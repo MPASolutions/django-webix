@@ -12,8 +12,8 @@ Django Webix
     :target: https://travis-ci.org/MPASolutions/django-webix
     :alt: Build
 
-.. image:: https://codecov.io/gh/AlessioBazzanella/django-webix/branch/master/graph/badge.svg
-    :target: https://codecov.io/gh/AlessioBazzanella/django-webix
+.. image:: https://codecov.io/gh/MPASolutions/django-webix/branch/master/graph/badge.svg
+    :target: https://codecov.io/gh/MPASolutions/django-webix
     :alt: Codecov
     
 .. image:: https://img.shields.io/github/issues/MPASolutions/django-webix.svg
