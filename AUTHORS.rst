@@ -6,7 +6,7 @@ This package was developed by MPA Solutions
 Development Lead
 ----------------
 
-* Alessandro Regolini <regolini@mpasol.it>
+* Alessandro Regolini <regolini@mpasol.it> 
 * Alessio Bazzanella <bazzanella@mpasol.it>
 
 Contributors
