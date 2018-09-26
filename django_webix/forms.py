@@ -10,6 +10,7 @@ from random import randint
 import django
 import six
 from django import forms
+from django.core.serializers.json import DjangoJSONEncoder
 from django.db import models
 from django.db.models.fields import FieldDoesNotExist
 from django.forms.forms import DeclarativeFieldsMetaclass
@@ -590,12 +591,12 @@ class BaseWebixForm(forms.BaseForm):
             'scroll': 'false',
             'height': 35,
             'columns': fields,
-        })
+        }, cls=DjangoJSONEncoder)
 
     def as_webix(self):
         """ Webix js format form structure """
 
-        return dumps(list(self.get_fieldsets()))[1:-1]
+        return dumps(list(self.get_fieldsets()), cls=DjangoJSONEncoder)[1:-1]
 
     def get_fieldsets(self):
         """ Returns a dict with all the fields """
