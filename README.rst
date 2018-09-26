@@ -34,6 +34,7 @@ Documentation
 -------------
 
 The full documentation is at https://django-webix.readthedocs.io.
+Develop documentation is at https://django-webix.readthedocs.io/en/develop/.
 
 Quickstart
 ----------
