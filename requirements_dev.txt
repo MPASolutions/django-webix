@@ -1,0 +1,20 @@
+# Runtime dependencies
+Django
+six
+requests
+django-extra-views
+sorl-thumbnail
+Pillow
+
+# Testing
+coverage
+flake8
+tox
+
+# Documentation
+Sphinx
+sphinx-rtd-theme
+
+# Other tools
+bumpversion==0.5.3
+wheel==0.29.0

@@ -1,0 +1,26 @@
+{% load i18n %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+
+    {% include "django_webix/static_meta.html" %}
+</head>
+<body>
+</body>
+
+<script type="text/javascript" charset="utf-8">
+    webix.ready(function () {
+        webix.ui({
+            id: 'content_right',
+            rows: []
+        });
+
+        webix.extend($$('content_right'), webix.OverlayBox);
+
+        {% include 'list.js' %}
+    });
+</script>
+</html>

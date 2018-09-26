@@ -1,0 +1,28 @@
+{% load static %}
+
+<meta name="viewport"
+      content="width=device-width, initial-scale=0.5, maximum-scale=2.0, minimum-scale=0.5, user-scalable=yes"/>
+<link rel="stylesheet" href="{% static 'webix/webix.css' %}" type="text/css">
+<link rel="stylesheet" href="{% static 'webix_custom/inlines.css' %}" type="text/css">
+<link rel="stylesheet" href="{% static 'webix_custom/theme.siberia.css' %}" type="text/css">
+<link rel="stylesheet" href="{% static 'webix_custom/grey_compact.css' %}" type="text/css">
+{% if DEBUG %}
+    <script type="text/javascript" src="{% static 'webix/webix_debug.js' %}"></script>
+{% else %}
+    <script type="text/javascript" src="{% static 'webix/webix.js' %}"></script>
+{% endif %}
+
+<script type="text/javascript" src="{% static 'webix/pivot/pivot.js' %}" charset="utf-8"></script>
+{% if LANGUAGE_CODE == 'ca' %}
+    <script type="text/javascript" src="{% static 'webix/i18n/es.js' %}" charset="utf-8"></script>
+{% else %}
+    {% with js_i18n='webix/i18n/'|add:LANGUAGE_CODE|add:'.js' %}
+        <script type="text/javascript" src="{% static js_i18n %}" charset="utf-8"></script>
+    {% endwith %}
+{% endif %}
+<script type="text/javascript" src="{% static 'webix/jquery-3.2.1.min.js' %}"></script>
+<script type="text/javascript" charset="utf-8">
+    {% include "django_webix/include/form_validation.js" %}
+    {% include "django_webix/include/utils.js" %}
+</script>
+<!-- https://fortawesome.github.io/Font-Awesome/icons/ -->
