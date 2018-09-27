@@ -34,7 +34,7 @@ Documentation
 -------------
 
 The full documentation is at https://django-webix.readthedocs.io.
-Develop documentation is at https://django-webix.readthedocs.io/en/develop/.
+
 
 Quickstart
 ----------
@@ -67,7 +67,34 @@ Add ``django-webix`` URLconf to your project ``urls.py`` file
         # ...
     ]
 
-Include ``webix static files`` folder in your django staticfiles folder as ``webix``
+Add internationalization to `TEMPLATES`
+
+.. code-block:: python
+
+    TEMPLATES = [
+        {
+            # ...
+            'OPTIONS': {
+                'context_processors': [
+                    # ...
+                    'django.template.context_processors.i18n',
+                ],
+            },
+        },
+    ]
+
+Include ``webix static files`` folder in your django staticfiles folder as ``webix`` and add static configuration
+
+.. code-block:: python
+
+    STATICFILES_FINDERS = (
+        'django.contrib.staticfiles.finders.FileSystemFinder',
+        'django.contrib.staticfiles.finders.AppDirectoriesFinder',
+    )
+    STATICFILES_DIRS = (
+        os.path.join(BASE_DIR, 'staticfiles'),
+    )
+    STATIC_URL = '/static/'
 
 
 Running Tests
