@@ -13,7 +13,7 @@ The format is based on KeepAChangelog_ and this project adheres to SemanticVersi
 [0.1.1] - 2018-09-26
 ++++++++++++++++++++
 
-* First release on PyPI.
+* Serializer encoder fix
 
 
 [0.1] - 2018-09-26
