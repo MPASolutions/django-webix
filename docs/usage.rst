@@ -38,7 +38,34 @@ Add ``django-webix`` URLconf to your project ``urls.py`` file
         # ...
     ]
 
-Include ``webix static files`` folder in your django staticfiles folder as ``webix``
+Add internationalization to `TEMPLATES`
+
+.. code-block:: python
+
+    TEMPLATES = [
+        {
+            # ...
+            'OPTIONS': {
+                'context_processors': [
+                    # ...
+                    'django.template.context_processors.i18n',
+                ],
+            },
+        },
+    ]
+
+Include ``webix static files`` folder in your django staticfiles folder as ``webix`` and add static configuration
+
+.. code-block:: python
+
+    STATICFILES_FINDERS = (
+        'django.contrib.staticfiles.finders.FileSystemFinder',
+        'django.contrib.staticfiles.finders.AppDirectoriesFinder',
+    )
+    STATICFILES_DIRS = (
+        os.path.join(BASE_DIR, 'staticfiles'),
+    )
+    STATIC_URL = '/static/'
 
 
 Usage
@@ -107,6 +134,10 @@ Create the views (e.g. <app_name>/views.py)
     from <app_name>.models import MyModel, InlineModel
 
 
+    class HomeView(TemplateView):
+        template_name = 'base.html'
+
+
     class InlineModelInline(WebixStackedInlineFormSet):
         model = InlineModel
         fields = '__all__'
@@ -149,10 +180,12 @@ Register the views url (e.g. <project_name>/urls.py)
 
     from django.conf.urls import url
 
-    from <app_name>.views import MyModelListView, MyModelCreateView, MyModelUpdateView, MyModelDeleteView
+    from <app_name>.views import HomeView, MyModelListView, MyModelCreateView, MyModelUpdateView, MyModelDeleteView
 
     urlpatterns = [
         # ...
+        url(r'^$', HomeView.as_view(), name='home'),
+
         url(r'^mymodel/list$', MyModelListView.as_view(), name='mymodel_list'),
         url(r'^mymodel/create$', MyModelCreateView.as_view(), name='mymodel_create'),
         url(r'^mymodel/update/(?P<pk>\d+)$', MyModelUpdateView.as_view(), name='mymodel_update'),
@@ -190,7 +223,7 @@ Create a base html template (e.g. <app_name>/templates/base.html)
 
             webix.extend($$('content_right'), webix.OverlayBox);
 
-            {% include 'list.js' %}
+            load_js('{% url 'mymodel_list' %}');
         });
     </script>
     </html>
