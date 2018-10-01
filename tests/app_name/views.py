@@ -56,7 +56,8 @@ class InlineEmptyModelInline(WebixTabularInlineFormSet):
 
 
 class MyModelForm(WebixModelForm):
-    readonly_fields = ['readonly', 'raise_error', 'datetimefield', 'datefield', 'booleanfield']
+    readonly_fields = ['readonly', 'raise_error', 'datetimefield', 'datefield', 'booleanfield', 'datefield_empty',
+                       'datetimefield_empty']
 
     class Meta:
         model = MyModel

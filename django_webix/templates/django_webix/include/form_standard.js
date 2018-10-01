@@ -25,6 +25,7 @@ webix.ui([], $$("{{ view.webix_view_id|default:"content_right" }}"));
         borderless: true,
         view: 'form',
         elements: [
+            {% if inlines|length > 0 %}
             {
                 view: "tabbar",
                 id: '{{ form.webix_id }}-inlines-tabbar',
@@ -34,7 +35,7 @@ webix.ui([], $$("{{ view.webix_view_id|default:"content_right" }}"));
                 options: [
                     {
                         "id": '{{ form.webix_id }}-group',
-                        "value": "{{ form.get_name }}"
+                        "value": "{{ form.get_name }}",
                     },
                     {% for inline in inlines %}
                     {
@@ -44,6 +45,7 @@ webix.ui([], $$("{{ view.webix_view_id|default:"content_right" }}"));
                     {% endfor %}
                 ]
             },
+            {% endif %}
             {
                 animate: false,
                 id: '{{ form.webix_id }}-inlines',
