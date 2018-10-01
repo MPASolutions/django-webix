@@ -10,6 +10,12 @@ All notable changes to this project will be documented in this file.
 
 The format is based on KeepAChangelog_ and this project adheres to SemanticVersioning_.
 
+[0.1.2] - 2018-10-01
+++++++++++++++++++++
+
+* Static files updates and include fixes
+
+
 [0.1.1] - 2018-09-26
 ++++++++++++++++++++
 
