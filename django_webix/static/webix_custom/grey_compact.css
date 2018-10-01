@@ -855,8 +855,8 @@ label.webix_required:after{padding-left:4px;content:"*";color:red}
 .webix_dbllist button:last-child{margin-left:5%}
 .webix_dbllist .bottom_label{font-size:10px;text-transform:uppercase;background:#ededed;padding-left:13px}
 .webix_invalid .webix_list{background:#f8e2e2}
-@font-face{font-family:'PT Sans';font-style:normal;font-weight:400;src:local('PT Sans'),local('PTSans-Regular'),url(../fonts/PTS-webfont.woff) format('woff')}
-@font-face{font-family:'PT Sans';font-style:normal;font-weight:700;src:local('PT Sans Bold'),local('PTSans-Bold'),url(../fonts/PTS-bold.woff) format('woff')}
+@font-face{font-family:'PT Sans';font-style:normal;font-weight:400;src:local('PT Sans'),local('PTSans-Regular'),url(../webix/fonts/PTS-webfont.woff) format('woff')}
+@font-face{font-family:'PT Sans';font-style:normal;font-weight:700;src:local('PT Sans Bold'),local('PTSans-Bold'),url(../webix/fonts/PTS-bold.woff) format('woff')}
 .mainFont{font-family:'PT Sans',Tahoma;font-size:13px;color:#666}
 .webix_layout_toolbar.webix_toolbar{color:#fff;font-size:16px;background:#727272 }
 .webix_layout_toolbar.webix_toolbar .webix_el_button,.webix_layout_toolbar.webix_toolbar .webix_el_label,.webix_layout_toolbar.webix_toolbar .webix_inp_label{color:#fff}
@@ -1108,7 +1108,7 @@ body.webix_print *{visibility:hidden}
  *  Font Awesome 4.3.0 by @davegandy - http://fontawesome.io - @fontawesome
  *  License - http://fontawesome.io/license (Font: SIL OFL 1.1, CSS: MIT License)
  */
-@font-face{font-family:FontAwesome;src:url(../fonts/fontawesome-webfont.eot?v=4.7.0);src:url(../fonts/fontawesome-webfont.eot?#iefix&v=4.7.0) format('embedded-opentype'),url(../fonts/fontawesome-webfont.woff2?v=4.7.0) format('woff2'),url(../fonts/fontawesome-webfont.woff?v=4.7.0) format('woff'),url(../fonts/fontawesome-webfont.ttf?v=4.7.0) format('truetype'),url(../fonts/fontawesome-webfont.svg?v=4.7.0#fontawesomeregular) format('svg');font-weight:400;font-style:normal}
+@font-face{font-family:FontAwesome;src:url(../webix/fonts/fontawesome-webfont.eot?v=4.7.0);src:url(../webix/fonts/fontawesome-webfont.eot?#iefix&v=4.7.0) format('embedded-opentype'),url(../webix/fonts/fontawesome-webfont.woff2?v=4.7.0) format('woff2'),url(../webix/fonts/fontawesome-webfont.woff?v=4.7.0) format('woff'),url(../webix/fonts/fontawesome-webfont.ttf?v=4.7.0) format('truetype'),url(../webix/fonts/fontawesome-webfont.svg?v=4.7.0#fontawesomeregular) format('svg');font-weight:400;font-style:normal}
 .fa{display:inline-block;font-family:FontAwesome;font-style:normal;font-weight:400;line-height:1;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;transform:translate(0,0)}
 .fa-lg{font-size:1.33333333em;line-height:.75em;vertical-align:-15%}
 .fa-2x{font-size:2em}
