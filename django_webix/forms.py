@@ -84,7 +84,10 @@ class BaseWebixForm(forms.BaseForm):
                             label=_(_field.verbose_name).capitalize(),
                             required=False
                         )
-                        value = '%s' % (getattr(self.instance, readonly_field).strftime('%d/%m/%Y %H:%i') or '')
+                        if getattr(self.instance, readonly_field):
+                            value = '%s' % getattr(self.instance, readonly_field).strftime('%d/%m/%Y %H:%i')
+                        else:
+                            value = ''
                     elif isinstance(_field, django.db.models.fields.DateField) or \
                         isinstance(_field, django.forms.fields.DateField):
                         # TODO: it can be improved
@@ -92,7 +95,10 @@ class BaseWebixForm(forms.BaseForm):
                             label=_(_field.verbose_name).capitalize(),
                             required=False
                         )
-                        value = '%s' % (getattr(self.instance, readonly_field).strftime('%d/%m/%Y') or '')
+                        if getattr(self.instance, readonly_field):
+                            value = '%s' % getattr(self.instance, readonly_field).strftime('%d/%m/%Y')
+                        else:
+                            value = ''
                     elif isinstance(_field, django.db.models.fields.BooleanField) or \
                         isinstance(_field, django.forms.fields.CheckboxInput):
                         # TODO: it can be improved
@@ -106,7 +112,7 @@ class BaseWebixForm(forms.BaseForm):
                             label=_(_field.verbose_name).capitalize(),
                             required=False
                         )
-                        value = '%s' % (getattr(self.instance, readonly_field) or '')
+                        value = '%s' % getattr(self.instance, readonly_field) or ''
                     self.fields[readonly_field].initial = value
                     self.initial[readonly_field] = value
 
