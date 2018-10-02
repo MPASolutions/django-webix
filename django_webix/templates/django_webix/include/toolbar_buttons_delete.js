@@ -1,6 +1,6 @@
 $$("{{ view.webix_view_id|default:"content_right" }}").addView({
     view: "form",
-    id: "delete",
+    id: "delete_form",
     cols: [{
         margin: 5,
         view: "toolbar",
@@ -30,7 +30,6 @@ $$("{{ view.webix_view_id|default:"content_right" }}").addView({
                         url: "{% url object.get_url_delete object.pk %}",
                         dataType: "script",
                         type: "POST",
-                        data: $$('delete').getValues(),
                         success: function () {
                             webix.ui.resize()
                         }
