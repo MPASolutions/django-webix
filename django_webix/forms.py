@@ -11,7 +11,7 @@ import django
 import six
 from django import forms
 from django.core.serializers.json import DjangoJSONEncoder
-from django.db import models
+from django.db import models, connection
 from django.db.models.fields import FieldDoesNotExist
 from django.forms.forms import DeclarativeFieldsMetaclass
 from django.forms.models import ModelFormMetaclass
@@ -197,13 +197,12 @@ class BaseWebixForm(forms.BaseForm):
                     'id': '%s.%s' % (self.webix_id, self[name].auto_id)
                 })
 
-            # if hasattr(self, 'data') and self.add_prefix(name) in self.data:
-            #     initial = self.data.getlist(self.add_prefix(name))
-            #     if len(initial) == 1:
-            #         initial = initial[0]
-            # else:
-            #     initial = self.initial.get(name, field.initial)
-            initial = self.initial.get(name, field.initial)
+            # Get initial value
+            if hasattr(self, 'cleaned_data'):
+                # Error with clean of Model Form
+                initial = self.cleaned_data.get(name, field.initial)
+            else:
+                initial = self.initial.get(name, field.initial)
 
             # EmailField
             if type(field) == forms.EmailField:
@@ -558,6 +557,14 @@ class BaseWebixForm(forms.BaseForm):
                     # Default if is required and there are only one option
                     if field.required and initial is None and len(field.queryset) == 1:
                         el.update({'value': '{}'.format(field.queryset.first().pk)})
+            # JSONField (postgresql)
+            elif connection.vendor == 'postgresql' and type(field) == django.contrib.postgres.forms.jsonb.JSONField:
+                if isinstance(field.widget, forms.widgets.Textarea):
+                    el.update({
+                        'view': 'textarea'
+                    })
+                if initial is not None:
+                    el.update({'value': dumps(initial)})
 
             # Hidden Fields
             if type(field.widget) == forms.widgets.HiddenInput:
