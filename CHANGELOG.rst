@@ -10,6 +10,13 @@ All notable changes to this project will be documented in this file.
 
 The format is based on KeepAChangelog_ and this project adheres to SemanticVersioning_.
 
+[0.1.5] - 2018-10-11
+++++++++++++++++++++
+
+* Fix empty form fields initial values on clean validation error
+* JSONField postgresql support
+
+
 [0.1.4] - 2018-10-02
 ++++++++++++++++++++
 
