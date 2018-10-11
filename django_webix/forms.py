@@ -197,13 +197,12 @@ class BaseWebixForm(forms.BaseForm):
                     'id': '%s.%s' % (self.webix_id, self[name].auto_id)
                 })
 
-            # if hasattr(self, 'data') and self.add_prefix(name) in self.data:
-            #     initial = self.data.getlist(self.add_prefix(name))
-            #     if len(initial) == 1:
-            #         initial = initial[0]
-            # else:
-            #     initial = self.initial.get(name, field.initial)
-            initial = self.initial.get(name, field.initial)
+            # Get initial value
+            if hasattr(self, 'cleaned_data'):
+                # Error with clean of Model Form
+                initial = self.cleaned_data.get(name, field.initial)
+            else:
+                initial = self.initial.get(name, field.initial)
 
             # EmailField
             if type(field) == forms.EmailField:
