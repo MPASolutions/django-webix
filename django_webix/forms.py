@@ -22,6 +22,11 @@ from django.utils.text import capfirst
 from django.utils.translation import ugettext_lazy as _
 from sorl.thumbnail import get_thumbnail
 
+try:
+    from django.contrib.postgres.fields import JSONField
+except ImportError:
+    JSONField = forms.Field
+
 
 class BaseWebixForm(forms.BaseForm):
     form_fix_height = None
@@ -151,8 +156,11 @@ class BaseWebixForm(forms.BaseForm):
         """ Returns the form id """
 
         if hasattr(self.Meta, 'model'):
-            return self.Meta.model._meta.app_label + '.' + self.Meta.model._meta.model_name
-        return self.__class__.__name__  # pragma: no cover
+            return '{app_label}.{model_name}'.format(
+                app_label=self.Meta.model._meta.app_label,
+                model_name=self.Meta.model._meta.model_name
+            )
+        return self.__class__.__name__
 
     def get_rules(self):
         """ Returns the form rules """
@@ -205,21 +213,30 @@ class BaseWebixForm(forms.BaseForm):
                 initial = self.initial.get(name, field.initial)
 
             # EmailField
-            if type(field) == forms.EmailField:
+            if isinstance(field, forms.EmailField):
                 el.update({
                     'view': 'text'
                 })
                 if initial is not None:
                     el.update({'value': initial})
+            # FloatField
+            elif isinstance(field, forms.FloatField):
+                if initial is not None:
+                    el.update({'value': ('%s' % initial).replace('.', ',')})
+            # DecimalField
+            elif isinstance(field, forms.DecimalField):
+                # el.update({'view':''})
+                if initial is not None:
+                    el.update({'value': ('%s' % initial).replace('.', ',')})
             # IntegerField
-            elif type(field) == forms.IntegerField:
+            elif isinstance(field, forms.IntegerField):
                 el.update({
                     'view': 'text'
                 })
                 if initial is not None and initial not in ['', None]:
                     el.update({'value': ('%s' % initial)})
             # TimeField
-            elif type(field) == forms.TimeField:
+            elif isinstance(field, forms.TimeField):
                 el.update({
                     'view': "datepicker",
                     'type': "time",
@@ -234,7 +251,7 @@ class BaseWebixForm(forms.BaseForm):
                     else:
                         el.update({'value': '%s' % initial.strftime('%H,%M')})
             # DateField
-            elif type(field) == forms.DateField:
+            elif isinstance(field, forms.DateField):
                 el.update({
                     'view': 'datepicker',
                     'format': "%d/%m/%Y",
@@ -249,7 +266,7 @@ class BaseWebixForm(forms.BaseForm):
                     else:
                         el.update({'value': '%s' % initial.strftime('%Y,%m,%d')})
             # DateTimeField
-            elif type(field) in [forms.DateTimeField, forms.fields.DateTimeField]:
+            elif isinstance(field, forms.DateTimeField):
                 el.update({
                     'view': "datepicker",
                     'format': "%d/%m/%Y %H:%i",
@@ -264,16 +281,8 @@ class BaseWebixForm(forms.BaseForm):
                         el.update({'value': '%s' % initial().strftime('%Y,%m,%d,%H,%M')})
                     else:
                         el.update({'value': '%s' % initial.strftime('%Y,%m,%d,%H,%M')})
-            # CharField
-            elif type(field) == forms.CharField:
-                if isinstance(field.widget, forms.widgets.Textarea):
-                    el.update({
-                        'view': 'textarea'
-                    })
-                if initial is not None:
-                    el.update({'value': initial})
             # BooleanField NullBooleanField
-            elif type(field) == forms.NullBooleanField or type(field) == forms.BooleanField:
+            elif isinstance(field, forms.NullBooleanField) or isinstance(field, forms.BooleanField):
                 el.update({
                     'view': 'checkbox',
                     'checkValue': '2',
@@ -284,49 +293,134 @@ class BaseWebixForm(forms.BaseForm):
                         el.update({'value': '2'})
                     elif isinstance(initial, int) and initial == 2:
                         el.update({'value': '2'})
-            # FloatField
-            elif type(field) == forms.FloatField:
-                if initial is not None:
-                    el.update({'value': ('%s' % initial).replace('.', ',')})
             # URLField
-            elif type(field) == forms.URLField:
+            elif isinstance(field, forms.URLField):
                 # el.update({'view':''})
                 if initial is not None:
                     el.update({'value': initial})
-            # DecimalField
-            elif type(field) == forms.DecimalField:
-                # el.update({'view':''})
-                if initial is not None:
-                    el.update({'value': ('%s' % initial).replace('.', ',')})
             # SlugField
-            elif type(field) == forms.SlugField:
+            elif isinstance(field, forms.SlugField):
                 # el.update({'view':''})
                 if initial is not None:
                     el.update({'value': initial})
-            # TypedChoiceField ChoiceField
-            elif type(field) in [forms.TypedChoiceField, forms.ChoiceField]:
-                choices = self._add_null_choice([{
-                    'id': '%s' % key,
-                    'value': '%s' % value
-                } for key, value in field._choices])
-                if not field.required:
-                    choices.insert(0, {
-                        'id': ' ',
-                        'value': '------'
+            # FileField  # TODO
+            elif isinstance(field, forms.FileField):
+                if initial is not None:
+                    el.update({'value': None})
+                el.update(
+                    {
+                        'view': 'uploader',
+                        'autosend': False,
+                        'multiple': False,
+                        'width': 100,
+                        'label': _('Upload file')
                     })
-                el.update({
-                    'selectAll': True,
-                    'view': 'richselect',
-                    'placeholder': _('Click to select'),
-                    'options': choices
-                })
+                if initial:
+                    _template_file = "<button type='button' style='width:28px;' class='webix_img_btn_abs " \
+                                     "webixtype_form' onclick=\"window.open('{url}','_blank');\">" \
+                                     "<span class='webix_icon fa-download'></span></button></a>".format(
+                        url=initial.url if not isinstance(initial, six.string_types) else str(initial)
+                    )
+                else:
+                    _template_file = ''
+                elements.update({
+                    ('%s_block' % self[name].html_name): {
+                        'cols': [
+                            {
+                                'name_label': name,
+                                'id_label': name,
+                                'borderless': True,
+                                'template': label,
+                                'height': 30,
+                                'width': 200
+                            },
+                            {
+                                'name_label': name,
+                                'id_label': name,
+                                'borderless': True,
+                                'template': _template_file,
+                                'height': 30,
+                                'width': 35
+                            },
+                            el,
+                            {
+                                'borderless': True,
+                                'template': '',
+                                'height': 30
+                            },
+                        ]}})
+                _pass = True
+            # FilePathFied
+            elif isinstance(field, forms.FilePathField):
+                # el.update({'view':''})
                 if initial is not None:
                     el.update({'value': initial})
-                # Default if is required and there are only one option
-                if field.required and initial is None and len(field.choices) == 1:
-                    el.update({'value': '{}'.format(field.choices[0][0])})
+            # ModelMultipleChoiceField
+            elif type(field) == forms.models.ModelMultipleChoiceField:
+                if initial is not None:
+                    el.update({
+                        'value': ','.join([str(i.pk) if isinstance(i, models.Model) else str(i) for i in initial])
+                    })
+                count = field.queryset.count()
+                if count > self.min_count_suggest and name not in self.autocomplete_fields:
+                    self.autocomplete_fields.append(name)
+                # autocomplete
+                if name in self.autocomplete_fields:
+                    self.autocomplete_fields_urls.update({
+                        name: self._get_url_suggest(
+                            field.queryset.model._meta.app_label,
+                            field.queryset.model._meta.model_name,
+                            field.to_field_name
+                        )
+                    })
+                    el.update({
+                        "view": "multicombo",
+                        'selectAll': True,
+                        'placeholder': _('Click to select'),
+                        'options': {
+                            'dynamic': True,
+                            'body': {
+                                'data': [],
+                                'dataFeed': self.autocomplete_fields_urls[name]
+                            }
+                        },
+                    })
+                    _vals = []
+                    if 'value' in el:
+                        _vals = el['value'].split(",")
+                    for _val in [i for i in _vals if i != ''.strip()]:
+                        if field.to_field_name:
+                            record = field.queryset.get(**{field.to_field_name: _val})
+                            el['options']['body']['data'].append({
+                                'id': '%s' % getattr(record, field.to_field_name),
+                                'value': '%s' % record
+                            })
+                        else:
+                            record = field.queryset.get(pk=_val)
+                            el['options']['body']['data'].append({
+                                'id': '%s' % record.pk,
+                                'value': '%s' % record
+                            })
+                else:
+                    el.update({
+                        "view": "multicombo",
+                        'selectAll': True,
+                        'placeholder': _('Click to select'),
+                        'options': {
+                            'dynamic': True,
+                            'body': {
+                                'data': self._add_null_choice([{
+                                    'id': '%s' % i.pk,
+                                    'value': '%s' % i
+                                } for i in field.queryset])
+                            }
+                        },
+                    })
+                    # Default if is required and there are only one option
+                    if field.required and initial is None and len(field.queryset) == 1:
+                        el.update({'value': '{}'.format(field.queryset.first().pk)})
             # ModelChoiceField
-            elif type(field) == forms.models.ModelChoiceField:
+            elif isinstance(field, forms.models.ModelChoiceField):
                 if initial is not None:
                     el.update({'value': initial.pk if isinstance(initial, models.Model) else str(initial)})
                 count = field.queryset.count()
@@ -394,58 +488,28 @@ class BaseWebixForm(forms.BaseForm):
                             'value': '%s' % i
                         } for i in field.queryset])
                     })
-            # FileField  # TODO
-            elif type(field) == forms.FileField:
-                if initial is not None:
-                    el.update({'value': None})
-                el.update(
-                    {
-                        'view': 'uploader',
-                        'autosend': False,
-                        'multiple': False,
-                        'width': 100,
-                        'label': _('Upload file')
+            # TypedChoiceField ChoiceField
+            elif isinstance(field, forms.TypedChoiceField) or isinstance(field, forms.ChoiceField):
+                choices = self._add_null_choice([{
+                    'id': '%s' % key,
+                    'value': '%s' % value
+                } for key, value in field._choices])
+                if not field.required:
+                    choices.insert(0, {
+                        'id': ' ',
+                        'value': '------'
                     })
-                if initial:
-                    _template_file = "<button type='button' style='width:28px;' class='webix_img_btn_abs " \
-                                     "webixtype_form' onclick=\"window.open('{url}','_blank');\">" \
-                                     "<span class='webix_icon fa-download'></span></button></a>".format(
-                        url=initial.url if not isinstance(initial, six.string_types) else str(initial)
-                    )
-                else:
-                    _template_file = ''
-                elements.update({
-                    ('%s_block' % self[name].html_name): {
-                        'cols': [
-                            {
-                                'name_label': name,
-                                'id_label': name,
-                                'borderless': True,
-                                'template': label,
-                                'height': 30,
-                                'width': 200
-                            },
-                            {
-                                'name_label': name,
-                                'id_label': name,
-                                'borderless': True,
-                                'template': _template_file,
-                                'height': 30,
-                                'width': 35
-                            },
-                            el,
-                            {
-                                'borderless': True,
-                                'template': '',
-                                'height': 30
-                            },
-                        ]}})
-                _pass = True
-            # FilePathFied
-            elif type(field) == forms.FilePathField:
-                # el.update({'view':''})
+                el.update({
+                    'selectAll': True,
+                    'view': 'richselect',
+                    'placeholder': _('Click to select'),
+                    'options': choices
+                })
                 if initial is not None:
                     el.update({'value': initial})
+                # Default if is required and there are only one option
+                if field.required and initial is None and len(field.choices) == 1:
+                    el.update({'value': '{}'.format(field.choices[0][0])})
             # Image  # TODO
             elif 'image' in str(type(field)).lower():
                 if initial is not None:
@@ -493,81 +557,25 @@ class BaseWebixForm(forms.BaseForm):
                             },
                         ]}})
                 _pass = True
-            # ModelMultipleChoiceField
-            elif type(field) == forms.models.ModelMultipleChoiceField:
-                if initial is not None:
-                    el.update({
-                        'value': ','.join([str(i.pk) if isinstance(i, models.Model) else str(i) for i in initial])
-                    })
-                count = field.queryset.count()
-                if count > self.min_count_suggest and name not in self.autocomplete_fields:
-                    self.autocomplete_fields.append(name)
-                # autocomplete
-                if name in self.autocomplete_fields:
-                    self.autocomplete_fields_urls.update({
-                        name: self._get_url_suggest(
-                            field.queryset.model._meta.app_label,
-                            field.queryset.model._meta.model_name,
-                            field.to_field_name
-                        )
-                    })
-                    el.update({
-                        "view": "multicombo",
-                        'selectAll': True,
-                        'placeholder': _('Click to select'),
-                        'options': {
-                            'dynamic': True,
-                            'body': {
-                                'data': [],
-                                'dataFeed': self.autocomplete_fields_urls[name]
-                            }
-                        },
-                    })
-                    _vals = []
-                    if 'value' in el:
-                        _vals = el['value'].split(",")
-                    for _val in [i for i in _vals if i != ''.strip()]:
-                        if field.to_field_name:
-                            record = field.queryset.get(**{field.to_field_name: _val})
-                            el['options']['body']['data'].append({
-                                'id': '%s' % getattr(record, field.to_field_name),
-                                'value': '%s' % record
-                            })
-                        else:
-                            record = field.queryset.get(pk=_val)
-                            el['options']['body']['data'].append({
-                                'id': '%s' % record.pk,
-                                'value': '%s' % record
-                            })
-                else:
-                    el.update({
-                        "view": "multicombo",
-                        'selectAll': True,
-                        'placeholder': _('Click to select'),
-                        'options': {
-                            'dynamic': True,
-                            'body': {
-                                'data': self._add_null_choice([{
-                                    'id': '%s' % i.pk,
-                                    'value': '%s' % i
-                                } for i in field.queryset])
-                            }
-                        },
-                    })
-                    # Default if is required and there are only one option
-                    if field.required and initial is None and len(field.queryset) == 1:
-                        el.update({'value': '{}'.format(field.queryset.first().pk)})
             # JSONField (postgresql)
-            elif connection.vendor == 'postgresql' and type(field) == django.contrib.postgres.fields.JSONField:
+            elif connection.vendor == 'postgresql' and isinstance(field, JSONField):
                 if isinstance(field.widget, forms.widgets.Textarea):
                     el.update({
                         'view': 'textarea'
                     })
                 if initial is not None:
                     el.update({'value': dumps(initial)})
+            # CharField
+            elif isinstance(field, forms.CharField):
+                if isinstance(field.widget, forms.widgets.Textarea):
+                    el.update({
+                        'view': 'textarea'
+                    })
+                if initial is not None:
+                    el.update({'value': initial})
 
             # RadioSelect
-            if type(field.widget) == forms.RadioSelect:
+            if isinstance(field.widget, forms.RadioSelect):
                 _choices = field.choices if hasattr(field, 'choices') else field.widget.choices
                 el.update({
                     "view": "radio",
