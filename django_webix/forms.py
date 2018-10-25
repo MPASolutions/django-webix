@@ -10,7 +10,6 @@ from random import randint
 import django
 import six
 from django import forms
-from django.contrib.postgres.fields import JSONField
 from django.core.serializers.json import DjangoJSONEncoder
 from django.db import models, connection
 from django.db.models.fields import FieldDoesNotExist
@@ -559,7 +558,7 @@ class BaseWebixForm(forms.BaseForm):
                     if field.required and initial is None and len(field.queryset) == 1:
                         el.update({'value': '{}'.format(field.queryset.first().pk)})
             # JSONField (postgresql)
-            elif connection.vendor == 'postgresql' and type(field) == JSONField:
+            elif connection.vendor == 'postgresql' and type(field) == django.contrib.postgres.fields.JSONField:
                 if isinstance(field.widget, forms.widgets.Textarea):
                     el.update({
                         'view': 'textarea'
