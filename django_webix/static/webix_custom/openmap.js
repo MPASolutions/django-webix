@@ -73,7 +73,7 @@ webix.protoUI({
             },
             onEachFeature: function (feature, layer) {
                 // featureGroup.addLayer(layer);
-                layer.bindPopup(c.name);
+                layer.bindPopup(feature.name);
             }
         }).addTo(map);
         console.log(c.geojson);

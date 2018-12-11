@@ -1,26 +1,21 @@
 {% load static %}
 
-<link rel="stylesheet" href="{% static 'webix/webix.css' %}" type="text/css">
+<link rel="stylesheet" href="{% static 'webix/skins/compact.min.css' %}" type="text/css">
 <link rel="stylesheet" href="{% static 'webix_custom/inlines.css' %}" type="text/css">
 <link rel="stylesheet" href="{% static 'webix_custom/theme.siberia.css' %}" type="text/css">
-<link rel="stylesheet" href="{% static 'webix_custom/grey_compact.css' %}" type="text/css">
-{% if DEBUG %}
-    <script type="text/javascript" src="{% static 'webix/webix_debug.js' %}"></script>
-{% else %}
-    <script type="text/javascript" src="{% static 'webix/webix.js' %}"></script>
-{% endif %}
+<link rel="stylesheet" href="{% static 'webix_custom/fontawesome-5.4.1/css/all.min.css' %}" type="text/css">
 
-{% if LANGUAGE_CODE == 'ca' %}
-    <script type="text/javascript" src="{% static 'webix/i18n/es.js' %}" charset="utf-8"></script>
-{% else %}
-    {% with js_i18n=LANGUAGE_CODE|lower|truncatechars:2|add:'.js' %}
-        {% with js_i18n_full='webix/i18n/'|add:js_i18n %}
-            <script type="text/javascript" src="{% static js_i18n_full %}" charset="utf-8"></script>
-        {% endwith %}
-    {% endwith %}
-{% endif %}
+<script type="text/javascript" src="{% static 'webix/webix.min.js' %}"></script>
 <script type="text/javascript" src="{% static 'webix_custom/jquery-3.3.1.min.js' %}"></script>
 <script type="text/javascript" charset="utf-8">
     {% include "django_webix/include/form_validation.js" %}
     {% include "django_webix/include/utils.js" %}
+
+    webix.attachEvent("onBeforeAjax", function (mode, url, data, xhr, headers) {
+
+        var key = document.querySelector("[name=csrfmiddlewaretoken]");
+        if (key !== undefined && key !== null) {
+            headers["X-CSRFToken"] = key.value;
+        }
+    });
 </script>
