@@ -466,10 +466,7 @@ class BaseWebixForm(forms.BaseForm):
                         'value': '%s' % i
                     } for i in field.queryset])
                     if not field.required:
-                        choices.insert(0, {
-                            'id': ' ',
-                            'value': '------'
-                        })
+                        choices.insert(0, {'id': "", 'value': "------", '$empty': True})
                     el.update({
                         'options': choices,
                         'view': 'richselect',
@@ -495,10 +492,7 @@ class BaseWebixForm(forms.BaseForm):
                     'value': '%s' % value
                 } for key, value in field._choices])
                 if not field.required:
-                    choices.insert(0, {
-                        'id': ' ',
-                        'value': '------'
-                    })
+                    choices.insert(0, {'id': "", 'value': "------", '$empty': True})
                 el.update({
                     'selectAll': True,
                     'view': 'richselect',
