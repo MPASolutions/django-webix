@@ -1,0 +1,176 @@
+
+.webix_layout_toolbar.webix_toolbar, .webix_layout_toolbar.webix_toolbar, .webix_header, .webix_item_tab.webix_selected, .webix_after_all_tabs, .webix_accordionitem_header {
+    background: #727272;
+}
+
+.webix_item_tab.webix_selected {
+    border-color: #727272;
+}
+
+.webix_ss_header td {
+    border-right: 1px solid #cccccc;
+    border-bottom: 1px solid #cccccc;
+}
+
+.webix_dd_drag_column, .webix_ss_header, .webix_ss_header TD, .webix_ss_vscroll_header {
+    color: #4a4a4a;
+    background: #dddddd;
+}
+
+.webix_accordionitem_header .webix_el_icon .webix_icon_button:hover, .webix_accordionitem_header .webix_el_icon .webix_icon_button:focus {
+    background-color: #656565;
+}
+
+.flex_tmp {
+    display: -webkit-box;
+    display: -moz-box;
+    display: -ms-flexbox;
+    display: -webkit-flex;
+    display: flex;
+    flex-flow: row wrap;
+    -webkit-flex-flow: row wrap;
+    justify-content: space-around
+}
+
+.flex_tmp .item {
+    border-radius: 3px;
+    position: relative;
+    min-width: 150px;
+    height: 105px;
+    padding-top: 10px;
+    margin: 6px 5.5px 0 5.5px;
+    color: #fff;
+    -ms-box-flex: 1;
+    -webkit-box-flex: 1;
+    -moz-box-flex: 1;
+    -ms-flex: 1 auto;
+    -webkit-flex: 1 auto;
+    flex: 1 auto
+}
+
+.flex_tmp .item .icon {
+    padding-left: 10px;
+    height: 73px;
+    padding-top: 7px;
+    display: block;
+    width: 30%;
+    font-size: 77px;
+    color: rgba(255, 255, 255, 0.17)
+}
+
+.flex_tmp .item .details {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    width: 150px
+}
+
+.flex_tmp .item .value {
+    font-size: 27px;
+    text-align: right
+}
+
+.flex_tmp .item .text {
+    width: 100%;
+    font-size: 18px;
+    text-align: right
+}
+
+.flex_tmp .footer {
+    height: 25px;
+    text-align: center;
+    line-height: 25px;
+    font-size: 13px;
+    background: rgba(0, 0, 0, 0.05)
+}
+
+.flex_tmp .footer .webix_icon {
+    font-size: 14px
+}
+
+.webix_dtable_subrow {
+    text-align: left !important;
+}
+
+.multiline {
+    line-height: 15px !important;
+    padding-top: 10px;
+}
+
+.webix_column > div.webix_row_lock {
+    color: #000;
+    background: #ccc;
+}
+
+.webix_table_checkbox {
+    width: 22px;
+    height: 22px;
+    margin-top: 2px;
+}
+
+.big_button {
+    font-size: 22px;
+}
+
+.flex_tmp .item .text {
+    font-size: 17px;
+}
+
+.flex_tmp .item {
+    min-width: 100px;
+    padding-top: 0px;
+    height: auto;
+}
+
+.flex_tmp .item .details {
+    width: 100px;
+}
+
+.webix_overlay {
+    background-color: rgba(200, 200, 200, 0.3)
+}
+
+.webix_overlay img {
+    position: relative;
+    top: 50%;
+    transform: translateY(-50%)
+}
+
+.bottone_attivo {
+    box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    border: 4px solid #555;
+}
+
+.menu_attivo {
+    background-color: #ccc;
+}
+
+.myhover {
+    background: #F0DCB6;
+}
+
+.webix_invalid .webix_inp_bottom_label {
+    font-size: 11px;
+    color: #fd595f;
+    font-weight: bold;
+}
+
+.webix_invalid .webix_custom_radio, .webix_invalid .webix_el_box .webix_inp_static, .webix_invalid .webix_el_box input, .webix_invalid .webix_el_box select,
+.webix_invalid .webix_el_box textarea, input.webix_invalid, select.webix_invalid, textarea.webix_invalid {
+    background-color: #ffcccc;
+    border: 2px solid #ff7777;
+}
+
+.webix_fieldset fieldset {
+    padding: 0 !important
+}
+
+.webix_el_box .webixtype_form {
+    border: 1px solid #fff;
+}
+
+.webix_badge {
+    background-color: #27ae60 !important;
+}

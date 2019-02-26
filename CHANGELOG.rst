@@ -10,6 +10,16 @@ All notable changes to this project will be documented in this file.
 
 The format is based on KeepAChangelog_ and this project adheres to SemanticVersioning_.
 
+[0.2.0] - 2019-02-26
+++++++++++++++++++++
+
+* Compatibility with Webix 6
+* Added RadioSelect widget
+* Added empty choice in select widget
+* Form fields type checked with isinstance method
+* Changed static path
+
+
 [0.1.5] - 2018-10-11
 ++++++++++++++++++++
 

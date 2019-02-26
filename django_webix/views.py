@@ -12,8 +12,36 @@ from django.views.generic import DeleteView
 from extra_views import UpdateWithInlinesView, CreateWithInlinesView
 
 
-class WebixCreateWithInlinesView(CreateWithInlinesView):
+class WebixPermissionsMixin:
+    def has_add_permission(self, request):
+        return True
+
+    def has_change_permission(self, request, obj=None):
+        return True
+
+    def has_delete_permission(self, request, obj=None):
+        return True
+
+    def has_view_permission(self, request, obj=None):
+        return True
+
+    def has_view_or_change_permission(self, request, obj=None):
+        return self.has_view_permission(request, obj) or self.has_change_permission(request, obj)
+
+    def has_module_permission(self, request):
+        return True
+
+
+class WebixCreateWithInlinesView(WebixPermissionsMixin, CreateWithInlinesView):
     template_name = 'django_webix/generic/create.js'
+
+    def get_context_data(self, **kwargs):
+        context = super(WebixCreateWithInlinesView, self).get_context_data(**kwargs)
+        context.update({
+            'has_add_permission': self.has_add_permission(self.request),
+            'has_module_permission': self.has_module_permission(self.request)
+        })
+        return context
 
     def get_success_url(self):
         return reverse(self.object.WebixMeta.url_update, kwargs={"pk": self.object.pk})
@@ -43,8 +71,19 @@ class WebixCreateWithInlinesUnmergedView(WebixCreateWithInlinesView):
     template_name = 'django_webix/generic/create_inline_unmerged.js'
 
 
-class WebixUpdateWithInlinesView(UpdateWithInlinesView):
+class WebixUpdateWithInlinesView(WebixPermissionsMixin, UpdateWithInlinesView):
     template_name = 'django_webix/generic/update.js'
+
+    def get_context_data(self, **kwargs):
+        context = super(WebixUpdateWithInlinesView, self).get_context_data(**kwargs)
+        context.update({
+            'has_view_permission': self.has_view_permission(self.request, self.object),
+            'has_change_permission': self.has_change_permission(self.request, self.object),
+            'has_view_or_change_permission': self.has_view_or_change_permission(self.request, self.object),
+            'has_delete_permission': self.has_delete_permission(self.request, self.object),
+            'has_module_permission': self.has_module_permission(self.request)
+        })
+        return context
 
     def get_success_url(self):
         return reverse(self.object.WebixMeta.url_update, kwargs={"pk": self.object.pk})
@@ -75,8 +114,17 @@ class WebixUpdateWithInlinesUnmergedView(WebixUpdateWithInlinesView):
     template_name = 'django_webix/generic/update_inline_unmerged.js'
 
 
-class WebixDeleteView(DeleteView):
+class WebixDeleteView(WebixPermissionsMixin, DeleteView):
     template_name = 'django_webix/generic/delete.js'
+
+    def get_context_data(self, **kwargs):
+        context = super(WebixDeleteView, self).get_context_data(**kwargs)
+        context.update({
+            'has_view_permission': self.has_view_permission(self.request, self.object),
+            'has_delete_permission': self.has_delete_permission(self.request, self.object),
+            'has_module_permission': self.has_module_permission(self.request)
+        })
+        return context
 
     def get_success_url(self):
         return reverse(self.object.WebixMeta.url_list)

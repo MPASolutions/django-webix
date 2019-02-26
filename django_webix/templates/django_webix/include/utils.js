@@ -134,7 +134,7 @@ function load_js(lnk, hide, area) {
         if (hide == true) {
             webix.ui([], $$(area));
         }
-        $$(area).showOverlay("<img src='{% static 'webix_custom/loading.gif' %}'>");
+        $$(area).showOverlay("<img src='{% static 'django_webix/loading.gif' %}'>");
         $.ajax({
             url: lnk,
             dataType: "script",
@@ -156,7 +156,7 @@ function load_js_data(lnk, area) {
     if ((area == undefined) || (area == '') || (area == null)) {
         area = 'content_right';
     }
-    $$(area).showOverlay("<img src='{% static 'webix_custom/loading.gif' %}'>");
+    $$(area).showOverlay("<img src='{% static 'django_webix/loading.gif' %}'>");
     $.ajax({
         url: lnk,
         dataType: "json",

@@ -9,7 +9,7 @@
  */
 function isNotEmpty(field_name, value) {
     $$("id_" + field_name).define("tooltip", '{% trans "Required field" %}');
-    return (value != null) && (value != '')
+    return value != null && value !== '';
 }
 
 /**
@@ -22,8 +22,8 @@ function isNotEmpty(field_name, value) {
 function isEmail(field_name, value) {
     $$("id_" + field_name).define("tooltip", '{% trans "Invalid email" %}');
     var re = /^([\w-]+(?:\.[\w-]+)*)@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$/i;
-    if ((value == null) || (value == ''))
-        return true
+    if (value == null || value === '')
+        return true;
     return re.test(value);
 }
 
@@ -35,12 +35,12 @@ function isEmail(field_name, value) {
  */
 function isInt(value) {
     if (value == undefined) {
-        return true
+        return true;
     }
-    else if ((value.indexOf('.') >= 0) || (value.indexOf(',') >= 0)) {
-        return false
+    else if (String(value).indexOf('.') >= 0 || String(value).indexOf(',') >= 0) {
+        return false;
     }
-    return (Math.floor(value) == value && $.isNumeric(value))
+    return ($.isNumeric(value) && Math.floor(value) === Number(value));
 }
 
 /**
@@ -54,21 +54,21 @@ function isInt(value) {
  */
 function isInteger(field_name, value, max, min) {
     // TODO
-    if (value != '') {
-        if (isInt(value) == false) {
+    if (value !== '') {
+        if (isInt(value) === false) {
             $$("id_" + field_name).define("tooltip", 'Campo non intero');
-            return false
+            return false;
         }
-        if (value < min) {
+        if (Number(value) < Number(min)) {
             $$("id_" + field_name).define("tooltip", 'Valore minore di ' + min);
-            return false
+            return false;
         }
-        if (value > max) {
+        if (Number(value) > Number(max)) {
             $$("id_" + field_name).define("tooltip", 'Valore maggiore di ' + max);
-            return false
+            return false;
         }
     }
-    return true
+    return true;
 }
 
 /**
@@ -81,23 +81,27 @@ function isInteger(field_name, value, max, min) {
  * @returns {boolean}
  */
 function isNumber(field_name, value, max, min) {
-    if (value == undefined) {
-        return true
+    if (!$.isNumeric(value)) {
+        value = value.replace(',', '.');
     }
-    value = value.replace(',', '.');
-    if ((value != '') && (value != parseFloat(value))) {
+    value = Number(value);
+
+    if (isNaN(value) || value === undefined) {
+        return true;
+    }
+    if (value !== '' && value !== parseFloat(value)) {
         $$("id_" + field_name).define("tooltip", 'Campo non decimale');
-        return false
+        return false;
     }
     if (value < min) {
         $$("id_" + field_name).define("tooltip", 'Valore minore di ' + min);
-        return false
+        return false;
     }
     if (value > max) {
         $$("id_" + field_name).define("tooltip", 'Valore maggiore di ' + max);
-        return false
+        return false;
     }
-    return true
+    return true;
 }
 
 /**
@@ -110,15 +114,15 @@ function isNumber(field_name, value, max, min) {
  * @returns {boolean}
  */
 function isString(field_name, value, max, min) {
-    if (value != null) {
+    if (value !== null) {
         if (value.length < min) {
             $$("id_" + field_name).define("tooltip", 'Stringa più corta di ' + min);
-            return false
+            return false;
         }
         if (value.length > max) {
             $$("id_" + field_name).define("tooltip", 'Stringa più lunga di ' + max);
-            return false
+            return false;
         }
     }
-    return true
+    return true;
 }

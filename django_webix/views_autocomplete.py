@@ -67,6 +67,8 @@ class RelatedLookup(View):
                         VALUE = True
                     elif VALUE == 'FALSE':
                         VALUE = False
+                    elif 'None' in VALUE:
+                        VALUE = False
                     if k != "_to_field":
                         filters[smart_text(k)] = prepare_lookup_value(smart_text(k), VALUE)
                 qset |= Q(**filters)
