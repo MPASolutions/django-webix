@@ -88,8 +88,6 @@ $$("{{ view.webix_view_id|default:"content_right" }}").addView({
                         });
                     });
 
-                    //form_data.csrfmiddlewaretoken = "{{ csrf_token }}";
-                    // invio i valori al server
                     $.ajax({
                         url: "{% if not object.pk %}{% url form.instance.get_url_create %}{% else %}{% url object.get_url_update object.pk %}{% endif %}",
                         dataType: "script",
@@ -108,3 +106,9 @@ $$("{{ view.webix_view_id|default:"content_right" }}").addView({
         {% endif %}
     ]
 }, -1);
+
+
+{# Check toolbar elements number #}
+if ($$('main_toolbar_form').getChildViews().length < 2) {
+  $$("{{ view.webix_view_id|default:"content_right" }}").removeView($$('main_toolbar_form'));
+}
