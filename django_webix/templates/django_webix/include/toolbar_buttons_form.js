@@ -40,22 +40,25 @@ $$("{{ view.webix_view_id|default:"content_right" }}").addView({
                 }
             },
         {% elif form.instance.get_url_delete %}
-            {
-                view: "button",
-                type: "danger",
-                align: "left",
-                icon: "eraser",
-                id: 'delete',
-                label: "Elimina",
-                width: 120,
-                click: function () {
-                    load_js("{% url form.instance.get_url_delete object.pk %}");
-                }
-            },
+            {% if has_delete_permission %}
+                {
+                    view: "button",
+                    type: "danger",
+                    align: "left",
+                    icon: "eraser",
+                    id: 'delete',
+                    label: "Elimina",
+                    width: 120,
+                    click: function () {
+                        load_js("{% url form.instance.get_url_delete object.pk %}");
+                    }
+                },
+            {% endif %}
         {% endif %}
         {% block extra_buttons_left %}{% endblock %}
         {$template: "Spacer"},
         {% block extra_buttons_right %}{% endblock %}
+        {% if not object.pk and has_add_permission or object.pk and has_change_permission %}
         {
             view: "button",
             type: "form",
@@ -66,7 +69,7 @@ $$("{{ view.webix_view_id|default:"content_right" }}").addView({
             width: 120,
             click: function () {
                 if (form_validate()) {
-                    $$('content_right').showOverlay("<img src='{% static 'webix_custom/loading.gif' %}'>");
+                    $$('content_right').showOverlay("<img src='{% static 'django_webix/loading.gif' %}'>");
 
                     var form_data = new FormData();
                     var form_data_webix_elements = [];
@@ -102,5 +105,6 @@ $$("{{ view.webix_view_id|default:"content_right" }}").addView({
                 }
             }
         }
+        {% endif %}
     ]
 }, -1);
