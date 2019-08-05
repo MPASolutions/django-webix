@@ -45,19 +45,13 @@ class BaseWebixInlineFormSet(BaseInlineFormSet):
         return result
 
     def get_rules_template(self):
-        """"""
+        """Returns the rules template"""
 
-        if len(self) == 0:  # pragma: no cover
-            return {}
-        rules_old = self[0].get_rules()
+        rules_old = self.form().get_rules() or {}
+        rules_old.pop(self.fk.name, None)  # Remove fk rule
         rules_new = {}
         for key in rules_old:
-            new_key = re.sub(
-                r"^(.*-)\d+(-.*)$",
-                r'\g<1>__prefix__\g<2>',
-                key
-            )
-            rules_new[new_key] = rules_old[key]
+            rules_new['{}-__prefix__-{}'.format(self.prefix, key)] = rules_old[key]
         return rules_new
 
     def get_name(self):
