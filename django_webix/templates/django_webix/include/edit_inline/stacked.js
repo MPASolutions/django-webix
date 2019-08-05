@@ -49,7 +49,7 @@ $$('{{ inline.prefix }}-group').addView({
                         id: '{{ inline.prefix }}-' + parseInt(totalForms.getValue()) + '-inline',
                         rows: []
                     }, -1);
-                    replace_prefix(empty_form.nc, totalForms, '{{ inline.prefix }}-' + parseInt(totalForms.getValue()) + '-inline');
+                    replace_prefix(empty_form.getChildViews(), totalForms, '{{ inline.prefix }}-' + parseInt(totalForms.getValue()) + '-inline');
 
                     // Add delete button event
                     var inline_id = '{{ inline.prefix }}-' + parseInt(totalForms.getValue());

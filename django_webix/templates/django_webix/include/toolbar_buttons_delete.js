@@ -3,39 +3,44 @@ $$("{{ view.webix_view_id|default:"content_right" }}").addView({
     id: "delete_form",
     cols: [{
         margin: 5,
+        height: 30,
         view: "toolbar",
         cols: [
-            {
-                view: "button",
-                type: "base",
-                align: "left",
-                icon: "undo",
-                label: 'Torna a "{{ object }}"',
-                minWidth: 300,
-                click: function () {
-                    load_js("{% url object.get_url_update object.pk %}");
-                }
-            },
+            {% if object.get_url_update != None and object.get_url_update != '' %}
+                {
+                    view: "button",
+                    type: "base",
+                    align: "left",
+                    icon: "undo",
+                    label: 'Torna a "{{ object }}"',
+                    minWidth: 300,
+                    click: function () {
+                        load_js("{% url object.get_url_update object.pk %}");
+                    }
+                },
+            {% endif %}
             {$template: "Spacer"},
-            {
-                view: "button",
-                type: "form",
-                align: "right",
-                id: "delete",
-                icon: "eraser",
-                label: "Conferma cancellazione",
-                width: 200,
-                click: function () {
-                    $.ajax({
-                        url: "{% url object.get_url_delete object.pk %}",
-                        dataType: "script",
-                        type: "POST",
-                        success: function () {
-                            webix.ui.resize()
-                        }
-                    });
+            {% if object.get_url_delete != None and object.get_url_delete != '' %}
+                {
+                    view: "button",
+                    type: "form",
+                    align: "right",
+                    id: "delete",
+                    icon: "eraser",
+                    label: "Conferma cancellazione",
+                    width: 200,
+                    click: function () {
+                        $.ajax({
+                            url: "{% url object.get_url_delete object.pk %}",
+                            dataType: "script",
+                            type: "POST",
+                            success: function () {
+                                webix.ui.resize()
+                            }
+                        });
+                    }
                 }
-            }
+            {% endif %}
         ]
     }]
-})
+});

@@ -45,7 +45,7 @@ class InlineModel(GenericModelWebix):
     timefield = models.TimeField(blank=True, null=True, default=timezone.now)
     datefield = models.DateField(blank=True, null=True, default=timezone.datetime.today)
     datetimefield = models.DateTimeField(blank=True, null=True, default=timezone.now)
-    filepathfield = models.FilePathField(blank=True, null=True)
+    filepathfield = models.FilePathField(blank=True, null=True, path='/tmp')
     filefield = models.FileField(blank=True, null=True)
     filefield_default = models.FileField(blank=True, null=True, default='test.txt')
     imagefield = models.ImageField(blank=True, null=True)

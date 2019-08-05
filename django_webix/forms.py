@@ -90,7 +90,7 @@ class BaseWebixForm(forms.BaseForm):
                             required=False
                         )
                         if getattr(self.instance, readonly_field):
-                            value = '%s' % getattr(self.instance, readonly_field).strftime('%d/%m/%Y %H:%i')
+                            value = '{}'.format(getattr(self.instance, readonly_field).strftime('%d/%m/%Y %H:%i'))
                         else:
                             value = ''
                     elif isinstance(_field, django.db.models.fields.DateField) or \
@@ -101,7 +101,7 @@ class BaseWebixForm(forms.BaseForm):
                             required=False
                         )
                         if getattr(self.instance, readonly_field):
-                            value = '%s' % getattr(self.instance, readonly_field).strftime('%d/%m/%Y')
+                            value = '{}'.format(getattr(self.instance, readonly_field).strftime('%d/%m/%Y'))
                         else:
                             value = ''
                     elif isinstance(_field, django.db.models.fields.BooleanField) or \
@@ -117,7 +117,7 @@ class BaseWebixForm(forms.BaseForm):
                             label=_(_field.verbose_name).capitalize(),
                             required=False
                         )
-                        value = '%s' % getattr(self.instance, readonly_field) or ''
+                        value = '{}'.format(getattr(self.instance, readonly_field) or '')
                     self.fields[readonly_field].initial = value
                     self.initial[readonly_field] = value
 
@@ -190,7 +190,7 @@ class BaseWebixForm(forms.BaseForm):
             _pass = False
             label = force_text(field.label).capitalize()
             if field.required:
-                label = '<strong>%s</strong>' % label
+                label = '<strong>{}</strong>'.format(label)
             el = {
                 'view': 'text',
                 'label': label,
@@ -202,7 +202,7 @@ class BaseWebixForm(forms.BaseForm):
             if name in self.get_readonly_fields():
                 el.update({
                     'disabled': True,
-                    'id': '%s.%s' % (self.webix_id, self[name].auto_id)
+                    'id': '{}.{}'.format(self.webix_id, self[name].auto_id)
                 })
 
             # Get initial value
@@ -222,19 +222,19 @@ class BaseWebixForm(forms.BaseForm):
             # FloatField
             elif isinstance(field, forms.FloatField):
                 if initial is not None:
-                    el.update({'value': ('%s' % initial).replace('.', ',')})
+                    el.update({'value': '{}'.format(initial).replace('.', ',')})
             # DecimalField
             elif isinstance(field, forms.DecimalField):
                 # el.update({'view':''})
                 if initial is not None:
-                    el.update({'value': ('%s' % initial).replace('.', ',')})
+                    el.update({'value': '{}'.format(initial).replace('.', ',')})
             # IntegerField
             elif isinstance(field, forms.IntegerField):
                 el.update({
                     'view': 'text'
                 })
                 if initial is not None and initial not in ['', None]:
-                    el.update({'value': ('%s' % initial)})
+                    el.update({'value': '{}'.format(initial)})
             # TimeField
             elif isinstance(field, forms.TimeField):
                 el.update({
@@ -245,11 +245,13 @@ class BaseWebixForm(forms.BaseForm):
                 })
                 if initial is not None:
                     if isinstance(initial, six.string_types):
-                        el.update({'value': ('%s' % initial).replace('-', ',').replace(' ', ',').replace(':', ',')})
+                        el.update({
+                            'value': '{}'.format(initial).replace('-', ',').replace(' ', ',').replace(':', ',')
+                        })
                     elif callable(initial):
-                        el.update({'value': '%s' % initial().strftime('%H,%M')})
+                        el.update({'value': '{}'.format(initial().strftime('%H,%M'))})
                     else:
-                        el.update({'value': '%s' % initial.strftime('%H,%M')})
+                        el.update({'value': '{}'.format(initial.strftime('%H,%M'))})
             # DateField
             elif isinstance(field, forms.DateField):
                 el.update({
@@ -260,11 +262,11 @@ class BaseWebixForm(forms.BaseForm):
                 })
                 if initial is not None:
                     if isinstance(initial, six.string_types):
-                        el.update({'value': ('%s' % initial[0:10]).replace('-', ',')})
+                        el.update({'value': '{}'.format(initial[0:10]).replace('-', ',')})
                     elif callable(initial):
-                        el.update({'value': '%s' % initial().strftime('%Y,%m,%d')})
+                        el.update({'value': '{}'.format(initial().strftime('%Y,%m,%d'))})
                     else:
-                        el.update({'value': '%s' % initial.strftime('%Y,%m,%d')})
+                        el.update({'value': '{}'.format(initial.strftime('%Y,%m,%d'))})
             # DateTimeField
             elif isinstance(field, forms.DateTimeField):
                 el.update({
@@ -276,11 +278,13 @@ class BaseWebixForm(forms.BaseForm):
                 })
                 if initial is not None:
                     if isinstance(initial, six.string_types):
-                        el.update({'value': ('%s' % initial).replace('-', ',').replace(' ', ',').replace(':', ',')})
+                        el.update({
+                            'value': '{}'.format(initial).replace('-', ',').replace(' ', ',').replace(':', ',')
+                        })
                     elif callable(initial):
-                        el.update({'value': '%s' % initial().strftime('%Y,%m,%d,%H,%M')})
+                        el.update({'value': '{}'.format(initial().strftime('%Y,%m,%d,%H,%M'))})
                     else:
-                        el.update({'value': '%s' % initial.strftime('%Y,%m,%d,%H,%M')})
+                        el.update({'value': '{}'.format(initial.strftime('%Y,%m,%d,%H,%M'))})
             # BooleanField NullBooleanField
             elif isinstance(field, forms.NullBooleanField) or isinstance(field, forms.BooleanField):
                 el.update({
@@ -303,51 +307,46 @@ class BaseWebixForm(forms.BaseForm):
                 # el.update({'view':''})
                 if initial is not None:
                     el.update({'value': initial})
-            # FileField  # TODO
+            # FileField
             elif isinstance(field, forms.FileField):
                 if initial is not None:
                     el.update({'value': None})
-                el.update(
-                    {
-                        'view': 'uploader',
-                        'autosend': False,
-                        'multiple': False,
-                        'width': 100,
-                        'label': _('Upload file')
-                    })
+                el.update({
+                    'view': 'uploader',
+                    'autosend': False,
+                    'multiple': False,
+                    'width': 100,
+                    'label': _('Upload file')
+                })
+                _download = {}
                 if initial:
-                    _template_file = "<button type='button' style='width:28px;' class='webix_img_btn_abs " \
-                                     "webixtype_form' onclick=\"window.open('{url}','_blank');\">" \
-                                     "<span class='webix_icon fa-download'></span></button></a>".format(
-                        url=initial.url if not isinstance(initial, six.string_types) else str(initial)
-                    )
-                else:
-                    _template_file = ''
+                    _download = {
+                        'name_label': name,
+                        'id_label': name,
+                        'borderless': True,
+                        'view': "button",
+                        "type": "iconButton",
+                        "css": "webix_primary",
+                        "icon": "fas fa-download",
+                        "width": 35,
+                        "on": {
+                            "onItemClick": "(function (id, e) {{ window.open('{url}','_blank') }})".format(
+                                url=initial.url if not isinstance(initial, six.string_types) else str(initial)
+                            )
+                        }
+                    }
                 elements.update({
-                    ('%s_block' % self[name].html_name): {
+                    '{}_block'.format(self[name].html_name): {
                         'cols': [
                             {
                                 'name_label': name,
                                 'id_label': name,
                                 'borderless': True,
                                 'template': label,
-                                'height': 30,
-                                'width': 200
-                            },
-                            {
-                                'name_label': name,
-                                'id_label': name,
-                                'borderless': True,
-                                'template': _template_file,
-                                'height': 30,
-                                'width': 35
-                            },
-                            el,
-                            {
-                                'borderless': True,
-                                'template': '',
                                 'height': 30
                             },
+                            _download,
+                            el
                         ]}})
                 _pass = True
             # FilePathFied
@@ -392,14 +391,14 @@ class BaseWebixForm(forms.BaseForm):
                         if field.to_field_name:
                             record = field.queryset.get(**{field.to_field_name: _val})
                             el['options']['body']['data'].append({
-                                'id': '%s' % getattr(record, field.to_field_name),
-                                'value': '%s' % record
+                                'id': '{}'.format(getattr(record, field.to_field_name)),
+                                'value': '{}'.format(record)
                             })
                         else:
                             record = field.queryset.get(pk=_val)
                             el['options']['body']['data'].append({
-                                'id': '%s' % record.pk,
-                                'value': '%s' % record
+                                'id': '{}'.format(record.pk),
+                                'value': '{}'.format(record)
                             })
                 else:
                     el.update({
@@ -410,8 +409,8 @@ class BaseWebixForm(forms.BaseForm):
                             'dynamic': True,
                             'body': {
                                 'data': self._add_null_choice([{
-                                    'id': '%s' % i.pk,
-                                    'value': '%s' % i
+                                    'id': '{}'.format(i.pk),
+                                    'value': '{}'.format(i)
                                 } for i in field.queryset])
                             }
                         },
@@ -451,19 +450,19 @@ class BaseWebixForm(forms.BaseForm):
                         if field.to_field_name:
                             record = field.queryset.get(**{field.to_field_name: el['value']})
                             el['suggest']['body']['data'] = [{
-                                'id': '%s' % getattr(record, field.to_field_name),
-                                'value': '%s' % record
+                                'id': '{}'.format(getattr(record, field.to_field_name)),
+                                'value': '{}'.format(record)
                             }]
                         else:
                             record = field.queryset.get(pk=el['value'])
                             el['suggest']['body']['data'] = [{
-                                'id': '%s' % record.pk,
-                                'value': '%s' % record
+                                'id': '{}'.format(record.pk),
+                                'value': '{}'.format(record)
                             }]
                 elif count <= 6:
                     choices = self._add_null_choice([{
-                        'id': '%s' % i.pk,
-                        'value': '%s' % i
+                        'id': '{}'.format(i.pk),
+                        'value': '{}'.format(i)
                     } for i in field.queryset])
                     if not field.required:
                         choices.insert(0, {'id': "", 'value': "------", '$empty': True})
@@ -481,15 +480,15 @@ class BaseWebixForm(forms.BaseForm):
                         'view': 'combo',
                         'placeholder': _('Click to select'),
                         'options': self._add_null_choice([{
-                            'id': '%s' % i.pk,
-                            'value': '%s' % i
+                            'id': '{}'.format(i.pk),
+                            'value': '{}'.format(i)
                         } for i in field.queryset])
                     })
             # TypedChoiceField ChoiceField
             elif isinstance(field, forms.TypedChoiceField) or isinstance(field, forms.ChoiceField):
                 choices = self._add_null_choice([{
-                    'id': '%s' % key,
-                    'value': '%s' % value
+                    'id': '{}'.format(key),
+                    'value': '{}'.format(value)
                 } for key, value in field._choices])
                 if not field.required:
                     choices.insert(0, {'id': "", 'value': "------", '$empty': True})
@@ -519,13 +518,13 @@ class BaseWebixForm(forms.BaseForm):
                     img_small = get_thumbnail(initial, '150x100', quality=85)
                     img_big = get_thumbnail(initial, '500x400', quality=85)
                     key = randint(1, 100000)
-                    _template_file = '<img src="%s"  onclick="image_modal(\'%s\',%s,%s,\'%s\')">' % (
+                    _template_file = '<img src="{}"  onclick="image_modal(\'{}\',{},{},\'{}\')">'.format(
                         img_small.url, img_big.url, 500, 400, str(key)
                     )
                 else:
                     _template_file = ''
                 elements.update({
-                    ('%s_block' % self[name].html_name): {
+                    '{}_block'.format(self[name].html_name): {
                         'cols': [
                             {
                                 'name_label': name,
@@ -592,12 +591,12 @@ class BaseWebixForm(forms.BaseForm):
             if self.add_prefix(name).endswith('-DELETE'):
                 el.update({'hidden': True})
                 elements.update({
-                    "%s-icon" % self.add_prefix(name): {
+                    "{}-icon".format(self.add_prefix(name)): {
                         'view': "button",
                         "type": "iconButton",
-                        "icon": "trash-o",
+                        "icon": "far fa-trash-alt",
                         "width": 28,
-                        'id': "%s-icon" % self.add_prefix(name)
+                        'id': "{}-icon".format(self.add_prefix(name))
                     }
                 })
 
