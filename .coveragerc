@@ -6,7 +6,7 @@ omit =
     *site-packages*
     *tests*
     *.tox*
-    *utils_getattr.py
+    *django_webix_utils.py
 show_missing = True
 exclude_lines =
     pragma: no cover

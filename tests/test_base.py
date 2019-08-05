@@ -57,6 +57,10 @@ class TestCalls(TestCase):
             'inlineemptymodel_set-MAX_NUM_FORMS': 1000
         }
 
+    def test_login(self):
+        response = self.client.get('/mylogin')
+        self.assertEqual(response.status_code, 200)
+
     def test_call_view_list(self):
         response = self.client.get('/mymodel/list')
         self.assertEqual(response.status_code, 200)

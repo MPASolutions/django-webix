@@ -24,9 +24,7 @@ AUTOCOMPLETE_SEARCH_FIELDS = getattr(settings, "WEBIX_AUTOCOMPLETE_SEARCH_FIELDS
 
 
 def get_label(f):
-    if getattr(f, "related_label", None):
-        return f.related_label()
-    return smart_text(f)
+    return f.related_label() if getattr(f, "related_label", None) else smart_text(f)
 
 
 def ajax_response(data):

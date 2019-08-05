@@ -8,8 +8,8 @@
  */
 function replace_prefix(empty_form, totalForms, form_id) {
     var new_form = [];
-
     $.each(empty_form, function (i, el) {
+        el = el.config;
         var new_el = webix.clone(el);
 
         if (new_el.cols !== undefined) {

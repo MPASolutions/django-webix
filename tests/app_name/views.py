@@ -5,9 +5,10 @@ from __future__ import unicode_literals
 
 import json
 
-from django.views.generic import TemplateView
+from django import forms
+from django.views.generic import TemplateView, FormView
 
-from django_webix.forms import WebixModelForm
+from django_webix.forms import WebixModelForm, WebixForm
 from django_webix.formsets import WebixTabularInlineFormSet, WebixStackedInlineFormSet, BaseWebixInlineFormSet
 from django_webix.views import WebixCreateWithInlinesView, WebixUpdateWithInlinesView, WebixDeleteView
 
@@ -90,3 +91,13 @@ class MyModelUpdateView(WebixUpdateWithInlinesView):
 
 class MyModelDeleteView(WebixDeleteView):
     model = MyModel
+
+
+class MyLoginForm(WebixForm):
+    username = forms.CharField(required=True)
+    password = forms.CharField(widget=forms.PasswordInput(), required=True)
+
+
+class MyLoginView(FormView):
+    form_class = MyLoginForm
+    template_name = 'django_webix/generic/create.js'

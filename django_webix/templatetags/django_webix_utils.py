@@ -4,6 +4,7 @@ from __future__ import unicode_literals
 
 import re
 
+import six
 from django import template
 
 register = template.Library()
@@ -30,6 +31,9 @@ def getattr(obj, args):
         (attribute, default) = splitargs
     except ValueError:
         (attribute, default) = args, ''
+
+    if isinstance(obj, six.string_types):
+        return obj
 
     try:
         attr = obj.__getattribute__(attribute)
