@@ -21,6 +21,7 @@ Added
 Changed
 ~~~~~~~
 * Django-extra-view updates
+* `get_model_name` change separator between app_label and model_name from `_` to `.`
 
 Fixed
 ~~~~~

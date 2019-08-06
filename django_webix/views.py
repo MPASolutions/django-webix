@@ -144,8 +144,7 @@ class WebixDeleteView(WebixPermissionsMixin, DeleteView):
                     _item.update({'url': reverse(item.WebixMeta.url_update, kwargs={"pk": item.pk})})
                 _data.append(_item)
             return _data
-        else:
-            return []
+        return []  # pragma: no cover
 
     def get_context_data(self, **kwargs):
         context = super(WebixDeleteView, self).get_context_data(**kwargs)
