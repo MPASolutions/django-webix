@@ -13,6 +13,10 @@ The format is based on KeepAChangelog_ and this project adheres to SemanticVersi
 [Unreleased]
 ++++++++++++
 
+
+[0.2.2] - 2019-08-06
+++++++++++++++++++++
+
 Added
 ~~~~~
 * Tree of nested object before delete an instance
