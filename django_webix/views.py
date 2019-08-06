@@ -9,11 +9,12 @@ from django.contrib.contenttypes.models import ContentType
 from django.forms import all_valid
 from django.urls import reverse
 from django.utils.encoding import force_text
-from django.utils.text import capfirst
 from django.utils.text import get_text_list
 from django.utils.translation import ugettext as _
 from django.views.generic import DeleteView
 from extra_views import UpdateWithInlinesView, CreateWithInlinesView
+
+from django_webix.utils import tree_formatter
 
 
 class WebixPermissionsMixin:
@@ -128,24 +129,6 @@ class WebixDeleteView(WebixPermissionsMixin, DeleteView):
     template_name = 'django_webix/generic/delete.js'
     nested_prevent = False
 
-    def _as_webix_tree(self, obj):
-        if isinstance(obj, list) and len(obj) == 2:
-            item = '{}: {}'.format(capfirst(obj[0]._meta.verbose_name), force_text(obj[0]))
-            _data = {"value": item, "open": True}
-            if hasattr(obj[0], 'get_url_update') and obj[0].get_url_update is not None:
-                _data.update({'url': reverse(obj[0].get_url_update, kwargs={"pk": obj[0].pk})})
-            _data.update({"data": self._as_webix_tree(obj[1])})
-            return [_data]
-        elif isinstance(obj, list):
-            _data = []
-            for item in obj:
-                _item = {"value": '{}: {}'.format(capfirst(item._meta.verbose_name), force_text(item))}
-                if hasattr(item, 'get_url_update') and item.get_url_update is not None:
-                    _item.update({'url': reverse(item.WebixMeta.url_update, kwargs={"pk": item.pk})})
-                _data.append(_item)
-            return _data
-        return []  # pragma: no cover
-
     def get_context_data(self, **kwargs):
         context = super(WebixDeleteView, self).get_context_data(**kwargs)
         context.update({
@@ -158,7 +141,7 @@ class WebixDeleteView(WebixPermissionsMixin, DeleteView):
         collector = NestedObjects(using='default')
         collector.collect([self.object])
         context.update({
-            'related': json.dumps(self._as_webix_tree(collector.nested())),
+            'related': json.dumps(tree_formatter(collector.nested())),
             'nested_prevent': False if self.nested_prevent and len(collector.data) <= 1 else self.nested_prevent
         })
 

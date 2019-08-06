@@ -37,7 +37,7 @@ $$("{{ view.webix_view_id|default:"content_right" }}").addView({
 $$("{{ view.webix_view_id|default:"content_right" }}").addView({
     view: "template",
     {% if nested_prevent %}
-        template: "Non puoi cancellare questo elemento se prima non hai tutte le schede collegate",
+        template: "Non puoi cancellare questo elemento se prima non hai eliminato tutte le schede collegate",
     {% else %}
         template: "Le seguenti schede verranno eliminate",
     {% endif %}
