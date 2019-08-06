@@ -10,6 +10,19 @@ All notable changes to this project will be documented in this file.
 
 The format is based on KeepAChangelog_ and this project adheres to SemanticVersioning_.
 
+[Unreleased]
+++++++++++++
+
+Changed
+~~~~~~~
+* Django-extra-view updates
+
+Fixed
+~~~~~
+* Add new line in inline forms with filefield
+
+
+
 [0.2.1] - 2019-08-05
 ++++++++++++++++++++
 

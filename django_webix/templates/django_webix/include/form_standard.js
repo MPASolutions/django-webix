@@ -35,13 +35,13 @@ webix.ui([], $$("{{ view.webix_view_id|default:"content_right" }}"));
                 options: [
                     {
                         "id": '{{ form.webix_id }}-group',
-                        "value": "{{ form.get_name }}",
+                        "value": "{{ form.get_name }}"
                     },
                     {% for inline in inlines %}
-                    {
-                        "id": '{{ inline.prefix }}-group',
-                        "value": "{{ inline.get_name }}"
-                    },
+                        {
+                            "id": '{{ inline.prefix }}-group',
+                            "value": "{{ inline.get_name }}"
+                        },
                     {% endfor %}
                 ]
             },
