@@ -48,10 +48,10 @@ class WebixCreateWithInlinesView(WebixPermissionsMixin, CreateWithInlinesView):
         return context
 
     def get_success_url(self):
-        if hasattr(self.object, 'WebixMeta') and hasattr(self.object.WebixMeta, 'url_update'):
-            return reverse(self.object.WebixMeta.url_update, kwargs={"pk": self.object.pk})
-        elif hasattr(self.object, 'WebixMeta') and hasattr(self.object.WebixMeta, 'url_list'):
-            return reverse(self.object.WebixMeta.url_list)
+        if hasattr(self.object, 'get_url_update') and self.object.get_url_update is not None:
+            return reverse(self.object.get_url_update, kwargs={"pk": self.object.pk})
+        elif hasattr(self.object, 'get_url_list') and self.object.get_url_list is not None:
+            return reverse(self.object.get_url_list)
         return super(WebixCreateWithInlinesView, self).get_success_url()
 
     def post(self, request, *args, **kwargs):
@@ -94,7 +94,7 @@ class WebixUpdateWithInlinesView(WebixPermissionsMixin, UpdateWithInlinesView):
         return context
 
     def get_success_url(self):
-        if hasattr(self.object, 'WebixMeta') and hasattr(self.object.WebixMeta, 'url_update'):
+        if hasattr(self.object, 'get_url_update') and self.object.get_url_update is not None:
             return reverse(self.object.WebixMeta.url_update, kwargs={"pk": self.object.pk})
         return super(WebixUpdateWithInlinesView, self).get_success_url()
 
@@ -132,15 +132,15 @@ class WebixDeleteView(WebixPermissionsMixin, DeleteView):
         if isinstance(obj, list) and len(obj) == 2:
             item = '{}: {}'.format(capfirst(obj[0]._meta.verbose_name), force_text(obj[0]))
             _data = {"value": item, "open": True}
-            if hasattr(obj[0], 'WebixMeta') and hasattr(obj[0].WebixMeta, 'url_update'):
-                _data.update({'url': reverse(obj[0].WebixMeta.url_update, kwargs={"pk": obj[0].pk})})
+            if hasattr(obj[0], 'get_url_update') and obj[0].get_url_update is not None:
+                _data.update({'url': reverse(obj[0].get_url_update, kwargs={"pk": obj[0].pk})})
             _data.update({"data": self._as_webix_tree(obj[1])})
             return [_data]
         elif isinstance(obj, list):
             _data = []
             for item in obj:
                 _item = {"value": '{}: {}'.format(capfirst(item._meta.verbose_name), force_text(item))}
-                if hasattr(item, 'WebixMeta') and hasattr(item.WebixMeta, 'url_update'):
+                if hasattr(item, 'get_url_update') and item.get_url_update is not None:
                     _item.update({'url': reverse(item.WebixMeta.url_update, kwargs={"pk": item.pk})})
                 _data.append(_item)
             return _data
@@ -166,8 +166,8 @@ class WebixDeleteView(WebixPermissionsMixin, DeleteView):
         return context
 
     def get_success_url(self):
-        if hasattr(self.object, 'WebixMeta') and hasattr(self.object.WebixMeta, 'url_list'):
-            return reverse(self.object.WebixMeta.url_list)
+        if hasattr(self.object, 'get_url_list') and self.object.get_url_list is not None:
+            return reverse(self.object.get_url_list)
         return super(WebixDeleteView, self).get_success_url()
 
     def delete(self, request, *args, **kwargs):
