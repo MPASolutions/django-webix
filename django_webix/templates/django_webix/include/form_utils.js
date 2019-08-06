@@ -9,15 +9,14 @@
 function replace_prefix(empty_form, totalForms, form_id) {
     var new_form = [];
     $.each(empty_form, function (i, el) {
-        el = el.config;
-        var new_el = webix.clone(el);
+        var new_el = webix.clone(el.config);
 
         if (new_el.cols !== undefined) {
-            new_el.cols = replace_prefix(new_el.cols, totalForms);
+            new_el.cols = replace_prefix(el.getChildViews(), totalForms);
         } else {
-            if (el.id !== undefined)
+            if (el.config.id !== undefined)
                 new_el.id = new_el.id.replace("__prefix__", totalForms.getValue());
-            if (el.name !== undefined)
+            if (el.config.name !== undefined)
                 new_el.name = new_el.name.replace("__prefix__", totalForms.getValue());
         }
 

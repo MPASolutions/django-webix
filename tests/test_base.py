@@ -4,10 +4,46 @@
 from __future__ import unicode_literals
 
 from django.contrib.auth.models import User
-from django.core.exceptions import ValidationError
+from django.core.exceptions import ValidationError, ImproperlyConfigured
 from django.test import TestCase
 from django.urls import reverse
-from tests.app_name.models import MyModel, InlineModel, InlineStackedModel
+
+from tests.app_name.models import MyModel, InlineModel, InlineStackedModel, SubInlineStackedModel
+
+
+class TestFakeLogin(TestCase):
+    def test_login(self):
+        response = self.client.get('/mylogin')
+        self.assertEqual(response.status_code, 200)
+
+
+class TestGenericModelWebix(TestCase):
+    def setUp(self):
+        self.object = MyModel.objects.create(**{
+            'field': 'Test',
+            'email': 'test@test.com',
+            'floatfield': 2.6,
+            'decimalfield': 8.1,
+            'integerfield': 1
+        })
+        self.object_inline = InlineModel.objects.create(
+            inline_field='Text',
+            my_model=self.object
+        )
+
+    def test_get_url_name(self):
+        self.assertEqual(self.object.get_url_list, 'mymodel_list')
+        self.assertEqual(self.object.get_url_create, 'mymodel_create')
+        self.assertEqual(self.object.get_url_update, 'mymodel_update')
+        self.assertEqual(self.object.get_url_delete, 'mymodel_delete')
+        self.assertEqual(self.object_inline.get_url_list, None)
+        self.assertEqual(self.object_inline.get_url_create, None)
+        self.assertEqual(self.object_inline.get_url_update, 'inlinemodel_update')
+        self.assertEqual(self.object_inline.get_url_delete, None)
+
+    def test_get_model_name(self):
+        self.assertEqual(self.object.get_model_name, 'app_name.mymodel')
+        self.assertEqual(self.object_inline.get_model_name, 'app_name.inlinemodel')
 
 
 class TestCalls(TestCase):
@@ -56,10 +92,6 @@ class TestCalls(TestCase):
             'inlineemptymodel_set-MIN_NUM_FORMS': 0,
             'inlineemptymodel_set-MAX_NUM_FORMS': 1000
         }
-
-    def test_login(self):
-        response = self.client.get('/mylogin')
-        self.assertEqual(response.status_code, 200)
 
     def test_call_view_list(self):
         response = self.client.get('/mymodel/list')
@@ -179,30 +211,97 @@ class TestCalls(TestCase):
         self.assertEqual(response.status_code, 200)
 
 
-class TestGenericModelWebix(TestCase):
+class TestUrlsCalls(TestCase):
     def setUp(self):
-        self.object = MyModel.objects.create(**{
+        self.user = User.objects.create_user(username='testuser', password='12345')
+
+        self.object_dict = {
             'field': 'Test',
             'email': 'test@test.com',
             'floatfield': 2.6,
             'decimalfield': 8.1,
             'integerfield': 1
-        })
-        self.object_inline = InlineModel.objects.create(
-            inline_field='Text',
-            my_model=self.object
+        }
+
+        self.object1 = MyModel.objects.create(**self.object_dict)
+        self.object2 = MyModel.objects.create(**self.object_dict)
+        self.inlineobject1 = InlineModel.objects.create(
+            inline_field='Test',
+            my_model=self.object1
+        )
+        self.inlineobject2 = InlineModel.objects.create(
+            inline_field='Test',
+            my_model=self.object2
         )
 
-    def test_get_url_name(self):
-        self.assertEqual(self.object.get_url_list, 'mymodel_list')
-        self.assertEqual(self.object.get_url_create, 'mymodel_create')
-        self.assertEqual(self.object.get_url_update, 'mymodel_update')
-        self.assertEqual(self.object.get_url_delete, 'mymodel_delete')
-        self.assertEqual(self.object_inline.get_url_list, None)
-        self.assertEqual(self.object_inline.get_url_create, None)
-        self.assertEqual(self.object_inline.get_url_update, None)
-        self.assertEqual(self.object_inline.get_url_delete, None)
+        for i in range(100):
+            inline = InlineStackedModel.objects.create(
+                my_model=self.object2
+            )
+            SubInlineStackedModel.objects.create(
+                my_model=inline
+            )
 
-    def test_get_model_name(self):
-        self.assertEqual(self.object.get_model_name, 'app_name_mymodel')
-        self.assertEqual(self.object_inline.get_model_name, 'app_name_inlinemodel')
+        self.object_inlines_dict = {
+            'inlinemodel_set-TOTAL_FORMS': 3,
+            'inlinemodel_set-INITIAL_FORMS': 0,
+            'inlinemodel_set-MIN_NUM_FORMS': 0,
+            'inlinemodel_set-MAX_NUM_FORMS': 1000,
+            'inlinestackedmodel_set-0-booleanfield': '2',
+            'inlinestackedmodel_set-0-inlinemodels': '%s,%s' % (self.inlineobject1.pk, self.inlineobject2.pk),
+            'inlinestackedmodel_set-1-booleanfield': '2',
+            'inlinestackedmodel_set-1-inlinemodels': '',
+            'inlinestackedmodel_set-TOTAL_FORMS': 3,
+            'inlinestackedmodel_set-INITIAL_FORMS': 0,
+            'inlinestackedmodel_set-MIN_NUM_FORMS': 0,
+            'inlinestackedmodel_set-MAX_NUM_FORMS': 1000,
+            'inlineemptymodel_set-TOTAL_FORMS': 3,
+            'inlineemptymodel_set-INITIAL_FORMS': 0,
+            'inlineemptymodel_set-MIN_NUM_FORMS': 0,
+            'inlineemptymodel_set-MAX_NUM_FORMS': 1000
+        }
+
+    def test_call_view_create_list_post(self):
+        MyModel.WebixMeta.url_list = 'mymodel_list'
+        MyModel.WebixMeta.url_create = None
+        MyModel.WebixMeta.url_update = None
+        MyModel.WebixMeta.url_delete = None
+
+        response = self.client.post('/mymodel/create', dict(self.object_inlines_dict, **self.object_dict))
+        self.assertEqual(response.status_code, 302)
+
+    def test_call_view_create_none_post(self):
+        self.object1.WebixMeta.url_list = None
+        self.object1.WebixMeta.url_create = None
+        self.object1.WebixMeta.url_update = None
+        self.object1.WebixMeta.url_delete = None
+
+        with self.assertRaises(ImproperlyConfigured):
+            response = self.client.post('/mymodel/create', dict(self.object_inlines_dict, **self.object_dict))
+
+    def test_call_view_update_none_post(self):
+        self.object1.WebixMeta.url_list = None
+        self.object1.WebixMeta.url_create = None
+        self.object1.WebixMeta.url_update = None
+        self.object1.WebixMeta.url_delete = None
+
+        with self.assertRaises(ImproperlyConfigured):
+            response = self.client.post('/mymodel/update/%s' % self.object1.pk, dict(
+                self.object_inlines_dict, **self.object_dict
+            ))
+
+    def test_call_view_delete_none_post(self):
+        self.object1.WebixMeta.url_list = None
+        self.object1.WebixMeta.url_create = None
+        self.object1.WebixMeta.url_update = None
+        self.object1.WebixMeta.url_delete = None
+
+        with self.assertRaises(ImproperlyConfigured):
+            response = self.client.post('/mymodel/delete/%s' % self.object1.pk, {})
+
+    def test_call_view_delete_stacked_none_post(self):
+        response = self.client.get(
+            '/inlinestackedmodel/delete/%s' % self.object2.inlinestackedmodel_set.first().pk,
+            {}
+        )
+        self.assertEqual(response.status_code, 200)

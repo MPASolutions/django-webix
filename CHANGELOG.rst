@@ -10,6 +10,28 @@ All notable changes to this project will be documented in this file.
 
 The format is based on KeepAChangelog_ and this project adheres to SemanticVersioning_.
 
+[Unreleased]
+++++++++++++
+
+
+[0.2.2] - 2019-08-06
+++++++++++++++++++++
+
+Added
+~~~~~
+* Tree of nested object before delete an instance
+* Prevent to delete an instance if has at least one nested object
+
+Changed
+~~~~~~~
+* Django-extra-view updates
+* `get_model_name` change separator between app_label and model_name from `_` to `.`
+
+Fixed
+~~~~~
+* Add new line in inline forms with filefield
+
+
 [0.2.1] - 2019-08-05
 ++++++++++++++++++++
 

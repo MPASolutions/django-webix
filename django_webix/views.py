@@ -2,6 +2,9 @@
 
 from __future__ import unicode_literals
 
+import json
+
+from django.contrib.admin.utils import NestedObjects
 from django.contrib.contenttypes.models import ContentType
 from django.forms import all_valid
 from django.urls import reverse
@@ -10,6 +13,8 @@ from django.utils.text import get_text_list
 from django.utils.translation import ugettext as _
 from django.views.generic import DeleteView
 from extra_views import UpdateWithInlinesView, CreateWithInlinesView
+
+from django_webix.utils import tree_formatter
 
 
 class WebixPermissionsMixin:
@@ -44,7 +49,11 @@ class WebixCreateWithInlinesView(WebixPermissionsMixin, CreateWithInlinesView):
         return context
 
     def get_success_url(self):
-        return reverse(self.object.WebixMeta.url_update, kwargs={"pk": self.object.pk})
+        if hasattr(self.object, 'get_url_update') and self.object.get_url_update is not None:
+            return reverse(self.object.get_url_update, kwargs={"pk": self.object.pk})
+        elif hasattr(self.object, 'get_url_list') and self.object.get_url_list is not None:
+            return reverse(self.object.get_url_list)
+        return super(WebixCreateWithInlinesView, self).get_success_url()
 
     def post(self, request, *args, **kwargs):
         response = super(WebixCreateWithInlinesView, self).post(request, *args, **kwargs)
@@ -86,7 +95,9 @@ class WebixUpdateWithInlinesView(WebixPermissionsMixin, UpdateWithInlinesView):
         return context
 
     def get_success_url(self):
-        return reverse(self.object.WebixMeta.url_update, kwargs={"pk": self.object.pk})
+        if hasattr(self.object, 'get_url_update') and self.object.get_url_update is not None:
+            return reverse(self.object.WebixMeta.url_update, kwargs={"pk": self.object.pk})
+        return super(WebixUpdateWithInlinesView, self).get_success_url()
 
     def post(self, request, *args, **kwargs):
         response = super(WebixUpdateWithInlinesView, self).post(request, *args, **kwargs)
@@ -116,6 +127,7 @@ class WebixUpdateWithInlinesUnmergedView(WebixUpdateWithInlinesView):
 
 class WebixDeleteView(WebixPermissionsMixin, DeleteView):
     template_name = 'django_webix/generic/delete.js'
+    nested_prevent = False
 
     def get_context_data(self, **kwargs):
         context = super(WebixDeleteView, self).get_context_data(**kwargs)
@@ -124,10 +136,21 @@ class WebixDeleteView(WebixPermissionsMixin, DeleteView):
             'has_delete_permission': self.has_delete_permission(self.request, self.object),
             'has_module_permission': self.has_module_permission(self.request)
         })
+
+        # Nested objects
+        collector = NestedObjects(using='default')
+        collector.collect([self.object])
+        context.update({
+            'related': json.dumps(tree_formatter(collector.nested())),
+            'nested_prevent': False if self.nested_prevent and len(collector.data) <= 1 else self.nested_prevent
+        })
+
         return context
 
     def get_success_url(self):
-        return reverse(self.object.WebixMeta.url_list)
+        if hasattr(self.object, 'get_url_list') and self.object.get_url_list is not None:
+            return reverse(self.object.get_url_list)
+        return super(WebixDeleteView, self).get_success_url()
 
     def delete(self, request, *args, **kwargs):
         self.object = self.get_object()

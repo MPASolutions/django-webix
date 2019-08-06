@@ -1,12 +1,11 @@
 {% load django_webix_utils %}
 
-$$("{{ view.webix_view_id|default:"content_right" }}").addView({
-    id: 'main_toolbar_form',
-    view: "toolbar",
-    margin: 5,
-    height: 30,
-    cols: [
-        {% if form.instance.get_url_list != None and form.instance.get_url_list != '' %}
+{% if form.instance.get_url_list and form.instance.get_url_list != '' %}
+    $$("{{ view.webix_view_id|default:"content_right" }}").addView({
+        id: 'main_toolbar_navigation',
+        view: "toolbar",
+        margin: 5,
+        cols: [
             {
                 view: "button",
                 type: "base",
@@ -18,6 +17,6 @@ $$("{{ view.webix_view_id|default:"content_right" }}").addView({
                     load_js("{% url form.instance.get_url_list %}");
                 }
             }
-        {% endif %}
-    ]
-}, 0);
+        ]
+    });
+{% endif %}

@@ -54,8 +54,11 @@ class InlineModel(GenericModelWebix):
 
     my_model = models.ForeignKey(MyModel, on_delete=models.CASCADE)
 
+    class WebixMeta:
+        url_update = 'inlinemodel_update'
 
-class InlineStackedModel(models.Model):
+
+class InlineStackedModel(GenericModelWebix):
     textfield = models.TextField(blank=True, null=True)
     timefield = models.TimeField(blank=True, null=True)
     timefield_string = models.TimeField(blank=True, null=True, default="10:00")  # TODO: SISTEMARE
@@ -79,6 +82,9 @@ class InlineStackedModel(models.Model):
 
     my_model = models.ForeignKey(MyModel, on_delete=models.CASCADE)
 
+    class WebixMeta:
+        url_delete = 'inlinestackedmodel_delete'
+
 
 class InlineEmptyModel(models.Model):
     textfield = models.TextField(blank=True, null=True)
@@ -93,3 +99,7 @@ class InlineEmptyModel(models.Model):
     foreign_self = models.ForeignKey('self', on_delete=models.CASCADE)
 
     my_model = models.ForeignKey(MyModel, on_delete=models.CASCADE)
+
+
+class SubInlineStackedModel(models.Model):
+    my_model = models.ForeignKey(InlineStackedModel, on_delete=models.CASCADE)

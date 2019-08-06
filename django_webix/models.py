@@ -17,7 +17,7 @@ class GenericModelWebix(models.Model):
 
     @property
     def get_model_name(self):
-        return '%s_%s' % (self._meta.app_label, self._meta.model_name)
+        return '%s.%s' % (self._meta.app_label, self._meta.model_name)
 
     @property
     def get_url_list(self):

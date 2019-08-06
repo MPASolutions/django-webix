@@ -2,8 +2,6 @@
 
 from __future__ import unicode_literals
 
-import re
-
 from django.core.exceptions import ValidationError
 from django.forms import BaseInlineFormSet
 from django.forms.fields import IntegerField
@@ -12,7 +10,7 @@ from django.forms.widgets import HiddenInput
 from django.utils.functional import cached_property
 from django.utils.text import capfirst
 from django.utils.translation import ugettext_lazy as _
-from extra_views import InlineFormSet
+from extra_views import InlineFormSetFactory
 
 from django_webix.forms import WebixForm, WebixModelForm
 
@@ -80,7 +78,7 @@ class BaseWebixInlineFormSet(BaseInlineFormSet):
         return form
 
 
-class WebixInlineFormSet(InlineFormSet):
+class WebixInlineFormSet(InlineFormSetFactory):
     def __init__(self, parent_model, request, instance, view_kwargs=None, view=None):
         super(WebixInlineFormSet, self).__init__(parent_model, request, instance, view_kwargs, view)
 

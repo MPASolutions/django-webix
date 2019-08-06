@@ -1,6 +1,3 @@
-webix.ui([], $$("{{ view.webix_view_id|default:"content_right" }}"));
-
-
 {# Errors #}
 {% block webix_form_errors %}
     {% if form.errors %}
@@ -26,25 +23,25 @@ webix.ui([], $$("{{ view.webix_view_id|default:"content_right" }}"));
         view: 'form',
         elements: [
             {% if inlines|length > 0 %}
-            {
-                view: "tabbar",
-                id: '{{ form.webix_id }}-inlines-tabbar',
-                value: "{{ form.webix_id }}-group",
-                optionWidth: 150,
-                multiview: true,
-                options: [
-                    {
-                        "id": '{{ form.webix_id }}-group',
-                        "value": "{{ form.get_name }}",
-                    },
-                    {% for inline in inlines %}
-                    {
-                        "id": '{{ inline.prefix }}-group',
-                        "value": "{{ inline.get_name }}"
-                    },
-                    {% endfor %}
-                ]
-            },
+                {
+                    view: "tabbar",
+                    id: '{{ form.webix_id }}-inlines-tabbar',
+                    value: "{{ form.webix_id }}-group",
+                    optionWidth: 150,
+                    multiview: true,
+                    options: [
+                        {
+                            id: '{{ form.webix_id }}-group',
+                            value: "{{ form.get_name }}"
+                        },
+                        {% for inline in inlines %}
+                            {
+                                id: '{{ inline.prefix }}-group',
+                                value: "{{ inline.get_name }}"
+                            },
+                        {% endfor %}
+                    ]
+                },
             {% endif %}
             {
                 animate: false,
@@ -52,17 +49,17 @@ webix.ui([], $$("{{ view.webix_view_id|default:"content_right" }}"));
                 cells: [
                     {% block webix_form_elements %}
                         {
-                            "id": '{{ form.webix_id }}-group',
+                            id: '{{ form.webix_id }}-group',
                             rows: [
-                                {{ form.as_webix|safe }},
+                                {{ form.as_webix|safe }}
                             ]
                         },
                     {% endblock %}
                     {% for inline in inlines %}
-                    {
-                        "id": '{{ inline.prefix }}-group',
-                        rows: []
-                    },
+                        {
+                            id: '{{ inline.prefix }}-group',
+                            rows: []
+                        },
                     {% endfor %}
                 ]
             }

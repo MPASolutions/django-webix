@@ -15,6 +15,16 @@ from django_webix.views import WebixCreateWithInlinesView, WebixUpdateWithInline
 from .models import MyModel, InlineModel, InlineStackedModel, InlineEmptyModel
 
 
+class MyLoginForm(WebixForm):
+    username = forms.CharField(required=True)
+    password = forms.CharField(widget=forms.PasswordInput(), required=True)
+
+
+class MyLoginView(FormView):
+    form_class = MyLoginForm
+    template_name = 'django_webix/generic/create.js'
+
+
 class InlineModelInline(WebixTabularInlineFormSet):
     model = InlineModel
     fields = '__all__'
@@ -93,11 +103,9 @@ class MyModelDeleteView(WebixDeleteView):
     model = MyModel
 
 
-class MyLoginForm(WebixForm):
-    username = forms.CharField(required=True)
-    password = forms.CharField(widget=forms.PasswordInput(), required=True)
+class InlineModelUpdateView(WebixUpdateWithInlinesView):
+    model = InlineModel
 
 
-class MyLoginView(FormView):
-    form_class = MyLoginForm
-    template_name = 'django_webix/generic/create.js'
+class InlineStackedModelDelete(WebixDeleteView):
+    model = InlineStackedModel
