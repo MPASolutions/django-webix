@@ -44,7 +44,11 @@ class WebixCreateWithInlinesView(WebixPermissionsMixin, CreateWithInlinesView):
         return context
 
     def get_success_url(self):
-        return reverse(self.object.WebixMeta.url_update, kwargs={"pk": self.object.pk})
+        if hasattr(self.object, 'WebixMeta') and hasattr(self.object.WebixMeta, 'url_update'):
+            return reverse(self.object.WebixMeta.url_update, kwargs={"pk": self.object.pk})
+        elif hasattr(self.object, 'WebixMeta') and hasattr(self.object.WebixMeta, 'url_list'):
+            return reverse(self.object.WebixMeta.url_list)
+        return super(WebixCreateWithInlinesView, self).get_success_url()
 
     def post(self, request, *args, **kwargs):
         response = super(WebixCreateWithInlinesView, self).post(request, *args, **kwargs)
@@ -86,7 +90,9 @@ class WebixUpdateWithInlinesView(WebixPermissionsMixin, UpdateWithInlinesView):
         return context
 
     def get_success_url(self):
-        return reverse(self.object.WebixMeta.url_update, kwargs={"pk": self.object.pk})
+        if hasattr(self.object, 'WebixMeta') and hasattr(self.object.WebixMeta, 'url_update'):
+            return reverse(self.object.WebixMeta.url_update, kwargs={"pk": self.object.pk})
+        return super(WebixUpdateWithInlinesView, self).get_success_url()
 
     def post(self, request, *args, **kwargs):
         response = super(WebixUpdateWithInlinesView, self).post(request, *args, **kwargs)
@@ -127,7 +133,9 @@ class WebixDeleteView(WebixPermissionsMixin, DeleteView):
         return context
 
     def get_success_url(self):
-        return reverse(self.object.WebixMeta.url_list)
+        if hasattr(self.object, 'WebixMeta') and hasattr(self.object.WebixMeta, 'url_list'):
+            return reverse(self.object.WebixMeta.url_list)
+        return super(WebixDeleteView, self).get_success_url()
 
     def delete(self, request, *args, **kwargs):
         self.object = self.get_object()
