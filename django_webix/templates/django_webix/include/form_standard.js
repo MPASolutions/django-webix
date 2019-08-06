@@ -1,6 +1,3 @@
-webix.ui([], $$("{{ view.webix_view_id|default:"content_right" }}"));
-
-
 {# Errors #}
 {% block webix_form_errors %}
     {% if form.errors %}
@@ -34,13 +31,13 @@ webix.ui([], $$("{{ view.webix_view_id|default:"content_right" }}"));
                     multiview: true,
                     options: [
                         {
-                            "id": '{{ form.webix_id }}-group',
-                            "value": "{{ form.get_name }}"
+                            id: '{{ form.webix_id }}-group',
+                            value: "{{ form.get_name }}"
                         },
                         {% for inline in inlines %}
                             {
-                                "id": '{{ inline.prefix }}-group',
-                                "value": "{{ inline.get_name }}"
+                                id: '{{ inline.prefix }}-group',
+                                value: "{{ inline.get_name }}"
                             },
                         {% endfor %}
                     ]
@@ -52,17 +49,17 @@ webix.ui([], $$("{{ view.webix_view_id|default:"content_right" }}"));
                 cells: [
                     {% block webix_form_elements %}
                         {
-                            "id": '{{ form.webix_id }}-group',
+                            id: '{{ form.webix_id }}-group',
                             rows: [
                                 {{ form.as_webix|safe }}
                             ]
                         },
                     {% endblock %}
                     {% for inline in inlines %}
-                    {
-                        "id": '{{ inline.prefix }}-group',
-                        rows: []
-                    },
+                        {
+                            id: '{{ inline.prefix }}-group',
+                            rows: []
+                        },
                     {% endfor %}
                 ]
             }

@@ -2,10 +2,14 @@
 
 from __future__ import unicode_literals
 
+import json
+
+from django.contrib.admin.utils import NestedObjects
 from django.contrib.contenttypes.models import ContentType
 from django.forms import all_valid
 from django.urls import reverse
 from django.utils.encoding import force_text
+from django.utils.text import capfirst
 from django.utils.text import get_text_list
 from django.utils.translation import ugettext as _
 from django.views.generic import DeleteView
@@ -122,6 +126,26 @@ class WebixUpdateWithInlinesUnmergedView(WebixUpdateWithInlinesView):
 
 class WebixDeleteView(WebixPermissionsMixin, DeleteView):
     template_name = 'django_webix/generic/delete.js'
+    nested_prevent = False
+
+    def _as_webix_tree(self, obj):
+        if isinstance(obj, list) and len(obj) == 2:
+            item = '{}: {}'.format(capfirst(obj[0]._meta.verbose_name), force_text(obj[0]))
+            _data = {"value": item, "open": True}
+            if hasattr(obj[0], 'WebixMeta') and hasattr(obj[0].WebixMeta, 'url_update'):
+                _data.update({'url': reverse(obj[0].WebixMeta.url_update, kwargs={"pk": obj[0].pk})})
+            _data.update({"data": self._as_webix_tree(obj[1])})
+            return [_data]
+        elif isinstance(obj, list):
+            _data = []
+            for item in obj:
+                _item = {"value": '{}: {}'.format(capfirst(item._meta.verbose_name), force_text(item))}
+                if hasattr(item, 'WebixMeta') and hasattr(item.WebixMeta, 'url_update'):
+                    _item.update({'url': reverse(item.WebixMeta.url_update, kwargs={"pk": item.pk})})
+                _data.append(_item)
+            return _data
+        else:
+            return []
 
     def get_context_data(self, **kwargs):
         context = super(WebixDeleteView, self).get_context_data(**kwargs)
@@ -130,6 +154,15 @@ class WebixDeleteView(WebixPermissionsMixin, DeleteView):
             'has_delete_permission': self.has_delete_permission(self.request, self.object),
             'has_module_permission': self.has_module_permission(self.request)
         })
+
+        # Nested objects
+        collector = NestedObjects(using='default')
+        collector.collect([self.object])
+        context.update({
+            'related': json.dumps(self._as_webix_tree(collector.nested())),
+            'nested_prevent': False if self.nested_prevent and len(collector.data) <= 1 else self.nested_prevent
+        })
+
         return context
 
     def get_success_url(self):

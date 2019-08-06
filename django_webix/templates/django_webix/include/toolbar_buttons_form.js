@@ -26,23 +26,20 @@ $$("{{ view.webix_view_id|default:"content_right" }}").addView({
     id: 'main_toolbar_form',
     view: "toolbar",
     margin: 5,
-    height: 30,
     cols: [
-        {% if form.instance.get_url_delete and form.instance.get_url_delete != '' %}
-            {% if has_delete_permission %}
-                {
-                    view: "button",
-                    type: "danger",
-                    align: "left",
-                    icon: "eraser",
-                    id: 'delete',
-                    label: "Elimina",
-                    width: 120,
-                    click: function () {
-                        load_js("{% url form.instance.get_url_delete object.pk %}");
-                    }
-                },
-            {% endif %}
+        {% if has_delete_permission and form.instance.get_url_delete and form.instance.get_url_delete != '' %}
+            {
+                view: "button",
+                type: "danger",
+                align: "left",
+                icon: "eraser",
+                id: 'delete',
+                label: "Elimina",
+                width: 120,
+                click: function () {
+                    load_js("{% url form.instance.get_url_delete object.pk %}");
+                }
+            },
         {% endif %}
         {% block extra_buttons_left %}{% endblock %}
         {$template: "Spacer"},
@@ -94,7 +91,7 @@ $$("{{ view.webix_view_id|default:"content_right" }}").addView({
             }
         {% endif %}
     ]
-}, -1);
+} -1);
 
 
 {# Check toolbar elements number #}

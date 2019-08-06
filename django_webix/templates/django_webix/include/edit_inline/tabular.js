@@ -6,10 +6,10 @@ $$('{{ inline.prefix }}-group').addView({
             rows: [
                 {{ inline.management_form.as_webix|safe }},
                 {% for field in inline %}
-                {
-                    id: '{{ field.prefix|safe }}-inline',
-                    cols: [{{ field.as_webix|safe }}]
-                },
+                    {
+                        id: '{{ field.prefix|safe }}-inline',
+                        cols: [{{ field.as_webix|safe }}]
+                    },
                 {% endfor %}
                 {
                     css: 'empty-form',

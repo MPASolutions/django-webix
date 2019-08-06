@@ -13,6 +13,11 @@ The format is based on KeepAChangelog_ and this project adheres to SemanticVersi
 [Unreleased]
 ++++++++++++
 
+Added
+~~~~~
+* Tree of nested object before delete an instance
+* Prevent to delete an instance if has at least one nested object
+
 Changed
 ~~~~~~~
 * Django-extra-view updates
@@ -20,7 +25,6 @@ Changed
 Fixed
 ~~~~~
 * Add new line in inline forms with filefield
-
 
 
 [0.2.1] - 2019-08-05
