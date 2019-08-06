@@ -1,8 +1,8 @@
 # Runtime dependencies
-Django
+Django>=1.11.23
 six
 requests
-django-extra-views
+django-extra-views>=0.12.0
 sorl-thumbnail
 Pillow
 
