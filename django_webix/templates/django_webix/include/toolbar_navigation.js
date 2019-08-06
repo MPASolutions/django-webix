@@ -2,7 +2,7 @@
 
 {% if form.instance.get_url_list and form.instance.get_url_list != '' %}
     $$("{{ view.webix_view_id|default:"content_right" }}").addView({
-        id: 'main_toolbar_form',
+        id: 'main_toolbar_navigation',
         view: "toolbar",
         margin: 5,
         cols: [

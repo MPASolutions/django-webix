@@ -91,7 +91,7 @@ $$("{{ view.webix_view_id|default:"content_right" }}").addView({
             }
         {% endif %}
     ]
-} -1);
+});
 
 
 {# Check toolbar elements number #}
