@@ -2,6 +2,9 @@
 
 language: python
 
+services:
+  - postgresql
+
 matrix:
   fast_finish: true
   include:
@@ -41,6 +44,9 @@ matrix:
       env: TOXENV=py37-django22
       dist: xenial
       sudo: true
+
+before_script:
+  - psql -c 'create database djangowebix_test;' -U postgres
 
 install:
   - pip install coverage mock flake8 tox codecov

@@ -11,21 +11,17 @@ USE_TZ = True
 SECRET_KEY = "=================================================="
 
 DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": ":memory:",
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'djangowebix',
+        'USER': 'postgres',
+        'HOST': 'localhost',
+        'PORT': '5432',
+        'TEST': {
+            'NAME': 'djangowebix_test',
+        },
     }
 }
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-#         'NAME': 'djangowebix',
-#         'USER': 'root',
-#         'PASSWORD': 'root',
-#         'HOST': 'localhost',
-#         'PORT': '5432',
-#     }
-# }
 
 INSTALLED_APPS = [
     "django.contrib.admin",

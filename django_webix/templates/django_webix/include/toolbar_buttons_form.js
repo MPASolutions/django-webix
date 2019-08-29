@@ -27,7 +27,7 @@ $$("{{ view.webix_view_id|default:"content_right" }}").addView({
     view: "toolbar",
     margin: 5,
     cols: [
-        {% if has_delete_permission and form.instance.get_url_delete and form.instance.get_url_delete != '' %}
+        {% if object.pk and has_delete_permission and url_delete and url_delete != '' %}
             {
                 view: "button",
                 type: "danger",
@@ -37,7 +37,7 @@ $$("{{ view.webix_view_id|default:"content_right" }}").addView({
                 label: "Elimina",
                 width: 120,
                 click: function () {
-                    load_js("{% url form.instance.get_url_delete object.pk %}");
+                    load_js("{% url url_delete object.pk %}");
                 }
             },
         {% endif %}
@@ -75,7 +75,7 @@ $$("{{ view.webix_view_id|default:"content_right" }}").addView({
                         });
 
                         $.ajax({
-                            url: "{% if not object.pk and form.instance.get_url_create and form.instance.get_url_create != '' %}{% url form.instance.get_url_create %}{% elif object.get_url_update and object.get_url_update != '' %}{% url object.get_url_update object.pk %}{% endif %}",
+                            url: "{% if not object.pk and url_create and url_create != '' %}{% url url_create %}{% elif url_update and url_update != '' %}{% url url_update object.pk %}{% endif %}",
                             dataType: "script",
                             type: "POST",
                             data: form_data,

@@ -13,6 +13,41 @@ The format is based on KeepAChangelog_ and this project adheres to SemanticVersi
 [Unreleased]
 ++++++++++++
 
+Added
+~~~~~
+* `WebixUrlMixin` parent class of all django-webix views
+* Set `permissions` into django-webix views to use django permissions (default True: use django permissions)
+* Set `logs` into django-webix views to use django log entries
+* `style` variable in `WebixCreateView` `WebixUpdateView` with possible values: `merged` and `unmerged`
+* Added all permission types in context of all django-webix views
+* Added urls in context of all django-webix views
+* Added `model` and `model_name` in context of all django-webix views
+
+Changed
+~~~~~~~
+* `get_model_name`, `get_url_list`, `get_url_create`, `get_url_update`, `get_url_delete` moved to `WebixUrlMixin` as methods
+* Changed permissions check in templates
+
+Removed
+~~~~~~~
+* Removed `get_model_name` from `GenericModelWebix`
+* Removed `get_url_list` from `GenericModelWebix`
+* Removed `get_url_create` from `GenericModelWebix`
+* Removed `get_url_update` from `GenericModelWebix`
+* Removed `get_url_delete` from `GenericModelWebix`
+
+Fixed
+~~~~~
+* Check if `django.contrib.admin` is installed before add log entry
+
+Deprecated
+~~~~~~~~~~
+* `GenericModelWebix` will be removed in a future release
+* `WebixCreateWithInlinesView` has been renamed to `WebixCreateView`
+* `WebixCreateWithInlinesUnmergedView` has been renamed to `WebixCreateView`
+* `WebixUpdateWithInlinesView` has been renamed to `WebixUpdateView`
+* `WebixUpdateWithInlinesUnmergedView` has been renamed to `WebixUpdateView`
+
 
 [0.2.2] - 2019-08-06
 ++++++++++++++++++++

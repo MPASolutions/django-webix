@@ -6,7 +6,7 @@ $$("{{ view.webix_view_id|default:"content_right" }}").addView({
     margin: 5,
     height: 30,
     cols: [
-        {% if object.get_url_update and object.get_url_update != '' %}
+        {% if url_update and url_update != '' %}
             {
                 view: "button",
                 type: "base",
@@ -15,10 +15,10 @@ $$("{{ view.webix_view_id|default:"content_right" }}").addView({
                 label: 'Torna a "{{ object }}"',
                 autowidth: true,
                 click: function () {
-                    load_js("{% url object.get_url_update object.pk %}");
+                    load_js("{% url url_update object.pk %}");
                 }
             },
-        {% elif object.get_url_list and object.get_url_list != '' %}
+        {% elif url_list and url_list != '' %}
             {
                 view: "button",
                 type: "base",
@@ -27,7 +27,7 @@ $$("{{ view.webix_view_id|default:"content_right" }}").addView({
                 label: 'Torna a "{{ object }}"',
                 autowidth: true,
                 click: function () {
-                  load_js("{% url object.get_url_list %}");
+                  load_js("{% url url_list %}");
                 }
             },
         {% endif %}
@@ -58,7 +58,7 @@ $$("{{ view.webix_view_id|default:"content_right" }}").addView({
     }
 });
 
-{% if not nested_prevent and object.get_url_delete and object.get_url_delete != '' %}
+{% if not nested_prevent and url_delete and url_delete != '' %}
     $$("{{ view.webix_view_id|default:"content_right" }}").addView({
         margin: 5,
         height: 30,
@@ -75,7 +75,7 @@ $$("{{ view.webix_view_id|default:"content_right" }}").addView({
                 width: 200,
                 click: function () {
                     $.ajax({
-                        url: "{% url object.get_url_delete object.pk %}",
+                        url: "{% url url_delete object.pk %}",
                         dataType: "script",
                         type: "POST",
                         success: function () {

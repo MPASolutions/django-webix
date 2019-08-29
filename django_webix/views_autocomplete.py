@@ -19,7 +19,6 @@ from django.utils.encoding import smart_text
 from django.views import View
 from django.views.decorators.cache import never_cache
 
-# AUTOCOMPLETE_SEARCH_FIELDS = getattr(settings, "GRAPPELLI_AUTOCOMPLETE_SEARCH_FIELDS", {})
 AUTOCOMPLETE_SEARCH_FIELDS = getattr(settings, "WEBIX_AUTOCOMPLETE_SEARCH_FIELDS", {})
 
 
@@ -39,9 +38,6 @@ class RelatedLookup(View):
 
         if not (self.request.user.is_active and self.request.user.is_authenticated):
             raise PermissionDenied
-
-    def request_is_valid(self):
-        return 'object_id' in self.GET and 'app_label' in self.GET and 'model_name' in self.GET
 
     def get_model(self):
         try:
@@ -79,42 +75,6 @@ class RelatedLookup(View):
         #     qs = model_admin.get_queryset(self.request)
         qs = self.get_filtered_queryset(qs)
         return qs
-
-    def get_return_value(self, obj, obj_id):
-        to_field = self.GET.get('to_field', None)
-        if to_field is not None:
-            return getattr(obj, to_field)
-        return obj_id
-
-    def get_data(self):
-        obj_id = self.GET['object_id']
-        to_field = self.GET.get('to_field', None)
-        data = []
-        if obj_id:
-            try:
-                if to_field is not None:
-                    obj = self.get_queryset().get(**{to_field: obj_id})
-                else:
-                    obj = self.get_queryset().get(pk=obj_id)
-                data.append({"value": "%s" % self.get_return_value(obj, obj_id), "label": get_label(obj)})
-            except (self.model.DoesNotExist, ValueError):
-                data.append({"value": obj_id, "label": "?"})
-        return data
-
-    @never_cache
-    def get(self, request, *args, **kwargs):
-        self.check_user_permission()
-        self.GET = self.request.GET
-
-        if self.request_is_valid():
-            self.get_model()
-            if self.model is not None:
-                data = self.get_data()
-                if data:
-                    return ajax_response(data)
-
-        data = [{"value": None, "label": ""}]
-        return ajax_response(data)
 
 
 class AutocompleteWebixLookup(RelatedLookup):
@@ -180,7 +140,7 @@ class AutocompleteWebixLookup(RelatedLookup):
             for part in lookup.lstrip('-').split(LOOKUP_SEP):
                 field = opts.get_field(part)
                 if field.is_relation:
-                    opts = field.rel.to._meta
+                    opts = field.rel.to._meta if hasattr(field, 'rel') else field.related_model._meta
             if previous_lookup_parts is not None:
                 lookup = previous_lookup_parts + LOOKUP_SEP + lookup
             if field.is_relation:
@@ -205,8 +165,6 @@ class AutocompleteWebixLookup(RelatedLookup):
         return qs.distinct()
 
     def get_data(self):
-        """ CUSTOM """
-
         to_field = self.GET.get("to_field", 'pk')
         if self.GET.get("nolimit", None):
             _AUTOCOMPLETE_LIMIT = 1000
@@ -219,16 +177,15 @@ class AutocompleteWebixLookup(RelatedLookup):
 
     @never_cache
     def get(self, request, *args, **kwargs):
-        """ CUSTOM """
-
         self.check_user_permission()
         self.GET = self.request.GET
 
         if self.request_is_valid():
             self.get_model()
-            data = self.get_data()
-            if data:
-                return ajax_response(data)
+            if self.model is not None:
+                data = self.get_data()
+                if data:
+                    return ajax_response(data)
 
         # overcomplicated label translation
         data = []
