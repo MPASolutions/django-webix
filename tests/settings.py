@@ -2,6 +2,8 @@
 
 from __future__ import unicode_literals, absolute_import
 
+import os
+
 import django
 
 DEBUG = True
@@ -18,7 +20,7 @@ DATABASES = {
         'HOST': 'localhost',
         'PORT': '5432',
         'TEST': {
-            'NAME': 'djangowebix_test',
+            'NAME':  os.environ.get('DATABASE_NAME', 'djangowebix_test'),
         },
     }
 }

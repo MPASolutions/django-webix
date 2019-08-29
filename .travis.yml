@@ -9,44 +9,44 @@ matrix:
   fast_finish: true
   include:
     - python: 2.7
-      env: TOXENV=py27-django111
+      env: TOXENV=py27-django111 DATABASE_NAME=py27-django111-postgres
     - python: 3.4
-      env: TOXENV=py34-django111
+      env: TOXENV=py34-django111 DATABASE_NAME=py34-django111-postgres
     - python: 3.5
-      env: TOXENV=py35-django111
+      env: TOXENV=py35-django111 DATABASE_NAME=py35-django111-postgres
     - python: 3.6
-      env: TOXENV=py36-django111
+      env: TOXENV=py36-django111 DATABASE_NAME=py36-django111-postgres
     - python: 3.7
-      env: TOXENV=py37-django111
+      env: TOXENV=py37-django111 DATABASE_NAME=py37-django111-postgres
     - python: 3.4
-      env: TOXENV=py34-django20
+      env: TOXENV=py34-django20 DATABASE_NAME=py34-django20-postgres
     - python: 3.5
-      env: TOXENV=py35-django20
+      env: TOXENV=py35-django20 DATABASE_NAME=py35-django20-postgres
     - python: 3.6
-      env: TOXENV=py36-django20
+      env: TOXENV=py36-django20 DATABASE_NAME=py36-django20-postgres
     - python: 3.7
-      env: TOXENV=py37-django20
+      env: TOXENV=py37-django20 DATABASE_NAME=py37-django20-postgres
       dist: xenial
       sudo: true
     - python: 3.5
-      env: TOXENV=py35-django21
+      env: TOXENV=py35-django21 DATABASE_NAME=py35-django21-postgres
     - python: 3.6
-      env: TOXENV=py36-django21
+      env: TOXENV=py36-django21 DATABASE_NAME=py36-django21-postgres
     - python: 3.7
-      env: TOXENV=py37-django21
+      env: TOXENV=py37-django21 DATABASE_NAME=py37-django21-postgres
       dist: xenial
       sudo: true
     - python: 3.5
-      env: TOXENV=py35-django22
+      env: TOXENV=py35-django22 DATABASE_NAME=py35-django22-postgres
     - python: 3.6
-      env: TOXENV=py36-django22
+      env: TOXENV=py36-django22 DATABASE_NAME=py36-django22-postgres
     - python: 3.7
-      env: TOXENV=py37-django22
+      env: TOXENV=py37-django22 DATABASE_NAME=py37-django22-postgres
       dist: xenial
       sudo: true
 
 before_script:
-  - psql -c 'create database djangowebix_test;' -U postgres
+  - bash -c "psql -c 'create database \"$TOXENV\";' -U postgres;"
 
 install:
   - pip install coverage mock flake8 tox codecov
