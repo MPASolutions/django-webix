@@ -6,6 +6,7 @@ import json
 
 import six
 from django.apps import apps
+from django.conf import settings
 from django.contrib.admin.utils import NestedObjects
 from django.contrib.contenttypes.models import ContentType
 from django.core.exceptions import ImproperlyConfigured
@@ -176,13 +177,13 @@ class WebixMixinBase(WebixPermissionsMixin, WebixUrlMixin):
     remove_disabled_buttons = False
 
     def get_container_id(self, request):
-        return 'content_right'
+        return settings.WEBIX_CONTAINER_ID
 
 
 class WebixTemplateView(TemplateView):
 
     def get_container_id(self, request):
-        return 'content_right'
+        return settings.WEBIX_CONTAINER_ID
 
     def get_context_data(self, **kwargs):
         context = super(WebixTemplateView, self).get_context_data(**kwargs)
@@ -193,15 +194,20 @@ class WebixTemplateView(TemplateView):
 
 
 class WebixCreateView(WebixMixinBase, CreateWithInlinesView):
-    style = 'merged'
+    template_name = 'django_webix/generic/update.js'
+    template_style = None
 
-    def get_template_names(self):
-        if self.template_name is None and self.style == 'merged':
-            self.template_name = 'django_webix/generic/create.js'
-        elif self.template_name is None and self.style == 'unmerged':
-            self.template_name = 'django_webix/generic/create_inline_unmerged.js'
-
-        return super(WebixCreateView, self).get_template_names()
+    def get_template_style(self):
+        _template_style = None
+        if self.template_style is None:
+            _template_style  = 'standard'
+        elif self.template_style in ['standard' or 'tabs']:
+            _template_style = self.template_style
+        else:
+            raise ImproperlyConfigured(
+            "Template style is improperly configured"
+            " only options are 'standard' or 'tabs'.")
+        return _template_style
 
     def dispatch(self, *args, **kwargs):
         self.object = None
@@ -228,10 +234,13 @@ class WebixCreateView(WebixMixinBase, CreateWithInlinesView):
             'extra_params_url_save': None,
             'extra_path_url_save': None,
             # failure related objects
-            'failure_view_related_objects': self.get_failure_view_related_objects(request=self.request, obj=self.object),
+            'failure_view_related_objects': self.get_failure_view_related_objects(request=self.request,
+                                                                                  obj=self.object),
             'failure_add_related_objects': self.get_failure_add_related_objects(request=self.request),
-            'failure_change_related_objects': self.get_failure_change_related_objects(request=self.request, obj=self.object),
-            'failure_delete_related_objects': self.get_failure_delete_related_objects(request=self.request, obj=self.object),
+            'failure_change_related_objects': self.get_failure_change_related_objects(request=self.request,
+                                                                                      obj=self.object),
+            'failure_delete_related_objects': self.get_failure_delete_related_objects(request=self.request,
+                                                                                      obj=self.object),
             # buttons for saving
             'is_enable_button_save_continue': self.is_enable_button_save_continue(request=self.request),
             'is_enable_button_save_addanother': self.is_enable_button_save_addanother(request=self.request),
@@ -243,7 +252,9 @@ class WebixCreateView(WebixMixinBase, CreateWithInlinesView):
             'url_delete': self.get_url_delete(),
             # Model info
             'model': self.model,
-            'model_name': self.get_model_name()
+            'model_name': self.get_model_name(),
+            # Template style
+            'template_style': self.get_template_style(),
         })
         return context
 
@@ -306,15 +317,20 @@ class WebixCreateView(WebixMixinBase, CreateWithInlinesView):
 
 
 class WebixUpdateView(WebixMixinBase, UpdateWithInlinesView):
-    style = 'merged'
+    template_name = 'django_webix/generic/update.js'
+    template_style = None
 
-    def get_template_names(self):
-        if self.template_name is None and self.style == 'merged':
-            self.template_name = 'django_webix/generic/update.js'
-        elif self.template_name is None and self.style == 'unmerged':
-            self.template_name = 'django_webix/generic/update_inline_unmerged.js'
-
-        return super(WebixUpdateView, self).get_template_names()
+    def get_template_style(self):
+        _template_style = None
+        if self.template_style is None:
+            _template_style  = 'standard'
+        elif self.template_style in ['standard' or 'tabs']:
+            _template_style = self.template_style
+        else:
+            raise ImproperlyConfigured(
+            "Template style is improperly configured"
+            " only options are 'standard' or 'tabs'.")
+        return _template_style
 
     def get_object(self, queryset=None):
         if getattr(self, 'object', None) is not None:
@@ -346,10 +362,13 @@ class WebixUpdateView(WebixMixinBase, UpdateWithInlinesView):
             'extra_params_url_save': None,
             'extra_path_url_save': None,
             # failure related objects
-            'failure_view_related_objects': self.get_failure_view_related_objects(request=self.request, obj=self.object),
+            'failure_view_related_objects': self.get_failure_view_related_objects(request=self.request,
+                                                                                  obj=self.object),
             'failure_add_related_objects': self.get_failure_add_related_objects(request=self.request),
-            'failure_change_related_objects': self.get_failure_change_related_objects(request=self.request, obj=self.object),
-            'failure_delete_related_objects': self.get_failure_delete_related_objects(request=self.request, obj=self.object),
+            'failure_change_related_objects': self.get_failure_change_related_objects(request=self.request,
+                                                                                      obj=self.object),
+            'failure_delete_related_objects': self.get_failure_delete_related_objects(request=self.request,
+                                                                                      obj=self.object),
             # buttons for saving
             'is_enable_button_save_continue': self.is_enable_button_save_continue(request=self.request),
             'is_enable_button_save_addanother': self.is_enable_button_save_addanother(request=self.request),
@@ -361,7 +380,9 @@ class WebixUpdateView(WebixMixinBase, UpdateWithInlinesView):
             'url_delete': self.get_url_delete(),
             # Model info
             'model': self.model,
-            'model_name': self.get_model_name()
+            'model_name': self.get_model_name(),
+            # Template style
+            'template_style': self.get_template_style(),
         })
         return context
 
@@ -457,10 +478,13 @@ class WebixDeleteView(WebixMixinBase, DeleteView):
             'extra_params_url_save': None,
             'extra_path_url_save': None,
             # failure related objects
-            'failure_view_related_objects': self.get_failure_view_related_objects(request=self.request, obj=self.object),
+            'failure_view_related_objects': self.get_failure_view_related_objects(request=self.request,
+                                                                                  obj=self.object),
             'failure_add_related_objects': self.get_failure_add_related_objects(request=self.request),
-            'failure_change_related_objects': self.get_failure_change_related_objects(request=self.request, obj=self.object),
-            'failure_delete_related_objects': self.get_failure_delete_related_objects(request=self.request, obj=self.object),
+            'failure_change_related_objects': self.get_failure_change_related_objects(request=self.request,
+                                                                                      obj=self.object),
+            'failure_delete_related_objects': self.get_failure_delete_related_objects(request=self.request,
+                                                                                      obj=self.object),
             # Urls
             'url_list': self.get_url_list(),
             'url_create': self.get_url_create(),
@@ -543,7 +567,7 @@ class WebixDeleteView(WebixMixinBase, DeleteView):
 
 
 class WebixListView(WebixMixinBase, ListView):
-    # template_name = 'django_webix/generic/list.js'
+    template_name = 'django_webix/generic/list.js'
 
     def dispatch(self, *args, **kwargs):
         if not self.has_view_permission(request=self.request):
@@ -582,7 +606,7 @@ class WebixListView(WebixMixinBase, ListView):
 
 
 class WebixDetailView(WebixMixinBase, DetailView):
-    # template_name = 'django_webix/generic/detail.js'
+    template_name = 'django_webix/generic/detail.js'
 
     def get_object(self, queryset=None):
         if getattr(self, 'object', None) is not None:

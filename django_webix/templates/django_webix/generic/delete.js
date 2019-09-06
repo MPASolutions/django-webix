@@ -6,17 +6,19 @@
     webix.ui([], $$("{{ webix_container_id }}"));
     {% endblock %}
 
-    {% if url_update and url_update != '' %}
-        {% url url_update object.pk as url_back %}
-        {% include "django_webix/include/toolbar_navigation.js" with url_back=url_back %}
-    {% elif url_list and url_list != '' %}
-        {% url url_list as url_back %}
-        {% include "django_webix/include/toolbar_navigation.js" with url_back=url_back %}
-    {% endif %}
+    {% block toolbar_navigation %}
+        {% if url_update and url_update != '' %}
+            {% url url_update object.pk as url_back %}
+            {% include "django_webix/include/toolbar_navigation.js" with url_back=url_back %}
+        {% elif url_list and url_list != '' %}
+            {% url url_list as url_back %}
+            {% include "django_webix/include/toolbar_navigation.js" with url_back=url_back %}
+        {% endif %}
+    {% endblock %}
 
     {% if failure_delete_related_objects %}
         {% block failure_related_objects %}
-        {% include "django_webix/include/list_failure_related_objects.js" with failure_related_objects=failure_delete_related_objects %}
+            {% include "django_webix/include/list_failure_related_objects.js" with failure_related_objects=failure_delete_related_objects %}
         {% endblock %}
     {% endif %}
 

@@ -18,4 +18,9 @@ class DjangoWebixConfig(AppConfig):
         if not hasattr(settings, 'WEBIX_LICENSE'):
             raise Exception('WEBIX_LICENSE is not found in your settings ("FREE" or "PRO")')
 
+        # check webix container id
+        if not hasattr(settings, 'WEBIX_CONTAINER_ID'):
+            raise Exception('WEBIX_CONTAINER_ID is webix_id where js interfaces are loaded and '
+                            'is not found in your settings (usually "content_right")')
+
 
