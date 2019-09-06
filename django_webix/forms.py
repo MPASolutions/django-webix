@@ -2,14 +2,14 @@
 
 from __future__ import unicode_literals, absolute_import
 
-import copy
 from collections import OrderedDict, defaultdict
 from json import dumps
-from random import randint
 
+import copy
 import django
 import six
 from django import forms
+from django.conf import settings
 from django.core.serializers.json import DjangoJSONEncoder
 from django.db import models, connection
 from django.db.models.fields import FieldDoesNotExist
@@ -20,6 +20,7 @@ from django.urls import reverse
 from django.utils.encoding import force_text
 from django.utils.text import capfirst
 from django.utils.translation import ugettext_lazy as _
+from random import randint
 from sorl.thumbnail import get_thumbnail
 
 try:
@@ -307,6 +308,53 @@ class BaseWebixForm(forms.BaseForm):
                 # el.update({'view':''})
                 if initial is not None:
                     el.update({'value': initial})
+            # Image  # TODO
+            elif 'image' in str(type(field)).lower():
+                if initial is not None:
+                    el.update({'value': None})
+                el.update({
+                    'view': 'uploader',
+                    'autosend': False,
+                    'multiple': False,
+                    'width': 100,
+                    'label': _('Upload new image')
+                })
+                if initial:
+                    img_small = get_thumbnail(initial, '150x100', quality=85)
+                    img_big = get_thumbnail(initial, '500x400', quality=85)
+                    key = randint(1, 100000)
+                    _template_file = '<img src="{}"  onclick="image_modal(\'{}\',{},{},\'{}\')">'.format(
+                        img_small.url, img_big.url, 500, 400, str(key)
+                    )
+                else:
+                    _template_file = ''
+                elements.update({
+                    '{}_block'.format(self[name].html_name): {
+                        'cols': [
+                            {
+                                'name_label': name,
+                                'id_label': 'label_' + name,
+                                'borderless': True,
+                                'template': label,
+                                'height': 30,
+                                'width': 200
+                            },
+                            {
+                                'name_label': name,
+                                'id_label': 'preview_' + name,
+                                'borderless': True,
+                                'template': _template_file,
+                                'height': 100,
+                                'width': 170
+                            },
+                            el,
+                            {
+                                'borderless': True,
+                                'template': '',
+                                'height': 30
+                            },
+                        ]}})
+                _pass = True
             # FileField
             elif isinstance(field, forms.FileField):
                 if initial is not None:
@@ -356,6 +404,9 @@ class BaseWebixForm(forms.BaseForm):
                     el.update({'value': initial})
             # ModelMultipleChoiceField
             elif type(field) == forms.models.ModelMultipleChoiceField:
+                if settings.WEBIX_LICENSE != 'PRO':
+                    raise ImproperlyConfigured(
+                        "MultipleChoiceField is available only with PRO webix license")
                 if initial is not None:
                     el.update({
                         'value': ','.join([str(i.pk) if isinstance(i, models.Model) else str(i) for i in initial])
@@ -503,53 +554,7 @@ class BaseWebixForm(forms.BaseForm):
                 # Default if is required and there are only one option
                 if field.required and initial is None and len(field.choices) == 1:
                     el.update({'value': '{}'.format(field.choices[0][0])})
-            # Image  # TODO
-            elif 'image' in str(type(field)).lower():
-                if initial is not None:
-                    el.update({'value': None})
-                el.update({
-                    'view': 'uploader',
-                    'autosend': False,
-                    'multiple': False,
-                    'width': 100,
-                    'label': _('Upload new image')
-                })
-                if initial:
-                    img_small = get_thumbnail(initial, '150x100', quality=85)
-                    img_big = get_thumbnail(initial, '500x400', quality=85)
-                    key = randint(1, 100000)
-                    _template_file = '<img src="{}"  onclick="image_modal(\'{}\',{},{},\'{}\')">'.format(
-                        img_small.url, img_big.url, 500, 400, str(key)
-                    )
-                else:
-                    _template_file = ''
-                elements.update({
-                    '{}_block'.format(self[name].html_name): {
-                        'cols': [
-                            {
-                                'name_label': name,
-                                'id_label': 'label_' + name,
-                                'borderless': True,
-                                'template': label,
-                                'height': 30,
-                                'width': 200
-                            },
-                            {
-                                'name_label': name,
-                                'id_label': 'preview_' + name,
-                                'borderless': True,
-                                'template': _template_file,
-                                'height': 100,
-                                'width': 170
-                            },
-                            el,
-                            {
-                                'borderless': True,
-                                'template': '',
-                                'height': 30
-                            },
-                        ]}})
-                _pass = True
+
             # JSONField (postgresql)
             elif connection.vendor == 'postgresql' and isinstance(field, JSONField):
                 if isinstance(field.widget, forms.widgets.Textarea):

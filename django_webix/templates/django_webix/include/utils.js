@@ -1,4 +1,4 @@
-{% load static %}
+{% load static django_webix_utils %}
 
 // csrf set
 // using jQuery
@@ -54,16 +54,6 @@ webix.i18n.pivot = {
     total: "Totale"
 };
 
-function set_autocomplete_reload(selector, QS) {
-    a = $$(selector);
-    b = $$(a.config.suggest);
-    c = b.getBody();
-    c.define('dataFeed', QS);
-    c.clearAll()
-    c.refresh();
-    d = a.getList();
-    d.load(QS + '&filter[value]=');
-}
 
 function load_pdf(url) {
     var win = window.open(url, '_blank');
@@ -98,12 +88,16 @@ function custom_checkbox_yesno(obj, common, value) {
         return "<div style='color:red;'>No</div>";
 }
 
-function custom_button_cp() {
-    return '<div title="Duplica elemento"><i style="cursor:pointer" class="webix_icon fa-copy"></i></div>'
+function custom_button_cp(){
+  return '<div title="Duplica elemento"><i style="cursor:pointer" class="webix_icon far fa-copy"></i></div>'
 }
 
-function custom_button_rm() {
-    return '<div title="Rimuovi elemento"><i style="cursor:pointer" class="webix_icon fa-trash-o"></i></div>'
+function custom_button_rm(){
+  return '<div title="Rimuovi elemento"><i style="cursor:pointer" class="webix_icon far fa-trash-alt"></i></div>'
+}
+
+function custom_button_detail(){
+  return '<div title="Dettaglio elemento"><i style="cursor:pointer" class="webix_icon fas fa-external-link-square-alt"></i></div>'
 }
 
 function image_modal(url, width, height, id) {
@@ -127,7 +121,7 @@ function image_modal(url, width, height, id) {
 
 function load_js(lnk, hide, area) {
     if ((area == undefined) || (area == '') || (area == null)) {
-        area = 'content_right';
+        area = '{{ webix_container_id }}';
     }
     if (lnk != '') {
         hide = hide || 0;
@@ -154,7 +148,7 @@ function load_js(lnk, hide, area) {
 
 function load_js_data(lnk, area) {
     if ((area == undefined) || (area == '') || (area == null)) {
-        area = 'content_right';
+        area = '{{ webix_container_id }}';
     }
     $$(area).showOverlay("<img src='{% static 'django_webix/loading.gif' %}'>");
     $.ajax({
@@ -194,6 +188,18 @@ function makeid() {
     for (var i = 0; i < 5; i++)
         text += possible.charAt(Math.floor(Math.random() * possible.length));
     return text;
+}
+
+
+function set_autocomplete_reload(selector, QS) {
+    a = $$(selector);
+    b = $$(a.config.suggest);
+    c = b.getBody();
+    c.define('dataFeed', QS);
+    c.clearAll()
+    c.refresh();
+    d = a.getList();
+    d.load(QS + '&filter[value]=');
 }
 
 function set_autocomplete_value(selector, QS, value) {

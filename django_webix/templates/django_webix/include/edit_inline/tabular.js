@@ -1,3 +1,4 @@
+{% load django_webix_utils %}
 $$('{{ inline.prefix }}-group').addView({
     rows: [
         {{ inline.0.get_tabular_header|safe }},

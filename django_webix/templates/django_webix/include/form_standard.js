@@ -1,3 +1,4 @@
+{% load django_webix_utils %}
 {# Errors #}
 {% block webix_form_errors %}
     {% if form.errors %}
@@ -18,7 +19,7 @@
 
 {# Form #}
 {% block webix_form %}
-    $$("{{ view.webix_view_id|default:"content_right" }}").addView({
+    $$("{{ webix_container_id }}").addView({
         borderless: true,
         view: 'form',
         elements: [

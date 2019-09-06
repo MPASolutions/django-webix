@@ -3,7 +3,7 @@ webix.ui([], $$("{{ view.webix_view_id|default:"content_right" }}"));
 $$("{{ view.webix_view_id|default:"content_right" }}").addView({
     rows: [
         {
-            id: '{{ object_list.model.get_model_name }}',
+            id: '{{ object_list.model|get_model_name }}',
             view: "datatable",
             resizeColumn: true,
             data: {{ datalist|safe }},

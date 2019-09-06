@@ -3,11 +3,26 @@
 from __future__ import unicode_literals
 
 import re
-
 import six
 from django import template
+from django.conf import settings
 
 register = template.Library()
+
+
+@register.simple_tag(name='webix_version')
+def webix_version():
+    return settings.WEBIX_VERSION
+
+
+@register.simple_tag(name='webix_license')
+def webix_license():
+    return settings.WEBIX_LICENSE
+
+
+@register.filter
+def comma_to_underscore(value):
+    return value.replace(".", "_")
 
 
 @register.filter_function

@@ -1,3 +1,4 @@
+{% load django_webix_utils %}
 $$('{{ inline.prefix }}-group').addView({
     rows: [
         {
