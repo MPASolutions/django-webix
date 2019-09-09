@@ -13,7 +13,7 @@ if ((typeof actions_list != 'undefined') && (typeof actions_execute != 'undefine
             options: actions_list
         },
         {
-            view: "button",
+            view: "tootipButton",
             id: "action_button",
             value: "Esegui",
             inputWidth: 60,
@@ -22,7 +22,7 @@ if ((typeof actions_list != 'undefined') && (typeof actions_execute != 'undefine
                 onItemClick: function () {
                     var action = $$("action_combo").getValue();
                     ids = [];
-                    $$("{{ model_name }}").eachRow(function (id) {
+                    $$("datatable_{{ model_name }}").eachRow(function (id) {
                         if ((this.getItem(id)!=undefined )&&( this.getItem(id).checkbox_action)) {
                             ids.push(id)
                         }

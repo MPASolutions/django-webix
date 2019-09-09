@@ -23,47 +23,38 @@
         borderless: true,
         view: 'form',
         elements: [
-            {% if inlines|length > 0 %}
-                {
-                    view: "tabbar",
-                    id: '{{ form.webix_id }}-inlines-tabbar',
-                    value: "{{ form.webix_id }}-group",
-                    optionWidth: 150,
-                    multiview: true,
-                    options: [
-                        {
-                            id: '{{ form.webix_id }}-group',
-                            value: "{{ form.get_name }}"
-                        },
-                        {% for inline in inlines %}
-                            {
-                                id: '{{ inline.prefix }}-group',
-                                value: "{{ inline.get_name }}"
-                            },
-                        {% endfor %}
-                    ]
-                },
-            {% endif %}
-            {
-                animate: false,
-                id: '{{ form.webix_id }}-inlines',
-                cells: [
-                    {% block webix_form_elements %}
-                        {
-                            id: '{{ form.webix_id }}-group',
-                            rows: [
-                                {{ form.as_webix|safe }}
-                            ]
-                        },
-                    {% endblock %}
-                    {% for inline in inlines %}
-                        {
-                            id: '{{ inline.prefix }}-group',
-                            rows: []
-                        },
-                    {% endfor %}
-                ]
-            }
+            {% block webix_form_elements %}
+                {{ form.as_webix|safe }},
+                {% if inlines %}
+                    {
+                        view: "tabbar",
+                        id: '{{ form.webix_id }}-inlines-tabbar',
+                        value: "{{ inlines.0.prefix }}-group",
+                        optionWidth: 150,
+                        multiview: true,
+                        options: [
+                            {% for inline in inlines %}
+                                {
+                                    id: '{{ inline.prefix }}-group',
+                                    value: "{{ inline.get_name }}"
+                                },
+                            {% endfor %}
+                        ]
+                    },
+                    {
+                        animate: false,
+                        id: '{{ form.webix_id }}-inlines',
+                        cells: [
+                            {% for inline in inlines %}
+                                {
+                                    id: '{{ inline.prefix }}-group',
+                                    rows: []
+                                },
+                            {% endfor %}
+                        ]
+                    }
+                {% endif %}
+            {% endblock %}
         ],
         on: {
             onAfterValidation: function (result, value) {

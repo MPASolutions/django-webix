@@ -6,42 +6,46 @@ $$("{{ webix_container_id }}").addView({
     margin: 5,
     cols: [
         {% block button_delete %}
-          {% if not remove_delete %}
-            {% if not remove_disabled_buttons or remove_disabled_buttons and not has_delete_permission %}
+            {% if not remove_disabled_buttons %}
               {% if object.pk  and url_delete and url_delete != '' %}
                 {
                     id: '{{ form.webix_id }}_delete',
-                    view: "button",
+                    view: "tootipButton",
                     type: "danger",
                     align: "left",
                     label: "Elimina",
                     {% if not has_delete_permission %}
                     disabled: true,
+                    tooltip: "{% autoescape off %}{{ info_no_delete_permission|join:", " }}{% endautoescape %}",
                     {% endif %}
                     width: 120,
                     click: function () {
-                        load_js("{% url url_delete object.pk %}");
+                        load_js("{{ url_delete }}");
                     }
                 },
               {% endif %}
             {% endif %}
-          {% endif %}
         {% endblock %}
         {% block extra_buttons_left %}{% endblock %}
         {$template: "Spacer"},
         {% block extra_buttons_right %}{% endblock %}
         {% block button_save %}
-          {% if not remove_save %}
             {% if not remove_disabled_buttons or remove_disabled_buttons and not object.pk and not has_add_permission or remove_disabled_buttons and object.pk and not has_change_permission %}
                 {% if is_enable_button_save_continue %}
                 {
                     id: '{{ form.webix_id }}_save_continue',
-                    view: "button",
+                    view: "tootipButton",
                     type: "form",
                     align: "right",
                     label: "Salva e continua le modifiche",
                     {% if not object.pk and not has_add_permission or object.pk and not has_change_permission %}
-                    disabled: true,
+                        disabled: true,
+                    {% endif %}
+                    {% if not object.pk and not has_add_permission %}
+                        tooltip: "{% autoescape off %}{{ info_no_add_permission|join:", " }}{% endautoescape %}",
+                    {% endif %}
+                    {% if object.pk and not has_change_permission %}
+                        tooltip: "{% autoescape off %}{{ info_no_change_permission|join:", " }}{% endautoescape %}",
                     {% endif %}
                     width: 190,
                     click: function () {
@@ -52,12 +56,18 @@ $$("{{ webix_container_id }}").addView({
                 {% if is_enable_button_save_addanother %}
                 {
                     id: '{{ form.webix_id }}_save_addanother',
-                    view: "button",
+                    view: "tootipButton",
                     type: "form",
                     align: "right",
                     label: "Salva e aggiungi un altro",
                     {% if not object.pk and not has_add_permission or object.pk and not has_change_permission %}
                     disabled: true,
+                    {% endif %}
+                    {% if not object.pk and not has_add_permission %}
+                        tooltip: "{% autoescape off %}{{ info_no_add_permission|join:", " }}{% endautoescape %}",
+                    {% endif %}
+                    {% if object.pk and not has_change_permission %}
+                        tooltip: "{% autoescape off %}{{ info_no_change_permission|join:", " }}{% endautoescape %}",
                     {% endif %}
                     width: 160,
                     click: function () {
@@ -68,12 +78,18 @@ $$("{{ webix_container_id }}").addView({
                 {% if is_enable_button_save_gotolist %}
                 {
                     id: '{{ form.webix_id }}_save',
-                    view: "button",
+                    view: "tootipButton",
                     type: "form",
                     align: "right",
                     label: "Salva",
                     {% if not object.pk and not has_add_permission or object.pk and not has_change_permission %}
                     disabled: true,
+                    {% endif %}
+                    {% if not object.pk and not has_add_permission %}
+                        tooltip: "{% autoescape off %}{{ info_no_add_permission|join:", " }}{% endautoescape %}",
+                    {% endif %}
+                    {% if object.pk and not has_change_permission %}
+                        tooltip: "{% autoescape off %}{{ info_no_change_permission|join:", " }}{% endautoescape %}",
                     {% endif %}
                     width: 120,
                     click: function () {
@@ -82,7 +98,6 @@ $$("{{ webix_container_id }}").addView({
                 }
                 {% endif %}
             {% endif %}
-          {% endif %}
         {% endblock %}
     ]
 });

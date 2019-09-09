@@ -8,11 +8,9 @@
 
     {% block toolbar_navigation %}
         {% if url_update and url_update != '' %}
-            {% url url_update object.pk as url_back %}
-            {% include "django_webix/include/toolbar_navigation.js" with url_back=url_back %}
+            {% include "django_webix/include/toolbar_navigation.js" with url_back=url_update %}
         {% elif url_list and url_list != '' %}
-            {% url url_list as url_back %}
-            {% include "django_webix/include/toolbar_navigation.js" with url_back=url_back %}
+            {% include "django_webix/include/toolbar_navigation.js" with url_back=url_list %}
         {% endif %}
     {% endblock %}
 
@@ -51,7 +49,7 @@
         cols: [
             {$template: "Spacer"},
             {
-                view: "button",
+                view: "tootipButton",
                 type: "form",
                 align: "right",
                 id: "delete",
@@ -59,7 +57,7 @@
                 width: 200,
                 click: function () {
                     $.ajax({
-                        url: "{% url url_delete object.pk %}",
+                        url: "{{ url_delete }}",
                         dataType: "script",
                         type: "POST",
                         success: function () {

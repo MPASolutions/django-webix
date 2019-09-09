@@ -1,3 +1,5 @@
+{% load django_webix_utils %}
+
 $$("{{ webix_container_id }}").addView({
     id: "header_failure_related_objects",
     view: "template",

@@ -7,7 +7,7 @@ $$("{{ webix_container_id }}").addView({
     cols: [
         {% if url_back and url_back != '' %}
         {
-            view: "button",
+            view: "tootipButton",
             type: "base",
             align: "left",
             label: "Torna indietro",
@@ -18,13 +18,13 @@ $$("{{ webix_container_id }}").addView({
         },
         {% elif not url_list or url_list != '' %}
         {
-            view: "button",
+            view: "tootipButton",
             type: "base",
             align: "left",
             label: "Torna alla lista",
             autowidth: true,
             click: function () {
-                load_js("{% url url_list %}");
+                load_js("{{ url_list }}");
             }
         },
         {% endif %}

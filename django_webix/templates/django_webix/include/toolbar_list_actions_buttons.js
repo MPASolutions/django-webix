@@ -2,13 +2,13 @@
 var toolbar_actions = [];
 $.each(actions_list, function (index, obj) {
     toolbar_actions.push({
-        view: 'button',
+        view: "tootipButton",
         autowidth: true,
         id: 'action_' + obj.id,
         value: '' + obj.value,
         click: function () {
             ids = [];
-            $$("{{ model_name }}").eachRow(function (id) {
+            $$("datatable_{{ model_name }}").eachRow(function (id) {
                 if (this.getItem(id).checkbox_action) {
                     ids.push(id)
                 }

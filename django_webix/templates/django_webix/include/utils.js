@@ -109,7 +109,7 @@ function image_modal(url, width, height, id) {
         head: {
             view: "toolbar", cols: [
                 {view: "label", label: "Immagine"},
-                {view: "button", label: 'Chiudi', width: 100, align: 'right', click: "$$('" + id + "').close();"}
+                {view: "tootipButton", label: 'Chiudi', width: 100, align: 'right', click: "$$('" + id + "').close();"}
             ]
         },
         position: "center",
@@ -228,3 +228,32 @@ function set_autocomplete_empty(selector, QS) {
     d.load(QS + '&filter[value]=');
 }
 
+webix.protoUI({
+  name:"tootipButton",
+  $cssName:"button",
+  $init:function(obj){
+    if (obj.tooltip)
+    	this.$view.title = obj.tooltip;
+  }
+}, webix.ui.button)
+
+webix.ui.datafilter.dataListCheckbox = webix.extend({
+  refresh: function (master, node, config) {
+    node.onclick = function () { // NOTA uncheck lo fa su tutto invece di solo quello che vede filtrato
+      this.getElementsByTagName("input")[0].checked = config.checked = !config.checked;
+      var column = master.getColumnConfig(config.columnId);
+      var checked = config.checked ? column.checkValue : column.uncheckValue;
+
+      var range = master.data.getIndexRange(master.data.$min, master.data.$max);
+      for (var i = 0; i < range.length; i++) {
+        var obj = range[i];
+        obj[config.columnId] = checked;
+        master.callEvent("onCheck", [obj.id, config.columnId, checked]);
+      }
+      master.refresh();
+    };
+  },
+  render: function (master, config) {
+    return "<input type='checkbox' " + (config.checked ? "checked='1'" : "") + "> Tutti";
+  }
+}, webix.ui.datafilter.masterCheckbox);

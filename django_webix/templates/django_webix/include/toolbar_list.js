@@ -1,15 +1,15 @@
 {# counter #}
 function update_counter() {
     ids = [];
-    $$("{{ model_name }}").eachRow(function (id) {
+    $$("datatable_{{ model_name }}").eachRow(function (id) {
         if ((this.getItem(id)!=undefined )&&( this.getItem(id).checkbox_action)) {
             ids.push(id)
         }
     });
     if (ids.length > 0) {
-        txt = ids.length + ' di ' + $$('{{ model_name }}').count() + ' elementi';
+        txt = ids.length + ' di ' + $$('datatable_{{ model_name }}').count() + ' elementi';
     } else {
-        txt = $$('{{ model_name }}').count() + ' elementi';
+        txt = $$('datatable_{{ model_name }}').count() + ' elementi';
     }
     $$('stats_list').define('label', txt);
     $$('stats_list').refresh();
@@ -17,7 +17,7 @@ function update_counter() {
 
 {# hide column selection if no one actions #}
 if ((typeof actions_list == 'undefined') || (typeof actions_execute == 'undefined') || (actions_list.length == 0)) {
-    $$('{{ model_name }}').hideColumn("checkbox_action");
+    $$('datatable_{{ model_name }}').hideColumn("checkbox_action");
     var toolbar_actions = [];
 }
 
@@ -39,22 +39,24 @@ $$("{{webix_container_id}}").addView({
         {% endblock %}
 
         {% block add_button %}
-        {% if has_add_permission %}
         {
-            view: "button",
+            view: "tootipButton",
             type: "form",
             align: "right",
             label: 'Aggiungi nuovo',
+            {% if not has_add_permission %}
+            disabled: true,
+            tooltip: '{{ info_no_add_permission|join:", " }}',
+            {% endif %}
             width: 150,
             click: function () {
-                load_js('{% url url_create %}{{ extra_url }}')
+                load_js('{{ url_create }}')
             }
         }
-        {% endif %}
         {% endblock %}
     ])
 });
 update_counter();
-$$("{{ model_name }}").attachEvent("onCheck", function (row, column, state) {
+$$("datatable_{{ model_name }}").attachEvent("onCheck", function (row, column, state) {
     update_counter()
 });

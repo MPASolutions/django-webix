@@ -16,7 +16,7 @@
         {% endblock %}
     {% else %}
         {% block form_standard %}
-            {% if template_style == 'default' %}
+            {% if template_style == 'standard' %}
                 {% include "django_webix/include/form_standard.js" %}
             {% endif %}
             {% if template_style == 'tabs' %}

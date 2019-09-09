@@ -372,7 +372,7 @@ class BaseWebixForm(forms.BaseForm):
                         'name_label': name,
                         'id_label': name,
                         'borderless': True,
-                        'view': "button",
+                        'view': "tootipButton",
                         "type": "iconButton",
                         "css": "webix_primary",
                         "icon": "fas fa-download",
@@ -597,7 +597,7 @@ class BaseWebixForm(forms.BaseForm):
                 el.update({'hidden': True})
                 elements.update({
                     "{}-icon".format(self.add_prefix(name)): {
-                        'view': "button",
+                        'view': "tootipButton",
                         "type": "iconButton",
                         "icon": "far fa-trash-alt",
                         "width": 28,
