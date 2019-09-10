@@ -4,7 +4,7 @@ from __future__ import unicode_literals
 
 from django.apps import apps
 from django.contrib.contenttypes.models import ContentType
-from django.core.exceptions import ImproperlyConfigured
+from django.core.exceptions import ImproperlyConfigured, ValidationError
 from django.core.exceptions import PermissionDenied
 from django.forms import model_to_dict
 from django.http import HttpResponseRedirect
@@ -81,6 +81,12 @@ class WebixCreateUpdateMixin:
                 " a get_absolute_url method on the Model.")
         return url
 
+    def validate_unique_together(self, form=None, inlines=None, **kwargs):
+        #self.object.validate_unique()
+        if form is not None:
+            form.instance.validate_unique()
+
+
     def get_context_data_webix_create_update(self, request, obj=None, **kwargs):
         return {
             # buttons for saving
@@ -100,8 +106,11 @@ class WebixCreateView(WebixBaseMixin, WebixCreateUpdateMixin, WebixPermissionsMi
         initial = {}
         if self.request.GET.get('pk_copy', None) is not None:
             object_to_copy = get_object_or_404(self.get_queryset(), pk=self.request.GET['pk_copy'])
+            fields_to_copy = self.form_class._meta.fields
+            if self.model._meta.pk.name in fields_to_copy:
+                fields_to_copy.remove(self.model._meta.pk.name)
             initial.update(model_to_dict(object_to_copy,
-                                         fields=self.form_class._meta.fields))
+                                         fields=fields_to_copy))
         return initial
 
     def dispatch(self, *args, **kwargs):
@@ -146,6 +155,11 @@ class WebixCreateView(WebixBaseMixin, WebixCreateUpdateMixin, WebixPermissionsMi
 
     def forms_valid(self, form, inlines, **kwargs):
         self.pre_forms_valid(form=form, inlines=inlines, **kwargs)
+        try:
+            self.validate_unique_together(form=form, inlines=inlines, **kwargs)
+        except ValidationError as e:
+            form.add_error(None,str(e))
+            return self.forms_invalid(form=form, inlines=inlines, **kwargs)
         self.object = form.save()
         for formset in inlines:
             formset.save()
@@ -182,6 +196,11 @@ class WebixUpdateView(WebixBaseMixin, WebixCreateUpdateMixin, WebixPermissionsMi
         context.update(self.get_context_data_webix_base(request=self.request))
         return context
 
+    def validate_unique_together(self, form=None, inlines=None, **kwargs):
+        self.object.validate_unique()
+        if form is not None:
+            form.instance.validate_unique()
+
     def pre_forms_valid(self, form=None, inlines=None, **kwargs):
         pass
 
@@ -207,6 +226,11 @@ class WebixUpdateView(WebixBaseMixin, WebixCreateUpdateMixin, WebixPermissionsMi
 
     def forms_valid(self, form, inlines, **kwargs):
         self.pre_forms_valid(form=form, inlines=inlines, **kwargs)
+        try:
+            self.validate_unique_together(form=form, inlines=inlines, **kwargs)
+        except ValidationError:
+            form.add_error(None,str(e))
+            return self.forms_invalid(form=form, inlines=inlines, **kwargs)
         self.object = form.save()
         for formset in inlines:
             formset.save()
