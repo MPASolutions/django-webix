@@ -101,12 +101,23 @@ class WebixCreateUpdateMixin:
 
 class WebixCreateView(WebixBaseMixin, WebixCreateUpdateMixin, WebixPermissionsMixin, WebixUrlMixin, CreateWithInlinesView):
     template_name = 'django_webix/generic/create.js'
+    copy_fields = None
+    copy_exclude = None
+
+    def get_copy_fields(self):
+        if self.copy_fields is None:
+            _copy_fields = self.form_class._meta.fields
+        else:
+            _copy_fields = self.copy_fields
+        if self.copy_exclude is not None:
+            _copy_fields -= self.copy_exclude
+        return _copy_fields
 
     def get_initial(self):
         initial = {}
         if self.request.GET.get('pk_copy', None) is not None:
             object_to_copy = get_object_or_404(self.get_queryset(), pk=self.request.GET['pk_copy'])
-            fields_to_copy = self.form_class._meta.fields
+            fields_to_copy = self.get_copy_fields()
             if self.model._meta.pk.name in fields_to_copy:
                 fields_to_copy.remove(self.model._meta.pk.name)
             initial.update(model_to_dict(object_to_copy,

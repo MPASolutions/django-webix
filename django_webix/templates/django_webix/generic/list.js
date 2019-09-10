@@ -27,7 +27,7 @@
             {
               status: 0,
               {% for key, value in obj.items %}
-                {{key}}: "{{ value|default_if_none:''|escapejs }}"{% if not forloop.last %}, {% endif %}
+                {{key}}: "{{ value|format_list_value|escapejs }}"{% if not forloop.last %}, {% endif %}
               {% endfor %}
               {% block extra_columns %}{% endblock %}
             }{% if not forloop.last %}, {% endif %}

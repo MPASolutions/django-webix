@@ -6,6 +6,7 @@ import re
 import six
 from django import template
 from django.conf import settings
+import datetime
 
 register = template.Library()
 
@@ -29,6 +30,17 @@ def comma_to_underscore(value):
 def order_by(queryset, args):
     args = [x.strip() for x in args.split(',')]
     return queryset.order_by(*args)
+
+
+@register.filter
+def format_list_value(value):
+    if type(value)==datetime.date:
+        return value.strftime('%d/%m/%Y')
+    elif type(value) == datetime.datetime:
+        return value.strftime('%d/%m/%Y %H:%M')
+    elif value is None:
+        return ''
+    return str(value)
 
 
 @register.filter
