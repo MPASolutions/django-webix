@@ -46,16 +46,24 @@ class WebixPermissionsMixin:
         return []
 
     def has_add_django_user_permission(self, user):
-        return user.has_perm('{}.add_{}'.format(self.model._meta.app_label, self.model._meta.model_name))
+        if self.model is not None:
+            return user.has_perm('{}.add_{}'.format(self.model._meta.app_label, self.model._meta.model_name))
+        return False
 
     def has_change_django_user_permission(self, user):
-        return user.has_perm('{}.change_{}'.format(self.model._meta.app_label, self.model._meta.model_name))
+        if self.model is not None:
+            return user.has_perm('{}.change_{}'.format(self.model._meta.app_label, self.model._meta.model_name))
+        return False
 
     def has_delete_django_user_permission(self, user):
-        return user.has_perm('{}.delete_{}'.format(self.model._meta.app_label, self.model._meta.model_name))
+        if self.model is not None:
+            return user.has_perm('{}.delete_{}'.format(self.model._meta.app_label, self.model._meta.model_name))
+        return False
 
     def has_view_django_user_permission(self, user):
-        return user.has_perm('{}.view_{}'.format(self.model._meta.app_label, self.model._meta.model_name))
+        if self.model is not None:
+            return user.has_perm('{}.view_{}'.format(self.model._meta.app_label, self.model._meta.model_name))
+        return False
 
     def has_add_permission(self, request):
         if not self.check_permissions:
@@ -124,7 +132,9 @@ class WebixPermissionsMixin:
             return True
         if self.module_permission is not None:
             return self.module_permission
-        return request.user.has_module_perms(self.model._meta.app_label)
+        if self.model is not None:
+            return request.user.has_module_perms(self.model._meta.app_label)
+        return False
 
     def get_context_data_webix_permissions(self, request, obj=None, **kwargs):
         _has_view_permission = self.has_view_permission(request=self.request, obj=obj)
@@ -186,38 +196,44 @@ class WebixUrlMixin:
         return None
 
     def get_model_name(self):
-        return '{}.{}'.format(self.model._meta.app_label, self.model._meta.model_name)
+        if self.model is not None:
+            return '{}.{}'.format(self.model._meta.app_label, self.model._meta.model_name)
+        return None
 
     def get_url_list(self):
-        _url_pattern_name = self.url_pattern_list or self._check_url('{}.list'.format(self.get_model_name()))
-        if _url_pattern_name is not None:
-            return reverse(_url_pattern_name)
+        if self.model is not None:
+            _url_pattern_name = self.url_pattern_list or self._check_url('{}.list'.format(self.get_model_name()))
+            if _url_pattern_name is not None:
+                return reverse(_url_pattern_name)
         return None
 
     def get_url_create(self):
-        _url_pattern_name = self.url_pattern_create or self._check_url('{}.create'.format(self.get_model_name()))
-        if _url_pattern_name is not None:
-            return reverse(_url_pattern_name)
+        if self.model is not None:
+            _url_pattern_name = self.url_pattern_create or self._check_url('{}.create'.format(self.get_model_name()))
+            if _url_pattern_name is not None:
+                return reverse(_url_pattern_name)
         return None
 
     def get_url_update(self, obj=None):
-        _url_pattern_name = self.url_pattern_update or self._check_url('{}.update'.format(self.get_model_name()))
-        if _url_pattern_name is not None:
-            if obj is not None:
-                _pk = obj.pk
-            else:
-                _pk = 0
-            return reverse(_url_pattern_name, kwargs={'pk': _pk})
+        if self.model is not None:
+            _url_pattern_name = self.url_pattern_update or self._check_url('{}.update'.format(self.get_model_name()))
+            if _url_pattern_name is not None:
+                if obj is not None:
+                    _pk = obj.pk
+                else:
+                    _pk = 0
+                return reverse(_url_pattern_name, kwargs={'pk': _pk})
         return None
 
     def get_url_delete(self, obj=None):
-        _url_pattern_name = self.url_pattern_delete or self._check_url('{}.delete'.format(self.get_model_name()))
-        if _url_pattern_name is not None:
-            if obj is not None:
-                _pk = obj.pk
-            else:
-                _pk = 0
-            return reverse(_url_pattern_name, kwargs={'pk': _pk})
+        if self.model is not None:
+            _url_pattern_name = self.url_pattern_delete or self._check_url('{}.delete'.format(self.get_model_name()))
+            if _url_pattern_name is not None:
+                if obj is not None:
+                    _pk = obj.pk
+                else:
+                    _pk = 0
+                return reverse(_url_pattern_name, kwargs={'pk': _pk})
         return None
 
     def get_context_data_webix_url(self, request, obj=None, **kwargs):

@@ -7,23 +7,26 @@
     {% endblock %}
 
     {% block toolbar_navigation %}
-        $$("{{ webix_container_id }}").addView({
-            id: 'main_toolbar_navigation',
-            view: "toolbar",
-            margin: 5,
-            cols: [
-                {
-                    view: "template",
-                    type: "header",
-                    template: '<p style="text-align:center;">{% if object_list %}{{object_list.model|getattr:"_meta"|getattr:"verbose_name"}}{% endif %}</p>',
-                }
-            ]
-        });
+        {% if title %}
+            $$("{{ webix_container_id }}").addView({
+                id: 'main_toolbar_navigation',
+                view: "toolbar",
+                margin: 5,
+                cols: [
+                    {
+                        view: "template",
+                        type: "header",
+                        template: '<div style="width:100%; text-align:center;"><strong>{{ title }}</strong></div>',
+                    }
+                ]
+            });
+        {% endif %}
     {% endblock %}
 
     {% block objects_list %}
         var objects_list = [
-          {% for obj in object_list_values %}
+
+          {% for obj in objects_datatable %}
             {
               status: 0,
               {% for key, value in obj.items %}
@@ -42,11 +45,18 @@
           leftSplit: 1,
           select:   "row",
           resizeColumn: true,
+          {% block datatable_headermenu %}
+              headermenu: {
+                  width: 250,
+              },
+          {% endblock %}
           columns: [
               {
                   id: "checkbox_action",
-                  header: {content: "masterCheckbox", css: "center"},
+                  header: [{content: "headerMenu"},{content: "masterCheckbox", css: "center"}],
                   template: "{common.checkbox()}",
+                  tooltip:false,
+                  headermenu:false,
                   width: 40,
                   minWidth: 40,
                   maxWidth: 40,
@@ -64,6 +74,8 @@
                   id: "cmd_cp",
                   header: "",
                   adjust: "data",
+                  headermenu:false,
+                  tooltip:false,
                   template: custom_button_cp,
               },
               {% endif %}
@@ -74,6 +86,8 @@
                   id: "cmd_rm",
                   header: "",
                   adjust: "data",
+                  headermenu:false,
+                  tooltip:false,
                   template: custom_button_rm,
               }
               {% endif %}
@@ -93,7 +107,9 @@
                   } else if (id.column == 'cmd_rm') {
                       load_js('{{ url_delete }}'.replace('0', el.id));
                   } else {
+                      {% if is_enable_row_click %}
                       load_js('{{ url_update }}'.replace('0', el.id));
+                      {% endif %}
                   }
               }
           }
@@ -101,8 +117,28 @@
     {% endblock %}
 
     {% block toolbar_list %}
-        var actions_list = undefined;
-        var actions_execute = undefined;
+        {% block toolbar_list_actions %}
+            var actions_list = [
+                  {id: "excel_standard", value: "EXCEL: Esporta dati"},
+                  ];
+            function actions_execute(action, ids) {
+              if (action == "excel_standard") {
+                   webix.toExcel(
+                       $$("datatable_{{model_name}}"),
+                       {
+                           filter:function(obj) {
+                               return obj.checkbox_action;
+                           },
+                           filename:"Dati",
+                           name:"Dati",
+                           filterHTML:true,
+                           ignore: {"checkbox_action": true, "cmd_rm": true, "cmd_cp": true}
+                       }
+                       );
+                   console.log(action, ids,2);
+                }
+            }
+        {% endblock %}
         {% include "django_webix/include/toolbar_list.js" %}
     {% endblock %}
 

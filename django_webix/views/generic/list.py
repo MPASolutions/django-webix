@@ -2,7 +2,7 @@
 
 from __future__ import unicode_literals
 
-from django.core.exceptions import PermissionDenied
+from django.core.exceptions import PermissionDenied, ImproperlyConfigured
 from django.utils.translation import ugettext as _
 from django.views.generic import ListView
 
@@ -12,10 +12,25 @@ from django_webix.views.generic.base import WebixBaseMixin, WebixPermissionsMixi
 class WebixListView(WebixBaseMixin, WebixPermissionsMixin, WebixUrlMixin, ListView):
     template_name = 'django_webix/generic/list.js'
     pk_field = None
-    fields = None  # [{'field_name':'XXX','datalist_column':'YYY'}]
-
+    title = None
     enable_column_copy = True
     enable_column_delete = True
+    enable_row_click = True
+
+    fields = None
+    # [
+    # {
+    # 'field_name':'XXX',
+    # 'datalist_column':'YYY',
+    # }
+    # ]
+
+    def get_title(self):
+        if self.title is not None:
+            return self.title
+        if self.model is not None:
+            return self.model._meta.verbose_name
+        return None
 
     def is_enable_column_copy(self, request):
         return self.enable_column_copy
@@ -23,17 +38,28 @@ class WebixListView(WebixBaseMixin, WebixPermissionsMixin, WebixUrlMixin, ListVi
     def is_enable_column_delete(self, request):
         return self.enable_column_delete
 
+    def is_enable_row_click(self, request):
+        return self.enable_row_click
+
     def get_fields(self):
         return self.fields
 
-    def get_queryset_values(self):
-        values = [self.get_pk_field()]
-        fields = self.get_fields()
-        if fields is not None:
-            for field in fields:
-                values.append(field['field_name'])
-        qs = self.get_queryset()
-        return qs.values(*values)
+    def get_queryset(self):
+        # bypass improperly configured for custom queryset without model
+        if self.model:
+            return super(WebixListView, self).get_queryset()
+        return None
+
+    def get_objects_datatable(self):
+        if self.model:
+            values = [self.get_pk_field()]
+            fields = self.get_fields()
+            if fields is not None:
+                for field in fields:
+                    values.append(field['field_name'])
+            qs = self.get_queryset()
+            return qs.values(*values)
+        return None
 
     def get_pk_field(self):
         if self.pk_field is not None:
@@ -54,11 +80,31 @@ class WebixListView(WebixBaseMixin, WebixPermissionsMixin, WebixUrlMixin, ListVi
         context.update({
             'fields': self.get_fields(),
             'get_pk_field': self.get_pk_field(),
-            'object_list_values': self.get_queryset_values(),
+            'objects_datatable': self.get_objects_datatable(),
             'is_enable_column_copy': self.is_enable_column_copy(self.request),
             'is_enable_column_delete': self.is_enable_column_delete(self.request),
+            'is_enable_row_click': self.is_enable_row_click(self.request),
+            'title': self.get_title(),
         })
         return context
+
+
+class WebixTemplateListView(WebixListView):
+    model = None
+    enable_column_copy = False
+    enable_column_delete = False
+    add_permission = False
+    change_permission = False
+    delete_permission = False
+    view_permission = True
+    remove_disabled_buttons = True
+    enable_row_click = False
+
+    def get_objects_datatable(self):
+        raise ImproperlyConfigured("Generic TemplateListView needs to define data for datatable")
+
+
+
 
 # # -*- coding: utf-8 -*-
 #
