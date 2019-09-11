@@ -39,6 +39,7 @@ $$("{{webix_container_id}}").addView({
         {% endblock %}
 
         {% block add_button %}
+        {% if has_add_permission or not remove_disabled_buttons and not has_add_permission %}
         {
             view: "tootipButton",
             type: "form",
@@ -53,6 +54,7 @@ $$("{{webix_container_id}}").addView({
                 load_js('{{ url_create }}')
             }
         }
+        {% endif %}
         {% endblock %}
     ])
 });

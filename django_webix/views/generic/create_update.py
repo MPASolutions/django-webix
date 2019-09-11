@@ -9,7 +9,6 @@ from django.core.exceptions import PermissionDenied
 from django.forms import model_to_dict
 from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404
-from django.urls import reverse
 from django.utils.encoding import force_text
 from django.utils.text import get_text_list
 from django.utils.translation import ugettext as _
@@ -28,8 +27,6 @@ class WebixCreateUpdateMixin:
     enable_button_save_continue = True
     enable_button_save_addanother = True
     enable_button_save_gotolist = True
-
-    remove_disabled_buttons = False
 
     template_style = None
 
@@ -94,7 +91,6 @@ class WebixCreateUpdateMixin:
             'is_enable_button_save_continue': self.is_enable_button_save_continue(request=self.request),
             'is_enable_button_save_addanother': self.is_enable_button_save_addanother(request=self.request),
             'is_enable_button_save_gotolist': self.is_enable_button_save_gotolist(request=self.request),
-            'remove_disabled_buttons': self.remove_disabled_buttons,
             # Template style
             'template_style': self.get_template_style(),
         }
@@ -267,7 +263,7 @@ class WebixUpdateView(WebixCreateUpdateMixin, WebixBaseMixin, WebixPermissionsMi
         self.pre_forms_valid(form=form, inlines=inlines, **kwargs)
         try:
             self.validate_unique_together(form=form, inlines=inlines, **kwargs)
-        except ValidationError:
+        except ValidationError as e:
             form.add_error(None,str(e))
             return self.forms_invalid(form=form, inlines=inlines, **kwargs)
         self.object = form.save()

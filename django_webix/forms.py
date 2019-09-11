@@ -661,7 +661,7 @@ class BaseWebixForm(forms.BaseForm, BaseWebixMixin):
         # TODO: check if it works with all field types on create and update action
         self.set_readonly_fields()
 
-    def clean(self, cleaned_data):
+    def clean(self):
         cleaned_data = super(BaseWebixForm, self).clean()
         cleaned_data = self.webix_extra_clean(cleaned_data)
         return cleaned_data
@@ -690,7 +690,7 @@ class BaseWebixModelForm(forms.BaseModelForm, BaseWebixMixin):
         # TODO: check if it works with all field types on create and update action
         self.set_readonly_fields()
 
-    def clean(self, cleaned_data):
+    def clean(self):
         cleaned_data = super(BaseWebixModelForm, self).clean()
         cleaned_data = self.webix_extra_clean(cleaned_data)
         return cleaned_data

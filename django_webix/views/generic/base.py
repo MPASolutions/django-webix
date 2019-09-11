@@ -31,6 +31,8 @@ class WebixPermissionsMixin:
     _failure_delete_related_objects = None
     _failure_view_related_objects = None
 
+    remove_disabled_buttons = False
+
     def get_failure_add_related_objects(self, request):
         return []
 
@@ -130,6 +132,8 @@ class WebixPermissionsMixin:
         _has_change_permission = self.has_change_permission(request=self.request, obj=obj)
         _has_delete_permission = self.has_delete_permission(request=self.request, obj=obj)
         return {
+            # Buttons
+            'remove_disabled_buttons': self.remove_disabled_buttons,
             # Permissions
             'has_view_permission': _has_view_permission,
             'has_add_permission': _has_add_permission,
