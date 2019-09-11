@@ -16,6 +16,7 @@ class WebixListView(WebixBaseMixin, WebixPermissionsMixin, WebixUrlMixin, ListVi
     enable_column_copy = True
     enable_column_delete = True
     enable_row_click = True
+    actions_style = None
 
     fields = None
     # [
@@ -24,6 +25,19 @@ class WebixListView(WebixBaseMixin, WebixPermissionsMixin, WebixUrlMixin, ListVi
     # 'datalist_column':'YYY',
     # }
     # ]
+
+    def get_actions_style(self):
+        _actions_style = None
+        if self.actions_style is None:
+            _actions_style = 'select'
+        elif self.actions_style in ['buttons' or 'select']:
+            _actions_style = self.actions_style
+        else:
+            raise ImproperlyConfigured(
+                "Actions style is improperly configured"
+                " only options are 'buttons' or 'select' (select by default).")
+        return _actions_style
+
 
     def get_title(self):
         if self.title is not None:
@@ -84,6 +98,7 @@ class WebixListView(WebixBaseMixin, WebixPermissionsMixin, WebixUrlMixin, ListVi
             'is_enable_column_copy': self.is_enable_column_copy(self.request),
             'is_enable_column_delete': self.is_enable_column_delete(self.request),
             'is_enable_row_click': self.is_enable_row_click(self.request),
+            'actions_style': self.get_actions_style(),
             'title': self.get_title(),
         })
         return context

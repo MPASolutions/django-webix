@@ -135,7 +135,6 @@
                            ignore: {"checkbox_action": true, "cmd_rm": true, "cmd_cp": true}
                        }
                        );
-                   console.log(action, ids,2);
                 }
             }
         {% endblock %}

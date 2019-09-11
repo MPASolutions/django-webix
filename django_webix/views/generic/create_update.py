@@ -39,7 +39,7 @@ class WebixCreateUpdateMixin:
         else:
             raise ImproperlyConfigured(
                 "Template style is improperly configured"
-                " only options are 'standard' or 'tabs'.")
+                " only options are 'standard' or 'tabs' (standard by default).")
         return _template_style
 
     def is_enable_button_save_continue(self, request):

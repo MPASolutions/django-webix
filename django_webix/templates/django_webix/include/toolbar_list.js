@@ -22,8 +22,12 @@ if ((typeof actions_list == 'undefined') || (typeof actions_execute == 'undefine
 }
 
 {% block toolbar_list_actions %}
-{# bottoni singoli by default #}
-{% include "django_webix/include/toolbar_list_actions_buttons.js" %}
+    {% if actions_style == 'buttons' %}
+        {% include "django_webix/include/toolbar_list_actions_buttons.js" %}
+    {% endif %}
+    {% if actions_style == 'select' %}
+        {% include "django_webix/include/toolbar_list_actions_select.js" %}
+    {% endif %}
 {% endblock %}
 
 {# create toolbar footer #}
