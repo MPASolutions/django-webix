@@ -10,6 +10,7 @@ import django
 import six
 from django import forms
 from django.conf import settings
+from django.core.exceptions import ImproperlyConfigured
 from django.core.serializers.json import DjangoJSONEncoder
 from django.db import models, connection
 from django.db.models.fields import FieldDoesNotExist
@@ -29,7 +30,7 @@ except ImportError:
     JSONField = forms.Field
 
 
-class BaseWebixForm(forms.BaseForm):
+class BaseWebixMixin(object):
     form_fix_height = None
     min_count_suggest = 100
     style = 'stacked'
@@ -40,15 +41,7 @@ class BaseWebixForm(forms.BaseForm):
     class Meta:
         localized_fields = '__all__'  # to use comma as separator in i18n
 
-    def __init__(self, data=None, files=None, auto_id='id_%s', prefix=None,
-                 initial=None, error_class=ErrorList, label_suffix=None,
-                 empty_permitted=False, field_order=None, use_required_attribute=None, renderer=None):
-
-        # Set form prefix
-        if prefix is not None:
-            self.prefix = prefix
-
-        # Update of a queryset with modified values
+    def get_fields_data_with_prefix(self, data=None):
         if data is not None:
             qdict = data.copy()
             for name, field in copy.deepcopy(self.base_fields).items():
@@ -64,11 +57,9 @@ class BaseWebixForm(forms.BaseForm):
                         qdict.pop(self.add_prefix(name))  # Remove old value
                         qdict.update({self.add_prefix(name): val if val not in ['null', u'null'] else None})
             data = qdict
+        return data
 
-        super(BaseWebixForm, self).__init__(data, files, auto_id, prefix, initial, error_class, label_suffix,
-                                            empty_permitted, field_order, use_required_attribute, renderer)
-
-        # TODO: check if it works with all field types on create and update action
+    def set_readonly_fields(self):
         # Replace field if it is in readonly_fields list
         for readonly_field in self.get_readonly_fields():
             try:
@@ -122,8 +113,7 @@ class BaseWebixForm(forms.BaseForm):
                     self.fields[readonly_field].initial = value
                     self.initial[readonly_field] = value
 
-    def clean(self):
-        cleaned_data = super(BaseWebixForm, self).clean()
+    def webix_extra_clean(self, cleaned_data):
         for key, value in cleaned_data.items():
             if isinstance(value, six.string_types):
                 cleaned_data[key] = value.strip()
@@ -646,9 +636,69 @@ class BaseWebixForm(forms.BaseForm):
         return self.get_elements.values()
 
 
-class BaseWebixModelForm(forms.BaseModelForm, BaseWebixForm):
-    def clean(self):
-        return BaseWebixForm.clean(self)
+####################### BaseWebixForm AND BaseWebixModelForm #######################
+
+class BaseWebixForm(forms.BaseForm, BaseWebixMixin):
+
+    def __init__(self, data=None, files=None, auto_id='id_%s', prefix=None,
+                 initial=None, error_class=ErrorList, label_suffix=None,
+                 empty_permitted=False, field_order=None, use_required_attribute=None,
+                 renderer=None, request=None):
+
+        # Set request
+        self.request = request
+
+        # Set form prefix
+        if prefix is not None:
+            self.prefix = prefix
+
+        # Update field names with prefix
+        data = self.get_fields_data_with_prefix(data)
+
+        super(BaseWebixForm, self).__init__(data, files, auto_id, prefix, initial, error_class, label_suffix,
+                                                 empty_permitted, field_order, use_required_attribute, renderer)
+
+        # TODO: check if it works with all field types on create and update action
+        self.set_readonly_fields()
+
+    def clean(self, cleaned_data):
+        cleaned_data = super(BaseWebixForm, self).clean()
+        cleaned_data = self.webix_extra_clean(cleaned_data)
+        return cleaned_data
+
+
+class BaseWebixModelForm(forms.BaseModelForm, BaseWebixMixin):
+
+    def __init__(self, data=None, files=None, auto_id='id_%s', prefix=None,
+                 initial=None, error_class=ErrorList, label_suffix=None,
+                 empty_permitted=False, instance=None, use_required_attribute=None,
+                 renderer=None, request=None):
+
+        # Set request
+        self.request = request
+
+        # Set form prefix
+        if prefix is not None:
+            self.prefix = prefix
+
+        # Update field names with prefix
+        data = self.get_fields_data_with_prefix(data)
+
+        super(BaseWebixModelForm, self).__init__(data, files, auto_id, prefix, initial, error_class, label_suffix,
+                                                 empty_permitted, instance, use_required_attribute, renderer)
+
+        # TODO: check if it works with all field types on create and update action
+        self.set_readonly_fields()
+
+    def clean(self, cleaned_data):
+        cleaned_data = super(BaseWebixModelForm, self).clean()
+        cleaned_data = self.webix_extra_clean(cleaned_data)
+        return cleaned_data
+
+    def get_name(self):
+        return capfirst(self.Meta.model._meta.verbose_name)
+
+####################### WebixForm AND WebixModelForm #######################
 
 
 class WebixForm(six.with_metaclass(DeclarativeFieldsMetaclass, BaseWebixForm)):
@@ -656,5 +706,4 @@ class WebixForm(six.with_metaclass(DeclarativeFieldsMetaclass, BaseWebixForm)):
 
 
 class WebixModelForm(six.with_metaclass(ModelFormMetaclass, BaseWebixModelForm)):
-    def get_name(self):
-        return capfirst(self.Meta.model._meta.verbose_name)
+    pass

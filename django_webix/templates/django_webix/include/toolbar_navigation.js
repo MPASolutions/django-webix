@@ -31,7 +31,7 @@ $$("{{ webix_container_id }}").addView({
         {
             view: "template",
             type: "header",
-            template: '<p style="text-align:center;">{% if object %}{{model|getattr:"_meta"|getattr:"verbose_name"}}: {{object}}{% else %}Aggiungi {{model|getattr:"_meta"|getattr:"verbose_name"}} {% endif %}</p>',
+            template: '<div style="width:100%; text-align:center;"><strong>{% if object %}{{model|getattr:"_meta"|getattr:"verbose_name"}}: {{object}}{% else %}Aggiungi {{model|getattr:"_meta"|getattr:"verbose_name"}} {% endif %}</strong></div>',
         }
     ]
-});
+},0);

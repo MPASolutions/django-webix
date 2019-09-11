@@ -28,7 +28,7 @@
                     view: "tabbar",
                     id: '{{ form.webix_id }}-inlines-tabbar',
                     value: "{{ form.webix_id }}-group",
-                    optionWidth: 150,
+                    //optionWidth: 150,
                     multiview: true,
                     options: [
                         {
@@ -38,7 +38,7 @@
                         {% for inline in inlines %}
                             {
                                 id: '{{ inline.prefix }}-group',
-                                value: "{{ inline.get_name }}"
+                                value: "<div style='position: relative'>{{ inline.get_name }} <span class='webix_badge' style='background-color:#888 !important; margin-top: -2px; margin-right: 5px;'><strong>" + {{ inline.initial_form_count }} + "</strong></span></div>"
                             },
                         {% endfor %}
                     ]
@@ -119,9 +119,9 @@
 
     {% block webix_include_inlines %}
         {% for inline in inlines %}
-            {% if inline.0.style == 'tabular' %}
+            {% if inline.style == 'tabular' %}
                 {% include "django_webix/include/edit_inline/tabular.js" %}
-            {% elif inline.0.style == 'stacked' %}
+            {% elif inline.style == 'stacked' %}
                 {% include "django_webix/include/edit_inline/stacked.js" %}
             {% else %}
                 {% include "django_webix/include/edit_inline/stacked.js" %}

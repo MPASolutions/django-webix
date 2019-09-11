@@ -14,6 +14,7 @@ from django.utils.encoding import force_text
 from django.utils.text import get_text_list
 from django.utils.translation import ugettext as _
 from extra_views import UpdateWithInlinesView, CreateWithInlinesView
+from django.forms.formsets import all_valid
 
 from django_webix.views.generic.base import WebixBaseMixin, WebixPermissionsMixin, WebixUrlMixin
 
@@ -86,8 +87,8 @@ class WebixCreateUpdateMixin:
         if form is not None:
             form.instance.validate_unique()
 
-
     def get_context_data_webix_create_update(self, request, obj=None, **kwargs):
+
         return {
             # buttons for saving
             'is_enable_button_save_continue': self.is_enable_button_save_continue(request=self.request),
@@ -98,11 +99,33 @@ class WebixCreateUpdateMixin:
             'template_style': self.get_template_style(),
         }
 
+    def post(self, request, *args, **kwargs):
+        form_class = self.get_form_class()
+        form = self.get_form(form_class)
+        inlines = self.construct_inlines()
+        if self.validate(form, inlines):
+            return self.forms_valid(form, inlines)
+        return self.forms_invalid(form, inlines)
 
-class WebixCreateView(WebixBaseMixin, WebixCreateUpdateMixin, WebixPermissionsMixin, WebixUrlMixin, CreateWithInlinesView):
+    def validate(self, form, inlines):
+        if form.is_valid():
+            self.object = form.save(commit=False)
+            form_validated = True
+        else:
+            form_validated = False
+        return all_valid(inlines) and form_validated
+
+
+
+class WebixCreateView(WebixCreateUpdateMixin, WebixBaseMixin, WebixPermissionsMixin, WebixUrlMixin, CreateWithInlinesView):
     template_name = 'django_webix/generic/create.js'
     copy_fields = None
     copy_exclude = None
+
+    def get_form_kwargs(self):
+        kwargs = super(WebixCreateView, self).get_form_kwargs()
+        kwargs.update({'request': self.request})
+        return kwargs
 
     def get_copy_fields(self):
         if self.copy_fields is None:
@@ -181,8 +204,13 @@ class WebixCreateView(WebixBaseMixin, WebixCreateUpdateMixin, WebixPermissionsMi
         return self.response_invalid(form=form, inlines=inlines, **kwargs)
 
 
-class WebixUpdateView(WebixBaseMixin, WebixCreateUpdateMixin, WebixPermissionsMixin, WebixUrlMixin, UpdateWithInlinesView):
+class WebixUpdateView(WebixCreateUpdateMixin, WebixBaseMixin, WebixPermissionsMixin, WebixUrlMixin, UpdateWithInlinesView):
     template_name = 'django_webix/generic/update.js'
+
+    def get_form_kwargs(self):
+        kwargs = super(WebixUpdateView, self).get_form_kwargs()
+        kwargs.update({'request': self.request})
+        return kwargs
 
     def get_object(self, queryset=None):
         if getattr(self, 'object', None) is not None:
