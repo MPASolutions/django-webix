@@ -25,10 +25,9 @@ from random import randint
 from sorl.thumbnail import get_thumbnail
 
 try:
-    from django.contrib.postgres.fields import JSONField
+    from django.contrib.postgres.forms.jsonb import JSONField
 except ImportError:
     JSONField = forms.Field
-
 
 class BaseWebixMixin(object):
     form_fix_height = None
@@ -187,7 +186,8 @@ class BaseWebixMixin(object):
                 'label': label,
                 'name': self.add_prefix(name),
                 'id': self[name].auto_id,
-                'labelWidth': 200
+                'labelWidth': 200,
+                'django_type_field': str(type(field).__name__),
             }
 
             if name in self.get_readonly_fields():
@@ -553,6 +553,7 @@ class BaseWebixMixin(object):
                     })
                 if initial is not None:
                     el.update({'value': dumps(initial)})
+
             # CharField
             elif isinstance(field, forms.CharField):
                 if isinstance(field.widget, forms.widgets.Textarea):
