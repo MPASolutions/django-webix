@@ -29,6 +29,7 @@ try:
 except ImportError:
     JSONField = forms.Field
 
+
 class BaseWebixMixin(object):
     form_fix_height = None
     min_count_suggest = 100
@@ -606,11 +607,28 @@ class BaseWebixMixin(object):
         """ Returns the header for the tabular inlines as webix js format """
 
         fields = []
-        for name, f in self.fields.items():
-            if self.add_prefix(name).endswith('-DELETE'):
-                fields.append({'header': '', 'width': 28})
-            elif type(f.widget) != forms.widgets.HiddenInput:
-                fields.append({'header': force_text(f.label).capitalize(), 'fillspace': True})
+        #for name, f in self.fields.items():
+        for field_name, f in self.get_elements.items():
+
+            _field_header = None
+
+            if 'hidden' not in f or 'hidden' in f and not f['hidden']:
+
+                _field_header = {}
+
+                if field_name.endswith('-DELETE'):
+                    _field_header = {'header': '', 'width': 28}
+                else:
+                    if 'width' in f:
+                        _field_header.update({'width': f['width']})
+                    else:
+                        _field_header.update({'fillspace': True})
+
+                if 'label' in f and 'header' not in f:
+                    _field_header.update({'header': force_text(f['label']).capitalize()})
+
+                if _field_header is not None:
+                    fields.append(_field_header)
 
         return dumps({
             'view': "datatable",
@@ -624,17 +642,18 @@ class BaseWebixMixin(object):
 
         return dumps(list(self.get_fieldsets()), cls=DjangoJSONEncoder)[1:-1]
 
-    def get_fieldsets(self):
+    def get_fieldsets(self, **kwargs):
         """ Returns a dict with all the fields """
 
-        if self.style == 'tabular':
+        if 'fs' in kwargs:
+            fs = kwargs['fs']
+        else:
             fs = self.get_elements
-
+        if self.style == 'tabular':
             for field in fs:
                 fs[field]['label'] = ''
                 fs[field]['labelWidth'] = 0
-            return fs.values()
-        return self.get_elements.values()
+        return fs.values()
 
 
 ####################### BaseWebixForm AND BaseWebixModelForm #######################
@@ -645,7 +664,6 @@ class BaseWebixForm(forms.BaseForm, BaseWebixMixin):
                  initial=None, error_class=ErrorList, label_suffix=None,
                  empty_permitted=False, field_order=None, use_required_attribute=None,
                  renderer=None, request=None):
-
         # Set request
         self.request = request
 
@@ -657,7 +675,7 @@ class BaseWebixForm(forms.BaseForm, BaseWebixMixin):
         data = self.get_fields_data_with_prefix(data)
 
         super(BaseWebixForm, self).__init__(data, files, auto_id, prefix, initial, error_class, label_suffix,
-                                                 empty_permitted, field_order, use_required_attribute, renderer)
+                                            empty_permitted, field_order, use_required_attribute, renderer)
 
         # TODO: check if it works with all field types on create and update action
         self.set_readonly_fields()
@@ -674,7 +692,6 @@ class BaseWebixModelForm(forms.BaseModelForm, BaseWebixMixin):
                  initial=None, error_class=ErrorList, label_suffix=None,
                  empty_permitted=False, instance=None, use_required_attribute=None,
                  renderer=None, request=None):
-
         # Set request
         self.request = request
 
@@ -698,6 +715,7 @@ class BaseWebixModelForm(forms.BaseModelForm, BaseWebixMixin):
 
     def get_name(self):
         return capfirst(self.Meta.model._meta.verbose_name)
+
 
 ####################### WebixForm AND WebixModelForm #######################
 
