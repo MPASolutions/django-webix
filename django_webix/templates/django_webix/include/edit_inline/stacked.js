@@ -55,6 +55,11 @@ $$('{{ inline.prefix }}-group').addView({
                     // Add delete button event
                     var inline_id = '{{ inline.prefix }}-' + parseInt(totalForms.getValue());
                     delete_trigger(inline_id);
+                    {% block extra_trigger %}
+                    if (typeof trigger_{{inline.prefix}} === "function"){
+                        trigger_{{inline.prefix}}(inline_id);
+                    }
+                    {% endblock %}
 
                     // Increment management form values
                     totalForms.setValue(parseInt(totalForms.getValue()) + 1);
@@ -75,7 +80,13 @@ $$('{{ inline.prefix }}-group').addView({
 {# Delete trigger on all inlines #}
 {% for row in inline %}
     delete_trigger("{{ row.prefix }}");
+    {% block extra_trigger_init %}
+    if (typeof trigger_{{inline.prefix}} === "function"){
+        trigger_{{inline.prefix}}("{{ row.prefix }}");
+    }
+    {% endblock %}
 {% endfor %}
+
 
 {# Rules event on all inlines #}
 {% for row in inline %}

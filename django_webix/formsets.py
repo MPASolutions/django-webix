@@ -40,7 +40,7 @@ class BaseWebixInlineFormSet(BaseInlineFormSet):
 
     def get_form_kwargs(self, index):
         _form_kwargs = super(BaseWebixInlineFormSet, self).get_form_kwargs(index)
-        _form_kwargs.update({'request': self.request})
+        _form_kwargs.update({'request': self.request, 'inline_id': index})
         return _form_kwargs
 
     def get_rules(self):

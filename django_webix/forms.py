@@ -663,9 +663,12 @@ class BaseWebixForm(forms.BaseForm, BaseWebixMixin):
     def __init__(self, data=None, files=None, auto_id='id_%s', prefix=None,
                  initial=None, error_class=ErrorList, label_suffix=None,
                  empty_permitted=False, field_order=None, use_required_attribute=None,
-                 renderer=None, request=None):
+                 renderer=None, request=None, inline_id=None):
         # Set request
         self.request = request
+
+        # Set inline id
+        self.inline_id = inline_id
 
         # Set form prefix
         if prefix is not None:
@@ -691,9 +694,12 @@ class BaseWebixModelForm(forms.BaseModelForm, BaseWebixMixin):
     def __init__(self, data=None, files=None, auto_id='id_%s', prefix=None,
                  initial=None, error_class=ErrorList, label_suffix=None,
                  empty_permitted=False, instance=None, use_required_attribute=None,
-                 renderer=None, request=None):
+                 renderer=None, request=None, inline_id=None):
         # Set request
         self.request = request
+
+        # Set inline id
+        self.inline_id = inline_id
 
         # Set form prefix
         if prefix is not None:
