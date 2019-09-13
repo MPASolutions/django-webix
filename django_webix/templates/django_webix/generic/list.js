@@ -102,15 +102,22 @@
           on: {
               onItemClick: function (id, e, trg) {
                   var el = $$('datatable_{{model_name}}').getSelectedItem();
-                  if (id.column == 'cmd_cp') {
-                      load_js('{{ url_create }}?pk_copy=' + el.id);
-                  } else if (id.column == 'cmd_rm') {
-                      load_js('{{ url_delete }}'.replace('0', el.id));
-                  } else {
-                      {% if is_enable_row_click %}
-                      load_js('{{ url_update }}'.replace('0', el.id));
-                      {% endif %}
-                  }
+                  {% block datatable_onitemclick %}
+                      {% for field in fields %}{% if field.click_action %}
+                      if (id.column == '{{ field.field_name }}') {
+                          {{ field.click_action|safe }};
+                      } else
+                      {% endif %}{% endfor %}
+                      if (id.column == 'cmd_cp') {
+                          load_js('{{ url_create }}?pk_copy=' + el.id);
+                      } else if (id.column == 'cmd_rm') {
+                          load_js('{{ url_delete }}'.replace('0', el.id));
+                      } else {
+                          {% if is_enable_row_click %}
+                          load_js('{{ url_update }}'.replace('0', el.id));
+                          {% endif %}
+                      }
+                  {% endblock %}
               }
           }
       })
