@@ -92,7 +92,7 @@ class WebixDeleteView(WebixBaseMixin, WebixPermissionsMixin, WebixUrlMixin, Dele
         self.object = self.get_object()
 
         anonymous = request.user.is_anonymous() if callable(request.user.is_anonymous) else request.user.is_anonymous
-        if len(self.get_failure_related_objects()) > 0:
+        if len(self.get_failure_delete_related_objects()) > 0:
             return self.response_invalid(failure_url=self.get_failure_url())
 
         if self.logs_enable is True and not anonymous and apps.is_installed('django.contrib.admin'):
