@@ -119,10 +119,8 @@
 
     {% block webix_include_inlines %}
         {% for inline in inlines %}
-            {% if inline.style == 'tabular' %}
-                {% include "django_webix/include/edit_inline/tabular.js" %}
-            {% elif inline.style == 'stacked' %}
-                {% include "django_webix/include/edit_inline/stacked.js" %}
+            {% if inline.template_name %}
+                {% include inline.template_name %}
             {% else %}
                 {% include "django_webix/include/edit_inline/stacked.js" %}
             {% endif %}

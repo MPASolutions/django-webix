@@ -3,7 +3,7 @@
 from __future__ import unicode_literals, absolute_import
 
 from collections import OrderedDict, defaultdict
-from json import dumps
+from json import dumps, loads
 
 import copy
 import django
@@ -199,8 +199,16 @@ class BaseWebixMixin(object):
 
             # Get initial value
             if hasattr(self, 'cleaned_data'):
-                # Error with clean of Model Form
-                initial = self.cleaned_data.get(name, field.initial)
+                if type(field) == forms.models.ModelMultipleChoiceField:
+                    initial = self.data.getlist(self.add_prefix(name), field.initial)
+                elif connection.vendor == 'postgresql' and isinstance(field, JSONField):
+                    initial = self.data.get(self.add_prefix(name), None)
+                    if initial is not None:
+                        initial = loads(initial)
+                    else:
+                        initial = field.initial
+                else:
+                    initial = self.data.get(self.add_prefix(name), field.initial)
             else:
                 initial = self.initial.get(name, field.initial)
 
@@ -603,10 +611,10 @@ class BaseWebixMixin(object):
         return elements
 
     @property
-    def get_tabular_header(self):
+    def get_tabular_fields_header(self):
         """ Returns the header for the tabular inlines as webix js format """
 
-        fields = []
+        fields_header = OrderedDict()
         #for name, f in self.fields.items():
         for field_name, f in self.get_elements.items():
 
@@ -628,13 +636,20 @@ class BaseWebixMixin(object):
                     _field_header.update({'header': force_text(f['label']).capitalize()})
 
                 if _field_header is not None:
-                    fields.append(_field_header)
+                    fields_header.update({field_name:_field_header})
 
+        return fields_header
+
+    @property
+    def get_tabular_header(self):
+        """ Returns the header for the tabular inlines as webix js format """
         return dumps({
+            'id': self.add_prefix('datatable'),
             'view': "datatable",
             'scroll': 'false',
-            'height': 35,
-            'columns': fields,
+            'autoheight': 'false',
+            'data':[],
+            'columns': list(self.get_tabular_fields_header.values()),
         }, cls=DjangoJSONEncoder)
 
     def as_webix(self):

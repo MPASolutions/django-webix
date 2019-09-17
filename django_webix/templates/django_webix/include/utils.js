@@ -61,26 +61,30 @@ function load_pdf(url) {
 }
 
 function custom_checkbox(obj, common, value) {
-    if ((value == 'False') || (value == 'false') || (value == false))
+    if ((value == 'False') || (value == 'false') || (value == '0') || (value === 0) || (value === false))
         return "<img style='width:12px;' src='{% static 'admin/img/icon-no.svg' %}'> "
-    else
+    else if ((value == 'True') || (value == 'true') || (value == '1') || (value === 1) || (value === true))
         return "<img style='width:12px;' src='{% static 'admin/img/icon-yes.svg' %}'> "
+    else
+        return "<img style='width:12px;' src='{% static 'admin/img/icon-unknown.svg' %}'> "
 }
 
 function custom_checkbox_pointer(obj, common, value) {
-    if ((value == 'False') || (value == 'false') || (value == '0') || (value == 0) || (value == false))
+    if ((value == 'False') || (value == 'false') || (value == '0') || (value === 0) || (value === false))
         return "<img style='width:12px;cursor:pointer' src='{% static 'admin/img/icon-no.svg' %}'> "
-    else if ((value == 'True') || (value == 'true') || (value == '1') || (value == 1) || (value == true))
+    else if ((value == 'True') || (value == 'true') || (value == '1') || (value === 1) || (value === true))
         return "<img style='width:12px;cursor:pointer' src='{% static 'admin/img/icon-yes.svg' %}'> "
     else
         return "<img style='width:12px;cursor:pointer' src='{% static 'admin/img/icon-unknown.svg' %}'> "
 }
 
 function custom_checkbox_help(obj, common, value) {
-    if ((value == 'False') || (value == 'false') || (value == false))
+    if ((value == 'False') || (value == 'false') || (value == '0') || (value === 0) || (value === false))
         return "<img style='width:12px;cursor:help' src='{% static 'admin/img/icon-no.svg' %}'> "
-    else
+    else if ((value == 'True') || (value == 'true') || (value == '1') || (value === 1) || (value === true))
         return "<img style='width:12px;cursor:help' src='{% static 'admin/img/icon-yes.svg' %}'> "
+    else
+        return "<img style='width:12px;cursor:help' src='{% static 'admin/img/icon-unknown.svg' %}'> "
 }
 
 function custom_checkbox_yesno(obj, common, value) {

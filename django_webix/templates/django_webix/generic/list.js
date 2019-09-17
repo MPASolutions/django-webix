@@ -1,4 +1,4 @@
-{% load django_webix_utils %}
+{% load django_webix_utils static %}
 
 {% block webix_content %}
 
@@ -124,24 +124,27 @@
     {% endblock %}
 
     {% block toolbar_list %}
+        function webix_to_excel(){
+            webix.toExcel(
+                $$("datatable_{{model_name}}"),
+                {
+                    filter: function (obj) {
+                        return obj.checkbox_action;
+                    },
+                    filename: "Dati",
+                    name: "Dati",
+                    filterHTML: true,
+                    ignore: {"checkbox_action": true, "cmd_rm": true, "cmd_cp": true}
+                }
+            );
+        }
         {% block toolbar_list_actions %}
             var actions_list = [
                   {id: "excel_standard", value: "EXCEL: Esporta dati"},
                   ];
             function actions_execute(action, ids) {
               if (action == "excel_standard") {
-                   webix.toExcel(
-                       $$("datatable_{{model_name}}"),
-                       {
-                           filter:function(obj) {
-                               return obj.checkbox_action;
-                           },
-                           filename:"Dati",
-                           name:"Dati",
-                           filterHTML:true,
-                           ignore: {"checkbox_action": true, "cmd_rm": true, "cmd_cp": true}
-                       }
-                       );
+                   webix_to_excel()
                 }
             }
         {% endblock %}

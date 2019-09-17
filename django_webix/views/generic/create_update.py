@@ -95,21 +95,37 @@ class WebixCreateUpdateMixin:
             'template_style': self.get_template_style(),
         }
 
+
+
     def post(self, request, *args, **kwargs):
         form_class = self.get_form_class()
+
         form = self.get_form(form_class)
+        form, form_validated = self.validate_form(form)
+
         inlines = self.construct_inlines()
-        if self.validate(form, inlines):
+        inlines, inlines_validated = self.validate_inlines(inlines)
+
+        form, inlines, full_validated = self.full_validate(form, form_validated, inlines, inlines_validated)
+
+        if full_validated:
             return self.forms_valid(form, inlines)
         return self.forms_invalid(form, inlines)
 
-    def validate(self, form, inlines):
+    def full_validate(self, form, form_validated, inlines, inlines_validated):
+        return form, inlines, form_validated and inlines_validated
+
+    def validate_form(self, form):
         if form.is_valid():
             self.object = form.save(commit=False)
             form_validated = True
         else:
             form_validated = False
-        return all_valid(inlines) and form_validated
+        return form, form_validated
+
+    def validate_inlines(self, inlines):
+        inlines_validated = all_valid(inlines)
+        return inlines, inlines_validated
 
 
 
@@ -162,9 +178,21 @@ class WebixCreateView(WebixCreateUpdateMixin, WebixBaseMixin, WebixPermissionsMi
         return context
 
     def pre_forms_valid(self, form=None, inlines=None, **kwargs):
+        '''
+        Before all data saving
+        '''
+        pass
+
+    def post_form_save(self, form=None, inlines=None, **kwargs):
+        '''
+        After form save and before inlines save
+        '''
         pass
 
     def post_forms_valid(self, form=None, inlines=None, **kwargs):
+        '''
+        After all data saved
+        '''
         anonymous = self.request.user.is_anonymous() if callable(
             self.request.user.is_anonymous) else self.request.user.is_anonymous
         if self.logs_enable is True and not anonymous and apps.is_installed('django.contrib.admin'):
@@ -185,14 +213,19 @@ class WebixCreateView(WebixCreateUpdateMixin, WebixBaseMixin, WebixPermissionsMi
 
     def forms_valid(self, form, inlines, **kwargs):
         self.pre_forms_valid(form=form, inlines=inlines, **kwargs)
+
         try:
             self.validate_unique_together(form=form, inlines=inlines, **kwargs)
         except ValidationError as e:
             form.add_error(None,str(e))
             return self.forms_invalid(form=form, inlines=inlines, **kwargs)
+
         self.object = form.save()
+        self.post_form_save(form=form, inlines=inlines, **kwargs)
+
         for formset in inlines:
             formset.save()
+        #raise Exception(self.object.pk)
         self.post_forms_valid(form=form, inlines=inlines, **kwargs)
         return self.response_valid(success_url=self.get_success_url(), **kwargs)
 
