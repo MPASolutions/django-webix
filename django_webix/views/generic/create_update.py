@@ -16,7 +16,7 @@ from extra_views import UpdateWithInlinesView, CreateWithInlinesView
 from django.forms.formsets import all_valid
 
 from django_webix.views.generic.base import WebixBaseMixin, WebixPermissionsMixin, WebixUrlMixin
-
+from django.forms.models import _get_foreign_key
 
 class WebixCreateUpdateMixin:
     logs_enable = True
@@ -131,33 +131,80 @@ class WebixCreateUpdateMixin:
 
 class WebixCreateView(WebixCreateUpdateMixin, WebixBaseMixin, WebixPermissionsMixin, WebixUrlMixin, CreateWithInlinesView):
     template_name = 'django_webix/generic/create.js'
-    copy_fields = None
-    copy_exclude = None
+    model_copy_fields = None
+    inlines_copy_fields = None
+
+    def construct_inlines(self):
+        """
+        Returns the inline formset instances
+        """
+        inline_formsets = []
+        initial_inlines = self.get_initial_inlines()
+        for inline_class in self.get_inlines():
+            kwargs = self.kwargs
+            initial = initial_inlines.get(inline_class, None)
+            inline_instance = inline_class(self.model, self.request, self.object, kwargs, self, initial)
+            inline_formset = inline_instance.construct_formset()
+            inline_formsets.append(inline_formset)
+        return inline_formsets
 
     def get_form_kwargs(self):
         kwargs = super(WebixCreateView, self).get_form_kwargs()
         kwargs.update({'request': self.request})
         return kwargs
 
-    def get_copy_fields(self):
-        if self.copy_fields is None:
-            _copy_fields = self.form_class._meta.fields
+    def get_model_copy_fields(self):
+        if self.model_copy_fields is None:
+            _model_copy_fields = self.form_class._meta.fields
         else:
-            _copy_fields = self.copy_fields
-        if self.copy_exclude is not None:
-            _copy_fields -= self.copy_exclude
-        return _copy_fields
+            _model_copy_fields = self.model_copy_fields
+        return _model_copy_fields
+
+    def get_inlines_copy_fields(self):
+
+        # init
+        _inlines_copy_fields = {}
+        if self.inlines_copy_fields is None:
+            for inline in self.get_inlines():
+                _inlines_copy_fields.update({inline: None})
+        else:
+            _inlines_copy_fields = self.inlines_copy_fields
+
+        full_inlines_copy_fields = {}
+        # set fields for each inlines
+        for inline, fields in _inlines_copy_fields.items():
+            if fields is None:
+                fields = []
+            full_inlines_copy_fields.update({inline: list(inline.form_class.base_fields.keys())})
+
+        return full_inlines_copy_fields
 
     def get_initial(self):
         initial = {}
         if self.request.GET.get('pk_copy', None) is not None:
             object_to_copy = get_object_or_404(self.get_queryset(), pk=self.request.GET['pk_copy'])
-            fields_to_copy = self.get_copy_fields()
+            fields_to_copy = self.get_model_copy_fields()
             if self.model._meta.pk.name in fields_to_copy:
                 fields_to_copy.remove(self.model._meta.pk.name)
             initial.update(model_to_dict(object_to_copy,
                                          fields=fields_to_copy))
         return initial
+
+    def get_initial_inlines(self):
+        initial_inlines = {}
+        if self.request.GET.get('pk_copy', None) is not None:
+            object_to_copy = get_object_or_404(self.get_queryset(), pk=self.request.GET['pk_copy'])
+            for inline, inline_copy_fields in self.get_inlines_copy_fields().items():
+                fields_to_copy = inline_copy_fields
+                if inline.model._meta.pk.name in fields_to_copy:
+                    fields_to_copy.remove(self.model._meta.pk.name)
+                datas = []
+                fk = _get_foreign_key(self.model, inline.model)
+                for object in inline.model._default_manager.filter(**{fk.name: object_to_copy}):
+                    datas.append(model_to_dict(object,
+                                               fields=fields_to_copy))
+                initial_inlines.update({inline: datas})
+        return initial_inlines
 
     def dispatch(self, *args, **kwargs):
         self.object = None

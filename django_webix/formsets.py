@@ -90,8 +90,12 @@ class BaseWebixInlineFormSet(BaseInlineFormSet):
 class WebixInlineFormSet(InlineFormSetFactory):
     template_name = None
 
-    def __init__(self, parent_model, request, instance, view_kwargs=None, view=None):
+    def __init__(self, parent_model, request, instance, view_kwargs=None, view=None, initial=None):
         super(WebixInlineFormSet, self).__init__(parent_model, request, instance, view_kwargs, view)
+
+        # Set initial (for copy purpouse)
+        if initial is not None:
+            self.initial = initial
 
         # Set form class
         if self.form_class is None:
@@ -112,21 +116,27 @@ class WebixInlineFormSet(InlineFormSetFactory):
 
     def get_formset_kwargs(self):
         _formset_kwargs = super(WebixInlineFormSet, self).get_formset_kwargs()
-        _formset_kwargs.update({'request': self.request})
+        _formset_kwargs.update({'request': self.request, 'initial': self.initial})
         return _formset_kwargs
 
+    def get_factory_kwargs(self):
+        _factory_kwargs = super(WebixInlineFormSet, self).get_factory_kwargs()
+        extra_forms = _factory_kwargs.get('extra', 3)
+        # FIX for initial data values (list of dict and not instances)
+        _factory_kwargs.update({'extra': extra_forms + len(self.initial) })
+        return _factory_kwargs
 
 class WebixStackedInlineFormSet(WebixInlineFormSet):
     template_name = 'django_webix/include/edit_inline/stacked.js'
     style = 'stacked'
-    def __init__(self, parent_model, request, instance, view_kwargs=None, view=None):
-        super(WebixStackedInlineFormSet, self).__init__(parent_model, request, instance, view_kwargs, view)
+    def __init__(self, parent_model, request, instance, view_kwargs=None, view=None, initial=None):
+        super(WebixStackedInlineFormSet, self).__init__(parent_model, request, instance, view_kwargs, view, initial)
         self.form_class = type(str('WebixStackedModelForm'), (self.form_class,), {'style': self.style})
 
 
 class WebixTabularInlineFormSet(WebixInlineFormSet):
     template_name = 'django_webix/include/edit_inline/tabular.js'
     style = 'tabular'
-    def __init__(self, parent_model, request, instance, view_kwargs=None, view=None):
-        super(WebixTabularInlineFormSet, self).__init__(parent_model, request, instance, view_kwargs, view)
+    def __init__(self, parent_model, request, instance, view_kwargs=None, view=None, initial=None):
+        super(WebixTabularInlineFormSet, self).__init__(parent_model, request, instance, view_kwargs, view, initial)
         self.form_class = type(str('WebixTabularModelForm'), (self.form_class,), {'style': self.style})
