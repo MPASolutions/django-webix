@@ -33,6 +33,14 @@ class WebixPermissionsMixin:
 
     remove_disabled_buttons = False
 
+    def get_failure_add_missing_objects(self, request):
+        return [
+#            {
+#                'text': '',
+#                'url': '',
+#            },
+        ]
+
     def get_failure_add_related_objects(self, request):
         return []
 
@@ -171,6 +179,8 @@ class WebixPermissionsMixin:
                                                                                       obj=obj),
             'failure_delete_related_objects': self.get_failure_delete_related_objects(request=self.request,
                                                                                       obj=obj),
+            # filure add missing_objects
+            'failure_add_missing_objects': self.get_failure_add_missing_objects(request=self.request),
         }
 
 

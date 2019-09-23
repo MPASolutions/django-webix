@@ -38,7 +38,6 @@ class WebixListView(WebixBaseMixin, WebixPermissionsMixin, WebixUrlMixin, ListVi
                 " only options are 'buttons' or 'select' (select by default).")
         return _actions_style
 
-
     def get_title(self):
         if self.title is not None:
             return self.title
