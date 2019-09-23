@@ -1,5 +1,5 @@
 from django_webix.forms.forms import WebixForm, WebixModelForm
-from django_webix.forms.formset import WebixInlineFormSet,
+from django_webix.forms.formsets import WebixInlineFormSet, WebixStackedInlineFormSet, WebixTabularInlineFormSet
 
 __all__ = [
     # forms

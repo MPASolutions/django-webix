@@ -15,7 +15,7 @@ from django.utils.encoding import force_text
 from django.utils.translation import ugettext as _
 from django.views.generic import DeleteView
 
-from django_webix.utils import tree_formatter
+from django_webix.views.generic.utils import tree_formatter
 from django_webix.views.generic.base import WebixBaseMixin, WebixPermissionsMixin, WebixUrlMixin
 
 
