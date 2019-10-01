@@ -139,14 +139,16 @@
             );
         }
         {% block toolbar_list_actions %}
-            var actions_list = [
-                  {id: "excel_standard", value: "EXCEL: Esporta dati"},
-                  ];
-            function actions_execute(action, ids) {
-              if (action == "excel_standard") {
-                   webix_to_excel()
+            {% if is_enable_actions %}
+                var actions_list = [
+                      {id: "excel_standard", value: "EXCEL: Esporta dati"},
+                      ];
+                function actions_execute(action, ids) {
+                  if (action == "excel_standard") {
+                       webix_to_excel()
+                    }
                 }
-            }
+            {% endif %}
         {% endblock %}
         {% include "django_webix/include/toolbar_list.js" %}
     {% endblock %}

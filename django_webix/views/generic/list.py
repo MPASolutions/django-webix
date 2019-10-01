@@ -13,10 +13,12 @@ class WebixListView(WebixBaseMixin, WebixPermissionsMixin, WebixUrlMixin, ListVi
     template_name = 'django_webix/generic/list.js'
     pk_field = None
     title = None
+    actions_style = None
+
     enable_column_copy = True
     enable_column_delete = True
     enable_row_click = True
-    actions_style = None
+    enable_actions = True
 
     fields = None
     # [
@@ -45,6 +47,9 @@ class WebixListView(WebixBaseMixin, WebixPermissionsMixin, WebixUrlMixin, ListVi
             return self.model._meta.verbose_name
         return None
 
+    def is_enable_actions(self, request):
+        return self.enable_actions
+
     def is_enable_column_copy(self, request):
         return self.enable_column_copy
 
@@ -71,7 +76,8 @@ class WebixListView(WebixBaseMixin, WebixPermissionsMixin, WebixUrlMixin, ListVi
                 for field in fields:
                     values.append(field['field_name'])
             qs = self.get_queryset()
-            return qs.values(*values)
+            if qs is not None:
+                return qs.values(*values)
         return None
 
     def get_pk_field(self):
@@ -97,6 +103,7 @@ class WebixListView(WebixBaseMixin, WebixPermissionsMixin, WebixUrlMixin, ListVi
             'is_enable_column_copy': self.is_enable_column_copy(self.request),
             'is_enable_column_delete': self.is_enable_column_delete(self.request),
             'is_enable_row_click': self.is_enable_row_click(self.request),
+            'is_enable_actions': self.is_enable_actions(self.request),
             'actions_style': self.get_actions_style(),
             'title': self.get_title(),
         })
