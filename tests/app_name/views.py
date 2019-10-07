@@ -9,7 +9,7 @@ from django import forms
 from django.views.generic import TemplateView, FormView
 
 from django_webix.forms import WebixModelForm, WebixForm
-from django_webix.formsets import WebixTabularInlineFormSet, WebixStackedInlineFormSet, BaseWebixInlineFormSet
+from django_webix.forms import WebixTabularInlineFormSet, WebixStackedInlineFormSet, BaseWebixInlineFormSet
 from django_webix.views import WebixCreateWithInlinesView, WebixCreateWithInlinesUnmergedView, \
     WebixUpdateWithInlinesView, WebixUpdateWithInlinesUnmergedView, \
     WebixDeleteView
