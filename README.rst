@@ -12,14 +12,17 @@ Django Webix
     :target: https://travis-ci.org/MPASolutions/django-webix
     :alt: Build
 
+.. image:: https://readthedocs.org/projects/django-webix/badge/?version=latest
+    :target: http://django-webix.readthedocs.org/en/latest/?badge=latest
+
 .. image:: https://codecov.io/gh/MPASolutions/django-webix/branch/master/graph/badge.svg
     :target: https://codecov.io/gh/MPASolutions/django-webix
     :alt: Codecov
-    
+
 .. image:: https://img.shields.io/github/issues/MPASolutions/django-webix.svg
     :target: https://github.com/MPASolutions/django-webix/issues
     :alt: Issues
-    
+
 .. image:: https://img.shields.io/pypi/pyversions/django-webix.svg
     :target: https://img.shields.io/pypi/pyversions/django-webix.svg
     :alt: Py versions

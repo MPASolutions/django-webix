@@ -1,81 +1,63 @@
-webix.ui([], $$("{{ view.webix_view_id|default:"content_right" }}"));
+{% load django_webix_utils %}
 
-$$("{{ view.webix_view_id|default:"content_right" }}").addView({
-    id: 'main_toolbar_form',
-    view: "toolbar",
-    margin: 5,
-    height: 30,
-    cols: [
-        {% if object.get_url_update and object.get_url_update != '' %}
-            {
-                view: "button",
-                type: "base",
-                align: "left",
-                icon: "undo",
-                label: 'Torna a "{{ object }}"',
-                autowidth: true,
-                click: function () {
-                    load_js("{% url object.get_url_update object.pk %}");
-                }
-            },
-        {% elif object.get_url_list and object.get_url_list != '' %}
-            {
-                view: "button",
-                type: "base",
-                align: "left",
-                icon: "undo",
-                label: 'Torna a "{{ object }}"',
-                autowidth: true,
-                click: function () {
-                  load_js("{% url object.get_url_list %}");
-                }
-            },
+{% block webix_content %}
+
+    {% block context_cleaner %}
+    webix.ui([], $$("{{ webix_container_id }}"));
+    {% endblock %}
+
+    {% block toolbar_navigation %}
+        {% if url_update and url_update != '' %}
+            {% include "django_webix/include/toolbar_navigation.js" with url_back=url_update %}
+        {% elif url_list and url_list != '' %}
+            {% include "django_webix/include/toolbar_navigation.js" with url_back=url_list %}
         {% endif %}
-    ]
-});
+    {% endblock %}
 
-$$("{{ view.webix_view_id|default:"content_right" }}").addView({
-    view: "template",
-    {% if nested_prevent %}
-        template: "Non puoi cancellare questo elemento se prima non hai eliminato tutte le schede collegate",
-    {% else %}
-        template: "Le seguenti schede verranno eliminate",
+    {% if failure_delete_related_objects %}
+        {% block failure_related_objects %}
+            {% include "django_webix/include/list_failure_related_objects.js" with failure_related_objects=failure_delete_related_objects %}
+        {% endblock %}
     {% endif %}
-    type: "header",
-    css: 'webix_error'
-});
 
-$$("{{ view.webix_view_id|default:"content_right" }}").addView({
-    view: "tree",
-    data: JSON.parse("{{ related|safe|escapejs }}"),
-    on: {
-        onItemClick: function(id, e, node) {
-            var item = this.getItem(id);
-            if ('url' in item) {
-                load_js(item.url);
+    {% if has_delete_permission %}
+        $$("{{ webix_container_id }}").addView({
+            view: "template",
+            template: "Le seguenti schede verranno eliminate",
+            type: "header",
+        });
+
+        $$("{{ webix_container_id }}").addView({
+            view: "tree",
+            data: JSON.parse("{{ related_objects|safe|escapejs }}"),
+            on: {
+                onItemClick: function (id, e, node) {
+                    var item = this.getItem(id);
+                    if ('url' in item) {
+                        load_js(item.url);
+                    }
+                }
             }
-        }
-    }
-});
+        });
+    {% endif %}
 
-{% if not nested_prevent and object.get_url_delete and object.get_url_delete != '' %}
-    $$("{{ view.webix_view_id|default:"content_right" }}").addView({
+    {% if has_delete_permission and url_delete and url_delete != '' %}
+    $$("{{ webix_container_id }}").addView({
         margin: 5,
         height: 30,
         view: "toolbar",
         cols: [
             {$template: "Spacer"},
             {
-                view: "button",
+                view: "tootipButton",
                 type: "form",
                 align: "right",
                 id: "delete",
-                icon: "eraser",
                 label: "Conferma cancellazione",
                 width: 200,
                 click: function () {
                     $.ajax({
-                        url: "{% url object.get_url_delete object.pk %}",
+                        url: "{{ url_delete }}",
                         dataType: "script",
                         type: "POST",
                         success: function () {
@@ -86,5 +68,8 @@ $$("{{ view.webix_view_id|default:"content_right" }}").addView({
             }
         ]
     });
-{% endif %}
+    {% endif %}
 
+    {% block extrajs_post %}{% endblock %}
+
+{% endblock %}

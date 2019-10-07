@@ -1,3 +1,4 @@
+{% load django_webix_utils %}
 $$('{{ inline.prefix }}-group').addView({
     rows: [
         {
@@ -65,6 +66,13 @@ $$('{{ inline.prefix }}-group').addView({
                     } else {
                         this.hide();
                     }
+
+                    {% block extra_trigger %}
+                    if (typeof trigger_{{inline.prefix}} === "function"){
+                        trigger_{{inline.prefix}}(inline_id);
+                    }
+                    {% endblock %}
+
                 }
             }
         }
@@ -74,7 +82,13 @@ $$('{{ inline.prefix }}-group').addView({
 {# Delete trigger on all inlines #}
 {% for row in inline %}
     delete_trigger("{{ row.prefix }}");
+    {% block extra_trigger_init %}
+    if (typeof trigger_{{inline.prefix}} === "function"){
+        trigger_{{inline.prefix}}("{{ row.prefix }}");
+    }
+    {% endblock %}
 {% endfor %}
+
 
 {# Rules event on all inlines #}
 {% for row in inline %}

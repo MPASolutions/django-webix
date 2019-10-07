@@ -34,6 +34,15 @@ class WebixManagementForm(WebixForm):
 
 
 class BaseWebixInlineFormSet(BaseInlineFormSet):
+    def __init__(self, **kwargs):
+        self.request = kwargs.pop('request', None)
+        super(BaseWebixInlineFormSet, self).__init__(**kwargs)
+
+    def get_form_kwargs(self, index):
+        _form_kwargs = super(BaseWebixInlineFormSet, self).get_form_kwargs(index)
+        _form_kwargs.update({'request': self.request, 'inline_id': index})
+        return _form_kwargs
+
     def get_rules(self):
         """ Returns a dict with the inline fields rules """
 
@@ -45,7 +54,7 @@ class BaseWebixInlineFormSet(BaseInlineFormSet):
     def get_rules_template(self):
         """Returns the rules template"""
 
-        rules_old = self.form().get_rules() or {}
+        rules_old = self.form(**{'request':self.request}).get_rules() or {}
         rules_old.pop(self.fk.name, None)  # Remove fk rule
         rules_new = {}
         for key in rules_old:
@@ -79,8 +88,14 @@ class BaseWebixInlineFormSet(BaseInlineFormSet):
 
 
 class WebixInlineFormSet(InlineFormSetFactory):
-    def __init__(self, parent_model, request, instance, view_kwargs=None, view=None):
+    template_name = None
+
+    def __init__(self, parent_model, request, instance, view_kwargs=None, view=None, initial=None):
         super(WebixInlineFormSet, self).__init__(parent_model, request, instance, view_kwargs, view)
+
+        # Set initial (for copy purpouse)
+        if initial is not None:
+            self.initial = initial
 
         # Set form class
         if self.form_class is None:
@@ -91,6 +106,7 @@ class WebixInlineFormSet(InlineFormSetFactory):
             self.formset_class = self.custom_formset_class
         else:
             self.formset_class = BaseWebixInlineFormSet
+        self.formset_class = type(str('WebixInlineFormSet'), (self.formset_class,), {'template_name': self.template_name})
 
         # Set queryset
         if hasattr(self, 'get_queryset') and callable(self.get_queryset):
@@ -98,14 +114,29 @@ class WebixInlineFormSet(InlineFormSetFactory):
         else:
             self.formset_kwargs['queryset'] = self.inline_model.objects.all()
 
+    def get_formset_kwargs(self):
+        _formset_kwargs = super(WebixInlineFormSet, self).get_formset_kwargs()
+        _formset_kwargs.update({'request': self.request, 'initial': self.initial})
+        return _formset_kwargs
+
+    def get_factory_kwargs(self):
+        _factory_kwargs = super(WebixInlineFormSet, self).get_factory_kwargs()
+        extra_forms = _factory_kwargs.get('extra', 3)
+        # FIX for initial data values (list of dict and not instances)
+        _factory_kwargs.update({'extra': extra_forms + len(self.initial) })
+        return _factory_kwargs
 
 class WebixStackedInlineFormSet(WebixInlineFormSet):
-    def __init__(self, parent_model, request, instance, view_kwargs=None, view=None):
-        super(WebixStackedInlineFormSet, self).__init__(parent_model, request, instance, view_kwargs, view)
-        self.form_class = type(str('WebixStackedModelForm'), (self.form_class,), {'style': 'stacked'})
+    template_name = 'django_webix/include/edit_inline/stacked.js'
+    style = 'stacked'
+    def __init__(self, parent_model, request, instance, view_kwargs=None, view=None, initial=None):
+        super(WebixStackedInlineFormSet, self).__init__(parent_model, request, instance, view_kwargs, view, initial)
+        self.form_class = type(str('WebixStackedModelForm'), (self.form_class,), {'style': self.style})
 
 
 class WebixTabularInlineFormSet(WebixInlineFormSet):
-    def __init__(self, parent_model, request, instance, view_kwargs=None, view=None):
-        super(WebixTabularInlineFormSet, self).__init__(parent_model, request, instance, view_kwargs, view)
-        self.form_class = type(str('WebixTabularModelForm'), (self.form_class,), {'style': 'tabular'})
+    template_name = 'django_webix/include/edit_inline/tabular.js'
+    style = 'tabular'
+    def __init__(self, parent_model, request, instance, view_kwargs=None, view=None, initial=None):
+        super(WebixTabularInlineFormSet, self).__init__(parent_model, request, instance, view_kwargs, view, initial)
+        self.form_class = type(str('WebixTabularModelForm'), (self.form_class,), {'style': self.style})

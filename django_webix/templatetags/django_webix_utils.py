@@ -3,17 +3,44 @@
 from __future__ import unicode_literals
 
 import re
-
 import six
 from django import template
+from django.conf import settings
+import datetime
 
 register = template.Library()
+
+
+@register.simple_tag(name='webix_version')
+def webix_version():
+    return settings.WEBIX_VERSION
+
+
+@register.simple_tag(name='webix_license')
+def webix_license():
+    return settings.WEBIX_LICENSE
+
+
+@register.filter
+def comma_to_underscore(value):
+    return value.replace(".", "_")
 
 
 @register.filter_function
 def order_by(queryset, args):
     args = [x.strip() for x in args.split(',')]
     return queryset.order_by(*args)
+
+
+@register.filter
+def format_list_value(value):
+    if type(value)==datetime.date:
+        return value.strftime('%d/%m/%Y')
+    elif type(value) == datetime.datetime:
+        return value.strftime('%d/%m/%Y %H:%M')
+    elif value is None:
+        return ''
+    return str(value)
 
 
 @register.filter

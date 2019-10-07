@@ -1,4 +1,4 @@
-{% load i18n %}
+{% load i18n django_webix_utils %}
 
 /**
  * Returns if a field required is not empty

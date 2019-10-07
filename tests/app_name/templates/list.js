@@ -3,7 +3,7 @@ webix.ui([], $$("{{ view.webix_view_id|default:"content_right" }}"));
 $$("{{ view.webix_view_id|default:"content_right" }}").addView({
     rows: [
         {
-            id: '{{ object_list.model.get_model_name }}',
+            id: '{{ object_list.model|get_model_name }}',
             view: "datatable",
             resizeColumn: true,
             data: {{ datalist|safe }},
@@ -20,7 +20,7 @@ $$("{{ view.webix_view_id|default:"content_right" }}").addView({
                     var $this = this;
 
                     $.ajax({
-                        url: '{% url 'mymodel_update' 1 %}'.replace('1', id.row),
+                        url: '{% url 'app_name.mymodel.update' 1 %}'.replace('1', id.row),
                         dataType: "script",
                         success: function (text, data, XmlHttpRequest) {
                         },
@@ -38,7 +38,7 @@ $$("{{ view.webix_view_id|default:"content_right" }}").addView({
                 {
                     view: "button", value: "New", width: 100, align: "center", click: function () {
                         $.ajax({
-                            url: '{% url 'mymodel_create' %}',
+                            url: '{% url 'app_name.mymodel.create' %}',
                             dataType: "script",
                             success: function (text, data, XmlHttpRequest) {
                             },

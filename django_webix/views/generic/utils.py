@@ -39,8 +39,6 @@ def tree_formatter(item_list):
     for item, children in walk_items(item_list):
         _data = {"value": '{}: {}'.format(capfirst(item._meta.verbose_name), force_text(item))}
         _sub_data = None
-        if hasattr(item, 'get_url_update') and item.get_url_update is not None:
-            _data.update({'url': reverse(item.get_url_update, kwargs={"pk": item.pk})})
         if children:
             _data.update({"data": tree_formatter(children), "open": True})
         output.append(_data)

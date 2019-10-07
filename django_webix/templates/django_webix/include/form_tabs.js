@@ -1,3 +1,4 @@
+{% load django_webix_utils %}
 {# Errors #}
 {% block webix_form_errors %}
     {% if form.errors %}
@@ -18,42 +19,51 @@
 
 {# Form #}
 {% block webix_form %}
-    $$("{{ view.webix_view_id|default:"content_right" }}").addView({
+    $$("{{ webix_container_id }}").addView({
         borderless: true,
         view: 'form',
         elements: [
-            {% block webix_form_elements %}
-                {{ form.as_webix|safe }},
-                {% if inlines %}
-                    {
-                        view: "tabbar",
-                        id: '{{ form.webix_id }}-inlines-tabbar',
-                        value: "{{ inlines.0.prefix }}-group",
-                        optionWidth: 150,
-                        multiview: true,
-                        options: [
-                            {% for inline in inlines %}
-                                {
-                                    id: '{{ inline.prefix }}-group',
-                                    value: "{{ inline.get_name }}"
-                                },
-                            {% endfor %}
-                        ]
-                    },
-                    {
-                        animate: false,
-                        id: '{{ form.webix_id }}-inlines',
-                        cells: [
-                            {% for inline in inlines %}
-                                {
-                                    id: '{{ inline.prefix }}-group',
-                                    rows: []
-                                },
-                            {% endfor %}
-                        ]
-                    }
-                {% endif %}
-            {% endblock %}
+            {% if inlines|length > 0 %}
+                {
+                    view: "tabbar",
+                    id: '{{ form.webix_id }}-inlines-tabbar',
+                    value: "{{ form.webix_id }}-group",
+                    //optionWidth: 150,
+                    multiview: true,
+                    options: [
+                        {
+                            id: '{{ form.webix_id }}-group',
+                            value: "{{ form.get_name }}"
+                        },
+                        {% for inline in inlines %}
+                            {
+                                id: '{{ inline.prefix }}-group',
+                                value: "<div style='position: relative'>{{ inline.get_name }} <span class='webix_badge' style='background-color:#888 !important; margin-top: -2px; margin-right: 5px;'><strong>" + {{ inline.initial_form_count }} + "</strong></span></div>"
+                            },
+                        {% endfor %}
+                    ]
+                },
+            {% endif %}
+            {
+                animate: false,
+                id: '{{ form.webix_id }}-inlines',
+                cells: [
+                    {% block webix_form_elements %}
+                        {
+                            id: '{{ form.webix_id }}-group',
+                            rows: [
+                                {{ form.as_webix|safe }}
+                            ]
+                        },
+                    {% endblock %}
+                    {% for inline in inlines %}
+                        {
+                            id: '{{ inline.prefix }}-group',
+                            rows: []
+                        },
+                    {% endfor %}
+                ]
+            }
         ],
         on: {
             onAfterValidation: function (result, value) {
@@ -109,10 +119,8 @@
 
     {% block webix_include_inlines %}
         {% for inline in inlines %}
-            {% if inline.0.style == 'tabular' %}
-                {% include "django_webix/include/edit_inline/tabular.js" %}
-            {% elif inline.0.style == 'stacked' %}
-                {% include "django_webix/include/edit_inline/stacked.js" %}
+            {% if inline.template_name %}
+                {% include inline.template_name %}
             {% else %}
                 {% include "django_webix/include/edit_inline/stacked.js" %}
             {% endif %}

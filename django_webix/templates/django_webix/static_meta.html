@@ -1,11 +1,12 @@
-{% load static %}
+{% load i18n static django_webix_utils %}
 
-<link rel="stylesheet" href="{% static 'webix/skins/compact.min.css' %}" type="text/css">
+{% webix_version as ver %}
+<link rel="stylesheet" href="{% static 'webix/skins/compact.min.css' %}?ver={{ ver }}" type="text/css">
 <link rel="stylesheet" href="{% static 'django_webix/inlines.css' %}" type="text/css">
 <link rel="stylesheet" href="{% static 'django_webix/theme.siberia.css' %}" type="text/css">
 <link rel="stylesheet" href="{% static 'django_webix/fontawesome-5.7.2/css/all.min.css' %}" type="text/css">
 
-<script type="text/javascript" src="{% static 'webix/webix.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'webix/webix.min.js' %}?ver={{ ver }}"></script>
 <script type="text/javascript" src="{% static 'django_webix/jquery-3.3.1.min.js' %}"></script>
 <script type="text/javascript" charset="utf-8">
     {% include "django_webix/include/form_validation.js" %}

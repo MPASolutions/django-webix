@@ -9,10 +9,11 @@ from django import forms
 from django.views.generic import TemplateView, FormView
 
 from django_webix.forms import WebixModelForm, WebixForm
-from django_webix.formsets import WebixTabularInlineFormSet, WebixStackedInlineFormSet, BaseWebixInlineFormSet
-from django_webix.views import WebixCreateWithInlinesView, WebixUpdateWithInlinesView, WebixDeleteView
-
-from .models import MyModel, InlineModel, InlineStackedModel, InlineEmptyModel
+from django_webix.forms import WebixTabularInlineFormSet, WebixStackedInlineFormSet, BaseWebixInlineFormSet
+from django_webix.views import WebixCreateWithInlinesView, WebixCreateWithInlinesUnmergedView, \
+    WebixUpdateWithInlinesView, WebixUpdateWithInlinesUnmergedView, \
+    WebixDeleteView
+from .models import MyModel, InlineModel, InlineStackedModel, InlineEmptyModel, UrlsModel
 
 
 class MyLoginForm(WebixForm):
@@ -91,6 +92,25 @@ class MyModelCreateView(WebixCreateWithInlinesView):
     model = MyModel
     inlines = [InlineModelInline, InlineStackedModelInline, InlineEmptyModelInline]
     form_class = MyModelForm
+    permissions = False
+
+
+class MyModelCreateUnmergedView(WebixCreateWithInlinesUnmergedView):
+    model = MyModel
+    inlines = [InlineModelInline, InlineStackedModelInline, InlineEmptyModelInline]
+    form_class = MyModelForm
+    permissions = False
+
+    url_create = 'app_name.mymodel.create_unmerged'
+
+
+class MyModelCreateErrorView(WebixCreateWithInlinesView):
+    model = MyModel
+    inlines = [InlineModelInline, InlineStackedModelInline, InlineEmptyModelInline]
+    form_class = MyModelForm
+    style = 'error'
+
+    url_create = 'app_name.mymodel.create_error'
 
 
 class MyModelUpdateView(WebixUpdateWithInlinesView):
@@ -99,13 +119,84 @@ class MyModelUpdateView(WebixUpdateWithInlinesView):
     form_class = MyModelForm
 
 
+class MyModelUpdateErrorView(WebixUpdateWithInlinesView):
+    model = MyModel
+    inlines = [InlineModelInline, InlineStackedModelInline, InlineEmptyModelInline]
+    form_class = MyModelForm
+    style = 'error'
+
+    url_create = 'app_name.mymodel.update_error'
+
+
 class MyModelDeleteView(WebixDeleteView):
     model = MyModel
 
 
-class InlineModelUpdateView(WebixUpdateWithInlinesView):
+class InlineModelUpdateView(WebixUpdateWithInlinesUnmergedView):
     model = InlineModel
+    fields = '__all__'
 
 
 class InlineStackedModelDelete(WebixDeleteView):
     model = InlineStackedModel
+
+
+class CreateSuccessUrlView(WebixCreateWithInlinesView):
+    model = UrlsModel
+    fields = '__all__'
+    success_url = '/'
+
+
+class CreateUrlUpdateView(WebixCreateWithInlinesView):
+    model = UrlsModel
+    fields = '__all__'
+    url_update = 'app_name.mymodel.create_urlupdate'
+
+
+class CreateUrlListView(WebixCreateWithInlinesView):
+    model = UrlsModel
+    fields = '__all__'
+    url_update = None
+    url_list = 'app_name.mymodel.create_urllist'
+
+
+class CreateNoUrlView(WebixCreateWithInlinesView):
+    model = UrlsModel
+    fields = '__all__'
+    url_update = None
+    url_list = None
+
+
+class UpdateSuccessUrlView(WebixUpdateWithInlinesView):
+    model = UrlsModel
+    fields = '__all__'
+    success_url = '/'
+
+
+class UpdateUrlUpdateView(WebixUpdateWithInlinesView):
+    model = UrlsModel
+    fields = '__all__'
+    url_update = 'app_name.mymodel.update_urlupdate'
+
+
+class UpdateNoUrlView(WebixUpdateWithInlinesView):
+    model = UrlsModel
+    fields = '__all__'
+    url_update = None
+    url_list = None
+
+
+class DeleteSuccessUrlView(WebixDeleteView):
+    model = UrlsModel
+    success_url = '/'
+
+
+class DeleteUrlListView(WebixDeleteView):
+    model = UrlsModel
+    url_list = 'app_name.mymodel.delete_urllist'
+
+
+class DeleteNoUrlView(WebixDeleteView):
+    model = UrlsModel
+    url_update = None
+    url_list = None

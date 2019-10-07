@@ -1,3 +1,4 @@
+{% load django_webix_utils %}
 /**
  * Returns a copy of the empty form with an integer id instead of __prefix__
  *

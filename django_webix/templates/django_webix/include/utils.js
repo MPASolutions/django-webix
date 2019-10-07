@@ -1,4 +1,4 @@
-{% load static %}
+{% load static django_webix_utils %}
 
 // csrf set
 // using jQuery
@@ -54,16 +54,6 @@ webix.i18n.pivot = {
     total: "Totale"
 };
 
-function set_autocomplete_reload(selector, QS) {
-    a = $$(selector);
-    b = $$(a.config.suggest);
-    c = b.getBody();
-    c.define('dataFeed', QS);
-    c.clearAll()
-    c.refresh();
-    d = a.getList();
-    d.load(QS + '&filter[value]=');
-}
 
 function load_pdf(url) {
     var win = window.open(url, '_blank');
@@ -71,24 +61,30 @@ function load_pdf(url) {
 }
 
 function custom_checkbox(obj, common, value) {
-    if ((value == 'False') || (value == 'false') || (value == false))
+    if ((value == 'False') || (value == 'false') || (value == '0') || (value === 0) || (value === false))
         return "<img style='width:12px;' src='{% static 'admin/img/icon-no.svg' %}'> "
-    else
+    else if ((value == 'True') || (value == 'true') || (value == '1') || (value === 1) || (value === true))
         return "<img style='width:12px;' src='{% static 'admin/img/icon-yes.svg' %}'> "
+    else
+        return "<img style='width:12px;' src='{% static 'admin/img/icon-unknown.svg' %}'> "
 }
 
 function custom_checkbox_pointer(obj, common, value) {
-    if ((value == 'False') || (value == 'false') || (value == false))
+    if ((value == 'False') || (value == 'false') || (value == '0') || (value === 0) || (value === false))
         return "<img style='width:12px;cursor:pointer' src='{% static 'admin/img/icon-no.svg' %}'> "
-    else
+    else if ((value == 'True') || (value == 'true') || (value == '1') || (value === 1) || (value === true))
         return "<img style='width:12px;cursor:pointer' src='{% static 'admin/img/icon-yes.svg' %}'> "
+    else
+        return "<img style='width:12px;cursor:pointer' src='{% static 'admin/img/icon-unknown.svg' %}'> "
 }
 
 function custom_checkbox_help(obj, common, value) {
-    if ((value == 'False') || (value == 'false') || (value == false))
+    if ((value == 'False') || (value == 'false') || (value == '0') || (value === 0) || (value === false))
         return "<img style='width:12px;cursor:help' src='{% static 'admin/img/icon-no.svg' %}'> "
-    else
+    else if ((value == 'True') || (value == 'true') || (value == '1') || (value === 1) || (value === true))
         return "<img style='width:12px;cursor:help' src='{% static 'admin/img/icon-yes.svg' %}'> "
+    else
+        return "<img style='width:12px;cursor:help' src='{% static 'admin/img/icon-unknown.svg' %}'> "
 }
 
 function custom_checkbox_yesno(obj, common, value) {
@@ -98,12 +94,16 @@ function custom_checkbox_yesno(obj, common, value) {
         return "<div style='color:red;'>No</div>";
 }
 
-function custom_button_cp() {
-    return '<div title="Duplica elemento"><i style="cursor:pointer" class="webix_icon fa-copy"></i></div>'
+function custom_button_cp(){
+  return '<div title="Duplica elemento"><i style="cursor:pointer" class="webix_icon far fa-copy"></i></div>'
 }
 
-function custom_button_rm() {
-    return '<div title="Rimuovi elemento"><i style="cursor:pointer" class="webix_icon fa-trash-o"></i></div>'
+function custom_button_rm(){
+  return '<div title="Rimuovi elemento"><i style="cursor:pointer" class="webix_icon far fa-trash-alt"></i></div>'
+}
+
+function custom_button_detail(){
+  return '<div title="Dettaglio elemento"><i style="cursor:pointer" class="webix_icon fas fa-external-link-square-alt"></i></div>'
 }
 
 function image_modal(url, width, height, id) {
@@ -115,7 +115,7 @@ function image_modal(url, width, height, id) {
         head: {
             view: "toolbar", cols: [
                 {view: "label", label: "Immagine"},
-                {view: "button", label: 'Chiudi', width: 100, align: 'right', click: "$$('" + id + "').close();"}
+                {view: "tootipButton", label: 'Chiudi', width: 100, align: 'right', click: "$$('" + id + "').close();"}
             ]
         },
         position: "center",
@@ -127,7 +127,7 @@ function image_modal(url, width, height, id) {
 
 function load_js(lnk, hide, area) {
     if ((area == undefined) || (area == '') || (area == null)) {
-        area = 'content_right';
+        area = '{{ webix_container_id }}';
     }
     if (lnk != '') {
         hide = hide || 0;
@@ -154,7 +154,7 @@ function load_js(lnk, hide, area) {
 
 function load_js_data(lnk, area) {
     if ((area == undefined) || (area == '') || (area == null)) {
-        area = 'content_right';
+        area = '{{ webix_container_id }}';
     }
     $$(area).showOverlay("<img src='{% static 'django_webix/loading.gif' %}'>");
     $.ajax({
@@ -196,6 +196,18 @@ function makeid() {
     return text;
 }
 
+
+function set_autocomplete_reload(selector, QS) {
+    a = $$(selector);
+    b = $$(a.config.suggest);
+    c = b.getBody();
+    c.define('dataFeed', QS);
+    c.clearAll()
+    c.refresh();
+    d = a.getList();
+    d.load(QS + '&filter[value]=');
+}
+
 function set_autocomplete_value(selector, QS, value) {
     a = $$(selector);
     b = $$(a.config.suggest);
@@ -222,3 +234,32 @@ function set_autocomplete_empty(selector, QS) {
     d.load(QS + '&filter[value]=');
 }
 
+webix.protoUI({
+  name:"tootipButton",
+  $cssName:"button",
+  $init:function(obj){
+    if (obj.tooltip)
+    	this.$view.title = obj.tooltip;
+  }
+}, webix.ui.button)
+
+webix.ui.datafilter.dataListCheckbox = webix.extend({
+  refresh: function (master, node, config) {
+    node.onclick = function () { // NOTA uncheck lo fa su tutto invece di solo quello che vede filtrato
+      this.getElementsByTagName("input")[0].checked = config.checked = !config.checked;
+      var column = master.getColumnConfig(config.columnId);
+      var checked = config.checked ? column.checkValue : column.uncheckValue;
+
+      var range = master.data.getIndexRange(master.data.$min, master.data.$max);
+      for (var i = 0; i < range.length; i++) {
+        var obj = range[i];
+        obj[config.columnId] = checked;
+        master.callEvent("onCheck", [obj.id, config.columnId, checked]);
+      }
+      master.refresh();
+    };
+  },
+  render: function (master, config) {
+    return "<input type='checkbox' " + (config.checked ? "checked='1'" : "") + "> Tutti";
+  }
+}, webix.ui.datafilter.masterCheckbox);

@@ -29,18 +29,15 @@ class MyModel(GenericModelWebix):
     datetimefield_null = models.DateTimeField(blank=True, null=True)
     filepathfield_default = models.FilePathField(blank=True, null=True, path='/tmp', default='')
 
-    class WebixMeta:
-        url_list = 'mymodel_list'
-        url_create = 'mymodel_create'
-        url_update = 'mymodel_update'
-        url_delete = 'mymodel_delete'
+    class Meta:
+        ordering = ['field']
 
     @staticmethod
     def autocomplete_search_fields():
         return "field__icontains", "email__icontains",
 
 
-class InlineModel(GenericModelWebix):
+class InlineModel(models.Model):
     inline_field = models.CharField(max_length=255)
     timefield = models.TimeField(blank=True, null=True, default=timezone.now)
     datefield = models.DateField(blank=True, null=True, default=timezone.datetime.today)
@@ -54,11 +51,11 @@ class InlineModel(GenericModelWebix):
 
     my_model = models.ForeignKey(MyModel, on_delete=models.CASCADE)
 
-    class WebixMeta:
-        url_update = 'inlinemodel_update'
+    class Meta:
+        ordering = ['my_model__field', 'my_model']
 
 
-class InlineStackedModel(GenericModelWebix):
+class InlineStackedModel(models.Model):
     textfield = models.TextField(blank=True, null=True)
     timefield = models.TimeField(blank=True, null=True)
     timefield_string = models.TimeField(blank=True, null=True, default="10:00")  # TODO: SISTEMARE
@@ -82,9 +79,6 @@ class InlineStackedModel(GenericModelWebix):
 
     my_model = models.ForeignKey(MyModel, on_delete=models.CASCADE)
 
-    class WebixMeta:
-        url_delete = 'inlinestackedmodel_delete'
-
 
 class InlineEmptyModel(models.Model):
     textfield = models.TextField(blank=True, null=True)
@@ -103,3 +97,7 @@ class InlineEmptyModel(models.Model):
 
 class SubInlineStackedModel(models.Model):
     my_model = models.ForeignKey(InlineStackedModel, on_delete=models.CASCADE)
+
+
+class UrlsModel(models.Model):
+    field = models.CharField(max_length=255)

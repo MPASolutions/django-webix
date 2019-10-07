@@ -2,14 +2,15 @@
 
 from __future__ import unicode_literals, absolute_import
 
-import copy
 from collections import OrderedDict, defaultdict
-from json import dumps
-from random import randint
+from json import dumps, loads
 
+import copy
 import django
 import six
 from django import forms
+from django.conf import settings
+from django.core.exceptions import ImproperlyConfigured
 from django.core.serializers.json import DjangoJSONEncoder
 from django.db import models, connection
 from django.db.models.fields import FieldDoesNotExist
@@ -20,15 +21,16 @@ from django.urls import reverse
 from django.utils.encoding import force_text
 from django.utils.text import capfirst
 from django.utils.translation import ugettext_lazy as _
+from random import randint
 from sorl.thumbnail import get_thumbnail
 
 try:
-    from django.contrib.postgres.fields import JSONField
+    from django.contrib.postgres.forms.jsonb import JSONField
 except ImportError:
     JSONField = forms.Field
 
 
-class BaseWebixForm(forms.BaseForm):
+class BaseWebixMixin(object):
     form_fix_height = None
     min_count_suggest = 100
     style = 'stacked'
@@ -39,15 +41,7 @@ class BaseWebixForm(forms.BaseForm):
     class Meta:
         localized_fields = '__all__'  # to use comma as separator in i18n
 
-    def __init__(self, data=None, files=None, auto_id='id_%s', prefix=None,
-                 initial=None, error_class=ErrorList, label_suffix=None,
-                 empty_permitted=False, field_order=None, use_required_attribute=None, renderer=None):
-
-        # Set form prefix
-        if prefix is not None:
-            self.prefix = prefix
-
-        # Update of a queryset with modified values
+    def get_fields_data_with_prefix(self, data=None):
         if data is not None:
             qdict = data.copy()
             for name, field in copy.deepcopy(self.base_fields).items():
@@ -63,11 +57,9 @@ class BaseWebixForm(forms.BaseForm):
                         qdict.pop(self.add_prefix(name))  # Remove old value
                         qdict.update({self.add_prefix(name): val if val not in ['null', u'null'] else None})
             data = qdict
+        return data
 
-        super(BaseWebixForm, self).__init__(data, files, auto_id, prefix, initial, error_class, label_suffix,
-                                            empty_permitted, field_order, use_required_attribute, renderer)
-
-        # TODO: check if it works with all field types on create and update action
+    def set_readonly_fields(self):
         # Replace field if it is in readonly_fields list
         for readonly_field in self.get_readonly_fields():
             try:
@@ -121,8 +113,7 @@ class BaseWebixForm(forms.BaseForm):
                     self.fields[readonly_field].initial = value
                     self.initial[readonly_field] = value
 
-    def clean(self):
-        cleaned_data = super(BaseWebixForm, self).clean()
+    def webix_extra_clean(self, cleaned_data):
         for key, value in cleaned_data.items():
             if isinstance(value, six.string_types):
                 cleaned_data[key] = value.strip()
@@ -196,7 +187,8 @@ class BaseWebixForm(forms.BaseForm):
                 'label': label,
                 'name': self.add_prefix(name),
                 'id': self[name].auto_id,
-                'labelWidth': 200
+                'labelWidth': 200,
+                'django_type_field': str(type(field).__name__),
             }
 
             if name in self.get_readonly_fields():
@@ -207,8 +199,16 @@ class BaseWebixForm(forms.BaseForm):
 
             # Get initial value
             if hasattr(self, 'cleaned_data'):
-                # Error with clean of Model Form
-                initial = self.cleaned_data.get(name, field.initial)
+                if type(field) == forms.models.ModelMultipleChoiceField:
+                    initial = self.data.getlist(self.add_prefix(name), field.initial)
+                elif connection.vendor == 'postgresql' and isinstance(field, JSONField):
+                    initial = self.data.get(self.add_prefix(name), None)
+                    if initial is not None:
+                        initial = loads(initial)
+                    else:
+                        initial = field.initial
+                else:
+                    initial = self.data.get(self.add_prefix(name), field.initial)
             else:
                 initial = self.initial.get(name, field.initial)
 
@@ -293,9 +293,9 @@ class BaseWebixForm(forms.BaseForm):
                     'uncheckValue': ''
                 })
                 if initial is not None:
-                    if isinstance(initial, bool) and initial:
-                        el.update({'value': '2'})
-                    elif isinstance(initial, int) and initial == 2:
+                    if (isinstance(initial, bool) and initial) or \
+                        (isinstance(initial, six.string_types) and initial.lower() == 'true') or \
+                        (isinstance(initial, int) and initial == 2):
                         el.update({'value': '2'})
             # URLField
             elif isinstance(field, forms.URLField):
@@ -307,6 +307,53 @@ class BaseWebixForm(forms.BaseForm):
                 # el.update({'view':''})
                 if initial is not None:
                     el.update({'value': initial})
+            # Image  # TODO
+            elif 'image' in str(type(field)).lower():
+                if initial is not None:
+                    el.update({'value': None})
+                el.update({
+                    'view': 'uploader',
+                    'autosend': False,
+                    'multiple': False,
+                    'width': 100,
+                    'label': _('Upload new image')
+                })
+                if initial:
+                    img_small = get_thumbnail(initial, '150x100', quality=85)
+                    img_big = get_thumbnail(initial, '500x400', quality=85)
+                    key = randint(1, 100000)
+                    _template_file = '<img src="{}"  onclick="image_modal(\'{}\',{},{},\'{}\')">'.format(
+                        img_small.url, img_big.url, 500, 400, str(key)
+                    )
+                else:
+                    _template_file = ''
+                elements.update({
+                    '{}_block'.format(self[name].html_name): {
+                        'cols': [
+                            {
+                                'name_label': name,
+                                'id_label': 'label_' + name,
+                                'borderless': True,
+                                'template': label,
+                                'height': 30,
+                                'width': 200
+                            },
+                            {
+                                'name_label': name,
+                                'id_label': 'preview_' + name,
+                                'borderless': True,
+                                'template': _template_file,
+                                'height': 100,
+                                'width': 170
+                            },
+                            el,
+                            {
+                                'borderless': True,
+                                'template': '',
+                                'height': 30
+                            },
+                        ]}})
+                _pass = True
             # FileField
             elif isinstance(field, forms.FileField):
                 if initial is not None:
@@ -324,7 +371,7 @@ class BaseWebixForm(forms.BaseForm):
                         'name_label': name,
                         'id_label': name,
                         'borderless': True,
-                        'view': "button",
+                        'view': "tootipButton",
                         "type": "iconButton",
                         "css": "webix_primary",
                         "icon": "fas fa-download",
@@ -356,6 +403,9 @@ class BaseWebixForm(forms.BaseForm):
                     el.update({'value': initial})
             # ModelMultipleChoiceField
             elif type(field) == forms.models.ModelMultipleChoiceField:
+                if settings.WEBIX_LICENSE != 'PRO':
+                    raise ImproperlyConfigured(
+                        "MultipleChoiceField is available only with PRO webix license")
                 if initial is not None:
                     el.update({
                         'value': ','.join([str(i.pk) if isinstance(i, models.Model) else str(i) for i in initial])
@@ -503,53 +553,7 @@ class BaseWebixForm(forms.BaseForm):
                 # Default if is required and there are only one option
                 if field.required and initial is None and len(field.choices) == 1:
                     el.update({'value': '{}'.format(field.choices[0][0])})
-            # Image  # TODO
-            elif 'image' in str(type(field)).lower():
-                if initial is not None:
-                    el.update({'value': None})
-                el.update({
-                    'view': 'uploader',
-                    'autosend': False,
-                    'multiple': False,
-                    'width': 100,
-                    'label': _('Upload new image')
-                })
-                if initial:
-                    img_small = get_thumbnail(initial, '150x100', quality=85)
-                    img_big = get_thumbnail(initial, '500x400', quality=85)
-                    key = randint(1, 100000)
-                    _template_file = '<img src="{}"  onclick="image_modal(\'{}\',{},{},\'{}\')">'.format(
-                        img_small.url, img_big.url, 500, 400, str(key)
-                    )
-                else:
-                    _template_file = ''
-                elements.update({
-                    '{}_block'.format(self[name].html_name): {
-                        'cols': [
-                            {
-                                'name_label': name,
-                                'id_label': 'label_' + name,
-                                'borderless': True,
-                                'template': label,
-                                'height': 30,
-                                'width': 200
-                            },
-                            {
-                                'name_label': name,
-                                'id_label': 'preview_' + name,
-                                'borderless': True,
-                                'template': _template_file,
-                                'height': 100,
-                                'width': 170
-                            },
-                            el,
-                            {
-                                'borderless': True,
-                                'template': '',
-                                'height': 30
-                            },
-                        ]}})
-                _pass = True
+
             # JSONField (postgresql)
             elif connection.vendor == 'postgresql' and isinstance(field, JSONField):
                 if isinstance(field.widget, forms.widgets.Textarea):
@@ -558,6 +562,7 @@ class BaseWebixForm(forms.BaseForm):
                     })
                 if initial is not None:
                     el.update({'value': dumps(initial)})
+
             # CharField
             elif isinstance(field, forms.CharField):
                 if isinstance(field.widget, forms.widgets.Textarea):
@@ -592,7 +597,7 @@ class BaseWebixForm(forms.BaseForm):
                 el.update({'hidden': True})
                 elements.update({
                     "{}-icon".format(self.add_prefix(name)): {
-                        'view': "button",
+                        'view': "tootipButton",
                         "type": "iconButton",
                         "icon": "far fa-trash-alt",
                         "width": 28,
@@ -606,21 +611,45 @@ class BaseWebixForm(forms.BaseForm):
         return elements
 
     @property
-    def get_tabular_header(self):
+    def get_tabular_fields_header(self):
         """ Returns the header for the tabular inlines as webix js format """
 
-        fields = []
-        for name, f in self.fields.items():
-            if self.add_prefix(name).endswith('-DELETE'):
-                fields.append({'header': '', 'width': 28})
-            elif type(f.widget) != forms.widgets.HiddenInput:
-                fields.append({'header': force_text(f.label).capitalize(), 'fillspace': True})
+        fields_header = OrderedDict()
+        #for name, f in self.fields.items():
+        for field_name, f in self.get_elements.items():
 
+            _field_header = None
+
+            if 'hidden' not in f or 'hidden' in f and not f['hidden']:
+
+                _field_header = {}
+
+                if field_name.endswith('-DELETE'):
+                    _field_header = {'header': '', 'width': 28}
+                else:
+                    if 'width' in f:
+                        _field_header.update({'width': f['width']})
+                    else:
+                        _field_header.update({'fillspace': True})
+
+                if 'label' in f and 'header' not in f:
+                    _field_header.update({'header': force_text(f['label']).capitalize()})
+
+                if _field_header is not None:
+                    fields_header.update({field_name:_field_header})
+
+        return fields_header
+
+    @property
+    def get_tabular_header(self):
+        """ Returns the header for the tabular inlines as webix js format """
         return dumps({
+            'id': self.add_prefix('datatable'),
             'view': "datatable",
             'scroll': 'false',
-            'height': 35,
-            'columns': fields,
+            'autoheight': 'false',
+            'data':[],
+            'columns': list(self.get_tabular_fields_header.values()),
         }, cls=DjangoJSONEncoder)
 
     def as_webix(self):
@@ -628,22 +657,88 @@ class BaseWebixForm(forms.BaseForm):
 
         return dumps(list(self.get_fieldsets()), cls=DjangoJSONEncoder)[1:-1]
 
-    def get_fieldsets(self):
+    def get_fieldsets(self, **kwargs):
         """ Returns a dict with all the fields """
 
-        if self.style == 'tabular':
+        if 'fs' in kwargs:
+            fs = kwargs['fs']
+        else:
             fs = self.get_elements
-
+        if self.style == 'tabular':
             for field in fs:
                 fs[field]['label'] = ''
                 fs[field]['labelWidth'] = 0
-            return fs.values()
-        return self.get_elements.values()
+        return fs.values()
 
 
-class BaseWebixModelForm(forms.BaseModelForm, BaseWebixForm):
+####################### BaseWebixForm AND BaseWebixModelForm #######################
+
+class BaseWebixForm(forms.BaseForm, BaseWebixMixin):
+
+    def __init__(self, data=None, files=None, auto_id='id_%s', prefix=None,
+                 initial=None, error_class=ErrorList, label_suffix=None,
+                 empty_permitted=False, field_order=None, use_required_attribute=None,
+                 renderer=None, request=None, inline_id=None):
+        # Set request
+        self.request = request
+
+        # Set inline id
+        self.inline_id = inline_id
+
+        # Set form prefix
+        if prefix is not None:
+            self.prefix = prefix
+
+        # Update field names with prefix
+        data = self.get_fields_data_with_prefix(data)
+
+        super(BaseWebixForm, self).__init__(data, files, auto_id, prefix, initial, error_class, label_suffix,
+                                            empty_permitted, field_order, use_required_attribute, renderer)
+
+        # TODO: check if it works with all field types on create and update action
+        self.set_readonly_fields()
+
     def clean(self):
-        return BaseWebixForm.clean(self)
+        cleaned_data = super(BaseWebixForm, self).clean()
+        cleaned_data = self.webix_extra_clean(cleaned_data)
+        return cleaned_data
+
+
+class BaseWebixModelForm(forms.BaseModelForm, BaseWebixMixin):
+
+    def __init__(self, data=None, files=None, auto_id='id_%s', prefix=None,
+                 initial=None, error_class=ErrorList, label_suffix=None,
+                 empty_permitted=False, instance=None, use_required_attribute=None,
+                 renderer=None, request=None, inline_id=None):
+        # Set request
+        self.request = request
+
+        # Set inline id
+        self.inline_id = inline_id
+
+        # Set form prefix
+        if prefix is not None:
+            self.prefix = prefix
+
+        # Update field names with prefix
+        data = self.get_fields_data_with_prefix(data)
+
+        super(BaseWebixModelForm, self).__init__(data, files, auto_id, prefix, initial, error_class, label_suffix,
+                                                 empty_permitted, instance, use_required_attribute, renderer)
+
+        # TODO: check if it works with all field types on create and update action
+        self.set_readonly_fields()
+
+    def clean(self):
+        cleaned_data = super(BaseWebixModelForm, self).clean()
+        cleaned_data = self.webix_extra_clean(cleaned_data)
+        return cleaned_data
+
+    def get_name(self):
+        return capfirst(self.Meta.model._meta.verbose_name)
+
+
+####################### WebixForm AND WebixModelForm #######################
 
 
 class WebixForm(six.with_metaclass(DeclarativeFieldsMetaclass, BaseWebixForm)):
@@ -651,5 +746,4 @@ class WebixForm(six.with_metaclass(DeclarativeFieldsMetaclass, BaseWebixForm)):
 
 
 class WebixModelForm(six.with_metaclass(ModelFormMetaclass, BaseWebixModelForm)):
-    def get_name(self):
-        return capfirst(self.Meta.model._meta.verbose_name)
+    pass
