@@ -217,11 +217,18 @@ class WebixUrlMixin:
                 return reverse(_url_pattern_name)
         return None
 
+    def get_url_create_kwargs(self):
+        return None
+
     def get_url_create(self):
         if self.model is not None:
             _url_pattern_name = self.url_pattern_create or self._check_url('{}.create'.format(self.get_model_name()))
             if _url_pattern_name is not None:
-                return reverse(_url_pattern_name)
+                create_kwargs = self.get_url_create_kwargs()
+                if create_kwargs is not None:
+                    return reverse(_url_pattern_name, kwargs=create_kwargs)
+                else:
+                    return reverse(_url_pattern_name)
         return None
 
     def get_url_update(self, obj=None):
