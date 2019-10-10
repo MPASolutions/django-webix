@@ -16,7 +16,7 @@ $$("{{ webix_container_id }}").addView({
                 load_js("{{url_back}}");
             }
         },
-        {% elif not url_list or url_list != '' %}
+        {% elif url_list and url_list != '' %}
         {
             view: "tootipButton",
             type: "base",
