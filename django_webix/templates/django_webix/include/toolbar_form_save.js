@@ -26,9 +26,9 @@
 
         $.ajax({
             {% if not object.pk and url_create and url_create != '' %}
-            url: "{{ url_create }}{% if extra_params_button %}{% if not '?' in url_create %}?{% endif %}{{ extra_params_button }}{% endif %}",
+            url: "{{ url_create }}{% if extra_params_button %}{% if not '?' in url_create %}?{% else %}&{% endif %}{{ extra_params_button }}{% endif %}",
             {% elif url_update and url_update != '' %}
-            url: "{{ url_update }}{% if extra_params_button %}{% if not '?' in url_create %}?{% endif %}{{ extra_params_button }}{% endif %}",
+            url: "{{ url_update }}{% if extra_params_button %}{% if not '?' in url_create %}?{% else %}&{% endif %}{{ extra_params_button }}{% endif %}",
             {% endif %}
             dataType: "script",
             type: "POST",
