@@ -1,7 +1,9 @@
 {% load django_webix_utils %}
 $$('{{ inline.prefix }}-group').addView({
     rows: [
-        {{ inline.0.get_tabular_header|safe }},
+        {% if inline|length > 0 %}
+            {{ inline.0.get_tabular_header|safe }},
+        {% endif %}
         {
             id: '{{ inline.prefix }}-form',
             rows: [
