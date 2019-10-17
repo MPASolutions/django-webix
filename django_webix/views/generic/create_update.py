@@ -34,7 +34,7 @@ class WebixCreateUpdateMixin:
         _template_style = None
         if self.template_style is None:
             _template_style = 'standard'
-        elif self.template_style in ['standard' or 'tabs']:
+        elif self.template_style in ['standard', 'tabs']:
             _template_style = self.template_style
         else:
             raise ImproperlyConfigured(
