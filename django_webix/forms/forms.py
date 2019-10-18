@@ -597,9 +597,10 @@ class BaseWebixMixin(object):
                 el.update({'hidden': True})
                 elements.update({
                     "{}-icon".format(self.add_prefix(name)): {
-                        'view': "tootipButton",
-                        "type": "iconButton",
+                        'view': "button",
+                        "type": "icon",
                         "icon": "far fa-trash-alt",
+                        "align": "center",
                         "width": 28,
                         'id': "{}-icon".format(self.add_prefix(name))
                     }
@@ -632,7 +633,11 @@ class BaseWebixMixin(object):
                     else:
                         _field_header.update({'fillspace': True})
 
-                if 'label' in f and 'header' not in f:
+                if 'header' in f:
+                    if not isinstance(f['header'], list):
+                        f['header'] = [f['header']]
+                    _field_header.update({'header': f['header']})
+                elif 'label' in f:
                     _field_header.update({'header': force_text(f['label']).capitalize()})
 
                 if _field_header is not None:
