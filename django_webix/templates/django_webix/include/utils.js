@@ -263,3 +263,39 @@ webix.ui.datafilter.dataListCheckbox = webix.extend({
     return "<input type='checkbox' " + (config.checked ? "checked='1'" : "") + "> Tutti";
   }
 }, webix.ui.datafilter.masterCheckbox);
+
+/**
+ * sends a request to the specified url from a form. this will change the window location.
+ * @param {string} path the path to send the post request to
+ * @param {object} params the paramiters to add to the url
+ */
+
+
+function post(path, params) {
+
+  // The rest of this code assumes you are not using a library.
+  // It can be made less wordy if you use one.
+  const form = document.createElement('form');
+  form.method = 'post';
+  form.action = path;
+
+  const hiddenField = document.createElement('input');
+  hiddenField.type = 'hidden';
+  hiddenField.name = 'csrfmiddlewaretoken';
+  hiddenField.value = getCookie('csrftoken');
+  form.appendChild(hiddenField);
+
+  for (const key in params) {
+    if (params.hasOwnProperty(key)) {
+      const hiddenField = document.createElement('input');
+      hiddenField.type = 'hidden';
+      hiddenField.name = key;
+      hiddenField.value = params[key];
+
+      form.appendChild(hiddenField);
+    }
+  }
+
+  document.body.appendChild(form);
+  form.submit();
+}
