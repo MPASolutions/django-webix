@@ -422,11 +422,14 @@ class BaseWebixMixin(object):
                         'value': ','.join([str(i.pk) if isinstance(i, models.Model) else str(i) for i in initial])
                     })
                 count = field.queryset.count()
-                if count > self.min_count_suggest and name not in self.autocomplete_fields:
+
+                if count > self.min_count_suggest and \
+                    name not in self.autocomplete_fields:
                     self.autocomplete_fields.append(name)
-                # autocomplete
-                if name in self.autocomplete_fields and \
-                    name not in self.autocomplete_fields_urls:
+
+                # autocomplete url
+                if self.add_prefix(name) in self.autocomplete_fields and \
+                   self.add_prefix(name) not in self.autocomplete_fields_urls:
                     self.autocomplete_fields_urls.update({
                         name: self._get_url_suggest(
                             field.queryset.model._meta.app_label,
@@ -434,6 +437,9 @@ class BaseWebixMixin(object):
                             field.to_field_name
                         )
                     })
+
+                # autocomplete field
+                if name in self.autocomplete_fields:
                     el.update({
                         "view": "multicombo",
                         'selectAll': True,
@@ -462,6 +468,8 @@ class BaseWebixMixin(object):
                                 'id': '{}'.format(record.pk),
                                 'value': '{}'.format(record)
                             })
+
+                # regular field without autocomplete
                 else:
                     el.update({
                         "view": "multicombo",
@@ -485,11 +493,14 @@ class BaseWebixMixin(object):
                 if initial is not None:
                     el.update({'value': initial.pk if isinstance(initial, models.Model) else str(initial)})
                 count = field.queryset.count()
-                if count > self.min_count_suggest and name not in self.autocomplete_fields:
+
+                if count > self.min_count_suggest and \
+                    name not in self.autocomplete_fields:
                     self.autocomplete_fields.append(name)
-                # autocomplete
+
+                # autocomplete url
                 if name in self.autocomplete_fields and \
-                    name not in self.autocomplete_fields_urls:
+                   name not in self.autocomplete_fields_urls:
                     self.autocomplete_fields_urls.update({
                         name: self._get_url_suggest(
                             field.queryset.model._meta.app_label,
@@ -497,6 +508,12 @@ class BaseWebixMixin(object):
                             field.to_field_name
                         )
                     })
+
+                # autocomplete field
+                #if self.add_prefix(name)=='agrofarmacotrattamento_set-0-revisione_agrofarmaco':
+                #    raise Exception(name, self.autocomplete_fields, self.autocomplete_fields_urls)
+
+                if name in self.autocomplete_fields:
                     el.update({
                         'view': 'combo',
                         'placeholder': _('Click to select'),
@@ -522,6 +539,8 @@ class BaseWebixMixin(object):
                                 'id': '{}'.format(record.pk),
                                 'value': '{}'.format(record)
                             }]
+
+                # regular field without autocomplete
                 elif count <= 6:
                     choices = self._add_null_choice([{
                         'id': '{}'.format(i.pk),
