@@ -1,5 +1,5 @@
 {% load django_webix_utils %}
-$$('{{ inline.prefix }}-group').addView({
+$$('{{ inline.get_container_id }}').addView({
     rows: [
         {% if inline|length > 0 %}
             {{ inline.0.get_tabular_header|safe }},
@@ -8,10 +8,10 @@ $$('{{ inline.prefix }}-group').addView({
             id: '{{ inline.prefix }}-form',
             rows: [
                 {{ inline.management_form.as_webix|safe }},
-                {% for field in inline %}
+                {% for inline_form in inline %}
                     {
-                        id: '{{ field.prefix|safe }}-inline',
-                        cols: [{{ field.as_webix|safe }}]
+                        id: '{{ inline_form.prefix|safe }}-inline',
+                        cols: [{{ inline_form.as_webix|safe }}]
                     },
                 {% endfor %}
                 {
@@ -20,8 +20,9 @@ $$('{{ inline.prefix }}-group').addView({
                     cols: [{{ inline.empty_form.as_webix|safe }}]
                 }
             ]
-        },
-        {
+        }
+        {% if inline.has_add_permission %}
+        ,{
             id: "{{ inline.prefix }}-add",
             view: "label",
             label: "<b style='cursor: pointer; color: #3498db;'>Aggiungi</b>",
@@ -79,6 +80,7 @@ $$('{{ inline.prefix }}-group').addView({
                 }
             }
         }
+        {% endif %}
     ]
 });
 

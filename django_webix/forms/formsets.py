@@ -36,11 +36,20 @@ class WebixManagementForm(WebixForm):
 class BaseWebixInlineFormSet(BaseInlineFormSet):
     def __init__(self, **kwargs):
         self.request = kwargs.pop('request', None)
+        self.has_add_permission = kwargs.pop('has_add_permission', None)
+        self.has_change_permission = kwargs.pop('has_change_permission', None)
+        self.has_delete_permission = kwargs.pop('has_delete_permission', None)
         super(BaseWebixInlineFormSet, self).__init__(**kwargs)
 
     def get_form_kwargs(self, index):
         _form_kwargs = super(BaseWebixInlineFormSet, self).get_form_kwargs(index)
-        _form_kwargs.update({'request': self.request, 'inline_id': index})
+        _form_kwargs.update({
+            'request': self.request,
+            'inline_id': index,
+            'has_add_permission': self.has_add_permission,
+            'has_change_permission': self.has_change_permission,
+            'has_delete_permission': self.has_delete_permission,
+        })
         return _form_kwargs
 
     def get_rules(self):
@@ -86,6 +95,10 @@ class BaseWebixInlineFormSet(BaseInlineFormSet):
             })
         return form
 
+    def get_container_id(self):
+        return '{}-group'.format(self.prefix)
+
+
 
 class WebixInlineFormSet(InlineFormSetFactory):
     template_name = None
@@ -116,15 +129,34 @@ class WebixInlineFormSet(InlineFormSetFactory):
 
     def get_formset_kwargs(self):
         _formset_kwargs = super(WebixInlineFormSet, self).get_formset_kwargs()
-        _formset_kwargs.update({'request': self.request, 'initial': self.initial})
+        _formset_kwargs.update({
+            'has_add_permission': self.has_add_permission(),
+            'has_delete_permission': self.has_delete_permission(),
+            'has_change_permission': self.has_change_permission(),
+            'request': self.request,
+            'initial': self.initial
+        })
         return _formset_kwargs
 
     def get_factory_kwargs(self):
         _factory_kwargs = super(WebixInlineFormSet, self).get_factory_kwargs()
-        extra_forms = _factory_kwargs.get('extra', 3)
+        if self.has_add_permission():
+            extra_forms = _factory_kwargs.get('extra', 3)
+        else:
+            extra_forms = 0
         # FIX for initial data values (list of dict and not instances)
         _factory_kwargs.update({'extra': extra_forms + len(self.initial) })
         return _factory_kwargs
+
+    def has_add_permission(self):
+        return True
+
+    def has_change_permission(self):
+        return True
+
+    def has_delete_permission(self):
+        return True
+
 
 class WebixStackedInlineFormSet(WebixInlineFormSet):
     template_name = 'django_webix/include/edit_inline/stacked.js'

@@ -39,6 +39,7 @@ function replace_prefix(empty_form, totalForms, form_id) {
  * @param field_id field id to add onChange event
  */
 function add_rule(field_id) {
+    console.log(field_id)
     $$(field_id).attachEvent("onChange", function () {
         var prefix = /^id_(.*)-\d+-.*$/.exec(this.config.id)[1];
 
