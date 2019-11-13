@@ -47,20 +47,25 @@ class BaseWebixMixin(object):
         localized_fields = '__all__'  # to use comma as separator in i18n
 
     def get_fields_data_with_prefix(self, data=None):
+        readonly_fields = self.get_readonly_fields()
         if data is not None:
             qdict = data.copy()
             for name, field in copy.deepcopy(self.base_fields).items():
-                if self.add_prefix(name) in data and name not in self.get_readonly_fields():
+                key = self.add_prefix(name)
+                if key in data and \
+                   name not in readonly_fields:
                     if isinstance(field, forms.models.ModelMultipleChoiceField):
                         temp_list = []
-                        for val in data[self.add_prefix(name)].split(','):
-                            if val != '':
-                                temp_list.append(val)
-                        qdict.setlist(self.add_prefix(name), temp_list)
+                        if type(data[key])!=list:
+                            for val in data[key].split(','):
+                                if val != '':
+                                    temp_list.append(val)
+                        else:
+                            temp_list=data[key]
+                        qdict.setlist(key, temp_list)
                     else:
-                        val = data[self.add_prefix(name)]
-                        #qdict.pop(self.add_prefix(name))  # Remove old value (removed because change fields order)
-                        qdict.update({self.add_prefix(name): val if val not in ['null', u'null'] else None})
+                        val = data[key]
+                        qdict.update({key: val if val not in ['null', u'null'] else None})
             data = qdict
         return data
 
@@ -428,8 +433,8 @@ class BaseWebixMixin(object):
                     self.autocomplete_fields.append(name)
 
                 # autocomplete url
-                if self.add_prefix(name) in self.autocomplete_fields and \
-                   self.add_prefix(name) not in self.autocomplete_fields_urls:
+                if name in self.autocomplete_fields and \
+                   name not in self.autocomplete_fields_urls:
                     self.autocomplete_fields_urls.update({
                         name: self._get_url_suggest(
                             field.queryset.model._meta.app_label,
