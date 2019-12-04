@@ -316,6 +316,12 @@ class WebixUpdateView(WebixCreateUpdateMixin, WebixBaseMixin, WebixPermissionsMi
         if form is not None:
             form.instance.validate_unique()
 
+    def post_form_save(self, form=None, inlines=None, **kwargs):
+        '''
+        After form save and before inlines save
+        '''
+        pass
+
     def pre_forms_valid(self, form=None, inlines=None, **kwargs):
         pass
 
