@@ -347,6 +347,9 @@ class WebixUpdateView(WebixCreateUpdateMixin, WebixBaseMixin, WebixPermissionsMi
             form.add_error(None,str(e))
             return self.forms_invalid(form=form, inlines=inlines, **kwargs)
         self.object = form.save()
+
+        self.post_form_save(form=form, inlines=inlines, **kwargs)
+
         for formset in inlines:
             formset.save()
         self.post_forms_valid(form=form, inlines=inlines, **kwargs)
