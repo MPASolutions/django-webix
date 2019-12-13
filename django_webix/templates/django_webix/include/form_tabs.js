@@ -36,10 +36,12 @@
                             value: "{{ form.get_name }}"
                         },
                         {% for inline in inlines %}
-                            {
-                                id: '{{ inline.get_container_id }}',
-                                value: "<div style='position: relative'>{{ inline.get_name }} <span class='webix_badge' style='background-color:#888 !important; margin-top: -2px; margin-right: 5px;'><strong>" + {{ inline.initial_form_count }} + "</strong></span></div>"
-                            },
+                            {% if not inline.get_container_id %}
+                                {
+                                    id: '{{ inline.get_default_container_id }}',
+                                    value: "<div style='position: relative'>{{ inline.get_name }} <span class='webix_badge' style='background-color:#888 !important; margin-top: -2px; margin-right: 5px;'><strong>" + {{ inline.initial_form_count }} + "</strong></span></div>"
+                                },
+                            {% endif %}
                         {% endfor %}
                     ]
                 },
@@ -57,10 +59,12 @@
                         },
                     {% endblock %}
                     {% for inline in inlines %}
-                        {
-                            id: '{{ inline.get_container_id }}',
-                            rows: []
-                        },
+                        {% if not inline.get_container_id %}
+                            {
+                                id: '{{ inline.get_default_container_id }}',
+                                rows: []
+                            },
+                        {% endif %}
                     {% endfor %}
                 ]
             }

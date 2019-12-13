@@ -36,6 +36,7 @@ class WebixManagementForm(WebixForm):
 class BaseWebixInlineFormSet(BaseInlineFormSet):
     def __init__(self, **kwargs):
         self.request = kwargs.pop('request', None)
+        self.container_id = kwargs.pop('container_id', None)
         self.has_add_permission = kwargs.pop('has_add_permission', None)
         self.has_change_permission = kwargs.pop('has_change_permission', None)
         self.has_delete_permission = kwargs.pop('has_delete_permission', None)
@@ -95,9 +96,15 @@ class BaseWebixInlineFormSet(BaseInlineFormSet):
             })
         return form
 
-    def get_container_id(self):
+
+    def webix_id(self):
         return '{}-group'.format(self.prefix)
 
+    def get_container_id(self):
+        return self.container_id
+
+    def get_default_container_id(self):
+        return self.webix_id()+'-container'
 
 
 class WebixInlineFormSet(InlineFormSetFactory):
@@ -134,6 +141,7 @@ class WebixInlineFormSet(InlineFormSetFactory):
             'has_delete_permission': self.has_delete_permission(),
             'has_change_permission': self.has_change_permission(),
             'request': self.request,
+            'container_id': getattr(self, 'container_id', None),
             'initial': self.initial
         })
         return _formset_kwargs
@@ -145,7 +153,9 @@ class WebixInlineFormSet(InlineFormSetFactory):
         else:
             extra_forms = 0
         # FIX for initial data values (list of dict and not instances)
-        _factory_kwargs.update({'extra': extra_forms + len(self.initial) })
+        _factory_kwargs.update({
+            'extra': extra_forms + len(self.initial),
+        })
         return _factory_kwargs
 
     def has_add_permission(self):

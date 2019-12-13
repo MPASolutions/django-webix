@@ -1,5 +1,5 @@
 {% load django_webix_utils %}
-$$('{{ inline.get_container_id }}').addView({
+$$('{{ inline.get_container_id|default_if_none:inline.get_default_container_id }}').addView({
     rows: [
         {% if inline|length > 0 %}
             {{ inline.0.get_tabular_header|safe }},
