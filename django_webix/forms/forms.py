@@ -378,9 +378,15 @@ class BaseWebixMixin(object):
                     'view': 'uploader',
                     'autosend': False,
                     'multiple': False,
+                    'directory': False,
                     'width': 100,
                     'label': _('Upload file')
                 })
+                if isinstance(field.widget, forms.widgets.ClearableFileInput):
+                    el.update({
+                        'multiple': field.widget.attrs.get('multiple', False),
+                        'directory': field.widget.attrs.get('directory', False)
+                    })
                 _download = {}
                 if initial:
                     _download = {
