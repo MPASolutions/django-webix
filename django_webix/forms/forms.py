@@ -382,7 +382,7 @@ class BaseWebixMixin(object):
                     'width': 100,
                     'label': _('Upload file')
                 })
-                if isinstance(field.widget, forms.widgets.ClearableFileInput):
+                if isinstance(field.widget, forms.widgets.FileInput):
                     el.update({
                         'multiple': field.widget.attrs.get('multiple', False),
                         'directory': field.widget.attrs.get('directory', False)
