@@ -3,6 +3,8 @@
 if (form_validate('{{ form.webix_id }}')) {
     if ($$('{{ webix_container_id }}') !== undefined && $$('{{ webix_container_id }}').showOverlay !== undefined)
         $$('{{ webix_container_id }}').showOverlay("<img src='{% static 'django_webix/loading.gif' %}'>");
+    else if ($$('{{ webix_overlay_container_id }}') !== undefined && $$('{{ webix_overlay_container_id }}') !== null && $$('{{ webix_overlay_container_id }}').showOverlay !== undefined)
+        $$('{{ webix_overlay_container_id }}').showOverlay("<img src='{% static 'django_webix/loading.gif' %}'>");
 
     var form_data = new FormData();
     var form_data_webix_elements = [];
@@ -42,6 +44,8 @@ if (form_validate('{{ form.webix_id }}')) {
             webix.ui.resize();
             if ($$('{{ webix_container_id }}') !== undefined && $$('{{ webix_container_id }}').hideOverlay !== undefined)
                 $$('{{ webix_container_id }}').hideOverlay();
+            else if ($$('{{ webix_overlay_container_id }}') !== undefined && $$('{{ webix_overlay_container_id }}') !== null && $$('{{ webix_overlay_container_id }}').showOverlay !== undefined)
+                $$('{{ webix_overlay_container_id }}').hideOverlay();
         },
         error: function (jqXHR, textStatus, errorThrown) {
             {% block save_error %}{% endblock %}
