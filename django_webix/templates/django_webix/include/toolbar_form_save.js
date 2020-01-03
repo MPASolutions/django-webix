@@ -1,7 +1,8 @@
 {% load django_webix_utils static %}
 
 if (form_validate('{{ form.webix_id }}')) {
-    $$('{{ webix_container_id }}').showOverlay("<img src='{% static 'django_webix/loading.gif' %}'>");
+    if ($$('{{ webix_container_id }}') !== undefined && $$('{{ webix_container_id }}').showOverlay !== undefined)
+        $$('{{ webix_container_id }}').showOverlay("<img src='{% static 'django_webix/loading.gif' %}'>");
 
     var form_data = new FormData();
     var form_data_webix_elements = [];
@@ -39,7 +40,7 @@ if (form_validate('{{ form.webix_id }}')) {
         success: function (data, textStatus, jqXHR) {
             {% block save_success %}{% endblock %}
             webix.ui.resize();
-            if ($$('{{ webix_container_id }}') != undefined)
+            if ($$('{{ webix_container_id }}') !== undefined && $$('{{ webix_container_id }}').hideOverlay !== undefined)
                 $$('{{ webix_container_id }}').hideOverlay();
         },
         error: function (jqXHR, textStatus, errorThrown) {
