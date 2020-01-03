@@ -799,8 +799,12 @@ class BaseWebixModelForm(forms.BaseModelForm, BaseWebixMixin):
         # Update field names with prefix
         data = self.get_fields_data_with_prefix(data)
 
-        super(BaseWebixModelForm, self).__init__(data, files, auto_id, prefix, initial, error_class, label_suffix,
-                                                 empty_permitted, instance, use_required_attribute, renderer)
+        if django.VERSION > (2, 0):
+            super(BaseWebixModelForm, self).__init__(data, files, auto_id, prefix, initial, error_class, label_suffix,
+                                                     empty_permitted, instance, use_required_attribute, renderer)
+        else:
+            super(BaseWebixModelForm, self).__init__(data, files, auto_id, prefix, initial, error_class, label_suffix,
+                                                     empty_permitted, instance, use_required_attribute)
 
         # TODO: check if it works with all field types on create and update action
         self.set_readonly_fields()
