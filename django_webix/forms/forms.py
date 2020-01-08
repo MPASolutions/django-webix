@@ -2,20 +2,26 @@
 
 from __future__ import unicode_literals, absolute_import
 
+import copy
 from collections import OrderedDict, defaultdict
 from json import dumps, loads
 
-import copy
 import django
 import six
 from django import forms
 from django.conf import settings
+
+try:
+    from django.contrib.gis.geos import GEOSGeometry
+except ImportError:
+    GEOSGeometry = object
+
+from django.core.exceptions import FieldDoesNotExist
 from django.core.exceptions import ImproperlyConfigured
 from django.core.serializers.json import DjangoJSONEncoder
 from django.db import models, connection
-from django.db.models.fields import FieldDoesNotExist
 from django.forms.forms import DeclarativeFieldsMetaclass
-from django.forms.models import ModelFormMetaclass
+from django.forms.models import ModelFormMetaclass, InlineForeignKeyField
 from django.forms.utils import ErrorList
 from django.urls import reverse
 from django.utils.encoding import force_text
@@ -28,6 +34,16 @@ try:
     from django.contrib.postgres.forms.jsonb import JSONField
 except ImportError:
     JSONField = forms.Field
+
+try:
+    from django.contrib.postgres.fields.array import SimpleArrayField
+except ImportError:
+    SimpleArrayField = None
+
+try:
+    from django.contrib.gis.forms import GeometryField
+except ImportError:
+    GeometryField = None
 
 
 class BaseWebixMixin(object):
@@ -42,20 +58,25 @@ class BaseWebixMixin(object):
         localized_fields = '__all__'  # to use comma as separator in i18n
 
     def get_fields_data_with_prefix(self, data=None):
+        readonly_fields = self.get_readonly_fields()
         if data is not None:
             qdict = data.copy()
             for name, field in copy.deepcopy(self.base_fields).items():
-                if self.add_prefix(name) in data and name not in self.get_readonly_fields():
+                key = self.add_prefix(name)
+                if key in data and \
+                    name not in readonly_fields:
                     if isinstance(field, forms.models.ModelMultipleChoiceField):
                         temp_list = []
-                        for val in data[self.add_prefix(name)].split(','):
-                            if val != '':
-                                temp_list.append(val)
-                        qdict.setlist(self.add_prefix(name), temp_list)
+                        if type(data[key]) != list:
+                            for val in data[key].split(','):
+                                if val != '':
+                                    temp_list.append(val)
+                        else:
+                            temp_list = data[key]
+                        qdict.setlist(key, temp_list)
                     else:
-                        val = data[self.add_prefix(name)]
-                        qdict.pop(self.add_prefix(name))  # Remove old value
-                        qdict.update({self.add_prefix(name): val if val not in ['null', u'null'] else None})
+                        val = data[key]
+                        qdict.update({key: val if val not in ['null', u'null'] else None})
             data = qdict
         return data
 
@@ -123,8 +144,14 @@ class BaseWebixMixin(object):
 
     def get_readonly_fields(self):
         """ Returns a list of readonly fields """
-
-        return self.readonly_fields
+        if self.has_change_permission == False:
+            readonly_fields = []
+            for field_name in self.base_fields.keys():
+                if not field_name.endswith('_block'):
+                    readonly_fields.append(field_name)
+            return readonly_fields
+        else:
+            return self.readonly_fields
 
     def _add_null_choice(self, choices):
         return [option for option in choices if option['id'] not in ['', u'', None]]
@@ -194,7 +221,7 @@ class BaseWebixMixin(object):
             if name in self.get_readonly_fields():
                 el.update({
                     'disabled': True,
-                    'id': '{}.{}'.format(self.webix_id, self[name].auto_id)
+                    # 'id': '{}.{}'.format(self.webix_id, self[name].auto_id) # probabily old: disabled for has_change_permission=False
                 })
 
             # Get initial value
@@ -362,9 +389,29 @@ class BaseWebixMixin(object):
                     'view': 'uploader',
                     'autosend': False,
                     'multiple': False,
+                    'directory': False,
                     'width': 100,
                     'label': _('Upload file')
                 })
+                if isinstance(field.widget, forms.widgets.FileInput):
+                    directory = field.widget.attrs.get('directory', False)
+                    multiple = field.widget.attrs.get('multiple', False),
+
+                    el.update({
+                        'multiple': field.widget.attrs.get('multiple', False),
+                        'directory': field.widget.attrs.get('directory', False)
+                    })
+
+                    if directory:
+                        el.update({
+                            'label': _('Upload folder')
+                        })
+
+                    if multiple and not directory:
+                        el.update({
+                            'label': _('Upload files')
+                        })
+
                 _download = {}
                 if initial:
                     _download = {
@@ -411,10 +458,14 @@ class BaseWebixMixin(object):
                         'value': ','.join([str(i.pk) if isinstance(i, models.Model) else str(i) for i in initial])
                     })
                 count = field.queryset.count()
-                if count > self.min_count_suggest and name not in self.autocomplete_fields:
+
+                if count > self.min_count_suggest and \
+                    name not in self.autocomplete_fields:
                     self.autocomplete_fields.append(name)
-                # autocomplete
-                if name in self.autocomplete_fields:
+
+                # autocomplete url
+                if name in self.autocomplete_fields and \
+                    name not in self.autocomplete_fields_urls:
                     self.autocomplete_fields_urls.update({
                         name: self._get_url_suggest(
                             field.queryset.model._meta.app_label,
@@ -422,6 +473,9 @@ class BaseWebixMixin(object):
                             field.to_field_name
                         )
                     })
+
+                # autocomplete field
+                if name in self.autocomplete_fields:
                     el.update({
                         "view": "multicombo",
                         'selectAll': True,
@@ -450,6 +504,8 @@ class BaseWebixMixin(object):
                                 'id': '{}'.format(record.pk),
                                 'value': '{}'.format(record)
                             })
+
+                # regular field without autocomplete
                 else:
                     el.update({
                         "view": "multicombo",
@@ -473,10 +529,14 @@ class BaseWebixMixin(object):
                 if initial is not None:
                     el.update({'value': initial.pk if isinstance(initial, models.Model) else str(initial)})
                 count = field.queryset.count()
-                if count > self.min_count_suggest and name not in self.autocomplete_fields:
+
+                if count > self.min_count_suggest and \
+                    name not in self.autocomplete_fields:
                     self.autocomplete_fields.append(name)
-                # autocomplete
-                if name in self.autocomplete_fields:
+
+                # autocomplete url
+                if name in self.autocomplete_fields and \
+                    name not in self.autocomplete_fields_urls:
                     self.autocomplete_fields_urls.update({
                         name: self._get_url_suggest(
                             field.queryset.model._meta.app_label,
@@ -484,6 +544,12 @@ class BaseWebixMixin(object):
                             field.to_field_name
                         )
                     })
+
+                # autocomplete field
+                # if self.add_prefix(name)=='agrofarmacotrattamento_set-0-revisione_agrofarmaco':
+                #    raise Exception(name, self.autocomplete_fields, self.autocomplete_fields_urls)
+
+                if name in self.autocomplete_fields:
                     el.update({
                         'view': 'combo',
                         'placeholder': _('Click to select'),
@@ -509,6 +575,8 @@ class BaseWebixMixin(object):
                                 'id': '{}'.format(record.pk),
                                 'value': '{}'.format(record)
                             }]
+
+                # regular field without autocomplete
                 elif count <= 6:
                     choices = self._add_null_choice([{
                         'id': '{}'.format(i.pk),
@@ -563,6 +631,25 @@ class BaseWebixMixin(object):
                 if initial is not None:
                     el.update({'value': dumps(initial)})
 
+            # SimpleArrayField (postgresql)
+            elif connection.vendor == 'postgresql' and \
+                SimpleArrayField is not None and \
+                isinstance(field, SimpleArrayField):
+                if hasattr(field, 'base_field') and \
+                    isinstance(field.base_field, forms.fields.DateField):
+                    el.update({
+                        'view': 'datepicker',
+                        'multiselect': 'touch',
+                        'format': "%d/%m/%Y",
+                        'stringResult': True,
+                    })
+                if initial is not None:
+                    if type(initial) == list:
+                        el.update({
+                            'value': ', '.join([i.strftime('%Y-%m-%d') for i in initial]),
+                            'orig_value': ', '.join([i.strftime('%Y-%m-%d') for i in initial]),
+                        })
+
             # CharField
             elif isinstance(field, forms.CharField):
                 if isinstance(field.widget, forms.widgets.Textarea):
@@ -572,7 +659,23 @@ class BaseWebixMixin(object):
                 if initial is not None:
                     el.update({'value': initial})
 
-            # RadioSelect
+            # GeoFields
+            elif GeometryField is not None and isinstance(field, GeometryField):
+                el.update({
+                    'view': 'textarea'
+                })
+                if initial is not None:
+                    if issubclass(GEOSGeometry, django.contrib.gis.geos.GEOSGeometry) and \
+                        isinstance(initial, GEOSGeometry):
+                        el.update({'value': initial.ewkt})
+                    elif type(initial) == str:
+                        el.update({'value': str(initial)})
+                    else:
+                        raise Exception('Initial value {} for geo field {} is not supported'.format(initial, field))
+            elif not isinstance(field, InlineForeignKeyField):
+                raise Exception('Type of field {} not supported'.format(field))
+
+            # widget RadioSelect
             if isinstance(field.widget, forms.RadioSelect):
                 _choices = field.choices if hasattr(field, 'choices') else field.widget.choices
                 el.update({
@@ -588,7 +691,7 @@ class BaseWebixMixin(object):
                 if field.required and initial is None and len(_choices) == 1:
                     el.update({'value': '{}'.format(_choices[0][0])})
 
-            # Hidden Fields
+            # widget Hidden Fields
             if type(field.widget) == forms.widgets.HiddenInput:
                 el.update({'hidden': True})
 
@@ -597,10 +700,12 @@ class BaseWebixMixin(object):
                 el.update({'hidden': True})
                 elements.update({
                     "{}-icon".format(self.add_prefix(name)): {
-                        'view': "tootipButton",
-                        "type": "iconButton",
-                        "icon": "far fa-trash-alt",
-                        "width": 28,
+                        'view': "button",
+                        'type': "icon",
+                        'icon': "far fa-trash-alt",
+                        'align': "center",
+                        'width': 28,
+                        'hidden': not (self.has_delete_permission is not None and self.has_delete_permission == True),
                         'id': "{}-icon".format(self.add_prefix(name))
                     }
                 })
@@ -615,7 +720,7 @@ class BaseWebixMixin(object):
         """ Returns the header for the tabular inlines as webix js format """
 
         fields_header = OrderedDict()
-        #for name, f in self.fields.items():
+        # for name, f in self.fields.items():
         for field_name, f in self.get_elements.items():
 
             _field_header = None
@@ -632,11 +737,15 @@ class BaseWebixMixin(object):
                     else:
                         _field_header.update({'fillspace': True})
 
-                if 'label' in f and 'header' not in f:
+                if 'header' in f:
+                    if not isinstance(f['header'], list):
+                        f['header'] = [f['header']]
+                    _field_header.update({'header': f['header']})
+                elif 'label' in f:
                     _field_header.update({'header': force_text(f['label']).capitalize()})
 
                 if _field_header is not None:
-                    fields_header.update({field_name:_field_header})
+                    fields_header.update({field_name: _field_header})
 
         return fields_header
 
@@ -648,7 +757,7 @@ class BaseWebixMixin(object):
             'view': "datatable",
             'scroll': 'false',
             'autoheight': 'false',
-            'data':[],
+            'data': [],
             'columns': list(self.get_tabular_fields_header.values()),
         }, cls=DjangoJSONEncoder)
 
@@ -678,9 +787,13 @@ class BaseWebixForm(forms.BaseForm, BaseWebixMixin):
     def __init__(self, data=None, files=None, auto_id='id_%s', prefix=None,
                  initial=None, error_class=ErrorList, label_suffix=None,
                  empty_permitted=False, field_order=None, use_required_attribute=None,
-                 renderer=None, request=None, inline_id=None):
+                 renderer=None, request=None, inline_id=None,
+                 has_add_permission=None, has_change_permission=None, has_delete_permission=None):
         # Set request
         self.request = request
+        self.has_add_permission = has_add_permission
+        self.has_change_permission = has_change_permission
+        self.has_delete_permission = has_delete_permission
 
         # Set inline id
         self.inline_id = inline_id
@@ -709,9 +822,13 @@ class BaseWebixModelForm(forms.BaseModelForm, BaseWebixMixin):
     def __init__(self, data=None, files=None, auto_id='id_%s', prefix=None,
                  initial=None, error_class=ErrorList, label_suffix=None,
                  empty_permitted=False, instance=None, use_required_attribute=None,
-                 renderer=None, request=None, inline_id=None):
+                 renderer=None, request=None, inline_id=None,
+                 has_add_permission=None, has_change_permission=None, has_delete_permission=None):
         # Set request
         self.request = request
+        self.has_add_permission = has_add_permission
+        self.has_change_permission = has_change_permission
+        self.has_delete_permission = has_delete_permission
 
         # Set inline id
         self.inline_id = inline_id
@@ -723,8 +840,12 @@ class BaseWebixModelForm(forms.BaseModelForm, BaseWebixMixin):
         # Update field names with prefix
         data = self.get_fields_data_with_prefix(data)
 
-        super(BaseWebixModelForm, self).__init__(data, files, auto_id, prefix, initial, error_class, label_suffix,
-                                                 empty_permitted, instance, use_required_attribute, renderer)
+        if django.VERSION > (2, 0):
+            super(BaseWebixModelForm, self).__init__(data, files, auto_id, prefix, initial, error_class, label_suffix,
+                                                     empty_permitted, instance, use_required_attribute, renderer)
+        else:
+            super(BaseWebixModelForm, self).__init__(data, files, auto_id, prefix, initial, error_class, label_suffix,
+                                                     empty_permitted, instance, use_required_attribute)
 
         # TODO: check if it works with all field types on create and update action
         self.set_readonly_fields()

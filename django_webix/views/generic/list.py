@@ -2,31 +2,149 @@
 
 from __future__ import unicode_literals
 
+import json
+
+import django
 from django.core.exceptions import PermissionDenied, ImproperlyConfigured
+from django.db.models import Q
 from django.utils.translation import ugettext as _
 from django.views.generic import ListView
+
+try:
+    from django.contrib.gis.geos import GEOSGeometry
+except ImportError:
+    GEOSGeometry = object
+
+try:
+    from django.contrib.gis.geos import MultiPolygon
+except ImportError:
+    MultiPolygon = object
 
 from django_webix.views.generic.base import WebixBaseMixin, WebixPermissionsMixin, WebixUrlMixin
 
 
 class WebixListView(WebixBaseMixin, WebixPermissionsMixin, WebixUrlMixin, ListView):
+    http_method_names = ['get', 'post']  # enable POST for filter porpouse
+
+    # defaults and init
     template_name = 'django_webix/generic/list.js'
     pk_field = None
     title = None
     actions_style = None
-
     enable_column_copy = True
     enable_column_delete = True
     enable_row_click = True
+    type_row_click = 'single'  # or 'double'
     enable_actions = True
+    fields = None  # ex. [{'field_name':'XXX','datalist_column':'YYY',}]
 
-    fields = None
-    # [
+    def post(self, request, *args, **kwargs):
+        return self.get(request, *args, **kwargs)
+
+    def get(self, request, *args, **kwargs):
+        self.qsets_filters = self.get_qsets_filters(request)
+        self.geo_filter = self.get_geo_filter(request)
+        self.sql_filters = self.get_sql_filters(request)  # this is shit! but need for old SW (remove for future)
+        return super(WebixListView, self).get(request, *args, **kwargs)
+
     # {
-    # 'field_name':'XXX',
-    # 'datalist_column':'YYY',
+    #     'operator': 'AND', # by default
+    #     'qsets':[
+    #         {'sql': '...'}
+    #         {'path': 'appezzamento__superficie__in','val': [1,2],}
+    #         {'geo_field_name': '...','geo_srid': '...','polygons':'...'}
+    #     ]
     # }
-    # ]
+    def _decode_text_filters(self, request, key):
+        if request.method == 'GET':
+            filters_text = request.GET.get(key, None)
+        elif request.method == 'POST':
+            filters_text = request.POST.get(key, None)
+        else:
+            filters_text = None
+
+        if filters_text is not None:
+            if type(filters_text) == str:
+                # NB: JSON syntax is not Python syntax. JSON requires double quotes for its strings.
+                try:
+                    filters = json.loads(filters_text)
+                except json.JSONDecodeError:
+                    filters = None
+            elif type(filters_text) == dict:
+                filters = filters_text
+            else:
+                filters = None
+
+            if filters is not None:
+                return filters
+        return None  # by default filters are not set
+
+    def _elaborate_qsets_filters(self, data):
+        if 'qsets' in data and 'operator' in data:
+            operator = data.get('operator')
+            for j, data_qset in enumerate(data.get('qsets')):
+                if 'operator' in data_qset:
+                    qset_to_applicate = self._elaborate_qset(data_qset)
+                else:
+                    qset_to_applicate = Q(**{data_qset.get('path'): data_qset.get('val')})
+                if j == 1:
+                    qset = qset_to_applicate
+                else:
+                    if operator == 'AND':
+                        qset = qset & qset_to_applicate
+                    elif operator == 'OR':
+                        qset = qset & qset_to_applicate
+        elif 'path' in data and 'val' in data:
+            qset = Q(**{data.get('path'): data.get('val')})
+        else:
+            qset = Q()
+        return qset
+
+    def get_qsets_filters(self, request):
+        filters = self._decode_text_filters(request, 'filters')
+        if filters is not None:
+            try:
+                return self._elaborate_qsets_filters(filters)
+            except:
+                print('ERROR: qsets structure is incorrect')
+        return None  # by default filters are not set
+
+    def _elaborate_geo_filter(self, data):
+        if issubclass(GEOSGeometry, django.contrib.gis.geos.GEOSGeometry) and \
+            issubclass(MultiPolygon, django.contrib.gis.geos.GEOSGeometry):
+            if 'geo_field_name' in data and 'polygons_srid' in data and 'polygons' in data:
+                geo_field_name = data.get('geo_field_name')
+                polygons = []
+                for geo_text in data['polygons']:
+                    polygons.append(GEOSGeometry(geo_text))
+                geo = MultiPolygon(polygons)
+                try:
+                    geo.srid = int(data.get('polygons_srid'))
+                except ValueError:
+                    print('ERROR: geo srid is incorrect')
+                geo_field = self.model._meta.get_field(geo_field_name)
+                _geo = geo.transform(geo_field.srid, clone=True)
+                qset = Q(**{geo_field_name + '__intersects': _geo})
+            else:
+                qset = Q()
+            return qset
+        return Q()
+
+    def get_geo_filter(self, request):
+        filters = self._decode_text_filters(request, 'geo_filters')
+        if filters is not None:
+            try:
+                return self._elaborate_geo_filter(filters)
+            except:
+                print('ERROR: geo filter is incorrect')
+        return None  # by default filters are not set
+
+    def get_sql_filters(self, request):
+        filters = self._decode_text_filters(request, 'sql_filters')
+        if filters is not None:
+            return filters
+        # by default filters are not set
+        return None
 
     def get_actions_style(self):
         _actions_style = None
@@ -59,26 +177,63 @@ class WebixListView(WebixBaseMixin, WebixPermissionsMixin, WebixUrlMixin, ListVi
     def is_enable_row_click(self, request):
         return self.enable_row_click
 
+    def get_type_row_click(self, request):
+        return self.type_row_click
+
     def get_fields(self):
         return self.fields
 
     def get_queryset(self):
         # bypass improperly configured for custom queryset without model
         if self.model:
-            return super(WebixListView, self).get_queryset()
+            qs = super(WebixListView, self).get_queryset()
+            # apply qsets filters
+            if self.qsets_filters is not None:
+                qs = qs.filter(self.qsets_filters)
+            # apply geo filter
+            if self.geo_filter is not None:
+                qs = qs.filter(self.geo_filter)
+            # applay SQL raw: this is shit! but need for old SW (remove for future)
+            if self.sql_filters is not None:
+                sql_filter = ' OR '.join(['({sql})'.format(sql=_sql) for _sql in self.sql_filters])
+                qs = qs.extra(where=[sql_filter])
+            return qs
         return None
 
     def get_objects_datatable(self):
         if self.model:
-            values = [self.get_pk_field()]
-            fields = self.get_fields()
-            if fields is not None:
-                for field in fields:
-                    values.append(field['field_name'])
             qs = self.get_queryset()
+            # filters application (like IDS selections)
+            qs = self.filters_objects_datatable(qs)
+            # build output
             if qs is not None:
-                return qs.values(*values)
+                if type(qs) == list:
+                    return qs
+                else:  # queryset
+                    values = [self.get_pk_field()]
+                    fields = self.get_fields()
+                    if fields is not None:
+                        for field in fields:
+                            if field.get('field_name') is not None and \
+                                (field.get('queryset_exclude') is None or field.get('queryset_exclude') != True):
+                                values.append(field['field_name'])
+                    data = qs.values(*values)
+                    return data
         return None
+
+    def filters_objects_datatable(self, qs):
+        ids = self.request.POST.get('ids', '').split(',')
+        ids = list(set(ids) - set([None, '']))
+
+        if len(ids) > 0:
+            if type(qs) == list:
+                for item in qs:
+                    if item.get('id') not in ids:
+                        qs.pop(item)
+            else:
+                auto_field_name = self.model._meta.auto_field.name
+                qs = qs.filter(**{auto_field_name + '__in': ids})
+        return qs
 
     def get_pk_field(self):
         if self.pk_field is not None:
@@ -103,9 +258,14 @@ class WebixListView(WebixBaseMixin, WebixPermissionsMixin, WebixUrlMixin, ListVi
             'is_enable_column_copy': self.is_enable_column_copy(self.request),
             'is_enable_column_delete': self.is_enable_column_delete(self.request),
             'is_enable_row_click': self.is_enable_row_click(self.request),
+            'type_row_click': self.get_type_row_click(self.request),
             'is_enable_actions': self.is_enable_actions(self.request),
             'actions_style': self.get_actions_style(),
             'title': self.get_title(),
+            # extra filters
+            'is_filters_active': self.qsets_filters is not None,
+            'is_geo_filter_active': self.geo_filter is not None,
+            'is_sql_filters_active': self.sql_filters is not None,
         })
         return context
 
@@ -123,9 +283,6 @@ class WebixTemplateListView(WebixListView):
 
     def get_objects_datatable(self):
         raise ImproperlyConfigured("Generic TemplateListView needs to define data for datatable")
-
-
-
 
 # # -*- coding: utf-8 -*-
 #
@@ -392,4 +549,3 @@ class WebixTemplateListView(WebixListView):
 #     def get(self, request, *args, **kwargs):
 #         context = self.get_context_data(**kwargs)
 #         return JsonResponse(context)
-

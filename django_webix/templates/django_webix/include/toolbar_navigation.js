@@ -13,10 +13,10 @@ $$("{{ webix_container_id }}").addView({
             label: "Torna indietro",
             autowidth: true,
             click: function () {
-                load_js("{{url_back}}");
+                load_js("{{ url_back }}");
             }
         },
-        {% elif not url_list or url_list != '' %}
+        {% elif url_list and url_list != '' %}
         {
             view: "tootipButton",
             type: "base",
@@ -31,7 +31,7 @@ $$("{{ webix_container_id }}").addView({
         {
             view: "template",
             type: "header",
-            template: '<div style="width:100%; text-align:center;"><strong>{% if object %}{{model|getattr:"_meta"|getattr:"verbose_name"}}: {{object}}{% else %}Aggiungi {{model|getattr:"_meta"|getattr:"verbose_name"}} {% endif %}</strong></div>',
+            template: '<div style="width:100%; text-align:center;"><strong>{% if object %}{{ model|getattr:"_meta"|getattr:"verbose_name" }}: {{ object|escapejs }}{% else %}Aggiungi {{ model|getattr:"_meta"|getattr:"verbose_name" }}{% endif %}</strong></div>',
         }
     ]
-},0);
+}, 0);
