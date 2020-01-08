@@ -4,11 +4,21 @@ from __future__ import unicode_literals
 
 import json
 
-from django.contrib.gis.geos import GEOSGeometry, MultiPolygon
+import django
 from django.core.exceptions import PermissionDenied, ImproperlyConfigured
 from django.db.models import Q
 from django.utils.translation import ugettext as _
 from django.views.generic import ListView
+
+try:
+    from django.contrib.gis.geos import GEOSGeometry
+except ImportError:
+    GEOSGeometry = object
+
+try:
+    from django.contrib.gis.geos import MultiPolygon
+except ImportError:
+    MultiPolygon = object
 
 from django_webix.views.generic.base import WebixBaseMixin, WebixPermissionsMixin, WebixUrlMixin
 
@@ -100,25 +110,25 @@ class WebixListView(WebixBaseMixin, WebixPermissionsMixin, WebixUrlMixin, ListVi
         return None  # by default filters are not set
 
     def _elaborate_geo_filter(self, data):
-        if 'geo_field_name' in data and 'polygons_srid' in data and 'polygons' in data:
-            geo_field_name = data.get('geo_field_name')
-            polygons = []
-            for geo_text in data['polygons']:
-                polygons.append(GEOSGeometry(geo_text))
-            geo = MultiPolygon(polygons)
-            try:
-                geo.srid = int(data.get('polygons_srid'))
-            except ValueError:
-                print('ERROR: geo srid is incorrect')
-            geo_field = self.model._meta.get_field(geo_field_name)
-            _geo = geo.transform(geo_field.srid, clone=True)
-            qset = Q(**{geo_field_name + '__intersects': _geo})
-        else:
-            qset = Q()
-
-        # raise Exception(geo_field_name,str(_geo))
-
-        return qset
+        if issubclass(GEOSGeometry, django.contrib.gis.geos.GEOSGeometry) and \
+            issubclass(MultiPolygon, django.contrib.gis.geos.GEOSGeometry):
+            if 'geo_field_name' in data and 'polygons_srid' in data and 'polygons' in data:
+                geo_field_name = data.get('geo_field_name')
+                polygons = []
+                for geo_text in data['polygons']:
+                    polygons.append(GEOSGeometry(geo_text))
+                geo = MultiPolygon(polygons)
+                try:
+                    geo.srid = int(data.get('polygons_srid'))
+                except ValueError:
+                    print('ERROR: geo srid is incorrect')
+                geo_field = self.model._meta.get_field(geo_field_name)
+                _geo = geo.transform(geo_field.srid, clone=True)
+                qset = Q(**{geo_field_name + '__intersects': _geo})
+            else:
+                qset = Q()
+            return qset
+        return Q()
 
     def get_geo_filter(self, request):
         filters = self._decode_text_filters(request, 'geo_filters')

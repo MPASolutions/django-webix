@@ -2,23 +2,26 @@
 
 from __future__ import unicode_literals, absolute_import
 
+import copy
 from collections import OrderedDict, defaultdict
 from json import dumps, loads
 
-import copy
 import django
 import six
 from django import forms
 from django.conf import settings
-from django.contrib.gis.forms import GeometryField
-from django.contrib.gis.geos.geometry import GEOSGeometry
+
+try:
+    from django.contrib.gis.geos import GEOSGeometry
+except ImportError:
+    GEOSGeometry = object
 
 from django.core.exceptions import FieldDoesNotExist
 from django.core.exceptions import ImproperlyConfigured
 from django.core.serializers.json import DjangoJSONEncoder
 from django.db import models, connection
 from django.forms.forms import DeclarativeFieldsMetaclass
-from django.forms.models import ModelFormMetaclass
+from django.forms.models import ModelFormMetaclass, InlineForeignKeyField
 from django.forms.utils import ErrorList
 from django.urls import reverse
 from django.utils.encoding import force_text
@@ -36,6 +39,11 @@ try:
     from django.contrib.postgres.fields.array import SimpleArrayField
 except ImportError:
     SimpleArrayField = None
+
+try:
+    from django.contrib.gis.forms import GeometryField
+except ImportError:
+    GeometryField = None
 
 
 class BaseWebixMixin(object):
@@ -652,18 +660,19 @@ class BaseWebixMixin(object):
                     el.update({'value': initial})
 
             # GeoFields
-            elif isinstance(field, GeometryField):
+            elif GeometryField is not None and isinstance(field, GeometryField):
                 el.update({
                     'view': 'textarea'
                 })
                 if initial is not None:
-                    if isinstance(initial, GEOSGeometry):
+                    if issubclass(GEOSGeometry, django.contrib.gis.geos.GEOSGeometry) and \
+                        isinstance(initial, GEOSGeometry):
                         el.update({'value': initial.ewkt})
-                    elif type(initial)==str:
+                    elif type(initial) == str:
                         el.update({'value': str(initial)})
                     else:
                         raise Exception('Initial value {} for geo field {} is not supported'.format(initial, field))
-            else:
+            elif not isinstance(field, InlineForeignKeyField):
                 raise Exception('Type of field {} not supported'.format(field))
 
             # widget RadioSelect
