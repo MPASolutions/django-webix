@@ -10,10 +10,13 @@ import django
 import six
 from django import forms
 from django.conf import settings
+from django.contrib.gis.forms import GeometryField
+from django.contrib.gis.geos.geometry import GEOSGeometry
+
+from django.core.exceptions import FieldDoesNotExist
 from django.core.exceptions import ImproperlyConfigured
 from django.core.serializers.json import DjangoJSONEncoder
 from django.db import models, connection
-from django.core.exceptions import FieldDoesNotExist
 from django.forms.forms import DeclarativeFieldsMetaclass
 from django.forms.models import ModelFormMetaclass
 from django.forms.utils import ErrorList
@@ -53,15 +56,15 @@ class BaseWebixMixin(object):
             for name, field in copy.deepcopy(self.base_fields).items():
                 key = self.add_prefix(name)
                 if key in data and \
-                   name not in readonly_fields:
+                    name not in readonly_fields:
                     if isinstance(field, forms.models.ModelMultipleChoiceField):
                         temp_list = []
-                        if type(data[key])!=list:
+                        if type(data[key]) != list:
                             for val in data[key].split(','):
                                 if val != '':
                                     temp_list.append(val)
                         else:
-                            temp_list=data[key]
+                            temp_list = data[key]
                         qdict.setlist(key, temp_list)
                     else:
                         val = data[key]
@@ -210,7 +213,7 @@ class BaseWebixMixin(object):
             if name in self.get_readonly_fields():
                 el.update({
                     'disabled': True,
-                    #'id': '{}.{}'.format(self.webix_id, self[name].auto_id) # probabily old: disabled for has_change_permission=False
+                    # 'id': '{}.{}'.format(self.webix_id, self[name].auto_id) # probabily old: disabled for has_change_permission=False
                 })
 
             # Get initial value
@@ -383,10 +386,24 @@ class BaseWebixMixin(object):
                     'label': _('Upload file')
                 })
                 if isinstance(field.widget, forms.widgets.FileInput):
+                    directory = field.widget.attrs.get('directory', False)
+                    multiple = field.widget.attrs.get('multiple', False),
+
                     el.update({
                         'multiple': field.widget.attrs.get('multiple', False),
                         'directory': field.widget.attrs.get('directory', False)
                     })
+
+                    if directory:
+                        el.update({
+                            'label': _('Upload folder')
+                        })
+
+                    if multiple and not directory:
+                        el.update({
+                            'label': _('Upload files')
+                        })
+
                 _download = {}
                 if initial:
                     _download = {
@@ -440,7 +457,7 @@ class BaseWebixMixin(object):
 
                 # autocomplete url
                 if name in self.autocomplete_fields and \
-                   name not in self.autocomplete_fields_urls:
+                    name not in self.autocomplete_fields_urls:
                     self.autocomplete_fields_urls.update({
                         name: self._get_url_suggest(
                             field.queryset.model._meta.app_label,
@@ -511,7 +528,7 @@ class BaseWebixMixin(object):
 
                 # autocomplete url
                 if name in self.autocomplete_fields and \
-                   name not in self.autocomplete_fields_urls:
+                    name not in self.autocomplete_fields_urls:
                     self.autocomplete_fields_urls.update({
                         name: self._get_url_suggest(
                             field.queryset.model._meta.app_label,
@@ -521,7 +538,7 @@ class BaseWebixMixin(object):
                     })
 
                 # autocomplete field
-                #if self.add_prefix(name)=='agrofarmacotrattamento_set-0-revisione_agrofarmaco':
+                # if self.add_prefix(name)=='agrofarmacotrattamento_set-0-revisione_agrofarmaco':
                 #    raise Exception(name, self.autocomplete_fields, self.autocomplete_fields_urls)
 
                 if name in self.autocomplete_fields:
@@ -634,7 +651,22 @@ class BaseWebixMixin(object):
                 if initial is not None:
                     el.update({'value': initial})
 
-            # RadioSelect
+            # GeoFields
+            elif isinstance(field, GeometryField):
+                el.update({
+                    'view': 'textarea'
+                })
+                if initial is not None:
+                    if isinstance(initial, GEOSGeometry):
+                        el.update({'value': initial.ewkt})
+                    elif type(initial)==str:
+                        el.update({'value': str(initial)})
+                    else:
+                        raise Exception('Initial value {} for geo field {} is not supported'.format(initial, field))
+            else:
+                raise Exception('Type of field {} not supported'.format(field))
+
+            # widget RadioSelect
             if isinstance(field.widget, forms.RadioSelect):
                 _choices = field.choices if hasattr(field, 'choices') else field.widget.choices
                 el.update({
@@ -650,7 +682,7 @@ class BaseWebixMixin(object):
                 if field.required and initial is None and len(_choices) == 1:
                     el.update({'value': '{}'.format(_choices[0][0])})
 
-            # Hidden Fields
+            # widget Hidden Fields
             if type(field.widget) == forms.widgets.HiddenInput:
                 el.update({'hidden': True})
 

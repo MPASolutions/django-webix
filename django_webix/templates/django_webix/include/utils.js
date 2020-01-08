@@ -94,16 +94,30 @@ function custom_checkbox_yesno(obj, common, value) {
         return "<div style='color:red;'>No</div>";
 }
 
-function custom_button_cp(){
-  return '<div title="Duplica elemento"><i style="cursor:pointer" class="webix_icon far fa-copy"></i></div>'
+function custom_checkbox_default(obj, common, value) {
+    if (value)
+        return '<div title="Default"><i style="cursor:pointer" class="webix_icon fas fa-check-circle"></i></div>';
+    else
+        return ''
 }
 
-function custom_button_rm(){
-  return '<div title="Rimuovi elemento"><i style="cursor:pointer" class="webix_icon far fa-trash-alt"></i></div>'
+function custom_button_geo(obj, common, value) {
+    if (value)
+        return '<div title="Vedi in mappa"><i style="cursor:pointer" class="webix_icon fas fa-map-marker-alt"></i></div>';
+    else
+        return ''
 }
 
-function custom_button_detail(){
-  return '<div title="Dettaglio elemento"><i style="cursor:pointer" class="webix_icon fas fa-external-link-square-alt"></i></div>'
+function custom_button_cp(obj, common, value) {
+    return '<div title="Duplica elemento"><i style="cursor:pointer" class="webix_icon far fa-copy"></i></div>'
+}
+
+function custom_button_rm(obj, common, value) {
+    return '<div title="Rimuovi elemento"><i style="cursor:pointer" class="webix_icon far fa-trash-alt"></i></div>'
+}
+
+function custom_button_detail(obj, common, value) {
+    return '<div title="Dettaglio elemento"><i style="cursor:pointer" class="webix_icon fas fa-external-link-square-alt"></i></div>'
 }
 
 function image_modal(url, width, height, id) {
@@ -125,7 +139,13 @@ function image_modal(url, width, height, id) {
     }).show();
 }
 
-function load_js(lnk, hide, area) {
+function load_js(lnk, hide, area, method, data) {
+    if (method == undefined) {
+        method = 'GET'
+    }
+    if (data == undefined) {
+        data = {}
+    }
     if ((area == undefined) || (area == '') || (area == null)) {
         area = '{{ webix_container_id }}';
     }
@@ -137,6 +157,8 @@ function load_js(lnk, hide, area) {
         $$(area).showOverlay("<img src='{% static 'django_webix/loading.gif' %}'>");
         $.ajax({
             url: lnk,
+            type: method,
+            data: data,
             dataType: "script",
             success: function () {
                 //    setTimeout(function(){
@@ -146,13 +168,19 @@ function load_js(lnk, hide, area) {
 //        },2000); // monkey patch
             },
             error: function () {
-                alert('si è verificato un errore')
+                webix.alert('Server error')
             }
         });
     }
 }
 
-function load_js_data(lnk, area) {
+function load_js_data(lnk, area, method, data) {
+    if (method == undefined) {
+        method = 'GET'
+    }
+    if (data == undefined) {
+        data = {}
+    }
     if ((area == undefined) || (area == '') || (area == null)) {
         area = '{{ webix_container_id }}';
     }
@@ -160,13 +188,15 @@ function load_js_data(lnk, area) {
     $.ajax({
         url: lnk,
         dataType: "json",
+        type: method,
+        data: data,
         success: function (msg) {
             webix.ui.resize();
             $$(area).hideOverlay();
             return msg;
         },
         error: function () {
-            alert('si è verificato un errore')
+            webix.alert('Server error')
         }
     });
 }
@@ -235,33 +265,33 @@ function set_autocomplete_empty(selector, QS) {
 }
 
 webix.protoUI({
-  name:"tootipButton",
-  $cssName:"button",
-  $init:function(obj){
-    if (obj.tooltip)
-    	this.$view.title = obj.tooltip;
-  }
+    name: "tootipButton",
+    $cssName: "button",
+    $init: function (obj) {
+        if (obj.tooltip)
+            this.$view.title = obj.tooltip;
+    }
 }, webix.ui.button)
 
 webix.ui.datafilter.dataListCheckbox = webix.extend({
-  refresh: function (master, node, config) {
-    node.onclick = function () { // NOTA uncheck lo fa su tutto invece di solo quello che vede filtrato
-      this.getElementsByTagName("input")[0].checked = config.checked = !config.checked;
-      var column = master.getColumnConfig(config.columnId);
-      var checked = config.checked ? column.checkValue : column.uncheckValue;
+    refresh: function (master, node, config) {
+        node.onclick = function () { // NOTA uncheck lo fa su tutto invece di solo quello che vede filtrato
+            this.getElementsByTagName("input")[0].checked = config.checked = !config.checked;
+            var column = master.getColumnConfig(config.columnId);
+            var checked = config.checked ? column.checkValue : column.uncheckValue;
 
-      var range = master.data.getIndexRange(master.data.$min, master.data.$max);
-      for (var i = 0; i < range.length; i++) {
-        var obj = range[i];
-        obj[config.columnId] = checked;
-        master.callEvent("onCheck", [obj.id, config.columnId, checked]);
-      }
-      master.refresh();
-    };
-  },
-  render: function (master, config) {
-    return "<input type='checkbox' " + (config.checked ? "checked='1'" : "") + "> Tutti";
-  }
+            var range = master.data.getIndexRange(master.data.$min, master.data.$max);
+            for (var i = 0; i < range.length; i++) {
+                var obj = range[i];
+                obj[config.columnId] = checked;
+                master.callEvent("onCheck", [obj.id, config.columnId, checked]);
+            }
+            master.refresh();
+        };
+    },
+    render: function (master, config) {
+        return "<input type='checkbox' " + (config.checked ? "checked='1'" : "") + "> Tutti";
+    }
 }, webix.ui.datafilter.masterCheckbox);
 
 /**
@@ -273,29 +303,29 @@ webix.ui.datafilter.dataListCheckbox = webix.extend({
 
 function post(path, params) {
 
-  // The rest of this code assumes you are not using a library.
-  // It can be made less wordy if you use one.
-  const form = document.createElement('form');
-  form.method = 'post';
-  form.action = path;
+    // The rest of this code assumes you are not using a library.
+    // It can be made less wordy if you use one.
+    const form = document.createElement('form');
+    form.method = 'post';
+    form.action = path;
 
-  const hiddenField = document.createElement('input');
-  hiddenField.type = 'hidden';
-  hiddenField.name = 'csrfmiddlewaretoken';
-  hiddenField.value = getCookie('csrftoken');
-  form.appendChild(hiddenField);
+    const hiddenField = document.createElement('input');
+    hiddenField.type = 'hidden';
+    hiddenField.name = 'csrfmiddlewaretoken';
+    hiddenField.value = getCookie('csrftoken');
+    form.appendChild(hiddenField);
 
-  for (const key in params) {
-    if (params.hasOwnProperty(key)) {
-      const hiddenField = document.createElement('input');
-      hiddenField.type = 'hidden';
-      hiddenField.name = key;
-      hiddenField.value = params[key];
+    for (const key in params) {
+        if (params.hasOwnProperty(key)) {
+            const hiddenField = document.createElement('input');
+            hiddenField.type = 'hidden';
+            hiddenField.name = key;
+            hiddenField.value = params[key];
 
-      form.appendChild(hiddenField);
+            form.appendChild(hiddenField);
+        }
     }
-  }
 
-  document.body.appendChild(form);
-  form.submit();
+    document.body.appendChild(form);
+    form.submit();
 }

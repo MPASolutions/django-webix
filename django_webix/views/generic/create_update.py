@@ -7,16 +7,18 @@ from django.contrib.contenttypes.models import ContentType
 from django.core.exceptions import ImproperlyConfigured, ValidationError
 from django.core.exceptions import PermissionDenied
 from django.forms import model_to_dict
+from django.forms.formsets import all_valid
+from django.forms.models import _get_foreign_key
 from django.http import HttpResponseRedirect
+from django.http import QueryDict
 from django.shortcuts import get_object_or_404
 from django.utils.encoding import force_text
 from django.utils.text import get_text_list
 from django.utils.translation import ugettext as _
 from extra_views import UpdateWithInlinesView, CreateWithInlinesView
-from django.forms.formsets import all_valid
 
 from django_webix.views.generic.base import WebixBaseMixin, WebixPermissionsMixin, WebixUrlMixin
-from django.forms.models import _get_foreign_key
+
 
 class WebixCreateUpdateMixin:
     logs_enable = True
@@ -80,7 +82,7 @@ class WebixCreateUpdateMixin:
         return url
 
     def validate_unique_together(self, form=None, inlines=None, **kwargs):
-        #self.object.validate_unique()
+        # self.object.validate_unique()
         if form is not None:
             form.instance.validate_unique()
 
@@ -94,8 +96,6 @@ class WebixCreateUpdateMixin:
             # Template style
             'template_style': self.get_template_style(),
         }
-
-
 
     def post(self, request, *args, **kwargs):
         form_class = self.get_form_class()
@@ -128,11 +128,12 @@ class WebixCreateUpdateMixin:
         return inlines, inlines_validated
 
 
-
-class WebixCreateView(WebixCreateUpdateMixin, WebixBaseMixin, WebixPermissionsMixin, WebixUrlMixin, CreateWithInlinesView):
+class WebixCreateView(WebixCreateUpdateMixin, WebixBaseMixin, WebixPermissionsMixin, WebixUrlMixin,
+                      CreateWithInlinesView):
     template_name = 'django_webix/generic/create.js'
     model_copy_fields = None
     inlines_copy_fields = None
+    send_initial_data = None
 
     def construct_inlines(self):
         """
@@ -181,7 +182,11 @@ class WebixCreateView(WebixCreateUpdateMixin, WebixBaseMixin, WebixPermissionsMi
 
     def get_initial(self):
         initial = {}
-        if self.request.GET.get('pk_copy', None) is not None:
+        # main option: send SEND_INITIAL_DATA on header and POST initial data
+        if self.send_initial_data is not None:
+            initial.update(self.send_initial_data)
+        # secondary option: send pk_copy for copy instance field values
+        elif self.request.GET.get('pk_copy', None) is not None:
             object_to_copy = get_object_or_404(self.get_queryset(), pk=self.request.GET['pk_copy'])
             fields_to_copy = self.get_model_copy_fields()
             if self.model._meta.pk.name in fields_to_copy:
@@ -208,6 +213,16 @@ class WebixCreateView(WebixCreateUpdateMixin, WebixBaseMixin, WebixPermissionsMi
 
     def dispatch(self, *args, **kwargs):
         self.object = None
+
+        # BYPASS POST for initial data
+        if self.request.META.get('HTTP_SEND_INITIAL_DATA') and \
+            self.request.method == 'POST':
+            self.send_initial_data = self.request.POST.dict()
+            # switch to GET request
+            self.request.method = 'GET'
+            self.request.POST = QueryDict('', mutable=True)
+
+
         if self.request.method == 'GET':
             if not self.has_view_permission(request=self.request):
                 raise PermissionDenied(_('View permission is not allowed'))
@@ -264,7 +279,7 @@ class WebixCreateView(WebixCreateUpdateMixin, WebixBaseMixin, WebixPermissionsMi
         try:
             self.validate_unique_together(form=form, inlines=inlines, **kwargs)
         except ValidationError as e:
-            form.add_error(None,str(e))
+            form.add_error(None, str(e))
             return self.forms_invalid(form=form, inlines=inlines, **kwargs)
 
         self.object = form.save()
@@ -272,7 +287,7 @@ class WebixCreateView(WebixCreateUpdateMixin, WebixBaseMixin, WebixPermissionsMi
 
         for formset in inlines:
             formset.save()
-        #raise Exception(self.object.pk)
+        # raise Exception(self.object.pk)
         self.post_forms_valid(form=form, inlines=inlines, **kwargs)
         return self.response_valid(success_url=self.get_success_url(), **kwargs)
 
@@ -280,7 +295,8 @@ class WebixCreateView(WebixCreateUpdateMixin, WebixBaseMixin, WebixPermissionsMi
         return self.response_invalid(form=form, inlines=inlines, **kwargs)
 
 
-class WebixUpdateView(WebixCreateUpdateMixin, WebixBaseMixin, WebixPermissionsMixin, WebixUrlMixin, UpdateWithInlinesView):
+class WebixUpdateView(WebixCreateUpdateMixin, WebixBaseMixin, WebixPermissionsMixin, WebixUrlMixin,
+                      UpdateWithInlinesView):
     template_name = 'django_webix/generic/update.js'
 
     def get_form_kwargs(self):
@@ -350,7 +366,7 @@ class WebixUpdateView(WebixCreateUpdateMixin, WebixBaseMixin, WebixPermissionsMi
         try:
             self.validate_unique_together(form=form, inlines=inlines, **kwargs)
         except ValidationError as e:
-            form.add_error(None,str(e))
+            form.add_error(None, str(e))
             return self.forms_invalid(form=form, inlines=inlines, **kwargs)
         self.object = form.save()
 
