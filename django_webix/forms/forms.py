@@ -672,7 +672,12 @@ class BaseWebixMixin(object):
                         el.update({'value': str(initial)})
                     else:
                         raise Exception('Initial value {} for geo field {} is not supported'.format(initial, field))
-            elif not isinstance(field, InlineForeignKeyField):
+
+            # InlineForeignKey
+            elif isinstance(field, forms.models.InlineForeignKeyField):
+                pass
+
+            else:
                 raise Exception('Type of field {} not supported'.format(field))
 
             # widget RadioSelect
