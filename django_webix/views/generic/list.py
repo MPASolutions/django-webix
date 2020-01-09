@@ -106,7 +106,7 @@ class WebixListView(WebixBaseMixin, WebixPermissionsMixin, WebixUrlMixin, ListVi
             try:
                 return self._elaborate_qsets_filters(filters)
             except:
-                print('ERROR: qsets structure is incorrect')
+                print(_('ERROR: qsets structure is incorrect'))
         return None  # by default filters are not set
 
     def _elaborate_geo_filter(self, data):
@@ -121,7 +121,7 @@ class WebixListView(WebixBaseMixin, WebixPermissionsMixin, WebixUrlMixin, ListVi
                 try:
                     geo.srid = int(data.get('polygons_srid'))
                 except ValueError:
-                    print('ERROR: geo srid is incorrect')
+                    print(_('ERROR: geo srid is incorrect'))
                 geo_field = self.model._meta.get_field(geo_field_name)
                 _geo = geo.transform(geo_field.srid, clone=True)
                 qset = Q(**{geo_field_name + '__intersects': _geo})
@@ -136,7 +136,7 @@ class WebixListView(WebixBaseMixin, WebixPermissionsMixin, WebixUrlMixin, ListVi
             try:
                 return self._elaborate_geo_filter(filters)
             except:
-                print('ERROR: geo filter is incorrect')
+                print(_('ERROR: geo filter is incorrect'))
         return None  # by default filters are not set
 
     def get_sql_filters(self, request):
@@ -153,9 +153,9 @@ class WebixListView(WebixBaseMixin, WebixPermissionsMixin, WebixUrlMixin, ListVi
         elif self.actions_style in ['buttons' or 'select']:
             _actions_style = self.actions_style
         else:
-            raise ImproperlyConfigured(
+            raise ImproperlyConfigured(_(
                 "Actions style is improperly configured"
-                " only options are 'buttons' or 'select' (select by default).")
+                " only options are 'buttons' or 'select' (select by default)."))
         return _actions_style
 
     def get_title(self):
@@ -282,7 +282,7 @@ class WebixTemplateListView(WebixListView):
     enable_row_click = False
 
     def get_objects_datatable(self):
-        raise ImproperlyConfigured("Generic TemplateListView needs to define data for datatable")
+        raise ImproperlyConfigured(_("Generic TemplateListView needs to define data for datatable"))
 
 # # -*- coding: utf-8 -*-
 #

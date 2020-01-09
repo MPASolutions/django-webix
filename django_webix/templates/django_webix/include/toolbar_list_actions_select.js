@@ -1,3 +1,4 @@
+{% load i18n %}
 {# actions su select #}
 if ((typeof actions_list != 'undefined') && (typeof actions_execute != 'undefined') && (actions_list.length > 0)) {
     var toolbar_actions = [
@@ -9,13 +10,13 @@ if ((typeof actions_list != 'undefined') && (typeof actions_execute != 'undefine
             width: "300",
             value: 1,
             labelWidth: 0,
-            placeholder: "Seleziona una funzionalità ...",
+            placeholder: "{%  trans "Select an action" %}...",
             options: actions_list
         },
         {
             view: "tootipButton",
             id: "action_button",
-            value: "Esegui",
+            value: "{%  trans "Go" %}",
             inputWidth: 60,
             width: 60,
             on: {
@@ -30,7 +31,7 @@ if ((typeof actions_list != 'undefined') && (typeof actions_execute != 'undefine
                     if (ids.length > 0) {
                         actions_execute(action, ids);
                     } else {
-                        webix.alert("Non è stata selezionata nessuna riga", "alert-warning");
+                        webix.alert("{% trans "No row has been selected" %}", "alert-warning");
                     }
 
                 }

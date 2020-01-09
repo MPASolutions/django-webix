@@ -23,7 +23,7 @@ $$("{{ webix_container_id }}").addView({
         {% if is_filters_active or is_sql_filters_active %}
         {
             view: "button",
-            label: "Rimuovi filtri",
+            label: "{% trans 'Filters removal' %}",
             type: "icon",
             width: 170,
             icon: "far fa-trash-alt",
@@ -35,7 +35,7 @@ $$("{{ webix_container_id }}").addView({
         {% if is_geo_filter_active %}
         {
             view: "button",
-            label: "Rimuovi filtro geografico",
+            label: "{% trans 'Geographic filter removal' %}",
             type: "icon",
             width: 170,
             icon: "far fa-trash-alt",
@@ -140,7 +140,7 @@ $$("{{ webix_container_id }}").addView({
                 {% if is_enable_row_click and type_row_click == 'single' %}
                 load_js('{{ url_update }}'.replace('0', el.id));
                 {% else %}
-                webix.message({type: "success", text: "{% trans "Doppio click per modificare l'elemento" %}"});
+                webix.message({type: "success", text: "{% trans "Double click to edit the element" %}"});
                 {% endif %}
             }
             {% endblock %}
@@ -159,8 +159,8 @@ function webix_to_excel() {
             filter: function (obj) {
                 return obj.checkbox_action;
             },
-            filename: "Dati",
-            name: "Dati",
+            filename: "{% trans "Data" %}",
+            name: "{% trans "Data" %}",
             filterHTML: true,
             ignore: {"checkbox_action": true, "cmd_rm": true, "cmd_cp": true}
         }
@@ -169,7 +169,7 @@ function webix_to_excel() {
 {% block toolbar_list_actions %}
 {% if is_enable_actions %}
 var actions_list = [
-    {id: "excel_standard", value: "EXCEL: Esporta dati"},
+    {id: "excel_standard", value: "EXCEL: {% trans "Data export" %}"},
 ];
 function actions_execute(action, ids) {
     if (action == "excel_standard") {

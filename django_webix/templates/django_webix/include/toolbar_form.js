@@ -1,4 +1,5 @@
-{% load django_webix_utils static %}
+{% load django_webix_utils static i18n %}
+
 
 $$("{{ webix_container_id }}").addView({
     id: 'main_toolbar_form',
@@ -13,7 +14,7 @@ $$("{{ webix_container_id }}").addView({
                     view: "tootipButton",
                     type: "danger",
                     align: "left",
-                    label: "Elimina",
+                    label: "{% trans "Delete" %}",
                     {% if not has_delete_permission %}
                     disabled: true,
                     tooltip: "{% autoescape off %}{{ info_no_delete_permission|join:", " }}{% endautoescape %}",
@@ -37,7 +38,7 @@ $$("{{ webix_container_id }}").addView({
                     view: "tootipButton",
                     type: "form",
                     align: "right",
-                    label: "Salva e continua le modifiche",
+                    label: "{% trans "Save and continue" %}",
                     {% if not object.pk and not has_add_permission or object.pk and not has_change_permission %}
                         disabled: true,
                     {% endif %}
@@ -59,7 +60,7 @@ $$("{{ webix_container_id }}").addView({
                     view: "tootipButton",
                     type: "form",
                     align: "right",
-                    label: "Salva e aggiungi un altro",
+                    label: "{% trans "Save and add another" %}",
                     {% if not object.pk and not has_add_permission or object.pk and not has_change_permission %}
                     disabled: true,
                     {% endif %}
@@ -81,7 +82,7 @@ $$("{{ webix_container_id }}").addView({
                     view: "tootipButton",
                     type: "form",
                     align: "right",
-                    label: "Salva",
+                    label: "{% trans "Save" %}",
                     {% if not object.pk and not has_add_permission or object.pk and not has_change_permission %}
                     disabled: true,
                     {% endif %}

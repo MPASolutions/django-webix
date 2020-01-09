@@ -1,3 +1,4 @@
+{% load i18n %}
 {# counter #}
 function update_counter() {
     ids = [];
@@ -7,9 +8,9 @@ function update_counter() {
         }
     });
     if (ids.length > 0) {
-        txt = ids.length + ' di ' + $$('datatable_{{ model_name }}').count() + ' elementi';
+        txt = ids.length + ' {% trans "of" %} ' + $$('datatable_{{ model_name }}').count() + ' {% trans "elements" %}';
     } else {
-        txt = $$('datatable_{{ model_name }}').count() + ' elementi';
+        txt = $$('datatable_{{ model_name }}').count() + ' {% trans "elements" %}';
     }
     $$('stats_list').define('label', txt);
     $$('stats_list').refresh();
@@ -48,7 +49,7 @@ $$("{{webix_container_id}}").addView({
             view: "tootipButton",
             type: "form",
             align: "right",
-            label: 'Aggiungi nuovo',
+            label: '{% trans "Add new" %}',
             {% if not has_add_permission %}
             disabled: true,
             tooltip: '{{ info_no_add_permission|join:", " }}',

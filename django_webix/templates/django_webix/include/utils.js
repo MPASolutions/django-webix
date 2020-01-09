@@ -1,4 +1,4 @@
-{% load static django_webix_utils %}
+{% load static django_webix_utils i18n %}
 
 // csrf set
 // using jQuery
@@ -33,7 +33,7 @@ $.ajaxSetup({
 });
 
 // Italian locale settings for pivot
-webix.i18n.pivot = {
+webix.i18n.locales['it-IT'].pivot = {
     apply: "Applica",
     cancel: "Annulla",
     columns: "Colonne",
@@ -89,35 +89,35 @@ function custom_checkbox_help(obj, common, value) {
 
 function custom_checkbox_yesno(obj, common, value) {
     if (value)
-        return "<div style='color:green;'>Sì</div>";
+        return "<div style='color:green;'>{% trans "Yes" %}</div>";
     else
-        return "<div style='color:red;'>No</div>";
+        return "<div style='color:red;'>{% trans "No" %}</div>";
 }
 
 function custom_checkbox_default(obj, common, value) {
     if (value)
-        return '<div title="Default"><i style="cursor:pointer" class="webix_icon fas fa-check-circle"></i></div>';
+        return '<div title="{% trans "Default" %}"><i style="cursor:pointer" class="webix_icon fas fa-check-circle"></i></div>';
     else
         return ''
 }
 
 function custom_button_geo(obj, common, value) {
     if (value)
-        return '<div title="Vedi in mappa"><i style="cursor:pointer" class="webix_icon fas fa-map-marker-alt"></i></div>';
+        return '<div title="{% trans "Show on map" %}"><i style="cursor:pointer" class="webix_icon fas fa-map-marker-alt"></i></div>';
     else
         return ''
 }
 
 function custom_button_cp(obj, common, value) {
-    return '<div title="Duplica elemento"><i style="cursor:pointer" class="webix_icon far fa-copy"></i></div>'
+    return '<div title="{% trans "Duplicate element" %}"><i style="cursor:pointer" class="webix_icon far fa-copy"></i></div>'
 }
 
 function custom_button_rm(obj, common, value) {
-    return '<div title="Rimuovi elemento"><i style="cursor:pointer" class="webix_icon far fa-trash-alt"></i></div>'
+    return '<div title="{% trans "Remove element" %}"><i style="cursor:pointer" class="webix_icon far fa-trash-alt"></i></div>'
 }
 
 function custom_button_detail(obj, common, value) {
-    return '<div title="Dettaglio elemento"><i style="cursor:pointer" class="webix_icon fas fa-external-link-square-alt"></i></div>'
+    return '<div title="{% trans "Detail" %}"><i style="cursor:pointer" class="webix_icon fas fa-external-link-square-alt"></i></div>'
 }
 
 function image_modal(url, width, height, id) {
@@ -128,8 +128,8 @@ function image_modal(url, width, height, id) {
         width: width,
         head: {
             view: "toolbar", cols: [
-                {view: "label", label: "Immagine"},
-                {view: "tootipButton", label: 'Chiudi', width: 100, align: 'right', click: "$$('" + id + "').close();"}
+                {view: "label", label: "{% trans "Image" %}"},
+                {view: "tootipButton", label: '{% trans "Close" %}', width: 100, align: 'right', click: "$$('" + id + "').close();"}
             ]
         },
         position: "center",
@@ -168,7 +168,7 @@ function load_js(lnk, hide, area, method, data) {
 //        },2000); // monkey patch
             },
             error: function () {
-                webix.alert('Server error')
+                webix.alert('{% trans "Server error" %}')
             }
         });
     }
@@ -196,7 +196,7 @@ function load_js_data(lnk, area, method, data) {
             return msg;
         },
         error: function () {
-            webix.alert('Server error')
+            webix.alert('{% trans "Server error" %}')
         }
     });
 }
@@ -290,7 +290,7 @@ webix.ui.datafilter.dataListCheckbox = webix.extend({
         };
     },
     render: function (master, config) {
-        return "<input type='checkbox' " + (config.checked ? "checked='1'" : "") + "> Tutti";
+        return "<input type='checkbox' " + (config.checked ? "checked='1'" : "") + "> {% trans "All" %}";
     }
 }, webix.ui.datafilter.masterCheckbox);
 

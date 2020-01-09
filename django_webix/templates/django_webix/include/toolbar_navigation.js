@@ -1,4 +1,4 @@
-{% load django_webix_utils %}
+{% load django_webix_utils i18n %}
 
 $$("{{ webix_container_id }}").addView({
     id: 'main_toolbar_navigation',
@@ -10,7 +10,7 @@ $$("{{ webix_container_id }}").addView({
             view: "tootipButton",
             type: "base",
             align: "left",
-            label: "Torna indietro",
+            label: "{% trans "Back" %}",
             autowidth: true,
             click: function () {
                 load_js("{{ url_back }}");
@@ -21,7 +21,7 @@ $$("{{ webix_container_id }}").addView({
             view: "tootipButton",
             type: "base",
             align: "left",
-            label: "Torna alla lista",
+            label: "{% trans "Back to list" %}",
             autowidth: true,
             click: function () {
                 load_js("{{ url_list }}");
@@ -31,7 +31,7 @@ $$("{{ webix_container_id }}").addView({
         {
             view: "template",
             type: "header",
-            template: '<div style="width:100%; text-align:center;"><strong>{% if object %}{{ model|getattr:"_meta"|getattr:"verbose_name" }}: {{ object|escapejs }}{% else %}Aggiungi {{ model|getattr:"_meta"|getattr:"verbose_name" }}{% endif %}</strong></div>',
+            template: '<div style="width:100%; text-align:center;"><strong>{% if object %}{{ model|getattr:"_meta"|getattr:"verbose_name" }}: {{ object|escapejs }}{% else %}{% trans "Add" %} {{ model|getattr:"_meta"|getattr:"verbose_name" }}{% endif %}</strong></div>',
         }
     ]
 }, 0);

@@ -39,9 +39,9 @@ class WebixCreateUpdateMixin:
         elif self.template_style in ['standard', 'tabs']:
             _template_style = self.template_style
         else:
-            raise ImproperlyConfigured(
+            raise ImproperlyConfigured(_(
                 "Template style is improperly configured"
-                " only options are 'standard' or 'tabs' (standard by default).")
+                " only options are 'standard' or 'tabs' (standard by default)."))
         return _template_style
 
     def is_enable_button_save_continue(self, request):
@@ -76,9 +76,9 @@ class WebixCreateUpdateMixin:
             url = self.get_url_list()
 
         else:
-            raise ImproperlyConfigured(
+            raise ImproperlyConfigured(_(
                 "No URL to redirect to.  Either provide a url or define"
-                " a get_absolute_url method on the Model.")
+                " a get_absolute_url method on the Model."))
         return url
 
     def validate_unique_together(self, form=None, inlines=None, **kwargs):

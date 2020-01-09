@@ -59,9 +59,9 @@ class WebixDeleteView(WebixBaseMixin, WebixPermissionsMixin, WebixUrlMixin, Dele
         elif self.get_url_list() is not None:
             url = self.get_url_list()
         else:
-            raise ImproperlyConfigured(
+            raise ImproperlyConfigured(_(
                 "No URL to redirect to.  Either provide a url or define"
-                " a get_absolute_url method on the Model.")
+                " a get_absolute_url method on the Model."))
         return url
 
     def get_failure_url(self):
@@ -70,9 +70,9 @@ class WebixDeleteView(WebixBaseMixin, WebixPermissionsMixin, WebixUrlMixin, Dele
         elif self.get_delete(obj=self.object) is not None:
             url = self.get_delete(obj=self.object)
         else:
-            raise ImproperlyConfigured(
+            raise ImproperlyConfigured(_(
                 "No URL to failure redirect to.  Either provide a url or define"
-                " a get_absolute_url method on the Model.")
+                " a get_absolute_url method on the Model."))
         return url
 
     def pre_delete_valid(self, **kwargs):

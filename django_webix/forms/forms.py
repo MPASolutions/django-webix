@@ -452,7 +452,7 @@ class BaseWebixMixin(object):
             elif type(field) == forms.models.ModelMultipleChoiceField:
                 if settings.WEBIX_LICENSE != 'PRO':
                     raise ImproperlyConfigured(
-                        "MultipleChoiceField is available only with PRO webix license")
+                        _("MultipleChoiceField is available only with PRO webix license"))
                 if initial is not None:
                     el.update({
                         'value': ','.join([str(i.pk) if isinstance(i, models.Model) else str(i) for i in initial])
@@ -671,14 +671,14 @@ class BaseWebixMixin(object):
                     elif type(initial) == str:
                         el.update({'value': str(initial)})
                     else:
-                        raise Exception('Initial value {} for geo field {} is not supported'.format(initial, field))
+                        raise Exception(_('Initial value {} for geo field {} is not supported').format(initial, field))
 
             # InlineForeignKey
             elif isinstance(field, forms.models.InlineForeignKeyField):
                 pass
 
             else:
-                raise Exception('Type of field {} not supported'.format(field))
+                raise Exception(_('Type of field {} not supported').format(field))
 
             # widget RadioSelect
             if isinstance(field.widget, forms.RadioSelect):

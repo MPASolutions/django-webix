@@ -1,9 +1,10 @@
-{% load django_webix_utils %}
+{% load django_webix_utils i18n %}
+
 
 $$("{{ webix_container_id }}").addView({
     id: "header_failure_related_objects",
     view: "template",
-    template: "Queste schede non consentono l'operazione richiesta",
+    template: {% trans "These objects do not allow the requested operation" %},
     type: "header",
 });
 
@@ -20,8 +21,8 @@ $$("{{webix_container_id}}").addView({
     id: 'list_failure_related_objects',
     view: "datatable",
     columns: [
-        {id: "model", header: ["Tipo di dato", {content: "textFilter"}], fillspace: true},
-        {id: "object", header: ["Descrizione", {content: "textFilter"}], fillspace: true},
+        {id: "model", header: [{% trans "Data type" %}, {content: "textFilter"}], fillspace: true},
+        {id: "object", header: [{% trans "Description" %}, {content: "textFilter"}], fillspace: true},
     ],
     data: webix.copy(failure_related_objects),
 });

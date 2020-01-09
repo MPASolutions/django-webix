@@ -1,4 +1,4 @@
-{% load django_webix_utils %}
+{% load django_webix_utils i18n %}
 
 {% block webix_content %}
 
@@ -23,7 +23,7 @@
     {% if has_delete_permission %}
         $$("{{ webix_container_id }}").addView({
             view: "template",
-            template: "Le seguenti schede verranno eliminate",
+            template: '{% trans "The following objects will be deleted" %}',
             type: "header",
         });
 
@@ -53,7 +53,7 @@
                 type: "form",
                 align: "right",
                 id: "delete",
-                label: "Conferma cancellazione",
+                label: "{% trans 'Confirm cancellation' %}",
                 width: 200,
                 click: function () {
                     $.ajax({

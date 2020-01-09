@@ -1,4 +1,4 @@
-{% load django_webix_utils %}
+{% load django_webix_utils i18n %}
 {# Errors #}
 {% block webix_form_errors %}
     {% if form.errors %}
@@ -69,7 +69,7 @@
                     }
                     webix.message({
                         type: "error",
-                        text: "Devi compilare tutti i campi richiesti prima di poter salvare questo form!<br><br>Errore nei seguenti campi:<br>" + text
+                        text: "{% trans "You must fill in all the required fields before you can save this form!" %}<br><br>{% trans "Error in the following fields" %}:<br>" + text
                     });
                 }
             }

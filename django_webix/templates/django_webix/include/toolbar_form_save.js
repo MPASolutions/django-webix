@@ -1,4 +1,4 @@
-{% load django_webix_utils static %}
+{% load django_webix_utils static i18n %}
 
 if (form_validate('{{ form.webix_id }}')) {
     if ($$('{{ webix_container_id }}') !== undefined && $$('{{ webix_container_id }}').showOverlay !== undefined)

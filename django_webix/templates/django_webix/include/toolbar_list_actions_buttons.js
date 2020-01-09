@@ -1,3 +1,4 @@
+{% load i18n %}
 {# bottoni singoli #}
 var toolbar_actions = [];
 $.each(actions_list, function (index, obj) {
@@ -16,7 +17,7 @@ $.each(actions_list, function (index, obj) {
             if (ids.length > 0) {
                 actions_execute(obj.id, ids);
             } else {
-                webix.alert("Non è stata selezionata nessuna riga", "alert-warning");
+                webix.alert("{% trans "No row has been selected" %}", "alert-warning");
 
             }
 

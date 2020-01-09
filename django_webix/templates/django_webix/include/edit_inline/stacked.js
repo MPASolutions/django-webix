@@ -1,4 +1,4 @@
-{% load django_webix_utils %}
+{% load django_webix_utils i18n %}
 $$('{{ inline.get_container_id|default_if_none:inline.get_default_container_id }}').addView({
     rows: [
         {
@@ -27,7 +27,7 @@ $$('{{ inline.get_container_id|default_if_none:inline.get_default_container_id }
                     view: "tootipButton",
                     type: "form",
                     align: "right",
-                    label: 'Aggiungi',
+                    label: '{% trans 'Add' %}',
                     width: 150,
                     on: {
                         onBeforeRender: function () {
