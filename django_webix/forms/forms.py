@@ -808,6 +808,12 @@ class BaseWebixForm(forms.BaseForm, BaseWebixMixin):
         super(BaseWebixForm, self).__init__(data, files, auto_id, prefix, initial, error_class, label_suffix,
                                             empty_permitted, field_order, use_required_attribute, renderer)
 
+        # Set localization fields
+        if settings.USE_L10N is True:
+            for field in self.fields:
+                self.fields[field].localize = True
+                self.fields[field].widget.is_localized = True
+
         # TODO: check if it works with all field types on create and update action
         self.set_readonly_fields()
 
@@ -846,6 +852,12 @@ class BaseWebixModelForm(forms.BaseModelForm, BaseWebixMixin):
         else:
             super(BaseWebixModelForm, self).__init__(data, files, auto_id, prefix, initial, error_class, label_suffix,
                                                      empty_permitted, instance, use_required_attribute)
+
+        # Set localization fields
+        if settings.USE_L10N is True:
+            for field in self.fields:
+                self.fields[field].localize = True
+                self.fields[field].widget.is_localized = True
 
         # TODO: check if it works with all field types on create and update action
         self.set_readonly_fields()
