@@ -22,7 +22,7 @@ $$('{{ inline.get_container_id|default_if_none:inline.get_default_container_id }
         {% if inline.has_add_permission %}
         ,{
             cols: [
-                , {
+                {
                     id: "{{ inline.prefix }}-add",
                     view: "tootipButton",
                     type: "form",
