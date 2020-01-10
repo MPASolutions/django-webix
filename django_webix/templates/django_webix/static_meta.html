@@ -13,7 +13,6 @@
     {% include "django_webix/include/utils.js" %}
 
     webix.attachEvent("onBeforeAjax", function (mode, url, data, xhr, headers) {
-
         var key = document.querySelector("[name=csrfmiddlewaretoken]");
         if (key !== undefined && key !== null) {
             headers["X-CSRFToken"] = key.value;

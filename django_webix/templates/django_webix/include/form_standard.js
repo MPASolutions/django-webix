@@ -1,4 +1,5 @@
 {% load django_webix_utils i18n %}
+
 {# Errors #}
 {% block webix_form_errors %}
     {% if form.errors %}
@@ -15,7 +16,6 @@
         {% endfor %}
     {% endfor %}
 {% endblock %}
-
 
 {# Form #}
 {% block webix_form %}
@@ -37,7 +37,7 @@
                                 {% if not inline.get_container_id %}
                                     {
                                         id: '{{ inline.get_default_container_id }}',
-                                        value: "<div style='position: relative'>{{ inline.get_name }} <span class='webix_badge' style='background-color:#888 !important; margin-top: -2px; margin-right: 5px;'><strong>" + {{ inline.initial_form_count }} + "</strong></span></div>"
+                                        value: "<div style='position: relative'>{{ inline.get_name|escapejs }} <span class='webix_badge' style='background-color:#888 !important; margin-top: -2px; margin-right: 5px;'><strong>" + {{ inline.initial_form_count }} + "</strong></span></div>"
                                     },
                                 {% endif %}
                             {% endfor %}
@@ -111,7 +111,6 @@
         {% endfor %}
     {% endblock %}
 
-
     {% block webix_include_inlines %}
         {% for inline in inlines %}
             {% if inline.template_name %}
@@ -123,7 +122,6 @@
     {% endblock %}
 
 {% endblock %}
-
 
 {% block webix_inline_functions %}
     {% include "django_webix/include/form_utils.js" %}

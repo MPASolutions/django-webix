@@ -3,7 +3,7 @@
 {% block webix_content %}
 
     {% block context_cleaner %}
-    webix.ui([], $$("{{ webix_container_id }}"));
+        webix.ui([], $$("{{ webix_container_id }}"));
     {% endblock %}
 
     {% block toolbar_navigation %}
@@ -24,7 +24,7 @@
         $$("{{ webix_container_id }}").addView({
             view: "template",
             template: '{% trans "The following objects will be deleted" %}',
-            type: "header",
+            type: "header"
         });
 
         $$("{{ webix_container_id }}").addView({
@@ -42,32 +42,32 @@
     {% endif %}
 
     {% if has_delete_permission and url_delete and url_delete != '' %}
-    $$("{{ webix_container_id }}").addView({
-        margin: 5,
-        height: 30,
-        view: "toolbar",
-        cols: [
-            {$template: "Spacer"},
-            {
-                view: "tootipButton",
-                type: "form",
-                align: "right",
-                id: "delete",
-                label: "{% trans 'Confirm cancellation' %}",
-                width: 200,
-                click: function () {
-                    $.ajax({
-                        url: "{{ url_delete }}",
-                        dataType: "script",
-                        type: "POST",
-                        success: function () {
-                            webix.ui.resize()
-                        }
-                    });
+        $$("{{ webix_container_id }}").addView({
+            margin: 5,
+            height: 30,
+            view: "toolbar",
+            cols: [
+                {$template: "Spacer"},
+                {
+                    view: "tootipButton",
+                    type: "form",
+                    align: "right",
+                    id: "delete",
+                    label: "{% trans 'Confirm cancellation' %}",
+                    width: 200,
+                    click: function () {
+                        $.ajax({
+                            url: "{{ url_delete }}",
+                            dataType: "script",
+                            type: "POST",
+                            success: function () {
+                                webix.ui.resize()
+                            }
+                        });
+                    }
                 }
-            }
-        ]
-    });
+            ]
+        });
     {% endif %}
 
     {% block extrajs_post %}{% endblock %}

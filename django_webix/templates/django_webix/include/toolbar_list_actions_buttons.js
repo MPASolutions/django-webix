@@ -1,4 +1,5 @@
 {% load i18n %}
+
 {# bottoni singoli #}
 var toolbar_actions = [];
 $.each(actions_list, function (index, obj) {
@@ -8,7 +9,7 @@ $.each(actions_list, function (index, obj) {
         id: 'action_' + obj.id,
         value: '' + obj.value,
         click: function () {
-            ids = [];
+            var ids = [];
             $$("datatable_{{ model_name }}").eachRow(function (id) {
                 if (this.getItem(id).checkbox_action) {
                     ids.push(id)
@@ -18,10 +19,7 @@ $.each(actions_list, function (index, obj) {
                 actions_execute(obj.id, ids);
             } else {
                 webix.alert("{% trans "No row has been selected" %}", "alert-warning");
-
             }
-
         }
-
     });
 });

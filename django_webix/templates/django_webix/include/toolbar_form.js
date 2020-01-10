@@ -8,23 +8,23 @@ $$("{{ webix_container_id }}").addView({
     cols: [
         {% block button_delete %}
             {% if not remove_disabled_buttons %}
-              {% if object.pk  and url_delete and url_delete != '' %}
-                {
-                    id: '{{ form.webix_id }}_delete',
-                    view: "tootipButton",
-                    type: "danger",
-                    align: "left",
-                    label: "{% trans "Delete" %}",
-                    {% if not has_delete_permission %}
-                    disabled: true,
-                    tooltip: "{% autoescape off %}{{ info_no_delete_permission|join:", " }}{% endautoescape %}",
-                    {% endif %}
-                    width: 120,
-                    click: function () {
-                        load_js("{{ url_delete }}");
-                    }
-                },
-              {% endif %}
+                {% if object.pk  and url_delete and url_delete != '' %}
+                    {
+                        id: '{{ form.webix_id }}_delete',
+                        view: "tootipButton",
+                        type: "danger",
+                        align: "left",
+                        label: "{% trans "Delete" %}",
+                        {% if not has_delete_permission %}
+                            disabled: true,
+                            tooltip: "{% autoescape off %}{{ info_no_delete_permission|join:", " }}{% endautoescape %}",
+                        {% endif %}
+                        width: 120,
+                        click: function () {
+                            load_js("{{ url_delete }}");
+                        }
+                    },
+                {% endif %}
             {% endif %}
         {% endblock %}
         {% block extra_buttons_left %}{% endblock %}
@@ -33,70 +33,70 @@ $$("{{ webix_container_id }}").addView({
         {% block button_save %}
             {% if not remove_disabled_buttons or remove_disabled_buttons and not object.pk and not has_add_permission or remove_disabled_buttons and object.pk and not has_change_permission %}
                 {% if is_enable_button_save_continue %}
-                {
-                    id: '{{ form.webix_id }}_save_continue',
-                    view: "tootipButton",
-                    type: "form",
-                    align: "right",
-                    label: "{% trans "Save and continue" %}",
-                    {% if not object.pk and not has_add_permission or object.pk and not has_change_permission %}
-                        disabled: true,
-                    {% endif %}
-                    {% if not object.pk and not has_add_permission %}
-                        tooltip: "{% autoescape off %}{{ info_no_add_permission|join:", " }}{% endautoescape %}",
-                    {% endif %}
-                    {% if object.pk and not has_change_permission %}
-                        tooltip: "{% autoescape off %}{{ info_no_change_permission|join:", " }}{% endautoescape %}",
-                    {% endif %}
-                    width: 190,
-                    click: function () {
-                          {% include "django_webix/include/toolbar_form_save.js" with extra_params_button='_continue=true' %}
-                    }
-                },
+                    {
+                        id: '{{ form.webix_id }}_save_continue',
+                        view: "tootipButton",
+                        type: "form",
+                        align: "right",
+                        label: "{% trans "Save and continue" %}",
+                        {% if not object.pk and not has_add_permission or object.pk and not has_change_permission %}
+                            disabled: true,
+                        {% endif %}
+                        {% if not object.pk and not has_add_permission %}
+                            tooltip: "{% autoescape off %}{{ info_no_add_permission|join:", " }}{% endautoescape %}",
+                        {% endif %}
+                        {% if object.pk and not has_change_permission %}
+                            tooltip: "{% autoescape off %}{{ info_no_change_permission|join:", " }}{% endautoescape %}",
+                        {% endif %}
+                        width: 190,
+                        click: function () {
+                              {% include "django_webix/include/toolbar_form_save.js" with extra_params_button='_continue=true' %}
+                        }
+                    },
                 {% endif %}
                 {% if is_enable_button_save_addanother %}
-                {
-                    id: '{{ form.webix_id }}_save_addanother',
-                    view: "tootipButton",
-                    type: "form",
-                    align: "right",
-                    label: "{% trans "Save and add another" %}",
-                    {% if not object.pk and not has_add_permission or object.pk and not has_change_permission %}
-                    disabled: true,
-                    {% endif %}
-                    {% if not object.pk and not has_add_permission %}
-                        tooltip: "{% autoescape off %}{{ info_no_add_permission|join:", " }}{% endautoescape %}",
-                    {% endif %}
-                    {% if object.pk and not has_change_permission %}
-                        tooltip: "{% autoescape off %}{{ info_no_change_permission|join:", " }}{% endautoescape %}",
-                    {% endif %}
-                    width: 160,
-                    click: function () {
-                          {% include "django_webix/include/toolbar_form_save.js" with extra_params_button='_addanother=true' %}
-                    }
-                },
+                    {
+                        id: '{{ form.webix_id }}_save_addanother',
+                        view: "tootipButton",
+                        type: "form",
+                        align: "right",
+                        label: "{% trans "Save and add another" %}",
+                        {% if not object.pk and not has_add_permission or object.pk and not has_change_permission %}
+                        disabled: true,
+                        {% endif %}
+                        {% if not object.pk and not has_add_permission %}
+                            tooltip: "{% autoescape off %}{{ info_no_add_permission|join:", " }}{% endautoescape %}",
+                        {% endif %}
+                        {% if object.pk and not has_change_permission %}
+                            tooltip: "{% autoescape off %}{{ info_no_change_permission|join:", " }}{% endautoescape %}",
+                        {% endif %}
+                        width: 160,
+                        click: function () {
+                              {% include "django_webix/include/toolbar_form_save.js" with extra_params_button='_addanother=true' %}
+                        }
+                    },
                 {% endif %}
                 {% if is_enable_button_save_gotolist %}
-                {
-                    id: '{{ form.webix_id }}_save',
-                    view: "tootipButton",
-                    type: "form",
-                    align: "right",
-                    label: "{% trans "Save" %}",
-                    {% if not object.pk and not has_add_permission or object.pk and not has_change_permission %}
-                    disabled: true,
-                    {% endif %}
-                    {% if not object.pk and not has_add_permission %}
-                        tooltip: "{% autoescape off %}{{ info_no_add_permission|join:", " }}{% endautoescape %}",
-                    {% endif %}
-                    {% if object.pk and not has_change_permission %}
-                        tooltip: "{% autoescape off %}{{ info_no_change_permission|join:", " }}{% endautoescape %}",
-                    {% endif %}
-                    width: 120,
-                    click: function () {
-                          {% include "django_webix/include/toolbar_form_save.js" with extra_params_button='_gotolist=true' %}
+                    {
+                        id: '{{ form.webix_id }}_save',
+                        view: "tootipButton",
+                        type: "form",
+                        align: "right",
+                        label: "{% trans "Save" %}",
+                        {% if not object.pk and not has_add_permission or object.pk and not has_change_permission %}
+                            disabled: true,
+                        {% endif %}
+                        {% if not object.pk and not has_add_permission %}
+                            tooltip: "{% autoescape off %}{{ info_no_add_permission|join:", " }}{% endautoescape %}",
+                        {% endif %}
+                        {% if object.pk and not has_change_permission %}
+                            tooltip: "{% autoescape off %}{{ info_no_change_permission|join:", " }}{% endautoescape %}",
+                        {% endif %}
+                        width: 120,
+                        click: function () {
+                              {% include "django_webix/include/toolbar_form_save.js" with extra_params_button='_gotolist=true' %}
+                        }
                     }
-                }
                 {% endif %}
             {% endif %}
         {% endblock %}
@@ -109,24 +109,24 @@ if ($$('main_toolbar_form').getChildViews().length < 2) {
 }
 
 {% block form_validate %}
-/**
- * Returns if a form is valid
- *
- * @returns {boolean}
- */
-function form_validate(webix_id) {
-    var form_data_webix_elements = [];
-    form_data_webix_elements.push($$(webix_id));
+    /**
+     * Returns if a form is valid
+     *
+     * @returns {boolean}
+     */
+    function form_validate(webix_id) {
+        var form_data_webix_elements = [];
+        form_data_webix_elements.push($$(webix_id));
 
-    var status = true;
+        var status = true;
 
-    $.each(form_data_webix_elements, function (index, value) {
-        var valid = value.validate({hidden: true, disabled: true});
-        if (valid == false) {
-            status = false;
-        }
-    });
+        $.each(form_data_webix_elements, function (index, value) {
+            var valid = value.validate({hidden: true, disabled: true});
+            if (valid == false) {
+                status = false;
+            }
+        });
 
-    return status;
-}
+        return status;
+    }
 {% endblock %}

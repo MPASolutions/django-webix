@@ -32,8 +32,7 @@
             {% include "django_webix/include/toolbar_form.js" %}
         {% endblock %}
 
-
-    {% block extrajs_post %}{% endblock %}
+        {% block extrajs_post %}{% endblock %}
     {% endif %}
 
 {% endblock %}

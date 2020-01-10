@@ -22,7 +22,7 @@ if ((typeof actions_list != 'undefined') && (typeof actions_execute != 'undefine
             on: {
                 onItemClick: function () {
                     var action = $$("action_combo").getValue();
-                    ids = [];
+                    var ids = [];
                     $$("datatable_{{ model_name }}").eachRow(function (id) {
                         if ((this.getItem(id)!=undefined )&&( this.getItem(id).checkbox_action)) {
                             ids.push(id)
@@ -33,7 +33,6 @@ if ((typeof actions_list != 'undefined') && (typeof actions_execute != 'undefine
                     } else {
                         webix.alert("{% trans "No row has been selected" %}", "alert-warning");
                     }
-
                 }
             }
         }

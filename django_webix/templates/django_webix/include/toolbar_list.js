@@ -1,4 +1,5 @@
 {% load i18n %}
+
 {# counter #}
 function update_counter() {
     ids = [];
@@ -32,7 +33,7 @@ if ((typeof actions_list == 'undefined') || (typeof actions_execute == 'undefine
 {% endblock %}
 
 {# create toolbar footer #}
-$$("{{webix_container_id}}").addView({
+$$("{{ webix_container_id }}").addView({
     view: "toolbar",
     margin: 5,
     height: 65,
@@ -40,26 +41,26 @@ $$("{{webix_container_id}}").addView({
         {id: 'stats_list', view: 'label', label: '', width: 170},
 
         {% block toolbar_middle %}
-        {$template: "Spacer"},
+            {$template: "Spacer"},
         {% endblock %}
 
         {% block add_button %}
-        {% if has_add_permission or not remove_disabled_buttons and not has_add_permission %}
-        {
-            view: "tootipButton",
-            type: "form",
-            align: "right",
-            label: '{% trans "Add new" %}',
-            {% if not has_add_permission %}
-            disabled: true,
-            tooltip: '{{ info_no_add_permission|join:", " }}',
+            {% if has_add_permission or not remove_disabled_buttons and not has_add_permission %}
+                {
+                    view: "tootipButton",
+                    type: "form",
+                    align: "right",
+                    label: '{% trans "Add new" %}',
+                    {% if not has_add_permission %}
+                        disabled: true,
+                        tooltip: '{{ info_no_add_permission|join:", " }}',
+                    {% endif %}
+                    width: 150,
+                    click: function () {
+                        load_js('{{ url_create }}')
+                    }
+                }
             {% endif %}
-            width: 150,
-            click: function () {
-                load_js('{{ url_create }}')
-            }
-        }
-        {% endif %}
         {% endblock %}
     ])
 });

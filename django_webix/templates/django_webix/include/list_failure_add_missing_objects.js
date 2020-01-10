@@ -1,14 +1,14 @@
-{% load django_webix_utils %}
+{% load django_webix_utils i18n %}
 
 $$("{{ webix_container_id }}").addView({
     id: "header_failure_related_objects",
     view: "template",
-    template: "Mancano dei dati per poter aggiungere dati",
-    type: "header",
+    template: "{% trans "Missing data to add data" %}",
+    type: "header"
 });
 
 $$("{{ webix_container_id }}").addView({
-    height:70,
+    height:70
 });
 
 {% for el in failure_add_missing_objects %}
