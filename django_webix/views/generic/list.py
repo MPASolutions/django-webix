@@ -42,9 +42,6 @@ class WebixListView(WebixBaseMixin, WebixPermissionsMixin, WebixUrlMixin, ListVi
         return self.get(request, *args, **kwargs)
 
     def get(self, request, *args, **kwargs):
-        self.qsets_filters = self.get_qsets_filters(request)
-        self.geo_filter = self.get_geo_filter(request)
-        self.sql_filters = self.get_sql_filters(request)  # this is shit! but need for old SW (remove for future)
         return super(WebixListView, self).get(request, *args, **kwargs)
 
     # {
@@ -241,6 +238,9 @@ class WebixListView(WebixBaseMixin, WebixPermissionsMixin, WebixUrlMixin, ListVi
         return 'id'
 
     def dispatch(self, *args, **kwargs):
+        self.qsets_filters = self.get_qsets_filters(self.request)
+        self.geo_filter = self.get_geo_filter(self.request)
+        self.sql_filters = self.get_sql_filters(self.request)  # this is shit! but need for old SW (remove for future)
         if not self.has_view_permission(request=self.request):
             raise PermissionDenied(_('View permission is not allowed'))
         return super(WebixListView, self).dispatch(*args, **kwargs)

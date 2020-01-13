@@ -18,6 +18,8 @@ from django.utils.translation import ugettext as _
 from extra_views import UpdateWithInlinesView, CreateWithInlinesView
 
 from django_webix.views.generic.base import WebixBaseMixin, WebixPermissionsMixin, WebixUrlMixin
+from django_webix.views.generic.signals import (django_webix_view_pre_save, django_webix_view_pre_inline_save,
+                                                django_webix_view_post_save)
 
 
 class WebixCreateUpdateMixin:
@@ -222,7 +224,6 @@ class WebixCreateView(WebixCreateUpdateMixin, WebixBaseMixin, WebixPermissionsMi
             self.request.method = 'GET'
             self.request.POST = QueryDict('', mutable=True)
 
-
         if self.request.method == 'GET':
             if not self.has_view_permission(request=self.request):
                 raise PermissionDenied(_('View permission is not allowed'))
@@ -243,18 +244,32 @@ class WebixCreateView(WebixCreateUpdateMixin, WebixBaseMixin, WebixPermissionsMi
         '''
         Before all data saving
         '''
-        pass
+        django_webix_view_pre_save.send(sender=self,
+                                        instance=None,
+                                        created=True,
+                                        form=form,
+                                        inlines=inlines)
 
     def post_form_save(self, form=None, inlines=None, **kwargs):
         '''
         After form save and before inlines save
         '''
-        pass
+        django_webix_view_pre_inline_save.send(sender=self,
+                                               instance=self.object,
+                                               created=True,
+                                               form=form,
+                                               inlines=inlines)
 
     def post_forms_valid(self, form=None, inlines=None, **kwargs):
         '''
         After all data saved
         '''
+        django_webix_view_post_save.send(sender=self,
+                                         instance=self.object,
+                                         created=True,
+                                         form=form,
+                                         inlines=inlines)
+        # LOG
         anonymous = self.request.user.is_anonymous() if callable(
             self.request.user.is_anonymous) else self.request.user.is_anonymous
         if self.logs_enable is True and not anonymous and apps.is_installed('django.contrib.admin'):
@@ -332,16 +347,35 @@ class WebixUpdateView(WebixCreateUpdateMixin, WebixBaseMixin, WebixPermissionsMi
         if form is not None:
             form.instance.validate_unique()
 
+    def pre_forms_valid(self, form=None, inlines=None, **kwargs):
+        '''
+        Before all data saving
+        '''
+        django_webix_view_pre_save.send(sender=self,
+                                        instance=self.object,
+                                        created=False,
+                                        form=form,
+                                        inlines=inlines)
+
     def post_form_save(self, form=None, inlines=None, **kwargs):
         '''
         After form save and before inlines save
         '''
-        pass
 
-    def pre_forms_valid(self, form=None, inlines=None, **kwargs):
-        pass
+        django_webix_view_pre_inline_save.send(sender=self,
+                                               instance=self.object,
+                                               created=False,
+                                               form=form,
+                                               inlines=inlines)
 
     def post_forms_valid(self, form=None, inlines=None, **kwargs):
+
+        django_webix_view_post_save.send(sender=self,
+                                         instance=self.object,
+                                         created=False,
+                                         form=form,
+                                         inlines=inlines)
+
         anonymous = self.request.user.is_anonymous() if callable(
             self.request.user.is_anonymous) else self.request.user.is_anonymous
         if self.logs_enable is True and not anonymous and apps.is_installed('django.contrib.admin'):

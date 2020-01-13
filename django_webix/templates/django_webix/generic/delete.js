@@ -56,7 +56,9 @@
                     label: "{% trans 'Confirm cancellation' %}",
                     width: 200,
                     click: function () {
-                        $.ajax({
+ 			load_js("{{ url_delete }}", undefined, undefined, 'POST');
+			/*
+			$.ajax({
                             url: "{{ url_delete }}",
                             dataType: "script",
                             type: "POST",
@@ -64,6 +66,7 @@
                                 webix.ui.resize()
                             }
                         });
+			*/
                     }
                 }
             ]

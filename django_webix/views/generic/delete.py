@@ -17,7 +17,7 @@ from django.views.generic import DeleteView
 
 from django_webix.views.generic.utils import tree_formatter
 from django_webix.views.generic.base import WebixBaseMixin, WebixPermissionsMixin, WebixUrlMixin
-
+from django_webix.views.generic.signals import django_webix_view_pre_delete, django_webix_view_post_delete
 
 class WebixDeleteView(WebixBaseMixin, WebixPermissionsMixin, WebixUrlMixin, DeleteView):
     logs_enable = True
@@ -76,10 +76,10 @@ class WebixDeleteView(WebixBaseMixin, WebixPermissionsMixin, WebixUrlMixin, Dele
         return url
 
     def pre_delete_valid(self, **kwargs):
-        pass
+        django_webix_view_pre_delete.send(sender=self, instance=self.object)
 
     def post_delete_valid(self, **kwargs):
-        pass
+        django_webix_view_post_delete.send(sender=self, instance=self.self.copied_object)
 
     def response_valid(self, success_url=None, **kwargs):
         return HttpResponseRedirect(success_url)
@@ -90,6 +90,7 @@ class WebixDeleteView(WebixBaseMixin, WebixPermissionsMixin, WebixUrlMixin, Dele
     def delete(self, request, *args, **kwargs):
 
         self.object = self.get_object()
+        self.copied_object = copy.deepcopy(self.object )
 
         anonymous = request.user.is_anonymous() if callable(request.user.is_anonymous) else request.user.is_anonymous
         if len(self.get_failure_delete_related_objects(request=request, obj=self.object)) > 0:
