@@ -3,7 +3,7 @@
 from __future__ import unicode_literals
 
 import json
-
+import copy
 from django.apps import apps
 from django.contrib.admin.utils import NestedObjects
 from django.contrib.contenttypes.models import ContentType
