@@ -643,12 +643,12 @@ class BaseWebixMixin(object):
                         'format': "%d/%m/%Y",
                         'stringResult': True,
                     })
-                if initial is not None:
-                    if type(initial) == list:
-                        el.update({
-                            'value': ', '.join([i.strftime('%Y-%m-%d') for i in initial]),
-                            'orig_value': ', '.join([i.strftime('%Y-%m-%d') for i in initial]),
-                        })
+                    if initial is not None:
+                        if isinstance(initial, list):
+                            el.update({
+                                'value': ', '.join([i.strftime('%Y-%m-%d') for i in initial]),
+                                'orig_value': ', '.join([i.strftime('%Y-%m-%d') for i in initial]),
+                            })
 
             # CharField
             elif isinstance(field, forms.CharField):
