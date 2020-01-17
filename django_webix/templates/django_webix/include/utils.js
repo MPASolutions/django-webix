@@ -32,6 +32,11 @@ $.ajaxSetup({
     }
 });
 
+webix.attachEvent("onBeforeAjax", function (mode, url, data, xhr, headers) {
+    var csrftoken = getCookie('csrftoken');
+    headers["X-CSRFToken"] = csrftoken;
+});
+
 // Italian locale settings for pivot
 webix.i18n.locales['it-IT'].pivot = {
     apply: "Applica",
@@ -129,7 +134,13 @@ function image_modal(url, width, height, id) {
         head: {
             view: "toolbar", cols: [
                 {view: "label", label: "{% trans "Image" %}"},
-                {view: "tootipButton", label: '{% trans "Close" %}', width: 100, align: 'right', click: "$$('" + id + "').close();"}
+                {
+                    view: "tootipButton",
+                    label: '{% trans "Close" %}',
+                    width: 100,
+                    align: 'right',
+                    click: "$$('" + id + "').close();"
+                }
             ]
         },
         position: "center",

@@ -5,10 +5,14 @@ from __future__ import unicode_literals
 import json
 
 import django
+from django.core.exceptions import FieldDoesNotExist
 from django.core.exceptions import PermissionDenied, ImproperlyConfigured
-from django.db.models import Q
+from django.db.models import Q, ManyToManyField
 from django.utils.translation import ugettext as _
 from django.views.generic import ListView
+from django.http import JsonResponse
+
+from django_webix.views.generic.base import WebixBaseMixin, WebixPermissionsMixin, WebixUrlMixin
 
 try:
     from django.contrib.gis.geos import GEOSGeometry
@@ -20,15 +24,26 @@ try:
 except ImportError:
     MultiPolygon = object
 
-from django_webix.views.generic.base import WebixBaseMixin, WebixPermissionsMixin, WebixUrlMixin
 
-
-class WebixListView(WebixBaseMixin, WebixPermissionsMixin, WebixUrlMixin, ListView):
+class WebixListView(WebixBaseMixin,
+                    WebixPermissionsMixin,
+                    WebixUrlMixin,
+                    ListView):
+    # request vars
     http_method_names = ['get', 'post']  # enable POST for filter porpouse
 
-    # defaults and init
-    template_name = 'django_webix/generic/list.js'
+    # queryset vars
     pk_field = None
+    fields = None  # ex. [{'field_name':'XXX','datalist_column':'YYY',}]
+    # paging
+    enable_json_loading = False
+    paginate_count_default = 100
+    paginate_start_default = 0
+    paginate_count_key = 'count'
+    paginate_start_key = 'start'
+
+    # template vars
+    template_name = 'django_webix/generic/list.js'
     title = None
     actions_style = None
     enable_column_copy = True
@@ -36,13 +51,8 @@ class WebixListView(WebixBaseMixin, WebixPermissionsMixin, WebixUrlMixin, ListVi
     enable_row_click = True
     type_row_click = 'single'  # or 'double'
     enable_actions = True
-    fields = None  # ex. [{'field_name':'XXX','datalist_column':'YYY',}]
 
-    def post(self, request, *args, **kwargs):
-        return self.get(request, *args, **kwargs)
-
-    def get(self, request, *args, **kwargs):
-        return super(WebixListView, self).get(request, *args, **kwargs)
+    ########### QUERYSET BUILDER ###########
 
     # {
     #     'operator': 'AND', # by default
@@ -60,6 +70,7 @@ class WebixListView(WebixBaseMixin, WebixPermissionsMixin, WebixUrlMixin, ListVi
         else:
             filters_text = None
 
+        filters = None
         if filters_text is not None:
             if type(filters_text) == str:
                 # NB: JSON syntax is not Python syntax. JSON requires double quotes for its strings.
@@ -71,20 +82,20 @@ class WebixListView(WebixBaseMixin, WebixPermissionsMixin, WebixUrlMixin, ListVi
                 filters = filters_text
             else:
                 filters = None
-
-            if filters is not None:
-                return filters
-        return None  # by default filters are not set
+        return filters  # by default filters are not set
 
     def _elaborate_qsets_filters(self, data):
+
         if 'qsets' in data and 'operator' in data:
             operator = data.get('operator')
+            if len(data.get('qsets'))==0: # BYPASS
+                qset = Q()
             for j, data_qset in enumerate(data.get('qsets')):
                 if 'operator' in data_qset:
-                    qset_to_applicate = self._elaborate_qset(data_qset)
+                    qset_to_applicate = self._elaborate_qsets_filters(data_qset)
                 else:
                     qset_to_applicate = Q(**{data_qset.get('path'): data_qset.get('val')})
-                if j == 1:
+                if j == 0:
                     qset = qset_to_applicate
                 else:
                     if operator == 'AND':
@@ -100,10 +111,10 @@ class WebixListView(WebixBaseMixin, WebixPermissionsMixin, WebixUrlMixin, ListVi
     def get_qsets_filters(self, request):
         filters = self._decode_text_filters(request, 'filters')
         if filters is not None:
-            try:
+            #try:
                 return self._elaborate_qsets_filters(filters)
-            except:
-                print(_('ERROR: qsets structure is incorrect'))
+            #except:
+            #    print(_('ERROR: qsets structure is incorrect'))
         return None  # by default filters are not set
 
     def _elaborate_geo_filter(self, data):
@@ -143,79 +154,122 @@ class WebixListView(WebixBaseMixin, WebixPermissionsMixin, WebixUrlMixin, ListVi
         # by default filters are not set
         return None
 
-    def get_actions_style(self):
-        _actions_style = None
-        if self.actions_style is None:
-            _actions_style = 'select'
-        elif self.actions_style in ['buttons' or 'select']:
-            _actions_style = self.actions_style
-        else:
-            raise ImproperlyConfigured(_(
-                "Actions style is improperly configured"
-                " only options are 'buttons' or 'select' (select by default)."))
-        return _actions_style
-
-    def get_title(self):
-        if self.title is not None:
-            return self.title
-        if self.model is not None:
-            return self.model._meta.verbose_name
-        return None
-
-    def is_enable_actions(self, request):
-        return self.enable_actions
-
-    def is_enable_column_copy(self, request):
-        return self.enable_column_copy
-
-    def is_enable_column_delete(self, request):
-        return self.enable_column_delete
-
-    def is_enable_row_click(self, request):
-        return self.enable_row_click
-
-    def get_type_row_click(self, request):
-        return self.type_row_click
+    def _optimize_select_related(self, qs):
+        # Estrapolo le informazione per popolare `select_related`
+        _select_related = []
+        if self.get_fields() is not None:
+            for field in self.get_fields():
+                if field.get('field_name') is not None:
+                    field_name = field.get('field_name')
+                    _model = self.model
+                    _field = None
+                    _related = []
+                    for name in field_name.split('__'):
+                        try:
+                            _field = _model._meta.get_field(name)
+                            if isinstance(_field, ManyToManyField):  # Check if field is M2M
+                                raise FieldDoesNotExist()
+                        except FieldDoesNotExist:
+                            break  # name is probably a lookup or transform such as __contains
+                        if hasattr(_field, 'related_model') and _field.related_model is not None:
+                            _related.append(name)
+                            _model = _field.related_model  # field is a relation
+                        else:
+                            break  # field is not a relation, any name that follows is probably a lookup or transform
+                    _related = '__'.join(_related)
+                    if _related != '':
+                        _select_related.append(_related)
+            qs = qs.select_related(*_select_related)
+        return qs
 
     def get_fields(self):
         return self.fields
 
-    def get_queryset(self):
+    def get_queryset(self, initial_queryset=None):
         # bypass improperly configured for custom queryset without model
         if self.model:
-            qs = super(WebixListView, self).get_queryset()
+            if initial_queryset is None:
+                qs = super(WebixListView, self).get_queryset()
+            else:
+                qs = initial_queryset
             # apply qsets filters
             if self.qsets_filters is not None:
                 qs = qs.filter(self.qsets_filters)
             # apply geo filter
             if self.geo_filter is not None:
                 qs = qs.filter(self.geo_filter)
-            # applay SQL raw: this is shit! but need for old SW (remove for future)
+            # apply SQL raw: this is shit! but need for old SW (remove for future)
             if self.sql_filters is not None:
                 sql_filter = ' OR '.join(['({sql})'.format(sql=_sql) for _sql in self.sql_filters])
                 qs = qs.extra(where=[sql_filter])
+            # optimize select related queryset (only if fields are defined)
+            qs = self._optimize_select_related(qs)  # TODO
             return qs
+
         return None
 
+    def get_ordering(self):
+        return (self.get_pk_field(),) # TODO
+
+    def apply_ordering(self, queryset):
+        # TODO
+        #                for field in ordering:
+        #                    if field.startswith("-"):
+        #                        self._ordering.append({'sort[id]': field[1:], 'sort[dir]': 'desc'})
+        #                    else:
+        #                        self._ordering.append({'sort[id]': field, 'sort[dir]': 'asc'})
+        return queryset.order_by(*self.get_ordering())
+
+    def get_paginate_count(self):
+        paginate_count = self.request.GET.get(self.paginate_count_key,
+                                    self.request.POST.get(self.paginate_count_key,
+                                                          self.paginate_count_default))
+        try:
+            return int(paginate_count)
+        except ValueError:
+            raise Exception(_('Paginate count is not integer'))
+
+    def get_paginate_start(self):
+        paginate_start = self.request.GET.get(self.paginate_start_key,
+                                    self.request.POST.get(self.paginate_start_key,
+                                                          self.paginate_start_default))
+        try:
+            return int(paginate_start)
+        except ValueError:
+            raise Exception(_('Paginate start is not integer'))
+
+    def paginate_queryset(self, queryset):
+        paginate_count = self.get_paginate_count()
+        paginate_start = self.get_paginate_start()
+        return queryset[paginate_start: paginate_start+paginate_count]
+
+    def _get_objects_datatable_values(self, qs):
+        values = [self.get_pk_field()]
+        fields = self.get_fields()
+        if fields is not None:
+            for field in fields:
+                if field.get('field_name') is not None and \
+                    (field.get('queryset_exclude') is None or field.get('queryset_exclude') != True):
+                    values.append(field['field_name'])
+        data = qs.values(*values)
+        return data
+
     def get_objects_datatable(self):
-        if self.model:
+        if self.model and not self.enable_json_loading:
             qs = self.get_queryset()
             # filters application (like IDS selections)
             qs = self.filters_objects_datatable(qs)
+            # apply ordering
+            qs = self.apply_ordering(qs)
+            # pagination (applied only for json request)
+            #if self.is_json_request:
+            #    qs = self.paginate_queryset(qs)
             # build output
             if qs is not None:
                 if type(qs) == list:
                     return qs
-                else:  # queryset
-                    values = [self.get_pk_field()]
-                    fields = self.get_fields()
-                    if fields is not None:
-                        for field in fields:
-                            if field.get('field_name') is not None and \
-                                (field.get('queryset_exclude') is None or field.get('queryset_exclude') != True):
-                                values.append(field['field_name'])
-                    data = qs.values(*values)
-                    return data
+                else: # queryset
+                    return self._get_objects_datatable_values(qs)
         return None
 
     def filters_objects_datatable(self, qs):
@@ -237,13 +291,103 @@ class WebixListView(WebixBaseMixin, WebixPermissionsMixin, WebixUrlMixin, ListVi
             return self.pk_field
         return 'id'
 
+    ########### TEMPLATE BUILDER ###########
+
+    def get_actions_style(self):
+        _actions_style = None
+        if self.actions_style is None:
+            _actions_style = 'select'
+        elif self.actions_style in ['buttons' or 'select']:
+            _actions_style = self.actions_style
+        else:
+            raise ImproperlyConfigured(_(
+                "Actions style is improperly configured"
+                " only options are 'buttons' or 'select' (select by default)."))
+        return _actions_style
+
+    def is_enable_actions(self, request):
+        return self.enable_actions
+
+    def is_enable_column_copy(self, request):
+        return self.enable_column_copy
+
+    def is_enable_column_delete(self, request):
+        return self.enable_column_delete
+
+    def is_enable_row_click(self, request):
+        return self.enable_row_click
+
+    def get_type_row_click(self, request):
+        return self.type_row_click
+
+    def get_title(self):
+        if self.title is not None:
+            return self.title
+        if self.model is not None:
+            return self.model._meta.verbose_name
+        return None
+
+    ########### RESPONSE BUILDER ###########
+
+    @property
+    def is_json_request(self):
+        if 'json' in self.request.GET or 'json' in self.request.POST:
+            return True
+        else:
+            return False
+
+    def post(self, request, *args, **kwargs):  # all post works like get
+        return self.get(request, *args, **kwargs)
+
+    def get(self, request, *args, **kwargs):
+        return super(WebixListView, self).get(request, *args, **kwargs)
+
+    def json_response(self, request, *args, **kwargs):  # TODO
+        # ONLY for get_queryset() -> qs and not get_queryset() -> list
+        _data = []
+        total_count = 0
+        if self.model:
+            qs = self.get_queryset()
+            # filters application (like IDS selections)
+            qs = self.filters_objects_datatable(qs)
+            # apply ordering
+            qs = self.apply_ordering(qs)
+            # total count
+            total_count = qs.count()
+            # apply pagination
+            qs_paginate = self.paginate_queryset(qs)
+            # build output
+            if qs_paginate is not None:
+                if type(qs_paginate) == list:
+                    raise Exception(
+                        _('Json response is available only if get_queryset() return a queryset and not a list'))
+                else:  # queryset
+                    _data = self._get_objects_datatable_values(qs_paginate)
+
+        # output must be list and not values of queryset
+        data = {
+            "count": self.get_paginate_count(),
+            "total_count": total_count,
+            "pos": self.get_paginate_start(),
+            "data": list(_data)
+        }
+        return JsonResponse(data, safe=False)
+
     def dispatch(self, *args, **kwargs):
+
         self.qsets_filters = self.get_qsets_filters(self.request)
+
         self.geo_filter = self.get_geo_filter(self.request)
+
         self.sql_filters = self.get_sql_filters(self.request)  # this is shit! but need for old SW (remove for future)
+
         if not self.has_view_permission(request=self.request):
             raise PermissionDenied(_('View permission is not allowed'))
-        return super(WebixListView, self).dispatch(*args, **kwargs)
+
+        if self.is_json_request:  # added for json response with paging
+            return self.json_response(self.request, *args, **kwargs)
+        else:  # standard response with js webix template structure
+            return super(WebixListView, self).dispatch(*args, **kwargs)
 
     def get_context_data(self, **kwargs):
         context = super(WebixListView, self).get_context_data(**kwargs)
@@ -262,6 +406,11 @@ class WebixListView(WebixBaseMixin, WebixPermissionsMixin, WebixUrlMixin, ListVi
             'is_enable_actions': self.is_enable_actions(self.request),
             'actions_style': self.get_actions_style(),
             'title': self.get_title(),
+            # paging
+            'is_json_loading': self.enable_json_loading,
+            'paginate_count_default': self.paginate_count_default,
+            'paginate_count_key': self.paginate_count_key,
+            'paginate_start_key': self.paginate_start_key,
             # extra filters
             'is_filters_active': self.qsets_filters is not None,
             'is_geo_filter_active': self.geo_filter is not None,
@@ -283,269 +432,3 @@ class WebixTemplateListView(WebixListView):
 
     def get_objects_datatable(self):
         raise ImproperlyConfigured(_("Generic TemplateListView needs to define data for datatable"))
-
-# # -*- coding: utf-8 -*-
-#
-# import dateutil
-# import re
-# from django.core.exceptions import FieldDoesNotExist
-# from django.core.exceptions import ImproperlyConfigured
-# from django.db.models import fields, ManyToManyField
-# from django.db.models.query import QuerySet
-# from django.http import JsonResponse
-# from django.views.generic import View
-#
-#
-# # TODO: Spostare in django-webix con crazione liste automatiche
-# class WebixJsonListView(View):
-#     http_method_names = ['get', 'head', 'options', 'trace']
-#     queryset = None
-#     model = None
-#     ordering = None
-#
-#     list_display = ()
-#     list_filter = ()
-#     list_per_page = 100
-#     actions = []
-#
-#     def __init__(self, **kwargs):
-#         super().__init__()
-#         self._filters = []  # JSON filters
-#         self._ordering = []  # JSON ordering
-#
-#     def get_queryset(self):
-#         if self.queryset is not None:
-#             queryset = self.queryset
-#             if isinstance(queryset, QuerySet):
-#                 queryset = queryset.all()
-#         elif self.model is not None:
-#             queryset = self.model._default_manager.all()
-#         else:
-#             raise ImproperlyConfigured(
-#                 "%(cls)s is missing a QuerySet. Define "
-#                 "%(cls)s.model, %(cls)s.queryset, or override "
-#                 "%(cls)s.get_queryset()." % {
-#                     'cls': self.__class__.__name__
-#                 }
-#             )
-#         ordering = self.get_ordering()
-#         if ordering:
-#             if isinstance(ordering, str):
-#                 ordering = (ordering,)
-#             queryset = queryset.order_by(*ordering)
-#             for field in ordering:
-#                 if field.startswith("-"):
-#                     self._ordering.append({'sort[id]': field[1:], 'sort[dir]': 'desc'})
-#                 else:
-#                     self._ordering.append({'sort[id]': field, 'sort[dir]': 'asc'})
-#
-#         return queryset
-#
-#     def get_ordering(self):
-#         return self.ordering
-#
-#     def get_context_data(self, **kwargs):
-#         qs = self.get_queryset()
-#
-#         # Estrapolo le informazione per popolare `select_related`
-#         _select_related = []
-#         for field_name in self.list_display:
-#             _model = self.model
-#             _field = None
-#             _related = []
-#             for name in field_name.split('__'):
-#                 try:
-#                     _field = _model._meta.get_field(name)
-#                     if isinstance(_field, ManyToManyField):  # Check if field is M2M
-#                         raise FieldDoesNotExist()
-#                 except FieldDoesNotExist:
-#                     break  # name is probably a lookup or transform such as __contains
-#                 if hasattr(_field, 'related_model') and _field.related_model is not None:
-#                     _related.append(name)
-#                     _model = _field.related_model  # field is a relation
-#                 else:
-#                     break  # field is not a relation, any name that follows is probably a lookup or transform
-#             _related = '__'.join(_related)
-#             if _related != '':
-#                 _select_related.append(_related)
-#         qs = qs.select_related(*_select_related)
-#
-#         # Applico i filtri passati nella richiesta
-#         for field_name in self.list_display:
-#             # Estrapolo i valori del filtro e il tipo di filtro se presente
-#             values = [(
-#                 value,
-#                 re.findall('^filter\[.*?\]\[(.*?)\]$|$', field)[0] or None
-#             ) for field, value in self.request.GET.items() if
-#                 field.startswith('filter[{}]'.format(field_name)) and value not in [None, '', False]
-#             ]
-#
-#             if len(values) == 0:
-#                 continue  # Nessun filtro richiesto, passo al successivo
-#
-#             # Recupero il field seguendo le fks
-#             _model = self.model
-#             _field = None
-#             for name in field_name.split('__'):
-#                 try:
-#                     _field = _model._meta.get_field(name)
-#                 except FieldDoesNotExist:
-#                     break  # name is probably a lookup or transform such as __contains
-#                 if hasattr(_field, 'related_model') and _field.related_model is not None:
-#                     _model = _field.related_model  # field is a relation
-#                 else:
-#                     break  # field is not a relation, any name that follows is probably a lookup or transform
-#             if _field is None:
-#                 continue  # Passo al filtro successivo
-#             field_type = _field.get_internal_type()
-#
-#             # Creo le liste delle tipologie dei fields
-#             integers = list(map(
-#                 lambda x: x().get_internal_type(),
-#                 [fields.IntegerField, fields.BigIntegerField, fields.SmallIntegerField, fields.PositiveIntegerField,
-#                  fields.PositiveSmallIntegerField, fields.AutoField, fields.BigAutoField]
-#             ))
-#             reals = list(map(lambda x: x().get_internal_type(), [fields.FloatField, fields.DecimalField]))
-#             bools = list(map(lambda x: x().get_internal_type(), [fields.BooleanField, fields.NullBooleanField]))
-#
-#             # Creo le varie regex
-#             if field_type in integers:
-#                 regex = r'([<>]=?)?\s*([+-]?[0-9]+)+'  # Regex for <,>,<=,>= and integer number
-#             elif field_type in reals:
-#                 regex = r'([<>]=?)?\s*([+-]?[0-9]*[.]?[0-9]+)+'  # Regex for <,>,<=,>= and float number (e.g. 3.14)
-#
-#             # Filtro i dati secondo i valori passati
-#             # Nota: possono esserci più valori per un field (per esempio le date hanno start e end)
-#             for value, action in values:
-#                 # Applico la regola per i numeri
-#                 if field_type in integers or field_type in reals:
-#                     regexs = re.findall(regex, value)
-#                     if len(regexs) > 0:
-#                         for regex in regexs:
-#                             symbol, number = regex
-#                             if symbol == '>':
-#                                 qs = qs.filter(**{'{0}__{1}'.format(field_name, 'gt'): number})
-#                             elif symbol == '<':
-#                                 qs = qs.filter(**{'{0}__{1}'.format(field_name, 'lt'): number})
-#                             elif symbol == '>=':
-#                                 qs = qs.filter(**{'{0}__{1}'.format(field_name, 'gte'): number})
-#                             elif symbol == '<=':
-#                                 qs = qs.filter(**{'{0}__{1}'.format(field_name, 'lte'): number})
-#                             elif symbol == '=' or symbol == '==':
-#                                 qs = qs.filter(**{'{0}__{1}'.format(field_name, 'exact'): number})
-#                             elif symbol == '~' or symbol == '~*':
-#                                 qs = qs.filter(**{'{0}__{1}'.format(field_name, 'icontains'): number})
-#                             else:
-#                                 qs = qs.filter(**{'{0}__{1}'.format(field_name, 'exact'): number})
-#
-#                 # fields.CharField
-#                 # fields.BinaryField
-#                 # fields.CommaSeparatedIntegerField
-#                 # fields.EmailField
-#                 # fields.FilePathField
-#                 # fields.GenericIPAddressField
-#                 # fields.IPAddressField
-#                 # fields.SlugField
-#                 # fields.TextField
-#                 # fields.URLField
-#                 # fields.UUIDField
-#
-#                 # fields.TimeField
-#                 # fields.DurationField
-#                 # ATTENIZIONE A RANGE DI DATE O TIME
-#
-#                 elif field_type in list(map(lambda x: x().get_internal_type(), [fields.DateField, fields.DateTimeField, fields.TimeField])):
-#                     try:
-#                         qs = qs.filter(**{
-#                             '{0}__{1}'.format(field_name, 'gte' if action == 'start' else 'lte'): dateutil.parser.parse(value)
-#                         })
-#                     except Exception as e:
-#                         pass
-#
-#                 # TODO: Aggiungere i filtri mancanti
-#
-#                 elif field_type in bools:
-#                     if value in ['true', 'false']:
-#                         qs = qs.filter(**{'{0}'.format(field_name): True if value == 'true' else False})
-#                     if value == ['null', 'not_null']:
-#                         qs = qs.filter(**{'{0}__{1}'.format(field_name, 'isnull'): True if value == 'null' else False})
-#                 else:  # Tutto il resto passa con un icontains
-#                     qs = qs.filter(**{'{0}__{1}'.format(field_name, 'icontains'): value})
-#
-#         # Ordino il QuerySet
-#         if self.request.GET.get('sort[id]') not in [None, '', False] and \
-#             self.request.GET.get('sort[dir]') not in [None, '', False] and \
-#             self.request.GET.get('sort[id]') in self.list_display:
-#
-#             # Check if ordering by field or method
-#             field_path = self.request.GET.get('sort[id]').split('__')
-#             model = self.model
-#             isvalid = True
-#             for elem in field_path:
-#                 try:
-#                     field = model._meta.get_field(elem)
-#                 except FieldDoesNotExist:
-#                     isvalid = False
-#                     break  # name is probably a lookup or transform such as __contains
-#                 if hasattr(field, 'related_model') and field.related_model is not None:
-#                     model = field.related_model  # field is a relation
-#                 else:
-#                     break  # field is not a relation, any name that follows is probably a lookup or transform
-#
-#             if isvalid and self.request.GET.get('sort[dir]') == 'asc':
-#                 qs = qs.order_by(self.request.GET.get('sort[id]'))
-#             elif isvalid and self.request.GET.get('sort[dir]') == 'desc':
-#                 qs = qs.order_by('-{}'.format(self.request.GET.get('sort[id]')))
-#
-#             if isvalid:
-#                 self._ordering.append({
-#                     'sort[id]': self.request.GET.get('sort[id]'),
-#                     'sort[dir]': self.request.GET.get('sort[dir]')
-#                 })
-#
-#         # Pagino il QuerySet
-#         count = int(self.request.GET.get('count', self.list_per_page))
-#         pos = int(self.request.GET.get('start', 0))
-#         qs_limited = qs[pos:pos + count]
-#
-#         # Estrapolo i dati e creo una lista di dizionari
-#         data = []
-#         for instance in qs_limited:
-#             instance_dict = {'id': instance.pk}
-#             for field in self.list_display:
-#                 field_path = field.split('__')
-#                 attr = instance
-#                 for index, elem in enumerate(field_path):
-#                     # Try to get m2m values joined by comma
-#                     try:
-#                         if hasattr(attr, '_meta') and hasattr(attr._meta, 'get_field') and \
-#                             callable(attr._meta.get_field) and isinstance(attr._meta.get_field(elem), ManyToManyField):
-#                             attr = ', '.join(getattr(attr, elem).values_list(
-#                                 '__'.join(field_path[index + 1:]),
-#                                 flat=True
-#                             ).distinct())
-#                             break
-#                     except FieldDoesNotExist:
-#                         pass
-#                     # Otherwise get attribute
-#                     attr = getattr(attr, elem, None)
-#                 if callable(attr):
-#                     instance_dict[field] = attr()
-#                 else:
-#                     instance_dict[field] = attr
-#             data.append(instance_dict)
-#
-#         kwargs.update({
-#             'data': data,
-#             "count": len(data),
-#             "total_count": qs.count(),
-#             "pos": pos,
-#             # "session": session,
-#             # "filters": filters,
-#             "ordering": self._ordering
-#         })
-#         return kwargs
-#
-#     def get(self, request, *args, **kwargs):
-#         context = self.get_context_data(**kwargs)
-#         return JsonResponse(context)

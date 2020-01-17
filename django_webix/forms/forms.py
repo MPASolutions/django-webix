@@ -52,6 +52,7 @@ class BaseWebixMixin(object):
     style = 'stacked'
     readonly_fields = []
     autocomplete_fields = []
+    autocomplete_fields_exclude = []
     autocomplete_fields_urls = {}
 
     class Meta:
@@ -460,7 +461,8 @@ class BaseWebixMixin(object):
                 count = field.queryset.count()
 
                 if count > self.min_count_suggest and \
-                    name not in self.autocomplete_fields:
+                    name not in self.autocomplete_fields and \
+                    name not in self.autocomplete_fields_exclude:
                     self.autocomplete_fields.append(name)
 
                 # autocomplete url
@@ -531,7 +533,8 @@ class BaseWebixMixin(object):
                 count = field.queryset.count()
 
                 if count > self.min_count_suggest and \
-                    name not in self.autocomplete_fields:
+                    name not in self.autocomplete_fields and \
+                    name not in self.autocomplete_fields_exclude:
                     self.autocomplete_fields.append(name)
 
                 # autocomplete url
