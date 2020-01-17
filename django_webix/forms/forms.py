@@ -635,8 +635,7 @@ class BaseWebixMixin(object):
             elif connection.vendor == 'postgresql' and \
                 SimpleArrayField is not None and \
                 isinstance(field, SimpleArrayField):
-                if hasattr(field, 'base_field') and \
-                    isinstance(field.base_field, forms.fields.DateField):
+                if hasattr(field, 'base_field') and isinstance(field.base_field, forms.fields.DateField):
                     el.update({
                         'view': 'datepicker',
                         'multiselect': 'touch',
@@ -649,6 +648,8 @@ class BaseWebixMixin(object):
                                 'value': ', '.join([i.strftime('%Y-%m-%d') for i in initial]),
                                 'orig_value': ', '.join([i.strftime('%Y-%m-%d') for i in initial]),
                             })
+                elif initial is not None:
+                    el.update({'value': initial})
 
             # CharField
             elif isinstance(field, forms.CharField):
