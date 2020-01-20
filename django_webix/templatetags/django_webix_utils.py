@@ -21,6 +21,21 @@ def webix_license():
     return settings.WEBIX_LICENSE
 
 
+@register.simple_tag(name='webix_fontawesome_css_url')
+def webix_fontawesome_css_url():
+    if hasattr(settings, 'WEBIX_FONTAWESOME_CSS_URL'):
+        return settings.WEBIX_FONTAWESOME_CSS_URL
+    else:
+        return 'django_webix/fontawesome-5.7.2/css/all.min.css'
+
+@register.simple_tag(name='webix_fontawesome_version')
+def webix_fontawesome_version():
+    if hasattr(settings, 'WEBIX_FONTAWESOME_VERSION'):
+        return settings.WEBIX_FONTAWESOME_VERSION
+    else:
+        return '5.7.2'
+
+
 @register.filter
 def comma_to_underscore(value):
     return value.replace(".", "_")
