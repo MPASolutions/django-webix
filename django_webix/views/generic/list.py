@@ -259,8 +259,6 @@ class WebixListView(WebixBaseMixin,
             qs = self.get_queryset()
             # filters application (like IDS selections)
             qs = self.filters_objects_datatable(qs)
-            # apply ordering
-            qs = self.apply_ordering(qs)
             # pagination (applied only for json request)
             #if self.is_json_request:
             #    qs = self.paginate_queryset(qs)
@@ -269,6 +267,8 @@ class WebixListView(WebixBaseMixin,
                 if type(qs) == list:
                     return qs
                 else: # queryset
+                    # apply ordering
+                    qs = self.apply_ordering(qs)
                     return self._get_objects_datatable_values(qs)
         return None
 
