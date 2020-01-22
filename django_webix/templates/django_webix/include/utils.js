@@ -165,20 +165,32 @@ function load_js(lnk, hide, area, method, data) {
         if (hide == true) {
             webix.ui([], $$(area));
         }
-        $$(area).showOverlay("<img src='{% static 'django_webix/loading.gif' %}'>");
+
+        if ($$('{{ webix_overlay_container_id }}') !== undefined && $$('{{ webix_overlay_container_id }}') !== null && $$('{{ webix_overlay_container_id }}').showOverlay !== undefined)
+            $$('{{ webix_overlay_container_id }}').showOverlay("<img src='{% static 'django_webix/loading.gif' %}'>");
+        else if ($$(area) !== undefined && $$(area) !== null && $$(area).showOverlay !== undefined)
+            $$(area).showOverlay("<img src='{% static 'django_webix/loading.gif' %}'>");
+
         $.ajax({
             url: lnk,
             type: method,
             data: data,
             dataType: "script",
             success: function () {
-                //    setTimeout(function(){
-                $$(area).hideOverlay();
+                if ($$('{{ webix_overlay_container_id }}') !== undefined && $$('{{ webix_overlay_container_id }}') !== null && $$('{{ webix_overlay_container_id }}').hideOverlay !== undefined)
+                    $$('{{ webix_overlay_container_id }}').hideOverlay();
+                else if ($$(area) !== undefined && $$(area) !== null && $$(area).hideOverlay !== undefined)
+                    $$(area).hideOverlay();
+
                 webix.ui.fullScreen();
                 window.dispatchEvent(new Event('resize'));
-//        },2000); // monkey patch
             },
             error: function () {
+                if ($$('{{ webix_overlay_container_id }}') !== undefined && $$('{{ webix_overlay_container_id }}') !== null && $$('{{ webix_overlay_container_id }}').hideOverlay !== undefined)
+                    $$('{{ webix_overlay_container_id }}').hideOverlay();
+                else if ($$(area) !== undefined && $$(area) !== null && $$(area).hideOverlay !== undefined)
+                    $$(area).hideOverlay();
+
                 webix.alert('{% trans "Server error" %}')
             }
         });
