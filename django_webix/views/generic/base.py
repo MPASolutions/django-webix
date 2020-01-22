@@ -272,7 +272,7 @@ class WebixBaseMixin:
         return settings.WEBIX_CONTAINER_ID
 
     def get_overlay_container_id(self, request):
-        return settings.WEBIX_CONTAINER_ID
+        return getattr(settings, 'WEBIX_OVERLAY_CONTAINER_ID', settings.WEBIX_CONTAINER_ID)
 
     def get_context_data_webix_base(self, request, **kwargs):
         return {
