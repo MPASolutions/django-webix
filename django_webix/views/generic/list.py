@@ -218,7 +218,8 @@ class WebixListView(WebixBaseMixin,
         #                        self._ordering.append({'sort[id]': field[1:], 'sort[dir]': 'desc'})
         #                    else:
         #                        self._ordering.append({'sort[id]': field, 'sort[dir]': 'asc'})
-        return queryset.order_by(*self.get_ordering())
+        order = self.get_ordering()
+        return queryset.order_by(*order)
 
     def get_paginate_count(self):
         paginate_count = self.request.GET.get(self.paginate_count_key,

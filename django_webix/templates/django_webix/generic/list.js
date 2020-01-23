@@ -258,6 +258,9 @@ function actions_execute(action, ids) {
         webix_to_excel()
     }
 }
+{% else %}
+var actions_list = undefined;
+var actions_execute = undefined;
 {% endif %}
 {% endblock %}
 
