@@ -79,7 +79,7 @@ class WebixDeleteView(WebixBaseMixin, WebixPermissionsMixin, WebixUrlMixin, Dele
         django_webix_view_pre_delete.send(sender=self, instance=self.object)
 
     def post_delete_valid(self, **kwargs):
-        django_webix_view_post_delete.send(sender=self, instance=self.self.copied_object)
+        django_webix_view_post_delete.send(sender=self, instance=self.copied_object)
 
     def response_valid(self, success_url=None, **kwargs):
         return HttpResponseRedirect(success_url)
