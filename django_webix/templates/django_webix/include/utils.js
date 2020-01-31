@@ -352,3 +352,23 @@ function post(path, params) {
     document.body.appendChild(form);
     form.submit();
 }
+
+  webix.ui.datafilter.rowsCount = webix.extend({
+  		refresh:function(master, node, value){
+			node.firstChild.innerHTML = master.count();
+		}
+}, webix.ui.datafilter.summColumn)
+
+webix.ui.datafilter.avgColumn = webix.extend({
+  		refresh:function(master, node, value){
+			var result = 0;
+			master.mapCells(null, value.columnId, null, 1, function(value){
+				value = value*1;
+				if (!isNaN(value))
+					result+=value;
+				return value;
+			});
+
+			node.firstChild.innerHTML = Math.round(result/master.count());
+		}
+}, webix.ui.datafilter.summColumn)

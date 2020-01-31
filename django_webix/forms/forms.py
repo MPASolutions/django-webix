@@ -548,10 +548,6 @@ class BaseWebixMixin(object):
                         )
                     })
 
-                # autocomplete field
-                # if self.add_prefix(name)=='agrofarmacotrattamento_set-0-revisione_agrofarmaco':
-                #    raise Exception(name, self.autocomplete_fields, self.autocomplete_fields_urls)
-
                 if name in self.autocomplete_fields:
                     el.update({
                         'view': 'combo',
@@ -597,13 +593,16 @@ class BaseWebixMixin(object):
                     if field.required and initial is None and len(field.queryset) == 1:
                         el.update({'value': '{}'.format(field.queryset.first().pk)})
                 else:
+                    choices = self._add_null_choice([{
+                        'id': '{}'.format(i.pk),
+                        'value': '{}'.format(i)
+                    } for i in field.queryset])
+                    if not field.required:
+                        choices.insert(0, {'id': "", 'value': "------", '$empty': True})
                     el.update({
                         'view': 'combo',
                         'placeholder': _('Click to select'),
-                        'options': self._add_null_choice([{
-                            'id': '{}'.format(i.pk),
-                            'value': '{}'.format(i)
-                        } for i in field.queryset])
+                        'options': choices
                     })
             # TypedChoiceField ChoiceField
             elif isinstance(field, forms.TypedChoiceField) or isinstance(field, forms.ChoiceField):

@@ -149,7 +149,7 @@ $$("{{ webix_container_id }}").addView({
                 ds_filter = $$('datatable_{{ model_name }}').getFilter(el.id)
                 if ((ds_filter != null) && (ds_filter != undefined)) {
                     if (ds_filter.value != '') {
-                        // TODO: aggiungere __icontains per text ECCETERA
+                        // TODO: add __icontains for text etc.
                         qsets.push({'path': key, 'val': ds_filter.value});
                     }
                 } else {

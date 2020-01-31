@@ -302,7 +302,6 @@ class WebixCreateView(WebixCreateUpdateMixin, WebixBaseMixin, WebixPermissionsMi
 
         for formset in inlines:
             formset.save()
-        # raise Exception(self.object.pk)
         self.post_forms_valid(form=form, inlines=inlines, **kwargs)
         return self.response_valid(success_url=self.get_success_url(), **kwargs)
 
