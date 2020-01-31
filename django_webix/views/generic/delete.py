@@ -5,7 +5,6 @@ from __future__ import unicode_literals
 import json
 import copy
 from django.apps import apps
-from django.contrib.admin.utils import NestedObjects
 from django.contrib.contenttypes.models import ContentType
 from django.core.exceptions import ImproperlyConfigured
 from django.core.exceptions import PermissionDenied
@@ -15,14 +14,23 @@ from django.utils.encoding import force_text
 from django.utils.translation import ugettext as _
 from django.views.generic import DeleteView
 
-from django_webix.views.generic.utils import tree_formatter
+from django_webix.views.generic.utils import tree_formatter, NestedObjectsWithLimit
 from django_webix.views.generic.base import WebixBaseMixin, WebixPermissionsMixin, WebixUrlMixin
 from django_webix.views.generic.signals import django_webix_view_pre_delete, django_webix_view_post_delete
 
+
 class WebixDeleteView(WebixBaseMixin, WebixPermissionsMixin, WebixUrlMixin, DeleteView):
     logs_enable = True
+    exclude_models = None
+    only_models = None
 
     template_name = 'django_webix/generic/delete.js'
+
+    def get_exclude_models(self):
+        return self.exclude_models
+
+    def get_only_models(self):
+        return self.only_models
 
     def get_object(self, queryset=None):
         if getattr(self, 'object', None) is not None:
@@ -45,7 +53,9 @@ class WebixDeleteView(WebixBaseMixin, WebixPermissionsMixin, WebixUrlMixin, Dele
         context.update(self.get_context_data_webix_url(request=self.request, obj=self.object))
         context.update(self.get_context_data_webix_base(request=self.request))
         # Nested objects
-        collector = NestedObjects(using='default')
+        collector = NestedObjectsWithLimit(using='default',
+                                           exclude_models=self.get_exclude_models(),
+                                           only_models=self.get_only_models())
         collector.collect([self.object])
         context.update({
             'related_objects': json.dumps(tree_formatter(collector.nested())),
@@ -90,7 +100,7 @@ class WebixDeleteView(WebixBaseMixin, WebixPermissionsMixin, WebixUrlMixin, Dele
     def delete(self, request, *args, **kwargs):
 
         self.object = self.get_object()
-        self.copied_object = copy.deepcopy(self.object )
+        self.copied_object = copy.deepcopy(self.object)
 
         anonymous = request.user.is_anonymous() if callable(request.user.is_anonymous) else request.user.is_anonymous
         if len(self.get_failure_delete_related_objects(request=request, obj=self.object)) > 0:
