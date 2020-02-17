@@ -16,7 +16,7 @@ var failure_related_objects = [
         }{% if not forloop.last %}, {% endif %}
     {% endfor %}
 ]
-$$("{{webix_container_id}}").addView({
+$$("{{ webix_container_id }}").addView({
     id: 'list_failure_related_objects',
     view: "datatable",
     columns: [

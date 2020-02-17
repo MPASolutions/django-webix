@@ -29,6 +29,7 @@
 
         $$("{{ webix_container_id }}").addView({
             view: "tree",
+            id: "{{ object|getattr:"_meta"|getattr:"model_name" }}",
             data: JSON.parse("{{ related_objects|safe|escapejs }}"),
             on: {
                 onItemClick: function (id, e, node) {
@@ -56,17 +57,21 @@
                     label: "{% trans 'Confirm cancellation' %}",
                     width: 200,
                     click: function () {
- 			load_js("{{ url_delete }}", undefined, undefined, 'POST');
-			/*
-			$.ajax({
-                            url: "{{ url_delete }}",
-                            dataType: "script",
-                            type: "POST",
-                            success: function () {
-                                webix.ui.resize()
+                        {% if multiple_delete_confirmation == True %}
+                            if ($$("{{ object|getattr:"_meta"|getattr:"model_name" }}").count() > 1) {
+                                webix.confirm({
+                                    title: "{% trans "Delete confirmation" %}",
+                                    text: "{% trans "Warning! All linked objects will also be deleted." %}",
+                                    type: "confirm-alert"
+                                }).then(function(result){
+                                    load_js("{{ url_delete }}", undefined, undefined, 'POST');
+                                })
+                            } else {
+                                load_js("{{ url_delete }}", undefined, undefined, 'POST');
                             }
-                        });
-			*/
+                        {% else %}
+                            load_js("{{ url_delete }}", undefined, undefined, 'POST');
+                        {% endif %}
                     }
                 }
             ]
