@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-01-31 09:22+0100\n"
+"POT-Creation-Date: 2020-02-17 09:27+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -60,8 +60,16 @@ msgstr ""
 msgid "The following objects will be deleted"
 msgstr ""
 
-#: django_webix/templates/django_webix/generic/delete.js:56
+#: django_webix/templates/django_webix/generic/delete.js:57
 msgid "Confirm cancellation"
+msgstr ""
+
+#: django_webix/templates/django_webix/generic/delete.js:63
+msgid "Delete confirmation"
+msgstr ""
+
+#: django_webix/templates/django_webix/generic/delete.js:64
+msgid "Warning! All linked objects will also be deleted."
 msgstr ""
 
 #: django_webix/templates/django_webix/generic/list.js:26
@@ -272,7 +280,7 @@ msgid ""
 msgstr ""
 
 #: django_webix/views/generic/create_update.py:82
-#: django_webix/views/generic/delete.py:63
+#: django_webix/views/generic/delete.py:75
 msgid ""
 "No URL to redirect to.  Either provide a url or define a get_absolute_url "
 "method on the Model."
@@ -280,7 +288,7 @@ msgstr ""
 
 #: django_webix/views/generic/create_update.py:229
 #: django_webix/views/generic/create_update.py:330
-#: django_webix/views/generic/delete.py:36
+#: django_webix/views/generic/delete.py:45
 #: django_webix/views/generic/detail.py:23
 #: django_webix/views/generic/list.py:386
 msgid "View permission is not allowed"
@@ -303,11 +311,11 @@ msgstr ""
 msgid "and"
 msgstr ""
 
-#: django_webix/views/generic/delete.py:39
+#: django_webix/views/generic/delete.py:48
 msgid "Delete permission is not allowed"
 msgstr ""
 
-#: django_webix/views/generic/delete.py:74
+#: django_webix/views/generic/delete.py:86
 msgid ""
 "No URL to failure redirect to.  Either provide a url or define a "
 "get_absolute_url method on the Model."

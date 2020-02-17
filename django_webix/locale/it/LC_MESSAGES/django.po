@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-01-31 09:22+0100\n"
+"POT-Creation-Date: 2020-02-17 09:27+0100\n"
 "PO-Revision-Date: 2018-09-04 15:09+0200\n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -64,9 +64,17 @@ msgstr "Dati di ManagementForm mancanti o manomessi"
 msgid "The following objects will be deleted"
 msgstr "I seguenti oggetti verranno eliminati"
 
-#: django_webix/templates/django_webix/generic/delete.js:56
+#: django_webix/templates/django_webix/generic/delete.js:57
 msgid "Confirm cancellation"
 msgstr "Conferma cancellazione"
+
+#: django_webix/templates/django_webix/generic/delete.js:63
+msgid "Delete confirmation"
+msgstr "Conferma cancellazione"
+
+#: django_webix/templates/django_webix/generic/delete.js:64
+msgid "Warning! All linked objects will also be deleted."
+msgstr "Attenzione! Verranno eliminati anche tutti gli oggetti collegati."
 
 #: django_webix/templates/django_webix/generic/list.js:26
 msgid "Filters removal"
@@ -280,7 +288,7 @@ msgstr ""
 "disponibili sono 'standard' o 'tabs' (standard di default)."
 
 #: django_webix/views/generic/create_update.py:82
-#: django_webix/views/generic/delete.py:63
+#: django_webix/views/generic/delete.py:75
 msgid ""
 "No URL to redirect to.  Either provide a url or define a get_absolute_url "
 "method on the Model."
@@ -290,7 +298,7 @@ msgstr ""
 
 #: django_webix/views/generic/create_update.py:229
 #: django_webix/views/generic/create_update.py:330
-#: django_webix/views/generic/delete.py:36
+#: django_webix/views/generic/delete.py:45
 #: django_webix/views/generic/detail.py:23
 #: django_webix/views/generic/list.py:386
 msgid "View permission is not allowed"
@@ -313,11 +321,11 @@ msgstr "Modificato %s."
 msgid "and"
 msgstr "e"
 
-#: django_webix/views/generic/delete.py:39
+#: django_webix/views/generic/delete.py:48
 msgid "Delete permission is not allowed"
 msgstr "Non disponi del permesso di cancellare"
 
-#: django_webix/views/generic/delete.py:74
+#: django_webix/views/generic/delete.py:86
 msgid ""
 "No URL to failure redirect to.  Either provide a url or define a "
 "get_absolute_url method on the Model."
