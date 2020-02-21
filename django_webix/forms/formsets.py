@@ -154,7 +154,7 @@ class WebixInlineFormSet(InlineFormSetFactory):
             extra_forms = 0
         # FIX for initial data values (list of dict and not instances)
         _factory_kwargs.update({
-            'extra': extra_forms + len(self.initial),
+            'extra': extra_forms #+ len(self.initial),
         })
         return _factory_kwargs
 
