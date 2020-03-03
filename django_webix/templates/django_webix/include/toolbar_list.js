@@ -36,6 +36,7 @@ if ((typeof actions_list == 'undefined') || (typeof actions_execute == 'undefine
 $$("{{ webix_container_id }}").addView({
     view: "toolbar",
     margin: 5,
+    id: "{{ webix_container_id }}_toolbar",
     height: 65,
     cols: toolbar_actions.concat([
         {id: 'stats_list', view: 'label', label: '', width: 170},
