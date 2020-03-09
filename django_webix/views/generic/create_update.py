@@ -292,6 +292,11 @@ class WebixCreateView(WebixCreateUpdateMixin, WebixBaseMixin, WebixPermissionsMi
     def response_invalid(self, form=None, inlines=None, **kwargs):
         return self.render_to_response(self.get_context_data(form=form, inlines=inlines))
 
+    def save_inlines(self, inlines):
+        for formset in inlines:
+            formset.save()
+
+
     def forms_valid(self, form, inlines, **kwargs):
         self.pre_forms_valid(form=form, inlines=inlines, **kwargs)
 
@@ -304,8 +309,8 @@ class WebixCreateView(WebixCreateUpdateMixin, WebixBaseMixin, WebixPermissionsMi
         self.object = form.save()
         self.post_form_save(form=form, inlines=inlines, **kwargs)
 
-        for formset in inlines:
-            formset.save()
+        self.save_inlines(inlines=inlines)
+
         self.post_forms_valid(form=form, inlines=inlines, **kwargs)
         return self.response_valid(success_url=self.get_success_url(), **kwargs)
 
