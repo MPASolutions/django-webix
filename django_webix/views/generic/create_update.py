@@ -83,11 +83,6 @@ class WebixCreateUpdateMixin:
                 " a get_absolute_url method on the Model."))
         return url
 
-    def validate_unique_together(self, form=None, inlines=None, **kwargs):
-        # self.object.validate_unique()
-        if form is not None:
-            form.instance.validate_unique()
-
     def get_context_data_webix_create_update(self, request, obj=None, **kwargs):
 
         return {
@@ -99,20 +94,38 @@ class WebixCreateUpdateMixin:
             'template_style': self.get_template_style(),
         }
 
-    def post(self, request, *args, **kwargs):
-        form_class = self.get_form_class()
+    def form_save(self, form):
+        self.object = form.save()
+        return None
 
-        form = self.get_form(form_class)
-        form, form_validated = self.validate_form(form)
+    def inlines_save(self, form):
+        for formset in inlines:
+            formset.save()
+        return None
 
-        inlines = self.construct_inlines()
-        inlines, inlines_validated = self.validate_inlines(inlines)
+    def forms_valid(self, form, inlines, **kwargs):
+        # pre forms valid
+        self.pre_forms_valid(form=form, inlines=inlines, **kwargs)
+        # validate unique together
+        try:
+            self.validate_unique_together(form=form, inlines=inlines, **kwargs)
+        except ValidationError as e:
+            form.add_error(None, str(e))
+            return self.forms_invalid(form=form, inlines=inlines, **kwargs)
+        # form save
+        exception_response = self.form_save(form)
+        if exception_response is not None:
+            return exception_response
+        # post form save
+        self.post_form_save(form=form, inlines=inlines, **kwargs)
+        # inlines save
+        exception_response = self.inlines_save(inlines)
+        if exception_response is not None:
+            return exception_response
+        # post forms valid
+        self.post_forms_valid(form=form, inlines=inlines, **kwargs)
 
-        form, inlines, full_validated = self.full_validate(form, form_validated, inlines, inlines_validated)
-
-        if full_validated:
-            return self.forms_valid(form, inlines)
-        return self.forms_invalid(form, inlines)
+        return self.response_valid(success_url=self.get_success_url(), **kwargs)
 
     def full_validate(self, form, form_validated, inlines, inlines_validated):
         return form, inlines, form_validated and inlines_validated
@@ -128,6 +141,15 @@ class WebixCreateUpdateMixin:
     def validate_inlines(self, inlines):
         inlines_validated = all_valid(inlines)
         return inlines, inlines_validated
+
+    def response_valid(self, success_url=None, **kwargs):
+        return HttpResponseRedirect(success_url)
+
+    def response_invalid(self, form=None, inlines=None, **kwargs):
+        return self.render_to_response(self.get_context_data(form=form, inlines=inlines))
+
+    def forms_invalid(self, form, inlines, **kwargs):
+        return self.response_invalid(form=form, inlines=inlines, **kwargs)
 
 
 class WebixCreateView(WebixCreateUpdateMixin, WebixBaseMixin, WebixPermissionsMixin, WebixUrlMixin,
@@ -286,37 +308,11 @@ class WebixCreateView(WebixCreateUpdateMixin, WebixBaseMixin, WebixPermissionsMi
                 action_flag=ADDITION
             )
 
-    def response_valid(self, success_url=None, **kwargs):
-        return HttpResponseRedirect(success_url)
 
-    def response_invalid(self, form=None, inlines=None, **kwargs):
-        return self.render_to_response(self.get_context_data(form=form, inlines=inlines))
-
-    def save_inlines(self, inlines):
-        for formset in inlines:
-            formset.save()
-
-
-    def forms_valid(self, form, inlines, **kwargs):
-        self.pre_forms_valid(form=form, inlines=inlines, **kwargs)
-
-        try:
-            self.validate_unique_together(form=form, inlines=inlines, **kwargs)
-        except ValidationError as e:
-            form.add_error(None, str(e))
-            return self.forms_invalid(form=form, inlines=inlines, **kwargs)
-
-        self.object = form.save()
-        self.post_form_save(form=form, inlines=inlines, **kwargs)
-
-        self.save_inlines(inlines=inlines)
-
-        self.post_forms_valid(form=form, inlines=inlines, **kwargs)
-        return self.response_valid(success_url=self.get_success_url(), **kwargs)
-
-    def forms_invalid(self, form, inlines, **kwargs):
-        return self.response_invalid(form=form, inlines=inlines, **kwargs)
-
+    def validate_unique_together(self, form=None, inlines=None, **kwargs):
+        # self.object.validate_unique()
+        if form is not None:
+            form.instance.validate_unique()
 
 class WebixUpdateView(WebixCreateUpdateMixin, WebixBaseMixin, WebixPermissionsMixin, WebixUrlMixin,
                       UpdateWithInlinesView):
@@ -396,31 +392,6 @@ class WebixUpdateView(WebixCreateUpdateMixin, WebixBaseMixin, WebixPermissionsMi
                 action_flag=CHANGE,
                 change_message=_('Changed %s.') % get_text_list(form.changed_data, _('and'))
             )
-
-    def response_valid(self, success_url=None, **kwargs):
-        return HttpResponseRedirect(success_url)
-
-    def response_invalid(self, form=None, inlines=None, **kwargs):
-        return self.render_to_response(self.get_context_data(form=form, inlines=inlines))
-
-    def forms_valid(self, form, inlines, **kwargs):
-        self.pre_forms_valid(form=form, inlines=inlines, **kwargs)
-        try:
-            self.validate_unique_together(form=form, inlines=inlines, **kwargs)
-        except ValidationError as e:
-            form.add_error(None, str(e))
-            return self.forms_invalid(form=form, inlines=inlines, **kwargs)
-        self.object = form.save()
-
-        self.post_form_save(form=form, inlines=inlines, **kwargs)
-
-        for formset in inlines:
-            formset.save()
-        self.post_forms_valid(form=form, inlines=inlines, **kwargs)
-        return self.response_valid(success_url=self.get_success_url(), **kwargs)
-
-    def forms_invalid(self, form, inlines, **kwargs):
-        return self.response_invalid(form=form, inlines=inlines, **kwargs)
 
 
 class WebixCreateWithInlinesView(WebixCreateView):
