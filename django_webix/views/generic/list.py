@@ -43,7 +43,7 @@ class WebixListView(WebixBaseMixin,
     fields = None  # ex. [{'field_name':'XXX','datalist_column':'YYY',}]
     order_by = None
 
-    # actions
+    # actions {'delete':self.multiple_delete_action}
     actions = {}  # {'make_published': self.make_published}
     # def make_published(listview, request, queryset):
     #    queryset.update(status='p')
@@ -253,7 +253,9 @@ class WebixListView(WebixBaseMixin,
                 if field.get('footer') is not None:
                     aggregation_dict.update({field.get('field_name') + '_footer': field.get('footer')})
             qs = qs.aggregate(**aggregation_dict)
-        return qs
+            return qs
+        else:
+            return None
 
     def get_ordering(self):
         if self.request.POST.getlist('sort[]'):
@@ -340,8 +342,13 @@ class WebixListView(WebixBaseMixin,
         return 'id'
 
     ########### TEMPLATE BUILDER ###########
-
     def get_actions(self):
+        _actions = {}
+        for action_key, action_func in self.actions.items():
+            if type(action_func) == str:
+                _actions.update({action_key: getattr(self, action_func)})
+            else:
+                _actions.update({action_key: action_func})
 
         # add flexport actions
         if apps.is_installed('flexport'):
@@ -359,10 +366,10 @@ class WebixListView(WebixBaseMixin,
                 if EXP.is_enabled(self.request):
                     flexport_actions['flexport_{}'.format(EXP.id)] = action_builder(EXP)
 
-            self.actions.update(flexport_actions)
+            _actions.update(flexport_actions)
 
         # custom view actions
-        return self.actions
+        return _actions
 
     def get_actions_style(self):
         _actions_style = None
@@ -421,7 +428,12 @@ class WebixListView(WebixBaseMixin,
     def get_actions_names(self):
         actions_names = {}
         for action_key, action_func in self.get_actions().items():
-            actions_names.update({action_key: action_func.verbose_name})
+            has_perm = True
+            for key in getattr(action_func, 'allowed_permissions', []):
+                if not hasattr(self, 'has_{}_permission'.format(key)):
+                    has_perm = False
+            if has_perm==True:
+                actions_names.update({action_key: action_func.verbose_name})
         return actions_names
 
     def post(self, request, *args, **kwargs):  # all post works like get

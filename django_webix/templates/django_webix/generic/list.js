@@ -353,7 +353,7 @@ function webix_to_excel() {
             }
     );
 }*/
-function flexport_actions_execute(action, ids, all) {
+function win_actions_execute(action, ids, all) {
     $$('datatable_{{model_name}}').showOverlay("<img src='{% static 'django_webix/loading.gif' %}'>");
     var form = document.createElement("form");
     form.setAttribute("method", "post");
@@ -380,6 +380,48 @@ function flexport_actions_execute(action, ids, all) {
     $$('datatable_{{model_name}}').hideOverlay();
 }
 
+function delete_actions_execute(action, ids, all) {
+    webix.confirm({
+        title: '{{ _("Delete")|escapejs|upper }}',
+        ok: '{{ _("Proceed")|escapejs }}',
+        cancel: '{{ _("Undo")|escapejs }}',
+        text: "{% trans "Are you sure you want to proceed with this action?" %} </br> <b>" + ids.length + " {% trans "elements" %}</b> {% trans "selected" %}",
+        callback: function (result) {
+            if (result) {
+                _params = {
+                    'action': action,
+                    'filters': JSON.stringify(get_filters_qsets()),
+                    'csrfmiddlewaretoken': getCookie('csrftoken')
+                };
+                if (all == false) {
+                    _params['ids'] = ids.join(',');
+                }
+                $.ajax({
+                    url: "{{ url_list }}",
+                    //dataType: "json",
+                    type: "POST",
+                    data: _params,
+                    error: function (data) {
+                        webix.message({
+                            text: "{% trans "Action is not executable" %}",
+                            type: "error",
+                            expire: 10000
+                        });
+                    },
+                    success: function (data) {
+                        webix.message({
+                            text: data.message,
+                            type: "info",
+                            expire: 5000
+                        });
+                        load_js('{{ url_list }}');
+                    },
+                });
+            }
+        }
+    })
+}
+
 {% block toolbar_list_actions %}
 {% if is_enable_actions %}
 var actions_list = [
@@ -388,10 +430,15 @@ var actions_list = [
     {% endfor %}
 ];
 function actions_execute(action, ids, all) {
-    var flexport_action_names = [{% for action_key, action in actions.items %}'{{ action_key }}'{% if not forloop.last %}, {% endif %}{% endfor %}]
-    if (flexport_action_names.includes(action) == true) {
-        flexport_actions_execute(action, ids, all);
+    if (action=='delete'){
+        delete_actions_execute(action, ids, all);
+    } else {
+        var action_names = [{% for action_key, action in actions.items %}'{{ action_key }}'{% if not forloop.last %}, {% endif %}{% endfor %}];
+        if (action_names.includes(action) == true) {
+            win_actions_execute(action, ids, all);
+        }
     }
+
 }
 {% else %}
 var actions_list = undefined;
