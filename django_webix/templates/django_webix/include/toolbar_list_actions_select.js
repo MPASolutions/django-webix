@@ -1,5 +1,6 @@
 {% load i18n %}
-{# actions su select #}
+
+{# actions into select #}
 if ((typeof actions_list != 'undefined') && (typeof actions_execute != 'undefined') && (actions_list.length > 0)) {
     var toolbar_actions = [
         {
@@ -21,18 +22,8 @@ if ((typeof actions_list != 'undefined') && (typeof actions_execute != 'undefine
             width: 60,
             on: {
                 onItemClick: function () {
-                    var action = $$("action_combo").getValue();
-                    var ids = [];
-                    $$("datatable_{{ model_name }}").eachRow(function (id) {
-                        if ((this.getItem(id)!=undefined )&&( this.getItem(id).checkbox_action)) {
-                            ids.push(id)
-                        }
-                    })
-                    if (ids.length > 0) {
-                        actions_execute(action, ids);
-                    } else {
-                        webix.alert("{% trans "No row has been selected" %}", "alert-warning");
-                    }
+                    var action_name = $$("action_combo").getValue();
+                    prepare_actions_execute(action_name);
                 }
             }
         }

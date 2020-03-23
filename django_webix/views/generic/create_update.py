@@ -98,7 +98,7 @@ class WebixCreateUpdateMixin:
         self.object = form.save()
         return None
 
-    def inlines_save(self, form):
+    def inlines_save(self, inlines):
         for formset in inlines:
             formset.save()
         return None

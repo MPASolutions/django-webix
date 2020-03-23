@@ -11,6 +11,15 @@ import datetime
 register = template.Library()
 
 
+@register.filter('get_value_from_dict')
+def get_value_from_dict(dict_data, key):
+    """
+    usage example {{ your_dict|get_value_from_dict:your_key }}
+    """
+    if key:
+        return dict_data.get(key)
+
+
 @register.simple_tag(name='webix_version')
 def webix_version():
     return settings.WEBIX_VERSION

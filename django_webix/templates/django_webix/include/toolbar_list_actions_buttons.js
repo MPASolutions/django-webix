@@ -1,6 +1,6 @@
 {% load i18n %}
 
-{# bottoni singoli #}
+{# actions on buttons #}
 var toolbar_actions = [];
 $.each(actions_list, function (index, obj) {
     toolbar_actions.push({
@@ -9,17 +9,7 @@ $.each(actions_list, function (index, obj) {
         id: 'action_' + obj.id,
         value: '' + obj.value,
         click: function () {
-            var ids = [];
-            $$("datatable_{{ model_name }}").eachRow(function (id) {
-                if (this.getItem(id).checkbox_action) {
-                    ids.push(id)
-                }
-            });
-            if (ids.length > 0) {
-                actions_execute(obj.id, ids);
-            } else {
-                webix.alert("{% trans "No row has been selected" %}", "alert-warning");
-            }
+            prepare_actions_execute(obj.id);
         }
     });
 });

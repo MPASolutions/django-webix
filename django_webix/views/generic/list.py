@@ -5,12 +5,14 @@ from __future__ import unicode_literals
 import json
 
 import django
+from django.contrib.contenttypes.models import ContentType
 from django.core.exceptions import FieldDoesNotExist
 from django.core.exceptions import PermissionDenied, ImproperlyConfigured
 from django.db.models import Q, ManyToManyField
 from django.utils.translation import ugettext as _
 from django.views.generic import ListView
-from django.http import JsonResponse
+from django.http import JsonResponse, Http404
+from django.apps import apps
 
 from django_webix.views.generic.base import WebixBaseMixin, WebixPermissionsMixin, WebixUrlMixin
 
@@ -24,6 +26,10 @@ try:
 except ImportError:
     MultiPolygon = object
 
+if apps.is_installed('flexport'):
+    from flexport.views import create_extraction
+    from flexport.models import Export
+
 
 class WebixListView(WebixBaseMixin,
                     WebixPermissionsMixin,
@@ -35,6 +41,18 @@ class WebixListView(WebixBaseMixin,
     # queryset vars
     pk_field = None
     fields = None  # ex. [{'field_name':'XXX','datalist_column':'YYY',}]
+    order_by = None
+
+    # actions
+    actions = {}  # {'make_published': self.make_published}
+    # def make_published(listview, request, queryset):
+    #    queryset.update(status='p')
+    #    return render(request, 'myapp/index.html', {
+    #         'foo': 'bar',
+    #     }, content_type='application/xhtml+xml')
+    # make_published.allowed_permissions = ('add','change','delete','view')
+    # make_published.short_description = "Mark selected stories as published"
+
     # paging
     enable_json_loading = False
     paginate_count_default = 100
@@ -85,10 +103,10 @@ class WebixListView(WebixBaseMixin,
         return filters  # by default filters are not set
 
     def _elaborate_qsets_filters(self, data):
-
         if 'qsets' in data and 'operator' in data:
             operator = data.get('operator')
-            if len(data.get('qsets'))==0: # BYPASS
+            negate = data.get('negate', False)
+            if len(data.get('qsets')) == 0:  # BYPASS
                 qset = Q()
             for j, data_qset in enumerate(data.get('qsets')):
                 if 'operator' in data_qset:
@@ -101,7 +119,9 @@ class WebixListView(WebixBaseMixin,
                     if operator == 'AND':
                         qset = qset & qset_to_applicate
                     elif operator == 'OR':
-                        qset = qset & qset_to_applicate
+                        qset = qset | qset_to_applicate
+            if negate == True:
+                qset = ~Q(qset)
         elif 'path' in data and 'val' in data:
             qset = Q(**{data.get('path'): data.get('val')})
         else:
@@ -111,10 +131,10 @@ class WebixListView(WebixBaseMixin,
     def get_qsets_filters(self, request):
         filters = self._decode_text_filters(request, 'filters')
         if filters is not None:
-            #try:
-                return self._elaborate_qsets_filters(filters)
-            #except:
-            #    print(_('ERROR: qsets structure is incorrect'))
+            # try:
+            return self._elaborate_qsets_filters(filters)
+        # except:
+        #    print(_('ERROR: qsets structure is incorrect'))
         return None  # by default filters are not set
 
     def _elaborate_geo_filter(self, data):
@@ -205,26 +225,53 @@ class WebixListView(WebixBaseMixin,
             # optimize select related queryset (only if fields are defined)
             qs = self._optimize_select_related(qs)  # TODO
             return qs
-
         return None
 
+    def get_choices_filters(self):
+        _fields_choices = {}
+        fields = self.get_fields()
+        if fields is not None:
+            for field in fields:
+                if field.get('datalist_column') is not None and \
+                    ('serverSelectFilter' in field.get('datalist_column') or
+                     'serverRichSelectFilter' in field.get('datalist_column') or
+                     'serverMultiSelectFilter' in field.get('datalist_column') or
+                     'serverMultiComboFilter' in field.get('datalist_column')):
+                    field_name = field.get('field_name')
+                    _fields_choices[field_name] = list(
+                        self.get_queryset().values_list(field_name, flat=True).distinct().order_by())
+
+        return _fields_choices
+
+    def get_footer(self):
+        _footer = None
+        fields = self.get_fields()
+        if fields is not None:
+            qs = self.get_queryset()
+            aggregation_dict = {}
+            for field in fields:
+                if field.get('footer') is not None:
+                    aggregation_dict.update({field.get('field_name') + '_footer': field.get('footer')})
+            qs = qs.aggregate(**aggregation_dict)
+        return qs
+
     def get_ordering(self):
-        return (self.get_pk_field(),) # TODO
+        if self.request.POST.getlist('sort[]'):
+            return self.request.POST.getlist('sort[]')
+        else:
+            if self.order_by is not None:
+                return self.order_by
+            else:
+                return (self.get_pk_field(),)
 
     def apply_ordering(self, queryset):
-        # TODO
-        #                for field in ordering:
-        #                    if field.startswith("-"):
-        #                        self._ordering.append({'sort[id]': field[1:], 'sort[dir]': 'desc'})
-        #                    else:
-        #                        self._ordering.append({'sort[id]': field, 'sort[dir]': 'asc'})
         order = self.get_ordering()
         return queryset.order_by(*order)
 
     def get_paginate_count(self):
         paginate_count = self.request.GET.get(self.paginate_count_key,
-                                    self.request.POST.get(self.paginate_count_key,
-                                                          self.paginate_count_default))
+                                              self.request.POST.get(self.paginate_count_key,
+                                                                    self.paginate_count_default))
         try:
             return int(paginate_count)
         except ValueError:
@@ -232,8 +279,8 @@ class WebixListView(WebixBaseMixin,
 
     def get_paginate_start(self):
         paginate_start = self.request.GET.get(self.paginate_start_key,
-                                    self.request.POST.get(self.paginate_start_key,
-                                                          self.paginate_start_default))
+                                              self.request.POST.get(self.paginate_start_key,
+                                                                    self.paginate_start_default))
         try:
             return int(paginate_start)
         except ValueError:
@@ -242,7 +289,7 @@ class WebixListView(WebixBaseMixin,
     def paginate_queryset(self, queryset):
         paginate_count = self.get_paginate_count()
         paginate_start = self.get_paginate_start()
-        return queryset[paginate_start: paginate_start+paginate_count]
+        return queryset[paginate_start: paginate_start + paginate_count]
 
     def _get_objects_datatable_values(self, qs):
         values = [self.get_pk_field()]
@@ -261,13 +308,13 @@ class WebixListView(WebixBaseMixin,
             # filters application (like IDS selections)
             qs = self.filters_objects_datatable(qs)
             # pagination (applied only for json request)
-            #if self.is_json_request:
+            # if self.is_json_request:
             #    qs = self.paginate_queryset(qs)
             # build output
             if qs is not None:
                 if type(qs) == list:
                     return qs
-                else: # queryset
+                else:  # queryset
                     # apply ordering
                     qs = self.apply_ordering(qs)
                     return self._get_objects_datatable_values(qs)
@@ -293,6 +340,29 @@ class WebixListView(WebixBaseMixin,
         return 'id'
 
     ########### TEMPLATE BUILDER ###########
+
+    def get_actions(self):
+
+        # add flexport actions
+        if apps.is_installed('flexport'):
+            model_ct = ContentType.objects.get(model=self.model._meta.model_name, app_label=self.model._meta.app_label)
+            flexport_actions = {}
+
+            def action_builder(EXP):
+                _action = lambda listview, request, qs: create_extraction(request, EXP.id, qs)
+                _action.__name__ = 'EXP_action_%s' % EXP.id  # verificare se è corretto
+                _action.short_description = EXP.action_name
+                _action.verbose_name = EXP.action_name
+                return _action
+
+            for EXP in Export.objects.filter(model=model_ct, active=True):
+                if EXP.is_enabled(self.request):
+                    flexport_actions['flexport_{}'.format(EXP.id)] = action_builder(EXP)
+
+            self.actions.update(flexport_actions)
+
+        # custom view actions
+        return self.actions
 
     def get_actions_style(self):
         _actions_style = None
@@ -337,13 +407,30 @@ class WebixListView(WebixBaseMixin,
         else:
             return False
 
+    @property
+    def is_action_request(self):
+        if 'action' in self.request.GET or 'action' in self.request.POST:
+            return True
+        else:
+            return False
+
+    def get_request_action(self):
+        action_name = self.request.POST.get('action', self.request.GET.get('action', None))
+        return self.get_actions().get(action_name)
+
+    def get_actions_names(self):
+        actions_names = {}
+        for action_key, action_func in self.get_actions().items():
+            actions_names.update({action_key: action_func.verbose_name})
+        return actions_names
+
     def post(self, request, *args, **kwargs):  # all post works like get
         return self.get(request, *args, **kwargs)
 
     def get(self, request, *args, **kwargs):
         return super(WebixListView, self).get(request, *args, **kwargs)
 
-    def json_response(self, request, *args, **kwargs):  # TODO
+    def json_response(self, request, *args, **kwargs):
         # ONLY for get_queryset() -> qs and not get_queryset() -> list
         _data = []
         total_count = 0
@@ -374,6 +461,26 @@ class WebixListView(WebixBaseMixin,
         }
         return JsonResponse(data, safe=False)
 
+    def action_response(self, request, *args, **kwargs):
+        action_function = self.get_request_action()
+        if action_function is None:
+            raise Http404(_('This action is not registered'))
+        else:
+            # check permissions
+            for key in getattr(action_function, 'allowed_permissions', []):
+                if hasattr(self, 'has_{}_permission'.format(key)):
+                    if getattr(self, 'has_{}_permission'.format(key))(request) != True:
+                        raise Http404(_('Permission denied: {}'.format(key)))
+                else:
+                    raise Http404(_('This permission is not registered on this class'))
+            # execution
+            qs = self.get_queryset()
+            # filters application (like IDS selections)
+            qs = self.filters_objects_datatable(qs)
+            # apply ordering
+            qs = self.apply_ordering(qs)
+            return action_function(self, request, qs)
+
     def dispatch(self, *args, **kwargs):
 
         self.qsets_filters = self.get_qsets_filters(self.request)
@@ -385,7 +492,9 @@ class WebixListView(WebixBaseMixin,
         if not self.has_view_permission(request=self.request):
             raise PermissionDenied(_('View permission is not allowed'))
 
-        if self.is_json_request:  # added for json response with paging
+        if self.is_action_request:  # added for action response
+            return self.action_response(self.request, *args, **kwargs)
+        elif self.is_json_request:  # added for json response with paging
             return self.json_response(self.request, *args, **kwargs)
         else:  # standard response with js webix template structure
             return super(WebixListView, self).dispatch(*args, **kwargs)
@@ -398,6 +507,10 @@ class WebixListView(WebixBaseMixin,
         context.update(self.get_context_data_webix_base(request=self.request))
         context.update({
             'fields': self.get_fields(),
+            'orders': self.get_ordering(),
+            'actions': self.get_actions_names(),
+            'choices_filters': self.get_choices_filters(),
+            'footer': self.get_footer(),
             'get_pk_field': self.get_pk_field(),
             'objects_datatable': self.get_objects_datatable(),
             'is_enable_column_copy': self.is_enable_column_copy(self.request),
