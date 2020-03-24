@@ -238,8 +238,9 @@ class WebixListView(WebixBaseMixin,
                      'serverMultiSelectFilter' in field.get('datalist_column') or
                      'serverMultiComboFilter' in field.get('datalist_column')):
                     field_name = field.get('field_name')
+                    # TODO: there are no null option
                     _fields_choices[field_name] = list(
-                        self.get_queryset().values_list(field_name, flat=True).distinct().order_by())
+                        self.get_queryset().filter(**{field_name+'__isnull':False}).values_list(field_name, flat=True).distinct().order_by())
 
         return _fields_choices
 
