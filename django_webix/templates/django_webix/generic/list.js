@@ -95,15 +95,15 @@ function get_filters_qsets() {
                     val = val.split(' ').join('');
                     val = val.split(';')
                     $.each(val, function (index, filter_txt) {
-                        if (isNumber(filter_txt)) {
+                        if (isNumberCheck(filter_txt)) {
                             qsets.push({'path': el.id, 'val': filter_txt});
-                        } else if ((filter_txt.substring(0, 2) == '>=') && (isNumber(filter_txt.substring(2)))) {
+                        } else if ((filter_txt.substring(0, 2) == '>=') && (isNumberCheck(filter_txt.substring(2)))) {
                             qsets.push({'path': el.id + '__gte', 'val': filter_txt.substring(2)});
-                        } else if ((filter_txt.substring(0, 2) == '<=') && (isNumber(filter_txt.substring(2)))) {
+                        } else if ((filter_txt.substring(0, 2) == '<=') && (isNumberCheck(filter_txt.substring(2)))) {
                             qsets.push({'path': el.id + '__lte', 'val': filter_txt.substring(2)});
-                        } else if ((filter_txt.substring(0, 1) == '>') && (isNumber(filter_txt.substring(1)))) {
+                        } else if ((filter_txt.substring(0, 1) == '>') && (isNumberCheck(filter_txt.substring(1)))) {
                             qsets.push({'path': el.id + '__gt', 'val': filter_txt.substring(1)});
-                        } else if ((filter_txt.substring(0, 1) == '<') && (isNumber(filter_txt.substring(1)))) {
+                        } else if ((filter_txt.substring(0, 1) == '<') && (isNumberCheck(filter_txt.substring(1)))) {
                             qsets.push({'path': el.id + '__lt', 'val': filter_txt.substring(1)});
                         }
                     })
@@ -204,7 +204,7 @@ $$("{{ webix_container_id }}").addView({
             }
             // elaborate filters
             _params.filters = JSON.stringify( get_filters_qsets() );
-            $$('filter_{{ model_name }}').setValue('0');
+            //$$('filter_{{ model_name }}').setValue('0');
 
             // elaborate sort
             sort = $$('datatable_{{ model_name }}').getState().sort;
@@ -233,6 +233,7 @@ $$("{{ webix_container_id }}").addView({
 
     {% else %}
     data: objects_list,
+    clipboard: true,
     {% endif %}
     navigation: true,
     checkboxRefresh: true,
@@ -244,19 +245,23 @@ $$("{{ webix_container_id }}").addView({
             this.showOverlay("<img src='{% static 'django_webix/loading.gif' %}'>");
         },
         onBeforeFilter: function (id) {
+            this.getFilter(id).disabled = true;
+            console.log(id,'before filter','filter_{{ model_name }}', $$('filter_{{ model_name }}').getValue() , $$('filter_{{ model_name }}').getValue() == '0')
+
             if ($$('filter_{{ model_name }}').getValue() == '0') {
+                console.log('before filter FALSE',$$('filter_{{ model_name }}').getValue())
                 return false
-            } else {
-                this.getFilter(id).disabled = true;
             }
         },
         onAfterFilter: function () {
+            console.log('after filter')
             var columns = this.config.columns;
             columns.forEach(function (obj) {
                 if ($$("datatable_{{model_name}}").getFilter(obj.id)) {
                     $$("datatable_{{model_name}}").getFilter(obj.id).disabled = false;
                 }
             });
+            $$('filter_{{ model_name }}').setValue('0');
         },
         onItemDblClick: function (id, e, trg) {
             var el = $$('datatable_{{model_name}}').getSelectedItem();
@@ -333,6 +338,8 @@ $$("{{ webix_container_id }}").addView({
         }
     }
 })
+{% else %}
+$$('filter_{{ model_name }}').setValue('0');
 {% endif %}
 
 {% endblock %}

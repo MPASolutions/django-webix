@@ -18,7 +18,8 @@ from django.utils.translation import ugettext as _
 from extra_views import UpdateWithInlinesView, CreateWithInlinesView
 
 from django_webix.views.generic.base import WebixBaseMixin, WebixPermissionsMixin, WebixUrlMixin
-from django_webix.views.generic.signals import (django_webix_view_pre_save, django_webix_view_pre_inline_save,
+from django_webix.views.generic.signals import (django_webix_view_pre_save,
+                                                django_webix_view_pre_inline_save,
                                                 django_webix_view_post_save)
 
 
@@ -168,13 +169,9 @@ class WebixCreateView(WebixCreateUpdateMixin, WebixBaseMixin, WebixPermissionsMi
         for inline_class in self.get_inlines():
             kwargs = self.kwargs
             initial = initial_inlines.get(inline_class, None)
-            #raise Exception(initial)
-
-
             inline_instance = inline_class(self.model, self.request, self.object, kwargs, self, initial)
             inline_formset = inline_instance.construct_formset()
             inline_formsets.append(inline_formset)
-            #raise Exception(inline_formset)
         return inline_formsets
 
     def get_form_kwargs(self):

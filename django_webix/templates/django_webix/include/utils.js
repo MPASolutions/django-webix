@@ -58,15 +58,13 @@ webix.i18n.locales['it-IT'].pivot = {
     windowMessage: "[Trascinare i campi di sinistra nella sezione desiderata]",
     total: "Totale"
 };
-
-function isNumber(val) {
+function isNumberCheck(val) {
     if (val.match(/^\d+\.\d+$/) || val.match(/^\d+\,\d+$/) || val.match(/^-{0,1}\d+$/)){
         return true;
     } else {
         return false;
     }
 }
-
 
 function load_pdf(url) {
     var win = window.open(url, '_blank');

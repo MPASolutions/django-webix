@@ -81,6 +81,7 @@ function isInteger(field_name, value, max, min) {
  * @returns {boolean}
  */
 function isNumber(field_name, value, max, min) {
+//        if (val.match(/^\d+\.\d+$/) || val.match(/^\d+\,\d+$/) || val.match(/^-{0,1}\d+$/)){
     if (!$.isNumeric(value)) {
         value = value.replace(',', '.');
     }

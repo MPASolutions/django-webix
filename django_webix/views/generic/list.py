@@ -245,9 +245,14 @@ class WebixListView(WebixBaseMixin,
         return _fields_choices
 
     def get_footer(self):
-        _footer = None
+        is_footer = False
         fields = self.get_fields()
         if fields is not None:
+            for field in fields:
+                if field.get('footer') is not None:
+                    is_footer=True
+
+        if is_footer == True:
             qs = self.get_queryset()
             aggregation_dict = {}
             for field in fields:
