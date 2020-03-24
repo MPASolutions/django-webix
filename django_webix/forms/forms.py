@@ -364,7 +364,8 @@ class BaseWebixMixin(object):
                                 'borderless': True,
                                 'template': label,
                                 'height': 30,
-                                'width': 200
+                                'width': 200,
+                                'css': {'background-color': 'transparent !important'}
                             },
                             {
                                 'name_label': name,
@@ -438,7 +439,8 @@ class BaseWebixMixin(object):
                                 'id_label': name,
                                 'borderless': True,
                                 'template': label,
-                                'height': 30
+                                'height': 30,
+                                'css': {'background-color': 'transparent !important'}
                             },
                             _download,
                             el
