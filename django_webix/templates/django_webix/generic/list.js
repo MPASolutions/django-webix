@@ -230,10 +230,8 @@ $$("{{ webix_container_id }}").addView({
                     });
         }
     },
-
     {% else %}
     data: objects_list,
-    clipboard: true,
     {% endif %}
     navigation: true,
     checkboxRefresh: true,
@@ -241,18 +239,16 @@ $$("{{ webix_container_id }}").addView({
         onCheck: function (row, column, state) {
             update_counter();
         },
-        onBeforeLoad: function () {
-            this.showOverlay("<img src='{% static 'django_webix/loading.gif' %}'>");
-        },
         onBeforeFilter: function (id) {
-            this.getFilter(id).disabled = true;
-            console.log(id,'before filter','filter_{{ model_name }}', $$('filter_{{ model_name }}').getValue() , $$('filter_{{ model_name }}').getValue() == '0')
-
             if ($$('filter_{{ model_name }}').getValue() == '0') {
                 console.log('before filter FALSE',$$('filter_{{ model_name }}').getValue())
                 return false
+            } else {
+                $$("datatable_{{model_name}}").getFilter(id).disabled = true;
+                console.log('before filter TRUE',$$('filter_{{ model_name }}').getValue())
             }
         },
+
         onAfterFilter: function () {
             console.log('after filter')
             var columns = this.config.columns;
@@ -263,13 +259,8 @@ $$("{{ webix_container_id }}").addView({
             });
             $$('filter_{{ model_name }}').setValue('0');
         },
-        onItemDblClick: function (id, e, trg) {
-            var el = $$('datatable_{{model_name}}').getSelectedItem();
-            {% block datatable_onitemdoubleclick %}
-            {% if is_enable_row_click and type_row_click == 'double' %}
-            load_js('{{ url_update }}'.replace('0', el.id));
-            {% endif %}
-            {% endblock %}
+        onBeforeLoad: function () {
+            this.showOverlay("<img src='{% static 'django_webix/loading.gif' %}'>");
         },
         onAfterLoad: function () {
             {% if not is_json_loading %}
@@ -277,6 +268,14 @@ $$("{{ webix_container_id }}").addView({
             $$('datatable_{{ model_name }}').view_count_total = objects_list.length;
             {% endif %}
             this.hideOverlay();
+        },
+        onItemDblClick: function (id, e, trg) {
+            var el = $$('datatable_{{model_name}}').getSelectedItem();
+            {% block datatable_onitemdoubleclick %}
+            {% if is_enable_row_click and type_row_click == 'double' %}
+            load_js('{{ url_update }}'.replace('0', el.id));
+            {% endif %}
+            {% endblock %}
         },
         onItemClick: function (id, e, trg) {
             var el = $$('datatable_{{model_name}}').getSelectedItem();
@@ -319,8 +318,10 @@ $$('datatable_{{model_name}}').refreshColumns();
 {% endif %}
 {% endblock %}
 
-{%  if is_json_loading %}
+// disable filter on first request
+$$('filter_{{ model_name }}').setValue('0');
 
+{%  if is_json_loading %}
 $$("{{ webix_container_id }}").addView({
     template: "{common.first()} {common.prev()} {common.pages()} {common.next()} {common.last()}",
     id: "datatable_paging_{{ model_name }}", // the container to place the pager controls into
@@ -338,8 +339,6 @@ $$("{{ webix_container_id }}").addView({
         }
     }
 })
-{% else %}
-$$('filter_{{ model_name }}').setValue('0');
 {% endif %}
 
 {% endblock %}
