@@ -13,6 +13,6 @@ def multiple_delete_action(self, request, qs):
     return JsonResponse({
         "status": True,
         "message": _('{count_delete_instances} elements have been deleted').format(
-            count_delete_instances=_count_delete_instances)
+            count_delete_instances=_count_delete_instances),
         "redirect_url": self.get_url_list(),
     }, safe=False)

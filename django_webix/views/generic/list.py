@@ -358,6 +358,10 @@ class WebixListView(WebixBaseMixin,
                 _action.response_type = 'blank'
                 _action.short_description = export_instance.action_name
                 _action.action_key = 'flexport_{}'.format(export_instance.id)
+                _action.allowed_permissions = []
+                _action.modal_title = _("Are you sure you want to proceed with this action?")
+                _action.modal_ok = _("Proceed")
+                _action.modal_cancel = _("Undo")
                 return _action
 
             for export_instance in Export.objects.filter(model=model_ct, active=True):
