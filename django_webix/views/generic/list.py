@@ -43,15 +43,7 @@ class WebixListView(WebixBaseMixin,
     fields = None  # ex. [{'field_name':'XXX','datalist_column':'YYY',}]
     order_by = None
 
-    # actions {'delete':self.multiple_delete_action}
-    actions = {}  # {'make_published': self.make_published}
-    # def make_published(listview, request, queryset):
-    #    queryset.update(status='p')
-    #    return render(request, 'myapp/index.html', {
-    #         'foo': 'bar',
-    #     }, content_type='application/xhtml+xml')
-    # make_published.allowed_permissions = ('add','change','delete','view')
-    # make_published.short_description = "Mark selected stories as published"
+    actions = []  # [multiple_delete_action]
 
     # paging
     enable_json_loading = False
@@ -349,33 +341,43 @@ class WebixListView(WebixBaseMixin,
 
     ########### TEMPLATE BUILDER ###########
     def get_actions(self):
-        _actions = {}
-        for action_key, action_func in self.actions.items():
-            if type(action_func) == str:
-                _actions.update({action_key: getattr(self, action_func)})
-            else:
-                _actions.update({action_key: action_func})
+        '''
+        Return list ov actions to be executed on listview
+        :return:
+        '''
+        _actions = self.actions
 
         # add flexport actions
         if apps.is_installed('flexport'):
             model_ct = ContentType.objects.get(model=self.model._meta.model_name, app_label=self.model._meta.app_label)
             flexport_actions = {}
 
-            def action_builder(EXP):
-                _action = lambda listview, request, qs: create_extraction(request, EXP.id, qs)
-                _action.__name__ = 'EXP_action_%s' % EXP.id  # verificare se è corretto
-                _action.short_description = EXP.action_name
-                _action.verbose_name = EXP.action_name
+            def action_builder(export_instance):
+                _action = lambda listview, request, qs: create_extraction(request, export_instance.id, qs)
+                _action.__name__ = 'flexport_action_%s' % export_instance.id  # verificare se è corretto
+                _action.response_type = 'blank'
+                _action.short_description = export_instance.action_name
+                _action.action_key = 'flexport_{}'.format(export_instance.id)
                 return _action
 
-            for EXP in Export.objects.filter(model=model_ct, active=True):
-                if EXP.is_enabled(self.request):
-                    flexport_actions['flexport_{}'.format(EXP.id)] = action_builder(EXP)
+            for export_instance in Export.objects.filter(model=model_ct, active=True):
+                if export_instance.is_enabled(self.request):
+                    _actions.append(action_builder(export_instance))
 
-            _actions.update(flexport_actions)
+        _dict_actions = {}
+        for _action in _actions:
+            _dict_actions[_action.action_key] = {
+                    'func':_action,
+                    'action_key': _action.action_key,
+                    'response_type': _action.response_type,
+                    'allowed_permissions': _action.allowed_permissions,
+                    'short_description': _action.short_description,
+                    'modal_title': _action.modal_title,
+                    'modal_ok': _action.modal_ok,
+                    'modal_cancel': _action.modal_cancel,
+                }
 
-        # custom view actions
-        return _actions
+        return _dict_actions
 
     def get_actions_style(self):
         _actions_style = None
@@ -429,18 +431,8 @@ class WebixListView(WebixBaseMixin,
 
     def get_request_action(self):
         action_name = self.request.POST.get('action', self.request.GET.get('action', None))
-        return self.get_actions().get(action_name)
+        return self.get_actions().get(action_name)['func']
 
-    def get_actions_names(self):
-        actions_names = {}
-        for action_key, action_func in self.get_actions().items():
-            has_perm = True
-            for key in getattr(action_func, 'allowed_permissions', []):
-                if not hasattr(self, 'has_{}_permission'.format(key)):
-                    has_perm = False
-            if has_perm==True:
-                actions_names.update({action_key: action_func.verbose_name})
-        return actions_names
 
     def post(self, request, *args, **kwargs):  # all post works like get
         return self.get(request, *args, **kwargs)
@@ -526,7 +518,7 @@ class WebixListView(WebixBaseMixin,
         context.update({
             'fields': self.get_fields(),
             'orders': self.get_ordering(),
-            'actions': self.get_actions_names(),
+            'actions': self.get_actions(),
             'choices_filters': self.get_choices_filters(),
             'footer': self.get_footer(),
             'get_pk_field': self.get_pk_field(),
