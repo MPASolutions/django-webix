@@ -5,7 +5,6 @@ from __future__ import unicode_literals
 import json
 
 import django
-from django.contrib.contenttypes.models import ContentType
 from django.core.exceptions import FieldDoesNotExist
 from django.core.exceptions import PermissionDenied, ImproperlyConfigured
 from django.db.models import Q, ManyToManyField
@@ -25,11 +24,6 @@ try:
     from django.contrib.gis.geos import MultiPolygon
 except ImportError:
     MultiPolygon = object
-
-if apps.is_installed('flexport'):
-    from flexport.views import create_extraction
-    from flexport.models import Export
-
 
 class WebixListView(WebixBaseMixin,
                     WebixPermissionsMixin,
@@ -236,18 +230,20 @@ class WebixListView(WebixBaseMixin,
 
         return _fields_choices
 
-    def get_footer(self):
+    def is_enable_footer(self):
         is_footer = False
         fields = self.get_fields()
         if fields is not None:
             for field in fields:
                 if field.get('footer') is not None:
                     is_footer=True
+        return is_footer
 
-        if is_footer == True:
+    def get_footer(self):
+        if self.is_enable_footer():
             qs = self.get_queryset()
             aggregation_dict = {}
-            for field in fields:
+            for field in self.get_fields():
                 if field.get('footer') is not None:
                     aggregation_dict.update({field.get('field_name') + '_footer': field.get('footer')})
             qs = qs.aggregate(**aggregation_dict)
@@ -349,6 +345,10 @@ class WebixListView(WebixBaseMixin,
 
         # add flexport actions
         if apps.is_installed('flexport'):
+            from django.contrib.contenttypes.models import ContentType
+            from flexport.views import create_extraction
+            from flexport.models import Export
+
             model_ct = ContentType.objects.get(model=self.model._meta.model_name, app_label=self.model._meta.app_label)
             flexport_actions = {}
 
@@ -466,11 +466,14 @@ class WebixListView(WebixBaseMixin,
                 else:  # queryset
                     _data = self._get_objects_datatable_values(qs_paginate)
 
+        pos = self.get_paginate_start()
         # output must be list and not values of queryset
         data = {
+            "footer": self.get_footer() if pos==0 else None, # footer is computed only for first page
+            'is_enable_footer': self.is_enable_footer(),
             "count": self.get_paginate_count(),
             "total_count": total_count,
-            "pos": self.get_paginate_start(),
+            "pos": pos,
             "data": list(_data)
         }
         return JsonResponse(data, safe=False)
@@ -524,7 +527,8 @@ class WebixListView(WebixBaseMixin,
             'orders': self.get_ordering(),
             'actions': self.get_actions(),
             'choices_filters': self.get_choices_filters(),
-            'footer': self.get_footer(),
+            'footer': self.get_footer() if not self.enable_json_loading else None, # footer only if not paging
+            'is_enable_footer': self.is_enable_footer(),
             'get_pk_field': self.get_pk_field(),
             'objects_datatable': self.get_objects_datatable(),
             'is_enable_column_copy': self.is_enable_column_copy(self.request),

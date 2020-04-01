@@ -36,8 +36,10 @@ function update_counter() {
         }
 
         {% endif %}
-    } else {
+    } else if (view_count_total!=undefined) {
         txt = view_count_total + ' {% trans "elements" %}';
+    } else {
+        txt = '';
     }
 
     $$('stats_list').define('label', txt);

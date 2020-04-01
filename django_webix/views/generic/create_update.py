@@ -3,7 +3,6 @@
 from __future__ import unicode_literals
 
 from django.apps import apps
-from django.contrib.contenttypes.models import ContentType
 from django.core.exceptions import ImproperlyConfigured, ValidationError
 from django.core.exceptions import PermissionDenied
 from django.forms import model_to_dict
@@ -153,7 +152,10 @@ class WebixCreateUpdateMixin:
         return self.response_invalid(form=form, inlines=inlines, **kwargs)
 
 
-class WebixCreateView(WebixCreateUpdateMixin, WebixBaseMixin, WebixPermissionsMixin, WebixUrlMixin,
+class WebixCreateView(WebixCreateUpdateMixin,
+                      WebixBaseMixin,
+                      WebixPermissionsMixin,
+                      WebixUrlMixin,
                       CreateWithInlinesView):
     template_name = 'django_webix/generic/create.js'
     model_copy_fields = None
@@ -297,6 +299,7 @@ class WebixCreateView(WebixCreateUpdateMixin, WebixBaseMixin, WebixPermissionsMi
             self.request.user.is_anonymous) else self.request.user.is_anonymous
         if self.logs_enable is True and not anonymous and apps.is_installed('django.contrib.admin'):
             from django.contrib.admin.models import LogEntry, ADDITION
+            from django.contrib.contenttypes.models import ContentType
             LogEntry.objects.log_action(
                 user_id=self.request.user.pk,
                 content_type_id=ContentType.objects.get_for_model(self.object).pk,
@@ -381,6 +384,7 @@ class WebixUpdateView(WebixCreateUpdateMixin, WebixBaseMixin, WebixPermissionsMi
             self.request.user.is_anonymous) else self.request.user.is_anonymous
         if self.logs_enable is True and not anonymous and apps.is_installed('django.contrib.admin'):
             from django.contrib.admin.models import LogEntry, CHANGE
+            from django.contrib.contenttypes.models import ContentType
             LogEntry.objects.log_action(
                 user_id=self.request.user.pk,
                 content_type_id=ContentType.objects.get_for_model(self.object).pk,

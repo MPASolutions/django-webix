@@ -204,7 +204,6 @@ $$("{{ webix_container_id }}").addView({
             }
             // elaborate filters
             _params.filters = JSON.stringify( get_filters_qsets() );
-            //$$('filter_{{ model_name }}').setValue('0');
 
             // elaborate sort
             sort = $$('datatable_{{ model_name }}').getState().sort;
@@ -221,7 +220,15 @@ $$("{{ webix_container_id }}").addView({
                         _data = data.json();
                         $$('datatable_{{ model_name }}').view_count = _data.data.length;
                         $$('datatable_{{ model_name }}').view_count_total = _data.total_count;
+                        // counter
                         update_counter();
+                        {% if is_enable_footer %}
+                        // footer only for first page
+                        for (var field_name in _data.footer) {
+                            $$('datatable_{{model_name}}').getColumnConfig(field_name.replace('_footer', '')).footer[0].text = _data.footer[field_name];
+                        }
+                        //$$('datatable_{{model_name}}').refreshColumns(); // will be refreshed alone
+                        {% endif %}
                         return data;
                     })
                     .fail(function (err) {
@@ -241,16 +248,13 @@ $$("{{ webix_container_id }}").addView({
         },
         onBeforeFilter: function (id) {
             if ($$('filter_{{ model_name }}').getValue() == '0') {
-                console.log('before filter FALSE',$$('filter_{{ model_name }}').getValue())
                 return false
             } else {
                 $$("datatable_{{model_name}}").getFilter(id).disabled = true;
-                console.log('before filter TRUE',$$('filter_{{ model_name }}').getValue())
             }
         },
 
         onAfterFilter: function () {
-            console.log('after filter')
             var columns = this.config.columns;
             columns.forEach(function (obj) {
                 if ($$("datatable_{{model_name}}").getFilter(obj.id)) {
@@ -303,19 +307,17 @@ $$("{{ webix_container_id }}").addView({
     }
 });
 
-//% block orders %}
-//grid.markSorting("title", "asc");
-//% endblock %}
-
 {% block footer %}
-{% if footer %}
-$$("datatable_{{model_name}}").define("footer", true);
-$$("datatable_{{model_name}}").refresh();
-{% for field_name, field_value in footer.items %}
-$$('datatable_{{model_name}}').getColumnConfig('{{ field_name }}'.replace('_footer', '')).footer[0].text = "{{ field_value }}"
-$$('datatable_{{model_name}}').refreshColumns();
-{% endfor %}
-{% endif %}
+    {% if is_enable_footer %}
+        $$("datatable_{{model_name}}").define("footer", true);
+        $$("datatable_{{model_name}}").refresh();
+        {%  if not is_json_loading %}
+            {% for field_name, field_value in footer.items %}
+                $$('datatable_{{model_name}}').getColumnConfig('{{ field_name }}'.replace('_footer', '')).footer[0].text = "{{ field_value }}"
+            {% endfor %}
+            $$('datatable_{{model_name}}').refreshColumns();
+        {% endif %}
+    {% endif %}
 {% endblock %}
 
 // disable filter on first request

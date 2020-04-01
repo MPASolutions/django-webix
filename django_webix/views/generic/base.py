@@ -8,11 +8,7 @@ from django.utils.translation import ugettext as _
 from django.views.generic import TemplateView
 from django.urls import reverse
 
-try:
-    from django.urls import get_resolver
-except ImportError:
-    from django.core.urlresolvers import get_resolver
-
+from django.urls.exceptions import NoReverseMatch
 
 class WebixPermissionsMixin:
     model = None
@@ -192,18 +188,42 @@ class WebixUrlMixin:
     url_pattern_update = None
     url_pattern_delete = None
 
-    def _check_url(self, url_name):
+    def get_url_pattern_list(self):
+        if self.url_pattern_list is not None:
+            return self.url_pattern_list
+        else:
+            return '{}.list'.format(self.get_model_name())
+
+    def get_url_pattern_create(self):
+        if self.url_pattern_create is not None:
+            return self.url_pattern_create
+        else:
+            return '{}.create'.format(self.get_model_name())
+
+    def get_url_pattern_update(self):
+        if self.url_pattern_update is not None:
+            return self.url_pattern_update
+        else:
+            return '{}.update'.format(self.get_model_name())
+
+    def get_url_pattern_delete(self):
+        if self.url_pattern_delete is not None:
+            return self.url_pattern_delete
+        else:
+            return '{}.delete'.format(self.get_model_name())
+
+    def _check_url(self, url_name, reverse_kwargs={}):
         """
         Check if url_name exists
 
         :param url_name: url name
         :return: url_name if exists, otherwhise None
         """
-
-        exists = url_name in [i for i in get_resolver(None).reverse_dict.keys() if isinstance(i, six.string_types)]
-        if exists:
+        try:
+            url = reverse(url_name, kwargs=reverse_kwargs)
             return url_name
-        return None
+        except NoReverseMatch:
+            return None
 
     def get_model_name(self):
         if self.model is not None:
@@ -212,7 +232,7 @@ class WebixUrlMixin:
 
     def get_url_list(self):
         if self.model is not None:
-            _url_pattern_name = self.url_pattern_list or self._check_url('{}.list'.format(self.get_model_name()))
+            _url_pattern_name = self._check_url(self.get_url_pattern_list())
             if _url_pattern_name is not None:
                 return reverse(_url_pattern_name)
         return None
@@ -222,7 +242,7 @@ class WebixUrlMixin:
 
     def get_url_create(self):
         if self.model is not None:
-            _url_pattern_name = self.url_pattern_create or self._check_url('{}.create'.format(self.get_model_name()))
+            _url_pattern_name = self._check_url(self.get_url_pattern_create())
             if _url_pattern_name is not None:
                 create_kwargs = self.get_url_create_kwargs()
                 if create_kwargs is not None:
@@ -233,7 +253,7 @@ class WebixUrlMixin:
 
     def get_url_update(self, obj=None):
         if self.model is not None:
-            _url_pattern_name = self.url_pattern_update or self._check_url('{}.update'.format(self.get_model_name()))
+            _url_pattern_name = self._check_url(self.get_url_pattern_update(), {'pk':0})
             if _url_pattern_name is not None:
                 if obj is not None:
                     _pk = obj.pk
@@ -244,7 +264,7 @@ class WebixUrlMixin:
 
     def get_url_delete(self, obj=None):
         if self.model is not None:
-            _url_pattern_name = self.url_pattern_delete or self._check_url('{}.delete'.format(self.get_model_name()))
+            _url_pattern_name = self._check_url(self.get_url_pattern_delete(), {'pk':0})
             if _url_pattern_name is not None:
                 if obj is not None:
                     _pk = obj.pk

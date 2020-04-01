@@ -7,7 +7,7 @@ import json
 
 from django.apps import apps
 from django.conf import settings
-from django.contrib.contenttypes.models import ContentType
+
 from django.core.exceptions import ImproperlyConfigured
 from django.core.exceptions import PermissionDenied
 from django.http import HttpResponseRedirect
@@ -110,6 +110,7 @@ class WebixDeleteView(WebixBaseMixin, WebixPermissionsMixin, WebixUrlMixin, Dele
 
         if self.logs_enable is True and not anonymous and apps.is_installed('django.contrib.admin'):
             from django.contrib.admin.models import LogEntry, DELETION
+            from django.contrib.contenttypes.models import ContentType
             LogEntry.objects.log_action(
                 user_id=request.user.id,
                 content_type_id=ContentType.objects.get_for_model(self.object).pk,
