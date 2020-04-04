@@ -136,13 +136,6 @@ class AdminWebixSite:
         """
         return model in self._registry
 
-    def has_permission(self, request):
-        """
-        Return True if the given HttpRequest has permission to view
-        *at least one* page in the admin site.
-        """
-        return request.user.is_active and request.user.is_staff
-
     def _build_app_dict(self, request, label=None):
         """
         Build the app dictionary. The optional `label` parameter filters models
@@ -301,8 +294,6 @@ class AdminWebixSite:
         # Add in each model's views, and create a list of valid URLS for the
         # app_index
         valid_app_labels = []
-
-        print(self._registry)
 
         for model, model_admin in self._registry.items():
             urlpatterns += [

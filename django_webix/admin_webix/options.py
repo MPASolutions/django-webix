@@ -250,8 +250,6 @@ class ModelWebixAdmin(WebixPermissionsMixin):
         #    wrapper.model_admin = self
         #    return update_wrapper(wrapper, view)
 
-        info = self.model._meta.app_label, self.model._meta.model_name
-
         return [
             path('', self.get_list_view().as_view(), name=self.get_url_pattern_list()),
             path('create/', self.get_add_view().as_view(), name=self.get_url_pattern_create()),
