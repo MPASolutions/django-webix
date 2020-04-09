@@ -47,7 +47,7 @@ $$('{{ inline.get_container_id|default_if_none:inline.get_default_container_id }
                     view: "tootipButton",
                     type: "form",
                     align: "right",
-                    label: '{% trans 'Add' %}',
+                    label: '{% trans 'Add'|escapejs %}',
                     width: 150,
                     on: {
                         onBeforeRender: function () {

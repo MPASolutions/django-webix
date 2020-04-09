@@ -10,7 +10,7 @@ $$("{{ webix_container_id }}").addView({
                 view: "tootipButton",
                 type: "base",
                 align: "left",
-                label: "{% trans "Back" %}",
+                label: "{% trans "Back"|escapejs %}",
                 autowidth: true,
                 click: function () {
                     load_js("{{ url_back }}");
@@ -21,7 +21,7 @@ $$("{{ webix_container_id }}").addView({
                 view: "tootipButton",
                 type: "base",
                 align: "left",
-                label: "{% trans "Back to list" %}",
+                label: "{% trans "Back to list"|escapejs %}",
                 autowidth: true,
                 click: function () {
                     load_js("{{ url_list }}");
@@ -31,7 +31,7 @@ $$("{{ webix_container_id }}").addView({
         {
             view: "template",
             type: "header",
-            template: '<div style="width:100%; text-align:center;"><strong>{% if object %}{{ model|getattr:"_meta"|getattr:"verbose_name" }}: {{ object_name|default_if_none:object|escapejs }}{% else %}{% trans "Add" %} {{ model|getattr:"_meta"|getattr:"verbose_name" }}{% endif %}</strong></div>'
+            template: '<div style="width:100%; text-align:center;"><strong>{% if object %}{{ model|getattr:"_meta"|getattr:"verbose_name" }}: {{ object_name|default_if_none:object|escapejs }}{% else %}{% trans "Add"|escapejs %} {{ model|getattr:"_meta"|getattr:"verbose_name" }}{% endif %}</strong></div>'
         }
     ]
 }, 0);

@@ -3,7 +3,7 @@
 $$("{{ webix_container_id }}").addView({
     id: "header_failure_related_objects",
     view: "template",
-    template: "{% trans "Missing data to add item" %}",
+    template: "{% trans "Missing data to add item"|escapejs %}",
     type: "header"
 });
 

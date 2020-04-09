@@ -69,7 +69,7 @@
                     }
                     webix.message({
                         type: "error",
-                        text: "{% trans "You must fill in all the required fields before you can save this form!" %}<br><br>{% trans "Error in the following fields" %}:<br>" + text
+                        text: "{% trans "You must fill in all the required fields before you can save this form!"|escapejs %}<br><br>{% trans "Error in the following fields"|escapejs %}:<br>" + text
                     });
                 }
             }

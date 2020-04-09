@@ -20,24 +20,24 @@ function update_counter() {
         {% endif %}
     }
     if (ids.length > 0) {
-        txt = ids.length + ' {% trans "of" %} ' + view_count_total + ' {% trans "elements" %}';
+        txt = ids.length + ' {% trans "of"|escapejs %} ' + view_count_total + ' {% trans "elements"|escapejs %}';
         {% if is_json_loading %}
         if (ids.length ==view_count) {
             if ($$('select_all_checkbox').getValue() == 0) {
-                txt += '<div style="width:110px;float:right;height:100%;" class="webix_view webix_control webix_el_button webix_secondary"><div title="{% trans "Select all" %}" class="webix_el_box"><button type="button" class="webix_button webix_img_btn" style="line-height:24px;" onclick="$$(\'select_all_checkbox\').setValue(1);update_counter()"> {% trans "Select all" %} </button></div></div>';
+                txt += '<div style="width:110px;float:right;height:100%;" class="webix_view webix_control webix_el_button webix_secondary"><div title="{% trans "Select all"|escapejs %}" class="webix_el_box"><button type="button" class="webix_button webix_img_btn" style="line-height:24px;" onclick="$$(\'select_all_checkbox\').setValue(1);update_counter()"> {% trans "Select all"|escapejs %} </button></div></div>';
             } else {
-                txt = '{% trans "All" %} ' + view_count_total + ' {% trans "elements selected" %}';
-                txt += '<div style="width:110px;float:right;height:100%;" class="webix_view webix_control webix_el_button webix_secondary"><div title="{% trans "Cancel selection" %}" class="webix_el_box"><button type="button" class="webix_button webix_img_btn" style="line-height:24px;" onclick="$$(\'select_all_checkbox\').setValue(0);$(\'input[name=master_checkbox]\').prop(\'checked\',false);master_checkbox_click();update_counter()"> {% trans "Cancel selection" %} </button></div></div>';
+                txt = '{% trans "All"|escapejs %} ' + view_count_total + ' {% trans "elements selected"|escapejs %}';
+                txt += '<div style="width:110px;float:right;height:100%;" class="webix_view webix_control webix_el_button webix_secondary"><div title="{% trans "Cancel selection"|escapejs %}" class="webix_el_box"><button type="button" class="webix_button webix_img_btn" style="line-height:24px;" onclick="$$(\'select_all_checkbox\').setValue(0);$(\'input[name=master_checkbox]\').prop(\'checked\',false);master_checkbox_click();update_counter()"> {% trans "Cancel selection"|escapejs %} </button></div></div>';
             }
         }
         {% else %}
         if ($('input[name="master_checkbox"]').prop("checked") == true) {
-            txt = '{% trans "All" %} ' + view_count_total + ' {% trans "elements selected" %}';
+            txt = '{% trans "All"|escapejs %} ' + view_count_total + ' {% trans "elements selected"|escapejs %}';
         }
 
         {% endif %}
     } else if (view_count_total!=undefined) {
-        txt = view_count_total + ' {% trans "elements" %}';
+        txt = view_count_total + ' {% trans "elements"|escapejs %}';
     } else {
         txt = '';
     }
@@ -103,7 +103,7 @@ function prepare_actions_execute(action_name) {
         var all = $$('select_all_checkbox').getValue()==1;
         actions_execute(action_name, ids, all);
     } else {
-        webix.alert("{% trans "No row has been selected" %}", "alert-warning");
+        webix.alert("{% trans "No row has been selected"|escapejs %}", "alert-warning");
     }
 }
 
@@ -143,7 +143,7 @@ $$("{{ webix_container_id }}").addView({
             view: "tootipButton",
             type: "form",
             align: "right",
-            label: '{% trans "Add new" %}',
+            label: '{% trans "Add new"|escapejs %}',
             {% if not has_add_permission %}
             disabled: true,
             tooltip: '{{ info_no_add_permission|join:", " }}',

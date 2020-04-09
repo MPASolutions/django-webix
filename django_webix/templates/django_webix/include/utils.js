@@ -100,35 +100,35 @@ function custom_checkbox_help(obj, common, value) {
 
 function custom_checkbox_yesno(obj, common, value) {
     if (value)
-        return "<div style='color:green;'>{% trans "Yes" %}</div>";
+        return "<div style='color:green;'>{% trans "Yes"|escapejs %}</div>";
     else
-        return "<div style='color:red;'>{% trans "No" %}</div>";
+        return "<div style='color:red;'>{% trans "No"|escapejs %}</div>";
 }
 
 function custom_checkbox_default(obj, common, value) {
     if (value)
-        return '<div title="{% trans "Default" %}"><i style="cursor:pointer" class="webix_icon fas fa-check-circle"></i></div>';
+        return '<div title="{% trans "Default"|escapejs %}"><i style="cursor:pointer" class="webix_icon fas fa-check-circle"></i></div>';
     else
         return ''
 }
 
 function custom_button_geo(obj, common, value) {
     if (value)
-        return '<div title="{% trans "Show on map" %}"><i style="cursor:pointer" class="webix_icon fas fa-map-marker-alt"></i></div>';
+        return '<div title="{% trans "Show on map"|escapejs %}"><i style="cursor:pointer" class="webix_icon fas fa-map-marker-alt"></i></div>';
     else
         return ''
 }
 
 function custom_button_cp(obj, common, value) {
-    return '<div title="{% trans "Duplicate element" %}"><i style="cursor:pointer" class="webix_icon far fa-copy"></i></div>'
+    return '<div title="{% trans "Duplicate element"|escapejs %}"><i style="cursor:pointer" class="webix_icon far fa-copy"></i></div>'
 }
 
 function custom_button_rm(obj, common, value) {
-    return '<div title="{% trans "Remove element" %}"><i style="cursor:pointer" class="webix_icon far fa-trash-alt"></i></div>'
+    return '<div title="{% trans "Remove element"|escapejs %}"><i style="cursor:pointer" class="webix_icon far fa-trash-alt"></i></div>'
 }
 
 function custom_button_detail(obj, common, value) {
-    return '<div title="{% trans "Detail" %}"><i style="cursor:pointer" class="webix_icon fas fa-external-link-square-alt"></i></div>'
+    return '<div title="{% trans "Detail"|escapejs %}"><i style="cursor:pointer" class="webix_icon fas fa-external-link-square-alt"></i></div>'
 }
 
 function image_modal(url, width, height, id) {
@@ -139,10 +139,10 @@ function image_modal(url, width, height, id) {
         width: width,
         head: {
             view: "toolbar", cols: [
-                {view: "label", label: "{% trans "Image" %}"},
+                {view: "label", label: "{% trans "Image"|escapejs %}"},
                 {
                     view: "tootipButton",
-                    label: '{% trans "Close" %}',
+                    label: '{% trans "Close"|escapejs %}',
                     width: 100,
                     align: 'right',
                     click: "$$('" + id + "').close();"
@@ -197,7 +197,7 @@ function load_js(lnk, hide, area, method, data) {
                 else if ($$(area) !== undefined && $$(area) !== null && $$(area).hideOverlay !== undefined)
                     $$(area).hideOverlay();
 
-                webix.alert('{% trans "Server error" %}')
+                webix.alert('{% trans "Server error"|escapejs %}')
             }
         });
     }
@@ -225,7 +225,7 @@ function load_js_data(lnk, area, method, data) {
             return msg;
         },
         error: function () {
-            webix.alert('{% trans "Server error" %}')
+            webix.alert('{% trans "Server error"|escapejs %}')
         }
     });
 }
@@ -319,7 +319,7 @@ webix.ui.datafilter.dataListCheckbox = webix.extend({
         };
     },
     render: function (master, config) {
-        return "<input type='checkbox' " + (config.checked ? "checked='1'" : "") + "> {% trans "All" %}";
+        return "<input type='checkbox' " + (config.checked ? "checked='1'" : "") + "> {% trans "All"|escapejs %}";
     }
 }, webix.ui.datafilter.masterCheckbox);
 

@@ -8,7 +8,7 @@
  * @returns {boolean}
  */
 function isNotEmpty(field_name, value) {
-    $$("id_" + field_name).define("tooltip", '{% trans "Required field" %}');
+    $$("id_" + field_name).define("tooltip", '{% trans "Required field"|escapejs %}');
     return value != null && value !== '';
 }
 
@@ -20,7 +20,7 @@ function isNotEmpty(field_name, value) {
  * @returns {*}
  */
 function isEmail(field_name, value) {
-    $$("id_" + field_name).define("tooltip", '{% trans "Invalid email" %}');
+    $$("id_" + field_name).define("tooltip", '{% trans "Invalid email"|escapejs %}');
     var re = /^([\w-]+(?:\.[\w-]+)*)@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$/i;
     if (value == null || value === '')
         return true;
@@ -56,15 +56,15 @@ function isInteger(field_name, value, max, min) {
     // TODO
     if (value !== '') {
         if (isInt(value) === false) {
-            $$("id_" + field_name).define("tooltip", '{% trans "Not integer field" %}');
+            $$("id_" + field_name).define("tooltip", '{% trans "Not integer field"|escapejs %}');
             return false;
         }
         if (Number(value) < Number(min)) {
-            $$("id_" + field_name).define("tooltip", '{% trans "Value less than " %}' + min);
+            $$("id_" + field_name).define("tooltip", '{% trans "Value less than "|escapejs %}' + min);
             return false;
         }
         if (Number(value) > Number(max)) {
-            $$("id_" + field_name).define("tooltip", '{% trans "Value greater than " %}' + max);
+            $$("id_" + field_name).define("tooltip", '{% trans "Value greater than "|escapejs %}' + max);
             return false;
         }
     }
@@ -91,15 +91,15 @@ function isNumber(field_name, value, max, min) {
         return true;
     }
     if (value !== '' && value !== parseFloat(value)) {
-        $$("id_" + field_name).define("tooltip", '{% trans "Not decimal field" %}');
+        $$("id_" + field_name).define("tooltip", '{% trans "Not decimal field"|escapejs %}');
         return false;
     }
     if (value < min) {
-        $$("id_" + field_name).define("tooltip", '{% trans "Value less than " %}' + min);
+        $$("id_" + field_name).define("tooltip", '{% trans "Value less than "|escapejs %}' + min);
         return false;
     }
     if (value > max) {
-        $$("id_" + field_name).define("tooltip", '{% trans "Value greater than " %}' + max);
+        $$("id_" + field_name).define("tooltip", '{% trans "Value greater than "|escapejs %}' + max);
         return false;
     }
     return true;
@@ -117,11 +117,11 @@ function isNumber(field_name, value, max, min) {
 function isString(field_name, value, max, min) {
     if (value !== null) {
         if (value.length < min) {
-            $$("id_" + field_name).define("tooltip", '{% trans "String shorter than " %}' + min);
+            $$("id_" + field_name).define("tooltip", '{% trans "String shorter than "|escapejs %}' + min);
             return false;
         }
         if (value.length > max) {
-            $$("id_" + field_name).define("tooltip", '{% trans "String longer than " %}' + max);
+            $$("id_" + field_name).define("tooltip", '{% trans "String longer than "|escapejs %}' + max);
             return false;
         }
     }
