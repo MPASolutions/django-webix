@@ -387,7 +387,7 @@ class WebixListView(WebixBaseMixin,
         _actions_style = None
         if self.actions_style is None:
             _actions_style = 'select'
-        elif self.actions_style in ['buttons' or 'select']:
+        elif self.actions_style in ['buttons', 'select']:
             _actions_style = self.actions_style
         else:
             raise ImproperlyConfigured(_(
