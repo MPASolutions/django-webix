@@ -23,7 +23,7 @@
     {% if has_delete_permission %}
         $$("{{ webix_container_id }}").addView({
             view: "template",
-            template: '{% trans "The following objects will be deleted"|escapejs %}',
+            template: '{{_("The following objects will be deleted")|escapejs}}',
             type: "header"
         });
 
@@ -54,14 +54,14 @@
                     type: "form",
                     align: "right",
                     id: "delete",
-                    label: "{% trans 'Confirm cancellation'|escapejs %}",
+                    label: "{{_("Confirm cancellation")|escapejs}}",
                     width: 200,
                     click: function () {
                         {% if multiple_delete_confirmation == True %}
                             if ($$("{{ object|getattr:"_meta"|getattr:"model_name" }}").count() > 1) {
                                 webix.confirm({
-                                    title: "{% trans "Delete confirmation"|escapejs %}",
-                                    text: "{% trans "Warning! All linked objects will also be deleted."|escapejs %}",
+                                    title: "{{_("Delete confirmation")|escapejs}}",
+                                    text: "{{_("Warning! All linked objects will also be deleted.")|escapejs}}",
                                     type: "confirm-alert"
                                 }).then(function(result){
                                     load_js("{{ url_delete }}", undefined, undefined, 'POST');

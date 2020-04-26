@@ -35,7 +35,7 @@ webix.ui([], $$("{{ webix_container_id }}"));
                 {% if is_filters_active or is_sql_filters_active %}
                 {
                     view: "button",
-                    label: "{% trans 'Filters removal'|escapejs %}",
+                    label: "{{_("Filters removal")|escapejs}}",
                     type: "icon",
                     width: 170,
                     icon: "far fa-trash-alt",
@@ -47,7 +47,7 @@ webix.ui([], $$("{{ webix_container_id }}"));
                 {% if is_geo_filter_active %}
                 {
                     view: "button",
-                    label: "{% trans 'Geographic filter removal'|escapejs %}",
+                    label: "{{_("Geographic filter removal")|escapejs}}",
                     type: "icon",
                     width: 170,
                     icon: "far fa-trash-alt",
@@ -299,7 +299,7 @@ $$("{{ webix_container_id }}").addView({
                 {% if is_enable_row_click and type_row_click == 'single' %}
                 load_js('{{ url_update }}'.replace('0', el.id));
                 {% else %}
-                webix.message({type: "success", text: "{% trans "Double click to edit the element"|escapejs %}"});
+                webix.message({type: "success", text: "{{_("Double click to edit the element")|escapejs}}"});
                 {% endif %}
             }
             {% endblock %}
@@ -362,7 +362,7 @@ function _action_execute(action, ids, all, response_type, short_description, mod
         title: short_description,
         ok: modal_ok,
         cancel: modal_cancel,
-        text:  modal_title + "</br><b>" + ids.length + " {% trans "elements"|escapejs %}</b> {% trans "selected"|escapejs %}",
+        text:  modal_title + "</br><b>" + ids.length + " {{_("elements")|escapejs}}</b> {{_("selected")|escapejs}}",
         callback: function (confirm) {
             if (confirm==true) {
                 $$('datatable_{{model_name}}').showOverlay("<img src='{% static 'django_webix/loading.gif' %}'>");
@@ -382,7 +382,7 @@ function _action_execute(action, ids, all, response_type, short_description, mod
                         data: _params,
                         error: function (data) {
                             webix.message({
-                                text: "{% trans "Action is not executable"|escapejs %}",
+                                text: "{{_("Action is not executable")|escapejs}}",
                                 type: "error",
                                 expire: 10000
                             });
@@ -399,7 +399,7 @@ function _action_execute(action, ids, all, response_type, short_description, mod
                                     }
                             } else {
                                 webix.message({
-                                    text: "{% trans "Something gone wrong"|escapejs %}",
+                                    text: "{{_("Something gone wrong")|escapejs}}",
                                     type: "error",
                                     expire: 10000
                                 });

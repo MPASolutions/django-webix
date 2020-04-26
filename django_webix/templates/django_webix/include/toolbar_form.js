@@ -14,7 +14,7 @@ $$("{{ webix_container_id }}").addView({
                         view: "tootipButton",
                         type: "danger",
                         align: "left",
-                        label: "{% trans "Delete"|escapejs %}",
+                        label: "{{_("Delete")|escapejs}}",
                         {% if not has_delete_permission %}
                             disabled: true,
                             tooltip: "{% autoescape off %}{{ info_no_delete_permission|join:", " }}{% endautoescape %}",
@@ -38,7 +38,7 @@ $$("{{ webix_container_id }}").addView({
                         view: "tootipButton",
                         type: "form",
                         align: "right",
-                        label: "{% trans "Save and continue"|escapejs %}",
+                        label: "{{_("Save and continue")|escapejs}}",
                         {% if not object.pk and not has_add_permission or object.pk and not has_change_permission %}
                             disabled: true,
                         {% endif %}
@@ -60,7 +60,7 @@ $$("{{ webix_container_id }}").addView({
                         view: "tootipButton",
                         type: "form",
                         align: "right",
-                        label: "{% trans "Save and add another"|escapejs %}",
+                        label: "{{_("Save and add another")|escapejs}}",
                         {% if not object.pk and not has_add_permission or object.pk and not has_change_permission %}
                         disabled: true,
                         {% endif %}
@@ -82,7 +82,7 @@ $$("{{ webix_container_id }}").addView({
                         view: "tootipButton",
                         type: "form",
                         align: "right",
-                        label: "{% trans "Save"|escapejs %}",
+                        label: "{{_("Save")|escapejs}}",
                         {% if not object.pk and not has_add_permission or object.pk and not has_change_permission %}
                             disabled: true,
                         {% endif %}

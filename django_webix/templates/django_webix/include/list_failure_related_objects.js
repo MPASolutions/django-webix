@@ -3,7 +3,7 @@
 $$("{{ webix_container_id }}").addView({
     id: "header_failure_related_objects",
     view: "template",
-    template: "{% trans "These objects do not allow the requested operation"|escapejs %}",
+    template: "{{_("These objects do not allow the requested operation")|escapejs}}",
     type: "header"
 });
 
@@ -20,8 +20,8 @@ $$("{{ webix_container_id }}").addView({
     id: 'list_failure_related_objects',
     view: "datatable",
     columns: [
-        {id: "model", header: ["{% trans "Data type"|escapejs %}", {content: "textFilter"}], fillspace: true},
-        {id: "object", header: ["{% trans "Description"|escapejs %}", {content: "textFilter"}], fillspace: true}
+        {id: "model", header: ["{{_("Data type")|escapejs}}", {content: "textFilter"}], fillspace: true},
+        {id: "object", header: ["{{_("Description")|escapejs}}", {content: "textFilter"}], fillspace: true}
     ],
     data: webix.copy(failure_related_objects)
 });

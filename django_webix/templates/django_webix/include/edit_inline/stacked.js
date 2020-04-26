@@ -16,7 +16,7 @@ $$('{{ inline.get_container_id|default_if_none:inline.get_default_container_id }
                             {% for inline_form in inline %}
                             {
                                 id: '{{ inline_form.prefix|safe }}-inline',
-                                header: "{% if inline_form.instance %}{{ inline_form.instance}}{% else %}{% trans 'New Item'|escapejs %}{% endif %}",
+                                header: "{% if inline_form.instance %}{{ inline_form.instance}}{% else %}{{_("New Item")|escapejs}}{% endif %}",
                                 body: {
                                     id: '{{ inline_form.prefix|safe }}-inline-body',
                                     rows: [{{ inline_form.as_webix|safe }}]
@@ -27,7 +27,7 @@ $$('{{ inline.get_container_id|default_if_none:inline.get_default_container_id }
                                 //  css: 'empty-form',
                                 hidden: true,
                                 id: '{{ inline.prefix|safe }}-empty_form',
-                                header: "{% trans 'New Item'|escapejs %}",
+                                header: "{{_("New Item")|escapejs}}",
                                 body: {
                                     id: '{{ inline.prefix|safe }}-empty_form-body',
                                     rows: [{{ inline.empty_form.as_webix|safe }}]
@@ -48,7 +48,7 @@ $$('{{ inline.get_container_id|default_if_none:inline.get_default_container_id }
                     view: "tootipButton",
                     type: "form",
                     align: "right",
-                    label: '{% trans 'Add'|escapejs %}',
+                    label: '{{_("Add")|escapejs}}',
                     width: 150,
                     on: {
                         onBeforeRender: function () {
