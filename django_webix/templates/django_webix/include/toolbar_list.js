@@ -26,7 +26,7 @@ function update_counter() {
             if ($$('select_all_checkbox').getValue() == 0) {
                 txt += '<div style="width:110px;float:right;height:100%;" class="webix_view webix_control webix_el_button webix_secondary"><div title="{{_("Select all")|escapejs}}" class="webix_el_box"><button type="button" class="webix_button webix_img_btn" style="line-height:24px;" onclick="$$(\'select_all_checkbox\').setValue(1);update_counter()"> {{_("Select all")|escapejs}} </button></div></div>';
             } else {
-                txt = '{{_("All"|escapejs}} ' + view_count_total + ' {{_("elements selected")|escapejs}}';
+                txt = '{{_("All")|escapejs}} ' + view_count_total + ' {{_("elements selected")|escapejs}}';
                 txt += '<div style="width:110px;float:right;height:100%;" class="webix_view webix_control webix_el_button webix_secondary"><div title="{{_("Cancel selection")|escapejs}}" class="webix_el_box"><button type="button" class="webix_button webix_img_btn" style="line-height:24px;" onclick="$$(\'select_all_checkbox\').setValue(0);$(\'input[name=master_checkbox]\').prop(\'checked\',false);master_checkbox_click();update_counter()"> {{_("Cancel selection")|escapejs}} </button></div></div>';
             }
         }
