@@ -12,6 +12,24 @@ webix.ui([], $$("{{ webix_container_id }}"));
         {% endfor %}
 {% endblock %}
 
+{% if geo_filter %}
+var geo_filter = '{{ geo_filter|escapejs }}';
+{% else %}
+var geo_filter = undefined;
+{% endif %}
+
+{% if sql_filters %}
+var sql_filters = '{{ sql_filters|escapejs }}';
+{% else %}
+var sql_filters = undefined;
+{% endif %}
+
+{% if qsets_locked_filters %}
+var locked_filters = '{{ qsets_locked_filters|escapejs }}';
+{% else %}
+var locked_filters = undefined;
+{% endif %}
+
         {% block toolbar_navigation %}
         {% if title %}
         $$("{{ webix_container_id }}").addView({
@@ -32,24 +50,24 @@ webix.ui([], $$("{{ webix_container_id }}"));
                     template: '<div style="width:100%; text-align:center;"><strong>{{ title }}</strong></div>'
                 },
                 {},
-                {% if is_filters_active or is_sql_filters_active %}
+                {% if qsets_locked_filters or sql_filters %}
                 {
                     view: "button",
-                    label: "{{_("Filters removal")|escapejs}}",
+                    label: "{{_("WebGIS filters removal")|escapejs}}",
                     type: "icon",
-                    width: 170,
+                    width: 200,
                     icon: "far fa-trash-alt",
                     click: function (id, event) {
                         load_js('{{ url_list }}');
                     }
                 },
                 {% endif %}
-                {% if is_geo_filter_active %}
+                {% if geo_filter %}
                 {
                     view: "button",
                     label: "{{_("Geographic filter removal")|escapejs}}",
                     type: "icon",
-                    width: 170,
+                    width: 200,
                     icon: "far fa-trash-alt",
                     click: function (id, event) {
                         load_js('{{ url_list }}');
@@ -166,16 +184,16 @@ $$("{{ webix_container_id }}").addView({
                     colspan: 2
                 }
             ],
-            adjust: "data",
             headermenu: false,
+            width:40,
             tooltip: false,
             template: {% if has_add_permission and is_enable_column_copy %}custom_button_cp{% else %}'<div><i style="cursor:pointer" class="webix_icon far"></i></div>'{% endif %}
         },
         {
             id: "cmd_rm",
             header: "",
-            adjust: "data",
             headermenu: false,
+            width:40,
             tooltip: false,
             template: {% if has_delete_permission and is_enable_column_delete %}custom_button_rm{% else %}'<div><i style="cursor:pointer" class="webix_icon far"></i></div>'{% endif %}
         }
@@ -204,6 +222,18 @@ $$("{{ webix_container_id }}").addView({
             }
             // elaborate filters
             _params.filters = JSON.stringify( get_filters_qsets() );
+
+            if (geo_filter!=undefined) {
+                _params.geo_filter = geo_filter;
+            }
+
+            if (sql_filters!=undefined) {
+                _params.sql_filters = sql_filters;
+            }
+
+            if (locked_filters!=undefined) {
+                _params.locked_filters = locked_filters;
+            }
 
             // elaborate sort
             sort = $$('datatable_{{ model_name }}').getState().sort;

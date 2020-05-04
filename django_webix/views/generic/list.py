@@ -64,7 +64,6 @@ class WebixListView(WebixBaseMixin,
     # {
     #     'operator': 'AND', # by default
     #     'qsets':[
-    #         {'sql': '...'}
     #         {'path': 'appezzamento__superficie__in','val': [1,2],}
     #         {'geo_field_name': '...','geo_srid': '...','polygons':'...'}
     #     ]
@@ -90,6 +89,8 @@ class WebixListView(WebixBaseMixin,
             else:
                 filters = None
         return filters  # by default filters are not set
+
+    # 1. QSETS FILTERS (qsets style)
 
     def _elaborate_qsets_filters(self, data):
         if 'qsets' in data and 'operator' in data:
@@ -117,7 +118,14 @@ class WebixListView(WebixBaseMixin,
             qset = Q()
         return qset
 
+    def get_qsets_filters_str(self, request):
+        if self.get_qsets_filters(request) is not None:
+            return json.dumps(self._decode_text_filters(request, 'filters'))
+        else:
+            return None
+
     def get_qsets_filters(self, request):
+
         filters = self._decode_text_filters(request, 'filters')
         if filters is not None:
             # try:
@@ -125,6 +133,26 @@ class WebixListView(WebixBaseMixin,
         # except:
         #    print(_('ERROR: qsets structure is incorrect'))
         return None  # by default filters are not set
+
+    # 2. LOCK QSETS FILTERS (qsets style)
+
+    def get_qsets_locked_filters_str(self, request):
+        if self.get_qsets_locked_filters(request) is not None:
+            return json.dumps(self._decode_text_filters(request, 'locked_filters'))
+        else:
+            return None
+
+    def get_qsets_locked_filters(self, request):
+
+        filters = self._decode_text_filters(request, 'locked_filters')
+        if filters is not None:
+            # try:
+            return self._elaborate_qsets_filters(filters)
+        # except:
+        #    print(_('ERROR: qsets structure is incorrect'))
+        return None  # by default filters are not set
+
+    # 3. GEO FILTER (dict with keys ['geo_field_name','polygons_srid','polygons'])
 
     def _elaborate_geo_filter(self, data):
         if issubclass(GEOSGeometry, django.contrib.gis.geos.GEOSGeometry) and \
@@ -147,8 +175,14 @@ class WebixListView(WebixBaseMixin,
             return qset
         return Q()
 
+    def get_geo_filter_str(self, request):
+        if self.get_geo_filter(request) is not None:
+            return json.dumps(self._decode_text_filters(request, 'geo_filter'))
+        else:
+            return None
+
     def get_geo_filter(self, request):
-        filters = self._decode_text_filters(request, 'geo_filters')
+        filters = self._decode_text_filters(request, 'geo_filter')
         if filters is not None:
             try:
                 return self._elaborate_geo_filter(filters)
@@ -156,11 +190,18 @@ class WebixListView(WebixBaseMixin,
                 print(_('ERROR: geo filter is incorrect'))
         return None  # by default filters are not set
 
+    # 4. SQL FILTERS (list of string)
+
+    def get_sql_filters_str(self, request):
+        if self.get_sql_filters(request) is not None:
+            return json.dumps(self._decode_text_filters(request, 'sql_filters'))
+        else:
+            return None
+
     def get_sql_filters(self, request):
         filters = self._decode_text_filters(request, 'sql_filters')
         if filters is not None:
             return filters
-        # by default filters are not set
         return None
 
     def _optimize_select_related(self, qs):
@@ -213,7 +254,6 @@ class WebixListView(WebixBaseMixin,
                 _fields.append(_field)
             return _fields
 
-
     def get_queryset(self, initial_queryset=None):
         # bypass improperly configured for custom queryset without model
         if self.model:
@@ -221,13 +261,16 @@ class WebixListView(WebixBaseMixin,
                 qs = super(WebixListView, self).get_queryset()
             else:
                 qs = initial_queryset
-            # apply qsets filters
+            # 1. apply qsets filters
             if self.qsets_filters is not None:
                 qs = qs.filter(self.qsets_filters)
-            # apply geo filter
+            # 2. apply locked qsets filters
+            if self.qsets_locked_filters is not None:
+                qs = qs.filter(self.qsets_locked_filters)
+            # 3. apply geo filter
             if self.geo_filter is not None:
                 qs = qs.filter(self.geo_filter)
-            # apply SQL raw: this is shit! but need for old SW (remove for future)
+            # 4. apply SQL raw: this is shit! but need for old SW (remove for future)
             if self.sql_filters is not None:
                 sql_filter = ' OR '.join(['({sql})'.format(sql=_sql) for _sql in self.sql_filters])
                 qs = qs.extra(where=[sql_filter])
@@ -523,11 +566,17 @@ class WebixListView(WebixBaseMixin,
 
     def dispatch(self, *args, **kwargs):
 
+        # 1. QSETS FILTERS
         self.qsets_filters = self.get_qsets_filters(self.request)
 
+        # 2. QSETS LOCKED FILTERS
+        self.qsets_locked_filters = self.get_qsets_locked_filters(self.request)
+
+        # 3. GEO FILTER
         self.geo_filter = self.get_geo_filter(self.request)
 
-        self.sql_filters = self.get_sql_filters(self.request)  # this is shit! but need for old SW (remove for future)
+        # 4. SQL FILTERS
+        self.sql_filters = self.get_sql_filters(self.request)  # for now it's only a qsets list # this is shit! but need for old SW (remove for future)
 
         if not self.has_view_permission(request=self.request):
             raise PermissionDenied(_('View permission is not allowed'))
@@ -567,9 +616,15 @@ class WebixListView(WebixBaseMixin,
             'paginate_count_key': self.paginate_count_key,
             'paginate_start_key': self.paginate_start_key,
             # extra filters
-            'is_filters_active': self.qsets_filters is not None,
-            'is_geo_filter_active': self.geo_filter is not None,
-            'is_sql_filters_active': self.sql_filters is not None,
+            'qsets_filters': self.get_qsets_filters_str(self.request), # for init when template is loaded
+            'qsets_locked_filters': self.get_qsets_locked_filters_str(self.request), # for init when template is loaded
+            'geo_filter': self.get_geo_filter_str(self.request), # for init when template is loaded
+            'sql_filters': self.get_sql_filters_str(self.request), # for init when template is loaded
+
+            #'is_qsets_filters_active': self.qsets_filters is not None,
+            #'is_qsets_locked_filters_active': self.qsets_filters is not None,
+            #'is_geo_filter_active': self.geo_filter is not None,
+            #'is_sql_filters_active': self.sql_filters is not None,
         })
         return context
 
