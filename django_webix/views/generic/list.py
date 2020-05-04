@@ -198,10 +198,7 @@ class WebixListView(WebixBaseMixin,
             _fields = []
             for _field in self.fields:
                 datalist_column = _field['datalist_column']
-                if type(datalist_column) in [str, SafeString]:
-                    template = Template(datalist_column)
-                    context = Context({})
-                elif type(datalist_column)==dict:
+                if type(datalist_column)==dict:
                     if 'template_string' in datalist_column:
                         template = Template(datalist_column['template'])
                     elif 'template_name' in datalist_column:
@@ -209,8 +206,9 @@ class WebixListView(WebixBaseMixin,
                     else:
                         raise Exception('Template is not defined')
                     context = Context(datalist_column.get('context', {}))
-                else:
-                    raise Exception('datalist_column must be string or dict, not {}'.format(type(datalist_column)))
+                else: # string
+                    template = Template(datalist_column)
+                    context = Context({})
                 _field['datalist_column']  = template.render(context)
                 _fields.append(_field)
             return _fields
