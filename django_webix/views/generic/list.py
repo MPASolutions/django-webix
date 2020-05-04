@@ -8,10 +8,13 @@ import django
 from django.core.exceptions import FieldDoesNotExist
 from django.core.exceptions import PermissionDenied, ImproperlyConfigured
 from django.db.models import Q, ManyToManyField
+from django.template import Template, Context
+from django.template.loader import get_template
 from django.utils.translation import ugettext as _
 from django.views.generic import ListView
 from django.http import JsonResponse, Http404
 from django.apps import apps
+from django.utils.safestring import SafeString
 
 from django_webix.views.generic.base import WebixBaseMixin, WebixPermissionsMixin, WebixUrlMixin
 
@@ -189,7 +192,29 @@ class WebixListView(WebixBaseMixin,
         return qs
 
     def get_fields(self):
-        return self.fields
+        if self.fields is None:
+            return self.fields
+        else:
+            _fields = []
+            for _field in self.fields:
+                datalist_column = _field['datalist_column']
+                if type(datalist_column) in [str, SafeString]:
+                    template = Template(datalist_column)
+                    context = Context({})
+                elif type(datalist_column)==dict:
+                    if 'template_string' in datalist_column:
+                        template = Template(datalist_column['template'])
+                    elif 'template_name' in datalist_column:
+                        template = get_template(datalist_column['template_name'])
+                    else:
+                        raise Exception('Template is not defined')
+                    context = Context(datalist_column.get('context', {}))
+                else:
+                    raise Exception('datalist_column must be string or dict, not {}'.format(type(datalist_column)))
+                _field['datalist_column']  = template.render(context)
+                _fields.append(_field)
+            return _fields
+
 
     def get_queryset(self, initial_queryset=None):
         # bypass improperly configured for custom queryset without model
