@@ -1,8 +1,8 @@
 {% load i18n %}
 
 {# actions into select #}
-if ((typeof actions_list != 'undefined') && (typeof actions_execute != 'undefined') && (actions_list.length > 0)) {
-    var toolbar_actions = [
+if ((typeof {{ view_prefix }}actions_list != 'undefined') && (typeof {{ view_prefix }}actions_execute != 'undefined') && ({{ view_prefix }}actions_list.length > 0)) {
+    var {{ view_prefix }}toolbar_actions = [
         {
             view: "richselect",
             id: "action_combo",
@@ -12,7 +12,7 @@ if ((typeof actions_list != 'undefined') && (typeof actions_execute != 'undefine
             value: 1,
             labelWidth: 0,
             placeholder: "{%  trans "Select an action" %}...",
-            options: actions_list
+            options: {{ view_prefix }}actions_list
         },
         {
             view: "tootipButton",
@@ -23,7 +23,7 @@ if ((typeof actions_list != 'undefined') && (typeof actions_execute != 'undefine
             on: {
                 onItemClick: function () {
                     var action_name = $$("action_combo").getValue();
-                    prepare_actions_execute(action_name);
+                    {{ view_prefix }}prepare_actions_execute(action_name);
                 }
             }
         }

@@ -209,7 +209,7 @@ class WebixCreateView(WebixCreateUpdateMixin,
 
     def get_initial(self):
         initial = {}
-        # main option: send SEND_INITIAL_DATA on header and POST initial data
+        # main option: send SEND_INITIAL_DATA on (header or GET or POST) and POST initial data
         if self.send_initial_data is not None:
             initial.update(self.send_initial_data)
         # secondary option: send pk_copy for copy instance field values
@@ -242,12 +242,16 @@ class WebixCreateView(WebixCreateUpdateMixin,
         self.object = None
 
         # BYPASS POST for initial data
-        if self.request.META.get('HTTP_SEND_INITIAL_DATA') and \
-            self.request.method == 'POST':
-            self.send_initial_data = self.request.POST.dict()
-            # switch to GET request
-            self.request.method = 'GET'
-            self.request.POST = QueryDict('', mutable=True)
+        if self.request.META.get('HTTP_SEND_INITIAL_DATA') or \
+           self.request.POST.get('SEND_INITIAL_DATA') or \
+           self.request.GET.get('SEND_INITIAL_DATA'):
+            if self.request.method == 'POST':
+                self.send_initial_data = self.request.POST.dict()
+                # switch to GET request
+                self.request.method = 'GET'
+                self.request.POST = QueryDict('', mutable=True)
+            elif self.request.method == 'GET':
+                self.send_initial_data = self.request.GET.dict()
 
         if self.request.method == 'GET':
             if not self.has_view_permission(request=self.request):

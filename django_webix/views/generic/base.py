@@ -188,6 +188,18 @@ class WebixUrlMixin:
     url_pattern_update = None
     url_pattern_delete = None
 
+    def is_popup(self):
+        return self.request.GET.get('_popup', self.request.POST.get('_popup', False)) != False
+
+    def wrap_url_popup(self, url):
+        if url is not None:
+            if '?' in url:
+                return url + '&_popup'
+            else:
+                return url + '?_popup'
+        else:
+            return None
+
     def get_url_pattern_list(self):
         if self.url_pattern_list is not None:
             return self.url_pattern_list
@@ -234,7 +246,7 @@ class WebixUrlMixin:
         if self.model is not None:
             _url_pattern_name = self._check_url(self.get_url_pattern_list())
             if _url_pattern_name is not None:
-                return reverse(_url_pattern_name)
+                return self.wrap_url_popup( reverse(_url_pattern_name) )
         return None
 
     def get_url_create_kwargs(self):
@@ -249,9 +261,10 @@ class WebixUrlMixin:
                 _url_pattern_name = self._check_url(self.get_url_pattern_create())
             if _url_pattern_name is not None:
                 if create_kwargs is not None:
-                    return reverse(_url_pattern_name, kwargs=create_kwargs)
+                    return self.wrap_url_popup( reverse(_url_pattern_name, kwargs=create_kwargs) )
                 else:
-                    return reverse(_url_pattern_name)
+                    return self.wrap_url_popup( reverse(_url_pattern_name) )
+
         return None
 
     def get_url_update(self, obj=None):
@@ -262,7 +275,7 @@ class WebixUrlMixin:
                     _pk = obj.pk
                 else:
                     _pk = 0
-                return reverse(_url_pattern_name, kwargs={'pk': _pk})
+                return self.wrap_url_popup( reverse(_url_pattern_name, kwargs={'pk': _pk}) )
         return None
 
     def get_url_delete(self, obj=None):
@@ -273,8 +286,11 @@ class WebixUrlMixin:
                     _pk = obj.pk
                 else:
                     _pk = 0
-                return reverse(_url_pattern_name, kwargs={'pk': _pk})
+                return self.wrap_url_popup( reverse(_url_pattern_name, kwargs={'pk': _pk}) )
         return None
+
+    def get_view_prefix(self):
+        return '{}_{}_'.format(self.model._meta.app_label, self.model._meta.model_name)
 
     def get_context_data_webix_url(self, request, obj=None, **kwargs):
         return {
@@ -284,8 +300,12 @@ class WebixUrlMixin:
             'url_update': self.get_url_update(obj=obj),
             'url_delete': self.get_url_delete(obj=obj),
             # Model info
+            'is_popup': self.is_popup(),
             'model': self.model,
             'model_name': self.get_model_name(),
+            'app_label': self.model._meta.app_label,
+            'module_name': self.model._meta.model_name,
+            'view_prefix': self.get_view_prefix()
         }
 
 

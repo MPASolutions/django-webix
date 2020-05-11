@@ -156,11 +156,14 @@ function image_modal(url, width, height, id) {
     }).show();
 }
 
-function load_js(lnk, hide, area, method, data) {
+function load_js(lnk, hide, area, method, data, headers) {
     if (method == undefined) {
         method = 'GET'
     }
     if (data == undefined) {
+        data = {}
+    }
+    if (data == headers) {
         data = {}
     }
     if ((area == undefined) || (area == '') || (area == null)) {
@@ -181,6 +184,7 @@ function load_js(lnk, hide, area, method, data) {
             url: lnk,
             type: method,
             data: data,
+            headers: headers,
             dataType: "script",
             success: function () {
                 if ($$('{{ webix_overlay_container_id }}') !== undefined && $$('{{ webix_overlay_container_id }}') !== null && $$('{{ webix_overlay_container_id }}').hideOverlay !== undefined)

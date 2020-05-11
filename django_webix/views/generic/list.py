@@ -5,17 +5,17 @@ from __future__ import unicode_literals
 import json
 
 import django
+from django.apps import apps
 from django.core.exceptions import FieldDoesNotExist
 from django.core.exceptions import PermissionDenied, ImproperlyConfigured
 from django.db.models import Q, ManyToManyField
+from django.http import JsonResponse, Http404
 from django.template import Template, Context
 from django.template.loader import get_template
 from django.utils.translation import ugettext as _
 from django.views.generic import ListView
-from django.http import JsonResponse, Http404
-from django.apps import apps
-from django.utils.safestring import SafeString
 
+from django_webix.utils.filters import from_dict_to_qset
 from django_webix.views.generic.base import WebixBaseMixin, WebixPermissionsMixin, WebixUrlMixin
 
 try:
@@ -59,6 +59,9 @@ class WebixListView(WebixBaseMixin,
     type_row_click = 'single'  # or 'double'
     enable_actions = True
 
+    def is_installed_django_webix_filter(self):
+        return apps.is_installed('django_webix_filter')
+
     ########### QUERYSET BUILDER ###########
 
     # {
@@ -93,30 +96,7 @@ class WebixListView(WebixBaseMixin,
     # 1. QSETS FILTERS (qsets style)
 
     def _elaborate_qsets_filters(self, data):
-        if 'qsets' in data and 'operator' in data:
-            operator = data.get('operator')
-            negate = data.get('negate', False)
-            if len(data.get('qsets')) == 0:  # BYPASS
-                qset = Q()
-            for j, data_qset in enumerate(data.get('qsets')):
-                if 'operator' in data_qset:
-                    qset_to_applicate = self._elaborate_qsets_filters(data_qset)
-                else:
-                    qset_to_applicate = Q(**{data_qset.get('path'): data_qset.get('val')})
-                if j == 0:
-                    qset = qset_to_applicate
-                else:
-                    if operator == 'AND':
-                        qset = qset & qset_to_applicate
-                    elif operator == 'OR':
-                        qset = qset | qset_to_applicate
-            if negate == True:
-                qset = ~Q(qset)
-        elif 'path' in data and 'val' in data:
-            qset = Q(**{data.get('path'): data.get('val')})
-        else:
-            qset = Q()
-        return qset
+        return from_dict_to_qset(data)
 
     def get_qsets_filters_str(self, request):
         if self.get_qsets_filters(request) is not None:
@@ -168,8 +148,8 @@ class WebixListView(WebixBaseMixin,
                 except ValueError:
                     print(_('ERROR: geo srid is incorrect'))
                 geo_field = self.model._meta.get_field(geo_field_name)
-                _geo = geo.transform(geo_field.srid, clone=True)
-                qset = Q(**{geo_field_name + '__intersects': _geo})
+                _geo = geo.transform(geo_field.srid, clone=True).buffer(0)  # se l'unione del multipolygon risultasse invalida
+                qset = Q(**{geo_field_name + '__within': _geo})
             else:
                 qset = Q()
             return qset
@@ -202,6 +182,35 @@ class WebixListView(WebixBaseMixin,
         filters = self._decode_text_filters(request, 'sql_filters')
         if filters is not None:
             return filters
+        return None
+
+    # 5. DJANGO WEBIX FILTERS
+
+    def _django_webix_filters_ids(self, request):
+        if request.method == 'GET':
+            ids = request.GET.getlist('django_webix_filters[]', None)
+        elif request.method == 'POST':
+            ids = request.POST.getlist('django_webix_filters[]', None)
+        else:
+            ids = None
+        return ids
+
+    def get_django_webix_filters(self, request):
+        if self.is_installed_django_webix_filter():
+            from django_webix_filter.models import WebixFilter
+            filters_ids = self._django_webix_filters_ids(request)
+            if filters_ids is not None:
+                return WebixFilter.objects.filter(id__in=filters_ids)
+        return None
+
+    def get_django_webix_filters_qsets(self):
+        if self.is_installed_django_webix_filter():
+            qs_django_webix_filter = self.django_webix_filters
+            _filter = Q()
+            for django_webix_filter in qs_django_webix_filter:
+                _filter &= self._elaborate_qsets_filters(django_webix_filter.filter)
+            return _filter
+
         return None
 
     def _optimize_select_related(self, qs):
@@ -274,6 +283,11 @@ class WebixListView(WebixBaseMixin,
             if self.sql_filters is not None:
                 sql_filter = ' OR '.join(['({sql})'.format(sql=_sql) for _sql in self.sql_filters])
                 qs = qs.extra(where=[sql_filter])
+            # 5. apply django webix filters
+            #raise Exception(self.django_webix_filters)
+            if self.django_webix_filters is not None:
+                qs = qs.filter(self.get_django_webix_filters_qsets())
+
             # optimize select related queryset (only if fields are defined)
             qs = self._optimize_select_related(qs)  # TODO
             return qs
@@ -578,6 +592,9 @@ class WebixListView(WebixBaseMixin,
         # 4. SQL FILTERS
         self.sql_filters = self.get_sql_filters(self.request)  # for now it's only a qsets list # this is shit! but need for old SW (remove for future)
 
+        # 5. DJANGO WEBIX FILTERS
+        self.django_webix_filters = self.get_django_webix_filters(self.request)
+
         if not self.has_view_permission(request=self.request):
             raise PermissionDenied(_('View permission is not allowed'))
 
@@ -616,15 +633,12 @@ class WebixListView(WebixBaseMixin,
             'paginate_count_key': self.paginate_count_key,
             'paginate_start_key': self.paginate_start_key,
             # extra filters
+            'is_installed_django_webix_filter': self.is_installed_django_webix_filter(),
             'qsets_filters': self.get_qsets_filters_str(self.request), # for init when template is loaded
             'qsets_locked_filters': self.get_qsets_locked_filters_str(self.request), # for init when template is loaded
             'geo_filter': self.get_geo_filter_str(self.request), # for init when template is loaded
             'sql_filters': self.get_sql_filters_str(self.request), # for init when template is loaded
-
-            #'is_qsets_filters_active': self.qsets_filters is not None,
-            #'is_qsets_locked_filters_active': self.qsets_filters is not None,
-            #'is_geo_filter_active': self.geo_filter is not None,
-            #'is_sql_filters_active': self.sql_filters is not None,
+            'django_webix_filters': self.get_django_webix_filters(self.request), # for init when template is loaded
         })
         return context
 
