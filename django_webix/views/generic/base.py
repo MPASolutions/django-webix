@@ -303,8 +303,8 @@ class WebixUrlMixin:
             'is_popup': self.is_popup(),
             'model': self.model,
             'model_name': self.get_model_name(),
-            'app_label': self.model._meta.app_label,
-            'module_name': self.model._meta.model_name,
+            'app_label': self.model._meta.app_label if self.model else None,
+            'module_name': self.model._meta.model_name if self.model else None,
             'view_prefix': self.get_view_prefix()
         }
 
@@ -330,3 +330,6 @@ class WebixTemplateView(WebixBaseMixin, TemplateView):
         context = super(WebixTemplateView, self).get_context_data(**kwargs)
         context.update(self.get_context_data_webix_base(request=self.request))
         return context
+
+    def get_view_prefix(self):
+        return ''

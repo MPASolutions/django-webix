@@ -656,3 +656,6 @@ class WebixTemplateListView(WebixListView):
 
     def get_objects_datatable(self):
         raise ImproperlyConfigured(_("Generic TemplateListView needs to define data for datatable"))
+
+    def get_view_prefix(self):
+        return ''
