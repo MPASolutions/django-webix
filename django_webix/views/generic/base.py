@@ -193,10 +193,13 @@ class WebixUrlMixin:
 
     def wrap_url_popup(self, url):
         if url is not None:
-            if '?' in url:
-                return url + '&_popup'
+            if self.is_popup():
+                if '?' in url:
+                    return url + '&_popup'
+                else:
+                    return url + '?_popup'
             else:
-                return url + '?_popup'
+                return url
         else:
             return None
 
