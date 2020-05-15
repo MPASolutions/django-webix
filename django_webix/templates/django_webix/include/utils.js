@@ -1,7 +1,7 @@
 {% load static django_webix_utils i18n %}
 
-// csrf set
-// using jQuery
+{# csrf set and abort all using jQuery #}
+
 function getCookie(name) {
     var cookieValue = null;
     if (document.cookie && document.cookie !== '') {
@@ -23,21 +23,39 @@ function csrfSafeMethod(method) {
     return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
 }
 
+$.xhrPool = [];
+$.xhrPoolAbortAll = function () {
+    $.xhrPool.forEach(function (xhr) {
+        xhr.abort();
+    });
+    $.xhrPool = [];
+};
+
 $.ajaxSetup({
     beforeSend: function (xhr, settings) {
+        $.xhrPool.push(xhr);
         if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
             var csrftoken = getCookie('csrftoken');
             xhr.setRequestHeader("X-CSRFToken", csrftoken);
         }
+    },
+    complete: function (xhr) {
+        var index = $.xhrPool.indexOf(xhr);
+        if (index > -1) {
+            $.xhrPool.splice(index, 1);
+        }
     }
 });
+
+{# csrf set webix #}
 
 webix.attachEvent("onBeforeAjax", function (mode, url, data, xhr, headers) {
     var csrftoken = getCookie('csrftoken');
     headers["X-CSRFToken"] = csrftoken;
 });
 
-// Italian locale settings for pivot
+{# Italian locale settings for pivot #}
+
 webix.i18n.locales['it-IT'].pivot = {
     apply: "Applica",
     cancel: "Annulla",
@@ -58,18 +76,18 @@ webix.i18n.locales['it-IT'].pivot = {
     windowMessage: "[Trascinare i campi di sinistra nella sezione desiderata]",
     total: "Totale"
 };
+
+{# values casts #}
+
 function isNumberCheck(val) {
-    if (val.match(/^\d+\.\d+$/) || val.match(/^\d+\,\d+$/) || val.match(/^-{0,1}\d+$/)){
+    if (val.match(/^\d+\.\d+$/) || val.match(/^\d+\,\d+$/) || val.match(/^-{0,1}\d+$/)) {
         return true;
     } else {
         return false;
     }
 }
 
-function load_pdf(url) {
-    var win = window.open(url, '_blank');
-    win.focus();
-}
+{# templates lists #}
 
 function custom_checkbox(obj, common, value) {
     if ((value == 'False') || (value == 'false') || (value == '0') || (value === 0) || (value === false))
@@ -131,6 +149,16 @@ function custom_button_detail(obj, common, value) {
     return '<div title="{{_("Detail")|escapejs}}"><i style="cursor:pointer" class="webix_icon fas fa-external-link-square-alt"></i></div>'
 }
 
+{# modal popup and image manage #}
+
+function makeid() {
+    var text = "";
+    var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+    for (var i = 0; i < 5; i++)
+        text += possible.charAt(Math.floor(Math.random() * possible.length));
+    return text;
+}
+
 function image_modal(url, width, height, id) {
     webix.ui({
         id: id,
@@ -156,7 +184,17 @@ function image_modal(url, width, height, id) {
     }).show();
 }
 
-function load_js(lnk, hide, area, method, data, headers) {
+function preloadImage(url) {
+    var img = new Image();
+    img.src = url + '?t=' + makeid();
+}
+
+{# loading and custom post simulation #}
+
+function load_js(lnk, hide, area, method, data, headers, dataType, abortAllPending, done, fail, beforeSend, always) {
+    if (abortAllPending == true) {
+        $.xhrPoolAbortAll();
+    }
     if (method == undefined) {
         method = 'GET'
     }
@@ -169,96 +207,137 @@ function load_js(lnk, hide, area, method, data, headers) {
     if ((area == undefined) || (area == '') || (area == null)) {
         area = '{{ webix_container_id }}';
     }
-    if (lnk != '') {
-        hide = hide || 0;
-        if (hide == true) {
-            webix.ui([], $$(area));
-        }
-
-        if ($$('{{ webix_overlay_container_id }}') !== undefined && $$('{{ webix_overlay_container_id }}') !== null && $$('{{ webix_overlay_container_id }}').showOverlay !== undefined)
-            $$('{{ webix_overlay_container_id }}').showOverlay("<img src='{% static 'django_webix/loading.gif' %}'>");
-        else if ($$(area) !== undefined && $$(area) !== null && $$(area).showOverlay !== undefined)
-            $$(area).showOverlay("<img src='{% static 'django_webix/loading.gif' %}'>");
-
+    hide = hide || 0;
+    if (hide == true) {
+        webix.ui([], $$(area));
+    }
+    if (dataType == 'json') {
+        $$(area).showOverlay("<img src='{% static 'django_webix/loading.gif' %}'>");
         $.ajax({
             url: lnk,
+            dataType: "json",
             type: method,
             data: data,
-            headers: headers,
-            dataType: "script",
-            success: function () {
-                if ($$('{{ webix_overlay_container_id }}') !== undefined && $$('{{ webix_overlay_container_id }}') !== null && $$('{{ webix_overlay_container_id }}').hideOverlay !== undefined)
-                    $$('{{ webix_overlay_container_id }}').hideOverlay();
-                else if ($$(area) !== undefined && $$(area) !== null && $$(area).hideOverlay !== undefined)
-                    $$(area).hideOverlay();
-
-                webix.ui.fullScreen();
-                window.dispatchEvent(new Event('resize'));
-            },
-            error: function () {
-                if ($$('{{ webix_overlay_container_id }}') !== undefined && $$('{{ webix_overlay_container_id }}') !== null && $$('{{ webix_overlay_container_id }}').hideOverlay !== undefined)
-                    $$('{{ webix_overlay_container_id }}').hideOverlay();
-                else if ($$(area) !== undefined && $$(area) !== null && $$(area).hideOverlay !== undefined)
-                    $$(area).hideOverlay();
-
+            beforeSend: function (xhr, settings) {
+                if (beforeSend != undefined) {
+                    beforeSend(xhr, settings);
+                }
+            }
+        }).done(function (msg) {
+            if (done != undefined) {
+                return done(msg);
+            } else {
+                webix.ui.resize();
+                $$(area).hideOverlay();
+                return msg;
+            }
+        }).fail(function (xhr, textStatus) {
+            if (fail != undefined) {
+                return fail(xhr, textStatus);
+            } else {
                 webix.alert('{{_("Server error")|escapejs}}')
             }
-        });
-    }
-}
+        }).always(function (data, textStatus, errorThrown) {
+            if (always != undefined) {
+                always(data, textStatus, errorThrown);
+            }
+        })
+    } else {
+        if (lnk != '') {
 
-function load_js_data(lnk, area, method, data) {
-    if (method == undefined) {
-        method = 'GET'
-    }
-    if (data == undefined) {
-        data = {}
-    }
-    if ((area == undefined) || (area == '') || (area == null)) {
-        area = '{{ webix_container_id }}';
-    }
-    $$(area).showOverlay("<img src='{% static 'django_webix/loading.gif' %}'>");
-    $.ajax({
-        url: lnk,
-        dataType: "json",
-        type: method,
-        data: data,
-        success: function (msg) {
-            webix.ui.resize();
-            $$(area).hideOverlay();
-            return msg;
-        },
-        error: function () {
-            webix.alert('{{_("Server error")|escapejs}}')
+            if ($$('{{ webix_overlay_container_id }}') !== undefined && $$('{{ webix_overlay_container_id }}') !== null && $$('{{ webix_overlay_container_id }}').showOverlay !== undefined)
+                $$('{{ webix_overlay_container_id }}').showOverlay("<img src='{% static 'django_webix/loading.gif' %}'>");
+            else if ($$(area) !== undefined && $$(area) !== null && $$(area).showOverlay !== undefined)
+                $$(area).showOverlay("<img src='{% static 'django_webix/loading.gif' %}'>");
+
+            $.ajax({
+                url: lnk,
+                type: method,
+                data: data,
+                headers: headers,
+                dataType: "script",
+                beforeSend: function (xhr, settings) {
+                    if (beforeSend != undefined) {
+                        beforeSend(xhr, settings);
+                    }
+                }
+            }).done(function (msg) {
+                if (done != undefined) {
+                    return done(msg);
+                } else {
+                    if ($$('{{ webix_overlay_container_id }}') !== undefined && $$('{{ webix_overlay_container_id }}') !== null && $$('{{ webix_overlay_container_id }}').hideOverlay !== undefined)
+                        $$('{{ webix_overlay_container_id }}').hideOverlay();
+                    else if ($$(area) !== undefined && $$(area) !== null && $$(area).hideOverlay !== undefined)
+                        $$(area).hideOverlay();
+                    webix.ui.fullScreen();
+                    window.dispatchEvent(new Event('resize'));
+                }
+            }).fail(function (xhr, textStatus) {
+                if (fail != undefined) {
+                    return fail(xhr, textStatus);
+                } else {
+                    if ($$('{{ webix_overlay_container_id }}') !== undefined && $$('{{ webix_overlay_container_id }}') !== null && $$('{{ webix_overlay_container_id }}').hideOverlay !== undefined)
+                        $$('{{ webix_overlay_container_id }}').hideOverlay();
+                    else if ($$(area) !== undefined && $$(area) !== null && $$(area).hideOverlay !== undefined)
+                        $$(area).hideOverlay();
+                    webix.alert('{{_("Server error")|escapejs}}')
+                }
+            }).always(function (data, textStatus, errorThrown) {
+                if (always != undefined) {
+                    always(data, textStatus, errorThrown);
+                }
+            });
         }
-    });
-}
-
-function loading_blank(url) {
-    if (url != '') {
-        window.open(url, '_blank');
     }
 }
 
-function loading(url) {
-    if (url != '') {
-        document.location.href = url;
+
+function loading(url, blank, move_focus) {
+    if (blank != undefined) {
+        if (url != '') {
+            window.open(url, '_blank');
+        }
+    } else {
+        if (url != '') {
+            document.location.href = url;
+        }
     }
 }
 
-function preloadImage(url) {
-    var img = new Image();
-    img.src = url + '?t=' + makeid();
-}
+/**
+ * sends a request to the specified url from a form. this will change the window location.
+ * @param {string} path the path to send the post request to
+ * @param {object} params the paramiters to add to the url
+ */
+function post(path, params) {
 
-function makeid() {
-    var text = "";
-    var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-    for (var i = 0; i < 5; i++)
-        text += possible.charAt(Math.floor(Math.random() * possible.length));
-    return text;
-}
+    // The rest of this code assumes you are not using a library.
+    // It can be made less wordy if you use one.
+    const form = document.createElement('form');
+    form.method = 'post';
+    form.action = path;
 
+    const hiddenField = document.createElement('input');
+    hiddenField.type = 'hidden';
+    hiddenField.name = 'csrfmiddlewaretoken';
+    hiddenField.value = getCookie('csrftoken');
+    form.appendChild(hiddenField);
+
+    for (const key in params) {
+        if (params.hasOwnProperty(key)) {
+            const hiddenField = document.createElement('input');
+            hiddenField.type = 'hidden';
+            hiddenField.name = key;
+            hiddenField.value = params[key];
+
+            form.appendChild(hiddenField);
+        }
+    }
+
+    document.body.appendChild(form);
+    form.submit();
+}
+{# autocomplete #}
 
 function set_autocomplete_reload(selector, QS) {
     a = $$(selector);
@@ -297,6 +376,8 @@ function set_autocomplete_empty(selector, QS) {
     d.load(QS + '&filter[value]=');
 }
 
+{# webix extensions #}
+
 webix.protoUI({
     name: "tootipButton",
     $cssName: "button",
@@ -327,58 +408,22 @@ webix.ui.datafilter.dataListCheckbox = webix.extend({
     }
 }, webix.ui.datafilter.masterCheckbox);
 
-/**
- * sends a request to the specified url from a form. this will change the window location.
- * @param {string} path the path to send the post request to
- * @param {object} params the paramiters to add to the url
- */
-
-
-function post(path, params) {
-
-    // The rest of this code assumes you are not using a library.
-    // It can be made less wordy if you use one.
-    const form = document.createElement('form');
-    form.method = 'post';
-    form.action = path;
-
-    const hiddenField = document.createElement('input');
-    hiddenField.type = 'hidden';
-    hiddenField.name = 'csrfmiddlewaretoken';
-    hiddenField.value = getCookie('csrftoken');
-    form.appendChild(hiddenField);
-
-    for (const key in params) {
-        if (params.hasOwnProperty(key)) {
-            const hiddenField = document.createElement('input');
-            hiddenField.type = 'hidden';
-            hiddenField.name = key;
-            hiddenField.value = params[key];
-
-            form.appendChild(hiddenField);
-        }
+webix.ui.datafilter.rowsCount = webix.extend({
+    refresh: function (master, node, value) {
+        node.firstChild.innerHTML = master.count();
     }
-
-    document.body.appendChild(form);
-    form.submit();
-}
-
-  webix.ui.datafilter.rowsCount = webix.extend({
-  		refresh:function(master, node, value){
-			node.firstChild.innerHTML = master.count();
-		}
 }, webix.ui.datafilter.summColumn)
 
 webix.ui.datafilter.avgColumn = webix.extend({
-  		refresh:function(master, node, value){
-			var result = 0;
-			master.mapCells(null, value.columnId, null, 1, function(value){
-				value = value*1;
-				if (!isNaN(value))
-					result+=value;
-				return value;
-			});
+    refresh: function (master, node, value) {
+        var result = 0;
+        master.mapCells(null, value.columnId, null, 1, function (value) {
+            value = value * 1;
+            if (!isNaN(value))
+                result += value;
+            return value;
+        });
 
-			node.firstChild.innerHTML = Math.round(result/master.count());
-		}
+        node.firstChild.innerHTML = Math.round(result / master.count());
+    }
 }, webix.ui.datafilter.summColumn)
