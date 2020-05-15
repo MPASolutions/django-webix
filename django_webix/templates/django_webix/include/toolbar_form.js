@@ -21,7 +21,7 @@ $$("{{ webix_container_id }}").addView({
                         {% endif %}
                         width: 120,
                         click: function () {
-                            load_js("{{ url_delete }}");
+                            load_js("{{ url_delete }}", undefined, undefined, undefined, undefined, undefined, undefined, abortAllPending=true);
                         }
                     },
                 {% endif %}

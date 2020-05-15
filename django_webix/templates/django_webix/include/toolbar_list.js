@@ -150,7 +150,7 @@ $$("{{ webix_container_id }}").addView({
             {% endif %}
             width: 150,
             click: function () {
-                load_js('{{ url_create }}')
+                load_js('{{ url_create }}', undefined, undefined, undefined, undefined, undefined, undefined, abortAllPending=true);
             }
         }
         {% endif %}

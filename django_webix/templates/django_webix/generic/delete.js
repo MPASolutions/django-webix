@@ -35,7 +35,7 @@
                 onItemClick: function (id, e, node) {
                     var item = this.getItem(id);
                     if ('url' in item) {
-                        load_js(item.url);
+                        load_js(item.url, undefined, undefined, undefined, undefined, undefined, undefined, abortAllPending=true);
                     }
                 }
             }
@@ -64,13 +64,13 @@
                                     text: "{{_("Warning! All linked objects will also be deleted.")|escapejs}}",
                                     type: "confirm-alert"
                                 }).then(function(result){
-                                    load_js("{{ url_delete }}", undefined, undefined, 'POST');
+                                    load_js("{{ url_delete }}", undefined, undefined, 'POST', undefined, undefined, undefined, abortAllPending=true);
                                 })
                             } else {
-                                load_js("{{ url_delete }}", undefined, undefined, 'POST');
+                                load_js("{{ url_delete }}", undefined, undefined, 'POST', undefined, undefined, undefined, abortAllPending=true);
                             }
                         {% else %}
-                            load_js("{{ url_delete }}", undefined, undefined, 'POST');
+                            load_js("{{ url_delete }}", undefined, undefined, 'POST', undefined, undefined, undefined, abortAllPending=true);
                         {% endif %}
                     }
                 }

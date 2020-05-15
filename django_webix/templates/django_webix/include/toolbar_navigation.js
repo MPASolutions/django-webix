@@ -13,7 +13,7 @@ $$("{{ webix_container_id }}").addView({
                 label: "{{_("Back")|escapejs}}",
                 autowidth: true,
                 click: function () {
-                    load_js("{{ url_back }}");
+                    load_js("{{ url_back }}", undefined, undefined, undefined, undefined, undefined, undefined, abortAllPending=true);
                 }
             },
         {% elif url_list and url_list != '' %}
@@ -24,7 +24,7 @@ $$("{{ webix_container_id }}").addView({
                 label: "{{_("Back to list")|escapejs}}",
                 autowidth: true,
                 click: function () {
-                    load_js("{{ url_list }}");
+                    load_js("{{ url_list }}", undefined, undefined, undefined, undefined, undefined, undefined, abortAllPending=true);
                 }
             },
         {% endif %}

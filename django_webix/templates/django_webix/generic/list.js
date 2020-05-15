@@ -60,7 +60,7 @@ var {{ view_prefix }}django_webix_filters = [{% for f in django_webix_filters %}
                     hidden: ({{ view_prefix }}locked_filters==undefined) && ({{ view_prefix }}sql_filters==undefined),
                     icon: "far fa-trash-alt",
                     click: function (id, event) {
-                        load_js('{{ url_list }}');
+                        load_js('{{ url_list }}', undefined, undefined, undefined, undefined, undefined, undefined, abortAllPending=true);
                     }
                 },
                 {
@@ -71,7 +71,7 @@ var {{ view_prefix }}django_webix_filters = [{% for f in django_webix_filters %}
                     hidden: ({{ view_prefix }}geo_filter==undefined),
                     icon: "far fa-trash-alt",
                     click: function (id, event) {
-                        load_js('{{ url_list }}');
+                        load_js('{{ url_list }}', undefined, undefined, undefined, undefined, undefined, undefined, abortAllPending=true);
                     }
                 },
                 {% if is_installed_django_webix_filter %}
@@ -83,13 +83,7 @@ var {{ view_prefix }}django_webix_filters = [{% for f in django_webix_filters %}
                     //hidden: django_webix_filters.length==0,
                     icon: "far fa-filter",
                     click: function (id, event) { // (lnk, hide, area, method, data)
-                        load_js('{% url 'django_webix_filter.webixfilter.list_model' app_label=app_label model_name=module_name %}?_popup',
-                                //undefined,
-                                //undefined,
-                                //'POST',
-                                //{'model': '{{ app_label }}.{{ module_name }}'},
-                                //{'HTTP_SEND_INITIAL_DATA': true}
-                        );
+                        load_js('{% url 'django_webix_filter.webixfilter.list_model' app_label=app_label model_name=module_name %}?_popup', undefined, undefined, undefined, undefined, undefined, undefined, abortAllPending=true);
                     }
                 },
                 {% endif %}
@@ -337,7 +331,7 @@ $$("{{ webix_container_id }}").addView({
             var el = $$('{{ view_prefix }}datatable').getSelectedItem();
             {% block datatable_onitemdoubleclick %}
             {% if is_enable_row_click and type_row_click == 'double' %}
-            load_js('{{ url_update }}'.replace('0', el.id));
+            load_js('{{ url_update }}'.replace('0', el.id), undefined, undefined, undefined, undefined, undefined, undefined, abortAllPending=true);
             {% endif %}
             {% endblock %}
         },
@@ -352,12 +346,12 @@ $$("{{ webix_container_id }}").addView({
                     {% endif %}
                     {% endfor %}
             if (id.column == 'cmd_cp') {
-                load_js('{{ url_create }}?pk_copy=' + el.id);
+                load_js('{{ url_create }}?pk_copy=' + el.id, undefined, undefined, undefined, undefined, undefined, undefined, abortAllPending=true);
             } else if (id.column == 'cmd_rm') {
-                load_js('{{ url_delete }}'.replace('0', el.id));
+                load_js('{{ url_delete }}'.replace('0', el.id), undefined, undefined, undefined, undefined, undefined, undefined, abortAllPending=true);
             } else {
                 {% if is_enable_row_click and type_row_click == 'single' %}
-                load_js('{{ url_update }}'.replace('0', el.id));
+                load_js('{{ url_update }}'.replace('0', el.id), undefined, undefined, undefined, undefined, undefined, undefined, abortAllPending=true);
                 {% else %}
                 webix.message({type: "success", text: "{{_("Double click to edit the element")|escapejs}}"});
                 {% endif %}
@@ -455,7 +449,7 @@ function _{{ view_prefix }}action_execute(action, ids, all, response_type, short
                                     expire: 5000
                                 });
                                 if (data.redirect_url!=null){
-                                    load_js(data.redirect_url);
+                                    load_js(data.redirect_url, undefined, undefined, undefined, undefined, undefined, undefined, abortAllPending=true);
                                     }
                             } else {
                                 webix.message({
