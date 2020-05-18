@@ -346,14 +346,20 @@ $$("{{ webix_container_id }}").addView({
                     {% endif %}
                     {% endfor %}
             if (id.column == 'cmd_cp') {
+                {% if is_enable_column_copy %}
                 load_js('{{ url_create }}?pk_copy=' + el.id, undefined, undefined, undefined, undefined, undefined, undefined, abortAllPending=true);
+                {% endif %}
             } else if (id.column == 'cmd_rm') {
+                {% if is_enable_column_delete %}
                 load_js('{{ url_delete }}'.replace('0', el.id), undefined, undefined, undefined, undefined, undefined, undefined, abortAllPending=true);
+                {% endif %}
             } else {
-                {% if is_enable_row_click and type_row_click == 'single' %}
-                load_js('{{ url_update }}'.replace('0', el.id), undefined, undefined, undefined, undefined, undefined, undefined, abortAllPending=true);
-                {% else %}
-                webix.message({type: "success", text: "{{_("Double click to edit the element")|escapejs}}"});
+                {% if is_enable_row_click %}
+                    {% if type_row_click == 'single' %}
+                    load_js('{{ url_update }}'.replace('0', el.id), undefined, undefined, undefined, undefined, undefined, undefined, abortAllPending=true);
+                    {% else %}
+                    webix.message({type: "success", text: "{{_("Double click to edit the element")|escapejs}}"});
+                    {% endif %}
                 {% endif %}
             }
             {% endblock %}
