@@ -191,7 +191,7 @@ function preloadImage(url) {
 
 {# loading and custom post simulation #}
 
-function load_js(lnk, hide, area, method, data, headers, dataType, abortAllPending, done, fail, beforeSend, always) {
+function load_js(lnk, hide, area, method, data, headers, dataType, abortAllPending, done, fail, always) {
     if (abortAllPending == true) {
         $.xhrPoolAbortAll();
     }
@@ -218,11 +218,6 @@ function load_js(lnk, hide, area, method, data, headers, dataType, abortAllPendi
             dataType: "json",
             type: method,
             data: data,
-            beforeSend: function (xhr, settings) {
-                if (beforeSend != undefined) {
-                    beforeSend(xhr, settings);
-                }
-            }
         }).done(function (msg) {
             if (done != undefined) {
                 return done(msg);
@@ -256,11 +251,6 @@ function load_js(lnk, hide, area, method, data, headers, dataType, abortAllPendi
                 data: data,
                 headers: headers,
                 dataType: "script",
-                beforeSend: function (xhr, settings) {
-                    if (beforeSend != undefined) {
-                        beforeSend(xhr, settings);
-                    }
-                }
             }).done(function (msg) {
                 if (done != undefined) {
                     return done(msg);
