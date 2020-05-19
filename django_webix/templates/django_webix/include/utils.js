@@ -191,34 +191,31 @@ function preloadImage(url) {
 
 {# loading and custom post simulation #}
 
-function load_js(lnk, hide, area, method, data, headers, dataType, abortAllPending, done, fail, always) {
+function load_js(lnk, hide, area, method, data, headers, dataType, abortAllPending, done, fail, always, ajaxExtra) {
     if (abortAllPending == true) {
         $.xhrPoolAbortAll();
     }
-    if (method == undefined) {
-        method = 'GET'
-    }
-    if (data == undefined) {
-        data = {}
-    }
+    method = method || 'GET';
+    data = {}
     if (data == headers) {
         data = {}
     }
-    if ((area == undefined) || (area == '') || (area == null)) {
+    if (area === undefined || area === '' || area === null) {
         area = '{{ webix_container_id }}';
     }
     hide = hide || 0;
     if (hide == true) {
         webix.ui([], $$(area));
     }
+    ajaxExtra = ajaxExtra || {};
     if (dataType == 'json') {
         $$(area).showOverlay("<img src='{% static 'django_webix/loading.gif' %}'>");
-        $.ajax({
+        $.ajax($.extend({
             url: lnk,
             dataType: "json",
             type: method,
             data: data,
-        }).done(function (msg) {
+        }, ajaxExtra)).done(function (msg) {
             if (done != undefined) {
                 return done(msg);
             } else {
@@ -245,13 +242,13 @@ function load_js(lnk, hide, area, method, data, headers, dataType, abortAllPendi
             else if ($$(area) !== undefined && $$(area) !== null && $$(area).showOverlay !== undefined)
                 $$(area).showOverlay("<img src='{% static 'django_webix/loading.gif' %}'>");
 
-            $.ajax({
+            $.ajax($.extend({
                 url: lnk,
                 type: method,
                 data: data,
                 headers: headers,
                 dataType: "script",
-            }).done(function (msg) {
+            }, ajaxExtra)).done(function (msg) {
                 if (done != undefined) {
                     return done(msg);
                 } else {
