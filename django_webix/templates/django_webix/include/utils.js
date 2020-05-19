@@ -196,7 +196,7 @@ function load_js(lnk, hide, area, method, data, headers, dataType, abortAllPendi
         $.xhrPoolAbortAll();
     }
     method = method || 'GET';
-    data = {}
+    data = data || {};
     if (data == headers) {
         data = {}
     }
