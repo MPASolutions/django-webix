@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-04-23 17:03+0200\n"
+"POT-Creation-Date: 2020-05-20 23:20+0200\n"
 "PO-Revision-Date: 2020-04-15 09:46+0050\n"
 "Last-Translator: b'  <>'\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -95,37 +95,51 @@ msgstr "Eliminar confirmación"
 msgid "Warning! All linked objects will also be deleted."
 msgstr "¡Atención! Todos los objetos vinculados también serán eliminados."
 
-#: django_webix/templates/django_webix/generic/list.js:38
-msgid "Filters removal"
+#: django_webix/templates/django_webix/generic/list.js:58
+#, fuzzy
+#| msgid "Filters removal"
+msgid "Extra filters removal"
 msgstr "Eliminar filtros"
 
-#: django_webix/templates/django_webix/generic/list.js:50
+#: django_webix/templates/django_webix/generic/list.js:69
 msgid "Geographic filter removal"
 msgstr "Eliminar filtro Geográfico"
 
-#: django_webix/templates/django_webix/generic/list.js:302
+#: django_webix/templates/django_webix/generic/list.js:81
+msgid "Advanced filter"
+msgstr ""
+
+#: django_webix/templates/django_webix/generic/list.js:203
+msgid "Applica i filtri impostati"
+msgstr ""
+
+#: django_webix/templates/django_webix/generic/list.js:203
+msgid "Filter"
+msgstr ""
+
+#: django_webix/templates/django_webix/generic/list.js:362
 msgid "Double click to edit the element"
 msgstr "Doble clic para editar el elemento"
 
-#: django_webix/templates/django_webix/generic/list.js:365
+#: django_webix/templates/django_webix/generic/list.js:426
 #: django_webix/templates/django_webix/include/toolbar_list.js:23
 #: django_webix/templates/django_webix/include/toolbar_list.js:40
 msgid "elements"
 msgstr "elementos"
 
-#: django_webix/templates/django_webix/generic/list.js:365
+#: django_webix/templates/django_webix/generic/list.js:426
 #, fuzzy
 #| msgid "elements selected"
 msgid "selected"
 msgstr "elementos seleccionados"
 
-#: django_webix/templates/django_webix/generic/list.js:385
+#: django_webix/templates/django_webix/generic/list.js:446
 #, fuzzy
 #| msgid "This action is not registered"
 msgid "Action is not executable"
 msgstr "Esta acción no está registrada"
 
-#: django_webix/templates/django_webix/generic/list.js:402
+#: django_webix/templates/django_webix/generic/list.js:463
 msgid "Something gone wrong"
 msgstr ""
 
@@ -136,7 +150,7 @@ msgstr "Nuevo artículo"
 
 #: django_webix/templates/django_webix/include/edit_inline/stacked.js:51
 #: django_webix/templates/django_webix/include/edit_inline/tabular.js:50
-#: django_webix/templates/django_webix/include/toolbar_navigation.js:34
+#: django_webix/templates/django_webix/include/toolbar_navigation.js:35
 msgid "Add"
 msgstr "Añadir"
 
@@ -227,7 +241,7 @@ msgstr "Seleccionar todo"
 
 #: django_webix/templates/django_webix/include/toolbar_list.js:29
 #: django_webix/templates/django_webix/include/toolbar_list.js:35
-#: django_webix/templates/django_webix/include/utils.js:322
+#: django_webix/templates/django_webix/include/utils.js:413
 msgid "All"
 msgstr "Todo"
 
@@ -264,46 +278,54 @@ msgstr "Volver"
 msgid "Back to list"
 msgstr "Volver a la lista"
 
-#: django_webix/templates/django_webix/include/utils.js:103
+#: django_webix/templates/django_webix/include/utils.js:121
 msgid "Yes"
 msgstr "Si"
 
-#: django_webix/templates/django_webix/include/utils.js:105
+#: django_webix/templates/django_webix/include/utils.js:123
 msgid "No"
 msgstr "No"
 
-#: django_webix/templates/django_webix/include/utils.js:110
+#: django_webix/templates/django_webix/include/utils.js:128
 msgid "Default"
 msgstr "Por defecto"
 
-#: django_webix/templates/django_webix/include/utils.js:117
+#: django_webix/templates/django_webix/include/utils.js:135
 msgid "Show on map"
 msgstr "Mostrar en el mapa"
 
-#: django_webix/templates/django_webix/include/utils.js:123
+#: django_webix/templates/django_webix/include/utils.js:141
 msgid "Duplicate element"
 msgstr "Duplicar elemento"
 
-#: django_webix/templates/django_webix/include/utils.js:127
+#: django_webix/templates/django_webix/include/utils.js:145
 msgid "Remove element"
 msgstr "Eliminar elemento"
 
-#: django_webix/templates/django_webix/include/utils.js:131
+#: django_webix/templates/django_webix/include/utils.js:149
 msgid "Detail"
 msgstr "Detalle"
 
-#: django_webix/templates/django_webix/include/utils.js:142
+#: django_webix/templates/django_webix/include/utils.js:170
 msgid "Image"
 msgstr "Imagen"
 
-#: django_webix/templates/django_webix/include/utils.js:145
+#: django_webix/templates/django_webix/include/utils.js:173
 msgid "Close"
 msgstr "Cerrar"
 
-#: django_webix/templates/django_webix/include/utils.js:200
-#: django_webix/templates/django_webix/include/utils.js:228
+#: django_webix/templates/django_webix/include/utils.js:249
+#: django_webix/templates/django_webix/include/utils.js:289
 msgid "Server error"
 msgstr "Error del servidor"
+
+#: django_webix/templates/django_webix/redirect_to_login.js:2
+msgid "User is not authenticated"
+msgstr ""
+
+#: django_webix/templates/django_webix/redirect_to_login.js:5
+msgid "You are no longer authenticated, please login again."
+msgstr ""
 
 #: django_webix/views/generic/actions.py:15
 #, python-brace-format
@@ -343,43 +365,43 @@ msgstr ""
 "No hay URL a la que redirigir. Proporcione una url o defina un método "
 "get_absolute_url en el Modelo."
 
-#: django_webix/views/generic/create_update.py:254
-#: django_webix/views/generic/create_update.py:335
+#: django_webix/views/generic/create_update.py:258
+#: django_webix/views/generic/create_update.py:339
 #: django_webix/views/generic/delete.py:45
 #: django_webix/views/generic/detail.py:23
-#: django_webix/views/generic/list.py:510
+#: django_webix/views/generic/list.py:599
 msgid "View permission is not allowed"
 msgstr "Ver permiso no está permitido"
 
-#: django_webix/views/generic/create_update.py:257
+#: django_webix/views/generic/create_update.py:261
 msgid "Add permission is not allowed"
 msgstr "Añadir permiso no está permitido"
 
-#: django_webix/views/generic/create_update.py:338
+#: django_webix/views/generic/create_update.py:342
 msgid "Change permission is not allowed"
 msgstr "Cambiar permiso no está permitido"
 
-#: django_webix/views/generic/create_update.py:394
+#: django_webix/views/generic/create_update.py:398
 #, python-format
 msgid "Changed %s."
 msgstr "Cambiar %s."
 
-#: django_webix/views/generic/create_update.py:394
+#: django_webix/views/generic/create_update.py:398
 msgid "and"
 msgstr "y"
 
 #: django_webix/views/generic/decorators.py:9
-#: django_webix/views/generic/list.py:362
+#: django_webix/views/generic/list.py:442
 msgid "Are you sure you want to proceed with this action?"
 msgstr ""
 
 #: django_webix/views/generic/decorators.py:10
-#: django_webix/views/generic/list.py:363
+#: django_webix/views/generic/list.py:443
 msgid "Proceed"
 msgstr ""
 
 #: django_webix/views/generic/decorators.py:11
-#: django_webix/views/generic/list.py:364
+#: django_webix/views/generic/list.py:444
 msgid "Undo"
 msgstr ""
 
@@ -393,23 +415,23 @@ msgid ""
 "get_absolute_url method on the Model."
 msgstr ""
 
-#: django_webix/views/generic/list.py:138
+#: django_webix/views/generic/list.py:149
 msgid "ERROR: geo srid is incorrect"
 msgstr "Error: srid geográfico es incorrecto"
 
-#: django_webix/views/generic/list.py:153
+#: django_webix/views/generic/list.py:170
 msgid "ERROR: geo filter is incorrect"
 msgstr "Error: El filtro geográfico es incorrecto"
 
-#: django_webix/views/generic/list.py:274
+#: django_webix/views/generic/list.py:354
 msgid "Paginate count is not integer"
 msgstr "El recuento del paginado no es entero"
 
-#: django_webix/views/generic/list.py:283
+#: django_webix/views/generic/list.py:363
 msgid "Paginate start is not integer"
 msgstr "El inicio del paginado no es entero"
 
-#: django_webix/views/generic/list.py:394
+#: django_webix/views/generic/list.py:474
 msgid ""
 "Actions style is improperly configured only options are 'buttons' or "
 "'select' (select by default)."
@@ -417,7 +439,7 @@ msgstr ""
 "El estilo de acciones no está bien configurado las únicas opciones son "
 "'botones' o 'seleccionar' (seleccionar por defecto)."
 
-#: django_webix/views/generic/list.py:465
+#: django_webix/views/generic/list.py:545
 msgid ""
 "Json response is available only if get_queryset() return a queryset and not "
 "a list"
@@ -425,19 +447,19 @@ msgstr ""
 "La respuesta de Json solo está disponible si get_queryset () devuelve un "
 "conjunto de consultas y no una lista"
 
-#: django_webix/views/generic/list.py:484
+#: django_webix/views/generic/list.py:564
 msgid "This action is not registered"
 msgstr "Esta acción no está registrada"
 
-#: django_webix/views/generic/list.py:490
+#: django_webix/views/generic/list.py:570
 msgid "Permission denied: {}"
 msgstr "Permiso denegado:{}"
 
-#: django_webix/views/generic/list.py:492
+#: django_webix/views/generic/list.py:572
 msgid "This permission is not registered on this class"
 msgstr "Este permiso no está registrado en esta clase"
 
-#: django_webix/views/generic/list.py:566
+#: django_webix/views/generic/list.py:658
 msgid "Generic TemplateListView needs to define data for datatable"
 msgstr ""
 "TemplateListView genérico necesita definir datos para la tabla de datos"
