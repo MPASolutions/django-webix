@@ -189,25 +189,43 @@ function preloadImage(url) {
     img.src = url + '?t=' + makeid();
 }
 
-{# loading and custom post simulation #}
 
+/**
+ * Helper to send request (ajax or http redirect)
+ *
+ * @param lnk url of the new request
+ * @param hide specify if hide loading area
+ * @param area location to add loader
+ * @param method http method [GET, POST, etc.]
+ * @param data data to send to request
+ * @param headers header to send to request
+ * @param dataType type of expected response
+ * @param abortAllPending if ajax and true, then abort pending requests
+ * @param done function to call at the end of request (success)
+ * @param fail function to call when request fails (error)
+ * @param always function to call in any case
+ * @param ajaxExtra extra dict to merge with ajax params
+ */
 function load_js(lnk, hide, area, method, data, headers, dataType, abortAllPending, done, fail, always, ajaxExtra) {
+    asyncRequest = typeof asyncRequest !== 'undefined' ? asyncRequest : true;
+    method = typeof method !== 'undefined' ? method : 'GET';
+    data = typeof data !== 'undefined' ? data : {};
+    hide = typeof hide !== 'undefined' ? hide : false;
+    ajaxExtra = typeof ajaxExtra !== 'undefined' ? ajaxExtra : {};
+
     if (abortAllPending == true) {
         $.xhrPoolAbortAll();
     }
-    method = method || 'GET';
-    data = data || {};
     if (data == headers) {
-        data = {}
+        data = {};
     }
     if (area === undefined || area === '' || area === null) {
         area = '{{ webix_container_id }}';
     }
-    hide = hide || 0;
-    if (hide == true) {
+    if (hide === true) {
         webix.ui([], $$(area));
     }
-    ajaxExtra = ajaxExtra || {};
+
     if (dataType == 'json') {
         $$(area).showOverlay("<img src='{% static 'django_webix/loading.gif' %}'>");
         $.ajax($.extend({
@@ -216,7 +234,7 @@ function load_js(lnk, hide, area, method, data, headers, dataType, abortAllPendi
             type: method,
             data: data,
         }, ajaxExtra)).done(function (msg) {
-            if (done != undefined) {
+            if (typeof done === 'function') {
                 return done(msg);
             } else {
                 webix.ui.resize();
@@ -224,13 +242,13 @@ function load_js(lnk, hide, area, method, data, headers, dataType, abortAllPendi
                 return msg;
             }
         }).fail(function (xhr, textStatus) {
-            if (fail != undefined) {
+            if (typeof fail === 'function') {
                 return fail(xhr, textStatus);
             } else {
                 webix.alert('{{_("Server error")|escapejs}}')
             }
         }).always(function (data, textStatus, errorThrown) {
-            if (always != undefined) {
+            if (typeof always === 'function') {
                 always(data, textStatus, errorThrown);
             }
         })
@@ -249,7 +267,7 @@ function load_js(lnk, hide, area, method, data, headers, dataType, abortAllPendi
                 headers: headers,
                 dataType: "script",
             }, ajaxExtra)).done(function (msg) {
-                if (done != undefined) {
+                if (typeof done === 'function') {
                     return done(msg);
                 } else {
                     if ($$('{{ webix_overlay_container_id }}') !== undefined && $$('{{ webix_overlay_container_id }}') !== null && $$('{{ webix_overlay_container_id }}').hideOverlay !== undefined)
@@ -260,7 +278,7 @@ function load_js(lnk, hide, area, method, data, headers, dataType, abortAllPendi
                     window.dispatchEvent(new Event('resize'));
                 }
             }).fail(function (xhr, textStatus) {
-                if (fail != undefined) {
+                if (typeof fail === 'function') {
                     return fail(xhr, textStatus);
                 } else {
                     if ($$('{{ webix_overlay_container_id }}') !== undefined && $$('{{ webix_overlay_container_id }}') !== null && $$('{{ webix_overlay_container_id }}').hideOverlay !== undefined)
@@ -270,7 +288,7 @@ function load_js(lnk, hide, area, method, data, headers, dataType, abortAllPendi
                     webix.alert('{{_("Server error")|escapejs}}')
                 }
             }).always(function (data, textStatus, errorThrown) {
-                if (always != undefined) {
+                if (typeof always === 'function') {
                     always(data, textStatus, errorThrown);
                 }
             });

@@ -49,6 +49,7 @@ var {{ view_prefix }}django_webix_filters = [{% for f in django_webix_filters %}
                 {
                     view: "template",
                     type: "header",
+                    borderless: true,
                     template: '<div style="width:100%; text-align:center;"><strong>{{ title }}</strong></div>'
                 },
                 {},
