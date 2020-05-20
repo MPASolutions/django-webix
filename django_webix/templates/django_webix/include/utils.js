@@ -210,6 +210,7 @@ function load_js(lnk, hide, area, method, data, headers, dataType, abortAllPendi
     asyncRequest = typeof asyncRequest !== 'undefined' ? asyncRequest : true;
     method = typeof method !== 'undefined' ? method : 'GET';
     data = typeof data !== 'undefined' ? data : {};
+    dataType = typeof dataType !== 'undefined' ? dataType : 'script';
     hide = typeof hide !== 'undefined' ? hide : false;
     ajaxExtra = typeof ajaxExtra !== 'undefined' ? ajaxExtra : {};
 
@@ -265,7 +266,7 @@ function load_js(lnk, hide, area, method, data, headers, dataType, abortAllPendi
                 type: method,
                 data: data,
                 headers: headers,
-                dataType: "script",
+                dataType: dataType,
             }, ajaxExtra)).done(function (msg) {
                 if (typeof done === 'function') {
                     return done(msg);
