@@ -8,7 +8,7 @@ import django
 from django.apps import apps
 from django.core.exceptions import FieldDoesNotExist
 from django.core.exceptions import PermissionDenied, ImproperlyConfigured
-from django.db.models import Q, ManyToManyField
+from django.db.models import Q, F, ManyToManyField
 from django.http import JsonResponse, Http404
 from django.template import Template, Context
 from django.template.loader import get_template
@@ -375,7 +375,8 @@ class WebixListView(WebixBaseMixin,
                 if field.get('field_name') is not None and \
                     (field.get('queryset_exclude') is None or field.get('queryset_exclude') != True):
                     values.append(field['field_name'])
-        data = qs.values(*values)
+        data = qs.values(*values,
+                         **({'id': F('pk')} if self.get_pk_field() != 'id' and not hasattr(self.model, 'id') else {}))
         return data
 
     def get_objects_datatable(self):
