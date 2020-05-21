@@ -14,12 +14,15 @@ if (form_validate('{{ form.webix_id }}')) {
     form_data_webix_elements.push($$('{{ form.webix_id }}'));
     $.each(form_data_webix_elements, function (index, value) {
         $.each(value.elements, function (i, el) {
-            if (el.data.view != 'uploader') {
-                form_data.append(el.data.name, el.getValue());
-            } else {
+            var elementAttributes = typeof el.config !== "undefined" ? el.config : el.data;
+
+            if (elementAttributes.view != 'uploader') {
+                form_data.append(elementAttributes.name, el.getValue());
+            }
+            else {
                 el.files.data.each(function (obj) {
                     if (obj !== undefined) {
-                        form_data.append(el.data.name, obj.file, obj.file.name);
+                        form_data.append(elementAttributes.name, obj.file, obj.file.name);
                     }
                 });
             }
