@@ -347,13 +347,17 @@ $$("{{ webix_container_id }}").addView({
                     {% endif %}
                     {% endfor %}
             if (id.column == 'cmd_cp') {
-                {% if is_enable_column_copy %}
-                load_js('{{ url_create }}?pk_copy=' + el.id, undefined, undefined, undefined, undefined, undefined, undefined, abortAllPending=true);
-                {% endif %}
+                {% block cmd_cp_click %}
+                    {% if is_enable_column_copy %}
+                        load_js('{{ url_create }}?pk_copy=' + el.id, undefined, undefined, undefined, undefined, undefined, undefined, abortAllPending=true);
+                    {% endif %}
+                {% endblock %}
             } else if (id.column == 'cmd_rm') {
-                {% if is_enable_column_delete %}
-                load_js('{{ url_delete }}'.replace('0', el.id), undefined, undefined, undefined, undefined, undefined, undefined, abortAllPending=true);
-                {% endif %}
+                {% block cmd_rm_click %}
+                    {% if is_enable_column_delete %}
+                        load_js('{{ url_delete }}'.replace('0', el.id), undefined, undefined, undefined, undefined, undefined, undefined, abortAllPending=true);
+                    {% endif %}
+                {% endblock %}
             } else {
                 {% if is_enable_row_click %}
                     {% if type_row_click == 'single' %}
