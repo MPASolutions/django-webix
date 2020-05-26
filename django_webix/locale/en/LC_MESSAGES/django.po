@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-05-20 23:20+0200\n"
+"POT-Creation-Date: 2020-05-26 09:26+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -105,32 +105,32 @@ msgid "Advanced filter"
 msgstr ""
 
 #: django_webix/templates/django_webix/generic/list.js:203
-msgid "Applica i filtri impostati"
+msgid "Apply filters"
 msgstr ""
 
 #: django_webix/templates/django_webix/generic/list.js:203
 msgid "Filter"
 msgstr ""
 
-#: django_webix/templates/django_webix/generic/list.js:362
+#: django_webix/templates/django_webix/generic/list.js:366
 msgid "Double click to edit the element"
 msgstr ""
 
-#: django_webix/templates/django_webix/generic/list.js:426
+#: django_webix/templates/django_webix/generic/list.js:430
 #: django_webix/templates/django_webix/include/toolbar_list.js:23
 #: django_webix/templates/django_webix/include/toolbar_list.js:40
 msgid "elements"
 msgstr ""
 
-#: django_webix/templates/django_webix/generic/list.js:426
+#: django_webix/templates/django_webix/generic/list.js:430
 msgid "selected"
 msgstr ""
 
-#: django_webix/templates/django_webix/generic/list.js:446
+#: django_webix/templates/django_webix/generic/list.js:450
 msgid "Action is not executable"
 msgstr ""
 
-#: django_webix/templates/django_webix/generic/list.js:463
+#: django_webix/templates/django_webix/generic/list.js:467
 msgid "Something gone wrong"
 msgstr ""
 
@@ -354,7 +354,7 @@ msgstr ""
 #: django_webix/views/generic/create_update.py:339
 #: django_webix/views/generic/delete.py:45
 #: django_webix/views/generic/detail.py:23
-#: django_webix/views/generic/list.py:599
+#: django_webix/views/generic/list.py:600
 msgid "View permission is not allowed"
 msgstr ""
 
@@ -376,17 +376,17 @@ msgid "and"
 msgstr ""
 
 #: django_webix/views/generic/decorators.py:9
-#: django_webix/views/generic/list.py:442
+#: django_webix/views/generic/list.py:443
 msgid "Are you sure you want to proceed with this action?"
 msgstr ""
 
 #: django_webix/views/generic/decorators.py:10
-#: django_webix/views/generic/list.py:443
+#: django_webix/views/generic/list.py:444
 msgid "Proceed"
 msgstr ""
 
 #: django_webix/views/generic/decorators.py:11
-#: django_webix/views/generic/list.py:444
+#: django_webix/views/generic/list.py:445
 msgid "Undo"
 msgstr ""
 
@@ -416,30 +416,30 @@ msgstr ""
 msgid "Paginate start is not integer"
 msgstr ""
 
-#: django_webix/views/generic/list.py:474
+#: django_webix/views/generic/list.py:475
 msgid ""
 "Actions style is improperly configured only options are 'buttons' or "
 "'select' (select by default)."
 msgstr ""
 
-#: django_webix/views/generic/list.py:545
+#: django_webix/views/generic/list.py:546
 msgid ""
 "Json response is available only if get_queryset() return a queryset and not "
 "a list"
 msgstr ""
 
-#: django_webix/views/generic/list.py:564
+#: django_webix/views/generic/list.py:565
 msgid "This action is not registered"
 msgstr ""
 
-#: django_webix/views/generic/list.py:570
+#: django_webix/views/generic/list.py:571
 msgid "Permission denied: {}"
 msgstr ""
 
-#: django_webix/views/generic/list.py:572
+#: django_webix/views/generic/list.py:573
 msgid "This permission is not registered on this class"
 msgstr ""
 
-#: django_webix/views/generic/list.py:658
+#: django_webix/views/generic/list.py:659
 msgid "Generic TemplateListView needs to define data for datatable"
 msgstr ""
