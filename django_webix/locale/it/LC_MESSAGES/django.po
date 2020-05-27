@@ -322,8 +322,7 @@ msgstr "Utente non autenticato"
 
 #: django_webix/templates/django_webix/redirect_to_login.js:5
 msgid "You are no longer authenticated, please login again."
-msgstr ""
-"Il tuo utente non è piuù autenticato, perfavore effettua nuovamente la login."
+msgstr "Il tuo utente non è più autenticato, perfavore effettua nuovamente la login."
 
 #: django_webix/views/generic/actions.py:15
 #, python-brace-format
