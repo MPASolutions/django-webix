@@ -290,7 +290,9 @@ class WebixListView(WebixBaseMixin,
 
             # optimize select related queryset (only if fields are defined)
             qs = self._optimize_select_related(qs)  # TODO
-            return qs
+
+            return self.apply_ordering(qs)
+
         return None
 
     def get_choices_filters(self):
