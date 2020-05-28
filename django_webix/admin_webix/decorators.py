@@ -1,4 +1,3 @@
-
 def register(*models, site=None):
     """
     Register the given model(s) classes and wrapped ModelWebixAdmin class with
@@ -7,7 +6,12 @@ def register(*models, site=None):
     class AuthorAdmin(admin.ModelAdmin):
         pass
     The `site` kwarg is an admin site to use instead of the default admin site.
+
+    :param models:
+    :param site:
+    :return:
     """
+
     from django_webix.admin_webix import ModelWebixAdmin
     from django_webix.admin_webix.sites import site as default_site, AdminWebixSite
 
@@ -26,4 +30,5 @@ def register(*models, site=None):
         admin_site.register(models, admin_class=admin_class)
 
         return admin_class
+
     return _model_admin_wrapper

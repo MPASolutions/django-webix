@@ -15,6 +15,8 @@ import os
 import sys
 import sphinx_rtd_theme
 
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'tests.settings')
+
 # If extensions (or modules to document with autodoc) are in another directory,
 # add these directories to sys.path here. If the directory is relative to the
 # documentation root, use os.path.abspath to make it absolute, like shown here.
@@ -23,6 +25,10 @@ import sphinx_rtd_theme
 cwd = os.getcwd()
 parent = os.path.dirname(cwd)
 sys.path.append(parent)
+sys.path.insert(0, os.path.dirname(parent))
+
+import django
+django.setup()
 
 import django_webix
 
