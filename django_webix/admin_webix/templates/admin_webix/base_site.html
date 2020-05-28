@@ -1,0 +1,84 @@
+{% load utils_ifusergroup thumbnail static utils_getattr %}<!DOCTYPE HTML>
+<html>
+<head>
+  <title>
+      {{ title }}
+  </title>
+
+  {% block webix_header %}
+    {% include "django_webix/static_meta.html" %}
+  {% endblock %}
+
+{% comment %}
+  {% block header_leaflet %}
+    {% include "django_webix_leaflet/include/header_leaflet.html" %}
+  {% endblock %}
+{% endcomment %}
+
+</head>
+<body style="width:100%;height:100%;margin:0px;padding:0px;">
+<script type="text/javascript" charset="utf-8">
+  webix.ready(function(){
+    //webix.i18n.setLocale("it-IT"); // TODO
+    webix.CustomScroll.init();
+    webix.ui.fullScreen();
+    webix.ui({
+      id:'admin_webix',
+      rows:[
+        {% block dashboard_header %}
+            {% include "admin_webix/include/header.js" %},
+        {% endblock %}
+        {
+        id:"content",
+        type:"space",
+        cols:[
+            {% block dashborad_left %}
+            {
+                id: 'content_left',
+                rows: [
+                    {% block dashborad_menu %}
+                        {% include "admin_webix/include/menu.js" %},
+                    {% endblock %}
+
+                ]
+            },
+          {% endblock %}
+          {% block dashboard_content %}
+              {
+                  view: "scrollview",
+                  id: "content_right_vertical",
+                  scroll: "y",
+                  body: {
+                      rows: [
+                          {
+                              margin: 5,
+                              id: '{{webix_container_id}}',
+                              type: "space",
+                              rows: [],
+                          },
+                      ]
+                  }
+              }
+            {% endblock %}
+          ]
+        },
+        ]
+      });
+
+    webix.extend($$('{{webix_container_id}}'), webix.OverlayBox);
+
+      {% block content %}
+          {% if render_url %}
+              webix.ui([{view: 'template', template: ''}], $$('{{webix_container_id}}'));
+              //with empty content_right view no loading cube
+              load_js('{{render_url}}');
+          {% else %}
+              {% include 'admin_webix/dashboard.js' %}
+          {% endif %}
+      {% endblock %}
+
+    {% block extra_content %}{% endblock %}
+  });
+</script>
+</body>
+</html>

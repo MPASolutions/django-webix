@@ -1,7 +1,7 @@
-{% load static django_webix_utils %}
+{% load static django_webix_utils i18n %}
 
-// csrf set
-// using jQuery
+{# csrf set and abort all using jQuery #}
+
 function getCookie(name) {
     var cookieValue = null;
     if (document.cookie && document.cookie !== '') {
@@ -23,17 +23,49 @@ function csrfSafeMethod(method) {
     return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
 }
 
+if (!String.prototype.startsWith) {
+    Object.defineProperty(String.prototype, 'startsWith', {
+        value: function(search, rawPos) {
+            var pos = rawPos > 0 ? rawPos|0 : 0;
+            return this.substring(pos, pos + search.length) === search;
+        }
+    });
+}
+
+$.xhrPool = [];
+$.xhrPoolAbortAll = function () {
+    $.xhrPool.forEach(function (xhr) {
+        xhr.abort();
+    });
+    $.xhrPool = [];
+};
+
 $.ajaxSetup({
     beforeSend: function (xhr, settings) {
+        $.xhrPool.push(xhr);
         if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
             var csrftoken = getCookie('csrftoken');
             xhr.setRequestHeader("X-CSRFToken", csrftoken);
         }
+    },
+    complete: function (xhr) {
+        var index = $.xhrPool.indexOf(xhr);
+        if (index > -1) {
+            $.xhrPool.splice(index, 1);
+        }
     }
 });
 
-// Italian locale settings for pivot
-webix.i18n.pivot = {
+{# csrf set webix #}
+
+webix.attachEvent("onBeforeAjax", function (mode, url, data, xhr, headers) {
+    var csrftoken = getCookie('csrftoken');
+    headers["X-CSRFToken"] = csrftoken;
+});
+
+{# Italian locale settings for pivot #}
+
+webix.i18n.locales['it-IT'].pivot = {
     apply: "Applica",
     cancel: "Annulla",
     columns: "Colonne",
@@ -54,11 +86,17 @@ webix.i18n.pivot = {
     total: "Totale"
 };
 
+{# values casts #}
 
-function load_pdf(url) {
-    var win = window.open(url, '_blank');
-    win.focus();
+function isNumberCheck(val) {
+    if (val.match(/^\d+\.\d+$/) || val.match(/^\d+\,\d+$/) || val.match(/^-{0,1}\d+$/)) {
+        return true;
+    } else {
+        return false;
+    }
 }
+
+{# templates lists #}
 
 function custom_checkbox(obj, common, value) {
     if ((value == 'False') || (value == 'false') || (value == '0') || (value === 0) || (value === false))
@@ -89,35 +127,45 @@ function custom_checkbox_help(obj, common, value) {
 
 function custom_checkbox_yesno(obj, common, value) {
     if (value)
-        return "<div style='color:green;'>Sì</div>";
+        return "<div style='color:green;'>{{_("Yes")|escapejs}}</div>";
     else
-        return "<div style='color:red;'>No</div>";
+        return "<div style='color:red;'>{{_("No")|escapejs}}</div>";
 }
 
 function custom_checkbox_default(obj, common, value) {
     if (value)
-        return '<div title="Default"><i style="cursor:pointer" class="webix_icon fas fa-check-circle"></i></div>';
+        return '<div title="{{_("Default")|escapejs}}"><i style="cursor:pointer" class="webix_icon fas fa-check-circle"></i></div>';
     else
         return ''
 }
 
 function custom_button_geo(obj, common, value) {
     if (value)
-        return '<div title="Vedi in mappa"><i style="cursor:pointer" class="webix_icon fas fa-map-marker-alt"></i></div>';
+        return '<div title="{{_("Show on map")|escapejs}}"><i style="cursor:pointer" class="webix_icon fas fa-map-marker-alt"></i></div>';
     else
         return ''
 }
 
 function custom_button_cp(obj, common, value) {
-    return '<div title="Duplica elemento"><i style="cursor:pointer" class="webix_icon far fa-copy"></i></div>'
+    return '<div title="{{_("Duplicate element")|escapejs}}"><i style="cursor:pointer" class="webix_icon far fa-copy"></i></div>'
 }
 
 function custom_button_rm(obj, common, value) {
-    return '<div title="Rimuovi elemento"><i style="cursor:pointer" class="webix_icon far fa-trash-alt"></i></div>'
+    return '<div title="{{_("Remove element")|escapejs}}"><i style="cursor:pointer" class="webix_icon far fa-trash-alt"></i></div>'
 }
 
 function custom_button_detail(obj, common, value) {
-    return '<div title="Dettaglio elemento"><i style="cursor:pointer" class="webix_icon fas fa-external-link-square-alt"></i></div>'
+    return '<div title="{{_("Detail")|escapejs}}"><i style="cursor:pointer" class="webix_icon fas fa-external-link-square-alt"></i></div>'
+}
+
+{# modal popup and image manage #}
+
+function makeid() {
+    var text = "";
+    var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+    for (var i = 0; i < 5; i++)
+        text += possible.charAt(Math.floor(Math.random() * possible.length));
+    return text;
 }
 
 function image_modal(url, width, height, id) {
@@ -128,8 +176,14 @@ function image_modal(url, width, height, id) {
         width: width,
         head: {
             view: "toolbar", cols: [
-                {view: "label", label: "Immagine"},
-                {view: "tootipButton", label: 'Chiudi', width: 100, align: 'right', click: "$$('" + id + "').close();"}
+                {view: "label", label: "{{_("Image")|escapejs}}"},
+                {
+                    view: "tootipButton",
+                    label: '{{_("Close")|escapejs}}',
+                    width: 100,
+                    align: 'right',
+                    click: "$$('" + id + "').close();"
+                }
             ]
         },
         position: "center",
@@ -139,93 +193,172 @@ function image_modal(url, width, height, id) {
     }).show();
 }
 
-function load_js(lnk, hide, area, method, data) {
-    if (method == undefined) {
-        method = 'GET'
-    }
-    if (data == undefined) {
-        data = {}
-    }
-    if ((area == undefined) || (area == '') || (area == null)) {
-        area = '{{ webix_container_id }}';
-    }
-    if (lnk != '') {
-        hide = hide || 0;
-        if (hide == true) {
-            webix.ui([], $$(area));
-        }
-        $$(area).showOverlay("<img src='{% static 'django_webix/loading.gif' %}'>");
-        $.ajax({
-            url: lnk,
-            type: method,
-            data: data,
-            dataType: "script",
-            success: function () {
-                //    setTimeout(function(){
-                $$(area).hideOverlay();
-                webix.ui.fullScreen();
-                window.dispatchEvent(new Event('resize'));
-//        },2000); // monkey patch
-            },
-            error: function () {
-                webix.alert('Server error')
-            }
-        });
-    }
-}
-
-function load_js_data(lnk, area, method, data) {
-    if (method == undefined) {
-        method = 'GET'
-    }
-    if (data == undefined) {
-        data = {}
-    }
-    if ((area == undefined) || (area == '') || (area == null)) {
-        area = '{{ webix_container_id }}';
-    }
-    $$(area).showOverlay("<img src='{% static 'django_webix/loading.gif' %}'>");
-    $.ajax({
-        url: lnk,
-        dataType: "json",
-        type: method,
-        data: data,
-        success: function (msg) {
-            webix.ui.resize();
-            $$(area).hideOverlay();
-            return msg;
-        },
-        error: function () {
-            webix.alert('Server error')
-        }
-    });
-}
-
-function loading_blank(url) {
-    if (url != '') {
-        window.open(url, '_blank');
-    }
-}
-
-function loading(url) {
-    if (url != '') {
-        document.location.href = url;
-    }
-}
-
 function preloadImage(url) {
     var img = new Image();
     img.src = url + '?t=' + makeid();
 }
 
-function makeid() {
-    var text = "";
-    var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-    for (var i = 0; i < 5; i++)
-        text += possible.charAt(Math.floor(Math.random() * possible.length));
-    return text;
+/**
+ * Helper to send request (ajax or http redirect)
+ *
+ * @param lnk url of the new request
+ * @param hide specify if hide loading area
+ * @param area location to add loader
+ * @param method http method [GET, POST, etc.]
+ * @param data data to send to request
+ * @param headers header to send to request
+ * @param dataType type of expected response
+ * @param abortAllPending if ajax and true, then abort pending requests
+ * @param done function to call at the end of request (success)
+ * @param fail function to call when request fails (error)
+ * @param always function to call in any case
+ * @param ajaxExtra extra dict to merge with ajax params
+ */
+function load_js(lnk, hide, area, method, data, headers, dataType, abortAllPending, done, fail, always, ajaxExtra) {
+    asyncRequest = typeof asyncRequest !== 'undefined' ? asyncRequest : true;
+    method = typeof method !== 'undefined' ? method : 'GET';
+    data = typeof data !== 'undefined' ? data : {};
+    dataType = typeof dataType !== 'undefined' ? dataType : 'script';
+    hide = typeof hide !== 'undefined' ? hide : false;
+    ajaxExtra = typeof ajaxExtra !== 'undefined' ? ajaxExtra : {};
+
+    if (abortAllPending == true) {
+        $.xhrPoolAbortAll();
+    }
+    if (data == headers) {
+        data = {};
+    }
+    if (area === undefined || area === '' || area === null) {
+        area = '{{ webix_container_id }}';
+    }
+    if (hide === true) {
+        webix.ui([], $$(area));
+    }
+
+    if (dataType == 'json') {
+        $$(area).showOverlay("<img src='{% static 'django_webix/loading.gif' %}'>");
+        $.ajax($.extend({
+            url: lnk,
+            dataType: "json",
+            type: method,
+            data: data,
+        }, ajaxExtra)).done(function (msg) {
+            if (typeof done === 'function') {
+                return done(msg);
+            } else {
+                webix.ui.resize();
+                $$(area).hideOverlay();
+                return msg;
+            }
+        }).fail(function (xhr, textStatus) {
+            if (typeof fail === 'function') {
+                return fail(xhr, textStatus);
+            } else {
+                webix.alert('{{_("Server error")|escapejs}}')
+            }
+        }).always(function (data, textStatus, errorThrown) {
+            if (typeof always === 'function') {
+                always(data, textStatus, errorThrown);
+            }
+        })
+    } else {
+        if (lnk != '') {
+
+            if ($$('{{ webix_overlay_container_id }}') !== undefined && $$('{{ webix_overlay_container_id }}') !== null && $$('{{ webix_overlay_container_id }}').showOverlay !== undefined)
+                $$('{{ webix_overlay_container_id }}').showOverlay("<img src='{% static 'django_webix/loading.gif' %}'>");
+            else if ($$(area) !== undefined && $$(area) !== null && $$(area).showOverlay !== undefined)
+                $$(area).showOverlay("<img src='{% static 'django_webix/loading.gif' %}'>");
+
+            $.ajax($.extend({
+                url: lnk,
+                type: method,
+                data: data,
+                headers: headers,
+                dataType: dataType,
+            }, ajaxExtra)).done(function (msg) {
+                if (typeof done === 'function') {
+                    return done(msg);
+                } else {
+                    if ($$('{{ webix_overlay_container_id }}') !== undefined && $$('{{ webix_overlay_container_id }}') !== null && $$('{{ webix_overlay_container_id }}').hideOverlay !== undefined)
+                        $$('{{ webix_overlay_container_id }}').hideOverlay();
+                    else if ($$(area) !== undefined && $$(area) !== null && $$(area).hideOverlay !== undefined)
+                        $$(area).hideOverlay();
+                    webix.ui.fullScreen();
+                      if (navigator.userAgent.indexOf('MSIE') !== -1 || navigator.appVersion.indexOf('Trident/') > 0) {
+                         var evt = document.createEvent('UIEvents');
+                         evt.initUIEvent('resize', true, false, window, 0);
+                         window.dispatchEvent(evt);
+                        } else {
+                           window.dispatchEvent(new Event('resize'));
+
+                        }
+                }
+            }).fail(function (xhr, textStatus) {
+                if (typeof fail === 'function') {
+                    return fail(xhr, textStatus);
+                } else {
+                    if ($$('{{ webix_overlay_container_id }}') !== undefined && $$('{{ webix_overlay_container_id }}') !== null && $$('{{ webix_overlay_container_id }}').hideOverlay !== undefined)
+                        $$('{{ webix_overlay_container_id }}').hideOverlay();
+                    else if ($$(area) !== undefined && $$(area) !== null && $$(area).hideOverlay !== undefined)
+                        $$(area).hideOverlay();
+                    webix.alert('{{_("Server error")|escapejs}}')
+                }
+            }).always(function (data, textStatus, errorThrown) {
+                if (typeof always === 'function') {
+                    always(data, textStatus, errorThrown);
+                }
+            });
+        }
+    }
 }
 
+
+function loading(url, blank, move_focus) {
+    if (blank != undefined) {
+        if (url != '') {
+            window.open(url, '_blank');
+        }
+    } else {
+        if (url != '') {
+            document.location.href = url;
+        }
+    }
+}
+
+/**
+ * sends a request to the specified url from a form. this will change the window location.
+ * @param {string} path the path to send the post request to
+ * @param {object} params the paramiters to add to the url
+ */
+function webix_post(path, params) {
+
+    // The rest of this code assumes you are not using a library.
+    // It can be made less wordy if you use one.
+    var form = document.createElement('form');
+    form.method = 'post';
+    form.action = path;
+
+    var hiddenField = document.createElement('input');
+    hiddenField.type = 'hidden';
+    hiddenField.name = 'csrfmiddlewaretoken';
+    hiddenField.value = getCookie('csrftoken');
+    form.appendChild(hiddenField);
+
+    for (var key in params) {
+        if (params.hasOwnProperty(key)) {
+            var hiddenField = document.createElement('input');
+            hiddenField.type = 'hidden';
+            hiddenField.name = key;
+            hiddenField.value = params[key];
+
+            form.appendChild(hiddenField);
+        }
+    }
+
+    document.body.appendChild(form);
+    form.submit();
+}
+{# autocomplete #}
 
 function set_autocomplete_reload(selector, QS) {
     a = $$(selector);
@@ -264,6 +397,8 @@ function set_autocomplete_empty(selector, QS) {
     d.load(QS + '&filter[value]=');
 }
 
+{# webix extensions #}
+
 webix.protoUI({
     name: "tootipButton",
     $cssName: "button",
@@ -290,42 +425,26 @@ webix.ui.datafilter.dataListCheckbox = webix.extend({
         };
     },
     render: function (master, config) {
-        return "<input type='checkbox' " + (config.checked ? "checked='1'" : "") + "> Tutti";
+        return "<input type='checkbox' " + (config.checked ? "checked='1'" : "") + "> {{_("All")|escapejs}}";
     }
 }, webix.ui.datafilter.masterCheckbox);
 
-/**
- * sends a request to the specified url from a form. this will change the window location.
- * @param {string} path the path to send the post request to
- * @param {object} params the paramiters to add to the url
- */
-
-
-function post(path, params) {
-
-    // The rest of this code assumes you are not using a library.
-    // It can be made less wordy if you use one.
-    const form = document.createElement('form');
-    form.method = 'post';
-    form.action = path;
-
-    const hiddenField = document.createElement('input');
-    hiddenField.type = 'hidden';
-    hiddenField.name = 'csrfmiddlewaretoken';
-    hiddenField.value = getCookie('csrftoken');
-    form.appendChild(hiddenField);
-
-    for (const key in params) {
-        if (params.hasOwnProperty(key)) {
-            const hiddenField = document.createElement('input');
-            hiddenField.type = 'hidden';
-            hiddenField.name = key;
-            hiddenField.value = params[key];
-
-            form.appendChild(hiddenField);
-        }
+webix.ui.datafilter.rowsCount = webix.extend({
+    refresh: function (master, node, value) {
+        node.firstChild.innerHTML = master.count();
     }
+}, webix.ui.datafilter.summColumn)
 
-    document.body.appendChild(form);
-    form.submit();
-}
+webix.ui.datafilter.avgColumn = webix.extend({
+    refresh: function (master, node, value) {
+        var result = 0;
+        master.mapCells(null, value.columnId, null, 1, function (value) {
+            value = value * 1;
+            if (!isNaN(value))
+                result += value;
+            return value;
+        });
+
+        node.firstChild.innerHTML = Math.round(result / master.count());
+    }
+}, webix.ui.datafilter.summColumn)

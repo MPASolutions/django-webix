@@ -11,6 +11,15 @@ import datetime
 register = template.Library()
 
 
+@register.filter('get_value_from_dict')
+def get_value_from_dict(dict_data, key):
+    """
+    usage example {{ your_dict|get_value_from_dict:your_key }}
+    """
+    if key:
+        return dict_data.get(key)
+
+
 @register.simple_tag(name='webix_version')
 def webix_version():
     return settings.WEBIX_VERSION
@@ -19,6 +28,21 @@ def webix_version():
 @register.simple_tag(name='webix_license')
 def webix_license():
     return settings.WEBIX_LICENSE
+
+
+@register.simple_tag(name='webix_fontawesome_css_url')
+def webix_fontawesome_css_url():
+    if hasattr(settings, 'WEBIX_FONTAWESOME_CSS_URL'):
+        return settings.WEBIX_FONTAWESOME_CSS_URL
+    else:
+        return 'django_webix/fontawesome-5.7.2/css/all.min.css'
+
+@register.simple_tag(name='webix_fontawesome_version')
+def webix_fontawesome_version():
+    if hasattr(settings, 'WEBIX_FONTAWESOME_VERSION'):
+        return settings.WEBIX_FONTAWESOME_VERSION
+    else:
+        return '5.7.2'
 
 
 @register.filter

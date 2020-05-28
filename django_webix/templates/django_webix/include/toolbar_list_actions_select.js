@@ -1,6 +1,8 @@
-{# actions su select #}
-if ((typeof actions_list != 'undefined') && (typeof actions_execute != 'undefined') && (actions_list.length > 0)) {
-    var toolbar_actions = [
+{% load i18n %}
+
+{# actions into select #}
+if ((typeof {{ view_prefix }}actions_list != 'undefined') && (typeof {{ view_prefix }}actions_execute != 'undefined') && ({{ view_prefix }}actions_list.length > 0)) {
+    var {{ view_prefix }}toolbar_actions = [
         {
             view: "richselect",
             id: "action_combo",
@@ -9,30 +11,19 @@ if ((typeof actions_list != 'undefined') && (typeof actions_execute != 'undefine
             width: "300",
             value: 1,
             labelWidth: 0,
-            placeholder: "Seleziona una funzionalità ...",
-            options: actions_list
+            placeholder: "{%  trans "Select an action" %}...",
+            options: {{ view_prefix }}actions_list
         },
         {
             view: "tootipButton",
             id: "action_button",
-            value: "Esegui",
+            value: "{%  trans "Go" %}",
             inputWidth: 60,
             width: 60,
             on: {
                 onItemClick: function () {
-                    var action = $$("action_combo").getValue();
-                    ids = [];
-                    $$("datatable_{{ model_name }}").eachRow(function (id) {
-                        if ((this.getItem(id)!=undefined )&&( this.getItem(id).checkbox_action)) {
-                            ids.push(id)
-                        }
-                    })
-                    if (ids.length > 0) {
-                        actions_execute(action, ids);
-                    } else {
-                        webix.alert("Non è stata selezionata nessuna riga", "alert-warning");
-                    }
-
+                    var action_name = $$("action_combo").getValue();
+                    {{ view_prefix }}prepare_actions_execute(action_name);
                 }
             }
         }

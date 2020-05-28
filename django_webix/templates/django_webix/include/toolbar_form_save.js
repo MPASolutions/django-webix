@@ -1,10 +1,10 @@
-{% load django_webix_utils static %}
+{% load django_webix_utils static i18n %}
 
 if (form_validate('{{ form.webix_id }}')) {
-    if ($$('{{ webix_container_id }}') !== undefined && $$('{{ webix_container_id }}').showOverlay !== undefined)
-        $$('{{ webix_container_id }}').showOverlay("<img src='{% static 'django_webix/loading.gif' %}'>");
-    else if ($$('{{ webix_overlay_container_id }}') !== undefined && $$('{{ webix_overlay_container_id }}') !== null && $$('{{ webix_overlay_container_id }}').showOverlay !== undefined)
+    if ($$('{{ webix_overlay_container_id }}') !== undefined && $$('{{ webix_overlay_container_id }}') !== null && $$('{{ webix_overlay_container_id }}').showOverlay !== undefined)
         $$('{{ webix_overlay_container_id }}').showOverlay("<img src='{% static 'django_webix/loading.gif' %}'>");
+    else if ($$('{{ webix_container_id }}') !== undefined && $$('{{ webix_container_id }}') !== null && $$('{{ webix_container_id }}').showOverlay !== undefined)
+        $$('{{ webix_container_id }}').showOverlay("<img src='{% static 'django_webix/loading.gif' %}'>");
 
     var form_data = new FormData();
     var form_data_webix_elements = [];
@@ -14,12 +14,15 @@ if (form_validate('{{ form.webix_id }}')) {
     form_data_webix_elements.push($$('{{ form.webix_id }}'));
     $.each(form_data_webix_elements, function (index, value) {
         $.each(value.elements, function (i, el) {
-            if (el.data.view != 'uploader') {
-                form_data.append(el.data.name, el.getValue());
-            } else {
+            var elementAttributes = typeof el.config !== "undefined" ? el.config : el.data;
+
+            if (elementAttributes.view != 'uploader') {
+                form_data.append(elementAttributes.name, el.getValue());
+            }
+            else {
                 el.files.data.each(function (obj) {
                     if (obj !== undefined) {
-                        form_data.append(el.data.name, obj.file, obj.file.name);
+                        form_data.append(elementAttributes.name, obj.file, obj.file.name);
                     }
                 });
             }
@@ -42,10 +45,10 @@ if (form_validate('{{ form.webix_id }}')) {
         success: function (data, textStatus, jqXHR) {
             {% block save_success %}{% endblock %}
             webix.ui.resize();
-            if ($$('{{ webix_container_id }}') !== undefined && $$('{{ webix_container_id }}').hideOverlay !== undefined)
-                $$('{{ webix_container_id }}').hideOverlay();
-            else if ($$('{{ webix_overlay_container_id }}') !== undefined && $$('{{ webix_overlay_container_id }}') !== null && $$('{{ webix_overlay_container_id }}').showOverlay !== undefined)
+            if ($$('{{ webix_overlay_container_id }}') !== undefined && $$('{{ webix_overlay_container_id }}') !== null && $$('{{ webix_overlay_container_id }}').hideOverlay !== undefined)
                 $$('{{ webix_overlay_container_id }}').hideOverlay();
+            else if ($$('{{ webix_container_id }}') !== undefined && $$('{{ webix_container_id }}') !== null && $$('{{ webix_container_id }}').hideOverlay !== undefined)
+                $$('{{ webix_container_id }}').hideOverlay();
         },
         error: function (jqXHR, textStatus, errorThrown) {
             {% block save_error %}{% endblock %}

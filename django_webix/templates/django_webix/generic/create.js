@@ -1,4 +1,4 @@
-{% load django_webix_utils %}
+{% load django_webix_utils i18n %}
 
 {% block webix_content %}
 
@@ -32,8 +32,7 @@
             {% include "django_webix/include/toolbar_form.js" %}
         {% endblock %}
 
-
-    {% block extrajs_post %}{% endblock %}
+        {% block extrajs_post %}{% endblock %}
     {% endif %}
 
 {% endblock %}

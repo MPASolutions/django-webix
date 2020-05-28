@@ -3,7 +3,6 @@
 from __future__ import unicode_literals
 
 from django.apps import apps
-from django.contrib.contenttypes.models import ContentType
 from django.core.exceptions import ImproperlyConfigured, ValidationError
 from django.core.exceptions import PermissionDenied
 from django.forms import model_to_dict
@@ -18,6 +17,9 @@ from django.utils.translation import ugettext as _
 from extra_views import UpdateWithInlinesView, CreateWithInlinesView
 
 from django_webix.views.generic.base import WebixBaseMixin, WebixPermissionsMixin, WebixUrlMixin
+from django_webix.views.generic.signals import (django_webix_view_pre_save,
+                                                django_webix_view_pre_inline_save,
+                                                django_webix_view_post_save)
 
 
 class WebixCreateUpdateMixin:
@@ -39,9 +41,9 @@ class WebixCreateUpdateMixin:
         elif self.template_style in ['standard', 'tabs']:
             _template_style = self.template_style
         else:
-            raise ImproperlyConfigured(
+            raise ImproperlyConfigured(_(
                 "Template style is improperly configured"
-                " only options are 'standard' or 'tabs' (standard by default).")
+                " only options are 'standard' or 'tabs' (standard by default)."))
         return _template_style
 
     def is_enable_button_save_continue(self, request):
@@ -76,15 +78,10 @@ class WebixCreateUpdateMixin:
             url = self.get_url_list()
 
         else:
-            raise ImproperlyConfigured(
+            raise ImproperlyConfigured(_(
                 "No URL to redirect to.  Either provide a url or define"
-                " a get_absolute_url method on the Model.")
+                " a get_absolute_url method on the Model."))
         return url
-
-    def validate_unique_together(self, form=None, inlines=None, **kwargs):
-        # self.object.validate_unique()
-        if form is not None:
-            form.instance.validate_unique()
 
     def get_context_data_webix_create_update(self, request, obj=None, **kwargs):
 
@@ -97,20 +94,38 @@ class WebixCreateUpdateMixin:
             'template_style': self.get_template_style(),
         }
 
-    def post(self, request, *args, **kwargs):
-        form_class = self.get_form_class()
+    def form_save(self, form):
+        self.object = form.save()
+        return None
 
-        form = self.get_form(form_class)
-        form, form_validated = self.validate_form(form)
+    def inlines_save(self, inlines):
+        for formset in inlines:
+            formset.save()
+        return None
 
-        inlines = self.construct_inlines()
-        inlines, inlines_validated = self.validate_inlines(inlines)
+    def forms_valid(self, form, inlines, **kwargs):
+        # pre forms valid
+        self.pre_forms_valid(form=form, inlines=inlines, **kwargs)
+        # validate unique together
+        try:
+            self.validate_unique_together(form=form, inlines=inlines, **kwargs)
+        except ValidationError as e:
+            form.add_error(None, str(e))
+            return self.forms_invalid(form=form, inlines=inlines, **kwargs)
+        # form save
+        exception_response = self.form_save(form)
+        if exception_response is not None:
+            return exception_response
+        # post form save
+        self.post_form_save(form=form, inlines=inlines, **kwargs)
+        # inlines save
+        exception_response = self.inlines_save(inlines)
+        if exception_response is not None:
+            return exception_response
+        # post forms valid
+        self.post_forms_valid(form=form, inlines=inlines, **kwargs)
 
-        form, inlines, full_validated = self.full_validate(form, form_validated, inlines, inlines_validated)
-
-        if full_validated:
-            return self.forms_valid(form, inlines)
-        return self.forms_invalid(form, inlines)
+        return self.response_valid(success_url=self.get_success_url(), **kwargs)
 
     def full_validate(self, form, form_validated, inlines, inlines_validated):
         return form, inlines, form_validated and inlines_validated
@@ -127,8 +142,20 @@ class WebixCreateUpdateMixin:
         inlines_validated = all_valid(inlines)
         return inlines, inlines_validated
 
+    def response_valid(self, success_url=None, **kwargs):
+        return HttpResponseRedirect(success_url)
 
-class WebixCreateView(WebixCreateUpdateMixin, WebixBaseMixin, WebixPermissionsMixin, WebixUrlMixin,
+    def response_invalid(self, form=None, inlines=None, **kwargs):
+        return self.render_to_response(self.get_context_data(form=form, inlines=inlines))
+
+    def forms_invalid(self, form, inlines, **kwargs):
+        return self.response_invalid(form=form, inlines=inlines, **kwargs)
+
+
+class WebixCreateView(WebixCreateUpdateMixin,
+                      WebixBaseMixin,
+                      WebixPermissionsMixin,
+                      WebixUrlMixin,
                       CreateWithInlinesView):
     template_name = 'django_webix/generic/create.js'
     model_copy_fields = None
@@ -182,7 +209,7 @@ class WebixCreateView(WebixCreateUpdateMixin, WebixBaseMixin, WebixPermissionsMi
 
     def get_initial(self):
         initial = {}
-        # main option: send SEND_INITIAL_DATA on header and POST initial data
+        # main option: send SEND_INITIAL_DATA on (header or GET or POST) and POST initial data
         if self.send_initial_data is not None:
             initial.update(self.send_initial_data)
         # secondary option: send pk_copy for copy instance field values
@@ -215,13 +242,16 @@ class WebixCreateView(WebixCreateUpdateMixin, WebixBaseMixin, WebixPermissionsMi
         self.object = None
 
         # BYPASS POST for initial data
-        if self.request.META.get('HTTP_SEND_INITIAL_DATA') and \
-            self.request.method == 'POST':
-            self.send_initial_data = self.request.POST.dict()
-            # switch to GET request
-            self.request.method = 'GET'
-            self.request.POST = QueryDict('', mutable=True)
-
+        if self.request.META.get('HTTP_SEND_INITIAL_DATA') or \
+           self.request.POST.get('SEND_INITIAL_DATA') or \
+           self.request.GET.get('SEND_INITIAL_DATA'):
+            if self.request.method == 'POST':
+                self.send_initial_data = self.request.POST.dict()
+                # switch to GET request
+                self.request.method = 'GET'
+                self.request.POST = QueryDict('', mutable=True)
+            elif self.request.method == 'GET':
+                self.send_initial_data = self.request.GET.dict()
 
         if self.request.method == 'GET':
             if not self.has_view_permission(request=self.request):
@@ -243,22 +273,37 @@ class WebixCreateView(WebixCreateUpdateMixin, WebixBaseMixin, WebixPermissionsMi
         '''
         Before all data saving
         '''
-        pass
+        django_webix_view_pre_save.send(sender=self,
+                                        instance=None,
+                                        created=True,
+                                        form=form,
+                                        inlines=inlines)
 
     def post_form_save(self, form=None, inlines=None, **kwargs):
         '''
         After form save and before inlines save
         '''
-        pass
+        django_webix_view_pre_inline_save.send(sender=self,
+                                               instance=self.object,
+                                               created=True,
+                                               form=form,
+                                               inlines=inlines)
 
     def post_forms_valid(self, form=None, inlines=None, **kwargs):
         '''
         After all data saved
         '''
+        django_webix_view_post_save.send(sender=self,
+                                         instance=self.object,
+                                         created=True,
+                                         form=form,
+                                         inlines=inlines)
+        # LOG
         anonymous = self.request.user.is_anonymous() if callable(
             self.request.user.is_anonymous) else self.request.user.is_anonymous
         if self.logs_enable is True and not anonymous and apps.is_installed('django.contrib.admin'):
             from django.contrib.admin.models import LogEntry, ADDITION
+            from django.contrib.contenttypes.models import ContentType
             LogEntry.objects.log_action(
                 user_id=self.request.user.pk,
                 content_type_id=ContentType.objects.get_for_model(self.object).pk,
@@ -267,33 +312,11 @@ class WebixCreateView(WebixCreateUpdateMixin, WebixBaseMixin, WebixPermissionsMi
                 action_flag=ADDITION
             )
 
-    def response_valid(self, success_url=None, **kwargs):
-        return HttpResponseRedirect(success_url)
 
-    def response_invalid(self, form=None, inlines=None, **kwargs):
-        return self.render_to_response(self.get_context_data(form=form, inlines=inlines))
-
-    def forms_valid(self, form, inlines, **kwargs):
-        self.pre_forms_valid(form=form, inlines=inlines, **kwargs)
-
-        try:
-            self.validate_unique_together(form=form, inlines=inlines, **kwargs)
-        except ValidationError as e:
-            form.add_error(None, str(e))
-            return self.forms_invalid(form=form, inlines=inlines, **kwargs)
-
-        self.object = form.save()
-        self.post_form_save(form=form, inlines=inlines, **kwargs)
-
-        for formset in inlines:
-            formset.save()
-        # raise Exception(self.object.pk)
-        self.post_forms_valid(form=form, inlines=inlines, **kwargs)
-        return self.response_valid(success_url=self.get_success_url(), **kwargs)
-
-    def forms_invalid(self, form, inlines, **kwargs):
-        return self.response_invalid(form=form, inlines=inlines, **kwargs)
-
+    def validate_unique_together(self, form=None, inlines=None, **kwargs):
+        # self.object.validate_unique()
+        if form is not None:
+            form.instance.validate_unique()
 
 class WebixUpdateView(WebixCreateUpdateMixin, WebixBaseMixin, WebixPermissionsMixin, WebixUrlMixin,
                       UpdateWithInlinesView):
@@ -332,20 +355,40 @@ class WebixUpdateView(WebixCreateUpdateMixin, WebixBaseMixin, WebixPermissionsMi
         if form is not None:
             form.instance.validate_unique()
 
+    def pre_forms_valid(self, form=None, inlines=None, **kwargs):
+        '''
+        Before all data saving
+        '''
+        django_webix_view_pre_save.send(sender=self,
+                                        instance=self.object,
+                                        created=False,
+                                        form=form,
+                                        inlines=inlines)
+
     def post_form_save(self, form=None, inlines=None, **kwargs):
         '''
         After form save and before inlines save
         '''
-        pass
 
-    def pre_forms_valid(self, form=None, inlines=None, **kwargs):
-        pass
+        django_webix_view_pre_inline_save.send(sender=self,
+                                               instance=self.object,
+                                               created=False,
+                                               form=form,
+                                               inlines=inlines)
 
     def post_forms_valid(self, form=None, inlines=None, **kwargs):
+
+        django_webix_view_post_save.send(sender=self,
+                                         instance=self.object,
+                                         created=False,
+                                         form=form,
+                                         inlines=inlines)
+
         anonymous = self.request.user.is_anonymous() if callable(
             self.request.user.is_anonymous) else self.request.user.is_anonymous
         if self.logs_enable is True and not anonymous and apps.is_installed('django.contrib.admin'):
             from django.contrib.admin.models import LogEntry, CHANGE
+            from django.contrib.contenttypes.models import ContentType
             LogEntry.objects.log_action(
                 user_id=self.request.user.pk,
                 content_type_id=ContentType.objects.get_for_model(self.object).pk,
@@ -354,31 +397,6 @@ class WebixUpdateView(WebixCreateUpdateMixin, WebixBaseMixin, WebixPermissionsMi
                 action_flag=CHANGE,
                 change_message=_('Changed %s.') % get_text_list(form.changed_data, _('and'))
             )
-
-    def response_valid(self, success_url=None, **kwargs):
-        return HttpResponseRedirect(success_url)
-
-    def response_invalid(self, form=None, inlines=None, **kwargs):
-        return self.render_to_response(self.get_context_data(form=form, inlines=inlines))
-
-    def forms_valid(self, form, inlines, **kwargs):
-        self.pre_forms_valid(form=form, inlines=inlines, **kwargs)
-        try:
-            self.validate_unique_together(form=form, inlines=inlines, **kwargs)
-        except ValidationError as e:
-            form.add_error(None, str(e))
-            return self.forms_invalid(form=form, inlines=inlines, **kwargs)
-        self.object = form.save()
-
-        self.post_form_save(form=form, inlines=inlines, **kwargs)
-
-        for formset in inlines:
-            formset.save()
-        self.post_forms_valid(form=form, inlines=inlines, **kwargs)
-        return self.response_valid(success_url=self.get_success_url(), **kwargs)
-
-    def forms_invalid(self, form, inlines, **kwargs):
-        return self.response_invalid(form=form, inlines=inlines, **kwargs)
 
 
 class WebixCreateWithInlinesView(WebixCreateView):

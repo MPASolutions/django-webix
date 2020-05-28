@@ -52,6 +52,7 @@ class BaseWebixMixin(object):
     style = 'stacked'
     readonly_fields = []
     autocomplete_fields = []
+    autocomplete_fields_exclude = []
     autocomplete_fields_urls = {}
 
     class Meta:
@@ -363,7 +364,8 @@ class BaseWebixMixin(object):
                                 'borderless': True,
                                 'template': label,
                                 'height': 30,
-                                'width': 200
+                                'width': 200,
+                                'css': {'background-color': 'transparent !important'}
                             },
                             {
                                 'name_label': name,
@@ -437,7 +439,8 @@ class BaseWebixMixin(object):
                                 'id_label': name,
                                 'borderless': True,
                                 'template': label,
-                                'height': 30
+                                'height': 30,
+                                'css': {'background-color': 'transparent !important'}
                             },
                             _download,
                             el
@@ -452,7 +455,7 @@ class BaseWebixMixin(object):
             elif type(field) == forms.models.ModelMultipleChoiceField:
                 if settings.WEBIX_LICENSE != 'PRO':
                     raise ImproperlyConfigured(
-                        "MultipleChoiceField is available only with PRO webix license")
+                        _("MultipleChoiceField is available only with PRO webix license"))
                 if initial is not None:
                     el.update({
                         'value': ','.join([str(i.pk) if isinstance(i, models.Model) else str(i) for i in initial])
@@ -460,7 +463,8 @@ class BaseWebixMixin(object):
                 count = field.queryset.count()
 
                 if count > self.min_count_suggest and \
-                    name not in self.autocomplete_fields:
+                    name not in self.autocomplete_fields and \
+                    name not in self.autocomplete_fields_exclude:
                     self.autocomplete_fields.append(name)
 
                 # autocomplete url
@@ -531,7 +535,8 @@ class BaseWebixMixin(object):
                 count = field.queryset.count()
 
                 if count > self.min_count_suggest and \
-                    name not in self.autocomplete_fields:
+                    name not in self.autocomplete_fields and \
+                    name not in self.autocomplete_fields_exclude:
                     self.autocomplete_fields.append(name)
 
                 # autocomplete url
@@ -544,10 +549,6 @@ class BaseWebixMixin(object):
                             field.to_field_name
                         )
                     })
-
-                # autocomplete field
-                # if self.add_prefix(name)=='agrofarmacotrattamento_set-0-revisione_agrofarmaco':
-                #    raise Exception(name, self.autocomplete_fields, self.autocomplete_fields_urls)
 
                 if name in self.autocomplete_fields:
                     el.update({
@@ -594,13 +595,16 @@ class BaseWebixMixin(object):
                     if field.required and initial is None and len(field.queryset) == 1:
                         el.update({'value': '{}'.format(field.queryset.first().pk)})
                 else:
+                    choices = self._add_null_choice([{
+                        'id': '{}'.format(i.pk),
+                        'value': '{}'.format(i)
+                    } for i in field.queryset])
+                    if not field.required:
+                        choices.insert(0, {'id': "", 'value': "------", '$empty': True})
                     el.update({
                         'view': 'combo',
                         'placeholder': _('Click to select'),
-                        'options': self._add_null_choice([{
-                            'id': '{}'.format(i.pk),
-                            'value': '{}'.format(i)
-                        } for i in field.queryset])
+                        'options': choices
                     })
             # TypedChoiceField ChoiceField
             elif isinstance(field, forms.TypedChoiceField) or isinstance(field, forms.ChoiceField):
@@ -635,20 +639,21 @@ class BaseWebixMixin(object):
             elif connection.vendor == 'postgresql' and \
                 SimpleArrayField is not None and \
                 isinstance(field, SimpleArrayField):
-                if hasattr(field, 'base_field') and \
-                    isinstance(field.base_field, forms.fields.DateField):
+                if hasattr(field, 'base_field') and isinstance(field.base_field, forms.fields.DateField):
                     el.update({
                         'view': 'datepicker',
                         'multiselect': 'touch',
                         'format': "%d/%m/%Y",
                         'stringResult': True,
                     })
-                if initial is not None:
-                    if type(initial) == list:
-                        el.update({
-                            'value': ', '.join([i.strftime('%Y-%m-%d') for i in initial]),
-                            'orig_value': ', '.join([i.strftime('%Y-%m-%d') for i in initial]),
-                        })
+                    if initial is not None:
+                        if isinstance(initial, list):
+                            el.update({
+                                'value': ', '.join([i.strftime('%Y-%m-%d') for i in initial]),
+                                'orig_value': ', '.join([i.strftime('%Y-%m-%d') for i in initial]),
+                            })
+                elif initial is not None:
+                    el.update({'value': initial})
 
             # CharField
             elif isinstance(field, forms.CharField):
@@ -671,9 +676,14 @@ class BaseWebixMixin(object):
                     elif type(initial) == str:
                         el.update({'value': str(initial)})
                     else:
-                        raise Exception('Initial value {} for geo field {} is not supported'.format(initial, field))
-            elif not isinstance(field, InlineForeignKeyField):
-                raise Exception('Type of field {} not supported'.format(field))
+                        raise Exception(_('Initial value {} for geo field {} is not supported').format(initial, field))
+
+            # InlineForeignKey
+            elif isinstance(field, forms.models.InlineForeignKeyField):
+                pass
+
+            else:
+                raise Exception(_('Type of field {} not supported').format(field))
 
             # widget RadioSelect
             if isinstance(field.widget, forms.RadioSelect):
@@ -808,6 +818,12 @@ class BaseWebixForm(forms.BaseForm, BaseWebixMixin):
         super(BaseWebixForm, self).__init__(data, files, auto_id, prefix, initial, error_class, label_suffix,
                                             empty_permitted, field_order, use_required_attribute, renderer)
 
+        # Set localization fields
+        if settings.USE_L10N is True:
+            for field in self.fields:
+                self.fields[field].localize = True
+                self.fields[field].widget.is_localized = True
+
         # TODO: check if it works with all field types on create and update action
         self.set_readonly_fields()
 
@@ -846,6 +862,12 @@ class BaseWebixModelForm(forms.BaseModelForm, BaseWebixMixin):
         else:
             super(BaseWebixModelForm, self).__init__(data, files, auto_id, prefix, initial, error_class, label_suffix,
                                                      empty_permitted, instance, use_required_attribute)
+
+        # Set localization fields
+        if settings.USE_L10N is True:
+            for field in self.fields:
+                self.fields[field].localize = True
+                self.fields[field].widget.is_localized = True
 
         # TODO: check if it works with all field types on create and update action
         self.set_readonly_fields()

@@ -6,10 +6,9 @@ from __future__ import unicode_literals
 from django.db import models
 from django.utils import timezone
 
-from django_webix.models import GenericModelWebix
 
 
-class MyModel(GenericModelWebix):
+class MyModel(models.Model):
     field = models.CharField(max_length=255)
     email = models.EmailField(max_length=255)
     floatfield = models.FloatField()

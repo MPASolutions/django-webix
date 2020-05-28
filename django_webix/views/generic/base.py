@@ -8,11 +8,7 @@ from django.utils.translation import ugettext as _
 from django.views.generic import TemplateView
 from django.urls import reverse
 
-try:
-    from django.urls import get_resolver
-except ImportError:
-    from django.core.urlresolvers import get_resolver
-
+from django.urls.exceptions import NoReverseMatch
 
 class WebixPermissionsMixin:
     model = None
@@ -192,18 +188,57 @@ class WebixUrlMixin:
     url_pattern_update = None
     url_pattern_delete = None
 
-    def _check_url(self, url_name):
+    def is_popup(self):
+        return self.request.GET.get('_popup', self.request.POST.get('_popup', False)) != False
+
+    def wrap_url_popup(self, url):
+        if url is not None:
+            if self.is_popup():
+                if '?' in url:
+                    return url + '&_popup'
+                else:
+                    return url + '?_popup'
+            else:
+                return url
+        else:
+            return None
+
+    def get_url_pattern_list(self):
+        if self.url_pattern_list is not None:
+            return self.url_pattern_list
+        else:
+            return '{}.list'.format(self.get_model_name())
+
+    def get_url_pattern_create(self):
+        if self.url_pattern_create is not None:
+            return self.url_pattern_create
+        else:
+            return '{}.create'.format(self.get_model_name())
+
+    def get_url_pattern_update(self):
+        if self.url_pattern_update is not None:
+            return self.url_pattern_update
+        else:
+            return '{}.update'.format(self.get_model_name())
+
+    def get_url_pattern_delete(self):
+        if self.url_pattern_delete is not None:
+            return self.url_pattern_delete
+        else:
+            return '{}.delete'.format(self.get_model_name())
+
+    def _check_url(self, url_name, reverse_kwargs={}):
         """
         Check if url_name exists
 
         :param url_name: url name
         :return: url_name if exists, otherwhise None
         """
-
-        exists = url_name in [i for i in get_resolver(None).reverse_dict.keys() if isinstance(i, six.string_types)]
-        if exists:
+        try:
+            url = reverse(url_name, kwargs=reverse_kwargs)
             return url_name
-        return None
+        except NoReverseMatch:
+            return None
 
     def get_model_name(self):
         if self.model is not None:
@@ -212,9 +247,9 @@ class WebixUrlMixin:
 
     def get_url_list(self):
         if self.model is not None:
-            _url_pattern_name = self.url_pattern_list or self._check_url('{}.list'.format(self.get_model_name()))
+            _url_pattern_name = self._check_url(self.get_url_pattern_list())
             if _url_pattern_name is not None:
-                return reverse(_url_pattern_name)
+                return self.wrap_url_popup( reverse(_url_pattern_name) )
         return None
 
     def get_url_create_kwargs(self):
@@ -222,36 +257,43 @@ class WebixUrlMixin:
 
     def get_url_create(self):
         if self.model is not None:
-            _url_pattern_name = self.url_pattern_create or self._check_url('{}.create'.format(self.get_model_name()))
+            create_kwargs = self.get_url_create_kwargs()
+            if create_kwargs is not None:
+                _url_pattern_name = self._check_url(self.get_url_pattern_create(),reverse_kwargs=self.get_url_create_kwargs())
+            else:
+                _url_pattern_name = self._check_url(self.get_url_pattern_create())
             if _url_pattern_name is not None:
-                create_kwargs = self.get_url_create_kwargs()
                 if create_kwargs is not None:
-                    return reverse(_url_pattern_name, kwargs=create_kwargs)
+                    return self.wrap_url_popup( reverse(_url_pattern_name, kwargs=create_kwargs) )
                 else:
-                    return reverse(_url_pattern_name)
+                    return self.wrap_url_popup( reverse(_url_pattern_name) )
+
         return None
 
     def get_url_update(self, obj=None):
         if self.model is not None:
-            _url_pattern_name = self.url_pattern_update or self._check_url('{}.update'.format(self.get_model_name()))
+            _url_pattern_name = self._check_url(self.get_url_pattern_update(), {'pk':0})
             if _url_pattern_name is not None:
                 if obj is not None:
                     _pk = obj.pk
                 else:
                     _pk = 0
-                return reverse(_url_pattern_name, kwargs={'pk': _pk})
+                return self.wrap_url_popup( reverse(_url_pattern_name, kwargs={'pk': _pk}) )
         return None
 
     def get_url_delete(self, obj=None):
         if self.model is not None:
-            _url_pattern_name = self.url_pattern_delete or self._check_url('{}.delete'.format(self.get_model_name()))
+            _url_pattern_name = self._check_url(self.get_url_pattern_delete(), {'pk':0})
             if _url_pattern_name is not None:
                 if obj is not None:
                     _pk = obj.pk
                 else:
                     _pk = 0
-                return reverse(_url_pattern_name, kwargs={'pk': _pk})
+                return self.wrap_url_popup( reverse(_url_pattern_name, kwargs={'pk': _pk}) )
         return None
+
+    def get_view_prefix(self):
+        return '{}_{}_'.format(self.model._meta.app_label, self.model._meta.model_name)
 
     def get_context_data_webix_url(self, request, obj=None, **kwargs):
         return {
@@ -261,8 +303,12 @@ class WebixUrlMixin:
             'url_update': self.get_url_update(obj=obj),
             'url_delete': self.get_url_delete(obj=obj),
             # Model info
+            'is_popup': self.is_popup(),
             'model': self.model,
             'model_name': self.get_model_name(),
+            'app_label': self.model._meta.app_label if self.model else None,
+            'module_name': self.model._meta.model_name if self.model else None,
+            'view_prefix': self.get_view_prefix()
         }
 
 
@@ -272,7 +318,7 @@ class WebixBaseMixin:
         return settings.WEBIX_CONTAINER_ID
 
     def get_overlay_container_id(self, request):
-        return settings.WEBIX_CONTAINER_ID
+        return getattr(settings, 'WEBIX_OVERLAY_CONTAINER_ID', settings.WEBIX_CONTAINER_ID)
 
     def get_context_data_webix_base(self, request, **kwargs):
         return {
@@ -287,3 +333,6 @@ class WebixTemplateView(WebixBaseMixin, TemplateView):
         context = super(WebixTemplateView, self).get_context_data(**kwargs)
         context.update(self.get_context_data_webix_base(request=self.request))
         return context
+
+    def get_view_prefix(self):
+        return ''

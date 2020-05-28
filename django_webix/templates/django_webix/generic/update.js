@@ -1,4 +1,4 @@
-{% load django_webix_utils %}
+{% load django_webix_utils i18n %}
 
 {% block webix_content %}
 
