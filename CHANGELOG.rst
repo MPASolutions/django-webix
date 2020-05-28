@@ -14,6 +14,14 @@ The format is based on KeepAChangelog_ and this project adheres to SemanticVersi
 ++++++++++++
 
 
+[1.2.1] 2020-01-08
+++++++++++++++++++
+
+Changed
+~~~~~~~
+* Documentation
+
+
 [1.2.0] 2020-05-28
 ++++++++++++++++++
 
