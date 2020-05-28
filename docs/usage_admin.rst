@@ -1,6 +1,12 @@
 Admin
 =====
 
+.. image:: static/django_webix_admin_list.png
+  :alt: Django-Webix admin list example
+
+.. image:: static/django_webix_admin_form.png
+  :alt: Django-Webix admin form example
+
 Configure
 ---------
 
