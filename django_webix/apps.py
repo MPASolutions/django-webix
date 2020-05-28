@@ -5,6 +5,7 @@ from __future__ import unicode_literals
 from django.apps import AppConfig
 from django.conf import settings
 
+
 class DjangoWebixConfig(AppConfig):
     name = 'django_webix'
 
@@ -22,5 +23,3 @@ class DjangoWebixConfig(AppConfig):
         if not hasattr(settings, 'WEBIX_CONTAINER_ID'):
             raise Exception('WEBIX_CONTAINER_ID is webix_id where js interfaces are loaded and '
                             'is not found in your settings (usually "content_right")')
-
-
