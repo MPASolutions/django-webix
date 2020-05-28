@@ -66,7 +66,11 @@ class RelatedLookup(View):
                     if k != "_to_field":
                         filters[smart_text(k)] = prepare_lookup_value(smart_text(k), VALUE)
                 qset |= Q(**filters)
-        return qs.filter(qset)
+        try:
+            qs = qs.filter(qset)
+        except:
+            qs = qs.none()
+        return qs
 
     def get_queryset(self):
         qs = self.model._default_manager.get_queryset()

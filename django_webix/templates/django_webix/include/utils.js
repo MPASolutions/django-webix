@@ -23,6 +23,15 @@ function csrfSafeMethod(method) {
     return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
 }
 
+if (!String.prototype.startsWith) {
+    Object.defineProperty(String.prototype, 'startsWith', {
+        value: function(search, rawPos) {
+            var pos = rawPos > 0 ? rawPos|0 : 0;
+            return this.substring(pos, pos + search.length) === search;
+        }
+    });
+}
+
 $.xhrPool = [];
 $.xhrPoolAbortAll = function () {
     $.xhrPool.forEach(function (xhr) {
@@ -189,7 +198,6 @@ function preloadImage(url) {
     img.src = url + '?t=' + makeid();
 }
 
-
 /**
  * Helper to send request (ajax or http redirect)
  *
@@ -276,7 +284,14 @@ function load_js(lnk, hide, area, method, data, headers, dataType, abortAllPendi
                     else if ($$(area) !== undefined && $$(area) !== null && $$(area).hideOverlay !== undefined)
                         $$(area).hideOverlay();
                     webix.ui.fullScreen();
-                    window.dispatchEvent(new Event('resize'));
+                      if (navigator.userAgent.indexOf('MSIE') !== -1 || navigator.appVersion.indexOf('Trident/') > 0) {
+                         var evt = document.createEvent('UIEvents');
+                         evt.initUIEvent('resize', true, false, window, 0);
+                         window.dispatchEvent(evt);
+                        } else {
+                           window.dispatchEvent(new Event('resize'));
+
+                        }
                 }
             }).fail(function (xhr, textStatus) {
                 if (typeof fail === 'function') {
@@ -315,23 +330,23 @@ function loading(url, blank, move_focus) {
  * @param {string} path the path to send the post request to
  * @param {object} params the paramiters to add to the url
  */
-function post(path, params) {
+function webix_post(path, params) {
 
     // The rest of this code assumes you are not using a library.
     // It can be made less wordy if you use one.
-    const form = document.createElement('form');
+    var form = document.createElement('form');
     form.method = 'post';
     form.action = path;
 
-    const hiddenField = document.createElement('input');
+    var hiddenField = document.createElement('input');
     hiddenField.type = 'hidden';
     hiddenField.name = 'csrfmiddlewaretoken';
     hiddenField.value = getCookie('csrftoken');
     form.appendChild(hiddenField);
 
-    for (const key in params) {
+    for (var key in params) {
         if (params.hasOwnProperty(key)) {
-            const hiddenField = document.createElement('input');
+            var hiddenField = document.createElement('input');
             hiddenField.type = 'hidden';
             hiddenField.name = key;
             hiddenField.value = params[key];
