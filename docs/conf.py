@@ -25,6 +25,7 @@ os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'tests.settings')
 cwd = os.getcwd()
 parent = os.path.dirname(cwd)
 sys.path.append(parent)
+sys.path.insert(0, os.path.abspath('extensions'))
 sys.path.insert(0, os.path.dirname(parent))
 
 import django
