@@ -14,11 +14,4 @@
 <script type="text/javascript" charset="utf-8">
     {% include "django_webix/include/form_validation.js" %}
     {% include "django_webix/include/utils.js" %}
-
-    webix.attachEvent("onBeforeAjax", function (mode, url, data, xhr, headers) {
-        var key = document.querySelector("[name=csrfmiddlewaretoken]");
-        if (key !== undefined && key !== null) {
-            headers["X-CSRFToken"] = key.value;
-        }
-    });
 </script>
