@@ -13,6 +13,10 @@ The format is based on KeepAChangelog_ and this project adheres to SemanticVersi
 [Unreleased]
 ++++++++++++
 
+Changed
+~~~~~~~
+* Add optional argumenent input_params to action_execute function (used to send input paremetr in POST request)
+
 
 [1.2.1] 2020-01-08
 ++++++++++++++++++

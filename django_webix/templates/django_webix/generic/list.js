@@ -412,7 +412,7 @@ $$("{{ webix_container_id }}").addView({
 
 {% block toolbar_list %}
 
-function _{{ view_prefix }}action_execute(action, ids, all, response_type, short_description, modal_title, modal_ok, modal_cancel) {
+function _{{ view_prefix }}action_execute(action, ids, all, response_type, short_description, modal_title, modal_ok, modal_cancel, input_params) {
     /*
     action (required) = action_key to be executed
     ids (required) = list of selected elements ids
@@ -422,6 +422,7 @@ function _{{ view_prefix }}action_execute(action, ids, all, response_type, short
     modal_title (required) = text to show in modal choices execution
     modal_ok (not required)
     modal_cancel (not required)
+    params (not required) = paramters to post in action method
     */
     webix.confirm({
         title: short_description,
@@ -435,6 +436,7 @@ function _{{ view_prefix }}action_execute(action, ids, all, response_type, short
                     _params = {
                         'action': action,
                         'filters': JSON.stringify({{ view_prefix }}get_filters_qsets()),
+                        'params': JSON.stringify(input_params || {}),
                         'csrfmiddlewaretoken': getCookie('csrftoken')
                     };
                     if (all == false) {
