@@ -13,9 +13,18 @@ The format is based on KeepAChangelog_ and this project adheres to SemanticVersi
 [Unreleased]
 ++++++++++++
 
+Added
+~~~~~
+* `Select all` button in multicombo widget
+* Multicombo in PostgreSQL ArrayField with options
+
 Changed
 ~~~~~~~
 * Add optional argumenent input_params to action_execute function (used to send input paremetr in POST request)
+
+Fixed
+~~~~~
+* Object title in create and update forms
 
 
 [1.2.1] 2020-01-08

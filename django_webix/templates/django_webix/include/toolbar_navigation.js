@@ -32,7 +32,7 @@ $$("{{ webix_container_id }}").addView({
             view: "template",
             type: "header",
             borderless: true,
-            template: '<div style="width:100%; text-align:center;"><strong>{% if object %}{{ model|getattr:"_meta"|getattr:"verbose_name" }}: {{ object_name|default_if_none:object|escapejs }}{% else %}{{_("Add")|escapejs}} {{ model|getattr:"_meta"|getattr:"verbose_name" }}{% endif %}</strong></div>'
+            template: '<div style="width:100%; text-align:center;"><strong>{% if object %}{{ model|getattr:"_meta"|getattr:"verbose_name" }}: {{ object_name|default:object|escapejs }}{% else %}{{_("Add")|escapejs}} {{ model|getattr:"_meta"|getattr:"verbose_name" }}{% endif %}</strong></div>'
         }
     ]
 }, 0);

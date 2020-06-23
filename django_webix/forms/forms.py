@@ -2,6 +2,7 @@
 
 from __future__ import unicode_literals, absolute_import
 
+import re
 import copy
 from collections import OrderedDict, defaultdict
 from json import dumps, loads
@@ -36,7 +37,7 @@ except ImportError:
     JSONField = forms.Field
 
 try:
-    from django.contrib.postgres.fields.array import SimpleArrayField
+    from django.contrib.postgres.forms import SimpleArrayField
 except ImportError:
     SimpleArrayField = None
 
@@ -186,7 +187,7 @@ class BaseWebixMixin(object):
 
         rules = defaultdict(list)
         for name, field in self.fields.items():
-            if field.required and (not type(field) == forms.FileField or field.initial is not None):
+            if field.required and (not isinstance(field, forms.FileField) or field.initial is not None):
                 rules[self.add_prefix(name)].append({'rule': 'isNotEmpty'})
             if isinstance(field, forms.EmailField):
                 rules[self.add_prefix(name)].append({'rule': 'isEmail'})
@@ -196,7 +197,8 @@ class BaseWebixMixin(object):
                 rules[self.add_prefix(name)].append({'rule': 'isNumber', 'min': -six.MAXSIZE, 'max': six.MAXSIZE})
             elif isinstance(field, forms.IntegerField):
                 rules[self.add_prefix(name)].append({'rule': 'isInteger', 'min': -six.MAXSIZE, 'max': six.MAXSIZE})
-            elif isinstance(field, forms.CharField):
+            elif isinstance(field, forms.CharField) and \
+                (SimpleArrayField is not None and not isinstance(field, SimpleArrayField)):
                 rules[self.add_prefix(name)].append({'rule': 'isString', 'min': 0, 'max': field.max_length})
         return dict(rules)
 
@@ -208,8 +210,6 @@ class BaseWebixMixin(object):
         for name, field in self.fields.items():
             _pass = False
             label = force_text(field.label).capitalize()
-            if field.required:
-                label = '<strong>{}</strong>'.format(label)
             el = {
                 'view': 'text',
                 'label': label,
@@ -218,11 +218,13 @@ class BaseWebixMixin(object):
                 'labelWidth': 200,
                 'django_type_field': str(type(field).__name__),
             }
+            if field.required:
+                el['label'] = label = '<strong>{}</strong>'.format(label)
+                # el['required'] = True  # FIXME: problems with inlines
 
             if name in self.get_readonly_fields():
                 el.update({
                     'disabled': True,
-                    # 'id': '{}.{}'.format(self.webix_id, self[name].auto_id) # probabily old: disabled for has_change_permission=False
                 })
 
             # Get initial value
@@ -455,7 +457,8 @@ class BaseWebixMixin(object):
             elif type(field) == forms.models.ModelMultipleChoiceField:
                 if settings.WEBIX_LICENSE != 'PRO':
                     raise ImproperlyConfigured(
-                        _("MultipleChoiceField is available only with PRO webix license"))
+                        _("MultipleChoiceField is available only with PRO webix license")
+                    )
                 if initial is not None:
                     el.update({
                         'value': ','.join([str(i.pk) if isinstance(i, models.Model) else str(i) for i in initial])
@@ -516,6 +519,7 @@ class BaseWebixMixin(object):
                         'selectAll': True,
                         'placeholder': _('Click to select'),
                         'options': {
+                            'selectAll': True,
                             'dynamic': True,
                             'body': {
                                 'data': self._add_null_choice([{
@@ -652,6 +656,27 @@ class BaseWebixMixin(object):
                                 'value': ', '.join([i.strftime('%Y-%m-%d') for i in initial]),
                                 'orig_value': ', '.join([i.strftime('%Y-%m-%d') for i in initial]),
                             })
+                elif hasattr(field, 'base_field') and isinstance(field.base_field, forms.fields.TypedChoiceField) and \
+                    hasattr(field.base_field, 'choices'):
+                    el.update({
+                        "view": "multicombo",
+                        'selectAll': True,
+                        'placeholder': _('Click to select'),
+                        'options': {
+                            'selectAll': True,
+                            'dynamic': True,
+                            'body': {
+                                'data': self._add_null_choice([{
+                                    'id': '{}'.format(k),
+                                    'value': '{}'.format(v)
+                                } for k, v in field.base_field.choices])
+                            }
+                        },
+                    })
+                    if initial is not None:
+                        el.update({
+                            'value': ','.join([str(i.pk) if isinstance(i, models.Model) else str(i) for i in initial])
+                        })
                 elif initial is not None:
                     el.update({'value': initial})
 
@@ -730,29 +755,35 @@ class BaseWebixMixin(object):
         """ Returns the header for the tabular inlines as webix js format """
 
         fields_header = OrderedDict()
-        # for name, f in self.fields.items():
-        for field_name, f in self.get_elements.items():
-
+        for field_name, field in self.get_elements.items():
             _field_header = None
 
-            if 'hidden' not in f or 'hidden' in f and not f['hidden']:
-
+            if 'hidden' not in field or 'hidden' in field and not field['hidden']:
                 _field_header = {}
 
                 if field_name.endswith('-DELETE'):
                     _field_header = {'header': '', 'width': 28}
+                elif 'width' in field:
+                    _field_header.update({'width': field['width']})
                 else:
-                    if 'width' in f:
-                        _field_header.update({'width': f['width']})
-                    else:
-                        _field_header.update({'fillspace': True})
+                    _field_header.update({'fillspace': True})
 
-                if 'header' in f:
-                    if not isinstance(f['header'], list):
-                        f['header'] = [f['header']]
-                    _field_header.update({'header': f['header']})
-                elif 'label' in f:
-                    _field_header.update({'header': force_text(f['label']).capitalize()})
+                if 'header' in field:
+                    if not isinstance(field['header'], list):
+                        field['header'] = [field['header']]
+                    _field_header.update({'header': field['header']})
+                elif 'label' in field:
+                    # Find html tags
+                    _label_search = re.search("(<[^>]*>)?([\w\d\s]+)(<[^>]*>)?", field['label'], re.IGNORECASE)
+                    if _label_search:
+                        _label = "{}{}{}".format(
+                            _label_search.group(1) or "",
+                            force_text(_label_search.group(2)).capitalize(),
+                            _label_search.group(3) or ""
+                        )
+                    else:
+                        _label = field['label']
+                    _field_header.update({'header': _label})
 
                 if _field_header is not None:
                     fields_header.update({field_name: _field_header})
