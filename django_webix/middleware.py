@@ -39,7 +39,8 @@ class UserAgentLimitMiddleware(MiddlewareMixin):
         major_version = user_agent.browser.version[0]
         url_redirect = getattr(settings, 'WEBIX_USER_AGENT_LIMIT_REDIRECT', 'webix_user_agent_limit')
 
-        if major_version < get_limit_version(family):
+        limit_version = get_limit_version(family)
+        if limit_version is not None and major_version < limit_version:
             if reverse(url_redirect) != request.path:
                 return HttpResponseRedirect(reverse(url_redirect))
         #elif reverse(url_redirect) == request.path:
