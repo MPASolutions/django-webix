@@ -35,35 +35,16 @@ class UserAgentLimitMiddleware(MiddlewareMixin):
     def process_request(self, request):
 
         user_agent = get_user_agent(request)
-        family = user_agent.browser.family.lower()
-        major_version = user_agent.browser.version[0]
-        url_redirect = getattr(settings, 'WEBIX_USER_AGENT_LIMIT_REDIRECT', 'webix_user_agent_limit')
+        if user_agent is not None and \
+            user_agent.browser is not None and \
+            user_agent.browser.family is not None and \
+            user_agent.browser.version is not None and \
+            len(user_agent.browser.version) > 0:
+            family = user_agent.browser.family.lower()
+            major_version = user_agent.browser.version[0]
+            url_redirect = getattr(settings, 'WEBIX_USER_AGENT_LIMIT_REDIRECT', 'webix_user_agent_limit')
 
-        limit_version = get_limit_version(family)
-        if limit_version is not None and major_version < limit_version:
-            if reverse(url_redirect) != request.path:
-                return HttpResponseRedirect(reverse(url_redirect))
-        #elif reverse(url_redirect) == request.path:
-        #    return HttpResponsePermanentRedirect('/')
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+            limit_version = get_limit_version(family)
+            if limit_version is not None and major_version < limit_version:
+                if reverse(url_redirect) != request.path:
+                    return HttpResponseRedirect(reverse(url_redirect))
