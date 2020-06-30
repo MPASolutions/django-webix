@@ -755,35 +755,29 @@ class BaseWebixMixin(object):
         """ Returns the header for the tabular inlines as webix js format """
 
         fields_header = OrderedDict()
-        for field_name, field in self.get_elements.items():
+        # for name, f in self.fields.items():
+        for field_name, f in self.get_elements.items():
+
             _field_header = None
 
-            if 'hidden' not in field or 'hidden' in field and not field['hidden']:
+            if 'hidden' not in f or 'hidden' in f and not f['hidden']:
+
                 _field_header = {}
 
                 if field_name.endswith('-DELETE'):
                     _field_header = {'header': '', 'width': 28}
-                elif 'width' in field:
-                    _field_header.update({'width': field['width']})
                 else:
-                    _field_header.update({'fillspace': True})
-
-                if 'header' in field:
-                    if not isinstance(field['header'], list):
-                        field['header'] = [field['header']]
-                    _field_header.update({'header': field['header']})
-                elif 'label' in field:
-                    # Find html tags
-                    _label_search = re.search("(<[^>]*>)?([\w\d\s]+)(<[^>]*>)?", field['label'], re.IGNORECASE)
-                    if _label_search:
-                        _label = "{}{}{}".format(
-                            _label_search.group(1) or "",
-                            force_text(_label_search.group(2)).capitalize(),
-                            _label_search.group(3) or ""
-                        )
+                    if 'width' in f:
+                        _field_header.update({'width': f['width']})
                     else:
-                        _label = field['label']
-                    _field_header.update({'header': _label})
+                        _field_header.update({'fillspace': True})
+
+                if 'header' in f:
+                    if not isinstance(f['header'], list):
+                        f['header'] = [f['header']]
+                    _field_header.update({'header': f['header']})
+                elif 'label' in f:
+                    _field_header.update({'header': force_text(f['label']).capitalize()})
 
                 if _field_header is not None:
                     fields_header.update({field_name: _field_header})
