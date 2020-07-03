@@ -6,7 +6,7 @@ from django.utils.deprecation import MiddlewareMixin
 
 def get_limit_version(family):
     # Chrom * >= 60(25 / 7 / 2017)
-    # IE >= 11.0(26 / 06 / 2013)
+    # IE >= 11.0(26 / 06 / 2013)NO
     # Samsung Internet >= 8(1 / 12 / 2018)
     # Safari >= 11(1 / 1 / 2015)
     # Edge >= 40(1 / 4 / 2017)
@@ -15,7 +15,7 @@ def get_limit_version(family):
     if 'chrom' in family:
         return 60
     elif 'ie' in family:
-        return 11
+        return 12 # escludo ogni 11
     elif 'samsung internet' in family:
         return 8
     elif 'safari' in family:
