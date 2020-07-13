@@ -1,4 +1,4 @@
-{% load static tags_agrigis_enogis %}
+{% load static %}
 {
     view: "toolbar",
     cols:[

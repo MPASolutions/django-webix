@@ -1,4 +1,4 @@
-{% load static tags_agrigis_enogis %}
+{% load static %}
 {
     id:'main_menu',
     width: 180,
