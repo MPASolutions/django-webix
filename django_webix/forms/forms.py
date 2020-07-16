@@ -461,7 +461,10 @@ class BaseWebixMixin(object):
                     )
                 if initial is not None:
                     el.update({
-                        'value': ','.join([str(i.pk) if isinstance(i, models.Model) else str(i) for i in initial])
+                        'value': ','.join([
+                            str(getattr(i, field.to_field_name or 'pk')) if isinstance(i, models.Model) else str(i)
+                            for i in initial
+                        ])
                     })
                 count = field.queryset.count()
 
@@ -499,18 +502,11 @@ class BaseWebixMixin(object):
                     if 'value' in el:
                         _vals = el['value'].split(",")
                     for _val in [i for i in _vals if i != ''.strip()]:
-                        if field.to_field_name:
-                            record = field.queryset.get(**{field.to_field_name: _val})
-                            el['options']['body']['data'].append({
-                                'id': '{}'.format(getattr(record, field.to_field_name)),
-                                'value': '{}'.format(record)
-                            })
-                        else:
-                            record = field.queryset.get(pk=_val)
-                            el['options']['body']['data'].append({
-                                'id': '{}'.format(record.pk),
-                                'value': '{}'.format(record)
-                            })
+                        record = field.queryset.get(**{field.to_field_name or 'pk': _val})
+                        el['options']['body']['data'].append({
+                            'id': '{}'.format(getattr(record, field.to_field_name or 'pk')),
+                            'value': '{}'.format(record)
+                        })
 
                 # regular field without autocomplete
                 else:
@@ -523,7 +519,7 @@ class BaseWebixMixin(object):
                             'dynamic': True,
                             'body': {
                                 'data': self._add_null_choice([{
-                                    'id': '{}'.format(i.pk),
+                                    'id': '{}'.format(getattr(i, field.to_field_name or 'pk')),
                                     'value': '{}'.format(i)
                                 } for i in field.queryset])
                             }
@@ -531,11 +527,15 @@ class BaseWebixMixin(object):
                     })
                     # Default if is required and there are only one option
                     if field.required and initial is None and len(field.queryset) == 1:
-                        el.update({'value': '{}'.format(field.queryset.first().pk)})
+                        el.update({'value': '{}'.format(getattr(field.queryset.first(), field.to_field_name or 'pk'))})
             # ModelChoiceField
             elif isinstance(field, forms.models.ModelChoiceField):
                 if initial is not None:
-                    el.update({'value': initial.pk if isinstance(initial, models.Model) else str(initial)})
+                    el.update({
+                        'value': str(getattr(initial, field.to_field_name or 'pk'))
+                        if isinstance(initial, models.Model) else
+                        str(initial)
+                    })
                 count = field.queryset.count()
 
                 if count > self.min_count_suggest and \
@@ -568,23 +568,16 @@ class BaseWebixMixin(object):
                         }
                     })
                     if 'value' in el and el['value'] != '':  # and int(el['value']) > 0:
-                        if field.to_field_name:
-                            record = field.queryset.get(**{field.to_field_name: el['value']})
-                            el['suggest']['body']['data'] = [{
-                                'id': '{}'.format(getattr(record, field.to_field_name)),
-                                'value': '{}'.format(record)
-                            }]
-                        else:
-                            record = field.queryset.get(pk=el['value'])
-                            el['suggest']['body']['data'] = [{
-                                'id': '{}'.format(record.pk),
-                                'value': '{}'.format(record)
-                            }]
+                        record = field.queryset.get(**{field.to_field_name or 'pk': el['value']})
+                        el['suggest']['body']['data'] = [{
+                            'id': '{}'.format(getattr(record, field.to_field_name or 'pk')),
+                            'value': '{}'.format(record)
+                        }]
 
                 # regular field without autocomplete
                 elif count <= 6:
                     choices = self._add_null_choice([{
-                        'id': '{}'.format(i.pk),
+                        'id': '{}'.format(getattr(i, field.to_field_name or 'pk')),
                         'value': '{}'.format(i)
                     } for i in field.queryset])
                     if not field.required:
@@ -597,10 +590,10 @@ class BaseWebixMixin(object):
                     })
                     # Default if is required and there are only one option
                     if field.required and initial is None and len(field.queryset) == 1:
-                        el.update({'value': '{}'.format(field.queryset.first().pk)})
+                        el.update({'value': '{}'.format(getattr(field.queryset.first(), field.to_field_name or 'pk'))})
                 else:
                     choices = self._add_null_choice([{
-                        'id': '{}'.format(i.pk),
+                        'id': '{}'.format(getattr(i, field.to_field_name or 'pk')),
                         'value': '{}'.format(i)
                     } for i in field.queryset])
                     if not field.required:
@@ -629,7 +622,6 @@ class BaseWebixMixin(object):
                 # Default if is required and there are only one option
                 if field.required and initial is None and len(field.choices) == 1:
                     el.update({'value': '{}'.format(field.choices[0][0])})
-
             # JSONField (postgresql)
             elif connection.vendor == 'postgresql' and isinstance(field, JSONField):
                 if isinstance(field.widget, forms.widgets.Textarea):
@@ -638,7 +630,6 @@ class BaseWebixMixin(object):
                     })
                 if initial is not None:
                     el.update({'value': dumps(initial)})
-
             # SimpleArrayField (postgresql)
             elif connection.vendor == 'postgresql' and \
                 SimpleArrayField is not None and \
@@ -679,7 +670,6 @@ class BaseWebixMixin(object):
                         })
                 elif initial is not None:
                     el.update({'value': initial})
-
             # CharField
             elif isinstance(field, forms.CharField):
                 if isinstance(field.widget, forms.widgets.Textarea):
@@ -688,7 +678,6 @@ class BaseWebixMixin(object):
                     })
                 if initial is not None:
                     el.update({'value': initial})
-
             # GeoFields
             elif GeometryField is not None and isinstance(field, GeometryField):
                 el.update({
@@ -702,15 +691,14 @@ class BaseWebixMixin(object):
                         el.update({'value': str(initial)})
                     else:
                         raise Exception(_('Initial value {} for geo field {} is not supported').format(initial, field))
-
             # InlineForeignKey
             elif isinstance(field, forms.models.InlineForeignKeyField):
                 pass
-
+            # Field not supported
             else:
                 raise Exception(_('Type of field {} not supported').format(field))
 
-            # widget RadioSelect
+            # Widget RadioSelect
             if isinstance(field.widget, forms.RadioSelect):
                 _choices = field.choices if hasattr(field, 'choices') else field.widget.choices
                 el.update({
@@ -726,7 +714,7 @@ class BaseWebixMixin(object):
                 if field.required and initial is None and len(_choices) == 1:
                     el.update({'value': '{}'.format(_choices[0][0])})
 
-            # widget Hidden Fields
+            # Widget Hidden Fields
             if type(field.widget) == forms.widgets.HiddenInput:
                 el.update({'hidden': True})
 
