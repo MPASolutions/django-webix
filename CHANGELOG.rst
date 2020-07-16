@@ -25,7 +25,7 @@ Changed
 Fixed
 ~~~~~
 * Object title in create and update forms
-* Fix MultipleChoiceField and ModelChoiceField autocomplete with `to_field_name` different from pk
+* Fix ModelMultipleChoiceField and ModelChoiceField autocomplete with `to_field_name` different from pk
 
 
 [1.2.1] 2020-01-08
