@@ -735,7 +735,6 @@ class BaseWebixMixin(object):
                 el.update({'hidden': True})
                 elements.update({
                     "{}-icon".format(self.add_prefix(name)): {
-                        'cols':[{},{
                         'view': "button",
                         'type': "icon",
                         'icon': "far fa-trash-alt",
@@ -743,7 +742,6 @@ class BaseWebixMixin(object):
                         'width': 28,
                         'hidden': not (self.has_delete_permission is not None and self.has_delete_permission == True),
                         'id': "{}-icon".format(self.add_prefix(name))
-                    }]
                     }
                 })
 
