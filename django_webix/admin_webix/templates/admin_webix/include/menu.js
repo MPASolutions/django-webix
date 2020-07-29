@@ -22,7 +22,43 @@
             loading_type: 'redirect',
             url: '{% url 'admin_webix:index' %}'
         },
-    {% for item_app in available_apps %}
+        {
+            id: 'menu_profile',
+            value: "Utente",
+            icon: "fas fa-user",
+            submenu: [
+                {
+                    id: 'menu_profile_update',
+                    value: "Il mio profilo",
+                    icon: "fas fa-user-edit",
+                    loading_type: 'js_script',
+                    //url: 'account/update/' + "{{ user.pk }}"
+                    url: "{% url 'admin_webix:account_update' user.pk %}"
+                },
+                {
+                    id: 'menu_profile_change_password',
+                    value: "Cambia password",
+                    icon: "fas fa-key",
+                    loading_type: 'js_script',
+                    url: "{% url 'admin_webix:password_change' %}"
+                },
+                {
+                    id: 'menu_profile_reset_password',
+                    value: "Reimposta password",
+                    icon: "fas fa-mail-bulk",
+                    loading_type: 'js_script',
+                    url: "{% url 'admin_webix:password_reset' %}"
+                },
+                {
+                    id: 'menu_profile_two_factor',
+                    value: "Autenticazione a 2 fattori",
+                    icon: "fas fa-shield-alt",
+                    loading_type: 'js_script',
+                    url: "{% url 'admin_webix:two_factor_profile' %}"
+                }
+            ]
+        },
+        {% for item_app in available_apps %}
         {
             id: 'menu_{{item_app.app_label}}',
             value: "{{ item_app.name }}",
@@ -39,7 +75,7 @@
             {% endfor %}
             ]
         }{% if not forloop.last %},{% endif %}
-    {% endfor %}
+        {% endfor %}
 
 
         {# START BLOCCO EXTRA #}

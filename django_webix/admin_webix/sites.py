@@ -5,7 +5,7 @@ from django.core.exceptions import ImproperlyConfigured
 from django.db.models.base import ModelBase
 from django.http import HttpResponseRedirect
 from django.template.response import TemplateResponse
-from django.urls import NoReverseMatch, reverse
+from django.urls import NoReverseMatch, reverse, reverse_lazy
 from django.utils.functional import LazyObject
 from django.utils.module_loading import import_string
 from django.utils.text import capfirst
@@ -16,6 +16,7 @@ from functools import update_wrapper
 from weakref import WeakSet
 
 from django_webix.admin_webix import ModelWebixAdmin
+# from django_webix.admin_webix.views import UserUpdate
 
 all_sites = WeakSet()
 
@@ -263,6 +264,8 @@ class AdminWebixSite:
         # it cannot import models from other applications at the module level,
         # and django.contrib.contenttypes.views imports ContentType.
 
+        from django_webix.admin_webix import views
+
         def wrap(view, cacheable=False):
             def wrapper(*args, **kwargs):
                 return self.admin_view(view, cacheable)(*args, **kwargs)
@@ -272,17 +275,30 @@ class AdminWebixSite:
 
         # Admin-site-wide views.
         urlpatterns = [  # prefix = admin_webix:XXXX
+
             path('', wrap(self.index), name='index'),
             path('login/', self.login, name='login'),
             path('logout/', wrap(self.logout), name='logout'),
             path('dashboard/', wrap(self.dashboard), name='dashboard'),
-
+            path('index/', wrap(self.index), name='index'),
             path('password_change/', wrap(self.password_change, cacheable=True), name='password_change'),
-            path(
-                'password_change/done/',
-                wrap(self.password_change_done, cacheable=True),
-                name='password_change_done',
-            ),
+            path('password_change/done/', wrap(self.password_change_done, cacheable=True), name='password_change_done'),
+
+            # ################################################ user update ############################################
+
+            path('account/update/<int:pk>/', views.UserUpdate.as_view(), name='account_update'),
+
+            # ############################################ Reset password by email ####################################
+
+            path('password_reset/', self.password_reset, name='password_reset'),
+            path('reset/<uidb64>/<token>/', wrap(self.password_reset_confirm), name='password_reset_confirm'),
+            path('password_reset/done/', self.password_reset_done, name='password_reset_done'),
+            path('reset/done/', wrap(self.password_reset_complete), name='password_reset_complete'),
+
+            # ######################### Autenticazione a 2 fattori - django-two-factor-auth ###########################
+            path('two_factor/', wrap(self.two_factor_profile), name='two_factor_profile'),
+
+
             # path('jsi18n/', wrap(self.i18n_javascript, cacheable=True), name='jsi18n'),
             # path(
             #    'r/<int:content_type_id>/<path:object_id>/',
@@ -347,9 +363,9 @@ class AdminWebixSite:
             'form_class': AdminPasswordChangeForm,
             'success_url': url,
             'extra_context': {**self.each_context(request), **(extra_context or {})},
+            'template_name': self.password_change_template or 'admin_webix/account/password_change.js',
         }
-        if self.password_change_template is not None:
-            defaults['template_name'] = self.password_change_template
+
         request.current_app = self.name
         return PasswordChangeView.as_view(**defaults)(request)
 
@@ -365,6 +381,97 @@ class AdminWebixSite:
             defaults['template_name'] = self.password_change_done_template
         request.current_app = self.name
         return PasswordChangeDoneView.as_view(**defaults)(request)
+
+    def password_reset(self, request, extra_context=None):
+        """
+        Handle the "reset password" task -- both form display and validation.
+        """
+
+        from django.contrib.auth.views import PasswordResetView
+        from django_webix.admin_webix import forms
+        from django.contrib.sites.shortcuts import get_current_site
+
+        current_site = get_current_site(request)
+        site_name = current_site.name
+        domain = current_site.domain
+
+        if extra_context is None:
+            extra_context = {}
+        extra_context['domain'] = domain
+        extra_context['site_name'] = site_name
+
+        template = 'admin_webix/account/password_reset_form.js'
+        if not self.has_permission(request):
+            template = 'admin_webix/account/password_reset_form.html'
+
+        defaults = {
+            'template_name': template,
+            'email_template_name': 'admin_webix/account/password_reset_email.html',
+            'form_class': forms.WebixPasswordResetForm,
+            'success_url': reverse_lazy('admin_webix:password_reset_done'),
+            'extra_context': {**self.each_context(request), **(extra_context or {})},
+        }
+
+        request.current_app = self.name
+        return PasswordResetView.as_view(**defaults)(request)
+
+    def password_reset_done(self, request, extra_context=None):
+        """
+        Handle the "reset password" task -- both form display and validation.
+        """
+
+        from django.contrib.auth.views import PasswordResetDoneView
+
+        template = 'admin_webix/account/password_reset_done.js'
+        if not self.has_permission(request):
+            template = 'admin_webix/account/password_reset_done.html'
+
+        defaults = {
+            'template_name': template,
+            'extra_context': {**self.each_context(request), **(extra_context or {})},
+        }
+
+        request.current_app = self.name
+        return PasswordResetDoneView.as_view(**defaults)(request)
+
+    def password_reset_confirm(self, request, extra_context=None):
+
+        from django.contrib.auth.views import PasswordResetConfirmView
+        from django_webix.admin_webix import forms
+
+        defaults = {
+            'template_name': 'admin_webix/account/password_reset_confirm.js',
+            'form_class': forms.WebixSetPasswordForm,
+            'success_url': reverse_lazy('admin_webix:password_reset_complete'),
+            'extra_context': {**self.each_context(request), **(extra_context or {})},
+        }
+
+        request.current_app = self.name
+        return PasswordResetConfirmView.as_view(**defaults)(request)
+
+    def password_reset_complete(self, request, extra_context=None):
+
+        from django.contrib.auth.views import PasswordResetCompleteView
+
+        defaults = {
+            'template_name': 'admin_webix/account/password_reset_complete.js',
+            'extra_context': {**self.each_context(request), **(extra_context or {})},
+        }
+
+        request.current_app = self.name
+        return PasswordResetCompleteView.as_view(**defaults)(request)
+
+    def two_factor_profile(self, request, extra_context=None):
+        from two_factor.views import ProfileView
+        from django_webix.views import WebixTemplateView
+
+        defaults = {
+            'template_name': 'admin_webix/account/two_factor.js',
+            'extra_context': {**self.each_context(request), **(extra_context or {})},
+        }
+
+        request.current_app = self.name
+        return WebixTemplateView.as_view(**defaults)(request)
 
     @never_cache
     def logout(self, request, extra_context=None):
@@ -422,7 +529,7 @@ class AdminWebixSite:
         return LoginView.as_view(**defaults)(request)
 
     @never_cache
-    def index(self, request, extra_context=None):
+    def index(self, request, extra_context=None):  # TODO da terminare la parte del template in modo carino circa
         """
         Display the main admin index page, which lists all of the installed
         apps that have been registered in this site.

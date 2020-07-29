@@ -17,8 +17,8 @@
                 }
             }
         },
-           {% endcomment %}
-    {% comment %}
+       {% endcomment %}
+        {% comment %}
         {% if user.is_staff %}
         {
             view: "icon", align: "right", icon: "fas fa-cogs", on: {
@@ -28,7 +28,6 @@
             }
         },
         {% endif %}
-
         {% endcomment %}
         {
             view: "icon", align: "right", icon: "fas fa-sign-out-alt", on: {

@@ -39,7 +39,7 @@ class ModelWebixAdmin(WebixPermissionsMixin):
     list_display = []
 
     enable_json_loading = False
-
+    pk_field = None
     title = None
     actions_style = None
     enable_column_copy = True
@@ -47,6 +47,10 @@ class ModelWebixAdmin(WebixPermissionsMixin):
     enable_row_click = True
     type_row_click = 'single'
     enable_actions = True
+
+    # permission custom
+    only_superuser = False
+
 
     def get_url_pattern_list(self):
         info = self.model._meta.app_label, self.model._meta.model_name
@@ -76,6 +80,14 @@ class ModelWebixAdmin(WebixPermissionsMixin):
             'delete': self.has_delete_permission(request),
             'view': self.has_view_permission(request),
         }
+
+    def has_module_permission(self, request):
+        if self.only_superuser:
+            if request.user.is_superuser:
+                return True
+            return False
+        return super().has_module_permission(request)
+
 
     def get_field_traverse(self, path):
         _next = self.model
@@ -222,6 +234,7 @@ class ModelWebixAdmin(WebixPermissionsMixin):
                 url_pattern_delete = 'admin_webix:' + _admin.get_url_pattern_delete()
 
                 model = _admin.model
+                pk_field = _admin.pk_field
                 order_by = _admin.ordering
                 actions = _admin.actions
                 enable_json_loading = _admin.enable_json_loading
