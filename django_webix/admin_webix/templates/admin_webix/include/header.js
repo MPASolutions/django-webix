@@ -18,8 +18,8 @@
             }
         },
        {% endcomment %}
-        {% comment %}
-        {% if user.is_staff %}
+
+        {% if user.is_superuser %}
         {
             view: "icon", align: "right", icon: "fas fa-cogs", on: {
                 onItemClick: function (id, e) {
@@ -28,6 +28,7 @@
             }
         },
         {% endif %}
+        {% comment %}
         {% endcomment %}
         {
             view: "icon", align: "right", icon: "fas fa-sign-out-alt", on: {

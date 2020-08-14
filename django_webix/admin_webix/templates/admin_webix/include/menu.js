@@ -58,6 +58,7 @@
                 }
             ]
         },
+      {% comment %}
         {% for item_app in available_apps %}
         {
             id: 'menu_{{item_app.app_label}}',
@@ -71,11 +72,16 @@
                     icon: "far fa-archive",
                     loading_type: 'js_script',
                     url: '{{ item_model.admin_url }}'
-                }{% if not forloop.last %},{% endif %}
+                },
             {% endfor %}
             ]
-        }{% if not forloop.last %},{% endif %}
+        },
         {% endfor %}
+{% endcomment %}
+        {% for menu_item in menu_list %}
+        {{ menu_item|safe }},
+        {% endfor %}
+
 
 
         {# START BLOCCO EXTRA #}

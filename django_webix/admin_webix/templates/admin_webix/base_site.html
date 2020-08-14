@@ -1,4 +1,5 @@
-{% load utils_ifusergroup thumbnail static utils_getattr two_factor %}<!DOCTYPE HTML>
+{% load utils_ifusergroup thumbnail static utils_getattr two_factor %}
+<!DOCTYPE HTML>
 <html>
 <head>
   <title>
@@ -80,5 +81,8 @@
     {% block extra_content %}{% endblock %}
   });
 </script>
+
+{% block cookies %}
+{% endblock %}
 </body>
 </html>

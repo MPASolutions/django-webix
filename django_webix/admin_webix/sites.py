@@ -14,6 +14,7 @@ from django.views.decorators.cache import never_cache
 from django.views.decorators.csrf import csrf_protect
 from functools import update_wrapper
 from weakref import WeakSet
+from django.db.models import Q
 
 from django_webix.admin_webix import ModelWebixAdmin
 # from django_webix.admin_webix.views import UserUpdate
@@ -118,6 +119,8 @@ class AdminWebixSite:
 
                 # Instantiate the admin class to save in the registry
                 self._registry[model] = admin_class(model, self)
+            # else:
+            #     raise Exception(model, 'errore swap')
 
     def unregister(self, model_or_iterable):
         """
@@ -217,6 +220,55 @@ class AdminWebixSite:
 
         return app_list
 
+    def available_menu_items(self, user):
+        from django_webix.admin_webix.models import WebixAdminMenu
+        queryset = WebixAdminMenu.objects.all()
+        if user.is_superuser:
+            out = queryset.values_list('id', flat=True)
+        else:
+            out = []
+            for el in queryset.filter(enabled=True).filter(Q(active_all=True) | Q(groups__in=user.groups.all())):
+                if el.model is not None:
+                    if user.has_perm(el.model.app_label + '.view_' + el.model.model):  # TODO da vedere bene
+                        out.append(el.id)
+                else:
+                    out.append(el.id)
+        return out
+
+    def get_tree(self, items, available_items):
+        from django_webix.admin_webix.models import WebixAdminMenu
+        out = []
+        new_level = True
+        for item in items:
+            if item.id in available_items:
+                menu_item = {
+                    "id": "menu_{}".format(item),
+                    "value": "{}".format(item),
+                    "icon": item.icon if item.icon not in ['', None] else "fas fa-archive",
+                }
+                soons = WebixAdminMenu.objects.filter(parent=item, id__in=available_items).order_by('tree_id', 'lft')
+                children = self.get_tree(soons, available_items)
+                if children != []:
+                    menu_item["submenu"] = children
+                elif (item.model is not None) or (item.url not in ['', None]):
+                    if item.get_url is None:
+                        URL = ""
+                    else:
+                        URL = item.get_url
+                    menu_item["url"] = URL
+                    menu_item["loading_type"] = "js_script"
+                out.append(menu_item)
+        return out
+
+    def get_menu_list(self, request):
+        from django_webix.admin_webix.models import WebixAdminMenu
+        if request.user.is_anonymous:
+            return {}
+        avaible = self.available_menu_items(request.user)
+
+        return self.get_tree(WebixAdminMenu.objects.filter(level=0, id__in=avaible).order_by('tree_id', 'lft'),
+                             avaible)
+
     def admin_view(self, view, cacheable=False):
         """
         Decorator to create an admin view attached to this ``AdminWebixSite``. This
@@ -263,7 +315,8 @@ class AdminWebixSite:
         # Since this module gets imported in the application's root package,
         # it cannot import models from other applications at the module level,
         # and django.contrib.contenttypes.views imports ContentType.
-
+        from django.contrib.auth.views import PasswordResetConfirmView
+        from django_webix.admin_webix import forms
         from django_webix.admin_webix import views
 
         def wrap(view, cacheable=False):
@@ -289,11 +342,16 @@ class AdminWebixSite:
             path('account/update/<int:pk>/', views.UserUpdate.as_view(), name='account_update'),
 
             # ############################################ Reset password by email ####################################
-
+            # nessuna di queste view deve essere sotto wrap perche si deve poter accedere anche non essendo loggati
             path('password_reset/', self.password_reset, name='password_reset'),
-            path('reset/<uidb64>/<token>/', wrap(self.password_reset_confirm), name='password_reset_confirm'),
+            # path('reset/<uidb64>/<token>/', self.password_reset_confirm, name='password_reset_confirm'),
+            path('reset/<uidb64>/<token>/', PasswordResetConfirmView.as_view(
+                form_class=forms.WebixSetPasswordForm,
+                success_url=reverse_lazy('admin_webix:password_reset_complete'),
+                template_name='admin_webix/account/password_reset_confirm.html'
+            ), name='password_reset_confirm'),
             path('password_reset/done/', self.password_reset_done, name='password_reset_done'),
-            path('reset/done/', wrap(self.password_reset_complete), name='password_reset_complete'),
+            path('reset/done/', self.password_reset_complete, name='password_reset_complete'),
 
             # ######################### Autenticazione a 2 fattori - django-two-factor-auth ###########################
             path('two_factor/', wrap(self.two_factor_profile), name='two_factor_profile'),
@@ -345,6 +403,7 @@ class AdminWebixSite:
             'site_header': self.site_header,
             'site_url': site_url,
             'has_permission': self.has_permission(request),  # utils for menu
+            'menu_list': self.get_menu_list(request),  # utils for menu
             'available_apps': self.get_app_list(request),  # utils for menu
             'webix_container_id': self.webix_container_id,
         }
@@ -434,27 +493,32 @@ class AdminWebixSite:
         request.current_app = self.name
         return PasswordResetDoneView.as_view(**defaults)(request)
 
-    def password_reset_confirm(self, request, extra_context=None):
-
-        from django.contrib.auth.views import PasswordResetConfirmView
-        from django_webix.admin_webix import forms
-
-        defaults = {
-            'template_name': 'admin_webix/account/password_reset_confirm.js',
-            'form_class': forms.WebixSetPasswordForm,
-            'success_url': reverse_lazy('admin_webix:password_reset_complete'),
-            'extra_context': {**self.each_context(request), **(extra_context or {})},
-        }
-
-        request.current_app = self.name
-        return PasswordResetConfirmView.as_view(**defaults)(request)
+    # NON so perche non funziona se lo metto nella function
+    # def password_reset_confirm(self, request, extra_context=None):
+    #
+    #     from django.contrib.auth.views import PasswordResetConfirmView
+    #     from django_webix.admin_webix import forms
+    #
+    #     defaults = {
+    #         'template_name': 'admin_webix/account/password_reset_confirm.js',
+    #         'form_class': forms.WebixSetPasswordForm,
+    #         'success_url': reverse_lazy('admin_webix:password_reset_complete'),
+    #         # 'extra_context': {**self.each_context(request)},
+    #     }
+    #     # raise Exception(extra_context, defaults)
+    #     # request.current_app = self.name
+    #     return PasswordResetConfirmView.as_view(
+    #         form_class=forms.WebixSetPasswordForm,
+    #         success_url=reverse_lazy('admin_webix:password_reset_complete'),
+    #         template_name='admin_webix/account/password_reset_confirm.js'
+    #     )(request)
 
     def password_reset_complete(self, request, extra_context=None):
 
         from django.contrib.auth.views import PasswordResetCompleteView
 
         defaults = {
-            'template_name': 'admin_webix/account/password_reset_complete.js',
+            'template_name': 'admin_webix/account/password_reset_complete.html',
             'extra_context': {**self.each_context(request), **(extra_context or {})},
         }
 
