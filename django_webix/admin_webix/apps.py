@@ -1,6 +1,6 @@
 from django.apps import AppConfig
-#from django.contrib.admin.checks import check_admin_app, check_dependencies
-#from django.core import checks
+# from django.contrib.admin.checks import check_admin_app, check_dependencies
+# from django.core import checks
 from django.utils.translation import gettext_lazy as _
 
 
@@ -12,8 +12,8 @@ class SimpleAdminWebixConfig(AppConfig):
     verbose_name = _("Administration")
 
     def ready(self):
-        #checks.register(check_dependencies, checks.Tags.admin) # TODO
-        #checks.register(check_admin_app, checks.Tags.admin) # TODO
+        # checks.register(check_dependencies, checks.Tags.admin) # TODO
+        # checks.register(check_admin_app, checks.Tags.admin) # TODO
         pass
 
 
