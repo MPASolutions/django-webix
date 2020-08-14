@@ -486,12 +486,13 @@ class AdminWebixSite:
                 # Since the user isn't logged out at this point, the value of
                 # has_permission must be overridden.
                 'has_permission': False,
+                'template_name': self.login_template or 'admin_webix/logged_out.html',
+                'site_title': self.site_title,
                 **(extra_context or {})
             },
         }
-        if self.logout_template is not None:
-            defaults['template_name'] = self.logout_template
         request.current_app = self.name
+        LogoutView.template_name = self.login_template or 'admin_webix/logged_out.html'
         return LogoutView.as_view(**defaults)(request)
 
     @never_cache
@@ -514,6 +515,7 @@ class AdminWebixSite:
             'title': _('Log in'),
             'app_path': request.get_full_path(),
             'username': request.user.get_username(),
+            'site_title': self.site_title,
         }
         if (REDIRECT_FIELD_NAME not in request.GET and
             REDIRECT_FIELD_NAME not in request.POST):

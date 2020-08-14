@@ -1,4 +1,4 @@
-{% load utils_ifusergroup thumbnail static utils_getattr %}<!DOCTYPE HTML>
+{% load utils_ifusergroup thumbnail static utils_getattr i18n %}<!DOCTYPE HTML>
 <html>
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
@@ -49,36 +49,12 @@
                     type: "form",
                     scroll: false,
                     width: 400,
-                    on: {
-                        onSubmit: function (view, ev) {
-                            if ($$('login_form').validate()) {
-                                webix.send(".", $$('login_form').getValues());
-                            }
-                        }
-                    },
                     elements: [
-                        {
-                            labelWidth: 130,
-                            view: "text",
-                            name: "username",
-                            id: "id_username",
-                            label: "Username",
-                            required: true
-                        },
-                        {
-                            labelWidth: 130,
-                            view: "text",
-                            name: "password",
-                            id: "id_password",
-                            type: "password",
-                            label: "Password",
-                            required: true
-                        },
-                        {
+                         {
                             margin: 5, cols: [{
                                 view: "button",
                                 id: 'id_login_button',
-                                label: "Login",
+                                label: "{% trans 'Log in again' %}",
                                 click: function () {
                                     if ($$('login_form').validate()) {
                                         webix.send(".", $$('login_form').getValues());
