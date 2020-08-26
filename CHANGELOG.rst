@@ -17,15 +17,23 @@ Added
 ~~~~~
 * `Select all` button in multicombo widget
 * Multicombo in PostgreSQL ArrayField with options
+* Added middleware to limit browser version
 
 Changed
 ~~~~~~~
 * Add optional argumenent input_params to action_execute function (used to send input paremetr in POST request)
+* Admin subpackage improvements
+* jQuery version update
+* login and logout pages improvements
 
 Fixed
 ~~~~~
 * Object title in create and update forms
 * Fix ModelMultipleChoiceField and ModelChoiceField autocomplete with `to_field_name` different from pk
+* Fixed duplicate set middleware on static
+* Fixed buttons permissions in form view
+* Fixed checkbox dimension
+* Fixed readonly DateTime format
 
 
 [1.2.1] 2020-01-08
