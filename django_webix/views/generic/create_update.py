@@ -14,6 +14,8 @@ from django.shortcuts import get_object_or_404
 from django.utils.encoding import force_text
 from django.utils.text import get_text_list
 from django.utils.translation import ugettext as _
+from django.forms.fields import Field, FileField
+from sorl.thumbnail.fields import ImageField
 from extra_views import UpdateWithInlinesView, CreateWithInlinesView
 
 from django_webix.views.generic.base import WebixBaseMixin, WebixPermissionsMixin, WebixUrlMixin
@@ -95,11 +97,31 @@ class WebixCreateUpdateMixin:
         }
 
     def form_save(self, form):
+        obj = form.instance
+        if obj is not None:
+            for field in obj._meta.fields:
+                if not isinstance(field, FileField) and not isinstance(field, ImageField):
+                    continue
+
+                if form.data.get(field.name + '_clean', None) == '1':
+                    setattr(obj, field.name, None)
+
         self.object = form.save()
         return None
 
     def inlines_save(self, inlines):
         for formset in inlines:
+            for inline in formset:
+                obj = inline.instance
+                if obj is not None:
+                    for field in obj._meta.fields:
+                        if not isinstance(field, FileField) and not isinstance(field, ImageField):
+                            continue
+
+                        if inline.data.get(inline.add_prefix(field.name) + '_clean', None) == '1':
+                            setattr(obj, field.name, None)
+                            inline.save()
+
             formset.save()
         return None
 
