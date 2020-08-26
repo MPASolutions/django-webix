@@ -61,6 +61,9 @@ setup(
         'Django>=1.11',
         'sorl-thumbnail>=12.4.1',
         'django-extra-views>=0.11.0',
+        'django-mptt>=0.11.0',
+        'django-two-factor-auth>=1.12.1',
+        'django-user-agents>=0.4.0',
         'six'
     ],
     classifiers=[
