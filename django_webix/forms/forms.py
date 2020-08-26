@@ -106,7 +106,7 @@ class BaseWebixMixin(object):
                             required=False
                         )
                         if getattr(self.instance, readonly_field):
-                            value = '{}'.format(getattr(self.instance, readonly_field).strftime('%d/%m/%Y %H:%i'))
+                            value = '{}'.format(getattr(self.instance, readonly_field).strftime('%d/%m/%Y %H:%M'))
                         else:
                             value = ''
                     elif isinstance(_field, django.db.models.fields.DateField) or \
