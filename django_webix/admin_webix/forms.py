@@ -1,13 +1,12 @@
+from django.apps import apps
 from django_webix.forms import WebixModelForm
 from django.conf import settings
 from django import forms
 from django.contrib.auth.models import Group, Permission
 from django.contrib.auth import get_user_model
-from django_otp.forms import OTPAuthenticationFormMixin
+
 from django.contrib.auth.forms import AuthenticationForm, SetPasswordForm, PasswordResetForm
 from django_webix.forms import WebixForm, WebixModelForm
-from two_factor.forms import AuthenticationTokenForm, BackupTokenForm, DisableForm, MethodForm, TOTPDeviceForm, \
-    PhoneNumberForm, DeviceValidationForm, YubiKeyDeviceForm
 from django.contrib.auth import (
     authenticate, get_user_model, password_validation,
 )
@@ -323,40 +322,79 @@ class FieldSetMixin:
             {'cols': [fs[self.add_prefix('new_password2')]]}
         ]
 
+if apps.is_installed("two_factor"):
+    from two_factor.forms import (AuthenticationTokenForm, BackupTokenForm, DisableForm, MethodForm, TOTPDeviceForm,
+                                  PhoneNumberForm, DeviceValidationForm, YubiKeyDeviceForm)
+    from django_otp.forms import OTPAuthenticationFormMixin
+    # ################################ Autenticazione a 2 fattori - django-two-factor-auth ################################
+    AuthenticationForm.__bases__ = (WebixForm,)
+    WebixAuthenticationAuthForm = type(str('WebixAuthenticationAuthForm'), (AuthenticationForm,),
+                                       {'get_fieldsets': FieldSetMixin.authenticationForm_get_fieldsets})
 
-# ################################ Autenticazione a 2 fattori - django-two-factor-auth ################################
-AuthenticationForm.__bases__ = (WebixForm,)
-WebixAuthenticationAuthForm = type(str('WebixAuthenticationAuthForm'), (AuthenticationForm,),
-                                   {'get_fieldsets': FieldSetMixin.authenticationForm_get_fieldsets})
+    AuthenticationTokenForm.__bases__ = (OTPAuthenticationFormMixin, WebixForm)
+    WebixAuthenticationTokenForm = type(str('WebixAuthenticationTokenForm'), (AuthenticationTokenForm,), {})
 
-AuthenticationTokenForm.__bases__ = (OTPAuthenticationFormMixin, WebixForm)
-WebixAuthenticationTokenForm = type(str('WebixAuthenticationTokenForm'), (AuthenticationTokenForm,), {})
+    BackupTokenForm.__bases__ = (WebixAuthenticationTokenForm,)
+    WebixAuthenticationBackupTokenForm = type(str('WebixAuthenticationBackupTokenForm'), (BackupTokenForm,), {})
 
-BackupTokenForm.__bases__ = (WebixAuthenticationTokenForm,)
-WebixAuthenticationBackupTokenForm = type(str('WebixAuthenticationBackupTokenForm'), (BackupTokenForm,), {})
+    SetPasswordForm.__bases__ = (WebixForm,)
+    WebixSetPasswordForm = type(str('WebixSetPasswordForm'), (SetPasswordForm,),
+                                {'get_fieldsets': FieldSetMixin.setPasswordForm_get_fieldsets})
 
-SetPasswordForm.__bases__ = (WebixForm,)
-WebixSetPasswordForm = type(str('WebixSetPasswordForm'), (SetPasswordForm,),
-                            {'get_fieldsets': FieldSetMixin.setPasswordForm_get_fieldsets})
+    DisableForm.__bases__ = (WebixForm,)
+    WebixDisableForm = type(str('WebixDisableForm'), (DisableForm,), {})
 
-DisableForm.__bases__ = (WebixForm,)
-WebixDisableForm = type(str('WebixDisableForm'), (DisableForm,), {})
+    MethodForm.__bases__ = (WebixForm,)
+    WebixMethodForm = type(str('WebixMethodForm'), (MethodForm,), {})
 
-MethodForm.__bases__ = (WebixForm,)
-WebixMethodForm = type(str('WebixMethodForm'), (MethodForm,), {})
+    TOTPDeviceForm.__bases__ = (WebixForm,)
+    WebixTOTPDeviceForm = type(str('WebixTOTPDeviceForm'), (TOTPDeviceForm,), {})
 
-TOTPDeviceForm.__bases__ = (WebixForm,)
-WebixTOTPDeviceForm = type(str('WebixTOTPDeviceForm'), (TOTPDeviceForm,), {})
+    PhoneNumberForm.__bases__ = (WebixModelForm,)
+    WebixPhoneNumberForm = type(str('WebixPhoneNumberForm'), (PhoneNumberForm,), {})
 
-PhoneNumberForm.__bases__ = (WebixModelForm,)
-WebixPhoneNumberForm = type(str('WebixPhoneNumberForm'), (PhoneNumberForm,), {})
+    DeviceValidationForm.__bases__ = (WebixForm,)
+    WebixDeviceValidationForm = type(str('WebixDeviceValidationForm'), (DeviceValidationForm,), {})
 
-DeviceValidationForm.__bases__ = (WebixForm,)
-WebixDeviceValidationForm = type(str('WebixDeviceValidationForm'), (DeviceValidationForm,), {})
+    YubiKeyDeviceForm.__bases__ = (WebixDeviceValidationForm,)
+    WebixYubiKeyDeviceForm = type(str('WebixYubiKeyDeviceForm'), (YubiKeyDeviceForm,), {})
 
-YubiKeyDeviceForm.__bases__ = (WebixDeviceValidationForm,)
-WebixYubiKeyDeviceForm = type(str('WebixYubiKeyDeviceForm'), (YubiKeyDeviceForm,), {})
+    # ############################################## Reset password by email ##############################################
+    PasswordResetForm.__bases__ = (WebixForm,)
+    WebixPasswordResetForm = type(str('WebixPasswordResetForm'), (PasswordResetForm,), {})
+else:
+    AuthenticationForm.__bases__ = (WebixForm,)
+    WebixAuthenticationAuthForm = type(str('WebixAuthenticationAuthForm'), (AuthenticationForm,),
+                                       {'get_fieldsets': FieldSetMixin.authenticationForm_get_fieldsets})
 
-# ############################################## Reset password by email ##############################################
-PasswordResetForm.__bases__ = (WebixForm,)
-WebixPasswordResetForm = type(str('WebixPasswordResetForm'), (PasswordResetForm,), {})
+#    AuthenticationTokenForm.__bases__ = (OTPAuthenticationFormMixin, WebixForm)
+#    WebixAuthenticationTokenForm = type(str('WebixAuthenticationTokenForm'), (AuthenticationTokenForm,), {})
+
+#    BackupTokenForm.__bases__ = (WebixAuthenticationTokenForm,)
+#    WebixAuthenticationBackupTokenForm = type(str('WebixAuthenticationBackupTokenForm'), (BackupTokenForm,), {})
+
+    SetPasswordForm.__bases__ = (WebixForm,)
+    WebixSetPasswordForm = type(str('WebixSetPasswordForm'), (SetPasswordForm,),
+                                {'get_fieldsets': FieldSetMixin.setPasswordForm_get_fieldsets})
+
+#    DisableForm.__bases__ = (WebixForm,)
+#    WebixDisableForm = type(str('WebixDisableForm'), (DisableForm,), {})
+
+#    MethodForm.__bases__ = (WebixForm,)
+#    WebixMethodForm = type(str('WebixMethodForm'), (MethodForm,), {})
+
+#    TOTPDeviceForm.__bases__ = (WebixForm,)
+#    WebixTOTPDeviceForm = type(str('WebixTOTPDeviceForm'), (TOTPDeviceForm,), {})
+
+#    PhoneNumberForm.__bases__ = (WebixModelForm,)
+#    WebixPhoneNumberForm = type(str('WebixPhoneNumberForm'), (PhoneNumberForm,), {})
+
+#    DeviceValidationForm.__bases__ = (WebixForm,)
+#    WebixDeviceValidationForm = type(str('WebixDeviceValidationForm'), (DeviceValidationForm,), {})
+
+#    YubiKeyDeviceForm.__bases__ = (WebixDeviceValidationForm,)
+#    WebixYubiKeyDeviceForm = type(str('WebixYubiKeyDeviceForm'), (YubiKeyDeviceForm,), {})
+
+    # ############################################## Reset password by email ##############################################
+    PasswordResetForm.__bases__ = (WebixForm,)
+    WebixPasswordResetForm = type(str('WebixPasswordResetForm'), (PasswordResetForm,), {})

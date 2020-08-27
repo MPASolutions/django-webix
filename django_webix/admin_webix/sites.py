@@ -62,7 +62,7 @@ class AdminWebixSite:
         Return True if the given HttpRequest has permission to view
         *at least one* page in the admin site.
         """
-        return request.user.is_active and request.user.is_staff
+        return request.user.is_active #and request.user.is_staff
 
     #    def check(self, app_configs): # TODO
     #        if app_configs is None:
@@ -353,16 +353,10 @@ class AdminWebixSite:
             path('password_reset/done/', self.password_reset_done, name='password_reset_done'),
             path('reset/done/', self.password_reset_complete, name='password_reset_complete'),
 
-            # ######################### Autenticazione a 2 fattori - django-two-factor-auth ###########################
-            path('two_factor/', wrap(self.two_factor_profile), name='two_factor_profile'),
-
-
-            # path('jsi18n/', wrap(self.i18n_javascript, cacheable=True), name='jsi18n'),
-            # path(
-            #    'r/<int:content_type_id>/<path:object_id>/',
-            #    wrap(contenttype_views.shortcut),
-            #    name='view_on_site',
-            # ),
+        ]
+        if apps.is_installed("two_factor"):
+            urlpatterns += [
+                path('two_factor/', wrap(self.two_factor_profile), name='two_factor_profile'),
         ]
 
         # Add in each model's views, and create a list of valid URLS for the
@@ -525,17 +519,21 @@ class AdminWebixSite:
         request.current_app = self.name
         return PasswordResetCompleteView.as_view(**defaults)(request)
 
+
     def two_factor_profile(self, request, extra_context=None):
-        from two_factor.views import ProfileView
-        from django_webix.views import WebixTemplateView
+        if apps.is_installed("two_factor"):
+            from two_factor.views import ProfileView
+            from django_webix.views import WebixTemplateView
 
-        defaults = {
-            'template_name': 'admin_webix/account/two_factor.js',
-            'extra_context': {**self.each_context(request), **(extra_context or {})},
-        }
+            defaults = {
+                'template_name': 'admin_webix/account/two_factor.js',
+                'extra_context': {**self.each_context(request), **(extra_context or {})},
+            }
 
-        request.current_app = self.name
-        return WebixTemplateView.as_view(**defaults)(request)
+            request.current_app = self.name
+            return WebixTemplateView.as_view(**defaults)(request)
+        else:
+            return None
 
     @never_cache
     def logout(self, request, extra_context=None):
@@ -594,18 +592,21 @@ class AdminWebixSite:
         request.current_app = self.name
         return LoginView.as_view(**defaults)(request)
 
+    def extra_index_context(self, request):
+        return {}
+
     @never_cache
     def index(self, request, extra_context=None):  # TODO da terminare la parte del template in modo carino circa
         """
         Display the main admin index page, which lists all of the installed
         apps that have been registered in this site.
         """
-        app_list = self.get_app_list(request)
 
         context = {
             **self.each_context(request),
+            **self.extra_index_context(request),
             'title': self.index_title,
-            'app_list': app_list,
+            'app_list': self.get_app_list(request),
             **(extra_context or {}),
         }
 

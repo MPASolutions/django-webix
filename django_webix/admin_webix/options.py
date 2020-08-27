@@ -163,7 +163,7 @@ class ModelWebixAdmin(WebixPermissionsMixin):
     def __str__(self):
         return "%s.%s" % (self.model._meta.app_label, self.__class__.__name__)
 
-    def get_queryset(self):
+    def get_queryset(self, request):
         return self.model._default_manager.all()
 
     def get_form_fields(self):
@@ -222,7 +222,7 @@ class ModelWebixAdmin(WebixPermissionsMixin):
                 remove_disabled_buttons = _admin.remove_disabled_buttons
 
                 def get_queryset(self):
-                    return _admin.get_queryset()
+                    return _admin.get_queryset(request=self.request)
 
             return WebixAdminCreateView
 
@@ -255,7 +255,7 @@ class ModelWebixAdmin(WebixPermissionsMixin):
                 remove_disabled_buttons = _admin.remove_disabled_buttons
 
                 def get_queryset(self):
-                    return _admin.get_queryset()
+                    return _admin.get_queryset(request=self.request)
 
             return WebixAdminUpdateView
 
@@ -277,7 +277,7 @@ class ModelWebixAdmin(WebixPermissionsMixin):
                 model = _admin.model
 
                 def get_queryset(self):
-                    return _admin.get_queryset()
+                    return _admin.get_queryset(request=self.request)
 
             return WebixAdminDeleteView
 
@@ -318,10 +318,11 @@ class ModelWebixAdmin(WebixPermissionsMixin):
                     template_name = _admin.change_list_template
 
                 def get_queryset(self, initial_queryset=None):
-                    return super().get_queryset(initial_queryset=_admin.get_queryset())
+                    return super().get_queryset(initial_queryset=_admin.get_queryset(request=self.request))
 
-                def get_fields(self):
-                    return _admin.get_list_display()
+                @property
+                def fields(self):
+                    return _admin.list_display
 
             return WebixAdminListView
 
