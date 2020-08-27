@@ -6,6 +6,7 @@ import re
 import six
 from django import template
 from django.conf import settings
+from django.utils.timezone import is_naive, make_naive
 import datetime
 
 register = template.Library()
@@ -61,6 +62,8 @@ def format_list_value(value):
     if type(value)==datetime.date:
         return value.strftime('%d/%m/%Y')
     elif type(value) == datetime.datetime:
+        if not is_naive(value):
+            value = make_naive(value)
         return value.strftime('%d/%m/%Y %H:%M')
     elif value is None:
         return ''
