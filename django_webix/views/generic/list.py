@@ -245,7 +245,7 @@ class WebixListView(WebixBaseMixin,
 
     def get_fields(self):
         if self.fields is None:
-            return self.fields
+            return None
         else:
             _fields = []
             for _field in self.fields:

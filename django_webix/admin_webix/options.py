@@ -320,9 +320,17 @@ class ModelWebixAdmin(WebixPermissionsMixin):
                 def get_queryset(self, initial_queryset=None):
                     return super().get_queryset(initial_queryset=_admin.get_queryset(request=self.request))
 
+                # full mode
                 @property
                 def fields(self):
-                    return _admin.list_display
+                    if len(_admin.list_display) > 0:
+                        if type(_admin.list_display[0])==str:
+                            return _admin.get_list_display()
+                        else:
+                            return _admin.list_display
+                    else:
+                        return None
+
 
             return WebixAdminListView
 
