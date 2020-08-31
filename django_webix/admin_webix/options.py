@@ -104,7 +104,7 @@ class ModelWebixAdmin(WebixPermissionsMixin):
                 raise Exception('TODO?')
         return _next
 
-    def get_list_display(self):
+    def create_list_display(self, request=None):
         _fields = []
         for j, field_name in enumerate(self.list_display):
             model_field = self.get_field_traverse(field_name)
@@ -153,6 +153,15 @@ class ModelWebixAdmin(WebixPermissionsMixin):
                 field_list['click_action'] = click_action
             _fields.append(field_list)
         return _fields
+
+    def get_list_display(self, request=None):
+        if type(self.list_display[0]) == str:
+            return self.create_list_display(request=request)
+        else:
+            return self.list_display
+
+
+
 
     def __init__(self, model, admin_site):
         self.model = model
@@ -328,10 +337,7 @@ class ModelWebixAdmin(WebixPermissionsMixin):
                 @property
                 def fields(self):
                     if len(_admin.list_display) > 0:
-                        if type(_admin.list_display[0])==str:
-                            return _admin.get_list_display()
-                        else:
-                            return _admin.list_display
+                        return _admin.get_list_display(request = self.request)
                     else:
                         return None
 
