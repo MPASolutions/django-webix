@@ -232,6 +232,16 @@ class ModelWebixAdmin(WebixPermissionsMixin):
                 delete_permission = _admin.delete_permission
                 view_permission = _admin.view_permission
 
+                get_failure_add_related_objects = _admin.get_failure_add_related_objects
+                get_failure_change_related_objects = _admin.get_failure_change_related_objects
+                get_failure_delete_related_objects = _admin.get_failure_delete_related_objects
+                get_failure_view_related_objects = _admin.get_failure_view_related_objects
+
+                get_info_no_add_permission = _admin.get_info_no_add_permission
+                get_info_no_change_permission = _admin.get_info_no_change_permission
+                get_info_no_delete_permission = _admin.get_info_no_delete_permission
+                get_info_no_view_permission = _admin.get_info_no_view_permission
+
                 remove_disabled_buttons = _admin.remove_disabled_buttons
 
                 def get_queryset(self):
@@ -265,6 +275,16 @@ class ModelWebixAdmin(WebixPermissionsMixin):
                 delete_permission = _admin.delete_permission
                 view_permission = _admin.view_permission
 
+                get_failure_add_related_objects = _admin.get_failure_add_related_objects
+                get_failure_change_related_objects = _admin.get_failure_change_related_objects
+                get_failure_delete_related_objects = _admin.get_failure_delete_related_objects
+                get_failure_view_related_objects = _admin.get_failure_view_related_objects
+
+                get_info_no_add_permission = _admin.get_info_no_add_permission
+                get_info_no_change_permission = _admin.get_info_no_change_permission
+                get_info_no_delete_permission = _admin.get_info_no_delete_permission
+                get_info_no_view_permission = _admin.get_info_no_view_permission
+
                 remove_disabled_buttons = _admin.remove_disabled_buttons
 
                 def get_queryset(self):
@@ -284,6 +304,21 @@ class ModelWebixAdmin(WebixPermissionsMixin):
                 url_pattern_create = 'admin_webix:' + _admin.get_url_pattern_create()
                 url_pattern_update = 'admin_webix:' + _admin.get_url_pattern_update()
                 url_pattern_delete = 'admin_webix:' + _admin.get_url_pattern_delete()
+
+                add_permission = _admin.add_permission
+                change_permission = _admin.change_permission
+                delete_permission = _admin.delete_permission
+                view_permission = _admin.view_permission
+
+                get_failure_add_related_objects = _admin.get_failure_add_related_objects
+                get_failure_change_related_objects = _admin.get_failure_change_related_objects
+                get_failure_delete_related_objects = _admin.get_failure_delete_related_objects
+                get_failure_view_related_objects = _admin.get_failure_view_related_objects
+
+                get_info_no_add_permission = _admin.get_info_no_add_permission
+                get_info_no_change_permission = _admin.get_info_no_change_permission
+                get_info_no_delete_permission = _admin.get_info_no_delete_permission
+                get_info_no_view_permission = _admin.get_info_no_view_permission
 
                 remove_disabled_buttons = _admin.remove_disabled_buttons
 
@@ -324,6 +359,16 @@ class ModelWebixAdmin(WebixPermissionsMixin):
                 change_permission = _admin.change_permission
                 delete_permission = _admin.delete_permission
                 view_permission = _admin.view_permission
+
+                get_failure_add_related_objects = _admin.get_failure_add_related_objects
+                get_failure_change_related_objects = _admin.get_failure_change_related_objects
+                get_failure_delete_related_objects = _admin.get_failure_delete_related_objects
+                get_failure_view_related_objects = _admin.get_failure_view_related_objects
+
+                get_info_no_add_permission = _admin.get_info_no_add_permission
+                get_info_no_change_permission = _admin.get_info_no_change_permission
+                get_info_no_delete_permission = _admin.get_info_no_delete_permission
+                get_info_no_view_permission = _admin.get_info_no_view_permission
 
                 remove_disabled_buttons = _admin.remove_disabled_buttons
 

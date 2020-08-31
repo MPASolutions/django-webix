@@ -19,7 +19,7 @@ Description
 
     INSTALLED_APPS = [
         # ...
-        'django_webix',
+        'django_webix.admin_webix',
         # ...
     ]
 
@@ -192,6 +192,7 @@ Create the files (e.g. <app_name>/admin_webix.py) and here there is an example o
         change_form_template = None
         change_list_template = None
         delete_template = None
+        dashboard_template = 'admin_webix/dashboard.js'
 
         # CREATE AND UPDATE SETTINGS
         enable_button_save_continue = True
@@ -239,7 +240,13 @@ Create the files (e.g. <app_name>/admin_webix.py) and here there is an example o
         # permission custom
         only_superuser = False
 
-        def get_list_display(self):
+        def get_list_display(self, request=None):
+            pass
+
+        def is_webgis_enable(self):
+            pass
+
+        def is_webix_filter_enable(self):
             pass
 
         def get_model_perms(self, request):
@@ -255,6 +262,38 @@ Create the files (e.g. <app_name>/admin_webix.py) and here there is an example o
                 return False
             else:
                 return True
+
+        def get_failure_add_related_objects(self, request):
+            return []
+
+        def get_failure_change_related_objects(self, request, obj=None):
+            return []
+
+        def get_failure_delete_related_objects(self, request, obj=None):
+            return []
+
+        def get_failure_view_related_objects(self, request, obj=None):
+            return []
+
+        def get_info_no_add_permission(self, has_permission, request):
+            if not has_permission:
+                return [_("You haven't add permission")]
+            return []
+
+        def get_info_no_change_permission(self, has_permission, request, obj=None):
+            if not has_permission:
+                return [_("You haven't change permission")]
+            return []
+
+        def get_info_no_delete_permission(self, has_permission, request, obj=None):
+            if not has_permission:
+                return [_("You haven't delete permission")]
+            return []
+
+        def get_info_no_view_permission(self, has_permission, request, obj=None):
+            if not has_permission:
+                return [_("You haven't view permission")]
+            return []
 
         def get_queryset(self, request):
             qs = super().get_queryset(request=request).filter(anno=request.session.get('anno', 0))

@@ -49,6 +49,8 @@ class AdminWebixSite:
     index_template = None
     login_template = None
     logout_template = None
+    dashboard_template = 'admin_webix/dashboard.js'
+    webgis_template = None
     password_change_template = None
     password_change_done_template = None
 
@@ -56,6 +58,12 @@ class AdminWebixSite:
         self._registry = {}
         self.name = name
         all_sites.add(self)
+
+    def is_webgis_enable(self):
+        return apps.is_installed("django_webix_leaflet")
+
+    def is_webix_filter_enable(self):
+        return apps.is_installed("webix_filter")
 
     def has_permission(self, request):
         """
@@ -396,14 +404,22 @@ class AdminWebixSite:
             'site_title': self.site_title,
             'site_header': self.site_header,
             'site_url': site_url,
+            'is_webgis_enable': self.is_webgis_enable(),
+            'is_webix_filter_enable': self.is_webix_filter_enable(),
             'has_permission': self.has_permission(request),  # utils for menu
             'menu_list': self.get_menu_list(request),  # utils for menu
             'available_apps': self.get_app_list(request),  # utils for menu
             'webix_container_id': self.webix_container_id,
         }
 
-    def dashboard(self, request, extra_context=None):  # TODO
-        return None
+    def dashboard(self, request, extra_context=None):
+        from django.views.generic import TemplateView
+        defaults = {
+            'extra_context': {**self.each_context(request), **(extra_context or {})},
+        }
+        if self.dashboard_template is not None:
+            defaults['template_name'] = self.dashboard_template
+        return TemplateView.as_view(**defaults)(request)
 
     def password_change(self, request, extra_context=None):
         """
@@ -625,6 +641,8 @@ class AdminWebixSite:
         Display the main admin index page, which lists all of the installed
         apps that have been registered in this site.
         """
+        if self.is_webgis_enable() and self.webgis_template is None:
+            raise ImproperlyConfigured('Webgis template is not set')
 
         context = {
             **self.each_context(request),
