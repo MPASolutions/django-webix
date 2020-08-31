@@ -94,7 +94,7 @@ class WebixPermissionsMixin:
             return self.delete_permission
         if len(self.get_failure_delete_related_objects(request, obj=obj)) > 0:
             return False
-        return self.has_change_django_user_permission(user=request.user)
+        return self.has_delete_django_user_permission(user=request.user)
 
     def has_view_permission(self, request, obj=None):
         if not self.check_permissions:

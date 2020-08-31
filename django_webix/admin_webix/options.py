@@ -172,7 +172,11 @@ class ModelWebixAdmin(WebixPermissionsMixin):
             if type(_field) != AutoField and \
                 (self.exclude is None or _field.name not in self.exclude) and \
                 _field.editable is True:
-                _fields.append(_field.name)
+                if self.fields is not None and len(self.fields) > 0:
+                    if _field.name in self.fields:
+                        _fields.append(_field.name)
+                else:
+                    _fields.append(_field.name)
         return _fields
 
     def get_form_create_update(self):

@@ -8,17 +8,11 @@
             template: "<h3 style='margin:4px;'><a style='color:#fff;text-decoration:none;' href='{% url 'admin_webix:index' %}'>{{ title }}</a></h3>",
         },
         {$template: "Spacer"},
-        {% comment %}
-        //TODO
         {
-            view: "icon", align: "right", icon: "fas fa-user", on: {
-                onItemClick: function (id, e) {
-                    load_js("{% url 'account.update' %}");
-                }
-            }
+            align: "right",
+            type:"clean",
+            template: "<span style='color:#fff;font-size: 1.17em;float:right;padding-top:5px;'>{{ user }}</span>",
         },
-       {% endcomment %}
-
         {% if user.is_superuser %}
         {
             view: "icon", align: "right", icon: "fas fa-cogs", on: {
@@ -28,8 +22,6 @@
             }
         },
         {% endif %}
-        {% comment %}
-        {% endcomment %}
         {
             view: "icon", align: "right", icon: "fas fa-sign-out-alt", on: {
                 onItemClick: function (id, e) {
