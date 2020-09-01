@@ -1,4 +1,4 @@
-{% load static %}
+{% load static django_admin_utils %}
 {
     id:'main_menu',
     width: 180,
@@ -22,6 +22,12 @@
             loading_type: 'redirect',
             url: '{% url 'admin_webix:index' %}'
         },
+        {# START EXTRA MENU PREVIUS #}
+        {% block extra_menu_previus %}
+        {% endblock %}
+        {# END EXTRA MENU PREVIUS #}
+
+        {% block userprofile %}
         {
             id: 'menu_profile',
             value: "Utente",
@@ -49,6 +55,7 @@
                     loading_type: 'js_script',
                     url: "{% url 'admin_webix:password_reset' %}"
                 },
+                {% if 'two_factor'|is_app_installed %}
                 {
                     id: 'menu_profile_two_factor',
                     value: "Autenticazione a 2 fattori",
@@ -56,8 +63,10 @@
                     loading_type: 'js_script',
                     url: "{% url 'admin_webix:two_factor_profile' %}"
                 }
+                {% endif %}
             ]
         },
+        {% endblock %}
       {% comment %}
         {% for item_app in available_apps %}
         {
@@ -84,10 +93,10 @@
 
 
 
-        {# START BLOCCO EXTRA #}
-        {% block extra_menu %}
+        {# START EXTRA MENU AFTER #}
+        {% block extra_menu_after %}
         {% endblock %}
-        {# END BLOCCO EXTRA #}
+        {# END EXTRA MENU AFTER #}
     ],
     on:{
         onMenuItemClick: function (id) {

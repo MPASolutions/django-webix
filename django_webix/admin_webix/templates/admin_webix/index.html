@@ -3,45 +3,6 @@
 {% block content %}
 
     {{ content.super }}
+    load_js('{% url 'admin_webix:dashboard' %}');
 
-    {% comment%}
-    {% for i in app_list %}
-    console.log("{{ i }}")
-    {% endfor %}
-    webix.ui([], $$("{{ webix_container_id }}"));
-    var obj_list = [
-        {% for i in app_list %}
-            {% for j in i.models %}
-                {'name': '{{ i.name }}', 'object_name': '{{ j.object_name }}', 'model_name': '{{ j.model_name }}'},
-            {% endfor %}
-        {% endfor %}
-    ]
-
-    $$("{{ webix_container_id }}").addView({
-        view: "datatable",
-        id: "app_datatable",
-        columns:[
-            //name object_name model_name
-            {
-                id: "name",
-                header: "Name",
-                fillspace: true,
-                css: {'text-align': 'right'}
-            },
-            {
-                id: "object_name",
-                header: "Object name",
-                fillspace: true,
-                css: {'text-align': 'right'}
-            },
-            {
-                id: "model_name",
-                header: "Model name",
-                fillspace: true,
-                css: {'text-align': 'right'}
-            },
-        ],
-        data: obj_list
-    })
-    {% endcomment %}
 {% endblock %}

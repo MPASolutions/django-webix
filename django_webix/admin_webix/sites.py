@@ -49,6 +49,8 @@ class AdminWebixSite:
     index_template = None
     login_template = None
     logout_template = None
+    dashboard_template = 'admin_webix/dashboard.js'
+    webgis_template = None
     password_change_template = None
     password_change_done_template = None
 
@@ -57,12 +59,18 @@ class AdminWebixSite:
         self.name = name
         all_sites.add(self)
 
+    def is_webgis_enable(self):
+        return apps.is_installed("django_webix_leaflet")
+
+    def is_webix_filter_enable(self):
+        return apps.is_installed("webix_filter")
+
     def has_permission(self, request):
         """
         Return True if the given HttpRequest has permission to view
         *at least one* page in the admin site.
         """
-        return request.user.is_active and request.user.is_staff
+        return request.user.is_active #and request.user.is_staff
 
     #    def check(self, app_configs): # TODO
     #        if app_configs is None:
@@ -229,7 +237,7 @@ class AdminWebixSite:
             out = []
             for el in queryset.filter(enabled=True).filter(Q(active_all=True) | Q(groups__in=user.groups.all())):
                 if el.model is not None:
-                    if user.has_perm(el.model.app_label + '.view_' + el.model.model):  # TODO da vedere bene
+                    if user.has_perm(el.model.app_label + '.view_' + el.model.model):
                         out.append(el.id)
                 else:
                     out.append(el.id)
@@ -353,16 +361,10 @@ class AdminWebixSite:
             path('password_reset/done/', self.password_reset_done, name='password_reset_done'),
             path('reset/done/', self.password_reset_complete, name='password_reset_complete'),
 
-            # ######################### Autenticazione a 2 fattori - django-two-factor-auth ###########################
-            path('two_factor/', wrap(self.two_factor_profile), name='two_factor_profile'),
-
-
-            # path('jsi18n/', wrap(self.i18n_javascript, cacheable=True), name='jsi18n'),
-            # path(
-            #    'r/<int:content_type_id>/<path:object_id>/',
-            #    wrap(contenttype_views.shortcut),
-            #    name='view_on_site',
-            # ),
+        ]
+        if apps.is_installed("two_factor"):
+            urlpatterns += [
+                path('two_factor/', wrap(self.two_factor_profile), name='two_factor_profile'),
         ]
 
         # Add in each model's views, and create a list of valid URLS for the
@@ -402,14 +404,22 @@ class AdminWebixSite:
             'site_title': self.site_title,
             'site_header': self.site_header,
             'site_url': site_url,
+            'is_webgis_enable': self.is_webgis_enable(),
+            'is_webix_filter_enable': self.is_webix_filter_enable(),
             'has_permission': self.has_permission(request),  # utils for menu
             'menu_list': self.get_menu_list(request),  # utils for menu
             'available_apps': self.get_app_list(request),  # utils for menu
             'webix_container_id': self.webix_container_id,
         }
 
-    def dashboard(self, request, extra_context=None):  # TODO
-        return None
+    def dashboard(self, request, extra_context=None):
+        from django.views.generic import TemplateView
+        defaults = {
+            'extra_context': {**self.each_context(request), **(extra_context or {})},
+        }
+        if self.dashboard_template is not None:
+            defaults['template_name'] = self.dashboard_template
+        return TemplateView.as_view(**defaults)(request)
 
     def password_change(self, request, extra_context=None):
         """
@@ -525,17 +535,21 @@ class AdminWebixSite:
         request.current_app = self.name
         return PasswordResetCompleteView.as_view(**defaults)(request)
 
+
     def two_factor_profile(self, request, extra_context=None):
-        from two_factor.views import ProfileView
-        from django_webix.views import WebixTemplateView
+        if apps.is_installed("two_factor"):
+            from two_factor.views import ProfileView
+            from django_webix.views import WebixTemplateView
 
-        defaults = {
-            'template_name': 'admin_webix/account/two_factor.js',
-            'extra_context': {**self.each_context(request), **(extra_context or {})},
-        }
+            defaults = {
+                'template_name': 'admin_webix/account/two_factor.js',
+                'extra_context': {**self.each_context(request), **(extra_context or {})},
+            }
 
-        request.current_app = self.name
-        return WebixTemplateView.as_view(**defaults)(request)
+            request.current_app = self.name
+            return WebixTemplateView.as_view(**defaults)(request)
+        else:
+            return None
 
     @never_cache
     def logout(self, request, extra_context=None):
@@ -573,7 +587,31 @@ class AdminWebixSite:
         # Since this module gets imported in the application's root package,
         # it cannot import models from other applications at the module level,
         # and django.contrib.admin.forms eventually imports User.
-        from django.contrib.admin.forms import AdminAuthenticationForm
+        #from django.contrib.admin.forms import AdminAuthenticationForm
+        from django.contrib.auth.forms import AuthenticationForm
+
+        class AdminAuthenticationForm(AuthenticationForm):
+            """
+            A custom authentication form used in the admin app.
+            """
+            error_messages = {
+                **AuthenticationForm.error_messages,
+                'invalid_login': _(
+                    "Please enter the correct %(username)s and password for a staff "
+                    "account. Note that both fields may be case-sensitive."
+                ),
+            }
+            required_css_class = 'required'
+
+            def confirm_login_allowed(self, user):
+                super().confirm_login_allowed(user)
+                #if not user.is_staff:
+                #    raise forms.ValidationError(
+                #        self.error_messages['invalid_login'],
+                #        code='invalid_login',
+                #        params={'username': self.username_field.verbose_name}
+                #    )
+
         context = {
             **self.each_context(request),
             'title': _('Log in'),
@@ -594,18 +632,23 @@ class AdminWebixSite:
         request.current_app = self.name
         return LoginView.as_view(**defaults)(request)
 
+    def extra_index_context(self, request):
+        return {}
+
     @never_cache
     def index(self, request, extra_context=None):  # TODO da terminare la parte del template in modo carino circa
         """
         Display the main admin index page, which lists all of the installed
         apps that have been registered in this site.
         """
-        app_list = self.get_app_list(request)
+        if self.is_webgis_enable() and self.webgis_template is None:
+            raise ImproperlyConfigured('Webgis template is not set')
 
         context = {
             **self.each_context(request),
+            **self.extra_index_context(request),
             'title': self.index_title,
-            'app_list': app_list,
+            'app_list': self.get_app_list(request),
             **(extra_context or {}),
         }
 

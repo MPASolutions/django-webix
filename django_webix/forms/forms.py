@@ -27,6 +27,7 @@ from django.forms.utils import ErrorList
 from django.urls import reverse
 from django.utils.encoding import force_text
 from django.utils.text import capfirst
+from django.utils.timezone import is_naive, make_naive
 from django.utils.translation import ugettext_lazy as _
 from random import randint
 from sorl.thumbnail import get_thumbnail
@@ -106,7 +107,10 @@ class BaseWebixMixin(object):
                             required=False
                         )
                         if getattr(self.instance, readonly_field):
-                            value = '{}'.format(getattr(self.instance, readonly_field).strftime('%d/%m/%Y %H:%M'))
+                            _value = getattr(self.instance, readonly_field)
+                            if not is_naive(_value):
+                                _value = make_naive(_value)
+                            value = '{}'.format(_value.strftime('%d/%m/%Y %H:%M'))
                         else:
                             value = ''
                     elif isinstance(_field, django.db.models.fields.DateField) or \
@@ -280,8 +284,13 @@ class BaseWebixMixin(object):
                             'value': '{}'.format(initial).replace('-', ',').replace(' ', ',').replace(':', ',')
                         })
                     elif callable(initial):
-                        el.update({'value': '{}'.format(initial().strftime('%H,%M'))})
+                        _value = initial()
+                        if not is_naive(_value):
+                            _value = make_naive(_value)
+                        el.update({'value': '{}'.format(_value.strftime('%H,%M'))})
                     else:
+                        if not is_naive(initial):
+                            initial = make_naive(initial)
                         el.update({'value': '{}'.format(initial.strftime('%H,%M'))})
             # DateField
             elif isinstance(field, forms.DateField):
@@ -313,8 +322,13 @@ class BaseWebixMixin(object):
                             'value': '{}'.format(initial).replace('-', ',').replace(' ', ',').replace(':', ',')
                         })
                     elif callable(initial):
-                        el.update({'value': '{}'.format(initial().strftime('%Y,%m,%d,%H,%M'))})
+                        _value = initial()
+                        if not is_naive(_value):
+                            _value = make_naive(_value)
+                        el.update({'value': '{}'.format(_value.strftime('%Y,%m,%d,%H,%M'))})
                     else:
+                        if not is_naive(initial):
+                            initial = make_naive(initial)
                         el.update({'value': '{}'.format(initial.strftime('%Y,%m,%d,%H,%M'))})
             # BooleanField NullBooleanField
             elif isinstance(field, forms.NullBooleanField) or isinstance(field, forms.BooleanField):

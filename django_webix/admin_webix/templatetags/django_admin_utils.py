@@ -1,55 +1,7 @@
 # -*- coding: utf-8 -*-
-
-from __future__ import unicode_literals
-
-import re
-import six
+from admintools.templatetags import register
 from django import template
-from django.conf import settings
-from django.utils.timezone import is_naive, make_naive
-import datetime
-
-register = template.Library()
-
-
-@register.filter('get_value_from_dict')
-def get_value_from_dict(dict_data, key):
-    """
-    usage example {{ your_dict|get_value_from_dict:your_key }}
-    """
-    if key:
-        return dict_data.get(key)
-
-
-@register.simple_tag(name='webix_version')
-def webix_version():
-    return settings.WEBIX_VERSION
-
-
-@register.simple_tag(name='webix_license')
-def webix_license():
-    return settings.WEBIX_LICENSE
-
-
-@register.simple_tag(name='webix_fontawesome_css_url')
-def webix_fontawesome_css_url():
-    if hasattr(settings, 'WEBIX_FONTAWESOME_CSS_URL'):
-        return settings.WEBIX_FONTAWESOME_CSS_URL
-    else:
-        return 'django_webix/fontawesome-5.7.2/css/all.min.css'
-
-@register.simple_tag(name='webix_fontawesome_version')
-def webix_fontawesome_version():
-    if hasattr(settings, 'WEBIX_FONTAWESOME_VERSION'):
-        return settings.WEBIX_FONTAWESOME_VERSION
-    else:
-        return '5.7.2'
-
-
-@register.filter
-def comma_to_underscore(value):
-    return value.replace(".", "_")
-
+import re
 
 @register.filter_function
 def order_by(queryset, args):
@@ -58,16 +10,14 @@ def order_by(queryset, args):
 
 
 @register.filter
-def format_list_value(value):
-    if type(value)==datetime.date:
-        return value.strftime('%d/%m/%Y')
-    elif type(value) == datetime.datetime:
-        if not is_naive(value):
-            value = make_naive(value)
-        return value.strftime('%d/%m/%Y %H:%M')
-    elif value is None:
-        return ''
-    return str(value)
+def is_app_installed(appname):
+    from django.apps import apps
+    return apps.is_installed(appname)
+
+
+@register.filter(name='split')
+def split(value, arg):
+    return value.split(arg)
 
 
 @register.filter
@@ -86,14 +36,11 @@ def getattr(obj, args):
     except ValueError:
         (attribute, default) = args, ''
 
-    if isinstance(obj, six.string_types):
-        return obj
-
     try:
         attr = obj.__getattribute__(attribute)
     except AttributeError:
         attr = obj.__dict__.get(attribute, default)
-    except Exception:
+    except:
         attr = default
 
     if hasattr(attr, '__call__'):

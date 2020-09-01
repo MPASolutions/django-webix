@@ -104,7 +104,7 @@ class ModelWebixAdmin(WebixPermissionsMixin):
                 raise Exception('TODO?')
         return _next
 
-    def get_list_display(self):
+    def create_list_display(self, request=None):
         _fields = []
         for j, field_name in enumerate(self.list_display):
             model_field = self.get_field_traverse(field_name)
@@ -154,6 +154,15 @@ class ModelWebixAdmin(WebixPermissionsMixin):
             _fields.append(field_list)
         return _fields
 
+    def get_list_display(self, request=None):
+        if type(self.list_display[0]) == str:
+            return self.create_list_display(request=request)
+        else:
+            return self.list_display
+
+
+
+
     def __init__(self, model, admin_site):
         self.model = model
         self.opts = model._meta
@@ -163,7 +172,7 @@ class ModelWebixAdmin(WebixPermissionsMixin):
     def __str__(self):
         return "%s.%s" % (self.model._meta.app_label, self.__class__.__name__)
 
-    def get_queryset(self):
+    def get_queryset(self, request):
         return self.model._default_manager.all()
 
     def get_form_fields(self):
@@ -172,7 +181,11 @@ class ModelWebixAdmin(WebixPermissionsMixin):
             if type(_field) != AutoField and \
                 (self.exclude is None or _field.name not in self.exclude) and \
                 _field.editable is True:
-                _fields.append(_field.name)
+                if self.fields is not None and len(self.fields) > 0:
+                    if _field.name in self.fields:
+                        _fields.append(_field.name)
+                else:
+                    _fields.append(_field.name)
         return _fields
 
     def get_form_create_update(self):
@@ -219,10 +232,20 @@ class ModelWebixAdmin(WebixPermissionsMixin):
                 delete_permission = _admin.delete_permission
                 view_permission = _admin.view_permission
 
+                get_failure_add_related_objects = _admin.get_failure_add_related_objects
+                get_failure_change_related_objects = _admin.get_failure_change_related_objects
+                get_failure_delete_related_objects = _admin.get_failure_delete_related_objects
+                get_failure_view_related_objects = _admin.get_failure_view_related_objects
+
+                get_info_no_add_permission = _admin.get_info_no_add_permission
+                get_info_no_change_permission = _admin.get_info_no_change_permission
+                get_info_no_delete_permission = _admin.get_info_no_delete_permission
+                get_info_no_view_permission = _admin.get_info_no_view_permission
+
                 remove_disabled_buttons = _admin.remove_disabled_buttons
 
                 def get_queryset(self):
-                    return _admin.get_queryset()
+                    return _admin.get_queryset(request=self.request)
 
             return WebixAdminCreateView
 
@@ -252,10 +275,20 @@ class ModelWebixAdmin(WebixPermissionsMixin):
                 delete_permission = _admin.delete_permission
                 view_permission = _admin.view_permission
 
+                get_failure_add_related_objects = _admin.get_failure_add_related_objects
+                get_failure_change_related_objects = _admin.get_failure_change_related_objects
+                get_failure_delete_related_objects = _admin.get_failure_delete_related_objects
+                get_failure_view_related_objects = _admin.get_failure_view_related_objects
+
+                get_info_no_add_permission = _admin.get_info_no_add_permission
+                get_info_no_change_permission = _admin.get_info_no_change_permission
+                get_info_no_delete_permission = _admin.get_info_no_delete_permission
+                get_info_no_view_permission = _admin.get_info_no_view_permission
+
                 remove_disabled_buttons = _admin.remove_disabled_buttons
 
                 def get_queryset(self):
-                    return _admin.get_queryset()
+                    return _admin.get_queryset(request=self.request)
 
             return WebixAdminUpdateView
 
@@ -272,12 +305,27 @@ class ModelWebixAdmin(WebixPermissionsMixin):
                 url_pattern_update = 'admin_webix:' + _admin.get_url_pattern_update()
                 url_pattern_delete = 'admin_webix:' + _admin.get_url_pattern_delete()
 
+                add_permission = _admin.add_permission
+                change_permission = _admin.change_permission
+                delete_permission = _admin.delete_permission
+                view_permission = _admin.view_permission
+
+                get_failure_add_related_objects = _admin.get_failure_add_related_objects
+                get_failure_change_related_objects = _admin.get_failure_change_related_objects
+                get_failure_delete_related_objects = _admin.get_failure_delete_related_objects
+                get_failure_view_related_objects = _admin.get_failure_view_related_objects
+
+                get_info_no_add_permission = _admin.get_info_no_add_permission
+                get_info_no_change_permission = _admin.get_info_no_change_permission
+                get_info_no_delete_permission = _admin.get_info_no_delete_permission
+                get_info_no_view_permission = _admin.get_info_no_view_permission
+
                 remove_disabled_buttons = _admin.remove_disabled_buttons
 
                 model = _admin.model
 
                 def get_queryset(self):
-                    return _admin.get_queryset()
+                    return _admin.get_queryset(request=self.request)
 
             return WebixAdminDeleteView
 
@@ -312,16 +360,32 @@ class ModelWebixAdmin(WebixPermissionsMixin):
                 delete_permission = _admin.delete_permission
                 view_permission = _admin.view_permission
 
+                get_failure_add_related_objects = _admin.get_failure_add_related_objects
+                get_failure_change_related_objects = _admin.get_failure_change_related_objects
+                get_failure_delete_related_objects = _admin.get_failure_delete_related_objects
+                get_failure_view_related_objects = _admin.get_failure_view_related_objects
+
+                get_info_no_add_permission = _admin.get_info_no_add_permission
+                get_info_no_change_permission = _admin.get_info_no_change_permission
+                get_info_no_delete_permission = _admin.get_info_no_delete_permission
+                get_info_no_view_permission = _admin.get_info_no_view_permission
+
                 remove_disabled_buttons = _admin.remove_disabled_buttons
 
                 if _admin.change_list_template is not None:
                     template_name = _admin.change_list_template
 
                 def get_queryset(self, initial_queryset=None):
-                    return super().get_queryset(initial_queryset=_admin.get_queryset())
+                    return super().get_queryset(initial_queryset=_admin.get_queryset(request=self.request))
 
-                def get_fields(self):
-                    return _admin.get_list_display()
+                # full mode
+                @property
+                def fields(self):
+                    if len(_admin.list_display) > 0:
+                        return _admin.get_list_display(request = self.request)
+                    else:
+                        return None
+
 
             return WebixAdminListView
 

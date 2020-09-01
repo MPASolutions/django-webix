@@ -34,6 +34,7 @@ Fixed
 * Fixed buttons permissions in form view
 * Fixed checkbox dimension
 * Fixed readonly DateTime format
+* Fixed DateTime with timezone in forms
 
 
 [1.2.1] 2020-01-08

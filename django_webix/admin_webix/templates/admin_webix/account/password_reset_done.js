@@ -1,7 +1,9 @@
 {% extends 'admin_webix/base_site.html' %}
 
-{% load static two_factor %}
-
+{% load static %}
+{% if is_app_installed %}
+    {% load two_factor %}
+{% endif %}
 
 {% block extra_content %}
 webix.ui([], $$("{{ webix_container_id }}"));

@@ -75,7 +75,7 @@ Create the views (e.g. <app_name>/views.py)
                 'field_name': 'YYYY',
                 'datalist_column': ''' {id: "YYYY", serverFilterType:"exact", header: ["{{_("TEXT2")|escapejs}}", {content: "serverSelectFilter", options:YYYY_options}], adjust: "all", sort: "server"}'''
             },
-            { # number example
+            { # number example (in this case by interface is possibile to write for example "<=5" )
                 'click_action': '''custom_js_function_to_add_into_js(el['id']);''',
                 'field_name': 'ZZZZ',
                 'footer': Sum('ZZZZ'),
@@ -98,6 +98,38 @@ Create the views (e.g. <app_name>/views.py)
 
     class MyModelDeleteView(WebixDeleteView):
         model = MyModel
+
+
+CreateView and UpdateView Signals
+~~~~~~~~~~~~~~~~
+
+When createview and updateview work some signals are sended.
+
+.. code-block:: python
+        django_webix_view_pre_save.send(sender=self,
+                                        instance=None,
+                                        created=True,
+                                        form=form,
+                                        inlines=inlines)
+        django_webix_view_pre_inline_save.send(sender=self,
+                                               instance=self.object,
+                                               created=True,
+                                               form=form,
+                                               inlines=inlines)
+        django_webix_view_post_save.send(sender=self,
+                                         instance=self.object,
+                                         created=True,
+                                         form=form,
+                                         inlines=inlines)
+
+DeleteView Signals
+~~~~~~~~~~~~~~~~
+
+When deleteview works some signals are sended.
+
+.. code-block:: python
+        django_webix_view_pre_delete.send(sender=self, instance=self.object)
+        django_webix_view_post_delete.send(sender=self, instance=self.copied_object)
 
 
 ListView Actions
