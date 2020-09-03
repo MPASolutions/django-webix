@@ -1,3 +1,5 @@
+from django.apps import apps
+from django.conf import settings
 from django.db.models import AutoField, FieldDoesNotExist
 from django.urls import path
 from django.utils.text import capfirst
@@ -160,9 +162,6 @@ class ModelWebixAdmin(WebixPermissionsMixin):
         else:
             return self.list_display
 
-
-
-
     def __init__(self, model, admin_site):
         self.model = model
         self.opts = model._meta
@@ -206,6 +205,14 @@ class ModelWebixAdmin(WebixPermissionsMixin):
 
             return WebixAdminCreateUpdateForm
 
+    def get_layers(self):
+        layers = []
+        if apps.is_installed("django_webix_leaflet") and getattr(self,'model',None) is not None:
+            for layer in settings.DJANGO_WEBIX_LEAFLET['layers']:
+                if layer['modelname'] == f'{self.model._meta.app_label}.{self.model._meta.model_name}':
+                    layers.append(layer['layername'])
+        return layers
+
     def get_add_view(self):
         _admin = self
         if self.create_view is not None:
@@ -243,6 +250,7 @@ class ModelWebixAdmin(WebixPermissionsMixin):
                 get_info_no_view_permission = _admin.get_info_no_view_permission
 
                 remove_disabled_buttons = _admin.remove_disabled_buttons
+                get_layers = _admin.get_layers
 
                 def get_queryset(self):
                     return _admin.get_queryset(request=self.request)
@@ -286,6 +294,7 @@ class ModelWebixAdmin(WebixPermissionsMixin):
                 get_info_no_view_permission = _admin.get_info_no_view_permission
 
                 remove_disabled_buttons = _admin.remove_disabled_buttons
+                get_layers = _admin.get_layers
 
                 def get_queryset(self):
                     return _admin.get_queryset(request=self.request)
@@ -321,6 +330,7 @@ class ModelWebixAdmin(WebixPermissionsMixin):
                 get_info_no_view_permission = _admin.get_info_no_view_permission
 
                 remove_disabled_buttons = _admin.remove_disabled_buttons
+                get_layers = _admin.get_layers
 
                 model = _admin.model
 
@@ -371,6 +381,7 @@ class ModelWebixAdmin(WebixPermissionsMixin):
                 get_info_no_view_permission = _admin.get_info_no_view_permission
 
                 remove_disabled_buttons = _admin.remove_disabled_buttons
+                get_layers = _admin.get_layers
 
                 if _admin.change_list_template is not None:
                     template_name = _admin.change_list_template
