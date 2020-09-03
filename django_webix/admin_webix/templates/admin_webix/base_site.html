@@ -1,4 +1,4 @@
-{% load utils_ifusergroup thumbnail static utils_getattr django_admin_utils %}
+{% load utils_ifusergroup thumbnail static utils_getattr django_webix_admin_utils %}
 
 <!DOCTYPE HTML>
 <html>
@@ -24,6 +24,7 @@
   {% block webix_filter_header %}
       {% if is_webix_filter_enable %}
           {% include "django_webix_filter/static_meta.html" %}
+
       {% endif %}
   {% endblock %}
 
@@ -62,7 +63,7 @@
                   scroll: "y",
                   body: {
                       rows: [
-                          {% if is_webgis_enable %}
+                          {% if not is_webgis_enable %}
                           {
                               margin: 5,
                               id: '{{webix_container_id}}',
@@ -118,6 +119,10 @@
               load_js('{{render_url}}');
           {% endif %}
       {% endblock %}
+
+    {% if is_webgis_enable %}
+        load_js('{% url 'webix_webgis_init' %}', undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, false);
+    {% endif %}
 
     {% block extra_content %}{% endblock %}
   });

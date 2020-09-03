@@ -5,7 +5,7 @@ from django.core.exceptions import ImproperlyConfigured
 from django.db.models.base import ModelBase
 from django.http import HttpResponseRedirect
 from django.template.response import TemplateResponse
-from django.urls import NoReverseMatch, reverse, reverse_lazy
+from django.urls import NoReverseMatch, reverse, reverse_lazy, resolve
 from django.utils.functional import LazyObject
 from django.utils.module_loading import import_string
 from django.utils.text import capfirst
@@ -412,6 +412,7 @@ class AdminWebixSite:
             'webix_container_id': self.webix_container_id,
         }
 
+    @never_cache
     def dashboard(self, request, extra_context=None):
         from django.views.generic import TemplateView
         defaults = {
@@ -644,9 +645,16 @@ class AdminWebixSite:
         if self.is_webgis_enable() and self.webgis_template is None:
             raise ImproperlyConfigured('Webgis template is not set')
 
+        history_url = request.GET.get('state', None)
+        try:
+            resolve(history_url)
+        except:
+            history_url = None
+
         context = {
             **self.each_context(request),
             **self.extra_index_context(request),
+            'history_url': history_url,
             'title': self.index_title,
             'app_list': self.get_app_list(request),
             **(extra_context or {}),
