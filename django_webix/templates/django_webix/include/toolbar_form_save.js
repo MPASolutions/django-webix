@@ -20,25 +20,27 @@ if (form_validate('{{ form.webix_id }}')) {
                 form_data.append(elementAttributes.name, el.getValue());
             }
             else {
-                console.log('id_' + elementAttributes.name + '_clean')
-                if ($$('id_' + elementAttributes.name + '_clean').getValue() == 1) {
-                    // devo eliminarlo
-                    console.log('elimino il file provo')
-                    form_data.append(elementAttributes.name, '');
-                } else {
-                    el.files.data.each(function (obj) {
-                        if (obj !== undefined) {
-                            form_data.append(elementAttributes.name, obj.file, obj.file.name);
-                        }
-                    });
-                }
+                // console.log('id_' + elementAttributes.name + '_clean')
+                // if ($$('id_' + elementAttributes.name + '_clean').getValue() == 1) {
+                //     // devo eliminarlo
+                //     console.log('elimino il file provo')
+                //     form_data.append(elementAttributes.name, '');
+                // } else {
+                //     el.files.data.each(function (obj) {
+                //         if (obj !== undefined) {
+                //             form_data.append(elementAttributes.name, obj.file, obj.file.name);
+                //         }
+                //     });
+                // }
+                el.files.data.each(function (obj) {
+                    if (obj !== undefined) {
+                        form_data.append(elementAttributes.name, obj.file, obj.file.name);
+                    }
+                });
             }
         });
     });
-    console.log(form_data);
-    for(var p in form_data.values()){
-        console.log(p);
-    }
+
     {% block post_form_data %}{% endblock %}
 
     $.ajax({
