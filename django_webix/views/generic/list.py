@@ -54,6 +54,7 @@ class WebixListView(WebixBaseMixin,
     template_name = 'django_webix/generic/list.js'
     title = None
     actions_style = None
+    enable_column_webgis = True
     enable_column_copy = True
     enable_column_delete = True
     enable_row_click = True
@@ -484,6 +485,9 @@ class WebixListView(WebixBaseMixin,
     def is_enable_actions(self, request):
         return self.enable_actions
 
+    def is_enable_column_webgis(self, request):
+        return self.enable_column_webgis and apps.is_installed("django_webix_leaflet")
+
     def is_enable_column_copy(self, request):
         return self.enable_column_copy
 
@@ -626,6 +630,7 @@ class WebixListView(WebixBaseMixin,
             'is_enable_footer': self.is_enable_footer(),
             'get_pk_field': self.get_pk_field(),
             'objects_datatable': self.get_objects_datatable(),
+            'is_enable_column_webgis': self.is_enable_column_webgis(self.request),
             'is_enable_column_copy': self.is_enable_column_copy(self.request),
             'is_enable_column_delete': self.is_enable_column_delete(self.request),
             'is_enable_row_click': self.is_enable_row_click(self.request),

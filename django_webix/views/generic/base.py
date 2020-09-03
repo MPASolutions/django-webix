@@ -3,6 +3,7 @@
 from __future__ import unicode_literals
 
 import six
+from django.apps import apps
 from django.conf import settings
 from django.utils.translation import ugettext as _
 from django.views.generic import TemplateView
@@ -321,10 +322,23 @@ class WebixBaseMixin:
         return getattr(settings, 'WEBIX_OVERLAY_CONTAINER_ID', settings.WEBIX_CONTAINER_ID)
 
     def get_context_data_webix_base(self, request, **kwargs):
-        return {
+        context = {
             'webix_container_id': self.get_container_id(request=self.request),
             'webix_overlay_container_id': self.get_overlay_container_id(request=self.request)
         }
+        # extra data id django_webix_leaflet is installed
+        if apps.is_installed("django_webix_leaflet") and getattr(self,'model',None) is not None:
+            layers = []
+            for layer in settings.DJANGO_WEBIX_LEAFLET['layers']:
+                if layer['modelname'] == f'{self.model._meta.app_label}.{self.model._meta.model_name}':
+                    layers.append(layer['layername'])
+            context.update({
+                'layers': layers,
+                'pk_field_name': self.model._meta.pk.name,
+            })
+
+        return context
+
 
 
 class WebixTemplateView(WebixBaseMixin, TemplateView):

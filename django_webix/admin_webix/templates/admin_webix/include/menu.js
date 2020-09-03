@@ -1,4 +1,4 @@
-{% load static django_admin_utils %}
+{% load static django_webix_admin_utils %}
 {
     id:'main_menu',
     width: 180,
@@ -67,31 +67,10 @@
             ]
         },
         {% endblock %}
-      {% comment %}
-        {% for item_app in available_apps %}
-        {
-            id: 'menu_{{item_app.app_label}}',
-            value: "{{ item_app.name }}",
-            icon: "fas fa-archive",
-            submenu: [
-            {% for item_model in item_app.models %}
-                {
-                    id: 'menu_{{item_app.app_label}}_{{ item_model.model_name }}',
-                    value: "{{ item_model.name }}",
-                    icon: "far fa-archive",
-                    loading_type: 'js_script',
-                    url: '{{ item_model.admin_url }}'
-                },
-            {% endfor %}
-            ]
-        },
-        {% endfor %}
-{% endcomment %}
+
         {% for menu_item in menu_list %}
         {{ menu_item|safe }},
         {% endfor %}
-
-
 
         {# START EXTRA MENU AFTER #}
         {% block extra_menu_after %}
@@ -100,6 +79,9 @@
     ],
     on:{
         onMenuItemClick: function (id) {
+            {% if is_webgis_enable %}
+            $$('map').enableDataTab();
+            {% endif %}
             item = this.getMenuItem(id);
             loading_type = item.loading_type;
             url = item.url;
