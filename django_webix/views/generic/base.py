@@ -325,8 +325,12 @@ class WebixBaseMixin:
         context = {
             'webix_container_id': self.get_container_id(request=self.request),
             'webix_overlay_container_id': self.get_overlay_container_id(request=self.request),
-            'pk_field_name': self.model._meta.pk.name,
         }
+        if hasattr(self,'model'):
+            context.update({
+                'pk_field_name': self.model._meta.pk.name,
+            })
+
         # extra data id django_webix_leaflet is installed
         context.update({
             'layers': self.get_layers(),
