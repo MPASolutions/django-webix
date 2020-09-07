@@ -45,7 +45,7 @@ class UserAdmin(admin.ModelWebixAdmin):
             enable_button_save_gotolist = _admin.enable_button_save_gotolist
 
             def get_queryset(self):
-                return _admin.get_queryset()
+                return _admin.get_queryset(self.request)
 
         return WebixAdminUpdateView
 
