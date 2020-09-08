@@ -272,10 +272,10 @@ class AdminWebixSite:
         from django_webix.admin_webix.models import WebixAdminMenu
         if request.user.is_anonymous:
             return {}
-        avaible = self.available_menu_items(request.user)
+        available = self.available_menu_items(request.user)
 
-        return self.get_tree(WebixAdminMenu.objects.filter(level=0, id__in=avaible).order_by('tree_id', 'lft'),
-                             avaible)
+        return self.get_tree(WebixAdminMenu.objects.filter(level=0, id__in=available).order_by('tree_id', 'lft'),
+                             available)
 
     def admin_view(self, view, cacheable=False):
         """

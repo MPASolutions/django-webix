@@ -207,10 +207,10 @@ class ModelWebixAdmin(WebixPermissionsMixin):
 
     def get_layers(self):
         layers = []
-        if apps.is_installed("django_webix_leaflet") and getattr(self,'model',None) is not None:
+        if apps.is_installed("django_webix_leaflet") and getattr(self, 'model', None) is not None:
             for layer in settings.DJANGO_WEBIX_LEAFLET['layers']:
                 if layer['modelname'] == f'{self.model._meta.app_label}.{self.model._meta.model_name}':
-                    layers.append(layer['layername'])
+                    layers.append(layer)
         return layers
 
     def get_add_view(self):
@@ -393,10 +393,9 @@ class ModelWebixAdmin(WebixPermissionsMixin):
                 @property
                 def fields(self):
                     if len(_admin.list_display) > 0:
-                        return _admin.get_list_display(request = self.request)
+                        return _admin.get_list_display(request=self.request)
                     else:
                         return None
-
 
             return WebixAdminListView
 
