@@ -8,7 +8,7 @@ import django
 from django.apps import apps
 from django.core.exceptions import FieldDoesNotExist
 from django.core.exceptions import PermissionDenied, ImproperlyConfigured
-from django.db.models import Q, F, ManyToManyField
+from django.db.models import Q, F, ManyToManyField, Case, When, Value, BooleanField
 from django.http import JsonResponse, Http404
 from django.template import Template, Context
 from django.template.loader import get_template
@@ -17,6 +17,7 @@ from django.views.generic import ListView
 
 from django_webix.utils.filters import from_dict_to_qset
 from django_webix.views.generic.base import WebixBaseMixin, WebixPermissionsMixin, WebixUrlMixin
+from django_webix.views.generic.utils import get_model_geo_field_names
 
 try:
     from django.contrib.gis.geos import GEOSGeometry
@@ -266,6 +267,16 @@ class WebixListView(WebixBaseMixin,
                 _fields.append(_field)
             return _fields
 
+    def get_annotations_geoavailable(self, geo_field_names):
+        annotations = {}
+        for geo_field_name in geo_field_names:
+            annotations.update({
+                f'{geo_field_name}_available': Case(When(**{f'{geo_field_name}__isnull': False}, then=True),
+                                                    default=Value(False),
+                                                    output_field=BooleanField())
+            })
+        return annotations
+
     def get_queryset(self, initial_queryset=None):
         # bypass improperly configured for custom queryset without model
         if self.model:
@@ -287,9 +298,13 @@ class WebixListView(WebixBaseMixin,
                 sql_filter = ' OR '.join(['({sql})'.format(sql=_sql) for _sql in self.sql_filters])
                 qs = qs.extra(where=[sql_filter])
             # 5. apply django webix filters
-            # raise Exception(self.django_webix_filters)
             if self.django_webix_filters is not None:
                 qs = qs.filter(self.get_django_webix_filters_qsets())
+            # 6. annotate geo available
+            geo_field_names = get_model_geo_field_names(self.model)
+            annotations = self.get_annotations_geoavailable(geo_field_names)
+            qs = qs.annotate(**annotations)
+
 
             # optimize select related queryset (only if fields are defined)
             qs = self._optimize_select_related(qs)  # TODO
@@ -381,6 +396,8 @@ class WebixListView(WebixBaseMixin,
                 if field.get('field_name') is not None and \
                     (field.get('queryset_exclude') is None or field.get('queryset_exclude') != True):
                     values.append(field['field_name'])
+        for field_name in get_model_geo_field_names(self.model):
+            values += [f'{field_name}_available']
         data = qs.values(*values,
                          **({'id': F('pk')} if self.get_pk_field() != 'id' and not hasattr(self.model, 'id') else {}))
         return data

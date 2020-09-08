@@ -3,11 +3,30 @@
 from __future__ import unicode_literals
 
 import types
+from django.contrib.gis.db import models
 
 from django.urls import reverse
 from django.utils.encoding import force_text
 from django.utils.text import capfirst
 from django.contrib.admin.utils import NestedObjects
+
+geo_field_classes = {
+    "POINT": models.PointField,
+    "MULTIPOINT": models.MultiPointField,
+    "LINESTRING": models.LineStringField,
+    "MULTILINESTRING": models.MultiLineStringField,
+    "POLYGON": models.PolygonField,
+    "MULTIPOLYGON": models.MultiPolygonField,
+    "GEOMETRYCOLLECTION": models.GeometryCollectionField,
+    "GEOMETRY": models.GeometryField
+}
+
+def get_model_geo_field_names(model):
+    geo_field_names = []
+    for field in model._meta.fields:
+        if type(field) in geo_field_classes.values():
+            geo_field_names.append(field.name)
+    return geo_field_names
 
 
 def walk_items(item_list):

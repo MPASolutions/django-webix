@@ -343,7 +343,7 @@ class WebixBaseMixin:
         if apps.is_installed("django_webix_leaflet") and getattr(self,'model',None) is not None:
             for layer in settings.DJANGO_WEBIX_LEAFLET['layers']:
                 if layer['modelname'] == f'{self.model._meta.app_label}.{self.model._meta.model_name}':
-                    layers.append(layer['layername'])
+                    layers.append(layer)
         return layers
 
 class WebixTemplateView(WebixBaseMixin, TemplateView):

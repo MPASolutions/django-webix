@@ -35,15 +35,15 @@ $$("{{ webix_container_id }}").addView({
             template: '<div style="width:100%; text-align:center;"><strong>{% if object %}{{ model|getattr:"_meta"|getattr:"verbose_name" }}: {{ object_name|default:object|escapejs }}{% else %}{{_("Add")|escapejs}} {{ model|getattr:"_meta"|getattr:"verbose_name" }}{% endif %}</strong></div>'
         },
         {% if object.pk %}
-            {% for layername in layers %}
+            {% for layer in layers %}
              {
                 view: "tootipButton",
                 type: "base",
                 align: "left",
-                label: "{{_("Go to map")|escapejs}} ({{layername}})",
+                label: "{{_("Go to map")|escapejs}} ({{layer.layername}})",
                 autowidth: true,
                 click: function () {
-                    $$("map").goToWebgisPk('{{layername}}', '{{ pk_field_name }}', {{ object.pk }});
+                    $$("map").goToWebgisPk('{{layer.layername}}', '{{ pk_field_name }}', {{ object.pk }});
                 }
             },
             {% endfor %}
