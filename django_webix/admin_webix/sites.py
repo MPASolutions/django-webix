@@ -63,7 +63,7 @@ class AdminWebixSite:
         return apps.is_installed("django_webix_leaflet")
 
     def is_webix_filter_enable(self):
-        return apps.is_installed("webix_filter")
+        return apps.is_installed("django_webix_filter")
 
     def has_permission(self, request):
         """

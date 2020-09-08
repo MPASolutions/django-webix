@@ -100,3 +100,23 @@ function findValueByPrefix(object, prefix) {
     }
     return result;
 }
+
+
+function delete_image(webix_id_block, webix_id_button) {
+    // ho messo un timeout perche il click avviene prima del change del toogle...
+    setTimeout(function () {
+        if ($$(webix_id_button) != undefined && $$(webix_id_block) != undefined) {
+            if ($$(webix_id_button).getValue() == 1) {
+                webix.html.addCss($$(webix_id_block).getNode(), "deleted-inline");
+            } else {
+                webix.html.removeCss($$(webix_id_block).getNode(), "deleted-inline");
+            }
+        }
+    }, 100);
+}
+
+
+function image_add(uploader_id) {
+    console.log('ci siamo');
+    console.log(uploader_id)
+}

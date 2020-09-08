@@ -32,6 +32,7 @@ from django.utils.translation import ugettext_lazy as _
 from random import randint
 from sorl.thumbnail import get_thumbnail
 
+
 try:
     from django.contrib.postgres.forms.jsonb import JSONField
 except ImportError:
@@ -360,19 +361,26 @@ class BaseWebixMixin(object):
                     'autosend': False,
                     'multiple': False,
                     'width': 100,
-                    'label': _('Upload new image')
+                    'label': _('Upload new image'),
+                    # 'on': {
+                    #     'onAfterFileAdd': "image_add('" + self[name].auto_id + "');"
+                    # }
                 })
+                delete_hidden = True
                 if initial:
+
                     img_small = get_thumbnail(initial, '150x100', quality=85)
                     img_big = get_thumbnail(initial, '500x400', quality=85)
                     key = randint(1, 100000)
                     _template_file = '<img src="{}"  onclick="image_modal(\'{}\',{},{},\'{}\')">'.format(
                         img_small.url, img_big.url, 500, 400, str(key)
                     )
+                    delete_hidden = False
                 else:
                     _template_file = ''
                 elements.update({
                     '{}_block'.format(self[name].html_name): {
+                        'id': 'block_' + self[name].auto_id,
                         'cols': [
                             {
                                 'name_label': name,
@@ -385,13 +393,28 @@ class BaseWebixMixin(object):
                             },
                             {
                                 'name_label': name,
-                                'id_label': 'preview_' + name,
+                                'id_label': 'preview_' + self[name].auto_id,
                                 'borderless': True,
                                 'template': _template_file,
                                 'height': 100,
                                 'width': 170
                             },
                             el,
+                            {
+                                'id': self[name].auto_id + '_clean',
+                                'name': self.add_prefix(name) + '_clean',
+                                'view': "toggle",
+                                'type': "icon",
+                                'offIcon': 'fas fa-trash-alt',
+                                'onIcon': 'fas fa-trash-alt',
+                                'offLabel': '',
+                                'onLabel': _('Eliminato'),
+                                'width': 100,
+                                'css': "webix_danger",
+                                'hidden': delete_hidden,
+                                'click': "delete_image('block_{}', '{}_clean')".format(self[name].auto_id,
+                                                                                       self[name].auto_id),
+                            },
                             {
                                 'borderless': True,
                                 'template': '',
