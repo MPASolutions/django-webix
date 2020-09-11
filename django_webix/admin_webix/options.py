@@ -234,10 +234,10 @@ class ModelWebixAdmin(WebixPermissionsMixin):
                 enable_button_save_addanother = _admin.enable_button_save_addanother
                 enable_button_save_gotolist = _admin.enable_button_save_gotolist
 
-                add_permission = _admin.add_permission
-                change_permission = _admin.change_permission
-                delete_permission = _admin.delete_permission
-                view_permission = _admin.view_permission
+                has_add_permission = _admin.has_add_permission
+                has_change_permission = _admin.has_change_permission
+                has_delete_permission = _admin.has_delete_permission
+                has_view_permission = _admin.has_view_permission
 
                 get_failure_add_related_objects = _admin.get_failure_add_related_objects
                 get_failure_change_related_objects = _admin.get_failure_change_related_objects
@@ -278,10 +278,10 @@ class ModelWebixAdmin(WebixPermissionsMixin):
                 enable_button_save_addanother = _admin.enable_button_save_addanother
                 enable_button_save_gotolist = _admin.enable_button_save_gotolist
 
-                add_permission = _admin.add_permission
-                change_permission = _admin.change_permission
-                delete_permission = _admin.delete_permission
-                view_permission = _admin.view_permission
+                has_add_permission = _admin.has_add_permission
+                has_change_permission = _admin.has_change_permission
+                has_delete_permission = _admin.has_delete_permission
+                has_view_permission = _admin.has_view_permission
 
                 get_failure_add_related_objects = _admin.get_failure_add_related_objects
                 get_failure_change_related_objects = _admin.get_failure_change_related_objects
@@ -314,10 +314,10 @@ class ModelWebixAdmin(WebixPermissionsMixin):
                 url_pattern_update = 'admin_webix:' + _admin.get_url_pattern_update()
                 url_pattern_delete = 'admin_webix:' + _admin.get_url_pattern_delete()
 
-                add_permission = _admin.add_permission
-                change_permission = _admin.change_permission
-                delete_permission = _admin.delete_permission
-                view_permission = _admin.view_permission
+                has_add_permission = _admin.has_add_permission
+                has_change_permission = _admin.has_change_permission
+                has_delete_permission = _admin.has_delete_permission
+                has_view_permission = _admin.has_view_permission
 
                 get_failure_add_related_objects = _admin.get_failure_add_related_objects
                 get_failure_change_related_objects = _admin.get_failure_change_related_objects
@@ -365,10 +365,10 @@ class ModelWebixAdmin(WebixPermissionsMixin):
                 type_row_click = _admin.type_row_click
                 enable_actions = _admin.enable_actions
 
-                add_permission = _admin.add_permission
-                change_permission = _admin.change_permission
-                delete_permission = _admin.delete_permission
-                view_permission = _admin.view_permission
+                has_add_permission = _admin.has_add_permission
+                has_change_permission = _admin.has_change_permission
+                has_delete_permission = _admin.has_delete_permission
+                has_view_permission = _admin.has_view_permission
 
                 get_failure_add_related_objects = _admin.get_failure_add_related_objects
                 get_failure_change_related_objects = _admin.get_failure_change_related_objects
