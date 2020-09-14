@@ -433,7 +433,8 @@ class AdminWebixSite:
         Handle the "change password" task -- both form display and validation.
         """
         from django.contrib.admin.forms import AdminPasswordChangeForm
-        from django.contrib.auth.views import PasswordChangeView
+        # from django.contrib.auth.views import PasswordChangeView
+        from django_webix.admin_webix.views import PasswordChangeViewCustom
         url = reverse('admin_webix:password_change_done', current_app=self.name)
         defaults = {
             'form_class': AdminPasswordChangeForm,
@@ -443,7 +444,7 @@ class AdminWebixSite:
         }
 
         request.current_app = self.name
-        return PasswordChangeView.as_view(**defaults)(request)
+        return PasswordChangeViewCustom.as_view(**defaults)(request)
 
     def password_change_done(self, request, extra_context=None):
         """
