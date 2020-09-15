@@ -277,13 +277,16 @@ class WebixListView(WebixBaseMixin,
             })
         return annotations
 
+    def get_initial_queryset(self):
+        return super(WebixListView, self).get_queryset()
+
     def get_queryset(self, initial_queryset=None):
         # bypass improperly configured for custom queryset without model
         if self.model:
-            if initial_queryset is None:
-                qs = super(WebixListView, self).get_queryset()
-            else:
+            if initial_queryset is not None:
                 qs = initial_queryset
+            else:
+                qs = self.get_initial_queryset()
             # 1. apply qsets filters
             if self.qsets_filters is not None:
                 qs = qs.filter(self.qsets_filters)
@@ -301,10 +304,10 @@ class WebixListView(WebixBaseMixin,
             if self.django_webix_filters is not None:
                 qs = qs.filter(self.get_django_webix_filters_qsets())
             # 6. annotate geo available
-            geo_field_names = get_model_geo_field_names(self.model)
-            annotations = self.get_annotations_geoavailable(geo_field_names)
-            qs = qs.annotate(**annotations)
-
+            if self.is_enable_column_webgis(self.request):
+                geo_field_names = get_model_geo_field_names(self.model)
+                annotations = self.get_annotations_geoavailable(geo_field_names)
+                qs = qs.annotate(**annotations)
 
             # optimize select related queryset (only if fields are defined)
             qs = self._optimize_select_related(qs)  # TODO

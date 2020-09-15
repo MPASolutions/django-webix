@@ -346,6 +346,7 @@ class WebixBaseMixin:
                     layers.append(layer)
         return layers
 
+
 class WebixTemplateView(WebixBaseMixin, TemplateView):
 
     def get_context_data(self, **kwargs):
