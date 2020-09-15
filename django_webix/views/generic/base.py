@@ -326,7 +326,7 @@ class WebixBaseMixin:
             'webix_container_id': self.get_container_id(request=self.request),
             'webix_overlay_container_id': self.get_overlay_container_id(request=self.request),
         }
-        if hasattr(self,'model'):
+        if hasattr(self,'model') and self.model is not None:
             context.update({
                 'pk_field_name': self.model._meta.pk.name,
             })
