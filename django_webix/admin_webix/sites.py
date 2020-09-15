@@ -352,15 +352,21 @@ class AdminWebixSite:
             # ############################################ Reset password by email ####################################
             # nessuna di queste view deve essere sotto wrap perche si deve poter accedere anche non essendo loggati
             path('password_reset/', self.password_reset, name='password_reset'),
+            # OLD
             # path('reset/<uidb64>/<token>/', self.password_reset_confirm, name='password_reset_confirm'),
-            path('reset/<uidb64>/<token>/', PasswordResetConfirmView.as_view(
+            # path('reset/<uidb64>/<token>/', PasswordResetConfirmView.as_view(
+            #     form_class=forms.WebixSetPasswordForm,
+            #     success_url=reverse_lazy('admin_webix:password_reset_complete'),
+            #     template_name='admin_webix/account/password_reset_confirm.html'
+            # ), name='password_reset_confirm'),
+            path('reset/<uidb64>/<token>/', views.PasswordResetConfirmViewCustom.as_view(
                 form_class=forms.WebixSetPasswordForm,
                 success_url=reverse_lazy('admin_webix:password_reset_complete'),
                 template_name='admin_webix/account/password_reset_confirm.html'
             ), name='password_reset_confirm'),
+
             path('password_reset/done/', self.password_reset_done, name='password_reset_done'),
             path('reset/done/', self.password_reset_complete, name='password_reset_complete'),
-
         ]
         if apps.is_installed("two_factor"):
             urlpatterns += [
@@ -427,7 +433,8 @@ class AdminWebixSite:
         Handle the "change password" task -- both form display and validation.
         """
         from django.contrib.admin.forms import AdminPasswordChangeForm
-        from django.contrib.auth.views import PasswordChangeView
+        # from django.contrib.auth.views import PasswordChangeView
+        from django_webix.admin_webix.views import PasswordChangeViewCustom
         url = reverse('admin_webix:password_change_done', current_app=self.name)
         defaults = {
             'form_class': AdminPasswordChangeForm,
@@ -437,7 +444,7 @@ class AdminWebixSite:
         }
 
         request.current_app = self.name
-        return PasswordChangeView.as_view(**defaults)(request)
+        return PasswordChangeViewCustom.as_view(**defaults)(request)
 
     def password_change_done(self, request, extra_context=None):
         """

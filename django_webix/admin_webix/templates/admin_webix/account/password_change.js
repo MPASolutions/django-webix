@@ -23,6 +23,8 @@ $$("{{ webix_container_id }}").addView({
                 {
                     height: 30,
                 },
+                {% block extra_pre_form %}
+                {% endblock %}
                 {
                     id: "password_change_form",
                     view: "form",

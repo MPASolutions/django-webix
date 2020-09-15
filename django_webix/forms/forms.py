@@ -751,8 +751,12 @@ class BaseWebixMixin(object):
                 if field.required and initial is None and len(_choices) == 1:
                     el.update({'value': '{}'.format(_choices[0][0])})
 
+            # Widget RadioSelect
+            if isinstance(field.widget, forms.PasswordInput):
+                el.update({"type": "password"})
+
             # Widget Hidden Fields
-            if type(field.widget) == forms.widgets.HiddenInput:
+            if isinstance(field.widget, forms.HiddenInput):
                 el.update({'hidden': True})
 
             # Delete checkbox hidden

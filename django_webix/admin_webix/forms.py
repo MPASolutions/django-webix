@@ -322,6 +322,7 @@ class FieldSetMixin:
             {'cols': [fs[self.add_prefix('new_password2')]]}
         ]
 
+
 if apps.is_installed("two_factor"):
     from two_factor.forms import (AuthenticationTokenForm, BackupTokenForm, DisableForm, MethodForm, TOTPDeviceForm,
                                   PhoneNumberForm, DeviceValidationForm, YubiKeyDeviceForm)

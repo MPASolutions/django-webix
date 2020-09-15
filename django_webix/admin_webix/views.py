@@ -1,6 +1,7 @@
 from django_webix.views import WebixUpdateView, WebixCreateView
 from django_webix.admin_webix.forms import UserForm, UserAdminUpdateForm, UserAdminCreateForm
 from django.contrib.auth import get_user_model
+from django.contrib.auth.views import PasswordResetConfirmView, PasswordChangeView
 
 
 class UserUpdate(WebixUpdateView):
@@ -45,3 +46,24 @@ class UserAdminUpdate(WebixUpdateView):
 
     def get_url_pattern_create(self):
         return 'admin_webix:' + super().get_url_pattern_create()
+
+
+class PasswordResetConfirmViewCustom(PasswordResetConfirmView):
+
+    def form_valid(self, form):
+        try:
+            return super().form_valid(form)
+        except Exception as e:
+            form.add_error("new_password1", e)
+            return self.render_to_response(self.get_context_data(form=form))
+
+
+class PasswordChangeViewCustom(PasswordChangeView):
+
+    def form_valid(self, form):
+        try:
+            return super().form_valid(form)
+        except Exception as e:
+            form.add_error("new_password1", e)
+            return self.render_to_response(self.get_context_data(form=form))
+
