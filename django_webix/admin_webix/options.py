@@ -386,8 +386,8 @@ class ModelWebixAdmin(WebixPermissionsMixin):
                 if _admin.change_list_template is not None:
                     template_name = _admin.change_list_template
 
-                def get_queryset(self, initial_queryset=None):
-                    return super().get_queryset(initial_queryset=_admin.get_queryset(request=self.request))
+                def get_initial_queryset(self):
+                    return _admin.get_queryset(request=self.request)
 
                 # full mode
                 @property
