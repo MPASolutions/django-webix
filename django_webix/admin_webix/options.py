@@ -252,6 +252,9 @@ class ModelWebixAdmin(WebixPermissionsMixin):
                 remove_disabled_buttons = _admin.remove_disabled_buttons
                 get_layers = _admin.get_layers
 
+                if _admin.add_form_template is not None:
+                    template_name = _admin.add_form_template
+
                 def get_queryset(self):
                     return _admin.get_queryset(request=self.request)
 
@@ -296,6 +299,9 @@ class ModelWebixAdmin(WebixPermissionsMixin):
                 remove_disabled_buttons = _admin.remove_disabled_buttons
                 get_layers = _admin.get_layers
 
+                if _admin.change_form_template is not None:
+                    template_name = _admin.change_form_template
+
                 def get_queryset(self):
                     return _admin.get_queryset(request=self.request)
 
@@ -333,6 +339,9 @@ class ModelWebixAdmin(WebixPermissionsMixin):
                 get_layers = _admin.get_layers
 
                 model = _admin.model
+
+                if _admin.delete_template is not None:
+                    template_name = _admin.delete_template
 
                 def get_queryset(self):
                     return _admin.get_queryset(request=self.request)
