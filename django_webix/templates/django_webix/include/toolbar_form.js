@@ -39,16 +39,12 @@ $$("{{ webix_container_id }}").addView({
                         type: "form",
                         align: "right",
                         label: "{{_("Save and continue")|escapejs}}",
-                        {% if  not has_change_permission %}
+                        {% if not has_change_permission %}
                             disabled: true,
-                        {% else %}
-                            {% if not object.pk and not has_add_permission %}
-                                disabled: true,
-                            {% else %}
-                                {% if not has_change_permission %}
-                                disabled: true,
-                                {% endif %}
-                            {% endif %}
+                        {% elif not object.pk and not has_add_permission %}
+                            disabled: true,
+                        {% elif object.pk and not has_change_permission %}
+                            disabled: true,
                         {% endif %}
                         {% if not object.pk and not has_add_permission %}
                             tooltip: "{% autoescape off %}{{ info_no_add_permission|join:", " }}{% endautoescape %}",
@@ -69,16 +65,12 @@ $$("{{ webix_container_id }}").addView({
                         type: "form",
                         align: "right",
                         label: "{{_("Save and add another")|escapejs}}",
-                        {% if  not has_add_permission %}
+                        {% if not has_add_permission %}
                             disabled: true,
-                        {% else %}
-                            {% if not object.pk and not has_add_permission %}
-                                disabled: true,
-                            {% else %}
-                                {% if not has_change_permission %}
-                                disabled: true,
-                                {% endif %}
-                            {% endif %}
+                        {% elif not object.pk and not has_add_permission %}
+                            disabled: true,
+                        {% elif object.pk and not has_change_permission %}
+                            disabled: true,
                         {% endif %}
                         {% if not object.pk and not has_add_permission %}
                             tooltip: "{% autoescape off %}{{ info_no_add_permission|join:", " }}{% endautoescape %}",
@@ -99,16 +91,12 @@ $$("{{ webix_container_id }}").addView({
                         type: "form",
                         align: "right",
                         label: "{{_("Save")|escapejs}}",
-                        {% if  not has_view_permission %}
+                        {% if not has_view_permission %}
                             disabled: true,
-                        {% else %}
-                            {% if not object.pk and not has_add_permission %}
-                                disabled: true,
-                            {% else %}
-                                {% if not has_change_permission %}
-                                disabled: true,
-                                {% endif %}
-                            {% endif %}
+                        {% elif not object.pk and not has_add_permission %}
+                            disabled: true,
+                        {% elif object.pk and not has_change_permission %}
+                            disabled: true,
                         {% endif %}
                         {% if not object.pk and not has_add_permission %}
                             tooltip: "{% autoescape off %}{{ info_no_add_permission|join:", " }}{% endautoescape %}",
