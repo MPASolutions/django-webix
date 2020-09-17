@@ -214,13 +214,14 @@ function preloadImage(url) {
  * @param always function to call in any case
  * @param ajaxExtra extra dict to merge with ajax params
  */
-function load_js(lnk, hide, area, method, data, headers, dataType, abortAllPending, done, fail, always, ajaxExtra) {
+function load_js(lnk, hide, area, method, data, headers, dataType, abortAllPending, done, fail, always, ajaxExtra, enableHistory) {
     asyncRequest = typeof asyncRequest !== 'undefined' ? asyncRequest : true;
     method = typeof method !== 'undefined' ? method : 'GET';
     data = typeof data !== 'undefined' ? data : {};
     dataType = typeof dataType !== 'undefined' ? dataType : 'script';
     hide = typeof hide !== 'undefined' ? hide : false;
     ajaxExtra = typeof ajaxExtra !== 'undefined' ? ajaxExtra : {};
+    enableHistory = typeof enableHistory !== 'undefined' ? enableHistory : true;
 
     if (abortAllPending == true) {
         $.xhrPoolAbortAll();
@@ -284,14 +285,19 @@ function load_js(lnk, hide, area, method, data, headers, dataType, abortAllPendi
                     else if ($$(area) !== undefined && $$(area) !== null && $$(area).hideOverlay !== undefined)
                         $$(area).hideOverlay();
                     webix.ui.fullScreen();
-                      if (navigator.userAgent.indexOf('MSIE') !== -1 || navigator.appVersion.indexOf('Trident/') > 0) {
+                    if (navigator.userAgent.indexOf('MSIE') !== -1 || navigator.appVersion.indexOf('Trident/') > 0) {
                          var evt = document.createEvent('UIEvents');
                          evt.initUIEvent('resize', true, false, window, 0);
                          window.dispatchEvent(evt);
-                        } else {
-                           window.dispatchEvent(new Event('resize'));
-
-                        }
+                    } else {
+                         window.dispatchEvent(new Event('resize'));
+                    }
+                    // change state
+                    {% if history_enable %}
+                    if (enableHistory==true) {
+                        history.replaceState(null, null, '?state=' + lnk);
+                    }
+                    {% endif %}
                 }
             }).fail(function (xhr, textStatus) {
                 if (typeof fail === 'function') {

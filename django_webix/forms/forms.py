@@ -2,6 +2,7 @@
 
 from __future__ import unicode_literals, absolute_import
 
+import re
 import copy
 from collections import OrderedDict, defaultdict
 from json import dumps, loads
@@ -26,9 +27,11 @@ from django.forms.utils import ErrorList
 from django.urls import reverse
 from django.utils.encoding import force_text
 from django.utils.text import capfirst
+from django.utils.timezone import is_naive, make_naive
 from django.utils.translation import ugettext_lazy as _
 from random import randint
 from sorl.thumbnail import get_thumbnail
+
 
 try:
     from django.contrib.postgres.forms.jsonb import JSONField
@@ -36,7 +39,7 @@ except ImportError:
     JSONField = forms.Field
 
 try:
-    from django.contrib.postgres.fields.array import SimpleArrayField
+    from django.contrib.postgres.forms import SimpleArrayField
 except ImportError:
     SimpleArrayField = None
 
@@ -104,7 +107,10 @@ class BaseWebixMixin(object):
                             required=False
                         )
                         if getattr(self.instance, readonly_field):
-                            value = '{}'.format(getattr(self.instance, readonly_field).strftime('%d/%m/%Y %H:%i'))
+                            _value = getattr(self.instance, readonly_field)
+                            if not is_naive(_value):
+                                _value = make_naive(_value)
+                            value = '{}'.format(_value.strftime('%d/%m/%Y %H:%M'))
                         else:
                             value = ''
                     elif isinstance(_field, django.db.models.fields.DateField) or \
@@ -186,7 +192,7 @@ class BaseWebixMixin(object):
 
         rules = defaultdict(list)
         for name, field in self.fields.items():
-            if field.required and (not type(field) == forms.FileField or field.initial is not None):
+            if field.required and (not isinstance(field, forms.FileField) or field.initial is not None):
                 rules[self.add_prefix(name)].append({'rule': 'isNotEmpty'})
             if isinstance(field, forms.EmailField):
                 rules[self.add_prefix(name)].append({'rule': 'isEmail'})
@@ -196,7 +202,8 @@ class BaseWebixMixin(object):
                 rules[self.add_prefix(name)].append({'rule': 'isNumber', 'min': -six.MAXSIZE, 'max': six.MAXSIZE})
             elif isinstance(field, forms.IntegerField):
                 rules[self.add_prefix(name)].append({'rule': 'isInteger', 'min': -six.MAXSIZE, 'max': six.MAXSIZE})
-            elif isinstance(field, forms.CharField):
+            elif isinstance(field, forms.CharField) and \
+                (SimpleArrayField is not None and not isinstance(field, SimpleArrayField)):
                 rules[self.add_prefix(name)].append({'rule': 'isString', 'min': 0, 'max': field.max_length})
         return dict(rules)
 
@@ -208,8 +215,6 @@ class BaseWebixMixin(object):
         for name, field in self.fields.items():
             _pass = False
             label = force_text(field.label).capitalize()
-            if field.required:
-                label = '<strong>{}</strong>'.format(label)
             el = {
                 'view': 'text',
                 'label': label,
@@ -218,11 +223,13 @@ class BaseWebixMixin(object):
                 'labelWidth': 200,
                 'django_type_field': str(type(field).__name__),
             }
+            if field.required:
+                el['label'] = label = '<strong>{}</strong>'.format(label)
+                # el['required'] = True  # FIXME: problems with inlines
 
             if name in self.get_readonly_fields():
                 el.update({
                     'disabled': True,
-                    # 'id': '{}.{}'.format(self.webix_id, self[name].auto_id) # probabily old: disabled for has_change_permission=False
                 })
 
             # Get initial value
@@ -277,8 +284,13 @@ class BaseWebixMixin(object):
                             'value': '{}'.format(initial).replace('-', ',').replace(' ', ',').replace(':', ',')
                         })
                     elif callable(initial):
-                        el.update({'value': '{}'.format(initial().strftime('%H,%M'))})
+                        _value = initial()
+                        if not is_naive(_value):
+                            _value = make_naive(_value)
+                        el.update({'value': '{}'.format(_value.strftime('%H,%M'))})
                     else:
+                        if not is_naive(initial):
+                            initial = make_naive(initial)
                         el.update({'value': '{}'.format(initial.strftime('%H,%M'))})
             # DateField
             elif isinstance(field, forms.DateField):
@@ -310,8 +322,13 @@ class BaseWebixMixin(object):
                             'value': '{}'.format(initial).replace('-', ',').replace(' ', ',').replace(':', ',')
                         })
                     elif callable(initial):
-                        el.update({'value': '{}'.format(initial().strftime('%Y,%m,%d,%H,%M'))})
+                        _value = initial()
+                        if not is_naive(_value):
+                            _value = make_naive(_value)
+                        el.update({'value': '{}'.format(_value.strftime('%Y,%m,%d,%H,%M'))})
                     else:
+                        if not is_naive(initial):
+                            initial = make_naive(initial)
                         el.update({'value': '{}'.format(initial.strftime('%Y,%m,%d,%H,%M'))})
             # BooleanField NullBooleanField
             elif isinstance(field, forms.NullBooleanField) or isinstance(field, forms.BooleanField):
@@ -344,19 +361,26 @@ class BaseWebixMixin(object):
                     'autosend': False,
                     'multiple': False,
                     'width': 100,
-                    'label': _('Upload new image')
+                    'label': _('Upload new image'),
+                    # 'on': {
+                    #     'onAfterFileAdd': "image_add('" + self[name].auto_id + "');"
+                    # }
                 })
+                delete_hidden = True
                 if initial:
+
                     img_small = get_thumbnail(initial, '150x100', quality=85)
                     img_big = get_thumbnail(initial, '500x400', quality=85)
                     key = randint(1, 100000)
                     _template_file = '<img src="{}"  onclick="image_modal(\'{}\',{},{},\'{}\')">'.format(
                         img_small.url, img_big.url, 500, 400, str(key)
                     )
+                    delete_hidden = False
                 else:
                     _template_file = ''
                 elements.update({
                     '{}_block'.format(self[name].html_name): {
+                        'id': 'block_' + self[name].auto_id,
                         'cols': [
                             {
                                 'name_label': name,
@@ -369,13 +393,28 @@ class BaseWebixMixin(object):
                             },
                             {
                                 'name_label': name,
-                                'id_label': 'preview_' + name,
+                                'id_label': 'preview_' + self[name].auto_id,
                                 'borderless': True,
                                 'template': _template_file,
                                 'height': 100,
                                 'width': 170
                             },
                             el,
+                            {
+                                'id': self[name].auto_id + '_clean',
+                                'name': self.add_prefix(name) + '_clean',
+                                'view': "toggle",
+                                'type': "icon",
+                                'offIcon': 'fas fa-trash-alt',
+                                'onIcon': 'fas fa-trash-alt',
+                                'offLabel': '',
+                                'onLabel': _('Eliminato'),
+                                'width': 100,
+                                'css': "webix_danger",
+                                'hidden': delete_hidden,
+                                'click': "delete_image('block_{}', '{}_clean')".format(self[name].auto_id,
+                                                                                       self[name].auto_id),
+                            },
                             {
                                 'borderless': True,
                                 'template': '',
@@ -455,10 +494,14 @@ class BaseWebixMixin(object):
             elif type(field) == forms.models.ModelMultipleChoiceField:
                 if settings.WEBIX_LICENSE != 'PRO':
                     raise ImproperlyConfigured(
-                        _("MultipleChoiceField is available only with PRO webix license"))
+                        _("MultipleChoiceField is available only with PRO webix license")
+                    )
                 if initial is not None:
                     el.update({
-                        'value': ','.join([str(i.pk) if isinstance(i, models.Model) else str(i) for i in initial])
+                        'value': ','.join([
+                            str(getattr(i, field.to_field_name or 'pk')) if isinstance(i, models.Model) else str(i)
+                            for i in initial
+                        ])
                     })
                 count = field.queryset.count()
 
@@ -496,18 +539,11 @@ class BaseWebixMixin(object):
                     if 'value' in el:
                         _vals = el['value'].split(",")
                     for _val in [i for i in _vals if i != ''.strip()]:
-                        if field.to_field_name:
-                            record = field.queryset.get(**{field.to_field_name: _val})
-                            el['options']['body']['data'].append({
-                                'id': '{}'.format(getattr(record, field.to_field_name)),
-                                'value': '{}'.format(record)
-                            })
-                        else:
-                            record = field.queryset.get(pk=_val)
-                            el['options']['body']['data'].append({
-                                'id': '{}'.format(record.pk),
-                                'value': '{}'.format(record)
-                            })
+                        record = field.queryset.get(**{field.to_field_name or 'pk': _val})
+                        el['options']['body']['data'].append({
+                            'id': '{}'.format(getattr(record, field.to_field_name or 'pk')),
+                            'value': '{}'.format(record)
+                        })
 
                 # regular field without autocomplete
                 else:
@@ -516,10 +552,11 @@ class BaseWebixMixin(object):
                         'selectAll': True,
                         'placeholder': _('Click to select'),
                         'options': {
+                            'selectAll': True,
                             'dynamic': True,
                             'body': {
                                 'data': self._add_null_choice([{
-                                    'id': '{}'.format(i.pk),
+                                    'id': '{}'.format(getattr(i, field.to_field_name or 'pk')),
                                     'value': '{}'.format(i)
                                 } for i in field.queryset])
                             }
@@ -527,11 +564,15 @@ class BaseWebixMixin(object):
                     })
                     # Default if is required and there are only one option
                     if field.required and initial is None and len(field.queryset) == 1:
-                        el.update({'value': '{}'.format(field.queryset.first().pk)})
+                        el.update({'value': '{}'.format(getattr(field.queryset.first(), field.to_field_name or 'pk'))})
             # ModelChoiceField
             elif isinstance(field, forms.models.ModelChoiceField):
                 if initial is not None:
-                    el.update({'value': initial.pk if isinstance(initial, models.Model) else str(initial)})
+                    el.update({
+                        'value': str(getattr(initial, field.to_field_name or 'pk'))
+                        if isinstance(initial, models.Model) else
+                        str(initial)
+                    })
                 count = field.queryset.count()
 
                 if count > self.min_count_suggest and \
@@ -564,23 +605,16 @@ class BaseWebixMixin(object):
                         }
                     })
                     if 'value' in el and el['value'] != '':  # and int(el['value']) > 0:
-                        if field.to_field_name:
-                            record = field.queryset.get(**{field.to_field_name: el['value']})
-                            el['suggest']['body']['data'] = [{
-                                'id': '{}'.format(getattr(record, field.to_field_name)),
-                                'value': '{}'.format(record)
-                            }]
-                        else:
-                            record = field.queryset.get(pk=el['value'])
-                            el['suggest']['body']['data'] = [{
-                                'id': '{}'.format(record.pk),
-                                'value': '{}'.format(record)
-                            }]
+                        record = field.queryset.get(**{field.to_field_name or 'pk': el['value']})
+                        el['suggest']['body']['data'] = [{
+                            'id': '{}'.format(getattr(record, field.to_field_name or 'pk')),
+                            'value': '{}'.format(record)
+                        }]
 
                 # regular field without autocomplete
                 elif count <= 6:
                     choices = self._add_null_choice([{
-                        'id': '{}'.format(i.pk),
+                        'id': '{}'.format(getattr(i, field.to_field_name or 'pk')),
                         'value': '{}'.format(i)
                     } for i in field.queryset])
                     if not field.required:
@@ -593,10 +627,10 @@ class BaseWebixMixin(object):
                     })
                     # Default if is required and there are only one option
                     if field.required and initial is None and len(field.queryset) == 1:
-                        el.update({'value': '{}'.format(field.queryset.first().pk)})
+                        el.update({'value': '{}'.format(getattr(field.queryset.first(), field.to_field_name or 'pk'))})
                 else:
                     choices = self._add_null_choice([{
-                        'id': '{}'.format(i.pk),
+                        'id': '{}'.format(getattr(i, field.to_field_name or 'pk')),
                         'value': '{}'.format(i)
                     } for i in field.queryset])
                     if not field.required:
@@ -625,7 +659,6 @@ class BaseWebixMixin(object):
                 # Default if is required and there are only one option
                 if field.required and initial is None and len(field.choices) == 1:
                     el.update({'value': '{}'.format(field.choices[0][0])})
-
             # JSONField (postgresql)
             elif connection.vendor == 'postgresql' and isinstance(field, JSONField):
                 if isinstance(field.widget, forms.widgets.Textarea):
@@ -634,7 +667,6 @@ class BaseWebixMixin(object):
                     })
                 if initial is not None:
                     el.update({'value': dumps(initial)})
-
             # SimpleArrayField (postgresql)
             elif connection.vendor == 'postgresql' and \
                 SimpleArrayField is not None and \
@@ -652,9 +684,29 @@ class BaseWebixMixin(object):
                                 'value': ', '.join([i.strftime('%Y-%m-%d') for i in initial]),
                                 'orig_value': ', '.join([i.strftime('%Y-%m-%d') for i in initial]),
                             })
+                elif hasattr(field, 'base_field') and isinstance(field.base_field, forms.fields.TypedChoiceField) and \
+                    hasattr(field.base_field, 'choices'):
+                    el.update({
+                        "view": "multicombo",
+                        'selectAll': True,
+                        'placeholder': _('Click to select'),
+                        'options': {
+                            'selectAll': True,
+                            'dynamic': True,
+                            'body': {
+                                'data': self._add_null_choice([{
+                                    'id': '{}'.format(k),
+                                    'value': '{}'.format(v)
+                                } for k, v in field.base_field.choices])
+                            }
+                        },
+                    })
+                    if initial is not None:
+                        el.update({
+                            'value': ','.join([str(i.pk) if isinstance(i, models.Model) else str(i) for i in initial])
+                        })
                 elif initial is not None:
                     el.update({'value': initial})
-
             # CharField
             elif isinstance(field, forms.CharField):
                 if isinstance(field.widget, forms.widgets.Textarea):
@@ -663,7 +715,6 @@ class BaseWebixMixin(object):
                     })
                 if initial is not None:
                     el.update({'value': initial})
-
             # GeoFields
             elif GeometryField is not None and isinstance(field, GeometryField):
                 el.update({
@@ -677,15 +728,14 @@ class BaseWebixMixin(object):
                         el.update({'value': str(initial)})
                     else:
                         raise Exception(_('Initial value {} for geo field {} is not supported').format(initial, field))
-
             # InlineForeignKey
             elif isinstance(field, forms.models.InlineForeignKeyField):
                 pass
-
+            # Field not supported
             else:
                 raise Exception(_('Type of field {} not supported').format(field))
 
-            # widget RadioSelect
+            # Widget RadioSelect
             if isinstance(field.widget, forms.RadioSelect):
                 _choices = field.choices if hasattr(field, 'choices') else field.widget.choices
                 el.update({
@@ -701,8 +751,12 @@ class BaseWebixMixin(object):
                 if field.required and initial is None and len(_choices) == 1:
                     el.update({'value': '{}'.format(_choices[0][0])})
 
-            # widget Hidden Fields
-            if type(field.widget) == forms.widgets.HiddenInput:
+            # Widget RadioSelect
+            if isinstance(field.widget, forms.PasswordInput):
+                el.update({"type": "password"})
+
+            # Widget Hidden Fields
+            if isinstance(field.widget, forms.HiddenInput):
                 el.update({'hidden': True})
 
             # Delete checkbox hidden

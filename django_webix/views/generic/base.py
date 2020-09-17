@@ -3,6 +3,7 @@
 from __future__ import unicode_literals
 
 import six
+from django.apps import apps
 from django.conf import settings
 from django.utils.translation import ugettext as _
 from django.views.generic import TemplateView
@@ -94,7 +95,7 @@ class WebixPermissionsMixin:
             return self.delete_permission
         if len(self.get_failure_delete_related_objects(request, obj=obj)) > 0:
             return False
-        return self.has_change_django_user_permission(user=request.user)
+        return self.has_delete_django_user_permission(user=request.user)
 
     def has_view_permission(self, request, obj=None):
         if not self.check_permissions:
@@ -321,10 +322,29 @@ class WebixBaseMixin:
         return getattr(settings, 'WEBIX_OVERLAY_CONTAINER_ID', settings.WEBIX_CONTAINER_ID)
 
     def get_context_data_webix_base(self, request, **kwargs):
-        return {
+        context = {
             'webix_container_id': self.get_container_id(request=self.request),
-            'webix_overlay_container_id': self.get_overlay_container_id(request=self.request)
+            'webix_overlay_container_id': self.get_overlay_container_id(request=self.request),
         }
+        if hasattr(self,'model') and self.model is not None:
+            context.update({
+                'pk_field_name': self.model._meta.pk.name,
+            })
+
+        # extra data id django_webix_leaflet is installed
+        context.update({
+            'layers': self.get_layers(),
+        })
+
+        return context
+
+    def get_layers(self):
+        layers = []
+        if apps.is_installed("django_webix_leaflet") and getattr(self,'model',None) is not None:
+            for layer in settings.DJANGO_WEBIX_LEAFLET['layers']:
+                if layer['modelname'] == f'{self.model._meta.app_label}.{self.model._meta.model_name}':
+                    layers.append(layer)
+        return layers
 
 
 class WebixTemplateView(WebixBaseMixin, TemplateView):

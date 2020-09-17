@@ -159,6 +159,18 @@ function {{ view_prefix }}apply_filters(){
   $$('{{ view_prefix }}datatable').filterByAll();
   }
 
+{% if is_enable_column_webgis %}
+{% for layer in layers %}
+function custom_button_geo_{{layer.layername}}(obj, common, value) {
+    console.log(obj,common, value)
+    if (obj.{{ layer.geofieldname }}_available==true)
+        return '<div title="{{_("Go to map")|escapejs}} ({{layer.layername}})"><i style="cursor:pointer" class="webix_icon far fa-map-marker-alt"></i></div>';
+    else
+        return ''
+}
+{% endfor %}
+{% endif %}
+
 $$("{{ webix_container_id }}").addView({
     id: '{{ view_prefix }}datatable',
     view: "datatable",
@@ -192,6 +204,18 @@ $$("{{ webix_container_id }}").addView({
         {% endfor %}
         {% endblock %}
         {% block datatable_columns_commands %}
+        {% if is_enable_column_webgis %}
+            {% for layer in layers %}
+                {
+                    id: "cmd_gotomap_{{layer.layername}}",
+                    header: "",
+                    headermenu: false,
+                    width:40,
+                    tooltip: false,
+                    template: custom_button_geo_{{layer.layername}}
+                },
+            {% endfor %}
+        {% endif %}
         {
             id: "cmd_cp",
             header: [
@@ -344,8 +368,15 @@ $$("{{ webix_container_id }}").addView({
             if ((id.column == '{{ field.field_name }}') || (id.column == '{{ field.column_name }}')) {
                 {{ field.click_action|safe }};
             } else
-                    {% endif %}
-                    {% endfor %}
+            {% endif %}
+            {% endfor %}
+            {% if is_enable_column_webgis %}
+            {% for layer in layers %}
+            if ((id.column == 'cmd_gotomap_{{layer.layername}}')) {
+                $$("map").goToWebgisPk('{{layer.layername}}', '{{ pk_field_name }}', el.id);
+            } else
+            {% endfor %}
+            {% endif %}
             if (id.column == 'cmd_cp') {
                 {% block cmd_cp_click %}
                     {% if is_enable_column_copy %}
@@ -412,7 +443,7 @@ $$("{{ webix_container_id }}").addView({
 
 {% block toolbar_list %}
 
-function _{{ view_prefix }}action_execute(action, ids, all, response_type, short_description, modal_title, modal_ok, modal_cancel) {
+function _{{ view_prefix }}action_execute(action, ids, all, response_type, short_description, modal_title, modal_ok, modal_cancel, input_params) {
     /*
     action (required) = action_key to be executed
     ids (required) = list of selected elements ids
@@ -422,6 +453,7 @@ function _{{ view_prefix }}action_execute(action, ids, all, response_type, short
     modal_title (required) = text to show in modal choices execution
     modal_ok (not required)
     modal_cancel (not required)
+    params (not required) = paramters to post in action method
     */
     webix.confirm({
         title: short_description,
@@ -435,6 +467,7 @@ function _{{ view_prefix }}action_execute(action, ids, all, response_type, short
                     _params = {
                         'action': action,
                         'filters': JSON.stringify({{ view_prefix }}get_filters_qsets()),
+                        'params': JSON.stringify(input_params || {}),
                         'csrfmiddlewaretoken': getCookie('csrftoken')
                     };
                     if (all == false) {
@@ -507,12 +540,20 @@ function _{{ view_prefix }}action_execute(action, ids, all, response_type, short
 {% if is_enable_actions %}
 
 var {{ view_prefix }}actions_list = [
+    {% for layer in layers %}
+        {id: 'gotowebgis_{{ layer.layername }}', value: "{{_("Go to map")|escapejs}} ({{layer.layername}})"},
+    {% endfor %}
     {% for action_key,action in actions.items %}
     {id: '{{ action_key }}', value: '{{action.short_description}}'}{% if not forloop.last %}, {% endif %}
     {% endfor %}
 ];
 
 function {{ view_prefix }}actions_execute(action, ids, all) {
+    {% for layer in layers %}
+    if (action=='gotowebgis_{{ layer.layername }}') {
+        $$("map").goToWebgisPks('{{layer.layername}}', '{{ pk_field_name }}', ids);
+    }
+    {% endfor %}
     {% for action_key, action in actions.items %} if (action=='{{ action_key }}') {
         _{{ view_prefix }}action_execute(
                 '{{ action_key }}',

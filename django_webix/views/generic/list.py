@@ -8,7 +8,7 @@ import django
 from django.apps import apps
 from django.core.exceptions import FieldDoesNotExist
 from django.core.exceptions import PermissionDenied, ImproperlyConfigured
-from django.db.models import Q, F, ManyToManyField
+from django.db.models import Q, F, ManyToManyField, Case, When, Value, BooleanField
 from django.http import JsonResponse, Http404
 from django.template import Template, Context
 from django.template.loader import get_template
@@ -17,6 +17,7 @@ from django.views.generic import ListView
 
 from django_webix.utils.filters import from_dict_to_qset
 from django_webix.views.generic.base import WebixBaseMixin, WebixPermissionsMixin, WebixUrlMixin
+from django_webix.views.generic.utils import get_model_geo_field_names
 
 try:
     from django.contrib.gis.geos import GEOSGeometry
@@ -27,6 +28,7 @@ try:
     from django.contrib.gis.geos import MultiPolygon
 except ImportError:
     MultiPolygon = object
+
 
 class WebixListView(WebixBaseMixin,
                     WebixPermissionsMixin,
@@ -53,6 +55,7 @@ class WebixListView(WebixBaseMixin,
     template_name = 'django_webix/generic/list.js'
     title = None
     actions_style = None
+    enable_column_webgis = True
     enable_column_copy = True
     enable_column_delete = True
     enable_row_click = True
@@ -148,7 +151,8 @@ class WebixListView(WebixBaseMixin,
                 except ValueError:
                     print(_('ERROR: geo srid is incorrect'))
                 geo_field = self.model._meta.get_field(geo_field_name)
-                _geo = geo.transform(geo_field.srid, clone=True).buffer(0)  # se l'unione del multipolygon risultasse invalida
+                _geo = geo.transform(geo_field.srid, clone=True).buffer(
+                    0)  # se l'unione del multipolygon risultasse invalida
                 qset = Q(**{geo_field_name + '__within': _geo})
             else:
                 qset = Q()
@@ -243,12 +247,12 @@ class WebixListView(WebixBaseMixin,
 
     def get_fields(self):
         if self.fields is None:
-            return self.fields
+            return None
         else:
             _fields = []
             for _field in self.fields:
                 datalist_column = _field['datalist_column']
-                if type(datalist_column)==dict:
+                if type(datalist_column) == dict:
                     if 'template_string' in datalist_column:
                         template = Template(datalist_column['template'])
                     elif 'template_name' in datalist_column:
@@ -256,20 +260,33 @@ class WebixListView(WebixBaseMixin,
                     else:
                         raise Exception('Template is not defined')
                     context = Context(datalist_column.get('context', {}))
-                else: # string
+                else:  # string
                     template = Template(datalist_column)
                     context = Context({})
-                _field['datalist_column']  = template.render(context)
+                _field['datalist_column'] = template.render(context)
                 _fields.append(_field)
             return _fields
+
+    def get_annotations_geoavailable(self, geo_field_names):
+        annotations = {}
+        for geo_field_name in geo_field_names:
+            annotations.update({
+                f'{geo_field_name}_available': Case(When(**{f'{geo_field_name}__isnull': False}, then=True),
+                                                    default=Value(False),
+                                                    output_field=BooleanField())
+            })
+        return annotations
+
+    def get_initial_queryset(self):
+        return super(WebixListView, self).get_queryset()
 
     def get_queryset(self, initial_queryset=None):
         # bypass improperly configured for custom queryset without model
         if self.model:
-            if initial_queryset is None:
-                qs = super(WebixListView, self).get_queryset()
-            else:
+            if initial_queryset is not None:
                 qs = initial_queryset
+            else:
+                qs = self.get_initial_queryset()
             # 1. apply qsets filters
             if self.qsets_filters is not None:
                 qs = qs.filter(self.qsets_filters)
@@ -284,9 +301,13 @@ class WebixListView(WebixBaseMixin,
                 sql_filter = ' OR '.join(['({sql})'.format(sql=_sql) for _sql in self.sql_filters])
                 qs = qs.extra(where=[sql_filter])
             # 5. apply django webix filters
-            #raise Exception(self.django_webix_filters)
             if self.django_webix_filters is not None:
                 qs = qs.filter(self.get_django_webix_filters_qsets())
+            # 6. annotate geo available
+            if self.is_enable_column_webgis(self.request):
+                geo_field_names = get_model_geo_field_names(self.model)
+                annotations = self.get_annotations_geoavailable(geo_field_names)
+                qs = qs.annotate(**annotations)
 
             # optimize select related queryset (only if fields are defined)
             qs = self._optimize_select_related(qs)  # TODO
@@ -308,7 +329,8 @@ class WebixListView(WebixBaseMixin,
                     field_name = field.get('field_name')
                     # TODO: there are no null option
                     _fields_choices[field_name] = list(
-                        self.get_queryset().filter(**{field_name+'__isnull':False}).values_list(field_name, flat=True).distinct().order_by())
+                        self.get_queryset().filter(**{field_name + '__isnull': False}).values_list(field_name,
+                                                                                                   flat=True).distinct().order_by())
 
         return _fields_choices
 
@@ -318,7 +340,7 @@ class WebixListView(WebixBaseMixin,
         if fields is not None:
             for field in fields:
                 if field.get('footer') is not None:
-                    is_footer=True
+                    is_footer = True
         return is_footer
 
     def get_footer(self):
@@ -377,6 +399,8 @@ class WebixListView(WebixBaseMixin,
                 if field.get('field_name') is not None and \
                     (field.get('queryset_exclude') is None or field.get('queryset_exclude') != True):
                     values.append(field['field_name'])
+        for field_name in get_model_geo_field_names(self.model):
+            values += [f'{field_name}_available']
         data = qs.values(*values,
                          **({'id': F('pk')} if self.get_pk_field() != 'id' and not hasattr(self.model, 'id') else {}))
         return data
@@ -454,15 +478,15 @@ class WebixListView(WebixBaseMixin,
         _dict_actions = {}
         for _action in _actions:
             _dict_actions[_action.action_key] = {
-                    'func':_action,
-                    'action_key': _action.action_key,
-                    'response_type': _action.response_type,
-                    'allowed_permissions': _action.allowed_permissions,
-                    'short_description': _action.short_description,
-                    'modal_title': _action.modal_title,
-                    'modal_ok': _action.modal_ok,
-                    'modal_cancel': _action.modal_cancel,
-                }
+                'func': _action,
+                'action_key': _action.action_key,
+                'response_type': _action.response_type,
+                'allowed_permissions': _action.allowed_permissions,
+                'short_description': _action.short_description,
+                'modal_title': _action.modal_title,
+                'modal_ok': _action.modal_ok,
+                'modal_cancel': _action.modal_cancel,
+            }
 
         return _dict_actions
 
@@ -480,6 +504,9 @@ class WebixListView(WebixBaseMixin,
 
     def is_enable_actions(self, request):
         return self.enable_actions
+
+    def is_enable_column_webgis(self, request):
+        return self.enable_column_webgis and apps.is_installed("django_webix_leaflet")
 
     def is_enable_column_copy(self, request):
         return self.enable_column_copy
@@ -520,7 +547,6 @@ class WebixListView(WebixBaseMixin,
         action_name = self.request.POST.get('action', self.request.GET.get('action', None))
         return self.get_actions().get(action_name)['func']
 
-
     def post(self, request, *args, **kwargs):  # all post works like get
         return self.get(request, *args, **kwargs)
 
@@ -552,7 +578,7 @@ class WebixListView(WebixBaseMixin,
         pos = self.get_paginate_start()
         # output must be list and not values of queryset
         data = {
-            "footer": self.get_footer() if pos==0 else None, # footer is computed only for first page
+            "footer": self.get_footer() if pos == 0 else None,  # footer is computed only for first page
             'is_enable_footer': self.is_enable_footer(),
             "count": self.get_paginate_count(),
             "total_count": total_count,
@@ -593,7 +619,8 @@ class WebixListView(WebixBaseMixin,
         self.geo_filter = self.get_geo_filter(self.request)
 
         # 4. SQL FILTERS
-        self.sql_filters = self.get_sql_filters(self.request)  # for now it's only a qsets list # this is shit! but need for old SW (remove for future)
+        self.sql_filters = self.get_sql_filters(
+            self.request)  # for now it's only a qsets list # this is shit! but need for old SW (remove for future)
 
         # 5. DJANGO WEBIX FILTERS
         self.django_webix_filters = self.get_django_webix_filters(self.request)
@@ -619,10 +646,11 @@ class WebixListView(WebixBaseMixin,
             'orders': self.get_ordering(),
             'actions': self.get_actions(),
             'choices_filters': self.get_choices_filters(),
-            'footer': self.get_footer() if not self.enable_json_loading else None, # footer only if not paging
+            'footer': self.get_footer() if not self.enable_json_loading else None,  # footer only if not paging
             'is_enable_footer': self.is_enable_footer(),
             'get_pk_field': self.get_pk_field(),
             'objects_datatable': self.get_objects_datatable(),
+            'is_enable_column_webgis': self.is_enable_column_webgis(self.request),
             'is_enable_column_copy': self.is_enable_column_copy(self.request),
             'is_enable_column_delete': self.is_enable_column_delete(self.request),
             'is_enable_row_click': self.is_enable_row_click(self.request),
@@ -637,11 +665,12 @@ class WebixListView(WebixBaseMixin,
             'paginate_start_key': self.paginate_start_key,
             # extra filters
             'is_installed_django_webix_filter': self.is_installed_django_webix_filter(),
-            'qsets_filters': self.get_qsets_filters_str(self.request), # for init when template is loaded
-            'qsets_locked_filters': self.get_qsets_locked_filters_str(self.request), # for init when template is loaded
-            'geo_filter': self.get_geo_filter_str(self.request), # for init when template is loaded
-            'sql_filters': self.get_sql_filters_str(self.request), # for init when template is loaded
-            'django_webix_filters': self.get_django_webix_filters(self.request), # for init when template is loaded
+            'qsets_filters': self.get_qsets_filters_str(self.request),  # for init when template is loaded
+            'qsets_locked_filters': self.get_qsets_locked_filters_str(self.request),
+            # for init when template is loaded
+            'geo_filter': self.get_geo_filter_str(self.request),  # for init when template is loaded
+            'sql_filters': self.get_sql_filters_str(self.request),  # for init when template is loaded
+            'django_webix_filters': self.get_django_webix_filters(self.request),  # for init when template is loaded
         })
         return context
 

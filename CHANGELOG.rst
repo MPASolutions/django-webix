@@ -14,6 +14,38 @@ The format is based on KeepAChangelog_ and this project adheres to SemanticVersi
 ++++++++++++
 
 
+[1.3.0] 2020-09-17
+++++++++++++++++++
+
+Added
+~~~~~
+* Stable admin subpackage with multiple functionalities
+* `Select all` button in multicombo widget
+* Multicombo in PostgreSQL ArrayField with options
+* Added middleware to limit browser version
+* Added possibility to remove uploaded images and files
+* Added browser history urls with ajax requests
+* Added PasswordInput widget support
+* Added get_queryset_initial on list for initial queryset
+
+Changed
+~~~~~~~
+* Add optional argumenent input_params to action_execute function (used to send input paremetr in POST request)
+* Admin subpackage improvements
+* jQuery version update
+* login and logout pages improvements
+
+Fixed
+~~~~~
+* Object title in create and update forms
+* Fix ModelMultipleChoiceField and ModelChoiceField autocomplete with `to_field_name` different from pk
+* Fixed duplicate set middleware on static
+* Fixed buttons permissions in form view
+* Fixed checkbox dimension
+* Fixed readonly DateTime format
+* Fixed DateTime with timezone in forms
+
+
 [1.2.1] 2020-01-08
 ++++++++++++++++++
 

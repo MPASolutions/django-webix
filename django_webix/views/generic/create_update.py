@@ -3,6 +3,7 @@
 from __future__ import unicode_literals
 
 from django.apps import apps
+from django.conf import settings
 from django.core.exceptions import ImproperlyConfigured, ValidationError
 from django.core.exceptions import PermissionDenied
 from django.forms import model_to_dict
@@ -14,6 +15,8 @@ from django.shortcuts import get_object_or_404
 from django.utils.encoding import force_text
 from django.utils.text import get_text_list
 from django.utils.translation import ugettext as _
+from django.forms.fields import Field, FileField
+from sorl.thumbnail.fields import ImageField
 from extra_views import UpdateWithInlinesView, CreateWithInlinesView
 
 from django_webix.views.generic.base import WebixBaseMixin, WebixPermissionsMixin, WebixUrlMixin
@@ -95,11 +98,31 @@ class WebixCreateUpdateMixin:
         }
 
     def form_save(self, form):
+        obj = form.instance
+        if obj is not None:
+            for field in obj._meta.fields:
+                if not isinstance(field, FileField) and not isinstance(field, ImageField):
+                    continue
+
+                if form.data.get(field.name + '_clean', None) == '1':
+                    setattr(obj, field.name, None)
+
         self.object = form.save()
         return None
 
     def inlines_save(self, inlines):
         for formset in inlines:
+            for inline in formset:
+                obj = inline.instance
+                if obj is not None:
+                    for field in obj._meta.fields:
+                        if not isinstance(field, FileField) and not isinstance(field, ImageField):
+                            continue
+
+                        if inline.data.get(inline.add_prefix(field.name) + '_clean', None) == '1':
+                            setattr(obj, field.name, None)
+                            inline.save()
+
             formset.save()
         return None
 
@@ -243,8 +266,8 @@ class WebixCreateView(WebixCreateUpdateMixin,
 
         # BYPASS POST for initial data
         if self.request.META.get('HTTP_SEND_INITIAL_DATA') or \
-           self.request.POST.get('SEND_INITIAL_DATA') or \
-           self.request.GET.get('SEND_INITIAL_DATA'):
+            self.request.POST.get('SEND_INITIAL_DATA') or \
+            self.request.GET.get('SEND_INITIAL_DATA'):
             if self.request.method == 'POST':
                 self.send_initial_data = self.request.POST.dict()
                 # switch to GET request
@@ -312,11 +335,11 @@ class WebixCreateView(WebixCreateUpdateMixin,
                 action_flag=ADDITION
             )
 
-
     def validate_unique_together(self, form=None, inlines=None, **kwargs):
         # self.object.validate_unique()
         if form is not None:
             form.instance.validate_unique()
+
 
 class WebixUpdateView(WebixCreateUpdateMixin, WebixBaseMixin, WebixPermissionsMixin, WebixUrlMixin,
                       UpdateWithInlinesView):

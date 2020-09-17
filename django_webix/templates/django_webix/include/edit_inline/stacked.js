@@ -16,7 +16,7 @@ $$('{{ inline.get_container_id|default_if_none:inline.get_default_container_id }
                             {% for inline_form in inline %}
                             {
                                 id: '{{ inline_form.prefix|safe }}-inline',
-                                header: "{% if inline_form.instance %}{{ inline_form.instance}}{% else %}{{_("New Item")|escapejs}}{% endif %}",
+                                header: "{% if inline_form.instance.pk %}{{ inline_form.instance}}{% else %}{{_("New Item")|escapejs}}{% endif %}",
                                 body: {
                                     id: '{{ inline_form.prefix|safe }}-inline-body',
                                     rows: [{{ inline_form.as_webix|safe }}]

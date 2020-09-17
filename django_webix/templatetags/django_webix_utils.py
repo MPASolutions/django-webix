@@ -6,7 +6,9 @@ import re
 import six
 from django import template
 from django.conf import settings
+from django.utils.timezone import is_naive, make_naive
 import datetime
+from django.apps import apps
 
 register = template.Library()
 
@@ -30,12 +32,31 @@ def webix_license():
     return settings.WEBIX_LICENSE
 
 
+@register.simple_tag(name='is_installed_djangowebixleaflet')
+def is_installed_djangowebixleaflet():
+    return apps.is_installed("django_webix_leaflet")
+
+
+@register.simple_tag(name='is_installed_djangowebixfilter')
+def is_installed_djangowebixfilter():
+    return apps.is_installed("webix_filter")
+
+
+@register.simple_tag(name='webix_history_enable')
+def webix_history_enable():
+    if hasattr(settings, 'WEBIX_HISTORY_ENABLE'):
+        return settings.WEBIX_HISTORY_ENABLE
+    else:
+        return False
+
+
 @register.simple_tag(name='webix_fontawesome_css_url')
 def webix_fontawesome_css_url():
     if hasattr(settings, 'WEBIX_FONTAWESOME_CSS_URL'):
         return settings.WEBIX_FONTAWESOME_CSS_URL
     else:
         return 'django_webix/fontawesome-5.7.2/css/all.min.css'
+
 
 @register.simple_tag(name='webix_fontawesome_version')
 def webix_fontawesome_version():
@@ -58,9 +79,11 @@ def order_by(queryset, args):
 
 @register.filter
 def format_list_value(value):
-    if type(value)==datetime.date:
+    if type(value) == datetime.date:
         return value.strftime('%d/%m/%Y')
     elif type(value) == datetime.datetime:
+        if not is_naive(value):
+            value = make_naive(value)
         return value.strftime('%d/%m/%Y %H:%M')
     elif value is None:
         return ''
