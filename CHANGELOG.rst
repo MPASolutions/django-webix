@@ -13,11 +13,20 @@ The format is based on KeepAChangelog_ and this project adheres to SemanticVersi
 [Unreleased]
 ++++++++++++
 
+
+[1.3.0] 2020-09-17
+++++++++++++++++++
+
 Added
 ~~~~~
+* Stable admin subpackage with multiple functionalities
 * `Select all` button in multicombo widget
 * Multicombo in PostgreSQL ArrayField with options
 * Added middleware to limit browser version
+* Added possibility to remove uploaded images and files
+* Added browser history urls with ajax requests
+* Added PasswordInput widget support
+* Added get_queryset_initial on list for initial queryset
 
 Changed
 ~~~~~~~
