@@ -110,3 +110,13 @@ Does the code actually work?
     $ source <YOURVIRTUALENV>/bin/activate
     $ (myenv) $ pip install tox
     $ (myenv) $ tox
+
+
+Contributors
+------------
+
+Here is a list of Django-Webix's contributors.
+
+.. image:: https://contributors-img.web.app/image?repo=MPASolutions/django-webix
+    :target: https://github.com/MPASolutions/django-webix/graphs/contributors
+    :alt: Contributors
