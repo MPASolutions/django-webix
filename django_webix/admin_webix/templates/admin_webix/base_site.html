@@ -13,11 +13,13 @@
 
     {% block header_leaflet %}
         {% if is_webgis_enable %}
-            {% load utils_leaflet %}
+            {% friendly_load utils_leaflet %}
             <script type="text/javascript">
                 var ForceScriptNameUrl = "{{settings.FORCE_SCRIPT_NAME_URL}}";
             </script>
-            {% header_leaflet %}
+            {% if_has_tag header_leaflet %}
+                {% header_leaflet %}
+            {% endif_has_tag %}
         {% endif %}
     {% endblock %}
 
@@ -52,7 +54,6 @@
                     {% block dashborad_menu %}
                         {% include "admin_webix/include/menu.js" %},
                     {% endblock %}
-
                 ]
             },
           {% endblock %}
