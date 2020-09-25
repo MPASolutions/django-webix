@@ -295,7 +295,11 @@ function load_js(lnk, hide, area, method, data, headers, dataType, abortAllPendi
                     // change state
                     {% if history_enable %}
                     if (enableHistory==true) {
-                        history.replaceState(null, null, '?state=' + lnk);
+                        extra_url = '?state=' + lnk;
+                        if ($$('main_content_right')!=undefined){
+                            extra_url += '&tab='+$$('main_content_right').getValue();
+                        }
+                        history.replaceState(null, null, extra_url);
                     }
                     {% endif %}
                 }
