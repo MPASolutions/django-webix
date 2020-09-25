@@ -658,12 +658,17 @@ class AdminWebixSite:
         except:
             history_url = None
 
+        active_tab = request.GET.get('tab', None)
+        if active_tab not in ['webgis_leaflet', self.webix_container_id]:
+            active_tab = self.webix_container_id
+
         context = {
             **self.each_context(request),
             **self.extra_index_context(request),
             'history_url': history_url,
             'title': self.index_title,
             'app_list': self.get_app_list(request),
+            'active_tab': active_tab,
             **(extra_context or {}),
         }
 

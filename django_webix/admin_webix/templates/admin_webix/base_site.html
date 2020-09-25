@@ -121,7 +121,7 @@
       {% endblock %}
 
     {% if is_webgis_enable %}
-        load_js('{% url 'webix_webgis_init' %}', undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, false);
+        load_js('{% url 'webix_webgis_init' %}{% if active_tab == 'webgis_leaflet' %}?autoopen{% endif %}', undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, false);
     {% endif %}
 
     {% block extra_content %}{% endblock %}
