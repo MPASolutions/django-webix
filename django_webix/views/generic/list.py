@@ -399,8 +399,9 @@ class WebixListView(WebixBaseMixin,
                 if field.get('field_name') is not None and \
                     (field.get('queryset_exclude') is None or field.get('queryset_exclude') != True):
                     values.append(field['field_name'])
-        for field_name in get_model_geo_field_names(self.model):
-            values += [f'{field_name}_available']
+        if self.is_enable_column_webgis(self.request):
+            for field_name in get_model_geo_field_names(self.model):
+                values += [f'{field_name}_available']
         data = qs.values(*values,
                          **({'id': F('pk')} if self.get_pk_field() != 'id' and not hasattr(self.model, 'id') else {}))
         return data
