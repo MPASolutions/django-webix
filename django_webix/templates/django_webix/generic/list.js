@@ -162,7 +162,7 @@ function {{ view_prefix }}apply_filters(){
 {% if is_enable_column_webgis %}
 {% for layer in layers %}
 function custom_button_geo_{{layer.layername}}(obj, common, value) {
-    console.log(obj,common, value)
+    // console.log(obj,common, value)
     if (obj.{{ layer.geofieldname }}_available==true)
         return '<div title="{{_("Go to map")|escapejs}} ({{layer.layername}})"><i style="cursor:pointer" class="webix_icon far fa-map-marker-alt"></i></div>';
     else
@@ -224,7 +224,7 @@ $$("{{ webix_container_id }}").addView({
                     colspan: 2
                 },
                 {
-                    text: '<div class="webix_view webix_control webix_el_button webix_secondary"><div title="{{_("Apply filters") }}" class="webix_el_box"><button type="button" class="webix_button webix_img_btn" style="line-height:24px;" onclick="{{ view_prefix }}apply_filters(\'{{ model_name }}\');"> {{_("Filter") }} </button></div></div>',
+                    text: '<div class="webix_view webix_control webix_el_button webix_secondary"><div title="{{_("Apply filters") }}" class="webix_el_box"><button id="button_filter_datatable" type="button" class="webix_button webix_img_btn" style="line-height:24px;" onclick="{{ view_prefix }}apply_filters(\'{{ model_name }}\');"> {{_("Filter") }} </button></div></div>',
                     colspan: 2
                 }
             ],
