@@ -45,6 +45,12 @@ class UserForm(WebixModelForm):
                   all(x not in i.attname for x in
                       ['password', 'is_staff', 'is_active', 'is_superuser', 'date_joined', 'data'])]
 
+    @property
+    def get_elements(self):
+        fs = super().get_elements
+        fs['username'].update({'readonly': 'readonly', 'disabled': True})
+        return fs
+
 
 class UserAdminCreateForm(WebixModelForm):
     error_messages = {
