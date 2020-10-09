@@ -17,7 +17,7 @@ $$("{{ webix_container_id }}").addView({
                         label: "{{_("Delete")|escapejs}}",
                         {% if not has_delete_permission %}
                             disabled: true,
-                            tooltip: "{% autoescape off %}{{ info_no_delete_permission|join:", " }}{% endautoescape %}",
+                            tooltip: "{{ info_no_delete_permission|join:", "|escapejs }}",
                         {% endif %}
                         width: 120,
                         click: function () {
@@ -47,10 +47,10 @@ $$("{{ webix_container_id }}").addView({
                             disabled: true,
                         {% endif %}
                         {% if not object.pk and not has_add_permission %}
-                            tooltip: "{% autoescape off %}{{ info_no_add_permission|join:", " }}{% endautoescape %}",
+                            tooltip: "{{ info_no_add_permission|join:", "|escapejs}}",
                         {% endif %}
                         {% if object.pk and not has_change_permission %}
-                            tooltip: "{% autoescape off %}{{ info_no_change_permission|join:", " }}{% endautoescape %}",
+                            tooltip: "{{ info_no_change_permission|join:", "|escapejs}}",
                         {% endif %}
                         width: 190,
                         click: function () {
@@ -73,10 +73,10 @@ $$("{{ webix_container_id }}").addView({
                             disabled: true,
                         {% endif %}
                         {% if not object.pk and not has_add_permission %}
-                            tooltip: "{% autoescape off %}{{ info_no_add_permission|join:", " }}{% endautoescape %}",
+                            tooltip: "{{ info_no_add_permission|join:", "|escapejs}}",
                         {% endif %}
                         {% if object.pk and not has_change_permission %}
-                            tooltip: "{% autoescape off %}{{ info_no_change_permission|join:", " }}{% endautoescape %}",
+                            tooltip: "{{ info_no_change_permission|join:", "|escapejs}}",
                         {% endif %}
                         width: 160,
                         click: function () {
@@ -99,10 +99,10 @@ $$("{{ webix_container_id }}").addView({
                             disabled: true,
                         {% endif %}
                         {% if not object.pk and not has_add_permission %}
-                            tooltip: "{% autoescape off %}{{ info_no_add_permission|join:", " }}{% endautoescape %}",
+                            tooltip: "{{ info_no_add_permission|join:", "|escapejs }}",
                         {% endif %}
                         {% if object.pk and not has_change_permission %}
-                            tooltip: "{% autoescape off %}{{ info_no_change_permission|join:", " }}{% endautoescape %}",
+                            tooltip: "{{ info_no_change_permission|join:", "|escapejs }}",
                         {% endif %}
                         width: 120,
                         click: function () {
