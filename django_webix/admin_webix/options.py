@@ -1,6 +1,7 @@
 from django.apps import apps
 from django.conf import settings
-from django.db.models import AutoField, FieldDoesNotExist
+from django.db.models import AutoField
+from django.core.exceptions import FieldDoesNotExist
 from django.urls import path
 from django.utils.text import capfirst
 
