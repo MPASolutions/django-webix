@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
-from admintools.templatetags import register
 from django import template
 import re
+
+register = template.Library()
 
 @register.filter_function
 def order_by(queryset, args):
