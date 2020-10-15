@@ -1,99 +1,5 @@
 {% load django_webix_utils static i18n %}
 
-
-function _{{ view_prefix }}action_execute(action, ids, all, response_type, short_description, modal_title, modal_ok, modal_cancel, input_params) {
-    /*
-    action (required) = action_key to be executed
-    ids (required) = list of selected elements ids
-    all (required) = boolean if all elements are selected
-    response_type (required) = ['script', 'json', 'blank']
-    short_description (not required)
-    modal_title (required) = text to show in modal choices execution
-    modal_ok (not required)
-    modal_cancel (not required)
-    params (not required) = paramters to post in action method
-    */
-    webix.confirm({
-        title: short_description,
-        ok: modal_ok,
-        cancel: modal_cancel,
-        text:  modal_title + "</br><b>" + ids.length + " {{_("elements")|escapejs}}</b> {{_("selected")|escapejs}}",
-        callback: function (confirm) {
-            if (confirm==true) {
-                $$('{{ view_prefix }}datatable').showOverlay("<img src='{% static 'django_webix/loading.gif' %}'>");
-                if ((response_type=='json') || (response_type=='script')){
-                    _params = {
-                        'action': action,
-                        'filters': JSON.stringify({{ view_prefix }}get_filters_qsets()),
-                        'params': JSON.stringify(input_params || {}),
-                        'csrfmiddlewaretoken': getCookie('csrftoken')
-                    };
-                    if (all == false) {
-                        _params['ids'] = ids.join(',');
-                    }
-                    $.ajax({
-                        url: "{{ url_list }}",
-                        type: "POST",
-                        dataType: response_type,
-                        data: _params,
-                        error: function (data) {
-                            webix.message({
-                                text: "{{_("Action is not executable")|escapejs}}",
-                                type: "error",
-                                expire: 10000
-                            });
-                        },
-                        success: function (data) { // TODO gestire response
-                            if (data.status==true) {
-                                webix.message({
-                                    text: data.message,
-                                    type: "info",
-                                    expire: 5000
-                                });
-                                if (data.redirect_url!=null){
-                                    load_js(data.redirect_url, undefined, undefined, undefined, undefined, undefined, undefined, abortAllPending=true);
-                                    }
-                            } else {
-                                webix.message({
-                                    text: "{{_("Something gone wrong")|escapejs}}",
-                                    type: "error",
-                                    expire: 10000
-                                });
-                            }
-                        },
-                    });
-                } else if (response_type=='blank'){
-                    var form = document.createElement("form");
-                    form.setAttribute("method", "post");
-                    form.setAttribute("action", "{{ url_list }}");
-                    form.setAttribute("target", "view");
-                    _fields = [
-                        ['action',action],
-                        ['filters', JSON.stringify( {{ view_prefix }}get_filters_qsets() )],
-                        ['csrfmiddlewaretoken',getCookie('csrftoken')]
-                    ];
-                    if (all==false){
-                        _fields.push(['ids',ids.join(',')])
-                    }
-                    $.each(_fields, function( index, value ) {
-                        var hiddenField = document.createElement("input");
-                            hiddenField.setAttribute("type", "hidden");
-                            hiddenField.setAttribute("name", value[0]);
-                            hiddenField.setAttribute("value", value[1]);
-                            form.appendChild(hiddenField);
-                        });
-                    document.body.appendChild(form);
-                    window.open('', 'view');
-                    form.submit();
-                } else {
-
-                }
-                $$('{{ view_prefix }}datatable').hideOverlay();
-            }
-        }
-    })
-}
-
 {% if is_enable_actions %}
 
 var {{ view_prefix }}actions_list = [
@@ -105,6 +11,86 @@ var {{ view_prefix }}actions_list = [
     {% endfor %}
 ];
 
+{% for action_key,action in actions.items %}
+    {% if action.form %}
+
+
+function _{{ action_key }}_action_execute_form(ids, all) {
+  webix.ui({
+    view: "window",
+    id: "{{ action_key }}_win",
+    width: 340,
+    maxHeigth: 600,
+    scrool: 'y',
+    position: "center",
+    modal: true,
+    move:true,
+    resize: true,
+    head: {
+      view: "toolbar", cols: [
+        {view: "label", label: '{{_("Fill in the form")|escapejs}}'},
+        {view: "button", label: '{{_("Close")|escapejs}}', width: 100, align: 'right', click: "$$('{{ action_key }}_win').destructor();"}
+      ]
+    },
+    body: {
+        view: 'form',
+        id: '{{ action.form.webix_id }}',
+        name: '{{ action.form.webix_id }}',
+        borderless: true,
+        elements: [
+            {{ action.form.as_webix|safe }},
+            {
+                id: '{{ action_key }}_toolbar_form',
+                view: "toolbar",
+                margin: 5,
+                cols: [
+                    {$template: "Spacer"},
+                    {
+                        id: '{{ form.webix_id }}_set',
+                        view: "tootipButton",
+                        type: "form",
+                        align: "right",
+                        label: "{{_("Go")|escapejs}}",
+                        click: function () {
+                            if ($$('{{ action.form.webix_id }}').validate({hidden:true, disabled:true})) {
+                                webix.extend($$('{{ action.form.webix_id }}'), webix.OverlayBox);
+                                $$('{{ action.form.webix_id }}').showOverlay("<img src='{% static 'django_webix/loading.gif' %}'>");
+                                _{{ view_prefix }}action_execute(
+                                                '{{ action_key }}',
+                                                ids,
+                                                all,
+                                                '{{ action.response_type }}',
+                                                '{{ action.short_description }}',
+                                                '{{ action.modal_title }}',
+                                                '{{ action.modal_ok }}',
+                                                '{{ action.modal_cancel }}',
+                                                $$('{{ action.form.webix_id }}').getValues(),
+                                                function() {$$('{{ action_key }}_win').hideOverlay(); $$('{{ action_key }}_win').destructor()},
+                                                function() {$$('{{ action_key }}_win').hideOverlay();}
+                                        )
+                            }
+                        }
+                    },
+                    {$template: "Spacer"}
+                ]
+            }
+        ],
+        rules: {
+            {% for field_name, rules in action.form.get_rules.items %}
+            '{{ field_name }}': function (value) {
+                return {% for r in rules %}{{r.rule}}('{{ field_name }}', value{% if r.max %},{{ r.max }}{% endif %}{% if r.min %}, {{ r.min }}{%endif %}){% if not forloop.last %} &&
+                {% endif %}{% endfor %}
+            },
+            {% endfor %}
+        },
+    }
+  }).show();
+}
+
+    {% endif %}
+{% endfor %}
+
+
 function {{ view_prefix }}actions_execute(action, ids, all) {
     {% for layer in layers %}
     if (action=='gotowebgis_{{ layer.layername }}') {
@@ -112,6 +98,9 @@ function {{ view_prefix }}actions_execute(action, ids, all) {
     }
     {% endfor %}
     {% for action_key, action in actions.items %} if (action=='{{ action_key }}') {
+        {% if action.form %}
+        _{{ action_key }}_action_execute_form(ids,all);
+        {% else %}
         _{{ view_prefix }}action_execute(
                 '{{ action_key }}',
                 ids,
@@ -121,7 +110,8 @@ function {{ view_prefix }}actions_execute(action, ids, all) {
                 '{{ action.modal_title }}',
                 '{{ action.modal_ok }}',
                 '{{ action.modal_cancel }}'
-        )
+        );
+        {% endif %}
     } {% if not forloop.last %} else {% endif %} {% endfor %}
 
 }

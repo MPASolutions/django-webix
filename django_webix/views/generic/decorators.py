@@ -1,3 +1,5 @@
+import json
+from django.http import JsonResponse
 from django.utils.translation import ugettext as _
 
 
@@ -9,6 +11,7 @@ def action_config(
     modal_title=_("Are you sure you want to proceed with this action?"),
     modal_ok=_("Proceed"),
     modal_cancel=_("Undo"),
+    form=None,
 ):  # TODO: permission check bebore execution
 
     if response_type not in ['json', 'script', 'blank']:
@@ -16,6 +19,20 @@ def action_config(
 
     def decorator(func):
         def wrapper(self, request, qs):
+            if form is not None:
+                if request.method=='POST':
+                    try:
+                        params = json.loads(request.POST.get('params', '{}'))
+                    except json.JSONDecodeError:
+                        params = {}
+                    _form = form(params, request.FILES, request=request)
+                    if _form.is_valid():
+                        return func(self, request, qs, _form)
+                    else:
+                        return JsonResponse({
+                            'status': False,
+                            'errors': [', '.join(['{}: {}'.format(k,v) for k, v in _form.errors.items()] )]
+                        }, status=400)
             return func(self, request, qs)
 
         setattr(wrapper, 'action_key', action_key)
@@ -25,7 +42,10 @@ def action_config(
         setattr(wrapper, 'modal_title', modal_title)
         setattr(wrapper, 'modal_ok', modal_ok)
         setattr(wrapper, 'modal_cancel', modal_cancel)
+        setattr(wrapper, 'form', form)
 
         return wrapper
 
     return decorator
+
+

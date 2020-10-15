@@ -454,6 +454,7 @@ class WebixListView(WebixBaseMixin,
             'modal_title': action.modal_title,
             'modal_ok': action.modal_ok,
             'modal_cancel': action.modal_cancel,
+            'form': action.form,
         }
 
     def _get_actions_flexport(self):

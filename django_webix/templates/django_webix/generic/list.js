@@ -443,6 +443,8 @@ $$("{{ webix_container_id }}").addView({
 
 {% block toolbar_list %}
 
+{% include "django_webix/include/actions_utils.js" %}
+
 {% block toolbar_list_actions %}
 {% include "django_webix/include/actions_list.js" %}
 {% endblock %}
