@@ -1,8 +1,5 @@
 {% load django_webix_utils static i18n %}
 
-function {{ view_prefix }}get_filters_qsets() {
-    return []
-}
 
 function _{{ view_prefix }}action_execute(action, ids, all, response_type, short_description, modal_title, modal_ok, modal_cancel, input_params) {
     /*
