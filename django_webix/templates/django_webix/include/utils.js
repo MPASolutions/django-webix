@@ -25,8 +25,8 @@ function csrfSafeMethod(method) {
 
 if (!String.prototype.startsWith) {
     Object.defineProperty(String.prototype, 'startsWith', {
-        value: function(search, rawPos) {
-            var pos = rawPos > 0 ? rawPos|0 : 0;
+        value: function (search, rawPos) {
+            var pos = rawPos > 0 ? rawPos | 0 : 0;
             return this.substring(pos, pos + search.length) === search;
         }
     });
@@ -130,6 +130,16 @@ function custom_checkbox_yesno(obj, common, value) {
         return "<div style='color:green;'>{{_("Yes")|escapejs}}</div>";
     else
         return "<div style='color:red;'>{{_("No")|escapejs}}</div>";
+}
+
+function custom_checkbox_yesnonone(obj, common, value) {
+    if (value === "True") {
+        return "<div style='color:green;'>{{_("Sì")|escapejs}}</div>";
+    } else if (value === "False") {
+        return "<div style='color:red;'>{{_("No")|escapejs}}</div>";
+    } else {
+        return "";
+    }
 }
 
 function custom_checkbox_default(obj, common, value) {
@@ -286,18 +296,18 @@ function load_js(lnk, hide, area, method, data, headers, dataType, abortAllPendi
                         $$(area).hideOverlay();
                     webix.ui.fullScreen();
                     if (navigator.userAgent.indexOf('MSIE') !== -1 || navigator.appVersion.indexOf('Trident/') > 0) {
-                         var evt = document.createEvent('UIEvents');
-                         evt.initUIEvent('resize', true, false, window, 0);
-                         window.dispatchEvent(evt);
+                        var evt = document.createEvent('UIEvents');
+                        evt.initUIEvent('resize', true, false, window, 0);
+                        window.dispatchEvent(evt);
                     } else {
-                         window.dispatchEvent(new Event('resize'));
+                        window.dispatchEvent(new Event('resize'));
                     }
                     // change state
                     {% if history_enable %}
-                    if (enableHistory==true) {
+                    if (enableHistory == true) {
                         extra_url = '?state=' + lnk;
-                        if ($$('main_content_right')!=undefined){
-                            extra_url += '&tab='+$$('main_content_right').getValue();
+                        if ($$('main_content_right') != undefined) {
+                            extra_url += '&tab=' + $$('main_content_right').getValue();
                         }
                         history.replaceState(null, null, extra_url);
                     }
@@ -458,3 +468,9 @@ webix.ui.datafilter.avgColumn = webix.extend({
         node.firstChild.innerHTML = Math.round(result / master.count());
     }
 }, webix.ui.datafilter.summColumn)
+
+function sortFloat(a, b) {
+    a = parseFloat(a.data6);
+    b = parseFloat(b.data6);
+    return a > b ? 1 : (a < b ? -1 : 0);
+}

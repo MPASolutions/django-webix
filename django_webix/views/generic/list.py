@@ -444,13 +444,20 @@ class WebixListView(WebixBaseMixin,
         return 'id'
 
     ########### TEMPLATE BUILDER ###########
-    def get_actions(self):
-        '''
-        Return list ov actions to be executed on listview
-        :return:
-        '''
-        _actions = self.actions
+    def _get_action_dict(self, action):
+        return {
+            'func': action,
+            'action_key': action.action_key,
+            'response_type': action.response_type,
+            'allowed_permissions': action.allowed_permissions,
+            'short_description': action.short_description,
+            'modal_title': action.modal_title,
+            'modal_ok': action.modal_ok,
+            'modal_cancel': action.modal_cancel,
+        }
 
+    def _get_actions_flexport(self):
+        _actions = []
         # add flexport actions
         if apps.is_installed('flexport'):
             from django.contrib.contenttypes.models import ContentType
@@ -475,19 +482,19 @@ class WebixListView(WebixBaseMixin,
             for export_instance in Export.objects.filter(model=model_ct, active=True):
                 if export_instance.is_enabled(self.request):
                     _actions.append(action_builder(export_instance))
+        return _actions
+
+    def get_actions(self):
+        '''
+        Return list ov actions to be executed on listview
+        :return:
+        '''
+        _actions = self.actions
+        _actions += self._get_actions_flexport()
 
         _dict_actions = {}
         for _action in _actions:
-            _dict_actions[_action.action_key] = {
-                'func': _action,
-                'action_key': _action.action_key,
-                'response_type': _action.response_type,
-                'allowed_permissions': _action.allowed_permissions,
-                'short_description': _action.short_description,
-                'modal_title': _action.modal_title,
-                'modal_ok': _action.modal_ok,
-                'modal_cancel': _action.modal_cancel,
-            }
+            _dict_actions[_action.action_key] = self._get_action_dict(_action)
 
         return _dict_actions
 
