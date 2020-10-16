@@ -65,8 +65,8 @@ function _{{ action_key }}_action_execute_form(ids, all) {
                                                 '{{ action.modal_ok }}',
                                                 '{{ action.modal_cancel }}',
                                                 $$('{{ action.form.webix_id }}').getValues(),
-                                                function() {$$('{{ action_key }}_win').hideOverlay(); $$('{{ action_key }}_win').destructor()},
-                                                function() {$$('{{ action_key }}_win').hideOverlay();}
+                                                function() {$$('{{ action.form.webix_id }}').hideOverlay(); $$('{{ action_key }}_win').destructor()},
+                                                function() {$$('{{ action.form.webix_id }}').hideOverlay();}
                                         )
                             }
                         }
