@@ -432,7 +432,7 @@ class WebixListView(WebixBaseMixin,
             if type(qs) == list:
                 for item in qs:
                     if item.get('id') not in ids:
-                        qs.pop(item)
+                        qs.remove(item)
             else:
                 auto_field_name = self.model._meta.auto_field.name
                 qs = qs.filter(**{auto_field_name + '__in': ids})
@@ -454,7 +454,7 @@ class WebixListView(WebixBaseMixin,
             'modal_title': action.modal_title,
             'modal_ok': action.modal_ok,
             'modal_cancel': action.modal_cancel,
-            'form': action.form,
+            'form': getattr(action,'form',None),
         }
 
     def _get_actions_flexport(self):
@@ -613,7 +613,8 @@ class WebixListView(WebixBaseMixin,
             # filters application (like IDS selections)
             qs = self.filters_objects_datatable(qs)
             # apply ordering
-            qs = self.apply_ordering(qs)
+            if type(qs) != list:
+                qs = self.apply_ordering(qs)
             return action_function(self, request, qs)
 
     def dispatch(self, *args, **kwargs):
