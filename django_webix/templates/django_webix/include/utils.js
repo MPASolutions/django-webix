@@ -133,9 +133,9 @@ function custom_checkbox_yesno(obj, common, value) {
 }
 
 function custom_checkbox_yesnonone(obj, common, value) {
-    if (value === "True") {
+    if ((value === "True") || (value === "true") || (value == '1') || (value === 1) || (value === true)) {
         return "<div style='color:green;'>{{_("Sì")|escapejs}}</div>";
-    } else if (value === "False") {
+    } else if ((value === "False") || (value === "false") || (value == '0') || (value === 0) || (value === false)) {
         return "<div style='color:red;'>{{_("No")|escapejs}}</div>";
     } else {
         return "";
