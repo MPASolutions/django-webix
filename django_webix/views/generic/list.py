@@ -217,6 +217,39 @@ class WebixListView(WebixBaseMixin,
 
         return None
 
+    # 6. DJANGO WEBIX FILTERS ON THE FLY
+
+    def _django_webix_otf_filters(self, request):
+        if request.method == 'GET':
+            otf_filter = request.GET.get('otf_filter', None)
+        elif request.method == 'POST':
+            otf_filter = request.POST.get('otf_filter', None)
+        else:
+            otf_filter = None
+        return otf_filter
+
+    def get_django_webix_otf_filters(self, request):
+        if self.is_installed_django_webix_filter():
+            otf_filter = self._django_webix_otf_filters(request)
+            if otf_filter is not None:
+                try:
+                    return json.loads(otf_filter)
+                except:
+                    return None
+        return None
+
+    def get_django_webix_otf_filters_qsets(self):
+        if self.is_installed_django_webix_filter():
+            otf_filter = self.django_webix_otf_filters
+            from django_webix_filter.utils.json_converter import get_JSON_for_DB
+            try:
+                return self._elaborate_qsets_filters(get_JSON_for_DB(otf_filter))
+            except:
+                return None
+        return None
+
+    # ##################################
+
     def _optimize_select_related(self, qs):
         # Estrapolo le informazione per popolare `select_related`
         _select_related = []
@@ -303,6 +336,10 @@ class WebixListView(WebixBaseMixin,
             # 5. apply django webix filters
             if self.django_webix_filters is not None:
                 qs = qs.filter(self.get_django_webix_filters_qsets())
+            # TODO: da inserire qui il otf filter
+            if self.django_webix_otf_filters is not None:
+                qs = qs.filter(self.get_django_webix_otf_filters_qsets())
+
             # 6. annotate geo available
             if self.is_enable_column_webgis(self.request):
                 geo_field_names = get_model_geo_field_names(self.model)
@@ -629,11 +666,14 @@ class WebixListView(WebixBaseMixin,
         self.geo_filter = self.get_geo_filter(self.request)
 
         # 4. SQL FILTERS
-        self.sql_filters = self.get_sql_filters(
-            self.request)  # for now it's only a qsets list # this is shit! but need for old SW (remove for future)
+        self.sql_filters = self.get_sql_filters(self.request)
+        # for now it's only a qsets list # this is shit! but need for old SW (remove for future)
 
         # 5. DJANGO WEBIX FILTERS
         self.django_webix_filters = self.get_django_webix_filters(self.request)
+
+        # 6. DJANGO WEBIX ON THE FLY FILTERS
+        self.django_webix_otf_filters = self.get_django_webix_otf_filters(self.request)
 
         if not self.has_view_permission(request=self.request):
             raise PermissionDenied(_('View permission is not allowed'))
