@@ -381,34 +381,52 @@ function webix_post(path, params) {
 {# autocomplete #}
 
 function set_autocomplete_reload(selector, QS) {
-    a = $$(selector);
-    b = $$(a.config.suggest);
-    c = b.getBody();
-    c.define('dataFeed', QS);
-    c.clearAll()
-    c.refresh();
-    d = a.getList();
+    var a = $$(selector);
+    var d = a.getList();
+    if(a.config.view === 'multicombo' || a.config.view === 'multiselect'){
+        d.define('dataFeed', QS);
+        d.clearAll();
+    } else {
+        var b = $$(a.config.suggest);
+        var c = b.getBody();
+        c.define('dataFeed', QS);
+        c.clearAll()
+        c.refresh();
+    }
     d.load(QS + '&filter[value]=');
+    d.refresh();
 }
 
 function set_autocomplete_value(selector, QS, value) {
-    a = $$(selector);
-    b = $$(a.config.suggest);
-    c = b.getBody();
-    c.define('dataFeed', QS);
-    c.refresh();
-    d = a.getList();
+    var a = $$(selector);
+    var d = a.getList();
+    if(a.config.view === 'multicombo' || a.config.view === 'multiselect'){
+        d.define('dataFeed', QS);
+        d.clearAll();
+    }else {
+        var b = $$(a.config.suggest);
+        var c = b.getBody();
+        c.define('dataFeed', QS);
+        c.refresh();
+    }
     d.load(QS + '&filter[value]=' + value);
+    d.refresh();
 }
 
 function set_autocomplete(selector, QS) {
-    a = $$(selector);
-    b = $$(a.config.suggest);
-    c = b.getBody();
-    c.define('dataFeed', QS);
-    c.refresh();
-    d = a.getList();
+    var a = $$(selector);
+    var d = a.getList();
+    if(a.config.view === 'multicombo' || a.config.view === 'multiselect'){
+        d.define('dataFeed', QS);
+        d.clearAll();
+    }else {
+        var b = $$(a.config.suggest);
+        var c = b.getBody();
+        c.define('dataFeed', QS);
+        c.refresh();
+    }
     d.load(QS + '&filter[value]=');
+    d.refresh();
 }
 
 function set_autocomplete_empty(selector, QS) {

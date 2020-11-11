@@ -155,10 +155,12 @@ function {{ view_prefix }}get_filters_qsets() {
 
 function {{ view_prefix }}is_active_otf_filter(){
     var key = '{{ model_name }}';
-    if (otf_filter[key] != undefined) {
-        if (otf_filter[key]['list'] != undefined) {
-            if (otf_filter[key]['list']['active']) {
-                return true;
+    if(typeof otf_filter !== "undefined") {
+        if (otf_filter[key] != undefined) {
+            if (otf_filter[key]['list'] != undefined) {
+                if (otf_filter[key]['list']['active']) {
+                    return true;
+                }
             }
         }
     }
@@ -167,10 +169,12 @@ function {{ view_prefix }}is_active_otf_filter(){
 
 function {{ view_prefix }}is_present_otf_filter(){
     var key = '{{ model_name }}';
-    if (otf_filter[key] != undefined) {
-        if (otf_filter[key]['list'] != undefined) {
-            if (otf_filter[key]['list']['json'] != undefined) {
-                return true;
+    if(typeof otf_filter !== "undefined") {
+        if (otf_filter[key] != undefined) {
+            if (otf_filter[key]['list'] != undefined) {
+                if (otf_filter[key]['list']['json'] != undefined) {
+                    return true;
+                }
             }
         }
     }
@@ -179,10 +183,12 @@ function {{ view_prefix }}is_present_otf_filter(){
 
 function {{ view_prefix }}get_otf_filter(){
     var key = '{{ model_name }}';
-    if (otf_filter[key] != undefined) {
-        if (otf_filter[key]['list'] != undefined) {
-            if (otf_filter[key]['list']['json'] != undefined) {
-                return otf_filter[key]['list']['json'];
+    if(typeof otf_filter !== "undefined") {
+        if (otf_filter[key] != undefined) {
+            if (otf_filter[key]['list'] != undefined) {
+                if (otf_filter[key]['list']['json'] != undefined) {
+                    return otf_filter[key]['list']['json'];
+                }
             }
         }
     }
@@ -191,10 +197,12 @@ function {{ view_prefix }}get_otf_filter(){
 
 function {{ view_prefix }}deactivate_otf_filter(){
     var key = '{{ model_name }}';
-    if (otf_filter[key] != undefined) {
-        if (otf_filter[key]['list'] != undefined) {
-            otf_filter[key]['list']['active'] = false;
-            return true;
+    if(typeof otf_filter !== "undefined") {
+        if (otf_filter[key] != undefined) {
+            if (otf_filter[key]['list'] != undefined) {
+                otf_filter[key]['list']['active'] = false;
+                return true;
+            }
         }
     }
     return false;
