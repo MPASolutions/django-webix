@@ -2,7 +2,68 @@
 
 from __future__ import unicode_literals
 
+import json
+
+import django
 from django.db.models import Q
+from django.utils.translation import ugettext as _
+
+
+try:
+    from django.contrib.gis.geos import GEOSGeometry
+except ImportError:
+    GEOSGeometry = object
+
+try:
+    from django.contrib.gis.geos import MultiPolygon
+except ImportError:
+    MultiPolygon = object
+
+
+def decode_text_filters(request, key):
+    if request.method == 'GET':
+        filters_text = request.GET.get(key, None)
+    elif request.method == 'POST':
+        filters_text = request.POST.get(key, None)
+    else:
+        filters_text = None
+
+    filters = None
+    if filters_text is not None:
+        if type(filters_text) == str:
+            # NB: JSON syntax is not Python syntax. JSON requires double quotes for its strings.
+            try:
+                filters = json.loads(filters_text)
+            except json.JSONDecodeError:
+                filters = None
+        elif type(filters_text) == dict:
+            filters = filters_text
+        else:
+            filters = None
+    return filters  # by default filters are not set
+
+
+def from_geo_dict_to_qset(model, data):
+    if issubclass(GEOSGeometry, django.contrib.gis.geos.GEOSGeometry) and \
+        issubclass(MultiPolygon, django.contrib.gis.geos.GEOSGeometry):
+        if 'geo_field_name' in data and 'polygons_srid' in data and 'polygons' in data:
+            geo_field_name = data.get('geo_field_name')
+            polygons = []
+            for geo_text in data['polygons']:
+                polygons.append(GEOSGeometry(geo_text))
+            geo = MultiPolygon(polygons)
+            try:
+                geo.srid = int(data.get('polygons_srid'))
+            except ValueError:
+                print(_('ERROR: geo srid is incorrect'))
+            geo_field = model._meta.get_field(geo_field_name)
+            _geo = geo.transform(geo_field.srid, clone=True).buffer(
+                0)  # se l'unione del multipolygon risultasse invalida
+            qset = Q(**{geo_field_name + '__within': _geo})
+        else:
+            qset = Q()
+        return qset
+    return Q()
 
 
 def from_dict_to_qset(data):

@@ -15,7 +15,7 @@ from django.template.loader import get_template
 from django.utils.translation import ugettext as _
 from django.views.generic import ListView
 
-from django_webix.utils.filters import from_dict_to_qset
+from django_webix.utils.filters import from_dict_to_qset, from_geo_dict_to_qset, decode_text_filters
 from django_webix.views.generic.base import WebixBaseMixin, WebixPermissionsMixin, WebixUrlMixin
 from django_webix.views.generic.utils import get_model_geo_field_names
 
@@ -75,26 +75,7 @@ class WebixListView(WebixBaseMixin,
     #     ]
     # }
     def _decode_text_filters(self, request, key):
-        if request.method == 'GET':
-            filters_text = request.GET.get(key, None)
-        elif request.method == 'POST':
-            filters_text = request.POST.get(key, None)
-        else:
-            filters_text = None
-
-        filters = None
-        if filters_text is not None:
-            if type(filters_text) == str:
-                # NB: JSON syntax is not Python syntax. JSON requires double quotes for its strings.
-                try:
-                    filters = json.loads(filters_text)
-                except json.JSONDecodeError:
-                    filters = None
-            elif type(filters_text) == dict:
-                filters = filters_text
-            else:
-                filters = None
-        return filters  # by default filters are not set
+        return decode_text_filters(request, key)
 
     # 1. QSETS FILTERS (qsets style)
 
@@ -138,26 +119,7 @@ class WebixListView(WebixBaseMixin,
     # 3. GEO FILTER (dict with keys ['geo_field_name','polygons_srid','polygons'])
 
     def _elaborate_geo_filter(self, data):
-        if issubclass(GEOSGeometry, django.contrib.gis.geos.GEOSGeometry) and \
-            issubclass(MultiPolygon, django.contrib.gis.geos.GEOSGeometry):
-            if 'geo_field_name' in data and 'polygons_srid' in data and 'polygons' in data:
-                geo_field_name = data.get('geo_field_name')
-                polygons = []
-                for geo_text in data['polygons']:
-                    polygons.append(GEOSGeometry(geo_text))
-                geo = MultiPolygon(polygons)
-                try:
-                    geo.srid = int(data.get('polygons_srid'))
-                except ValueError:
-                    print(_('ERROR: geo srid is incorrect'))
-                geo_field = self.model._meta.get_field(geo_field_name)
-                _geo = geo.transform(geo_field.srid, clone=True).buffer(
-                    0)  # se l'unione del multipolygon risultasse invalida
-                qset = Q(**{geo_field_name + '__within': _geo})
-            else:
-                qset = Q()
-            return qset
-        return Q()
+        return from_geo_dict_to_qset(self.model, data)
 
     def get_geo_filter_str(self, request):
         if self.get_geo_filter(request) is not None:
