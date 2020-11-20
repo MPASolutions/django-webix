@@ -3,7 +3,7 @@ from django.db.models import Q
 from django_webix.utils.filters import from_dict_to_qset, decode_text_filters
 from django_webix_filter.models import WebixFilter
 from django_webix_filter.utils.json_converter import get_JSON_for_DB
-from filtermerger import RequestFilter
+from django_filtersmerger import RequestFilter
 
 
 class DjangoBaseLockedWebixFilter(RequestFilter):
