@@ -31,7 +31,7 @@ from django.utils.timezone import is_naive, make_naive
 from django.utils.translation import ugettext_lazy as _
 from random import randint
 from sorl.thumbnail import get_thumbnail
-
+from django.utils import formats
 
 try:
     from django.contrib.postgres.forms.jsonb import JSONField
@@ -257,12 +257,12 @@ class BaseWebixMixin(object):
             # FloatField
             elif isinstance(field, forms.FloatField):
                 if initial is not None:
-                    el.update({'value': '{}'.format(initial).replace('.', ',')})
+                    el.update({'value': '{}'.format(formats.localize(initial, use_l10n=True)) } ) #initial).replace('.', ',')})
             # DecimalField
             elif isinstance(field, forms.DecimalField):
                 # el.update({'view':''})
                 if initial is not None:
-                    el.update({'value': '{}'.format(initial).replace('.', ',')})
+                    el.update({'value': '{}'.format(formats.localize(initial, use_l10n=True)) }  ) # .replace('.', ',')})
             # IntegerField
             elif isinstance(field, forms.IntegerField):
                 el.update({
