@@ -33,10 +33,16 @@ from random import randint
 from sorl.thumbnail import get_thumbnail
 from django.utils import formats
 
-try:
-    from django.contrib.postgres.forms.jsonb import JSONField
-except ImportError:
-    JSONField = forms.Field
+
+
+if django.__version__ < '3.1':
+    try:
+        from django.contrib.postgres.forms.jsonb import JSONField
+    except ImportError:
+        JSONField = forms.Field
+elif django.__version__ >= '3.1':
+    from django.forms.fields import JSONField
+
 
 try:
     from django.contrib.postgres.forms import SimpleArrayField

@@ -6,31 +6,13 @@
 webix.ui([], $$("{{ webix_container_id }}"));
 {% endblock %}
 
+initWebixFilterPrefix('{{ model|getattr:'_meta'|getattr:'app_label'}}.{{ model|getattr:'_meta'|getattr:'model_name'}}');
+
 {% block filter_options %}
     {% for field_name, choices_filter in choices_filters.items %}
         var {{ field_name }}_options = {{ choices_filter|safe }}
     {% endfor %}
 {% endblock %}
-
-{% if geo_filter %}
-var {{ view_prefix }}geo_filter = '{{ geo_filter|escapejs }}';
-{% else %}
-var {{ view_prefix }}geo_filter = undefined;
-{% endif %}
-
-{% if sql_filters %}
-var {{ view_prefix }}sql_filters = '{{ sql_filters|escapejs }}';
-{% else %}
-var {{ view_prefix }}sql_filters = undefined;
-{% endif %}
-
-{% if qsets_locked_filters %}
-var {{ view_prefix }}locked_filters = '{{ qsets_locked_filters|escapejs }}';
-{% else %}
-var {{ view_prefix }}locked_filters = undefined;
-{% endif %}
-
-var {{ view_prefix }}django_webix_filters = [{% for f in django_webix_filters %}{{ f.pk }}{% if not forloop.last %},{% endif %}{% endfor %}];
 
 {% block toolbar_navigation %}
 {% if title %}
@@ -54,29 +36,35 @@ $$("{{ webix_container_id }}").addView({
         },
         {},
         {
+            id: '{{ view_prefix }}_filter_locked_sql',
             view: "button",
             label: "{{_("Extra filters removal")|escapejs}}",
             type: "icon",
             width: 200,
-            hidden: ({{ view_prefix }}locked_filters == undefined) && ({{ view_prefix }}sql_filters == undefined),
+            hidden: true,
             icon: "far fa-trash-alt",
             click: function (id, event) {
+                setWebixFilter('{{ model|getattr:'_meta'|getattr:'app_label'}}.{{ model|getattr:'_meta'|getattr:'model_name'}}', 'locked', null);
+                setWebixFilter('{{ model|getattr:'_meta'|getattr:'app_label'}}.{{ model|getattr:'_meta'|getattr:'model_name'}}', 'sql', null);
                 load_js('{{ url_list }}', undefined, undefined, undefined, undefined, undefined, undefined, abortAllPending = true);
             }
         },
         {
+            id: '{{ view_prefix }}_filter_geo',
             view: "button",
             label: "{{_("Geographic filter removal")|escapejs}}",
             type: "icon",
             width: 200,
-            hidden: ({{ view_prefix }}geo_filter == undefined),
+            hidden: true,
             icon: "far fa-trash-alt",
             click: function (id, event) {
+                setWebixFilter('{{ model|getattr:'_meta'|getattr:'app_label'}}.{{ model|getattr:'_meta'|getattr:'model_name'}}', 'geo', null);
                 load_js('{{ url_list }}', undefined, undefined, undefined, undefined, undefined, undefined, abortAllPending = true);
             }
         },
         {% if is_installed_django_webix_filter %}
         {
+            id: '{{ view_prefix }}_filter_advanced',
             view: "button",
             label: "{{_("Advanced filter")|escapejs}} <div class='webix_badge' style='background-color: #ff8839 !important;' id='{{ view_prefix }}django_webix_filter_counter'>0</div>",
             type: "icon",
@@ -88,8 +76,17 @@ $$("{{ webix_container_id }}").addView({
             }
         },
         {% endif %}
+
     ]
 });
+
+if ((webixAppliedFilters['{{ model|getattr:'_meta'|getattr:'app_label'}}.{{ model|getattr:'_meta'|getattr:'model_name'}}']['locked']!=null) || (webixAppliedFilters['{{ model|getattr:'_meta'|getattr:'app_label'}}.{{ model|getattr:'_meta'|getattr:'model_name'}}']['sql']!=null)) {
+    $$('{{ view_prefix }}_filter_locked_sql').show();
+}
+if (webixAppliedFilters['{{ model|getattr:'_meta'|getattr:'app_label'}}.{{ model|getattr:'_meta'|getattr:'model_name'}}']['geo']!=null) {
+    $$('{{ view_prefix }}_filter_geo').show();
+}
+
 {% endif %}
 {% endblock %}
 
@@ -209,11 +206,11 @@ function {{ view_prefix }}deactivate_otf_filter(){
 }
 
 function {{ view_prefix }}apply_filters() {
-    var extra = ''
-    if({{ view_prefix }}is_active_otf_filter()){
-        extra = '+1';
-    }
-    $('#{{ view_prefix }}django_webix_filter_counter').text({{ view_prefix }}django_webix_filters.length + extra);
+//    var extra = ''
+//    if({{ view_prefix }}is_active_otf_filter()){
+//        extra = '+1';
+//    }
+//    $('#{{ view_prefix }}django_webix_filter_counter').text({{ view_prefix }}django_webix_filters.length + extra);
     $$('{{ view_prefix }}filter').setValue('1');
     $$('{{ view_prefix }}datatable').filterByAll();
 }
@@ -318,13 +315,12 @@ $$("{{ webix_container_id }}").addView({
             if ((params) && (params.start)) {
                 _start = params.start;
             }
-            var _params = {
-                'start': _start,
-                'count': _count,
-            }
+            var _params = webixAppliedFilters['{{ model|getattr:'_meta'|getattr:'app_label'}}.{{ model|getattr:'_meta'|getattr:'model_name'}}'];
+            _params.start = _start;
+            _params.count = _count;
             // elaborate filters
             _params.filters = JSON.stringify( {{ view_prefix }}get_filters_qsets() );
-
+/*
             if ({{ view_prefix }}geo_filter!=undefined) {
                 _params.geo_filter = {{ view_prefix }}geo_filter;
             }
@@ -345,7 +341,7 @@ $$("{{ webix_container_id }}").addView({
                 var key = '{{ model_name }}';
                 _params.otf_filter = JSON.stringify(otf_filter[key]['list']['json']);
             }
-
+*/
             // elaborate sort
             sort = $$('{{ view_prefix }}datatable').getState().sort;
             if (sort != undefined) {
