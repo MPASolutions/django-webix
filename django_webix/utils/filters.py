@@ -20,14 +20,7 @@ except ImportError:
     MultiPolygon = object
 
 
-def decode_text_filters(request, key):
-    if request.method == 'GET':
-        filters_text = request.GET.get(key, None)
-    elif request.method == 'POST':
-        filters_text = request.POST.get(key, None)
-    else:
-        filters_text = None
-
+def decode_text_filters(filters_text):
     filters = None
     if filters_text is not None:
         if type(filters_text) == str:
