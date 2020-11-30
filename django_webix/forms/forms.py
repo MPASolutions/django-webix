@@ -137,7 +137,7 @@ class BaseWebixMixin(object):
                             label=_(_field.verbose_name).capitalize(),
                             required=False
                         )
-                        value = '{}'.format(getattr(self.instance, readonly_field) or '')
+                        value = '{}'.format(getattr(self.instance, readonly_field)) if getattr(self.instance, readonly_field) is not None else ""
                     self.fields[readonly_field].initial = value
                     self.initial[readonly_field] = value
 

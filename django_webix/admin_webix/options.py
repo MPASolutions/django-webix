@@ -120,6 +120,7 @@ class ModelWebixAdmin(WebixPermissionsMixin):
             sort_option = 'server' if self.enable_json_loading else 'string'
             filter_type = 'icontains'
             click_action = None
+            extra_filter_options = ''
             if field_name in self.extra_header:
                 conf_header = self.extra_header.get(field_name, {})
                 if 'header_title' in conf_header:
@@ -134,10 +135,12 @@ class ModelWebixAdmin(WebixPermissionsMixin):
                     filter_type = conf_header.get('filter_type', '')
                 if 'click_action' in conf_header:
                     click_action = conf_header.get('click_action', '')
+                if 'extra_filter_options' in conf_header:
+                    extra_filter_options = conf_header.get('extra_filter_options', '')
             field_list = {
                 'field_name': field_name,
                 'datalist_column': '''{{id: "{field_name}",
-                header: ["{header_title}", {{content: "{filter}"}}],
+                header: ["{header_title}", {{content: "{filter}", {extra_filter_options}}}],
                 {width_adapt},
                 sort: "{sort_option}",
                 serverFilterType: "{filter_type}",
@@ -145,6 +148,7 @@ class ModelWebixAdmin(WebixPermissionsMixin):
                     field_name=field_name,
                     header_title=header_title,
                     filter=filter_option,
+                    extra_filter_options=extra_filter_options,
                     width_adapt=width_adapt,
                     sort_option=sort_option,
                     filter_type=filter_type,
