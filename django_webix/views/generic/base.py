@@ -343,6 +343,7 @@ class WebixBaseMixin:
         if apps.is_installed("django_webix_leaflet") and getattr(self,'model',None) is not None:
             for layer in settings.DJANGO_WEBIX_LEAFLET['layers']:
                 if layer['modelname'].lower() == f'{self.model._meta.app_label}.{self.model._meta.model_name}':
+                    layer['codename'] = layer['layername'].replace(' ','_').replace(':','_').replace('.','_')
                     layers.append(layer)
         return layers
 
