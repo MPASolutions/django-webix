@@ -163,6 +163,10 @@ function custom_checkbox_yesnonone(obj, common, value) {
     }
 }
 
+function template_colour_rgb(obj, common, value) {
+    return '<div style="border:1px solid #000;height:15px;background-color: '+value+'"></div>';
+}
+
 function custom_checkbox_default(obj, common, value) {
     if (value)
         return '<div title="{{_("Default")|escapejs}}"><i style="cursor:pointer" class="webix_icon fas fa-check-circle"></i></div>';

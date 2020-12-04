@@ -320,28 +320,7 @@ $$("{{ webix_container_id }}").addView({
             _params.count = _count;
             // elaborate filters
             _params.filters = JSON.stringify( {{ view_prefix }}get_filters_qsets() );
-/*
-            if ({{ view_prefix }}geo_filter!=undefined) {
-                _params.geo_filter = {{ view_prefix }}geo_filter;
-            }
 
-            if ({{ view_prefix }}sql_filters!=undefined) {
-                _params.sql_filters = {{ view_prefix }}sql_filters;
-            }
-
-            if ({{ view_prefix }}locked_filters!=undefined) {
-                _params.locked_filters = {{ view_prefix }}locked_filters;
-            }
-
-            if ({{ view_prefix }}django_webix_filters!=undefined) {
-                _params.django_webix_filters = {{ view_prefix }}django_webix_filters;
-            }
-
-            if({{ view_prefix }}is_active_otf_filter()){
-                var key = '{{ model_name }}';
-                _params.otf_filter = JSON.stringify(otf_filter[key]['list']['json']);
-            }
-*/
             // elaborate sort
             sort = $$('{{ view_prefix }}datatable').getState().sort;
             if (sort != undefined) {

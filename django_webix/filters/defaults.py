@@ -8,7 +8,7 @@ from django_filtersmerger import RequestFilter
 
 class DjangoBaseLockedWebixFilter(RequestFilter):
     def filter_queryset(self, queryset, **kwargs):
-        locked_filters = self.get_param('locked_filters')
+        locked_filters = self.get_param('locked')
         if locked_filters is not None:
             locked_filters_dict = decode_text_filters(locked_filters)
             locked_qset = from_dict_to_qset(locked_filters_dict)
@@ -29,7 +29,7 @@ class DjangoBaseWebixFilter(RequestFilter):
 
 class DjangoBaseSqlFilter(RequestFilter):
     def filter_queryset(self, queryset, **kwargs):
-        sql_filters = self.get_param('sql_filters')
+        sql_filters = self.get_param('sql')
         if sql_filters is not None:
             sql_filters_dict = decode_text_filters(sql_filters)
             sql_filter_where = ' OR '.join(['({sql})'.format(sql=_sql) for _sql in sql_filters_dict])
