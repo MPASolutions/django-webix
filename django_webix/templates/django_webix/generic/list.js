@@ -366,7 +366,9 @@ $$("{{ webix_container_id }}").addView({
             if ($$('{{ view_prefix }}filter').getValue() == '0') {
                 return false
             } else {
-                $$("{{ view_prefix }}datatable").getFilter(id).disabled = true;
+                if ($$("{{ view_prefix }}datatable").getFilter(id)) {
+                    $$("{{ view_prefix }}datatable").getFilter(id).disabled = true;
+                }
             }
         },
         onAfterFilter: function () {
