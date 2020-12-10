@@ -211,6 +211,7 @@ function {{ view_prefix }}apply_filters() {
 //        extra = '+1';
 //    }
 //    $('#{{ view_prefix }}django_webix_filter_counter').text({{ view_prefix }}django_webix_filters.length + extra);
+    console.log('{{ view_prefix }}');
     $$('{{ view_prefix }}filter').setValue('1');
     $$('{{ view_prefix }}datatable').filterByAll();
 }
@@ -274,6 +275,7 @@ $$("{{ webix_container_id }}").addView({
         {% endif %}
         {
             id: "cmd_cp",
+            {% if is_json_loading %}
             header: [
                 {
                     text: "",
@@ -284,6 +286,9 @@ $$("{{ webix_container_id }}").addView({
                     colspan: 2
                 }
             ],
+            {% else %}
+            header: "",
+            {% endif %}
             headermenu: false,
             width:40,
             tooltip: false,
@@ -362,6 +367,7 @@ $$("{{ webix_container_id }}").addView({
         onCheck: function (row, column, state) {
             {{ view_prefix }}update_counter();
         },
+    {% if is_json_loading %}
         onBeforeFilter: function (id) {
             if ($$('{{ view_prefix }}filter').getValue() == '0') {
                 return false
@@ -380,6 +386,7 @@ $$("{{ webix_container_id }}").addView({
             });
             $$('{{ view_prefix }}filter').setValue('0');
         },
+    {% endif %}
         onBeforeLoad: function () {
             this.showOverlay("<img src='{% static 'django_webix/loading.gif' %}'>");
         },
