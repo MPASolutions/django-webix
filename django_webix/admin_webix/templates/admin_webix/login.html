@@ -61,6 +61,19 @@
                     }
                 ]
             },
+            {
+                padding: 10,
+                rows: [
+                    {
+                        view: "button",
+                        margin: 30,
+                        value: "Recupera password",
+                        click: function() {
+                            location.href = "{% url "admin_webix:password_reset" %}"
+                        }
+                    },
+                ]
+            },
             {% block extra_post_form %}{% endblock %}
         ]
     });

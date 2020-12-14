@@ -141,7 +141,7 @@ class ModelWebixAdmin(WebixPermissionsMixin):
             field_list = {
                 'field_name': field_name,
                 'datalist_column': '''{{id: "{field_name}",
-                header: ["{header_title}", {{content: "{filter}", {extra_filter_options}}}],
+                header: ["{header_title}", {{content: "{filter}" {extra_filter_options}}}],
                 {width_adapt},
                 sort: "{sort_option}",
                 serverFilterType: "{filter_type}",

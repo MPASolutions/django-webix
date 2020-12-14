@@ -33,6 +33,7 @@
 <body style="width:100%;height:100%;margin:0px;padding:0px;">
 <script type="text/javascript" charset="utf-8">
 
+  {% block full_content %}
   webix.ready(function(){
     //webix.i18n.setLocale("it-IT"); // TODO
     webix.CustomScroll.init();
@@ -127,6 +128,8 @@
 
     {% block extra_content %}{% endblock %}
   });
+  {% endblock %}
+
 </script>
 
 {% block cookies %}
