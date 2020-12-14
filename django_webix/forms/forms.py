@@ -286,18 +286,29 @@ class BaseWebixMixin(object):
                 })
                 if initial is not None:
                     if isinstance(initial, six.string_types):
-                        el.update({
-                            'value': '2020-01-01 {}'.format(initial).replace('-', ',').replace(' ', ',').replace(':', ',')
-                        })
+                        if settings.WEBIX_VERSION >= '7.0.0' and settings.WEBIX_VERSION < '8.0.0':
+                            el.update({
+                                'value': '2020-01-01 {}'.format(initial).replace('-', ',').replace(' ', ',').replace(':', ',')
+                            })
+                        else:
+                            el.update({
+                                'value': '{}'.format(initial).replace('-', ',').replace(' ', ',').replace(':', ',')
+                            })
                     elif callable(initial):
                         _value = initial()
                         if not is_naive(_value):
                             _value = make_naive(_value)
-                        el.update({'value': '2020-01-01 {}'.format(_value.strftime('%H,%M'))})
+                        if settings.WEBIX_VERSION >= '7.0.0' and settings.WEBIX_VERSION < '8.0.0':
+                            el.update({'value': '2020-01-01 {}'.format(_value.strftime('%H,%M'))})
+                        else:
+                            el.update({'value': '{}'.format(_value.strftime('%H,%M'))})
                     else:
                         if not is_naive(initial):
                             initial = make_naive(initial)
-                        el.update({'value': '2020-01-01 {}'.format(initial.strftime('%H,%M'))})
+                        if settings.WEBIX_VERSION >= '7.0.0' and settings.WEBIX_VERSION < '8.0.0':
+                            el.update({'value': '2020-01-01 {}'.format(initial.strftime('%H,%M'))})
+                        else:
+                            el.update({'value': '{}'.format(initial.strftime('%H,%M'))})
             # DateField
             elif isinstance(field, forms.DateField):
                 el.update({
