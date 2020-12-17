@@ -136,7 +136,7 @@ function {{ view_prefix }}get_filters_qsets() {
                         }
                     })
                 } else {
-                    qsets.push({'path': el.id + '__' + el.serverFilterType, 'val': value});
+                    qsets.push({'path': el.id+'__'+el.serverFilterType, 'val': value});
                 }
             }
         }

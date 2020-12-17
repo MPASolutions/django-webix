@@ -22,7 +22,6 @@ class DjangoBaseWebixFilter(RequestFilter):
         if filters not in [None,'']:
             filters_dict = decode_text_filters(filters)
             qset = from_dict_to_qset(filters_dict)
-            #raise Exception('test',filters_dict,qset)
             return queryset.filter(qset)
         else:
             return queryset

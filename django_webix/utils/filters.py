@@ -7,7 +7,7 @@ import json
 import django
 from django.db.models import Q
 from django.utils.translation import ugettext as _
-
+from dateutil.parser import parse
 
 try:
     from django.contrib.gis.geos import GEOSGeometry
@@ -69,10 +69,22 @@ def from_dict_to_qset(data):
             if 'operator' in data_qset:
                 qset_to_applicate = from_dict_to_qset(data_qset)
             else:
-                if data_qset.get('path').endswith("__exact_in"):
+                if data_qset.get('path').endswith("__range"):
+                     #{"start":null,"end":null}
+                     val = data_qset.get('val')
+                     base_path = data_qset.get('path').replace('__range','')
+                     qset_to_applicate = Q()
+                     if val is not None and val.get('start') is not None:
+                         qset_to_applicate = Q(**{base_path + '__gte': parse(val.get('start'))})
+                     if val is not None and val.get('end') is not None:
+                         qset_to_applicate &= Q(**{base_path + '__lte': parse(val.get('end'))})
+
+                elif data_qset.get('path').endswith("__exact_in"):
                     data_qset['path'] = data_qset['path'].replace("__exact_in", "__in")
                     data_qset['val'] = data_qset['val'].split(",")
-                qset_to_applicate = Q(**{data_qset.get('path'): data_qset.get('val')})
+                    qset_to_applicate = Q(**{data_qset.get('path'): data_qset.get('val')})
+                else:
+                    qset_to_applicate = Q(**{data_qset.get('path'): data_qset.get('val')})
             if j == 0:
                 qset = qset_to_applicate
             else:
