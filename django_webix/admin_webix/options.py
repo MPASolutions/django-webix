@@ -122,6 +122,7 @@ class ModelWebixAdmin(WebixPermissionsMixin):
             filter_type = 'icontains'
             click_action = None
             extra_filter_options = ''
+            footer = None
             if field_name in self.extra_header:
                 conf_header = self.extra_header.get(field_name, {})
                 if 'header_title' in conf_header:
@@ -138,6 +139,8 @@ class ModelWebixAdmin(WebixPermissionsMixin):
                     click_action = conf_header.get('click_action', '')
                 if 'extra_filter_options' in conf_header:
                     extra_filter_options = conf_header.get('extra_filter_options', '')
+                if 'footer' in conf_header:
+                    footer = conf_header.get('footer', None)
             field_list = {
                 'field_name': field_name,
                 'datalist_column': '''{{id: "{field_name}",
@@ -156,6 +159,8 @@ class ModelWebixAdmin(WebixPermissionsMixin):
                     extra_header=extra_header
                 )
             }
+            if footer is not None:
+                field_list.update({'footer': footer})
             if click_action is not None:
                 field_list['click_action'] = click_action
             _fields.append(field_list)
