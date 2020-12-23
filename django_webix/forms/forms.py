@@ -228,7 +228,7 @@ class BaseWebixMixin(object):
                 'id': self[name].auto_id,
                 'labelWidth': 200,
                 'django_type_field': str(type(field).__name__),
-            }
+                }
             if field.required:
                 el['label'] = label = '<strong>{}</strong>'.format(label)
                 # el['required'] = True  # FIXME: problems with inlines
@@ -244,7 +244,7 @@ class BaseWebixMixin(object):
                     initial = self.data.getlist(self.add_prefix(name), field.initial)
                 elif connection.vendor == 'postgresql' and isinstance(field, JSONField):
                     initial = self.data.get(self.add_prefix(name), None)
-                    if initial is not None:
+                    if initial is not None and initial!='':
                         initial = loads(initial)
                     else:
                         initial = field.initial
