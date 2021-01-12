@@ -99,53 +99,62 @@ class BaseWebixMixin(object):
                 _field = None
             else:
                 del self.fields[readonly_field]
-                if not hasattr(self, 'instance') or self.instance.pk is None:
+                # if not hasattr(self, 'instance') or self.instance.pk is None:
+                #     self.fields[readonly_field] = forms.CharField(
+                #         label=_(_field.verbose_name).capitalize(), required=False
+                #     )
+                # else:
+                #     pass
+
+                if isinstance(_field, django.db.models.fields.DateTimeField) or \
+                    isinstance(_field, django.forms.fields.DateTimeField) or \
+                    isinstance(_field, django.forms.fields.DateTimeInput):
+                    # TODO: it can be improved
                     self.fields[readonly_field] = forms.CharField(
-                        label=_(_field.verbose_name).capitalize(), required=False
+                        label=_(_field.verbose_name).capitalize(),
+                        required=False
                     )
-                else:
-                    if isinstance(_field, django.db.models.fields.DateTimeField) or \
-                        isinstance(_field, django.forms.fields.DateTimeField) or \
-                        isinstance(_field, django.forms.fields.DateTimeInput):
-                        # TODO: it can be improved
-                        self.fields[readonly_field] = forms.CharField(
-                            label=_(_field.verbose_name).capitalize(),
-                            required=False
-                        )
-                        if getattr(self.instance, readonly_field):
-                            _value = getattr(self.instance, readonly_field)
-                            if not is_naive(_value):
-                                _value = make_naive(_value)
-                            value = '{}'.format(_value.strftime('%d/%m/%Y %H:%M'))
-                        else:
-                            value = ''
-                    elif isinstance(_field, django.db.models.fields.DateField) or \
-                        isinstance(_field, django.forms.fields.DateField):
-                        # TODO: it can be improved
-                        self.fields[readonly_field] = forms.CharField(
-                            label=_(_field.verbose_name).capitalize(),
-                            required=False
-                        )
-                        if getattr(self.instance, readonly_field):
-                            value = '{}'.format(getattr(self.instance, readonly_field).strftime('%d/%m/%Y'))
-                        else:
-                            value = ''
-                    elif isinstance(_field, django.db.models.fields.BooleanField) or \
-                        isinstance(_field, django.forms.fields.CheckboxInput):
-                        # TODO: it can be improved
-                        self.fields[readonly_field] = forms.BooleanField(
-                            label=_(_field.verbose_name).capitalize(),
-                            required=False
-                        )
+                    if hasattr(self, 'instance') and self.instance.pk is not None and getattr(self.instance, readonly_field):
+                        _value = getattr(self.instance, readonly_field)
+                        if not is_naive(_value):
+                            _value = make_naive(_value)
+                        value = '{}'.format(_value.strftime('%d/%m/%Y %H:%M'))
+                    else:
+                        value = ''
+                elif isinstance(_field, django.db.models.fields.DateField) or \
+                    isinstance(_field, django.forms.fields.DateField):
+                    # TODO: it can be improved
+                    self.fields[readonly_field] = forms.CharField(
+                        label=_(_field.verbose_name).capitalize(),
+                        required=False
+                    )
+                    if hasattr(self, 'instance') and self.instance.pk is not None and getattr(self.instance, readonly_field):
+                        value = '{}'.format(getattr(self.instance, readonly_field).strftime('%d/%m/%Y'))
+                    else:
+                        value = ''
+                elif isinstance(_field, django.db.models.fields.BooleanField) or \
+                    isinstance(_field, django.forms.fields.CheckboxInput):
+                    # TODO: it can be improved
+                    self.fields[readonly_field] = forms.BooleanField(
+                        label=_(_field.verbose_name).capitalize(),
+                        required=False
+                    )
+                    if hasattr(self, 'instance') and self.instance.pk is not None:
                         value = getattr(self.instance, readonly_field) or None
                     else:
-                        self.fields[readonly_field] = forms.CharField(
-                            label=_(_field.verbose_name).capitalize(),
-                            required=False
-                        )
+                        value = None
+                else:
+                    self.fields[readonly_field] = forms.CharField(
+                        label=_(_field.verbose_name).capitalize(),
+                        required=False
+                    )
+                    if hasattr(self, 'instance') and self.instance.pk is not None:
                         value = '{}'.format(getattr(self.instance, readonly_field)) if getattr(self.instance, readonly_field) is not None else ""
-                    self.fields[readonly_field].initial = value
-                    self.initial[readonly_field] = value
+                    else:
+                        value = ''
+
+                self.fields[readonly_field].initial = value
+                self.initial[readonly_field] = value
 
     def webix_extra_clean(self, cleaned_data):
         for key, value in cleaned_data.items():
