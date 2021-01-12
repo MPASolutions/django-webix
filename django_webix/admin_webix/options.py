@@ -6,6 +6,7 @@ from django.urls import path
 from django.utils.text import capfirst
 
 from django_webix.views.generic.base import WebixPermissionsMixin  # utils for permission
+from qxs import qxsreg
 
 
 class ModelWebixAdmin(WebixPermissionsMixin):
@@ -218,9 +219,8 @@ class ModelWebixAdmin(WebixPermissionsMixin):
     def get_layers(self):
         layers = []
         if apps.is_installed("django_webix_leaflet") and getattr(self, 'model', None) is not None:
-            for layer in settings.DJANGO_WEBIX_LEAFLET['layers']:
-                if layer['modelname'] == f'{self.model._meta.app_label}.{self.model._meta.model_name}':
-                    layers.append(layer)
+            for model_layer in list(filter(lambda x: x.model == self.model, qxsreg.get_models())):
+                layers.append(model_layer.get_qxs_codename())
         return layers
 
     def get_add_view(self):

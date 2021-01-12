@@ -6,7 +6,9 @@
 webix.ui([], $$("{{ webix_container_id }}"));
 {% endblock %}
 
+{% if model %}
 initWebixFilterPrefix('{{ model|getattr:'_meta'|getattr:'app_label'}}.{{ model|getattr:'_meta'|getattr:'model_name'}}');
+{% endif %}
 
 {% block filter_options %}
     {% for field_name, choices_filter in choices_filters.items %}
@@ -44,8 +46,10 @@ $$("{{ webix_container_id }}").addView({
             hidden: true,
             icon: "far fa-trash-alt",
             click: function (id, event) {
+                {% if model %}
                 setWebixFilter('{{ model|getattr:'_meta'|getattr:'app_label'}}.{{ model|getattr:'_meta'|getattr:'model_name'}}', 'locked', null);
                 setWebixFilter('{{ model|getattr:'_meta'|getattr:'app_label'}}.{{ model|getattr:'_meta'|getattr:'model_name'}}', 'sql', null);
+                {% endif %}
                 load_js('{{ url_list }}', undefined, undefined, undefined, undefined, undefined, undefined, abortAllPending = true);
             }
         },
@@ -58,7 +62,9 @@ $$("{{ webix_container_id }}").addView({
             hidden: true,
             icon: "far fa-trash-alt",
             click: function (id, event) {
+                {% if model %}
                 setWebixFilter('{{ model|getattr:'_meta'|getattr:'app_label'}}.{{ model|getattr:'_meta'|getattr:'model_name'}}', 'geo', null);
+                {% endif %}
                 load_js('{{ url_list }}', undefined, undefined, undefined, undefined, undefined, undefined, abortAllPending = true);
             }
         },
@@ -80,12 +86,14 @@ $$("{{ webix_container_id }}").addView({
     ]
 });
 
+{% if model %}
 if ((webixAppliedFilters['{{ model|getattr:'_meta'|getattr:'app_label'}}.{{ model|getattr:'_meta'|getattr:'model_name'}}']['locked']!=null) || (webixAppliedFilters['{{ model|getattr:'_meta'|getattr:'app_label'}}.{{ model|getattr:'_meta'|getattr:'model_name'}}']['sql']!=null)) {
     $$('{{ view_prefix }}_filter_locked_sql').show();
 }
 if (webixAppliedFilters['{{ model|getattr:'_meta'|getattr:'app_label'}}.{{ model|getattr:'_meta'|getattr:'model_name'}}']['geo']!=null) {
     $$('{{ view_prefix }}_filter_geo').show();
 }
+{% endif %}
 
 {% endif %}
 {% endblock %}
@@ -320,7 +328,11 @@ $$("{{ webix_container_id }}").addView({
             if ((params) && (params.start)) {
                 _start = params.start;
             }
+            {% if model %}
             var _params = webixAppliedFilters['{{ model|getattr:'_meta'|getattr:'app_label'}}.{{ model|getattr:'_meta'|getattr:'model_name'}}'];
+            {% else %}
+            var _params = {};
+            {% endif %}
             _params.start = _start;
             _params.count = _count;
             // elaborate filters
