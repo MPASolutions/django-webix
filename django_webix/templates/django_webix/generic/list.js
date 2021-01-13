@@ -47,8 +47,12 @@ $$("{{ webix_container_id }}").addView({
             icon: "far fa-trash-alt",
             click: function (id, event) {
                 {% if model %}
-                setWebixFilter('{{ model|getattr:'_meta'|getattr:'app_label'}}.{{ model|getattr:'_meta'|getattr:'model_name'}}', 'locked', null);
-                setWebixFilter('{{ model|getattr:'_meta'|getattr:'app_label'}}.{{ model|getattr:'_meta'|getattr:'model_name'}}', 'sql', null);
+                  {% with param='DjangoGeoFilter'|request_filter_param} %}{% if param %}
+                    setWebixFilter('{{ model|getattr:'_meta'|getattr:'app_label'}}.{{ model|getattr:'_meta'|getattr:'model_name'}}', '{{ param }}', null);
+                  {% endif %}{% endwith %}
+                  {% with param='DjangoBaseSqlFilter'|request_filter_param} %}{% if param %}
+                    setWebixFilter('{{ model|getattr:'_meta'|getattr:'app_label'}}.{{ model|getattr:'_meta'|getattr:'model_name'}}', '{{ param }}', null);
+                  {% endif %}{% endwith %}
                 {% endif %}
                 load_js('{{ url_list }}', undefined, undefined, undefined, undefined, undefined, undefined, abortAllPending = true);
             }
@@ -63,7 +67,9 @@ $$("{{ webix_container_id }}").addView({
             icon: "far fa-trash-alt",
             click: function (id, event) {
                 {% if model %}
-                setWebixFilter('{{ model|getattr:'_meta'|getattr:'app_label'}}.{{ model|getattr:'_meta'|getattr:'model_name'}}', 'geo', null);
+                  {% with param='DjangoGeoFilter'|request_filter_param} %}{% if param %}
+                    setWebixFilter('{{ model|getattr:'_meta'|getattr:'app_label'}}.{{ model|getattr:'_meta'|getattr:'model_name'}}', '{{ param }}', null);
+                  {% endif %}{% endwith %}
                 {% endif %}
                 load_js('{{ url_list }}', undefined, undefined, undefined, undefined, undefined, undefined, abortAllPending = true);
             }

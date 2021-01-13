@@ -1,4 +1,4 @@
-{% load static django_webix_utils i18n %}
+{% load static django_webix_utils i18n filtersmerger_utils %}
 
 {# filters #}
 
@@ -13,11 +13,21 @@ function setWebixFilter(app_model, filter_type, value){
 function initWebixFilterPrefix(app_model){
     if (webixAppliedFilters[app_model]==undefined){
         webixAppliedFilters[app_model] = {};
-        webixAppliedFilters[app_model]['geo'] = null;
-        webixAppliedFilters[app_model]['sql'] = null;
-        webixAppliedFilters[app_model]['locked'] = null;
-        webixAppliedFilters[app_model]['advanced'] = [];
-        webixAppliedFilters[app_model]['otf'] = null;
+        {% with param='DjangoGeoFilter'|request_filter_param} %}{% if param %}
+            webixAppliedFilters[app_model]['{{ param }}'] = null;
+        {% endif %}{% endwith %}
+        {% with param='DjangoBaseSqlFilter'|request_filter_param} %}{% if param %}
+            webixAppliedFilters[app_model]['{{ param }}'] = null;
+        {% endif %}{% endwith %}
+        {% with param='DjangoBaseLockedWebixFilter'|request_filter_param} %}{% if param %}
+            webixAppliedFilters[app_model]['{{ param }}'] = null;
+        {% endif %}{% endwith %}
+        {% with param='DjangoAdvancedWebixFilter'|request_filter_param} %}{% if param %}
+            webixAppliedFilters[app_model]['{{ param }}'] = null;
+        {% endif %}{% endwith %}
+        {% with param='DjangoAdvancedOTFWebixFilter'|request_filter_param} %}{% if param %}
+            webixAppliedFilters[app_model]['{{ param }}'] = null;
+        {% endif %}{% endwith %}
     }
 }
 
