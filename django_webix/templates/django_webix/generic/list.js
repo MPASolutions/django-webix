@@ -47,10 +47,10 @@ $$("{{ webix_container_id }}").addView({
             icon: "far fa-trash-alt",
             click: function (id, event) {
                 {% if model %}
-                  {% with param='DjangoGeoFilter'|request_filter_param} %}{% if param %}
+                  {% with param='DjangoGeoFilter'|request_filter_param %}{% if param %}
                     setWebixFilter('{{ model|getattr:'_meta'|getattr:'app_label'}}.{{ model|getattr:'_meta'|getattr:'model_name'}}', '{{ param }}', null);
                   {% endif %}{% endwith %}
-                  {% with param='DjangoBaseSqlFilter'|request_filter_param} %}{% if param %}
+                  {% with param='DjangoBaseSqlFilter'|request_filter_param %}{% if param %}
                     setWebixFilter('{{ model|getattr:'_meta'|getattr:'app_label'}}.{{ model|getattr:'_meta'|getattr:'model_name'}}', '{{ param }}', null);
                   {% endif %}{% endwith %}
                 {% endif %}
@@ -67,7 +67,7 @@ $$("{{ webix_container_id }}").addView({
             icon: "far fa-trash-alt",
             click: function (id, event) {
                 {% if model %}
-                  {% with param='DjangoGeoFilter'|request_filter_param} %}{% if param %}
+                  {% with param='DjangoGeoFilter'|request_filter_param %}{% if param %}
                     setWebixFilter('{{ model|getattr:'_meta'|getattr:'app_label'}}.{{ model|getattr:'_meta'|getattr:'model_name'}}', '{{ param }}', null);
                   {% endif %}{% endwith %}
                 {% endif %}

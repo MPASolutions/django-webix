@@ -13,19 +13,19 @@ function setWebixFilter(app_model, filter_type, value){
 function initWebixFilterPrefix(app_model){
     if (webixAppliedFilters[app_model]==undefined){
         webixAppliedFilters[app_model] = {};
-        {% with param='DjangoGeoFilter'|request_filter_param} %}{% if param %}
+        {% with param='DjangoGeoFilter'|request_filter_param %}{% if param %}
             webixAppliedFilters[app_model]['{{ param }}'] = null;
         {% endif %}{% endwith %}
-        {% with param='DjangoBaseSqlFilter'|request_filter_param} %}{% if param %}
+        {% with param='DjangoBaseSqlFilter'|request_filter_param %}{% if param %}
             webixAppliedFilters[app_model]['{{ param }}'] = null;
         {% endif %}{% endwith %}
-        {% with param='DjangoBaseLockedWebixFilter'|request_filter_param} %}{% if param %}
+        {% with param='DjangoBaseLockedWebixFilter'|request_filter_param %}{% if param %}
             webixAppliedFilters[app_model]['{{ param }}'] = null;
         {% endif %}{% endwith %}
-        {% with param='DjangoAdvancedWebixFilter'|request_filter_param} %}{% if param %}
+        {% with param='DjangoAdvancedWebixFilter'|request_filter_param %}{% if param %}
             webixAppliedFilters[app_model]['{{ param }}'] = null;
         {% endif %}{% endwith %}
-        {% with param='DjangoAdvancedOTFWebixFilter'|request_filter_param} %}{% if param %}
+        {% with param='DjangoAdvancedOTFWebixFilter'|request_filter_param %}{% if param %}
             webixAppliedFilters[app_model]['{{ param }}'] = null;
         {% endif %}{% endwith %}
     }
