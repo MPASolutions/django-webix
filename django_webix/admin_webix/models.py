@@ -1,9 +1,9 @@
 from django.db import models
-from mptt.models import MPTTModel, TreeForeignKey
+from mptt.models import TreeForeignKey
 from django.contrib.auth.models import Group
 from django.contrib.contenttypes.models import ContentType
 from django.urls import reverse
-
+from django_dal.models import DALMPTTModel as MPTTModel
 
 class WebixAdminMenu(MPTTModel):
     label = models.CharField(verbose_name='Nome nodo', max_length=255, blank=True, null=True)
