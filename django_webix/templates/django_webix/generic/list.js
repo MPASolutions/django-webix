@@ -1,4 +1,4 @@
-{% load django_webix_utils static i18n %}
+{% load django_webix_utils static i18n filtersmerger_utils %}
 
 {% block webix_content %}
 

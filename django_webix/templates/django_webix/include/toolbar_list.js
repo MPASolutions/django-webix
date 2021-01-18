@@ -96,7 +96,7 @@ function {{ view_prefix }}prepare_actions_execute(action_name) {
     var ids = [];
     $$("{{ view_prefix }}datatable").eachRow(function (id) {
         if ((this.getItem(id) != undefined) && (this.getItem(id).checkbox_action)) {
-            ids.push(id)
+            ids.push(id);
         }
     })
     if (ids.length > 0) {
@@ -140,6 +140,7 @@ $$("{{ webix_container_id }}").addView({
         {% block add_button %}
         {% if has_add_permission or not remove_disabled_buttons and not has_add_permission %}
         {
+            id: "{{ view_prefix }}_addnew",
             view: "tootipButton",
             type: "form",
             align: "right",
