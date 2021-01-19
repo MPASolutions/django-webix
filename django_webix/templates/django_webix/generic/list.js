@@ -1,4 +1,5 @@
 {% load django_webix_utils static i18n filtersmerger_utils %}
+{% get_request_filter_params %}
 
 {% block webix_content %}
 
@@ -47,12 +48,9 @@ $$("{{ webix_container_id }}").addView({
             icon: "far fa-trash-alt",
             click: function (id, event) {
                 {% if model %}
-                  {% with param='DjangoGeoFilter'|request_filter_param %}{% if param %}
-                    setWebixFilter('{{ model|getattr:'_meta'|getattr:'app_label'}}.{{ model|getattr:'_meta'|getattr:'model_name'}}', '{{ param }}', null);
-                  {% endif %}{% endwith %}
-                  {% with param='DjangoBaseSqlFilter'|request_filter_param %}{% if param %}
-                    setWebixFilter('{{ model|getattr:'_meta'|getattr:'app_label'}}.{{ model|getattr:'_meta'|getattr:'model_name'}}', '{{ param }}', null);
-                  {% endif %}{% endwith %}
+                {% for key, param in extra_filter_params.items %}{% if param %}
+                setWebixFilter('{{ model|getattr:'_meta'|getattr:'app_label'}}.{{ model|getattr:'_meta'|getattr:'model_name'}}', '{{ param }}', null);
+                {% endif %}{% endfor %}
                 {% endif %}
                 load_js('{{ url_list }}', undefined, undefined, undefined, undefined, undefined, undefined, abortAllPending = true);
             }
@@ -67,9 +65,9 @@ $$("{{ webix_container_id }}").addView({
             icon: "far fa-trash-alt",
             click: function (id, event) {
                 {% if model %}
-                  {% with param='DjangoGeoFilter'|request_filter_param %}{% if param %}
-                    setWebixFilter('{{ model|getattr:'_meta'|getattr:'app_label'}}.{{ model|getattr:'_meta'|getattr:'model_name'}}', '{{ param }}', null);
-                  {% endif %}{% endwith %}
+                {% for key, param in spatial_filter_params.items %}{% if param %}
+                setWebixFilter('{{ model|getattr:'_meta'|getattr:'app_label'}}.{{ model|getattr:'_meta'|getattr:'model_name'}}', '{{ param }}', null);
+                {% endif %}{% endfor %}
                 {% endif %}
                 load_js('{{ url_list }}', undefined, undefined, undefined, undefined, undefined, undefined, abortAllPending = true);
             }
@@ -81,7 +79,6 @@ $$("{{ webix_container_id }}").addView({
             label: "{{_("Advanced filter")|escapejs}} <div class='webix_badge' style='background-color: #ff8839 !important;' id='{{ view_prefix }}django_webix_filter_counter'>0</div>",
             type: "icon",
             width: 180,
-            //hidden: django_webix_filters.length==0,
             icon: "far fa-filter",
             click: function (id, event) { // (lnk, hide, area, method, data)
                 load_js('{% url 'django_webix_filter.webixfilter.list_model' app_label=app_label model_name=module_name %}?_popup', undefined, undefined, undefined, undefined, undefined, undefined, abortAllPending = true);
@@ -93,10 +90,20 @@ $$("{{ webix_container_id }}").addView({
 });
 
 {% if model %}
-if ((webixAppliedFilters['{{ model|getattr:'_meta'|getattr:'app_label'}}.{{ model|getattr:'_meta'|getattr:'model_name'}}']['locked']!=null) || (webixAppliedFilters['{{ model|getattr:'_meta'|getattr:'app_label'}}.{{ model|getattr:'_meta'|getattr:'model_name'}}']['sql']!=null)) {
+if (
+    false
+    {% for key, param in extra_filter_params.items %}{% if param %}
+    || (webixAppliedFilters['{{ model|getattr:'_meta'|getattr:'app_label'}}.{{ model|getattr:'_meta'|getattr:'model_name'}}']['{{ param }}'] != null)
+    {% endif %}{% endfor %}
+) {
     $$('{{ view_prefix }}_filter_locked_sql').show();
 }
-if (webixAppliedFilters['{{ model|getattr:'_meta'|getattr:'app_label'}}.{{ model|getattr:'_meta'|getattr:'model_name'}}']['geo']!=null) {
+if (
+    false
+    {% for key, param in spatial_filter_params.items %}{% if param %}
+    || (webixAppliedFilters['{{ model|getattr:'_meta'|getattr:'app_label'}}.{{ model|getattr:'_meta'|getattr:'model_name'}}']['{{ param }}'] != null)
+    {% endif %}{% endfor %}
+) {
     $$('{{ view_prefix }}_filter_geo').show();
 }
 {% endif %}
@@ -220,12 +227,23 @@ function {{ view_prefix }}deactivate_otf_filter(){
 }
 
 function {{ view_prefix }}apply_filters() {
-//    var extra = ''
-//    if({{ view_prefix }}is_active_otf_filter()){
-//        extra = '+1';
-//    }
-//    $('#{{ view_prefix }}django_webix_filter_counter').text({{ view_prefix }}django_webix_filters.length + extra);
-    console.log('{{ view_prefix }}');
+    var extra = ''
+    if({{ view_prefix }}is_active_otf_filter()){
+        extra = '+';
+    }
+    var advanced_filter_count = '0';
+    {% with param='DjangoAdvancedWebixFilter'|request_filter_param %}
+    {% if param %}
+    var advanced_filter = webixAppliedFilters['{{ model_name }}']['{{ param }}'];
+    if (advanced_filter){
+        advanced_filter_count = advanced_filter.split(',').length
+    }
+    {% endif %}
+    {% endwith %}
+    if(extra != '' && advanced_filter_count == '0'){
+        advanced_filter_count = '';
+    }
+    $('#{{ view_prefix }}django_webix_filter_counter').text(advanced_filter_count + extra);
     $$('{{ view_prefix }}filter').setValue('1');
     $$('{{ view_prefix }}datatable').filterByAll();
 }
@@ -233,7 +251,6 @@ function {{ view_prefix }}apply_filters() {
 {% if is_enable_column_webgis %}
 {% for layer in layers %}
 function custom_button_geo_{{layer.codename}}(obj, common, value) {
-    // console.log(obj,common, value)
     if (obj.{{ layer.geofieldname }}_available==true)
         return '<div title="{{_("Go to map")|escapejs}} ({{layer.layername}})"><i style="cursor:pointer" class="webix_icon far fa-map-marker-alt"></i></div>';
     else
@@ -436,7 +453,7 @@ $$("{{ webix_container_id }}").addView({
             {% if is_enable_column_webgis %}
             {% for layer in layers %}
             if ((id.column == 'cmd_gotomap_{{layer.codename}}')) {
-                $$("map").goToWebgisPk('{{layer.layername}}', '{{ pk_field_name }}', el.id);
+                $$("map").goToWebgisPk('{{layer.qxsname}}', '{{ pk_field_name }}', el.id);
             } else
             {% endfor %}
             {% endif %}
