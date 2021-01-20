@@ -1,8 +1,10 @@
 {% load static django_webix_utils i18n filtersmerger_utils %}
 
+{% get_request_filter_params %}
+
 {# filters #}
 
-if (webixAppliedFilters==undefined) {
+if (webixAppliedFilters == undefined) {
     var webixAppliedFilters = {};
 }
 
@@ -11,23 +13,25 @@ function setWebixFilter(app_model, filter_type, value){
 }
 
 function initWebixFilterPrefix(app_model){
-    if (webixAppliedFilters[app_model]==undefined){
+    if (webixAppliedFilters[app_model] == undefined) {
         webixAppliedFilters[app_model] = {};
-        {% with param='DjangoGeoFilter'|request_filter_param %}{% if param %}
-            webixAppliedFilters[app_model]['{{ param }}'] = null;
-        {% endif %}{% endwith %}
-        {% with param='DjangoBaseSqlFilter'|request_filter_param %}{% if param %}
-            webixAppliedFilters[app_model]['{{ param }}'] = null;
-        {% endif %}{% endwith %}
-        {% with param='DjangoBaseLockedWebixFilter'|request_filter_param %}{% if param %}
-            webixAppliedFilters[app_model]['{{ param }}'] = null;
-        {% endif %}{% endwith %}
-        {% with param='DjangoAdvancedWebixFilter'|request_filter_param %}{% if param %}
-            webixAppliedFilters[app_model]['{{ param }}'] = null;
-        {% endif %}{% endwith %}
-        {% with param='DjangoAdvancedOTFWebixFilter'|request_filter_param %}{% if param %}
-            webixAppliedFilters[app_model]['{{ param }}'] = null;
-        {% endif %}{% endwith %}
+        {% for key, param in filter_params.items %}
+        {% if param %}
+         webixAppliedFilters[app_model]['{{ param }}'] = null;
+        {% endif %}
+        {%  endfor %}
+    }
+}
+
+function resetWebixFilterPrefix(app_model){
+    webixAppliedFilters[app_model] = {};
+    {% for key, param in filter_params.items %}
+    {% if param %}
+    webixAppliedFilters[app_model]['{{ param }}'] = null;
+    {% endif %}
+    {%  endfor %}
+    if('layer' in webixAppliedFilters[app_model]) {
+        webixAppliedFilters[app_model]['layer'] = null;
     }
 }
 

@@ -218,9 +218,14 @@ class ModelWebixAdmin(WebixPermissionsMixin):
 
     def get_layers(self):
         layers = []
-        if apps.is_installed("django_webix_leaflet") and getattr(self, 'model', None) is not None:
+        if apps.is_installed("django_webix_leaflet") and getattr(self,'model',None) is not None:
             for model_layer in list(filter(lambda x: x.model == self.model, qxsreg.get_models())):
-                layers.append(model_layer.get_qxs_codename())
+                layers.append({
+                    'codename': model_layer.get_qxs_codename(),
+                    'layername': model_layer.get_title(),
+                    'qxsname': model_layer.get_qxs_name(),
+                    'geofieldname': model_layer.geo_field_name
+                })
         return layers
 
     def get_add_view(self):

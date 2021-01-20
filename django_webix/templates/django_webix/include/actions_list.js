@@ -4,7 +4,7 @@
 
 var {{ view_prefix }}actions_list = [
     {% for layer in layers %}
-        {id: 'gotowebgis_{{ layer.layername }}', value: "{{_("Go to map")|escapejs}} ({{layer.layername}})"},
+        {id: 'gotowebgis_{{ layer.codename }}', value: "{{_("Go to map")|escapejs}} ({{layer.layername}})"},
     {% endfor %}
     {% for action_key,action in actions.items %}
     {id: '{{ action_key }}', value: '{{action.short_description}}'}{% if not forloop.last %}, {% endif %}
@@ -93,8 +93,8 @@ function _{{ action_key }}_action_execute_form(ids, all) {
 
 function {{ view_prefix }}actions_execute(action, ids, all) {
     {% for layer in layers %}
-    if (action=='gotowebgis_{{ layer.layername }}') {
-        $$("map").goToWebgisPks('{{layer.layername}}', '{{ pk_field_name }}', ids);
+    if (action=='gotowebgis_{{ layer.codename }}') {
+        $$("map").goToWebgisPks('{{layer.qxsname}}', '{{ pk_field_name }}', ids);
     }
     {% endfor %}
     {% for action_key, action in actions.items %} if (action=='{{ action_key }}') {
