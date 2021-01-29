@@ -8,7 +8,6 @@ from django.conf import settings
 from django.utils.translation import ugettext as _
 from django.views.generic import TemplateView
 from django.urls import reverse
-from qxs import qxsreg
 from django.urls.exceptions import NoReverseMatch
 
 
@@ -344,7 +343,7 @@ class WebixBaseMixin:
 
         if apps.is_installed("qxs") and apps.is_installed("django_webix_leaflet") and getattr(self,'model',None) is not None:
             from qxs import qxsreg
-            
+
             for model_layer in list(filter(lambda x: x.model == self.model, qxsreg.get_models())):
                 layers.append({
                     'codename': model_layer.get_qxs_codename(),
