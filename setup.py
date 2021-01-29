@@ -64,7 +64,7 @@ setup(
         'django-mptt>=0.11.0',
         'django-two-factor-auth>=1.12.1',
         'django-user-agents>=0.4.0',
-        'dateutil>=2.8.1',
+        'python-dateutil>=2.8.1',
         'six'
     ],
     classifiers=[
