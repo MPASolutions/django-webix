@@ -27,7 +27,7 @@ $$("{{ webix_container_id }}").addView({
         {
             id: '{{ view_prefix }}filter',
             view: "text",
-            value: "1",
+            value: "0", // disable by default
             hidden: true,
         },
         {},
@@ -259,6 +259,26 @@ function custom_button_geo_{{layer.codename}}(obj, common, value) {
 {% endfor %}
 {% endif %}
 
+{%  if is_json_loading %}
+$$("{{ webix_container_id }}").addView({
+    template: "{common.first()} {common.prev()} {common.pages()} {common.next()} {common.last()}",
+    id: "datatable_paging_{{ model_name }}", // the container to place the pager controls into
+    view: "pager",
+    group: 5, // buttons for next amd back
+    // must to be the same of url request because managed from interface
+    size: {{ paginate_count_default }},
+    page: 0,
+    on: {
+        onBeforePageChange: function (new_page, old_page) {
+            if ($('input[name="{{ view_prefix }}master_checkbox"]').prop("checked") == true) {
+                $('input[name="{{ view_prefix }}master_checkbox"]').click();
+                {{ view_prefix }}update_counter();
+            }
+        }
+    }
+})
+{% endif %}
+
 $$("{{ webix_container_id }}").addView({
     id: '{{ view_prefix }}datatable',
     view: "datatable",
@@ -426,9 +446,12 @@ $$("{{ webix_container_id }}").addView({
             this.showOverlay("<img src='{% static 'django_webix/loading.gif' %}'>");
         },
         onAfterLoad: function () {
+            console.log(4)
             {% if not is_json_loading %}
             $$('{{ view_prefix }}datatable').view_count = {{ view_prefix }}objects_list.length;
             $$('{{ view_prefix }}datatable').view_count_total = {{ view_prefix }}objects_list.length;
+            {% else %}
+            $$('{{ view_prefix }}filter').setValue('0');
             {% endif %}
             this.hideOverlay();
         },
@@ -481,7 +504,7 @@ $$("{{ webix_container_id }}").addView({
             {% endblock %}
         }
     }
-});
+},1);
 
 {% block footer %}
     {% if is_enable_footer %}
@@ -497,27 +520,8 @@ $$("{{ webix_container_id }}").addView({
 {% endblock %}
 
 // disable filter on first request
-$$('{{ view_prefix }}filter').setValue('0');
+// $$('{{ view_prefix }}filter').setValue('0');
 
-{%  if is_json_loading %}
-$$("{{ webix_container_id }}").addView({
-    template: "{common.first()} {common.prev()} {common.pages()} {common.next()} {common.last()}",
-    id: "datatable_paging_{{ model_name }}", // the container to place the pager controls into
-    view: "pager",
-    group: 5, // buttons for next amd back
-    // must to be the same of url request because managed from interface
-    size: {{ paginate_count_default }},
-    page: 0,
-    on: {
-        onBeforePageChange: function (new_page, old_page) {
-            if ($('input[name="{{ view_prefix }}master_checkbox"]').prop("checked") == true) {
-                $('input[name="{{ view_prefix }}master_checkbox"]').click();
-                {{ view_prefix }}update_counter();
-            }
-        }
-    }
-})
-{% endif %}
 
 {% endblock %}
 
