@@ -58,8 +58,13 @@ function _{{ view_prefix }}action_execute(action, ids, all, response_type, short
                         },
                         success: function (data) { // TODO gestire response
                             if (data.status==true) {
+                                if (data.message!=undefined){
+                                    message = data.message;
+                                } else {
+                                    message = "{{_("Action successful")|escapejs}}";
+                                }
                                 webix.message({
-                                    text: data.message,
+                                    text: message,
                                     type: "info",
                                     expire: 5000
                                 });
