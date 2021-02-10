@@ -34,6 +34,8 @@ class ModelWebixAdmin(WebixPermissionsMixin):
     # DJANGO WEBIX FORM: OPTION 2
     form = None
 
+    template_form_style = None
+
     inlines = []
 
     # LIST SETTINGS
@@ -55,6 +57,9 @@ class ModelWebixAdmin(WebixPermissionsMixin):
 
     # permission custom
     only_superuser = False
+
+    def get_template_form_style(self):
+        return self.template_form_style
 
     def get_url_pattern_list(self):
         info = self.model._meta.app_label, self.model._meta.model_name
@@ -107,9 +112,9 @@ class ModelWebixAdmin(WebixPermissionsMixin):
                 raise Exception('TODO?')
         return _next
 
-    def create_list_display(self, request=None):
+    def create_list_display(self, list_display, request=None):
         _fields = []
-        for j, field_name in enumerate(self.list_display):
+        for j, field_name in enumerate(list_display):
             model_field = self.get_field_traverse(field_name)
             if type(model_field) == str:
                 header_title = model_field
@@ -168,7 +173,7 @@ class ModelWebixAdmin(WebixPermissionsMixin):
 
     def get_list_display(self, request=None):
         if type(self.list_display[0]) == str:
-            return self.create_list_display(request=request)
+            return self.create_list_display(self.list_display, request=request)
         else:
             return self.list_display
 
@@ -243,6 +248,7 @@ class ModelWebixAdmin(WebixPermissionsMixin):
 
                 model = _admin.model
                 form_class = _admin.get_form_create_update()
+                template_style = _admin.get_template_form_style()
                 inlines = _admin.inlines
                 model_copy_fields = _admin.get_form_fields()
                 enable_button_save_continue = _admin.enable_button_save_continue
@@ -290,6 +296,7 @@ class ModelWebixAdmin(WebixPermissionsMixin):
 
                 model = _admin.model
                 form_class = _admin.get_form_create_update()
+                template_style = _admin.get_template_form_style()
                 inlines = _admin.inlines
                 model_copy_fields = _admin.get_form_fields()
                 enable_button_save_continue = _admin.enable_button_save_continue

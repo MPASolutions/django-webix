@@ -44,6 +44,9 @@ function create_inline(empty_form, totalForms, form_id) {
  * @param field_id field id to add onChange event
  */
 function add_rule(field_id) {
+    if ($$(field_id)==undefined){
+        console.log('Config field error',field_id);
+    }
     $$(field_id).attachEvent("onChange", function () {
         var prefix = /^id_(.*)-\d+-.*$/.exec(this.config.id)[1];
 
