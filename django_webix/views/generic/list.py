@@ -273,6 +273,9 @@ class WebixListView(WebixBaseMixin,
         return annotations
 
     def get_initial_queryset(self):
+        # TODO: questo causa errori quando si fa l'ordering su campi annotati, possibile soluzione:
+        # return self.model._default_manager.all()
+        # da discutere di farla
         return super(WebixListView, self).get_queryset()
 
     def get_queryset(self, initial_queryset=None):
