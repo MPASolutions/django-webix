@@ -110,6 +110,10 @@ function _{{ view_prefix }}action_execute(action, ids, all, response_type, short
 
                 }
                 $$('{{ view_prefix }}datatable').hideOverlay();
+            } else {
+                if (callback_error) {
+                    callback_error();
+                }
             }
         }
     })

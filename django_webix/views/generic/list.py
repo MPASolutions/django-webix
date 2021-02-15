@@ -438,7 +438,7 @@ class WebixListView(WebixBaseMixin,
                     if item.get('id') not in ids:
                         qs.remove(item)
             else:
-                auto_field_name = self.model._meta.auto_field.name
+                auto_field_name = self.model._meta.get_field(self.get_pk_field()).name
                 qs = qs.filter(**{auto_field_name + '__in': ids})
         return qs
 
