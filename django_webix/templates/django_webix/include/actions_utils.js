@@ -89,8 +89,9 @@ function _{{ view_prefix }}action_execute(action, ids, all, response_type, short
                     form.setAttribute("action", "{{ url_list }}");
                     form.setAttribute("target", "view");
                     _fields = [
-                        ['action',action],
-                        ['filters', JSON.stringify( {{ view_prefix }}get_filters_qsets() )],
+                        ['action', action],
+                        ['filters', JSON.stringify( {{ view_prefix }}get_filters_qsets())],
+                        ['params', JSON.stringify(input_params || {})],
                         ['csrfmiddlewaretoken',getCookie('csrftoken')]
                     ];
                     if (all==false){
@@ -98,14 +99,17 @@ function _{{ view_prefix }}action_execute(action, ids, all, response_type, short
                     }
                     $.each(_fields, function( index, value ) {
                         var hiddenField = document.createElement("input");
-                            hiddenField.setAttribute("type", "hidden");
-                            hiddenField.setAttribute("name", value[0]);
-                            hiddenField.setAttribute("value", value[1]);
-                            form.appendChild(hiddenField);
-                        });
+                        hiddenField.setAttribute("type", "hidden");
+                        hiddenField.setAttribute("name", value[0]);
+                        hiddenField.setAttribute("value", value[1]);
+                        form.appendChild(hiddenField);
+                    });
                     document.body.appendChild(form);
-                    window.open('', 'view');
+                    form.target = '_blabk';
                     form.submit();
+                    if (callback_success) {
+                        callback_success();
+                    }
                 } else {
 
                 }
