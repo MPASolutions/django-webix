@@ -157,7 +157,11 @@ function {{ view_prefix }}get_filters_qsets() {
                         }
                     })
                 } else {
-                    qsets.push({'path': el.id+'__'+el.serverFilterType, 'val': value});
+                    if ((el.serverFilterType=='') || (el.serverFilterType==undefined)){
+                        qsets.push({'path': el.id, 'val': value});
+                    } else{
+                        qsets.push({'path': el.id + '__' + el.serverFilterType, 'val': value});
+                    }
                 }
             }
         }
@@ -446,7 +450,6 @@ $$("{{ webix_container_id }}").addView({
             this.showOverlay("<img src='{% static 'django_webix/loading.gif' %}'>");
         },
         onAfterLoad: function () {
-            console.log(4)
             {% if not is_json_loading %}
             $$('{{ view_prefix }}datatable').view_count = {{ view_prefix }}objects_list.length;
             $$('{{ view_prefix }}datatable').view_count_total = {{ view_prefix }}objects_list.length;
