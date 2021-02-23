@@ -121,24 +121,5 @@ if ($$('main_toolbar_form').getChildViews().length < 2) {
 }
 
 {% block form_validate %}
-    /**
-     * Returns if a form is valid
-     *
-     * @returns {boolean}
-     */
-    function form_validate(webix_id) {
-        var form_data_webix_elements = [];
-        form_data_webix_elements.push($$(webix_id));
-
-        var status = true;
-
-        $.each(form_data_webix_elements, function (index, value) {
-            var valid = value.validate({hidden: true, disabled: true});
-            if (valid == false) {
-                status = false;
-            }
-        });
-
-        return status;
-    }
+  {% include "django_webix/include/toolbar_form_validate.js" %}
 {% endblock %}

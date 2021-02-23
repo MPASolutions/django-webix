@@ -134,7 +134,10 @@ $$("{{ webix_container_id }}").addView({
         {id: '{{ view_prefix }}select_all_checkbox', view: 'checkbox', value: 0, hidden:true},
 
         {% block toolbar_middle %}
-        {$template: "Spacer"},
+        {
+            id: "{{ webix_container_id }}_toolbar_middle",
+            cols: [{$template: "Spacer"}]
+        },
         {% endblock %}
 
         {% block add_button %}
