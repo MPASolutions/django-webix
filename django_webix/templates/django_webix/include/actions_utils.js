@@ -89,21 +89,30 @@ function _{{ view_prefix }}action_execute(action, ids, all, response_type, short
                     form.setAttribute("action", "{{ url_list }}");
                     form.setAttribute("target", "view");
                     _fields = [
-                        ['action', action],
-                        ['filters', JSON.stringify( {{ view_prefix }}get_filters_qsets())],
-                        ['params', JSON.stringify(input_params || {})],
-                        ['csrfmiddlewaretoken',getCookie('csrftoken')]
+                        ['action',action],
+                        ['filters', JSON.stringify( {{ view_prefix }}get_filters_qsets() )],
+                        ['csrfmiddlewaretoken',getCookie('csrftoken')],
+                        ['params', JSON.stringify(input_params || {})]
                     ];
                     if (all==false){
                         _fields.push(['ids',ids.join(',')])
                     }
+                    // add standard fields
                     $.each(_fields, function( index, value ) {
                         var hiddenField = document.createElement("input");
-                        hiddenField.setAttribute("type", "hidden");
-                        hiddenField.setAttribute("name", value[0]);
-                        hiddenField.setAttribute("value", value[1]);
-                        form.appendChild(hiddenField);
-                    });
+                            hiddenField.setAttribute("type", "hidden");
+                            hiddenField.setAttribute("name", value[0]);
+                            hiddenField.setAttribute("value", value[1]);
+                            form.appendChild(hiddenField);
+                        });
+                    // add form fields
+                    for (var key in input_params){
+                        var hiddenField = document.createElement("input");
+                            hiddenField.setAttribute("type", "hidden");
+                            hiddenField.setAttribute("name", key);
+                            hiddenField.setAttribute("value", input_params[key]);
+                            form.appendChild(hiddenField);
+                        };
                     document.body.appendChild(form);
                     form.target = '_blabk';
                     form.submit();

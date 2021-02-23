@@ -65,151 +65,6 @@ class WebixListView(WebixBaseMixin,
     def is_installed_django_webix_filter(self):
         return apps.is_installed('django_webix_filter')
 
-    ########### QUERYSET BUILDER ###########
-
-    # {
-    #     'operator': 'AND', # by default
-    #     'qsets':[
-    #         {'path': 'appezzamento__superficie__in','val': [1,2],}
-    #         {'geo_field_name': '...','geo_srid': '...','polygons':'...'}
-    #     ]
-    # }
-    #def _decode_text_filters(self, request, key):
-    #    return decode_text_filters(request, key)
-
-    # 1. QSETS FILTERS (qsets style)
-
-    # def _elaborate_qsets_filters(self, data):
-    #     return from_dict_to_qset(data)
-    #
-    # def get_qsets_filters_str(self, request):
-    #     if self.get_qsets_filters(request) is not None:
-    #         return json.dumps(self._decode_text_filters(request, 'filters'))
-    #     else:
-    #         return None
-    #
-    # def get_qsets_filters(self, request):
-    #
-    #     filters = self._decode_text_filters(request, 'filters')
-    #     if filters is not None:
-    #         # try:
-    #         return self._elaborate_qsets_filters(filters)
-    #     # except:
-    #     #    print(_('ERROR: qsets structure is incorrect'))
-    #     return None  # by default filters are not set
-    #
-    # # 2. LOCK QSETS FILTERS (qsets style)
-    #
-    # def get_qsets_locked_filters_str(self, request):
-    #     if self.get_qsets_locked_filters(request) is not None:
-    #         return json.dumps(self._decode_text_filters(request, 'locked_filters'))
-    #     else:
-    #         return None
-    #
-    # def get_qsets_locked_filters(self, request):
-    #
-    #     filters = self._decode_text_filters(request, 'locked_filters')
-    #     if filters is not None:
-    #         # try:
-    #         return self._elaborate_qsets_filters(filters)
-    #     # except:
-    #     #    print(_('ERROR: qsets structure is incorrect'))
-    #     return None  # by default filters are not set
-    #
-    # # 3. GEO FILTER (dict with keys ['geo_field_name','polygons_srid','polygons'])
-    #
-    # def _elaborate_geo_filter(self, data):
-    #     return from_geo_dict_to_qset(self.model, data)
-    #
-    # def get_geo_filter_str(self, request):
-    #     if self.get_geo_filter(request) is not None:
-    #         return json.dumps(self._decode_text_filters(request, 'geo_filter'))
-    #     else:
-    #         return None
-    #
-    # def get_geo_filter(self, request):
-    #     filters = self._decode_text_filters(request, 'geo_filter')
-    #     if filters is not None:
-    #         try:
-    #             return self._elaborate_geo_filter(filters)
-    #         except:
-    #             print(_('ERROR: geo filter is incorrect'))
-    #     return None  # by default filters are not set
-    #
-    # # 4. SQL FILTERS (list of string)
-    #
-    # def get_sql_filters_str(self, request):
-    #     if self.get_sql_filters(request) is not None:
-    #         return json.dumps(self._decode_text_filters(request, 'sql_filters'))
-    #     else:
-    #         return None
-    #
-    # def get_sql_filters(self, request):
-    #     filters = self._decode_text_filters(request, 'sql_filters')
-    #     if filters is not None:
-    #         return filters
-    #     return None
-    #
-    # # 5. DJANGO WEBIX FILTERS
-    #
-    # def _django_webix_filters_ids(self, request):
-    #     if request.method == 'GET':
-    #         ids = request.GET.getlist('django_webix_filters[]', None)
-    #     elif request.method == 'POST':
-    #         ids = request.POST.getlist('django_webix_filters[]', None)
-    #     else:
-    #         ids = None
-    #     return ids
-    #
-    # def get_django_webix_filters(self, request):
-    #     if self.is_installed_django_webix_filter():
-    #         from django_webix_filter.models import WebixFilter
-    #         filters_ids = self._django_webix_filters_ids(request)
-    #         if filters_ids is not None:
-    #             return WebixFilter.objects.filter(id__in=filters_ids)
-    #     return None
-    #
-    # def get_django_webix_filters_qsets(self):
-    #     if self.is_installed_django_webix_filter():
-    #         qs_django_webix_filter = self.django_webix_filters
-    #         _filter = Q()
-    #         for django_webix_filter in qs_django_webix_filter:
-    #             _filter &= self._elaborate_qsets_filters(django_webix_filter.filter)
-    #         return _filter
-    #
-    #     return None
-    #
-    # # 6. DJANGO WEBIX FILTERS ON THE FLY
-    #
-    # def _django_webix_otf_filters(self, request):
-    #     if request.method == 'GET':
-    #         otf_filter = request.GET.get('otf_filter', None)
-    #     elif request.method == 'POST':
-    #         otf_filter = request.POST.get('otf_filter', None)
-    #     else:
-    #         otf_filter = None
-    #     return otf_filter
-    #
-    # def get_django_webix_otf_filters(self, request):
-    #     if self.is_installed_django_webix_filter():
-    #         otf_filter = self._django_webix_otf_filters(request)
-    #         if otf_filter is not None:
-    #             try:
-    #                 return json.loads(otf_filter)
-    #             except:
-    #                 return None
-    #     return None
-    #
-    # def get_django_webix_otf_filters_qsets(self):
-    #     if self.is_installed_django_webix_filter():
-    #         otf_filter = self.django_webix_otf_filters
-    #         from django_webix_filter.utils.json_converter import get_JSON_for_DB
-    #         try:
-    #             return self._elaborate_qsets_filters(get_JSON_for_DB(otf_filter))
-    #         except:
-    #             return None
-    #     return None
-
     # ##################################
 
     def _optimize_select_related(self, qs):
@@ -285,29 +140,11 @@ class WebixListView(WebixBaseMixin,
                 qs = initial_queryset
             else:
                 qs = self.get_initial_queryset()
-            # # 1. apply qsets filters
-            # if self.qsets_filters is not None:
-            #     qs = qs.filter(self.qsets_filters)
-            # # 2. apply locked qsets filters
-            # if self.qsets_locked_filters is not None:
-            #     qs = qs.filter(self.qsets_locked_filters)
-            # # 3. apply geo filter
-            # if self.geo_filter is not None:
-            #     qs = qs.filter(self.geo_filter)
-            # # 4. apply SQL raw: this is shit! but need for old SW (remove for future)
-            # if self.sql_filters is not None:
-            #     sql_filter = ' OR '.join(['({sql})'.format(sql=_sql) for _sql in self.sql_filters])
-            #     qs = qs.extra(where=[sql_filter])
-            # # 5. apply django webix filters
-            # if self.django_webix_filters is not None:
-            #     qs = qs.filter(self.get_django_webix_filters_qsets())
-            # # TODO: da inserire qui il otf filter
-            # if self.django_webix_otf_filters is not None:
-            #     qs = qs.filter(self.get_django_webix_otf_filters_qsets())
+
             filter_merger = FilterMerger(request=self.request)
             qs = filter_merger.get_queryset(self.model, initial_queryset=qs)
 
-            # 6. annotate geo available
+            # annotate geo available
             if self.is_enable_column_webgis(self.request):
                 geo_field_names = get_model_geo_field_names(self.model)
                 annotations = self.get_annotations_geoavailable(geo_field_names)
@@ -325,16 +162,16 @@ class WebixListView(WebixBaseMixin,
         fields = self.get_fields()
         if fields is not None:
             for field in fields:
-                if field.get('datalist_column') is not None and \
-                    ('serverSelectFilter' in field.get('datalist_column') or
-                     'serverRichSelectFilter' in field.get('datalist_column') or
-                     'serverMultiSelectFilter' in field.get('datalist_column') or
-                     'serverMultiComboFilter' in field.get('datalist_column')):
-                    field_name = field.get('field_name')
-                    # TODO: there are no null option
-                    _fields_choices[field_name] = list(
-                        self.get_queryset().filter(**{field_name + '__isnull': False}).values_list(field_name,
-                                                                                                   flat=True).distinct().order_by())
+                if field.get('datalist_column') is not None:
+                    if ('serverSelectFilter' in field.get('datalist_column') or
+                       'serverRichSelectFilter' in field.get('datalist_column') or
+                       'serverMultiSelectFilter' in field.get('datalist_column') or
+                       'serverMultiComboFilter' in field.get('datalist_column')):
+                        field_name = field.get('field_name')
+                        # TODO: there are no null option
+                        _fields_choices[field_name] = [str(i) for i in
+                            self.get_queryset().filter(**{field_name + '__isnull': False}).values_list(field_name,
+                                                                                                   flat=True).distinct().order_by()]
 
         return _fields_choices
 
@@ -623,25 +460,6 @@ class WebixListView(WebixBaseMixin,
 
     def dispatch(self, *args, **kwargs):
 
-        # # 1. QSETS FILTERS
-        # self.qsets_filters = self.get_qsets_filters(self.request)
-        #
-        # # 2. QSETS LOCKED FILTERS
-        # self.qsets_locked_filters = self.get_qsets_locked_filters(self.request)
-        #
-        # # 3. GEO FILTER
-        # self.geo_filter = self.get_geo_filter(self.request)
-        #
-        # # 4. SQL FILTERS
-        # self.sql_filters = self.get_sql_filters(self.request)
-        # # for now it's only a qsets list # this is shit! but need for old SW (remove for future)
-        #
-        # # 5. DJANGO WEBIX FILTERS
-        # self.django_webix_filters = self.get_django_webix_filters(self.request)
-        #
-        # # 6. DJANGO WEBIX ON THE FLY FILTERS
-        # self.django_webix_otf_filters = self.get_django_webix_otf_filters(self.request)
-
         if not self.has_view_permission(request=self.request):
             raise PermissionDenied(_('View permission is not allowed'))
 
@@ -682,12 +500,6 @@ class WebixListView(WebixBaseMixin,
             'paginate_start_key': self.paginate_start_key,
             # extra filters
             'is_installed_django_webix_filter': self.is_installed_django_webix_filter(),
-#            'qsets_filters': self.get_qsets_filters_str(self.request),  # for init when template is loaded
-#            'qsets_locked_filters': self.get_qsets_locked_filters_str(self.request),
-            # for init when template is loaded
-#            'geo_filter': self.get_geo_filter_str(self.request),  # for init when template is loaded
-#            'sql_filters': self.get_sql_filters_str(self.request),  # for init when template is loaded
-#            'django_webix_filters': self.get_django_webix_filters(self.request),  # for init when template is loaded
         })
         return context
 
