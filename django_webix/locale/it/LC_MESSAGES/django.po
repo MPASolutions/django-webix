@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-05-26 09:26+0200\n"
+"POT-Creation-Date: 2021-02-04 15:43+0100\n"
 "PO-Revision-Date: 2018-09-04 15:09+0200\n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -18,334 +18,406 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Poedit 2.1.1\n"
 
-#: django_webix/admin_webix/apps.py:12
+#: admin_webix/apps.py:12
 msgid "Administration"
 msgstr "Amministrazione"
 
-#: django_webix/admin_webix/sites.py:33
+#: admin_webix/sites.py:35
 msgid "Django webix site admin"
 msgstr ""
 
-#: django_webix/admin_webix/sites.py:36
+#: admin_webix/sites.py:38
 msgid "Django webix administration"
 msgstr ""
 
-#: django_webix/admin_webix/sites.py:39
+#: admin_webix/sites.py:41
 msgid "Site administration"
 msgstr "Amministrazione"
 
-#: django_webix/admin_webix/sites.py:407
+#: admin_webix/sites.py:608
+#, python-format
+msgid ""
+"Please enter the correct %(username)s and password for a staff account. Note "
+"that both fields may be case-sensitive."
+msgstr ""
+
+#: admin_webix/sites.py:625
 msgid "Log in"
 msgstr "Entra"
 
-#: django_webix/forms/forms.py:347
+#: admin_webix/templates/admin_webix/account/password_reset_email.html:2
+#, python-format
+msgid ""
+"You're receiving this email because you requested a password reset for your "
+"user account at %(site_name)s."
+msgstr ""
+
+#: admin_webix/templates/admin_webix/account/password_reset_email.html:4
+msgid "Please go to the following page and choose a new password:"
+msgstr ""
+
+#: admin_webix/templates/admin_webix/account/password_reset_email.html:8
+msgid "Your username, in case you’ve forgotten:"
+msgstr ""
+
+#: admin_webix/templates/admin_webix/account/password_reset_email.html:10
+msgid "Thanks for using our site!"
+msgstr ""
+
+#: admin_webix/templates/admin_webix/account/password_reset_email.html:12
+#, python-format
+msgid "The %(site_name)s team"
+msgstr ""
+
+#: admin_webix/templates/admin_webix/base_site.html:85
+msgid "DATI"
+msgstr ""
+
+#: admin_webix/templates/admin_webix/base_site.html:86
+msgid "WEBGIS"
+msgstr ""
+
+#: admin_webix/templates/admin_webix/logged_out.html:58
+#, fuzzy
+#| msgid "Log in"
+msgid "Log in again"
+msgstr "Entra"
+
+#: forms/forms.py:391
 msgid "Upload new image"
 msgstr "Carica un’immagine"
 
-#: django_webix/forms/forms.py:396
+#: forms/forms.py:438
+msgid "Eliminato"
+msgstr ""
+
+#: forms/forms.py:462
 msgid "Upload file"
 msgstr "Carica un file"
 
-#: django_webix/forms/forms.py:409
+#: forms/forms.py:475
 msgid "Upload folder"
 msgstr "Carica un file"
 
-#: django_webix/forms/forms.py:414
+#: forms/forms.py:480
 msgid "Upload files"
 msgstr "Carica un file"
 
-#: django_webix/forms/forms.py:458
+#: forms/forms.py:524
 msgid "MultipleChoiceField is available only with PRO webix license"
 msgstr "MultipleChoiceField è disponibile solo con licenza PRO webix"
 
-#: django_webix/forms/forms.py:486 django_webix/forms/forms.py:517
-#: django_webix/forms/forms.py:556 django_webix/forms/forms.py:592
-#: django_webix/forms/forms.py:606 django_webix/forms/forms.py:620
+#: forms/forms.py:556 forms/forms.py:580 forms/forms.py:624 forms/forms.py:653
+#: forms/forms.py:667 forms/forms.py:681 forms/forms.py:719
 msgid "Click to select"
 msgstr "Clicca per selezionare"
 
-#: django_webix/forms/forms.py:679
+#: forms/forms.py:757
 msgid "Initial value {} for geo field {} is not supported"
 msgstr "Il valore iniziale {} per il campo geografico {} non è supportato"
 
-#: django_webix/forms/forms.py:686
+#: forms/forms.py:763
 msgid "Type of field {} not supported"
 msgstr "Tipo di campo {} non supportato"
 
-#: django_webix/forms/formsets.py:87
+#: forms/formsets.py:87
 msgid "ManagementForm data is missing or has been tampered with"
 msgstr "Dati di ManagementForm mancanti o manomessi"
 
-#: django_webix/templates/django_webix/generic/delete.js:26
+#: templates/django_webix/generic/delete.js:26
 msgid "The following objects will be deleted"
 msgstr "I seguenti oggetti verranno eliminati"
 
-#: django_webix/templates/django_webix/generic/delete.js:57
+#: templates/django_webix/generic/delete.js:57
 msgid "Confirm cancellation"
 msgstr "Conferma cancellazione"
 
-#: django_webix/templates/django_webix/generic/delete.js:63
+#: templates/django_webix/generic/delete.js:63
 msgid "Delete confirmation"
 msgstr "Conferma cancellazione"
 
-#: django_webix/templates/django_webix/generic/delete.js:64
+#: templates/django_webix/generic/delete.js:64
 msgid "Warning! All linked objects will also be deleted."
 msgstr "Attenzione! Verranno eliminati anche tutti gli oggetti collegati."
 
-#: django_webix/templates/django_webix/generic/list.js:58
+#: templates/django_webix/generic/list.js:44
 #, fuzzy
 #| msgid "Filters removal"
 msgid "Extra filters removal"
 msgstr "Rimozione filtri"
 
-#: django_webix/templates/django_webix/generic/list.js:69
+#: templates/django_webix/generic/list.js:61
 msgid "Geographic filter removal"
 msgstr "Rimozione filtro geografico"
 
-#: django_webix/templates/django_webix/generic/list.js:81
+#: templates/django_webix/generic/list.js:79
 msgid "Advanced filter"
 msgstr "Filtro avanzato"
 
-#: django_webix/templates/django_webix/generic/list.js:203
+#: templates/django_webix/generic/list.js:255
+#: templates/django_webix/include/actions_list.js:7
+#: templates/django_webix/include/toolbar_navigation.js:43
+#, fuzzy
+#| msgid "Show on map"
+msgid "Go to map"
+msgstr "Mostra in mappa"
+
+#: templates/django_webix/generic/list.js:336
 msgid "Apply filters"
 msgstr "Applica i filtri"
 
-#: django_webix/templates/django_webix/generic/list.js:203
+#: templates/django_webix/generic/list.js:336
 msgid "Filter"
 msgstr "Filtra"
 
-#: django_webix/templates/django_webix/generic/list.js:366
+#: templates/django_webix/generic/list.js:500
 msgid "Double click to edit the element"
 msgstr "Doppio click per editare l'elemento"
 
-#: django_webix/templates/django_webix/generic/list.js:430
-#: django_webix/templates/django_webix/include/toolbar_list.js:23
-#: django_webix/templates/django_webix/include/toolbar_list.js:40
+#: templates/django_webix/include/actions_list.js:31
+msgid "Fill in the form"
+msgstr ""
+
+#: templates/django_webix/include/actions_list.js:32
+#: templates/django_webix/include/utils.js:231
+msgid "Close"
+msgstr "Chiudi"
+
+#: templates/django_webix/include/actions_list.js:53
+#: templates/django_webix/include/toolbar_list_actions_select.js:20
+msgid "Go"
+msgstr "Vai"
+
+#: templates/django_webix/include/actions_utils.js:20
+#: templates/django_webix/include/toolbar_list.js:23
+#: templates/django_webix/include/toolbar_list.js:40
 msgid "elements"
 msgstr "elementi"
 
-#: django_webix/templates/django_webix/generic/list.js:430
+#: templates/django_webix/include/actions_utils.js:20
 #, fuzzy
 #| msgid "elements selected"
 msgid "selected"
 msgstr "elementi selezionati"
 
-#: django_webix/templates/django_webix/generic/list.js:450
+#: templates/django_webix/include/actions_utils.js:50
 #, fuzzy
 #| msgid "This action is not registered"
 msgid "Action is not executable"
 msgstr "Questa azione non è registrata"
 
-#: django_webix/templates/django_webix/generic/list.js:467
+#: templates/django_webix/include/actions_utils.js:64
+msgid "Action successful"
+msgstr ""
+
+#: templates/django_webix/include/actions_utils.js:79
 msgid "Something gone wrong"
 msgstr "Si è verificato un errore"
 
-#: django_webix/templates/django_webix/include/edit_inline/stacked.js:19
-#: django_webix/templates/django_webix/include/edit_inline/stacked.js:30
+#: templates/django_webix/include/edit_inline/stacked.js:19
+#: templates/django_webix/include/edit_inline/stacked.js:30
 msgid "New Item"
 msgstr "Nuovo elemento"
 
-#: django_webix/templates/django_webix/include/edit_inline/stacked.js:51
-#: django_webix/templates/django_webix/include/edit_inline/tabular.js:50
-#: django_webix/templates/django_webix/include/toolbar_navigation.js:35
+#: templates/django_webix/include/edit_inline/stacked.js:51
+#: templates/django_webix/include/edit_inline/tabular.js:50
+#: templates/django_webix/include/toolbar_navigation.js:35
 msgid "Add"
 msgstr "Aggiungi"
 
-#: django_webix/templates/django_webix/include/form_standard.js:72
+#: templates/django_webix/include/form_standard.js:72
 msgid "You must fill in all the required fields before you can save this form!"
 msgstr ""
 "È necessario compilare tutti i campi richiesti prima di poter salvare questo "
 "modulo!"
 
-#: django_webix/templates/django_webix/include/form_standard.js:72
+#: templates/django_webix/include/form_standard.js:72
 msgid "Error in the following fields"
 msgstr "Errore nei seguenti campi"
 
-#: django_webix/templates/django_webix/include/form_validation.js:11
+#: templates/django_webix/include/form_validation.js:11
 msgid "Required field"
 msgstr "Campo obbligatorio"
 
-#: django_webix/templates/django_webix/include/form_validation.js:23
+#: templates/django_webix/include/form_validation.js:23
 msgid "Invalid email"
 msgstr "Email non valida"
 
-#: django_webix/templates/django_webix/include/form_validation.js:59
+#: templates/django_webix/include/form_validation.js:59
 msgid "Not integer field"
 msgstr "Campo non intero"
 
-#: django_webix/templates/django_webix/include/form_validation.js:63
-#: django_webix/templates/django_webix/include/form_validation.js:98
+#: templates/django_webix/include/form_validation.js:63
+#: templates/django_webix/include/form_validation.js:98
 msgid "Value less than "
 msgstr "Valore minore di"
 
-#: django_webix/templates/django_webix/include/form_validation.js:67
-#: django_webix/templates/django_webix/include/form_validation.js:102
+#: templates/django_webix/include/form_validation.js:67
+#: templates/django_webix/include/form_validation.js:102
 msgid "Value greater than "
 msgstr "Valore maggiore di"
 
-#: django_webix/templates/django_webix/include/form_validation.js:94
+#: templates/django_webix/include/form_validation.js:94
 msgid "Not decimal field"
 msgstr "Valore non decimale"
 
-#: django_webix/templates/django_webix/include/form_validation.js:120
+#: templates/django_webix/include/form_validation.js:120
 msgid "String shorter than "
 msgstr "Stringa più corta di"
 
-#: django_webix/templates/django_webix/include/form_validation.js:124
+#: templates/django_webix/include/form_validation.js:124
 msgid "String longer than "
 msgstr "Stringa più lunga di"
 
-#: django_webix/templates/django_webix/include/list_failure_add_missing_objects.js:6
+#: templates/django_webix/include/list_failure_add_missing_objects.js:6
 msgid "Missing data to add item"
 msgstr "Dati mancanti per aggiungere un elemento"
 
-#: django_webix/templates/django_webix/include/list_failure_related_objects.js:6
+#: templates/django_webix/include/list_failure_related_objects.js:6
 msgid "These objects do not allow the requested operation"
 msgstr "Questi oggetti non consentono l'operazione richiesta"
 
-#: django_webix/templates/django_webix/include/list_failure_related_objects.js:23
+#: templates/django_webix/include/list_failure_related_objects.js:23
 msgid "Data type"
 msgstr "Tipo di dato"
 
-#: django_webix/templates/django_webix/include/list_failure_related_objects.js:24
+#: templates/django_webix/include/list_failure_related_objects.js:24
 msgid "Description"
 msgstr "Descrizione"
 
-#: django_webix/templates/django_webix/include/toolbar_form.js:17
-#: django_webix/views/generic/actions.py:8
+#: templates/django_webix/include/toolbar_form.js:17 views/generic/actions.py:8
 msgid "Delete"
 msgstr "Cancellazione"
 
-#: django_webix/templates/django_webix/include/toolbar_form.js:41
+#: templates/django_webix/include/toolbar_form.js:41
 msgid "Save and continue"
 msgstr "Salva e continua"
 
-#: django_webix/templates/django_webix/include/toolbar_form.js:63
+#: templates/django_webix/include/toolbar_form.js:67
 msgid "Save and add another"
 msgstr "Salva e aggiungi un altro"
 
-#: django_webix/templates/django_webix/include/toolbar_form.js:85
+#: templates/django_webix/include/toolbar_form.js:93
 msgid "Save"
 msgstr "Salva"
 
-#: django_webix/templates/django_webix/include/toolbar_list.js:23
+#: templates/django_webix/include/toolbar_list.js:23
 msgid "of"
 msgstr "di"
 
-#: django_webix/templates/django_webix/include/toolbar_list.js:27
+#: templates/django_webix/include/toolbar_list.js:27
 msgid "Select all"
 msgstr "Seleziona tutti"
 
-#: django_webix/templates/django_webix/include/toolbar_list.js:29
-#: django_webix/templates/django_webix/include/toolbar_list.js:35
-#: django_webix/templates/django_webix/include/utils.js:413
+#: templates/django_webix/include/toolbar_list.js:29
+#: templates/django_webix/include/toolbar_list.js:35
+#: templates/django_webix/include/utils.js:505
 msgid "All"
 msgstr "Tutti"
 
-#: django_webix/templates/django_webix/include/toolbar_list.js:29
-#: django_webix/templates/django_webix/include/toolbar_list.js:35
+#: templates/django_webix/include/toolbar_list.js:29
+#: templates/django_webix/include/toolbar_list.js:35
 msgid "elements selected"
 msgstr "elementi selezionati"
 
-#: django_webix/templates/django_webix/include/toolbar_list.js:30
+#: templates/django_webix/include/toolbar_list.js:30
 msgid "Cancel selection"
 msgstr "Annulla seleziona"
 
-#: django_webix/templates/django_webix/include/toolbar_list.js:106
+#: templates/django_webix/include/toolbar_list.js:106
 msgid "No row has been selected"
 msgstr "Nessuna riga selezionata"
 
-#: django_webix/templates/django_webix/include/toolbar_list.js:146
+#: templates/django_webix/include/toolbar_list.js:147
 msgid "Add new"
 msgstr "Aggiungi nuovo"
 
-#: django_webix/templates/django_webix/include/toolbar_list_actions_select.js:14
+#: templates/django_webix/include/toolbar_list_actions_select.js:14
 msgid "Select an action"
 msgstr "Scegli una azione"
 
-#: django_webix/templates/django_webix/include/toolbar_list_actions_select.js:20
-msgid "Go"
-msgstr "Vai"
-
-#: django_webix/templates/django_webix/include/toolbar_navigation.js:13
+#: templates/django_webix/include/toolbar_navigation.js:13
 msgid "Back"
 msgstr "Indietro"
 
-#: django_webix/templates/django_webix/include/toolbar_navigation.js:24
+#: templates/django_webix/include/toolbar_navigation.js:24
 msgid "Back to list"
 msgstr "Torna alla lista"
 
-#: django_webix/templates/django_webix/include/utils.js:121
+#: templates/django_webix/include/utils.js:165
+#: templates/django_webix/include/utils.js:172
 msgid "Yes"
 msgstr "Sì"
 
-#: django_webix/templates/django_webix/include/utils.js:123
+#: templates/django_webix/include/utils.js:167
+#: templates/django_webix/include/utils.js:174
 msgid "No"
 msgstr "No"
 
-#: django_webix/templates/django_webix/include/utils.js:128
+#: templates/django_webix/include/utils.js:186
 msgid "Default"
 msgstr "Default"
 
-#: django_webix/templates/django_webix/include/utils.js:135
+#: templates/django_webix/include/utils.js:193
 msgid "Show on map"
 msgstr "Mostra in mappa"
 
-#: django_webix/templates/django_webix/include/utils.js:141
+#: templates/django_webix/include/utils.js:199
 msgid "Duplicate element"
 msgstr "Duplica elemento"
 
-#: django_webix/templates/django_webix/include/utils.js:145
+#: templates/django_webix/include/utils.js:203
 msgid "Remove element"
 msgstr "Rimuovi elemento"
 
-#: django_webix/templates/django_webix/include/utils.js:149
+#: templates/django_webix/include/utils.js:207
 msgid "Detail"
 msgstr "Dettaglio"
 
-#: django_webix/templates/django_webix/include/utils.js:170
+#: templates/django_webix/include/utils.js:228
 msgid "Image"
 msgstr "Immagine"
 
-#: django_webix/templates/django_webix/include/utils.js:173
-msgid "Close"
-msgstr "Chiudi"
-
-#: django_webix/templates/django_webix/include/utils.js:249
-#: django_webix/templates/django_webix/include/utils.js:289
+#: templates/django_webix/include/utils.js:307
+#: templates/django_webix/include/utils.js:363
 msgid "Server error"
 msgstr "Errore sul server"
 
-#: django_webix/templates/django_webix/redirect_to_login.js:2
+#: templates/django_webix/redirect_to_login.js:2
 msgid "User is not authenticated"
 msgstr "Utente non autenticato"
 
-#: django_webix/templates/django_webix/redirect_to_login.js:5
+#: templates/django_webix/redirect_to_login.js:5
 msgid "You are no longer authenticated, please login again."
-msgstr "Il tuo utente non è più autenticato, perfavore effettua nuovamente la login."
+msgstr ""
+"Il tuo utente non è più autenticato, perfavore effettua nuovamente la login."
 
-#: django_webix/views/generic/actions.py:15
+#: utils/filters.py:51
+msgid "ERROR: geo srid is incorrect"
+msgstr "ERRORE: lo srid della geo non è corretto"
+
+#: views/generic/actions.py:15
 #, python-brace-format
 msgid "{count_delete_instances} elements have been deleted"
 msgstr "{count_delete_instances} elementi sono stati cancellati"
 
-#: django_webix/views/generic/base.py:110
+#: views/generic/base.py:111
 msgid "You haven't add permission"
 msgstr "Non hai il permesso di aggiunta"
 
-#: django_webix/views/generic/base.py:115
+#: views/generic/base.py:116
 msgid "You haven't change permission"
 msgstr "Non hai il permesso di cambiare"
 
-#: django_webix/views/generic/base.py:120
+#: views/generic/base.py:121
 msgid "You haven't delete permission"
 msgstr "Non hai il permesso di cancellare"
 
-#: django_webix/views/generic/base.py:125
+#: views/generic/base.py:126
 msgid "You haven't view permission"
 msgstr "Non hai il permesso di vedere"
 
-#: django_webix/views/generic/create_update.py:45
+#: views/generic/create_update.py:48
 msgid ""
 "Template style is improperly configured only options are 'standard' or "
 "'tabs' (standard by default)."
@@ -353,8 +425,7 @@ msgstr ""
 "Lo stile del modello è configurato in modo errato, le sole opzioni "
 "disponibili sono 'standard' o 'tabs' (standard di default)."
 
-#: django_webix/views/generic/create_update.py:82
-#: django_webix/views/generic/delete.py:75
+#: views/generic/create_update.py:85 views/generic/delete.py:75
 msgid ""
 "No URL to redirect to.  Either provide a url or define a get_absolute_url "
 "method on the Model."
@@ -362,51 +433,46 @@ msgstr ""
 "Nessun URL a cui reindirizzare. O fornire un URL o definire un metodo "
 "get_absolute_url sul modello."
 
-#: django_webix/views/generic/create_update.py:258
-#: django_webix/views/generic/create_update.py:339
-#: django_webix/views/generic/delete.py:45
-#: django_webix/views/generic/detail.py:23
-#: django_webix/views/generic/list.py:600
+#: views/generic/create_update.py:281 views/generic/create_update.py:362
+#: views/generic/delete.py:45 views/generic/detail.py:23
+#: views/generic/list.py:643
 msgid "View permission is not allowed"
 msgstr "Non disponi del permesso di visione"
 
-#: django_webix/views/generic/create_update.py:261
+#: views/generic/create_update.py:284
 msgid "Add permission is not allowed"
 msgstr "Non disponi del permesso di aggiunta"
 
-#: django_webix/views/generic/create_update.py:342
+#: views/generic/create_update.py:365
 msgid "Change permission is not allowed"
 msgstr "Non disponi del permesso di cambiare"
 
-#: django_webix/views/generic/create_update.py:398
+#: views/generic/create_update.py:421
 #, python-format
 msgid "Changed %s."
 msgstr "Modificato %s."
 
-#: django_webix/views/generic/create_update.py:398
+#: views/generic/create_update.py:421
 msgid "and"
 msgstr "e"
 
-#: django_webix/views/generic/decorators.py:9
-#: django_webix/views/generic/list.py:443
+#: views/generic/decorators.py:11 views/generic/list.py:479
 msgid "Are you sure you want to proceed with this action?"
 msgstr "Sei certo che vuoi procedere con questa azione?"
 
-#: django_webix/views/generic/decorators.py:10
-#: django_webix/views/generic/list.py:444
+#: views/generic/decorators.py:12 views/generic/list.py:480
 msgid "Proceed"
 msgstr "Procedi"
 
-#: django_webix/views/generic/decorators.py:11
-#: django_webix/views/generic/list.py:445
+#: views/generic/decorators.py:13 views/generic/list.py:481
 msgid "Undo"
 msgstr "Annulla"
 
-#: django_webix/views/generic/delete.py:48
+#: views/generic/delete.py:48
 msgid "Delete permission is not allowed"
 msgstr "Non disponi del permesso di cancellare"
 
-#: django_webix/views/generic/delete.py:86
+#: views/generic/delete.py:86
 msgid ""
 "No URL to failure redirect to.  Either provide a url or define a "
 "get_absolute_url method on the Model."
@@ -414,23 +480,15 @@ msgstr ""
 "Nessun URL a cui reindirizzare. O fornire un URL o definire un metodo "
 "get_absolute_url sul modello."
 
-#: django_webix/views/generic/list.py:149
-msgid "ERROR: geo srid is incorrect"
-msgstr "ERRORE: lo srid della geo non è corretto"
-
-#: django_webix/views/generic/list.py:170
-msgid "ERROR: geo filter is incorrect"
-msgstr "ERRORE: il filtro geografico non è corretto"
-
-#: django_webix/views/generic/list.py:354
+#: views/generic/list.py:379
 msgid "Paginate count is not integer"
 msgstr "Il valore di paginazione no è intero"
 
-#: django_webix/views/generic/list.py:363
+#: views/generic/list.py:388
 msgid "Paginate start is not integer"
 msgstr "Il valore di partenza non è intero"
 
-#: django_webix/views/generic/list.py:475
+#: views/generic/list.py:511
 msgid ""
 "Actions style is improperly configured only options are 'buttons' or "
 "'select' (select by default)."
@@ -438,7 +496,7 @@ msgstr ""
 "Lo stile delle azioni è configurato in modo errato solo le opzioni sono "
 "'buttons' o 'select' (il default è select)."
 
-#: django_webix/views/generic/list.py:546
+#: views/generic/list.py:584
 msgid ""
 "Json response is available only if get_queryset() return a queryset and not "
 "a list"
@@ -446,21 +504,24 @@ msgstr ""
 "La risposta in json è disponibile solo se get_queryset() ritorna un queryset "
 "e non una lista"
 
-#: django_webix/views/generic/list.py:565
+#: views/generic/list.py:603
 msgid "This action is not registered"
 msgstr "Questa azione non è registrata"
 
-#: django_webix/views/generic/list.py:571
+#: views/generic/list.py:609
 msgid "Permission denied: {}"
 msgstr "Permesso negato: {}"
 
-#: django_webix/views/generic/list.py:573
+#: views/generic/list.py:611
 msgid "This permission is not registered on this class"
 msgstr "Questo permesso non è registrato su questa classe"
 
-#: django_webix/views/generic/list.py:659
+#: views/generic/list.py:704
 msgid "Generic TemplateListView needs to define data for datatable"
 msgstr "In un generico TemplateListView vanno definiti i dati per il datatable"
+
+#~ msgid "ERROR: geo filter is incorrect"
+#~ msgstr "ERRORE: il filtro geografico non è corretto"
 
 #~ msgid "Data"
 #~ msgstr "Dati"
