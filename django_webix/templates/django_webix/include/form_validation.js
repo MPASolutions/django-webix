@@ -87,8 +87,11 @@ function isNumber(field_name, value, max, min) {
     }
     value = Number(value);
 
-    if (isNaN(value) || value === undefined) {
+    if (value === undefined) {
         return true;
+    }
+    if(isNaN(value)){
+        return false;
     }
     if (value !== '' && value !== parseFloat(value)) {
         $$("id_" + field_name).define("tooltip", '{{_("Not decimal field")|escapejs}}');
