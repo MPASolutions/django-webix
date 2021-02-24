@@ -5,7 +5,10 @@ from __future__ import unicode_literals
 import json
 
 import django
+from django.contrib.postgres.fields import ArrayField
+from django.db import models
 from django.db.models import Q
+from django.db.models.fields.reverse_related import ForeignObjectRel
 from django.utils.translation import ugettext as _
 from dateutil.parser import parse
 
@@ -59,7 +62,7 @@ def from_geo_dict_to_qset(model, data):
     return Q()
 
 
-def from_dict_to_qset(data):
+def from_dict_to_qset(data, model):
     if 'qsets' in data and 'operator' in data:
         operator = data.get('operator')
         negate = data.get('negate', False)
@@ -67,8 +70,27 @@ def from_dict_to_qset(data):
             qset = Q()
         for j, data_qset in enumerate(data.get('qsets')):
             if 'operator' in data_qset:
-                qset_to_applicate = from_dict_to_qset(data_qset)
+                qset_to_applicate = from_dict_to_qset(data_qset, model=model)
             else:
+                # Recupero il tipo di field su cui andrò ad applicare il filtro
+                _curr_model = model
+                _curr_field = None
+                for _field in data_qset.get('path').split("__")[:-1]:
+                    _curr_field = _curr_model._meta.get_field(_field)
+
+                    if issubclass(type(_curr_field), models.ForeignKey):
+                        _curr_model = _curr_field.remote_field.get_related_field().model
+                    elif issubclass(type(_curr_field), ForeignObjectRel):
+                        _curr_model = _curr_field.related_model
+                    elif issubclass(type(_curr_field), models.ManyToManyField):
+                        _curr_model = _curr_field.remote_field.get_related_field().model
+                    else:
+                        pass  # Sono arrivato all'ultimo field, non serve fare altro
+
+                # Se si tratta di un array, allora lo metto in una lista
+                if isinstance(_curr_field, ArrayField):
+                    data_qset['val'] = [data_qset.get('val')]
+
                 if data_qset.get('path').endswith("__range"):
                      #{"start":null,"end":null}
                      val = data_qset.get('val')
@@ -78,7 +100,6 @@ def from_dict_to_qset(data):
                          qset_to_applicate = Q(**{base_path + '__gte': parse(val.get('start'))})
                      if val is not None and val.get('end') is not None:
                          qset_to_applicate &= Q(**{base_path + '__lte': parse(val.get('end'))})
-
                 elif data_qset.get('path').endswith("__exact_in"):
                     data_qset['path'] = data_qset['path'].replace("__exact_in", "__in")
                     data_qset['val'] = data_qset['val'].split(",")

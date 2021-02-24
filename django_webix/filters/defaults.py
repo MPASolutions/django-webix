@@ -9,7 +9,7 @@ class DjangoBaseLockedWebixFilter(RequestFilter):
         locked_filters = self.get_param(self.PARAM)
         if locked_filters not in [None, '']:
             locked_filters_dict = decode_text_filters(locked_filters)
-            locked_qset = from_dict_to_qset(locked_filters_dict)
+            locked_qset = from_dict_to_qset(locked_filters_dict, model=queryset.model)
             return queryset.filter(locked_qset)
         else:
             return queryset
@@ -22,7 +22,7 @@ class DjangoBaseWebixFilter(RequestFilter):
         filters = self.get_param(self.PARAM)
         if filters not in [None, '']:
             filters_dict = decode_text_filters(filters)
-            qset = from_dict_to_qset(filters_dict)
+            qset = from_dict_to_qset(filters_dict, model=queryset.model)
             return queryset.filter(qset)
         else:
             return queryset
