@@ -454,39 +454,3 @@ class WebixUpdateView(WebixCreateUpdateMixin, WebixBaseMixin, WebixPermissionsMi
                 action_flag=CHANGE,
                 change_message=_('Changed %s.') % get_text_list(form.changed_data, _('and'))
             )
-
-
-class WebixCreateWithInlinesView(WebixCreateView):
-    def __init__(self, *args, **kwargs):
-        from warnings import warn
-        warn('`django_webix.views.WebixCreateWithInlinesView` has been renamed to `WebixCreateView`. '
-             '`WebixCreateWithInlinesView` will be removed in a future release.', DeprecationWarning)
-        super(WebixCreateWithInlinesView, self).__init__(*args, **kwargs)
-
-
-class WebixCreateWithInlinesUnmergedView(WebixCreateView):
-    style = 'unmerged'
-
-    def __init__(self, *args, **kwargs):
-        from warnings import warn
-        warn('`django_webix.views.WebixCreateWithInlinesUnmergedView` has been renamed to `WebixCreateView`. '
-             '`WebixCreateWithInlinesUnmergedView` will be removed in a future release.', DeprecationWarning)
-        super(WebixCreateWithInlinesUnmergedView, self).__init__(*args, **kwargs)
-
-
-class WebixUpdateWithInlinesView(WebixUpdateView):
-    def __init__(self, *args, **kwargs):
-        from warnings import warn
-        warn('`django_webix.views.WebixUpdateWithInlinesView` has been renamed to `WebixUpdateView`. '
-             '`WebixUpdateWithInlinesView` will be removed in a future release.', DeprecationWarning)
-        super(WebixUpdateWithInlinesView, self).__init__(*args, **kwargs)
-
-
-class WebixUpdateWithInlinesUnmergedView(WebixUpdateView):
-    style = 'unmerged'
-
-    def __init__(self, *args, **kwargs):
-        from warnings import warn
-        warn('`django_webix.views.WebixUpdateWithInlinesUnmergedView` has been renamed to `WebixUpdateView`. '
-             '`WebixUpdateWithInlinesUnmergedView` will be removed in a future release.', DeprecationWarning)
-        super(WebixUpdateWithInlinesUnmergedView, self).__init__(*args, **kwargs)
