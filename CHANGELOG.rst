@@ -14,6 +14,41 @@ The format is based on KeepAChangelog_ and this project adheres to SemanticVersi
 ++++++++++++
 
 
+[1.4.0] 2021-03-02
+++++++++++++++++++
+
+Added
+~~~~~
+* Added exact_in serverFilterType to use serverMultiComboFilter into datatables
+* Added OTF filters
+* Added `django-filtersmerger` integration
+* Added `django-dal` integration
+* Added `datarange` filter on datatables
+* Added `FormView`
+* Allow create/update views witout form_class
+
+Changed
+~~~~~~~
+* Changed `from_dict_to_qset` params to check fields type
+
+Removed
+~~~~~~~
+* Removed deprecated `WebixCreateWithInlinesView` class
+* Removed deprecated `WebixCreateWithInlinesUnmergedView` class
+* Removed deprecated `WebixUpdateWithInlinesView` class
+* Removed deprecated `WebixUpdateWithInlinesUnmergedView` class
+
+Fixed
+~~~~~
+* Fixed webgis templatetag loads
+* Fixed geo column without webgis
+* Fixed lists without form
+* Fixed admin_webix logout template
+* Fixed readonly fields
+* Fixed `get_initial_queryset` method
+* Fixed list actions with _blank response
+
+
 [1.3.0] 2020-09-17
 ++++++++++++++++++
 

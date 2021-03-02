@@ -1,14 +1,17 @@
 # Runtime dependencies
 Django>=1.11.23
-six
+six>=1.15.0
 requests
 django-extra-views>=0.12.0
 sorl-thumbnail
 Pillow
 psycopg2-binary
+python-dateutil>=2.8.1
 django-mptt>=0.11.0
 django-two-factor-auth>=1.12.1
 django-user-agents>=0.4.0
+django-dal>=1.0.0
+django-filtersmerger>=1.0.0
 
 # Testing
 coverage
