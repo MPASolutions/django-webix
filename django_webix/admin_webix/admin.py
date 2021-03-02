@@ -1,9 +1,12 @@
+# -*- coding: utf-8 -*-
+
 from django.contrib import admin
-from django_webix.admin_webix.models import WebixAdminMenu
 from django.contrib.contenttypes.models import ContentType
-from django_webix.admin_webix.forms import WebixAdminMenuForm
-from feincms.admin import tree_editor
 from django.utils.safestring import mark_safe
+from feincms.admin import tree_editor
+
+from django_webix.admin_webix.forms import WebixAdminMenuForm
+from django_webix.admin_webix.models import WebixAdminMenu
 from django_webix.admin_webix.sites import site
 
 

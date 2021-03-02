@@ -1,7 +1,5 @@
 # -*- coding: utf-8 -*-
 
-from __future__ import unicode_literals
-
 from django.core.exceptions import ValidationError
 from django.forms import BaseInlineFormSet
 from django.forms.fields import IntegerField
@@ -64,7 +62,7 @@ class BaseWebixInlineFormSet(BaseInlineFormSet):
     def get_rules_template(self):
         """Returns the rules template"""
 
-        rules_old = self.form(**{'request':self.request}).get_rules() or {}
+        rules_old = self.form(**{'request': self.request}).get_rules() or {}
         rules_old.pop(self.fk.name, None)  # Remove fk rule
         rules_new = {}
         for key in rules_old:
@@ -96,7 +94,6 @@ class BaseWebixInlineFormSet(BaseInlineFormSet):
             })
         return form
 
-
     def webix_id(self):
         return '{}-group'.format(self.prefix)
 
@@ -104,7 +101,7 @@ class BaseWebixInlineFormSet(BaseInlineFormSet):
         return self.container_id
 
     def get_default_container_id(self):
-        return self.webix_id()+'-container'
+        return self.webix_id() + '-container'
 
 
 class WebixInlineFormSet(InlineFormSetFactory):
@@ -126,7 +123,11 @@ class WebixInlineFormSet(InlineFormSetFactory):
             self.formset_class = self.custom_formset_class
         else:
             self.formset_class = BaseWebixInlineFormSet
-        self.formset_class = type(str('WebixInlineFormSet'), (self.formset_class,), {'template_name': self.template_name})
+        self.formset_class = type(
+            str('WebixInlineFormSet'),
+            (self.formset_class,),
+            {'template_name': self.template_name}
+        )
 
         # Set queryset
         if hasattr(self, 'get_queryset') and callable(self.get_queryset):
@@ -154,7 +155,7 @@ class WebixInlineFormSet(InlineFormSetFactory):
             extra_forms = 0
         # FIX for initial data values (list of dict and not instances)
         _factory_kwargs.update({
-            'extra': extra_forms #+ len(self.initial),
+            'extra': extra_forms
         })
         return _factory_kwargs
 
@@ -171,6 +172,7 @@ class WebixInlineFormSet(InlineFormSetFactory):
 class WebixStackedInlineFormSet(WebixInlineFormSet):
     template_name = 'django_webix/include/edit_inline/stacked.js'
     style = 'stacked'
+
     def __init__(self, parent_model, request, instance, view_kwargs=None, view=None, initial=None):
         super(WebixStackedInlineFormSet, self).__init__(parent_model, request, instance, view_kwargs, view, initial)
         self.form_class = type(str('WebixStackedModelForm'), (self.form_class,), {'style': self.style})
@@ -179,6 +181,7 @@ class WebixStackedInlineFormSet(WebixInlineFormSet):
 class WebixTabularInlineFormSet(WebixInlineFormSet):
     template_name = 'django_webix/include/edit_inline/tabular.js'
     style = 'tabular'
+
     def __init__(self, parent_model, request, instance, view_kwargs=None, view=None, initial=None):
         super(WebixTabularInlineFormSet, self).__init__(parent_model, request, instance, view_kwargs, view, initial)
         self.form_class = type(str('WebixTabularModelForm'), (self.form_class,), {'style': self.style})

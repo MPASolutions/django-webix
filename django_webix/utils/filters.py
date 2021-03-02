@@ -1,16 +1,14 @@
 # -*- coding: utf-8 -*-
 
-from __future__ import unicode_literals
-
 import json
 
 import django
+from dateutil.parser import parse
 from django.contrib.postgres.fields import ArrayField
 from django.db import models
 from django.db.models import Q
 from django.db.models.fields.reverse_related import ForeignObjectRel
 from django.utils.translation import ugettext as _
-from dateutil.parser import parse
 
 try:
     from django.contrib.gis.geos import GEOSGeometry
@@ -92,14 +90,14 @@ def from_dict_to_qset(data, model):
                     data_qset['val'] = [data_qset.get('val')]
 
                 if data_qset.get('path').endswith("__range"):
-                     #{"start":null,"end":null}
-                     val = data_qset.get('val')
-                     base_path = data_qset.get('path').replace('__range','')
-                     qset_to_applicate = Q()
-                     if val is not None and val.get('start') is not None:
-                         qset_to_applicate = Q(**{base_path + '__gte': parse(val.get('start'))})
-                     if val is not None and val.get('end') is not None:
-                         qset_to_applicate &= Q(**{base_path + '__lte': parse(val.get('end'))})
+                    # {"start":null,"end":null}
+                    val = data_qset.get('val')
+                    base_path = data_qset.get('path').replace('__range', '')
+                    qset_to_applicate = Q()
+                    if val is not None and val.get('start') is not None:
+                        qset_to_applicate = Q(**{base_path + '__gte': parse(val.get('start'))})
+                    if val is not None and val.get('end') is not None:
+                        qset_to_applicate &= Q(**{base_path + '__lte': parse(val.get('end'))})
                 elif data_qset.get('path').endswith("__exact_in"):
                     data_qset['path'] = data_qset['path'].replace("__exact_in", "__in")
                     data_qset['val'] = data_qset['val'].split(",")

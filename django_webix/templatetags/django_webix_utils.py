@@ -1,10 +1,8 @@
 # -*- coding: utf-8 -*-
 
-from __future__ import unicode_literals
-
 import datetime
-
 import re
+
 import six
 from django import template
 from django.apps import apps

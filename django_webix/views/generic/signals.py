@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 from django.dispatch import Signal
 
 django_webix_view_pre_delete = Signal(providing_args=['instance'])

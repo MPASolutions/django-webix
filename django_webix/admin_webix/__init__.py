@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 from django_webix.admin_webix.decorators import register
 from django_webix.admin_webix.options import ModelWebixAdmin
 from django_webix.admin_webix.sites import AdminWebixSite, site

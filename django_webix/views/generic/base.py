@@ -1,12 +1,10 @@
 # -*- coding: utf-8 -*-
 
-from __future__ import unicode_literals
-
 from django.apps import apps
 from django.conf import settings
 from django.urls import reverse, resolve
 from django.urls.exceptions import NoReverseMatch
-from django.utils.translation import ugettext as _
+from django.utils.translation import gettext as _
 from django.views.generic import TemplateView
 from django.views.generic.edit import BaseFormView
 
@@ -32,10 +30,10 @@ class WebixPermissionsMixin:
 
     def get_failure_add_missing_objects(self, request):
         return [
-            #            {
-            #                'text': '',
-            #                'url': '',
-            #            },
+            # {
+            #     'text': '',
+            #     'url': '',
+            # },
         ]
 
     def get_failure_add_related_objects(self, request):
@@ -189,22 +187,23 @@ class WebixUrlUtilsMixin:
     def wrap_url_popup(self, url):
         if url is not None:
             if self.is_popup():
-                if '?' in url:
-                    return url + '&_popup'
-                else:
-                    return url + '?_popup'
+                return url + '&_popup' if '?' in url else url + '?_popup'
             else:
                 return url
         else:
             return None
 
-    def _check_url(self, url_name, reverse_kwargs={}):
+    def _check_url(self, url_name, reverse_kwargs=None):
         """
         Check if url_name exists
 
         :param url_name: url name
         :return: url_name if exists, otherwhise None
         """
+
+        if reverse_kwargs is None:
+            reverse_kwargs = {}
+
         try:
             url = reverse(url_name, kwargs=reverse_kwargs)
             return url_name
@@ -347,7 +346,7 @@ class WebixBaseMixin:
 
         if apps.is_installed("qxs") and apps.is_installed("django_webix_leaflet") and getattr(self, 'model',
                                                                                               None) is not None:
-            from qxs import qxsreg
+            from qxs import qxsreg  # FIXME: add to requirements?
 
             for model_layer in list(filter(lambda x: x.model == self.model, qxsreg.get_models())):
                 layers.append({

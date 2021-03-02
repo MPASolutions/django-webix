@@ -1,7 +1,13 @@
+# -*- coding: utf-8 -*-
+
 import re
+from functools import update_wrapper
+from weakref import WeakSet
+
 from django.apps import apps
 from django.contrib.auth import REDIRECT_FIELD_NAME
 from django.core.exceptions import ImproperlyConfigured
+from django.db.models import Q
 from django.db.models.base import ModelBase
 from django.http import HttpResponseRedirect
 from django.template.response import TemplateResponse
@@ -12,12 +18,8 @@ from django.utils.text import capfirst
 from django.utils.translation import gettext as _, gettext_lazy
 from django.views.decorators.cache import never_cache
 from django.views.decorators.csrf import csrf_protect
-from functools import update_wrapper
-from weakref import WeakSet
-from django.db.models import Q
 
 from django_webix.admin_webix import ModelWebixAdmin
-# from django_webix.admin_webix.views import UserUpdate
 
 all_sites = WeakSet()
 
@@ -70,7 +72,7 @@ class AdminWebixSite:
         Return True if the given HttpRequest has permission to view
         *at least one* page in the admin site.
         """
-        return request.user.is_active #and request.user.is_staff
+        return request.user.is_active
 
     #    def check(self, app_configs): # TODO
     #        if app_configs is None:
@@ -323,7 +325,6 @@ class AdminWebixSite:
         # Since this module gets imported in the application's root package,
         # it cannot import models from other applications at the module level,
         # and django.contrib.contenttypes.views imports ContentType.
-        from django.contrib.auth.views import PasswordResetConfirmView
         from django_webix.admin_webix import forms
         from django_webix.admin_webix import views
 
@@ -371,7 +372,7 @@ class AdminWebixSite:
         if apps.is_installed("two_factor"):
             urlpatterns += [
                 path('two_factor/', wrap(self.two_factor_profile), name='two_factor_profile'),
-        ]
+            ]
 
         # Add in each model's views, and create a list of valid URLS for the
         # app_index
@@ -543,10 +544,8 @@ class AdminWebixSite:
         request.current_app = self.name
         return PasswordResetCompleteView.as_view(**defaults)(request)
 
-
     def two_factor_profile(self, request, extra_context=None):
         if apps.is_installed("two_factor"):
-            from two_factor.views import ProfileView
             from django_webix.views import WebixTemplateView
 
             defaults = {
@@ -595,7 +594,7 @@ class AdminWebixSite:
         # Since this module gets imported in the application's root package,
         # it cannot import models from other applications at the module level,
         # and django.contrib.admin.forms eventually imports User.
-        #from django.contrib.admin.forms import AdminAuthenticationForm
+        # from django.contrib.admin.forms import AdminAuthenticationForm
         from django.contrib.auth.forms import AuthenticationForm
 
         class AdminAuthenticationForm(AuthenticationForm):
@@ -613,7 +612,7 @@ class AdminWebixSite:
 
             def confirm_login_allowed(self, user):
                 super().confirm_login_allowed(user)
-                #if not user.is_staff:
+                # if not user.is_staff:
                 #    raise forms.ValidationError(
                 #        self.error_messages['invalid_login'],
                 #        code='invalid_login',

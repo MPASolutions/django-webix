@@ -1,9 +1,7 @@
 # -*- coding: utf-8 -*-
 
-from __future__ import unicode_literals
-
 from django.core.exceptions import PermissionDenied
-from django.utils.translation import ugettext as _
+from django.utils.translation import gettext as _
 from django.views.generic import DetailView
 
 from django_webix.views.generic.base import WebixBaseMixin, WebixPermissionsMixin, WebixUrlMixin

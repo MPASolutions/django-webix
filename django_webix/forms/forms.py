@@ -1,8 +1,5 @@
 # -*- coding: utf-8 -*-
 
-from __future__ import unicode_literals, absolute_import
-
-import re
 import copy
 from collections import OrderedDict, defaultdict
 from json import dumps, loads
@@ -22,7 +19,7 @@ from django.core.exceptions import ImproperlyConfigured
 from django.core.serializers.json import DjangoJSONEncoder
 from django.db import models, connection
 from django.forms.forms import DeclarativeFieldsMetaclass
-from django.forms.models import ModelFormMetaclass, InlineForeignKeyField
+from django.forms.models import ModelFormMetaclass
 from django.forms.utils import ErrorList
 from django.urls import reverse
 from django.utils.encoding import force_text
@@ -33,8 +30,6 @@ from random import randint
 from sorl.thumbnail import get_thumbnail
 from django.utils import formats
 
-
-
 if django.__version__ < '3.1':
     try:
         from django.contrib.postgres.forms.jsonb import JSONField
@@ -42,7 +37,6 @@ if django.__version__ < '3.1':
         JSONField = forms.Field
 elif django.__version__ >= '3.1':
     from django.forms.fields import JSONField
-
 
 try:
     from django.contrib.postgres.forms import SimpleArrayField
@@ -55,7 +49,7 @@ except ImportError:
     GeometryField = None
 
 
-class BaseWebixMixin(object):
+class BaseWebixMixin:
     form_fix_height = None
     min_count_suggest = 100
     style = 'stacked'
@@ -99,12 +93,6 @@ class BaseWebixMixin(object):
                 _field = None
             else:
                 del self.fields[readonly_field]
-                # if not hasattr(self, 'instance') or self.instance.pk is None:
-                #     self.fields[readonly_field] = forms.CharField(
-                #         label=_(_field.verbose_name).capitalize(), required=False
-                #     )
-                # else:
-                #     pass
 
                 if isinstance(_field, django.db.models.fields.DateTimeField) or \
                     isinstance(_field, django.forms.fields.DateTimeField) or \
@@ -114,7 +102,8 @@ class BaseWebixMixin(object):
                         label=_(_field.verbose_name).capitalize(),
                         required=False
                     )
-                    if hasattr(self, 'instance') and self.instance.pk is not None and getattr(self.instance, readonly_field):
+                    if hasattr(self, 'instance') and \
+                        self.instance.pk is not None and getattr(self.instance, readonly_field):
                         _value = getattr(self.instance, readonly_field)
                         if not is_naive(_value):
                             _value = make_naive(_value)
@@ -128,7 +117,8 @@ class BaseWebixMixin(object):
                         label=_(_field.verbose_name).capitalize(),
                         required=False
                     )
-                    if hasattr(self, 'instance') and self.instance.pk is not None and getattr(self.instance, readonly_field):
+                    if hasattr(self, 'instance') and \
+                        self.instance.pk is not None and getattr(self.instance, readonly_field):
                         value = '{}'.format(getattr(self.instance, readonly_field).strftime('%d/%m/%Y'))
                     else:
                         value = ''
@@ -149,7 +139,8 @@ class BaseWebixMixin(object):
                         required=False
                     )
                     if hasattr(self, 'instance') and self.instance.pk is not None:
-                        value = '{}'.format(getattr(self.instance, readonly_field)) if getattr(self.instance, readonly_field) is not None else ""
+                        value = '{}'.format(getattr(self.instance, readonly_field)) \
+                            if getattr(self.instance, readonly_field) is not None else ""
                     else:
                         value = ''
 
@@ -254,7 +245,7 @@ class BaseWebixMixin(object):
                     initial = self.data.getlist(self.add_prefix(name), field.initial)
                 elif connection.vendor == 'postgresql' and isinstance(field, JSONField):
                     initial = self.data.get(self.add_prefix(name), None)
-                    if initial is not None and initial!='':
+                    if initial is not None and initial != '':
                         initial = loads(initial)
                     else:
                         initial = field.initial
@@ -273,12 +264,11 @@ class BaseWebixMixin(object):
             # FloatField
             elif isinstance(field, forms.FloatField):
                 if initial is not None:
-                    el.update({'value': '{}'.format(formats.localize(initial, use_l10n=True)) } ) #initial).replace('.', ',')})
+                    el.update({'value': '{}'.format(formats.localize(initial, use_l10n=True))})
             # DecimalField
             elif isinstance(field, forms.DecimalField):
-                # el.update({'view':''})
                 if initial is not None:
-                    el.update({'value': '{}'.format(formats.localize(initial, use_l10n=True)) }  ) # .replace('.', ',')})
+                    el.update({'value': '{}'.format(formats.localize(initial, use_l10n=True))})
             # IntegerField
             elif isinstance(field, forms.IntegerField):
                 el.update({
@@ -298,7 +288,8 @@ class BaseWebixMixin(object):
                     if isinstance(initial, six.string_types):
                         if settings.WEBIX_VERSION >= '7.0.0' and settings.WEBIX_VERSION < '8.0.0':
                             el.update({
-                                'value': '2020-01-01 {}'.format(initial).replace('-', ',').replace(' ', ',').replace(':', ',')
+                                'value': '2020-01-01 {}'.format(initial).replace('-', ',').replace(' ', ',').replace(
+                                    ':', ',')
                             })
                         else:
                             el.update({
@@ -871,8 +862,6 @@ class BaseWebixMixin(object):
         return fs.values()
 
 
-####################### BaseWebixForm AND BaseWebixModelForm #######################
-
 class BaseWebixForm(forms.BaseForm, BaseWebixMixin):
 
     def __init__(self, data=None, files=None, auto_id='id_%s', prefix=None,
@@ -960,9 +949,6 @@ class BaseWebixModelForm(forms.BaseModelForm, BaseWebixMixin):
 
     def get_name(self):
         return capfirst(self.Meta.model._meta.verbose_name)
-
-
-####################### WebixForm AND WebixModelForm #######################
 
 
 class WebixForm(six.with_metaclass(DeclarativeFieldsMetaclass, BaseWebixForm)):

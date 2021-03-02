@@ -1,14 +1,9 @@
 # -*- coding: utf-8 -*-
 
-from __future__ import unicode_literals
-
-import json
-
-import django
 from django.apps import apps
 from django.core.exceptions import FieldDoesNotExist
 from django.core.exceptions import PermissionDenied, ImproperlyConfigured
-from django.db.models import Q, F, ManyToManyField, Case, When, Value, BooleanField
+from django.db.models import F, ManyToManyField, Case, When, Value, BooleanField
 from django.http import JsonResponse, Http404
 from django.template import Template, Context
 from django.template.loader import get_template

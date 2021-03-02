@@ -1,8 +1,11 @@
+# -*- coding: utf-8 -*-
+
 from django.http import HttpResponseRedirect
 from django.urls import reverse
 from django_user_agents.utils import get_user_agent
 from django.conf import settings
 from django.utils.deprecation import MiddlewareMixin
+
 
 def get_limit_version(family):
     # Chrom * >= 60(25 / 7 / 2017)
@@ -15,7 +18,7 @@ def get_limit_version(family):
     if 'chrom' in family:
         return 60
     elif 'ie' in family:
-        return 12 # escludo ogni 11
+        return 12  # escludo ogni 11
     elif 'samsung internet' in family:
         return 8
     elif 'safari' in family:
@@ -26,6 +29,7 @@ def get_limit_version(family):
         return 60
     elif 'opera' in family:
         return 47
+
 
 class UserAgentLimitMiddleware(MiddlewareMixin):
     # user_agent.browser  # returns Browser(family=u'Mobile Safari', version=(5, 1), version_string='5.1')

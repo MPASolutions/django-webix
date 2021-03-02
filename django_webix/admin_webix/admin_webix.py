@@ -1,9 +1,12 @@
-from django_webix import admin_webix as admin
-from django.contrib.auth.models import Group, User
+# -*- coding: utf-8 -*-
+
 from django.contrib.auth import get_user_model
-from django_webix.admin_webix.views import UserAdminCreate, UserAdminUpdate
-from django_webix.admin_webix.forms import GroupAdminForm, AdminPasswordChangeForm
+from django.contrib.auth.models import Group
 from django.urls import path
+
+from django_webix import admin_webix as admin
+from django_webix.admin_webix.forms import GroupAdminForm, AdminPasswordChangeForm
+from django_webix.admin_webix.views import UserAdminCreate, UserAdminUpdate
 from django_webix.views.generic.actions import multiple_delete_action
 
 
