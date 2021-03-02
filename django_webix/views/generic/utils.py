@@ -1,14 +1,11 @@
 # -*- coding: utf-8 -*-
 
-from __future__ import unicode_literals
-
 import types
-from django.contrib.gis.db import models
 
-from django.urls import reverse
+from django.contrib.admin.utils import NestedObjects
+from django.contrib.gis.db import models
 from django.utils.encoding import force_text
 from django.utils.text import capfirst
-from django.contrib.admin.utils import NestedObjects
 
 geo_field_classes = {
     "POINT": models.PointField,
@@ -20,6 +17,7 @@ geo_field_classes = {
     "GEOMETRYCOLLECTION": models.GeometryCollectionField,
     "GEOMETRY": models.GeometryField
 }
+
 
 def get_model_geo_field_names(model):
     geo_field_names = []
@@ -76,15 +74,10 @@ class NestedObjectsWithLimit(NestedObjects):
             raise Exception('Set only one of exclude_models or only_models parameter')
         super().__init__(*args, **kwargs)
 
-
     def add_edge(self, source, target):
         if self.only_models is None or (source is None or source._meta.model in self.only_models):
             if self.only_models is None or (target is not None and target._meta.model in self.only_models):
                 super(NestedObjectsWithLimit, self).add_edge(source, target)
-#            else:
-#                super(NestedObjectsWithLimit, self).add_edge(source, None)
         elif self.exclude_models is None or (source is None or source._meta.model not in self.exclude_models):
             if self.exclude_models is None or (target is not None and target._meta.model not in self.only_models):
                 super(NestedObjectsWithLimit, self).add_edge(source, target)
-#            else:
-#                super(NestedObjectsWithLimit, self).add_edge(source, None)

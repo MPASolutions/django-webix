@@ -17,7 +17,7 @@ class MyModel(models.Model):
     integerfield_null = models.IntegerField(blank=True, null=True)
     integerfield_default = models.IntegerField(blank=True, null=True, default=43)
     readonly = models.CharField(max_length=255, blank=True, null=True)
-    boolean = models.NullBooleanField(blank=True, null=True, default=True)
+    boolean = models.BooleanField(blank=True, null=True, default=True)
     datefield = models.DateField(blank=True, null=True, default=timezone.datetime.today)
     datefield_empty = models.DateField(blank=True, null=True)
     datefield_2 = models.DateField(blank=True, null=True, default="2018-01-01")
@@ -59,7 +59,7 @@ class InlineStackedModel(models.Model):
     timefield = models.TimeField(blank=True, null=True)
     timefield_string = models.TimeField(blank=True, null=True, default="10:00")  # TODO: SISTEMARE
     datefield = models.DateField(blank=True, null=True)
-    nullbooleanfield = models.NullBooleanField(blank=True, null=True)
+    nullbooleanfield = models.BooleanField(blank=True, null=True)
     booleanfield = models.BooleanField(default=False)
     urlfield = models.URLField(blank=True, null=True, default='https://www.example.com')
     urlfield_2 = models.URLField(blank=True, null=True)
@@ -81,7 +81,7 @@ class InlineStackedModel(models.Model):
 
 class InlineEmptyModel(models.Model):
     textfield = models.TextField(blank=True, null=True)
-    boolean = models.NullBooleanField(blank=True, null=True, default=2)
+    boolean = models.BooleanField(blank=True, null=True, default=2)
     choicefield = models.CharField(max_length=255, choices=(
         ('test', 'Test'),
         ('sample', 'Sample')

@@ -1,7 +1,10 @@
-from django_webix.views import WebixUpdateView, WebixCreateView
-from django_webix.admin_webix.forms import UserForm, UserAdminUpdateForm, UserAdminCreateForm
+# -*- coding: utf-8 -*-
+
 from django.contrib.auth import get_user_model
 from django.contrib.auth.views import PasswordResetConfirmView, PasswordChangeView
+
+from django_webix.admin_webix.forms import UserForm, UserAdminUpdateForm, UserAdminCreateForm
+from django_webix.views import WebixUpdateView, WebixCreateView
 
 
 class UserUpdate(WebixUpdateView):
@@ -66,4 +69,3 @@ class PasswordChangeViewCustom(PasswordChangeView):
         except Exception as e:
             form.add_error("new_password1", e)
             return self.render_to_response(self.get_context_data(form=form))
-

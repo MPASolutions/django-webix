@@ -1,24 +1,22 @@
 # -*- coding: utf-8 -*-
 
-from __future__ import unicode_literals
-
 from django.apps import apps
-from django.conf import settings
 from django.core.exceptions import ImproperlyConfigured, ValidationError
 from django.core.exceptions import PermissionDenied
 from django.forms import model_to_dict
+from django.forms.fields import FileField
 from django.forms.formsets import all_valid
-from django.forms.models import _get_foreign_key
+from django.forms.models import _get_foreign_key, ModelForm, fields_for_model
 from django.http import HttpResponseRedirect
 from django.http import QueryDict
 from django.shortcuts import get_object_or_404
 from django.utils.encoding import force_text
 from django.utils.text import get_text_list
-from django.utils.translation import ugettext as _
-from django.forms.fields import Field, FileField
-from sorl.thumbnail.fields import ImageField
+from django.utils.translation import gettext as _
 from extra_views import UpdateWithInlinesView, CreateWithInlinesView
+from sorl.thumbnail.fields import ImageField
 
+from django_webix.forms import WebixModelForm
 from django_webix.views.generic.base import WebixBaseMixin, WebixPermissionsMixin, WebixUrlMixin
 from django_webix.views.generic.signals import (django_webix_view_pre_save,
                                                 django_webix_view_pre_inline_save,
@@ -36,6 +34,30 @@ class WebixCreateUpdateMixin:
     enable_button_save_gotolist = True
 
     template_style = None
+
+    def get_form_class(self):
+        """Return the form class to use."""
+
+        form_class = super().get_form_class()
+
+        # Transform ModelForm into WebixModelForm
+        if not isinstance(form_class, WebixModelForm) and issubclass(form_class, ModelForm):
+            if self.model is not None:
+                # If a model has been explicitly provided, use it
+                model = self.model
+            elif getattr(self, 'object', None) is not None:
+                # If this view is operating on a single object, use
+                # the class of that object
+                model = self.object.__class__
+            else:
+                # Try to get a queryset and extract the model class
+                # from that
+                model = self.get_queryset().model
+
+            form_class.__bases__ = (WebixModelForm,)
+            form_class = type(str(model.__name__ + 'Form'), (form_class,), {})
+
+        return form_class
 
     def get_template_style(self):
         _template_style = None
@@ -206,7 +228,17 @@ class WebixCreateView(WebixCreateUpdateMixin,
 
     def get_model_copy_fields(self):
         if self.model_copy_fields is None:
-            _model_copy_fields = self.form_class._meta.fields
+            form_class = self.get_form_class()
+            _model_copy_fields = form_class._meta.fields
+            if _model_copy_fields is None:  # __all__ option
+                opts = form_class._meta
+                _model_copy_fields = list(fields_for_model(
+                    opts.model, opts.fields, opts.exclude, opts.widgets,
+                    getattr(opts, 'formfield_callback', None), opts.localized_fields, opts.labels,
+                    opts.help_texts, opts.error_messages, opts.field_classes,
+                    # limit_choices_to will be applied during ModelForm.__init__().
+                    apply_limit_choices_to=False,
+                ).keys())
         else:
             _model_copy_fields = self.model_copy_fields
         return _model_copy_fields
@@ -420,39 +452,3 @@ class WebixUpdateView(WebixCreateUpdateMixin, WebixBaseMixin, WebixPermissionsMi
                 action_flag=CHANGE,
                 change_message=_('Changed %s.') % get_text_list(form.changed_data, _('and'))
             )
-
-
-class WebixCreateWithInlinesView(WebixCreateView):
-    def __init__(self, *args, **kwargs):
-        from warnings import warn
-        warn('`django_webix.views.WebixCreateWithInlinesView` has been renamed to `WebixCreateView`. '
-             '`WebixCreateWithInlinesView` will be removed in a future release.', DeprecationWarning)
-        super(WebixCreateWithInlinesView, self).__init__(*args, **kwargs)
-
-
-class WebixCreateWithInlinesUnmergedView(WebixCreateView):
-    style = 'unmerged'
-
-    def __init__(self, *args, **kwargs):
-        from warnings import warn
-        warn('`django_webix.views.WebixCreateWithInlinesUnmergedView` has been renamed to `WebixCreateView`. '
-             '`WebixCreateWithInlinesUnmergedView` will be removed in a future release.', DeprecationWarning)
-        super(WebixCreateWithInlinesUnmergedView, self).__init__(*args, **kwargs)
-
-
-class WebixUpdateWithInlinesView(WebixUpdateView):
-    def __init__(self, *args, **kwargs):
-        from warnings import warn
-        warn('`django_webix.views.WebixUpdateWithInlinesView` has been renamed to `WebixUpdateView`. '
-             '`WebixUpdateWithInlinesView` will be removed in a future release.', DeprecationWarning)
-        super(WebixUpdateWithInlinesView, self).__init__(*args, **kwargs)
-
-
-class WebixUpdateWithInlinesUnmergedView(WebixUpdateView):
-    style = 'unmerged'
-
-    def __init__(self, *args, **kwargs):
-        from warnings import warn
-        warn('`django_webix.views.WebixUpdateWithInlinesUnmergedView` has been renamed to `WebixUpdateView`. '
-             '`WebixUpdateWithInlinesUnmergedView` will be removed in a future release.', DeprecationWarning)
-        super(WebixUpdateWithInlinesUnmergedView, self).__init__(*args, **kwargs)

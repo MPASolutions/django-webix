@@ -1,8 +1,12 @@
+# -*- coding: utf-8 -*-
+
 from django.apps import apps
-from django.conf import settings
-from django.db.models import AutoField, FieldDoesNotExist
+from django.core.exceptions import FieldDoesNotExist
+from django.db.models import AutoField, ForeignKey
+from django.db.models.fields import BooleanField
 from django.urls import path
 from django.utils.text import capfirst
+from django.utils.translation import ugettext as _
 
 from django_webix.views.generic.base import WebixPermissionsMixin  # utils for permission
 
@@ -33,15 +37,18 @@ class ModelWebixAdmin(WebixPermissionsMixin):
     # DJANGO WEBIX FORM: OPTION 2
     form = None
 
+    template_form_style = None
+
     inlines = []
 
     # LIST SETTINGS
     ordering = None
     actions = []
     list_display = []
-    extra_header = {}
+    list_display_header = {} # NEW OVERRIDE HEADER MODALITY
+    extra_header = {} # TO BE REMOVED IN FUTURE
 
-    enable_json_loading = False
+    enable_json_loading = True # changed from the past
     pk_field = None
     title = None
     actions_style = None
@@ -54,6 +61,9 @@ class ModelWebixAdmin(WebixPermissionsMixin):
 
     # permission custom
     only_superuser = False
+
+    def get_template_form_style(self):
+        return self.template_form_style
 
     def get_url_pattern_list(self):
         info = self.model._meta.app_label, self.model._meta.model_name
@@ -98,7 +108,7 @@ class ModelWebixAdmin(WebixPermissionsMixin):
                 try:
                     _next = _next._meta.get_field(key)
                 except FieldDoesNotExist:
-                    # non lo ho trovato allora lo lascio alla view list di arrangiarsi
+                    # VIEW MANAGE BY HERSELF
                     return key
             elif hasattr(_next, 'related_model'):
                 _next = _next.related_model._meta.get_field(key)
@@ -106,59 +116,106 @@ class ModelWebixAdmin(WebixPermissionsMixin):
                 raise Exception('TODO?')
         return _next
 
-    def create_list_display(self, request=None):
+    def create_list_display(self, list_display, request=None):
         _fields = []
-        for j, field_name in enumerate(self.list_display):
-            model_field = self.get_field_traverse(field_name)
-            if type(model_field) == str:
-                header_title = model_field
+        for j, field_name in enumerate(list_display):
+            if field_name in self.list_display_header:
+                _fields.append(self.list_display_header[field_name]) # NEW OVERRIDE HEADER MODALITY
             else:
-                header_title = capfirst(model_field.verbose_name)
-            extra_header = ''
-            width_adapt = 'fillspace:true' if j == 0 else 'adjust:"all"'
-            filter_option = 'serverFilter' if self.enable_json_loading else 'textFilter'
-            sort_option = 'server' if self.enable_json_loading else 'string'
-            filter_type = 'icontains'
-            click_action = None
-            if field_name in self.extra_header:
-                conf_header = self.extra_header.get(field_name, {})
-                if 'header_title' in conf_header:
-                    header_title = conf_header.get('header_title', '')
-                if 'extra' in conf_header:
-                    extra_header = conf_header.get('extra', '')
-                if 'width_adapt' in conf_header:
-                    width_adapt = conf_header.get('width_adapt', '')
-                if 'filter_option' in conf_header:
-                    filter_option = conf_header.get('filter_option', '')
-                if 'filter_type' in conf_header:
-                    filter_type = conf_header.get('filter_type', '')
-                if 'click_action' in conf_header:
-                    click_action = conf_header.get('click_action', '')
-            field_list = {
-                'field_name': field_name,
-                'datalist_column': '''{{id: "{field_name}",
-                header: ["{header_title}", {{content: "{filter}"}}],
+                model_field = self.get_field_traverse(field_name)
+                filter_type = 'icontains'
+                extra_filter_options = ''
+                filter_option = 'serverFilter' if self.enable_json_loading else 'textFilter'
+                column_template = ''
+                if type(model_field) == str:
+                    header_title = model_field
+                else:
+                    # if boolean then custom choices
+                    header_title = capfirst(model_field.verbose_name)
+                    if type(model_field) == BooleanField:
+                        filter_type = ''
+                        filter_option = 'serverSelectFilter' if self.enable_json_loading else 'selectFilter'
+                        extra_filter_options= ", options:[{id: 'True', value: '"+_('Sì')+"'}, {id: 'False', value: '"+_("No")+"'}] "
+                        column_template = ' template:custom_checkbox_yesnonone, '
+                # if FK then choices
+                if '__' in field_name:
+                    try:
+                        _first_field = self.model._meta.get_field(field_name.split('__')[0])
+                    except FieldDoesNotExist:
+                        pass
+                    else:
+                        if type(_first_field)==ForeignKey:
+                            filter_type = 'iexact'
+                            filter_option = 'serverRichSelectFilter' if self.enable_json_loading else 'selectFilter'
+                            extra_filter_options = ", options: {}_options ".format(field_name)
+                # if choices... the same of FK
+                else:
+                    try:
+                        _first_field = self.model._meta.get_field(field_name)
+                    except FieldDoesNotExist:
+                        pass
+                    else:
+                        if hasattr(_first_field, 'choices') and _first_field.choices is not None:
+                            filter_type = 'iexact'
+                            filter_option = 'serverRichSelectFilter' if self.enable_json_loading else 'selectFilter'
+                            extra_filter_options = ", options: {}_options ".format(field_name)
+
+                extra_header = ''
+                width_adapt = 'fillspace:true' if j == 0 else 'adjust:"all"'
+                sort_option = 'server' if self.enable_json_loading else 'string'
+
+                click_action = None
+                footer = None
+                if field_name in self.extra_header:  # TO BE REMOVED IN FUTURE
+                    conf_header = self.extra_header.get(field_name, {})
+                    if 'header_title' in conf_header:
+                        header_title = conf_header.get('header_title', '')
+                    if 'extra' in conf_header:
+                        extra_header = conf_header.get('extra', '')
+                    if 'width_adapt' in conf_header:
+                        width_adapt = conf_header.get('width_adapt', '')
+                    if 'filter_option' in conf_header:
+                        filter_option = conf_header.get('filter_option', '')
+                    if 'filter_type' in conf_header:
+                        filter_type = conf_header.get('filter_type', '')
+                    if 'click_action' in conf_header:
+                        click_action = conf_header.get('click_action', '')
+                    if 'column_template' in conf_header:
+                        column_template = conf_header.get('column_template', '')
+                    if 'extra_filter_options' in conf_header:
+                        extra_filter_options = conf_header.get('extra_filter_options', '')
+                    if 'footer' in conf_header:
+                        footer = conf_header.get('footer', None)
+                field_list = {
+                    'field_name': field_name,
+                    'datalist_column': '''{{id: "{field_name}",
+                header: ["{header_title}", {{content: "{filter}" {extra_filter_options}}}],
                 {width_adapt},
                 sort: "{sort_option}",
                 serverFilterType: "{filter_type}",
+                {column_template}
                 {extra_header} }}'''.format(
-                    field_name=field_name,
-                    header_title=header_title,
-                    filter=filter_option,
-                    width_adapt=width_adapt,
-                    sort_option=sort_option,
-                    filter_type=filter_type,
-                    extra_header=extra_header
-                )
-            }
-            if click_action is not None:
-                field_list['click_action'] = click_action
-            _fields.append(field_list)
+                        field_name=field_name,
+                        header_title=header_title,
+                        filter=filter_option,
+                        extra_filter_options=extra_filter_options,
+                        width_adapt=width_adapt,
+                        sort_option=sort_option,
+                        filter_type=filter_type,
+                        column_template=column_template,
+                        extra_header=extra_header
+                    )
+                }
+                if footer is not None:
+                    field_list.update({'footer': footer})
+                if click_action is not None:
+                    field_list['click_action'] = click_action
+                _fields.append(field_list)
         return _fields
 
     def get_list_display(self, request=None):
         if type(self.list_display[0]) == str:
-            return self.create_list_display(request=request)
+            return self.create_list_display(self.list_display, request=request)
         else:
             return self.list_display
 
@@ -207,10 +264,16 @@ class ModelWebixAdmin(WebixPermissionsMixin):
 
     def get_layers(self):
         layers = []
-        if apps.is_installed("django_webix_leaflet") and getattr(self, 'model', None) is not None:
-            for layer in settings.DJANGO_WEBIX_LEAFLET['layers']:
-                if layer['modelname'] == f'{self.model._meta.app_label}.{self.model._meta.model_name}':
-                    layers.append(layer)
+        if apps.is_installed("qxs") and apps.is_installed("django_webix_leaflet") and getattr(self, 'model',
+                                                                                              None) is not None:
+            from qxs import qxsreg
+            for model_layer in list(filter(lambda x: x.model == self.model, qxsreg.get_models())):
+                layers.append({
+                    'codename': model_layer.get_qxs_codename(),
+                    'layername': model_layer.get_title(),
+                    'qxsname': model_layer.get_qxs_name(),
+                    'geofieldname': model_layer.geo_field_name
+                })
         return layers
 
     def get_add_view(self):
@@ -228,6 +291,7 @@ class ModelWebixAdmin(WebixPermissionsMixin):
 
                 model = _admin.model
                 form_class = _admin.get_form_create_update()
+                template_style = _admin.get_template_form_style()
                 inlines = _admin.inlines
                 model_copy_fields = _admin.get_form_fields()
                 enable_button_save_continue = _admin.enable_button_save_continue
@@ -275,6 +339,7 @@ class ModelWebixAdmin(WebixPermissionsMixin):
 
                 model = _admin.model
                 form_class = _admin.get_form_create_update()
+                template_style = _admin.get_template_form_style()
                 inlines = _admin.inlines
                 model_copy_fields = _admin.get_form_fields()
                 enable_button_save_continue = _admin.enable_button_save_continue
@@ -431,3 +496,4 @@ class ModelWebixAdmin(WebixPermissionsMixin):
     @property
     def urls(self):
         return self.get_urls()
+

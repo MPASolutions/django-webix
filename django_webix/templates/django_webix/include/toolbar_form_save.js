@@ -20,18 +20,6 @@ if (form_validate('{{ form.webix_id }}')) {
                 form_data.append(elementAttributes.name, el.getValue());
             }
             else {
-                // console.log('id_' + elementAttributes.name + '_clean')
-                // if ($$('id_' + elementAttributes.name + '_clean').getValue() == 1) {
-                //     // devo eliminarlo
-                //     console.log('elimino il file provo')
-                //     form_data.append(elementAttributes.name, '');
-                // } else {
-                //     el.files.data.each(function (obj) {
-                //         if (obj !== undefined) {
-                //             form_data.append(elementAttributes.name, obj.file, obj.file.name);
-                //         }
-                //     });
-                // }
                 el.files.data.each(function (obj) {
                     if (obj !== undefined) {
                         form_data.append(elementAttributes.name, obj.file, obj.file.name);
@@ -47,7 +35,9 @@ if (form_validate('{{ form.webix_id }}')) {
         {% if not object.pk and url_create and url_create != '' %}
             url: "{{ url_create }}{% if extra_params_button %}{% if not '?' in url_create %}?{% else %}&{% endif %}{{ extra_params_button }}{% endif %}",
         {% elif url_update and url_update != '' %}
-            url: "{{ url_update }}{% if extra_params_button %}{% if not '?' in url_create %}?{% else %}&{% endif %}{{ extra_params_button }}{% endif %}",
+            url: "{{ url_update }}{% if extra_params_button %}{% if not '?' in url_update %}?{% else %}&{% endif %}{{ extra_params_button }}{% endif %}",
+        {% elif url_send and url_send != '' %}
+            url: "{{ url_send }}{% if extra_params_button %}{% if not '?' in url_send %}?{% else %}&{% endif %}{{ extra_params_button }}{% endif %}",
         {% endif %}
         dataType: "script",
         type: "POST",

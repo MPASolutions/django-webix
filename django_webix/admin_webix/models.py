@@ -1,8 +1,12 @@
-from django.db import models
-from mptt.models import MPTTModel, TreeForeignKey
+# -*- coding: utf-8 -*-
+
 from django.contrib.auth.models import Group
 from django.contrib.contenttypes.models import ContentType
+from django.db import models
 from django.urls import reverse
+from mptt.models import TreeForeignKey
+
+from django_dal.models import DALMPTTModel as MPTTModel
 
 
 class WebixAdminMenu(MPTTModel):

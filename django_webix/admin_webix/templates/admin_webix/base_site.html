@@ -1,4 +1,4 @@
-{% load utils_ifusergroup thumbnail static utils_getattr django_webix_admin_utils %}
+{% load thumbnail static django_webix_utils django_webix_admin_utils %}
 
 <!DOCTYPE HTML>
 <html>
@@ -13,24 +13,27 @@
 
     {% block header_leaflet %}
         {% if is_webgis_enable %}
-            {% load utils_leaflet %}
+            {% friendly_load utils_leaflet %}
             <script type="text/javascript">
                 var ForceScriptNameUrl = "{{settings.FORCE_SCRIPT_NAME_URL}}";
             </script>
-            {% header_leaflet %}
+            {% if_has_tag header_leaflet %}
+                {% header_leaflet %}
+            {% endif_has_tag %}
         {% endif %}
     {% endblock %}
 
   {% block webix_filter_header %}
       {% if is_webix_filter_enable %}
           {% include "django_webix_filter/static_meta.html" %}
-
       {% endif %}
   {% endblock %}
 
 </head>
 <body style="width:100%;height:100%;margin:0px;padding:0px;">
 <script type="text/javascript" charset="utf-8">
+
+  {% block full_content %}
   webix.ready(function(){
     //webix.i18n.setLocale("it-IT"); // TODO
     webix.CustomScroll.init();
@@ -52,7 +55,6 @@
                     {% block dashborad_menu %}
                         {% include "admin_webix/include/menu.js" %},
                     {% endblock %}
-
                 ]
             },
           {% endblock %}
@@ -121,11 +123,13 @@
       {% endblock %}
 
     {% if is_webgis_enable %}
-        load_js('{% url 'webix_webgis_init' %}', undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, false);
+        load_js('{% url 'webix_webgis_init' %}{% if active_tab == 'webgis_leaflet' %}?autoopen{% endif %}', undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, false);
     {% endif %}
 
     {% block extra_content %}{% endblock %}
   });
+  {% endblock %}
+
 </script>
 
 {% block cookies %}

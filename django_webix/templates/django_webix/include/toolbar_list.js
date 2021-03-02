@@ -27,7 +27,7 @@ function {{ view_prefix }}update_counter() {
                 txt += '<div style="width:110px;float:right;height:100%;" class="webix_view webix_control webix_el_button webix_secondary"><div title="{{_("Select all")|escapejs}}" class="webix_el_box"><button type="button" class="webix_button webix_img_btn" style="line-height:24px;" onclick="$$(\'{{ view_prefix }}select_all_checkbox\').setValue(1);{{ view_prefix }}update_counter()"> {{_("Select all")|escapejs}} </button></div></div>';
             } else {
                 txt = '{{_("All")|escapejs}} ' + view_count_total + ' {{_("elements selected")|escapejs}}';
-                txt += '<div style="width:110px;float:right;height:100%;" class="webix_view webix_control webix_el_button webix_secondary"><div title="{{_("Cancel selection")|escapejs}}" class="webix_el_box"><button type="button" class="webix_button webix_img_btn" style="line-height:24px;" onclick="$$(\'{{ view_prefix }}select_all_checkbox\').setValue(0);$(\'input[name={{ view_prefix }}master_checkbox]\').prop(\'checked\',false);master_checkbox_click();{{ view_prefix }}update_counter()"> {{_("Cancel selection")|escapejs}} </button></div></div>';
+                txt += '<div style="width:110px;float:right;height:100%;" class="webix_view webix_control webix_el_button webix_secondary"><div title="{{_("Cancel selection")|escapejs}}" class="webix_el_box"><button type="button" class="webix_button webix_img_btn" style="line-height:24px;" onclick="$$(\'{{ view_prefix }}select_all_checkbox\').setValue(0);$(\'input[name={{ view_prefix }}master_checkbox]\').prop(\'checked\',false);{{ view_prefix }}master_checkbox_click();{{ view_prefix }}update_counter()"> {{_("Cancel selection")|escapejs}} </button></div></div>';
             }
         }
         {% else %}
@@ -96,7 +96,7 @@ function {{ view_prefix }}prepare_actions_execute(action_name) {
     var ids = [];
     $$("{{ view_prefix }}datatable").eachRow(function (id) {
         if ((this.getItem(id) != undefined) && (this.getItem(id).checkbox_action)) {
-            ids.push(id)
+            ids.push(id);
         }
     })
     if (ids.length > 0) {
@@ -134,12 +134,16 @@ $$("{{ webix_container_id }}").addView({
         {id: '{{ view_prefix }}select_all_checkbox', view: 'checkbox', value: 0, hidden:true},
 
         {% block toolbar_middle %}
-        {$template: "Spacer"},
+        {
+            id: "{{ webix_container_id }}_toolbar_middle",
+            cols: [{$template: "Spacer"}]
+        },
         {% endblock %}
 
         {% block add_button %}
         {% if has_add_permission or not remove_disabled_buttons and not has_add_permission %}
         {
+            id: "{{ view_prefix }}_addnew",
             view: "tootipButton",
             type: "form",
             align: "right",

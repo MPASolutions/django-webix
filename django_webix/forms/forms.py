@@ -1,8 +1,5 @@
 # -*- coding: utf-8 -*-
 
-from __future__ import unicode_literals, absolute_import
-
-import re
 import copy
 from collections import OrderedDict, defaultdict
 from json import dumps, loads
@@ -22,7 +19,7 @@ from django.core.exceptions import ImproperlyConfigured
 from django.core.serializers.json import DjangoJSONEncoder
 from django.db import models, connection
 from django.forms.forms import DeclarativeFieldsMetaclass
-from django.forms.models import ModelFormMetaclass, InlineForeignKeyField
+from django.forms.models import ModelFormMetaclass
 from django.forms.utils import ErrorList
 from django.urls import reverse
 from django.utils.encoding import force_text
@@ -31,12 +28,15 @@ from django.utils.timezone import is_naive, make_naive
 from django.utils.translation import ugettext_lazy as _
 from random import randint
 from sorl.thumbnail import get_thumbnail
+from django.utils import formats
 
-
-try:
-    from django.contrib.postgres.forms.jsonb import JSONField
-except ImportError:
-    JSONField = forms.Field
+if django.__version__ < '3.1':
+    try:
+        from django.contrib.postgres.forms.jsonb import JSONField
+    except ImportError:
+        JSONField = forms.Field
+elif django.__version__ >= '3.1':
+    from django.forms.fields import JSONField
 
 try:
     from django.contrib.postgres.forms import SimpleArrayField
@@ -49,7 +49,7 @@ except ImportError:
     GeometryField = None
 
 
-class BaseWebixMixin(object):
+class BaseWebixMixin:
     form_fix_height = None
     min_count_suggest = 100
     style = 'stacked'
@@ -93,53 +93,59 @@ class BaseWebixMixin(object):
                 _field = None
             else:
                 del self.fields[readonly_field]
-                if not hasattr(self, 'instance') or self.instance.pk is None:
+
+                if isinstance(_field, django.db.models.fields.DateTimeField) or \
+                    isinstance(_field, django.forms.fields.DateTimeField) or \
+                    isinstance(_field, django.forms.fields.DateTimeInput):
+                    # TODO: it can be improved
                     self.fields[readonly_field] = forms.CharField(
-                        label=_(_field.verbose_name).capitalize(), required=False
+                        label=_(_field.verbose_name).capitalize(),
+                        required=False
                     )
-                else:
-                    if isinstance(_field, django.db.models.fields.DateTimeField) or \
-                        isinstance(_field, django.forms.fields.DateTimeField) or \
-                        isinstance(_field, django.forms.fields.DateTimeInput):
-                        # TODO: it can be improved
-                        self.fields[readonly_field] = forms.CharField(
-                            label=_(_field.verbose_name).capitalize(),
-                            required=False
-                        )
-                        if getattr(self.instance, readonly_field):
-                            _value = getattr(self.instance, readonly_field)
-                            if not is_naive(_value):
-                                _value = make_naive(_value)
-                            value = '{}'.format(_value.strftime('%d/%m/%Y %H:%M'))
-                        else:
-                            value = ''
-                    elif isinstance(_field, django.db.models.fields.DateField) or \
-                        isinstance(_field, django.forms.fields.DateField):
-                        # TODO: it can be improved
-                        self.fields[readonly_field] = forms.CharField(
-                            label=_(_field.verbose_name).capitalize(),
-                            required=False
-                        )
-                        if getattr(self.instance, readonly_field):
-                            value = '{}'.format(getattr(self.instance, readonly_field).strftime('%d/%m/%Y'))
-                        else:
-                            value = ''
-                    elif isinstance(_field, django.db.models.fields.BooleanField) or \
-                        isinstance(_field, django.forms.fields.CheckboxInput):
-                        # TODO: it can be improved
-                        self.fields[readonly_field] = forms.BooleanField(
-                            label=_(_field.verbose_name).capitalize(),
-                            required=False
-                        )
+                    if hasattr(self, 'instance') and \
+                        self.instance.pk is not None and getattr(self.instance, readonly_field):
+                        _value = getattr(self.instance, readonly_field)
+                        if not is_naive(_value):
+                            _value = make_naive(_value)
+                        value = '{}'.format(_value.strftime('%d/%m/%Y %H:%M'))
+                    else:
+                        value = ''
+                elif isinstance(_field, django.db.models.fields.DateField) or \
+                    isinstance(_field, django.forms.fields.DateField):
+                    # TODO: it can be improved
+                    self.fields[readonly_field] = forms.CharField(
+                        label=_(_field.verbose_name).capitalize(),
+                        required=False
+                    )
+                    if hasattr(self, 'instance') and \
+                        self.instance.pk is not None and getattr(self.instance, readonly_field):
+                        value = '{}'.format(getattr(self.instance, readonly_field).strftime('%d/%m/%Y'))
+                    else:
+                        value = ''
+                elif isinstance(_field, django.db.models.fields.BooleanField) or \
+                    isinstance(_field, django.forms.fields.CheckboxInput):
+                    # TODO: it can be improved
+                    self.fields[readonly_field] = forms.BooleanField(
+                        label=_(_field.verbose_name).capitalize(),
+                        required=False
+                    )
+                    if hasattr(self, 'instance') and self.instance.pk is not None:
                         value = getattr(self.instance, readonly_field) or None
                     else:
-                        self.fields[readonly_field] = forms.CharField(
-                            label=_(_field.verbose_name).capitalize(),
-                            required=False
-                        )
-                        value = '{}'.format(getattr(self.instance, readonly_field) or '')
-                    self.fields[readonly_field].initial = value
-                    self.initial[readonly_field] = value
+                        value = None
+                else:
+                    self.fields[readonly_field] = forms.CharField(
+                        label=_(_field.verbose_name).capitalize(),
+                        required=False
+                    )
+                    if hasattr(self, 'instance') and self.instance.pk is not None:
+                        value = '{}'.format(getattr(self.instance, readonly_field)) \
+                            if getattr(self.instance, readonly_field) is not None else ""
+                    else:
+                        value = ''
+
+                self.fields[readonly_field].initial = value
+                self.initial[readonly_field] = value
 
     def webix_extra_clean(self, cleaned_data):
         for key, value in cleaned_data.items():
@@ -234,11 +240,12 @@ class BaseWebixMixin(object):
 
             # Get initial value
             if hasattr(self, 'cleaned_data'):
+
                 if type(field) == forms.models.ModelMultipleChoiceField:
                     initial = self.data.getlist(self.add_prefix(name), field.initial)
                 elif connection.vendor == 'postgresql' and isinstance(field, JSONField):
                     initial = self.data.get(self.add_prefix(name), None)
-                    if initial is not None:
+                    if initial is not None and initial != '':
                         initial = loads(initial)
                     else:
                         initial = field.initial
@@ -257,12 +264,11 @@ class BaseWebixMixin(object):
             # FloatField
             elif isinstance(field, forms.FloatField):
                 if initial is not None:
-                    el.update({'value': '{}'.format(initial).replace('.', ',')})
+                    el.update({'value': '{}'.format(formats.localize(initial, use_l10n=True))})
             # DecimalField
             elif isinstance(field, forms.DecimalField):
-                # el.update({'view':''})
                 if initial is not None:
-                    el.update({'value': '{}'.format(initial).replace('.', ',')})
+                    el.update({'value': '{}'.format(formats.localize(initial, use_l10n=True))})
             # IntegerField
             elif isinstance(field, forms.IntegerField):
                 el.update({
@@ -280,18 +286,30 @@ class BaseWebixMixin(object):
                 })
                 if initial is not None:
                     if isinstance(initial, six.string_types):
-                        el.update({
-                            'value': '{}'.format(initial).replace('-', ',').replace(' ', ',').replace(':', ',')
-                        })
+                        if settings.WEBIX_VERSION >= '7.0.0' and settings.WEBIX_VERSION < '8.0.0':
+                            el.update({
+                                'value': '2020-01-01 {}'.format(initial).replace('-', ',').replace(' ', ',').replace(
+                                    ':', ',')
+                            })
+                        else:
+                            el.update({
+                                'value': '{}'.format(initial).replace('-', ',').replace(' ', ',').replace(':', ',')
+                            })
                     elif callable(initial):
                         _value = initial()
                         if not is_naive(_value):
                             _value = make_naive(_value)
-                        el.update({'value': '{}'.format(_value.strftime('%H,%M'))})
+                        if settings.WEBIX_VERSION >= '7.0.0' and settings.WEBIX_VERSION < '8.0.0':
+                            el.update({'value': '2020-01-01 {}'.format(_value.strftime('%H,%M'))})
+                        else:
+                            el.update({'value': '{}'.format(_value.strftime('%H,%M'))})
                     else:
                         if not is_naive(initial):
                             initial = make_naive(initial)
-                        el.update({'value': '{}'.format(initial.strftime('%H,%M'))})
+                        if settings.WEBIX_VERSION >= '7.0.0' and settings.WEBIX_VERSION < '8.0.0':
+                            el.update({'value': '2020-01-01 {}'.format(initial.strftime('%H,%M'))})
+                        else:
+                            el.update({'value': '{}'.format(initial.strftime('%H,%M'))})
             # DateField
             elif isinstance(field, forms.DateField):
                 el.update({
@@ -844,8 +862,6 @@ class BaseWebixMixin(object):
         return fs.values()
 
 
-####################### BaseWebixForm AND BaseWebixModelForm #######################
-
 class BaseWebixForm(forms.BaseForm, BaseWebixMixin):
 
     def __init__(self, data=None, files=None, auto_id='id_%s', prefix=None,
@@ -933,9 +949,6 @@ class BaseWebixModelForm(forms.BaseModelForm, BaseWebixMixin):
 
     def get_name(self):
         return capfirst(self.Meta.model._meta.verbose_name)
-
-
-####################### WebixForm AND WebixModelForm #######################
 
 
 class WebixForm(six.with_metaclass(DeclarativeFieldsMetaclass, BaseWebixForm)):

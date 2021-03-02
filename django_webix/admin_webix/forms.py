@@ -1,18 +1,15 @@
-from django.apps import apps
-from django_webix.forms import WebixModelForm
-from django.conf import settings
-from django import forms
-from django.contrib.auth.models import Group, Permission
-from django.contrib.auth import get_user_model
+# -*- coding: utf-8 -*-
 
-from django.contrib.auth.forms import AuthenticationForm, SetPasswordForm, PasswordResetForm
-from django_webix.forms import WebixForm, WebixModelForm
+from django import forms
+from django.apps import apps
 from django.contrib.auth import (
-    authenticate, get_user_model, password_validation,
+    get_user_model, password_validation,
 )
-from django.urls import reverse
-from django.contrib.contenttypes.models import ContentType
+from django.contrib.auth.forms import AuthenticationForm, SetPasswordForm, PasswordResetForm
+from django.contrib.auth.models import Group, Permission
+
 from django_webix.admin_webix.models import WebixAdminMenu
+from django_webix.forms import WebixForm, WebixModelForm
 
 
 class GroupAdminForm(WebixModelForm):
@@ -44,6 +41,12 @@ class UserForm(WebixModelForm):
         fields = [i.attname for i in get_user_model()._meta.fields if i.editable and
                   all(x not in i.attname for x in
                       ['password', 'is_staff', 'is_active', 'is_superuser', 'date_joined', 'data'])]
+
+    @property
+    def get_elements(self):
+        fs = super().get_elements
+        fs['username'].update({'readonly': 'readonly', 'disabled': True})
+        return fs
 
 
 class UserAdminCreateForm(WebixModelForm):

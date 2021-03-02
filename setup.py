@@ -64,7 +64,11 @@ setup(
         'django-mptt>=0.11.0',
         'django-two-factor-auth>=1.12.1',
         'django-user-agents>=0.4.0',
-        'six'
+        'python-dateutil>=2.8.1',
+        'six>=1.15.0',
+        'django-dal>=1.0.0',
+        'django-filtersmerger>=1.0.0',
+        # FIXME: feincms admin_webix
     ],
     classifiers=[
         'Environment :: Web Environment',

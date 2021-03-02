@@ -43,7 +43,7 @@ $$("{{ webix_container_id }}").addView({
                 label: "{{_("Go to map")|escapejs}} ({{layer.layername}})",
                 autowidth: true,
                 click: function () {
-                    $$("map").goToWebgisPk('{{layer.layername}}', '{{ pk_field_name }}', {{ object.pk }});
+                    $$("map").goToWebgisPk('{{layer.qxsname}}', '{{ pk_field_name }}', {{ object.pk }});
                 }
             },
             {% endfor %}

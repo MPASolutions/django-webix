@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 def register(*models, site=None):
     """
     Register the given model(s) classes and wrapped ModelWebixAdmin class with

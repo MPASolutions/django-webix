@@ -1,4 +1,39 @@
-{% load static django_webix_utils i18n %}
+{% load static django_webix_utils i18n filtersmerger_utils %}
+
+{% get_request_filter_params %}
+
+{# filters #}
+
+if (webixAppliedFilters == undefined) {
+    var webixAppliedFilters = {};
+}
+
+function setWebixFilter(app_model, filter_type, value){
+    webixAppliedFilters[app_model][filter_type] = value;
+}
+
+function initWebixFilterPrefix(app_model){
+    if (webixAppliedFilters[app_model] == undefined) {
+        webixAppliedFilters[app_model] = {};
+        {% for key, param in filter_params.items %}
+        {% if param %}
+         webixAppliedFilters[app_model]['{{ param }}'] = null;
+        {% endif %}
+        {%  endfor %}
+    }
+}
+
+function resetWebixFilterPrefix(app_model){
+    webixAppliedFilters[app_model] = {};
+    {% for key, param in filter_params.items %}
+    {% if param %}
+    webixAppliedFilters[app_model]['{{ param }}'] = null;
+    {% endif %}
+    {%  endfor %}
+    if('layer' in webixAppliedFilters[app_model]) {
+        webixAppliedFilters[app_model]['layer'] = null;
+    }
+}
 
 {# csrf set and abort all using jQuery #}
 
@@ -25,8 +60,8 @@ function csrfSafeMethod(method) {
 
 if (!String.prototype.startsWith) {
     Object.defineProperty(String.prototype, 'startsWith', {
-        value: function(search, rawPos) {
-            var pos = rawPos > 0 ? rawPos|0 : 0;
+        value: function (search, rawPos) {
+            var pos = rawPos > 0 ? rawPos | 0 : 0;
             return this.substring(pos, pos + search.length) === search;
         }
     });
@@ -130,6 +165,20 @@ function custom_checkbox_yesno(obj, common, value) {
         return "<div style='color:green;'>{{_("Yes")|escapejs}}</div>";
     else
         return "<div style='color:red;'>{{_("No")|escapejs}}</div>";
+}
+
+function custom_checkbox_yesnonone(obj, common, value) {
+    if ((value === "True") || (value === "true") || (value == '1') || (value === 1) || (value === true)) {
+        return "<div style='color:green;'>{{_("Yes")|escapejs}}</div>";
+    } else if ((value === "False") || (value === "false") || (value == '0') || (value === 0) || (value === false)) {
+        return "<div style='color:red;'>{{_("No")|escapejs}}</div>";
+    } else {
+        return "";
+    }
+}
+
+function template_colour_rgb(obj, common, value) {
+    return '<div style="border:1px solid #000;height:15px;background-color: '+value+'"></div>';
 }
 
 function custom_checkbox_default(obj, common, value) {
@@ -286,16 +335,20 @@ function load_js(lnk, hide, area, method, data, headers, dataType, abortAllPendi
                         $$(area).hideOverlay();
                     webix.ui.fullScreen();
                     if (navigator.userAgent.indexOf('MSIE') !== -1 || navigator.appVersion.indexOf('Trident/') > 0) {
-                         var evt = document.createEvent('UIEvents');
-                         evt.initUIEvent('resize', true, false, window, 0);
-                         window.dispatchEvent(evt);
+                        var evt = document.createEvent('UIEvents');
+                        evt.initUIEvent('resize', true, false, window, 0);
+                        window.dispatchEvent(evt);
                     } else {
-                         window.dispatchEvent(new Event('resize'));
+                        window.dispatchEvent(new Event('resize'));
                     }
                     // change state
                     {% if history_enable %}
-                    if (enableHistory==true) {
-                        history.replaceState(null, null, '?state=' + lnk);
+                    if (enableHistory == true) {
+                        extra_url = '?state=' + lnk;
+                        if ($$('main_content_right') != undefined) {
+                            extra_url += '&tab=' + $$('main_content_right').getValue();
+                        }
+                        history.replaceState(null, null, extra_url);
                     }
                     {% endif %}
                 }
@@ -367,34 +420,52 @@ function webix_post(path, params) {
 {# autocomplete #}
 
 function set_autocomplete_reload(selector, QS) {
-    a = $$(selector);
-    b = $$(a.config.suggest);
-    c = b.getBody();
-    c.define('dataFeed', QS);
-    c.clearAll()
-    c.refresh();
-    d = a.getList();
+    var a = $$(selector);
+    var d = a.getList();
+    if(a.config.view === 'multicombo' || a.config.view === 'multiselect'){
+        d.define('dataFeed', QS);
+        d.clearAll();
+    } else {
+        var b = $$(a.config.suggest);
+        var c = b.getBody();
+        c.define('dataFeed', QS);
+        c.clearAll()
+        c.refresh();
+    }
     d.load(QS + '&filter[value]=');
+    d.refresh();
 }
 
 function set_autocomplete_value(selector, QS, value) {
-    a = $$(selector);
-    b = $$(a.config.suggest);
-    c = b.getBody();
-    c.define('dataFeed', QS);
-    c.refresh();
-    d = a.getList();
+    var a = $$(selector);
+    var d = a.getList();
+    if(a.config.view === 'multicombo' || a.config.view === 'multiselect'){
+        d.define('dataFeed', QS);
+        d.clearAll();
+    }else {
+        var b = $$(a.config.suggest);
+        var c = b.getBody();
+        c.define('dataFeed', QS);
+        c.refresh();
+    }
     d.load(QS + '&filter[value]=' + value);
+    d.refresh();
 }
 
 function set_autocomplete(selector, QS) {
-    a = $$(selector);
-    b = $$(a.config.suggest);
-    c = b.getBody();
-    c.define('dataFeed', QS);
-    c.refresh();
-    d = a.getList();
+    var a = $$(selector);
+    var d = a.getList();
+    if(a.config.view === 'multicombo' || a.config.view === 'multiselect'){
+        d.define('dataFeed', QS);
+        d.clearAll();
+    }else {
+        var b = $$(a.config.suggest);
+        var c = b.getBody();
+        c.define('dataFeed', QS);
+        c.refresh();
+    }
     d.load(QS + '&filter[value]=');
+    d.refresh();
 }
 
 function set_autocomplete_empty(selector, QS) {
@@ -454,3 +525,9 @@ webix.ui.datafilter.avgColumn = webix.extend({
         node.firstChild.innerHTML = Math.round(result / master.count());
     }
 }, webix.ui.datafilter.summColumn)
+
+function sortFloat(a, b) {
+    a = parseFloat(a.data6);
+    b = parseFloat(b.data6);
+    return a > b ? 1 : (a < b ? -1 : 0);
+}
