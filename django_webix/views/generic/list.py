@@ -9,6 +9,7 @@ from django.template import Template, Context
 from django.template.loader import get_template
 from django.utils.translation import ugettext as _
 from django.views.generic import ListView
+from django.db.models.query import QuerySet
 
 from django_filtersmerger import FilterMerger
 from django_webix.views.generic.base import WebixBaseMixin, WebixPermissionsMixin, WebixUrlMixin
@@ -123,10 +124,21 @@ class WebixListView(WebixBaseMixin,
         return annotations
 
     def get_initial_queryset(self):
-        # TODO: questo causa errori quando si fa l'ordering su campi annotati, possibile soluzione:
-        # return self.model._default_manager.all()
-        # da discutere di farla
-        return super(WebixListView, self).get_queryset()
+        if self.queryset is not None:
+            queryset = self.queryset
+            if isinstance(queryset, QuerySet):
+                queryset = queryset.all()
+        elif self.model is not None:
+            queryset = self.model._default_manager.all()
+        else:
+            raise ImproperlyConfigured(
+                "%(cls)s is missing a QuerySet. Define "
+                "%(cls)s.model, %(cls)s.queryset, or override "
+                "%(cls)s.get_queryset()." % {
+                    'cls': self.__class__.__name__
+                }
+            )
+        return queryset
 
     def get_queryset(self, initial_queryset=None):
         # bypass improperly configured for custom queryset without model
