@@ -237,7 +237,7 @@ function {{ view_prefix }}apply_filters() {
     }
     var advanced_filter_count = '0';
     {% with param='DjangoAdvancedWebixFilter'|request_filter_param %}
-    {% if param %}
+    {% if param and model_name %}
     var advanced_filter = webixAppliedFilters['{{ model_name }}']['{{ param }}'];
     if (advanced_filter){
         advanced_filter_count = advanced_filter.split(',').length
