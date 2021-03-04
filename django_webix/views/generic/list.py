@@ -415,7 +415,7 @@ class WebixListView(WebixBaseMixin,
         _data = []
         total_count = 0
         if self.model:
-            qs = self.get_queryset()
+            qs = self.get_queryset(initial_queryset=self.get_initial_queryset())
             # filters application (like IDS selections)
             qs = self.filters_objects_datatable(qs)
             # apply ordering
