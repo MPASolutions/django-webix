@@ -338,7 +338,9 @@ class WebixListView(WebixBaseMixin,
         Return list ov actions to be executed on listview
         :return:
         '''
-        _actions = self.actions
+        # _actions = self.actions
+        # tentativo di fix delle azioni sbagliate
+        _actions = deepcopy(self.actions)
         _actions += self._get_actions_flexport()
 
         _dict_actions = {}
