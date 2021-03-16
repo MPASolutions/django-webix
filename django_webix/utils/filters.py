@@ -74,19 +74,22 @@ def from_dict_to_qset(data, model):
                 _curr_model = model
                 _curr_field = None
 
-                if len(data_qset.get('path').split("__")) > 2: # utils for annotate...
-
-                    for _field in data_qset.get('path').split("__")[:-1]:
+                for _field in data_qset.get('path').split("__")[:-1]:
+                    try:
                         _curr_field = _curr_model._meta.get_field(_field)
+                    except:
+                        _curr_model = None
+                        _curr_field = None
+                        break  # Non è un field sul modello (es. annotate)
 
-                        if issubclass(type(_curr_field), models.ForeignKey):
-                            _curr_model = _curr_field.remote_field.get_related_field().model
-                        elif issubclass(type(_curr_field), ForeignObjectRel):
-                            _curr_model = _curr_field.related_model
-                        elif issubclass(type(_curr_field), models.ManyToManyField):
-                            _curr_model = _curr_field.remote_field.get_related_field().model
-                        else:
-                            pass  # Sono arrivato all'ultimo field, non serve fare altro
+                    if issubclass(type(_curr_field), models.ForeignKey):
+                        _curr_model = _curr_field.remote_field.get_related_field().model
+                    elif issubclass(type(_curr_field), ForeignObjectRel):
+                        _curr_model = _curr_field.related_model
+                    elif issubclass(type(_curr_field), models.ManyToManyField):
+                        _curr_model = _curr_field.remote_field.get_related_field().model
+                    else:
+                        pass  # Sono arrivato all'ultimo field, non serve fare altro
 
                 # Se si tratta di un array, allora lo metto in una lista
                 if isinstance(_curr_field, ArrayField):
