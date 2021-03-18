@@ -52,7 +52,6 @@ class AdminWebixSite:
     login_template = None
     logout_template = None
     dashboard_template = 'admin_webix/dashboard.js'
-    webgis_template = None
     password_change_template = None
     password_change_done_template = None
 
@@ -648,8 +647,6 @@ class AdminWebixSite:
         Display the main admin index page, which lists all of the installed
         apps that have been registered in this site.
         """
-        if self.is_webgis_enable() and self.webgis_template is None:
-            raise ImproperlyConfigured('Webgis template is not set')
 
         history_url = request.GET.get('state', None)
         try:
