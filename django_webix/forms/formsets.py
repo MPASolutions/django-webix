@@ -129,11 +129,12 @@ class WebixInlineFormSet(InlineFormSetFactory):
             {'template_name': self.template_name}
         )
 
-        # Set queryset
-        if hasattr(self, 'get_queryset') and callable(self.get_queryset):
-            self.formset_kwargs['queryset'] = self.get_queryset()
-        else:
-            self.formset_kwargs['queryset'] = self.inline_model.objects.all()
+        if instance is not None and instance.pk is not None:
+            # Set queryset
+            if hasattr(self, 'get_queryset') and callable(self.get_queryset):
+                self.formset_kwargs['queryset'] = self.get_queryset()
+            else:
+                self.formset_kwargs['queryset'] = self.inline_model.objects.all()
 
     def get_formset_kwargs(self):
         _formset_kwargs = super(WebixInlineFormSet, self).get_formset_kwargs()

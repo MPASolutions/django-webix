@@ -521,12 +521,11 @@ class BaseWebixMixin:
                             for i in initial
                         ])
                     })
-                count = field.queryset.count()
 
-                if count > self.min_count_suggest and \
-                    name not in self.autocomplete_fields and \
-                    name not in self.autocomplete_fields_exclude:
-                    self.autocomplete_fields.append(name)
+                if name not in self.autocomplete_fields and name not in self.autocomplete_fields_exclude:
+                    count = field.queryset.count()
+                    if count > self.min_count_suggest:
+                        self.autocomplete_fields.append(name)
 
                 # autocomplete url
                 if name in self.autocomplete_fields and \
@@ -591,12 +590,11 @@ class BaseWebixMixin:
                         if isinstance(initial, models.Model) else
                         str(initial)
                     })
-                count = field.queryset.count()
 
-                if count > self.min_count_suggest and \
-                    name not in self.autocomplete_fields and \
-                    name not in self.autocomplete_fields_exclude:
-                    self.autocomplete_fields.append(name)
+                if name not in self.autocomplete_fields and name not in self.autocomplete_fields_exclude:
+                    count = field.queryset.count()
+                    if count > self.min_count_suggest:
+                        self.autocomplete_fields.append(name)
 
                 # autocomplete url
                 if name in self.autocomplete_fields and \
@@ -628,24 +626,6 @@ class BaseWebixMixin:
                             'id': '{}'.format(getattr(record, field.to_field_name or 'pk')),
                             'value': '{}'.format(record)
                         }]
-
-                # regular field without autocomplete
-                elif count <= 6:
-                    choices = self._add_null_choice([{
-                        'id': '{}'.format(getattr(i, field.to_field_name or 'pk')),
-                        'value': '{}'.format(i)
-                    } for i in field.queryset])
-                    if not field.required:
-                        choices.insert(0, {'id': "", 'value': "------", '$empty': True})
-                    el.update({
-                        'options': choices,
-                        'view': 'richselect',
-                        'selectAll': True,
-                        'placeholder': _('Click to select')
-                    })
-                    # Default if is required and there are only one option
-                    if field.required and initial is None and len(field.queryset) == 1:
-                        el.update({'value': '{}'.format(getattr(field.queryset.first(), field.to_field_name or 'pk'))})
                 else:
                     choices = self._add_null_choice([{
                         'id': '{}'.format(getattr(i, field.to_field_name or 'pk')),
@@ -653,11 +633,25 @@ class BaseWebixMixin:
                     } for i in field.queryset])
                     if not field.required:
                         choices.insert(0, {'id': "", 'value': "------", '$empty': True})
-                    el.update({
-                        'view': 'combo',
-                        'placeholder': _('Click to select'),
-                        'options': choices
-                    })
+                    count = len(choices)
+                    # regular field without autocomplete
+                    if count <= 6:
+                        el.update({
+                            'options': choices,
+                            'view': 'richselect',
+                            'selectAll': True,
+                            'placeholder': _('Click to select')
+                        })
+                        # Default if is required and there are only one option
+                        if field.required and initial is None and count == 1:
+                            el.update({'value': '{}'.format(getattr(field.queryset.first(), field.to_field_name or 'pk'))})
+                    else:
+                        el.update({
+                            'view': 'combo',
+                            'placeholder': _('Click to select'),
+                            'options': choices
+                        })
+
             # TypedChoiceField ChoiceField
             elif isinstance(field, forms.TypedChoiceField) or isinstance(field, forms.ChoiceField):
                 choices = self._add_null_choice([{
