@@ -1,0 +1,32 @@
+{% load django_webix_utils static %}
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>{{ title }}</title>
+
+    {% block webix_header %}
+        {% include "django_webix/static_meta.html" %}
+    {% endblock %}
+
+    {% block extrahead %}{% endblock %}
+
+</head>
+<body style="width:100%;height:100%;margin:0px;padding:0px;">
+<script type="text/javascript" charset="utf-8">
+    webix.ready(function () {
+        webix.ui({
+            margin: 5,
+            id: '{{ webix_container_id }}',
+            type: "space",
+            rows: [],
+        });
+
+        {% block webix_content %}{% endblock %}
+
+        webix.extend($$('{{ webix_container_id }}'), webix.OverlayBox);
+    });
+</script>
+</body>
+</html>
