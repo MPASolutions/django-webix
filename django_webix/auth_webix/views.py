@@ -13,7 +13,8 @@ class WebixPasswordResetContainerView(WebixTemplateView):
 
 class WebixPasswordResetView(auth_views.PasswordResetView, WebixFormView):
     template_name = 'auth_webix/password_reset/password_reset_form.js'
-    email_template_name = 'auth_webix/password_reset1/password_reset_email.html'
+    email_template_name = 'auth_webix/password_reset/password_reset_email.html'
+    subject_template_name = 'auth_webix/password_reset/password_reset_subject.txt'
     form_class = WebixPasswordResetForm
     success_url = reverse_lazy('auth_webix:password_reset_done')
     url_pattern_send = "auth_webix:password_reset"
