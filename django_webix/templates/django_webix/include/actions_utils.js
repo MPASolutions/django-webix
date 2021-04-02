@@ -1,7 +1,7 @@
 {% load django_webix_utils static i18n %}
 
 
-function _{{ view_prefix }}action_execute(action, ids, all, response_type, short_description, modal_title, modal_ok, modal_cancel, input_params, callback_success, callback_error) {
+function _{{ view_prefix }}action_execute(action, ids, all, response_type, short_description, modal_title, modal_ok, modal_cancel, input_params, callback_success, callback_error, reload_list) {
     /*
     action (required) = action_key to be executed
     ids (required) = list of selected elements ids
@@ -74,6 +74,19 @@ function _{{ view_prefix }}action_execute(action, ids, all, response_type, short
                                 if (callback_success){
                                     callback_success();
                                 }
+                                if (reload_list){
+                                    try {
+                                        {{ view_prefix }}apply_filters();
+                                    } catch (error) { // only for custom purpose
+                                        $$('{{ view_prefix }}datatable').filterByAll();
+                                    }
+                                }
+                                // callback success by js
+                                try {
+                                    window['{{ view_prefix }}'+action+'_callback_success']();
+                                    } catch (error) { // only for custom purpose
+                                    }
+
                             } else {
                                 webix.message({
                                     text: "{{_("Something gone wrong")|escapejs}}",

@@ -304,6 +304,7 @@ class WebixListView(WebixBaseMixin,
             'modal_ok': action.modal_ok,
             'modal_cancel': action.modal_cancel,
             'form': getattr(action,'form',None),
+            'reload_list': getattr(action,'reload_list',True),
         }
 
     def _get_actions_flexport(self):
@@ -327,6 +328,7 @@ class WebixListView(WebixBaseMixin,
                 _action.modal_title = _("Are you sure you want to proceed with this action?")
                 _action.modal_ok = _("Proceed")
                 _action.modal_cancel = _("Undo")
+                _action.reload_list = False
                 return _action
 
             for export_instance in Export.objects.filter(model=model_ct, active=True):

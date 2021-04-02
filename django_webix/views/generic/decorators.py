@@ -15,6 +15,7 @@ def action_config(
     modal_ok=_("Proceed"),
     modal_cancel=_("Undo"),
     form=None,
+    reload_list=True,
 ):  # TODO: permission check before execution
 
     if allowed_permissions is None:
@@ -49,6 +50,7 @@ def action_config(
         setattr(wrapper, 'modal_ok', modal_ok)
         setattr(wrapper, 'modal_cancel', modal_cancel)
         setattr(wrapper, 'form', form)
+        setattr(wrapper, 'reload_list', reload_list)
 
         return wrapper
 

@@ -9,7 +9,8 @@ from django_webix.views.generic.decorators import action_config
 @action_config(action_key='delete',
                response_type='json',
                short_description=_('Delete'),
-               allowed_permissions=['delete'])
+               allowed_permissions=['delete'],
+               reload_list=True)
 def multiple_delete_action(self, request, qs):
     _count_delete_instances = int(qs.count())
     qs.delete()
