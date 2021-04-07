@@ -35,8 +35,11 @@ class InlineModelInline(WebixTabularInlineFormSet):
 
 
 class InlineStackedModelForm(WebixModelForm):
-    autocomplete_fields = ['inlinemodel']
     min_count_suggest = 0
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.autocomplete_fields = ['inlinemodel']
 
     class Meta:
         model = InlineStackedModel

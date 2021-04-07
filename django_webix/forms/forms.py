@@ -53,10 +53,6 @@ class BaseWebixMixin:
     form_fix_height = None
     min_count_suggest = 100
     style = 'stacked'
-    readonly_fields = []
-    autocomplete_fields = []
-    autocomplete_fields_exclude = []
-    autocomplete_fields_urls = {}
 
     class Meta:
         localized_fields = '__all__'  # to use comma as separator in i18n
@@ -863,6 +859,13 @@ class BaseWebixForm(forms.BaseForm, BaseWebixMixin):
                  empty_permitted=False, field_order=None, use_required_attribute=None,
                  renderer=None, request=None, inline_id=None,
                  has_add_permission=None, has_change_permission=None, has_delete_permission=None):
+
+        # Set default parameter
+        self.readonly_fields = []
+        self.autocomplete_fields = []
+        self.autocomplete_fields_exclude = []
+        self.autocomplete_fields_urls = {}
+
         # Set request
         self.request = request
         self.has_add_permission = has_add_permission
@@ -904,6 +907,13 @@ class BaseWebixModelForm(forms.BaseModelForm, BaseWebixMixin):
                  empty_permitted=False, instance=None, use_required_attribute=None,
                  renderer=None, request=None, inline_id=None,
                  has_add_permission=None, has_change_permission=None, has_delete_permission=None):
+
+        # Set default
+        self.readonly_fields = []
+        self.autocomplete_fields = []
+        self.autocomplete_fields_exclude = []
+        self.autocomplete_fields_urls = {}
+
         # Set request
         self.request = request
         self.has_add_permission = has_add_permission

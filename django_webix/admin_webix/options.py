@@ -252,13 +252,16 @@ class ModelWebixAdmin(WebixPermissionsMixin):
             from django_webix.forms import WebixModelForm
 
             class WebixAdminCreateUpdateForm(WebixModelForm):
-                readonly_fields = _admin.readonly_fields
-                autocomplete_fields = _admin.autocomplete_fields
 
                 class Meta:
                     localized_fields = ('__all__')
                     model = _admin.model
                     fields = _admin.get_form_fields()
+
+                def __init__(self, *args, **kwargs):
+                    super().__init__(*args, **kwargs)
+                    self.readonly_fields = _admin.readonly_fields
+                    self.autocomplete_fields = _admin.autocomplete_fields
 
             return WebixAdminCreateUpdateForm
 
