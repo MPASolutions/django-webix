@@ -531,3 +531,14 @@ function sortFloat(a, b) {
     b = parseFloat(b.data6);
     return a > b ? 1 : (a < b ? -1 : 0);
 }
+
+function floateditor(obj, common, value, config) {
+    var anno = config.id.replace('menu_','');
+    var lock = obj[config.id+'_lock'];
+    if (lock!=true) {
+        var floaticon = "<div title='{{_("Click and change")|escapejs}}'> " + value + "&nbsp;&nbsp;&nbsp;<span style='float:right;margin-top:3px;text-align:right;' class='webix_icon far fa-edit'></span></div>";
+    } else {
+        var floaticon = "<div title='{{_("Locked data")|escapejs}}'> " + value + "</div>";
+    }
+    return floaticon;
+}

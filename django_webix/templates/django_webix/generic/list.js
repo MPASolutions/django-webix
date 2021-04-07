@@ -423,6 +423,7 @@ $$("{{ webix_container_id }}").addView({
     navigation: true,
     checkboxRefresh: true,
     on: {
+    {% block datatable_on %}
         onCheck: function (row, column, state) {
             {{ view_prefix }}update_counter();
         },
@@ -506,6 +507,7 @@ $$("{{ webix_container_id }}").addView({
             }
             {% endblock %}
         }
+        {% endblock %}
     }
 },1);
 
