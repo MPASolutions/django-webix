@@ -30,14 +30,14 @@ $$("{{ webix_container_id }}").addView({
             value: "0", // disable by default
             hidden: true,
         },
-        {},
+
         {
             view: "template",
             type: "header",
             borderless: true,
-            template: '<div style="width:100%; text-align:center;"><strong>{{ title }}</strong></div>'
+            template: '<div style="width:100%; text-align:center;"><span style="text-align:center;"><strong>{{ title }}</strong></span></div>'
         },
-        {},
+
         {
             id: '{{ view_prefix }}_filter_locked_sql',
             view: "button",
