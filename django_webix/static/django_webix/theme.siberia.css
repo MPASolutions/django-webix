@@ -186,11 +186,13 @@
     border-radius: 4px;
     width: 100%;
     height: 6px;
-    -webkit-box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1);
-    box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1);
     float: left;
     overflow: hidden;
-    cursor: pointer
+}
+
+.progress_bar_element.show_label {
+    width: 60%;
+    margin-right: 1rem;
 }
 
 .progress_result {

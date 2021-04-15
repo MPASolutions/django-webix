@@ -101,12 +101,14 @@ webix.attachEvent("onBeforeAjax", function (mode, url, data, xhr, headers) {
 {# Italian locale settings for pivot #}
 
 webix.i18n.locales['it-IT'].pivot = {
+    avg: 'media',
     apply: "Applica",
     cancel: "Annulla",
     columns: "Colonne",
-    count: "Somma",
+    count: "conteggio",
     fields: "Campi",
     filters: "Filtri",
+    groupBy: "Raggruppa per",
     max: "max",
     min: "min",
     operationNotDefined: "Operazione non definita",
@@ -115,10 +117,10 @@ webix.i18n.locales['it-IT'].pivot = {
     select: "selezione",
     sum: "somma",
     text: "testo",
+    total: "Totale",
     values: "Valori",
     windowTitle: "Configurazione",
     windowMessage: "[Trascinare i campi di sinistra nella sezione desiderata]",
-    total: "Totale"
 };
 
 {# values casts #}
