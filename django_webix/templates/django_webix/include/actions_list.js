@@ -3,18 +3,18 @@
 {% if is_enable_actions %}
 
 var {{ view_prefix }}actions_list = [
+    {% block actions_list %}
     {% for layer in layers %}
         {id: 'gotowebgis_{{ layer.codename }}', value: "{{_("Go to map")|escapejs}} ({{layer.layername}})"},
     {% endfor %}
     {% for action_key,action in actions.items %}
     {id: '{{ action_key }}', value: '{{action.short_description}}'}{% if not forloop.last %}, {% endif %}
     {% endfor %}
+    {% endblock %}
 ];
 
 {% for action_key,action in actions.items %}
     {% if action.form %}
-
-
 function _{{ action_key }}_action_execute_form(ids, all) {
   webix.ui({
     view: "window",
@@ -93,6 +93,7 @@ function _{{ action_key }}_action_execute_form(ids, all) {
 
 
 function {{ view_prefix }}actions_execute(action, ids, all) {
+    {% block action_execute %}
     {% for layer in layers %}
     if (action=='gotowebgis_{{ layer.codename }}') {
         $$("map").goToWebgisPks('{{layer.qxsname}}', '{{ pk_field_name }}', ids);
@@ -114,6 +115,8 @@ function {{ view_prefix }}actions_execute(action, ids, all) {
         );
         {% endif %}
     } {% if not forloop.last %} else {% endif %} {% endfor %}
+
+    {% endblock %}
 
 }
 {% else %}
