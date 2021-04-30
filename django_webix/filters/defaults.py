@@ -28,7 +28,6 @@ class DjangoBaseWebixFilter(RequestFilter):
         if filters not in [None, '']:
             filters_dict = decode_text_filters(filters)
             qset = from_dict_to_qset(filters_dict, model=queryset.model)
-            #raise Exception(queryset[0].__dict__,filters_dict,qset)
             return queryset.filter(qset)
         else:
             return queryset

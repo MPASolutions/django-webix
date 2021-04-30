@@ -251,7 +251,7 @@ class AdminWebixSite:
         for item in items:
             if item.id in available_items:
                 menu_item = {
-                    "id": "menu_{}".format(item),
+                    "id": "menu_{}".format(item.id),
                     "value": "{}".format(item),
                     "icon": item.icon if item.icon not in ['', None] else "fas fa-archive",
                 }

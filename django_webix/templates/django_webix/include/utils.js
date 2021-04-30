@@ -123,6 +123,8 @@ webix.i18n.locales['it-IT'].pivot = {
     windowMessage: "[Trascinare i campi di sinistra nella sezione desiderata]",
 };
 
+webix.i18n.locales['it-IT'].fullDateFormat = "%d/%m/%Y %H:%i:%s"
+
 {# values casts #}
 
 function isNumberCheck(val) {

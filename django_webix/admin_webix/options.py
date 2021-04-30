@@ -3,7 +3,7 @@
 from django.apps import apps
 from django.core.exceptions import FieldDoesNotExist
 from django.db.models import AutoField, ForeignKey
-from django.db.models.fields import BooleanField
+from django.db.models.fields import BooleanField, DateField, DateTimeField
 from django.urls import path
 from django.utils.text import capfirst
 from django.utils.translation import ugettext as _
@@ -45,10 +45,10 @@ class ModelWebixAdmin(WebixPermissionsMixin):
     ordering = None
     actions = []
     list_display = []
-    list_display_header = {} # NEW OVERRIDE HEADER MODALITY
-    extra_header = {} # TO BE REMOVED IN FUTURE
+    list_display_header = {}  # NEW OVERRIDE HEADER MODALITY
+    extra_header = {}  # TO BE REMOVED IN FUTURE
 
-    enable_json_loading = True # changed from the past
+    enable_json_loading = True  # changed from the past
     pk_field = None
     title = None
     actions_style = None
@@ -120,31 +120,49 @@ class ModelWebixAdmin(WebixPermissionsMixin):
         _fields = []
         for j, field_name in enumerate(list_display):
             if field_name in self.list_display_header:
-                _fields.append(self.list_display_header[field_name]) # NEW OVERRIDE HEADER MODALITY
+                _fields.append(self.list_display_header[field_name])  # NEW OVERRIDE HEADER MODALITY
             else:
                 model_field = self.get_field_traverse(field_name)
                 filter_type = 'icontains'
+                format_type = None
                 extra_filter_options = ''
                 filter_option = 'serverFilter' if self.enable_json_loading else 'textFilter'
                 column_template = ''
+                extra_header = ''
+                width_adapt = 'fillspace:true' if j == 0 else 'adjust:"all"'
+                sort_option = 'server' if self.enable_json_loading else 'string'
+                click_action = None
+                footer = None
                 if type(model_field) == str:
                     header_title = model_field
                 else:
                     # if boolean then custom choices
                     header_title = capfirst(model_field.verbose_name)
-                    if type(model_field) == BooleanField:
-                        filter_type = ''
-                        filter_option = 'serverSelectFilter' if self.enable_json_loading else 'selectFilter'
-                        extra_filter_options= ", options:[{id: 'True', value: '"+_('Sì')+"'}, {id: 'False', value: '"+_("No")+"'}] "
-                        column_template = ' template:custom_checkbox_yesnonone, '
-                # if FK then choices
-                if '__' in field_name:
+
+                if type(model_field) == BooleanField:
+                    filter_type = ''
+                    filter_option = 'serverSelectFilter' if self.enable_json_loading else 'selectFilter'
+                    extra_filter_options = ", options:[{id: 'True', value: '" + _('Sì') + "'}, {id: 'False', value: '" + _("No") + "'}] "
+                    column_template = ' template:custom_checkbox_yesnonone, '
+                elif type(model_field) == DateTimeField:
+                    #width_adapt = 'width:"140"'
+                    filter_type = 'range'
+                    filter_option = 'serverDateRangeFilter' if self.enable_json_loading else 'dateRangeFilter'
+                    format_type = 'webix.i18n.fullDateFormatStr'
+                    column_template = ' template: function(obj){{if (obj.{field_name}===null) {{return ""}} else {{return this.format(new Date(obj.{field_name})) }} }},'.format(
+                        field_name=field_name)
+                elif type(model_field) == DateField:
+                    #width_adapt = 'width:"85"'
+                    filter_type = 'range'
+                    filter_option = 'serverDateRangeFilter' if self.enable_json_loading else 'dateRangeFilter'
+                    format_type = 'webix.i18n.dateFormatStr'
+                elif '__' in field_name:
                     try:
                         _first_field = self.model._meta.get_field(field_name.split('__')[0])
                     except FieldDoesNotExist:
                         pass
                     else:
-                        if type(_first_field)==ForeignKey:
+                        if type(_first_field) == ForeignKey:
                             filter_type = 'iexact'
                             filter_option = 'serverRichSelectFilter' if self.enable_json_loading else 'selectFilter'
                             extra_filter_options = ", options: {}_options ".format(field_name)
@@ -160,12 +178,6 @@ class ModelWebixAdmin(WebixPermissionsMixin):
                             filter_option = 'serverRichSelectFilter' if self.enable_json_loading else 'selectFilter'
                             extra_filter_options = ", options: {}_options ".format(field_name)
 
-                extra_header = ''
-                width_adapt = 'fillspace:true' if j == 0 else 'adjust:"all"'
-                sort_option = 'server' if self.enable_json_loading else 'string'
-
-                click_action = None
-                footer = None
                 if field_name in self.extra_header:  # TO BE REMOVED IN FUTURE
                     conf_header = self.extra_header.get(field_name, {})
                     if 'header_title' in conf_header:
@@ -192,12 +204,14 @@ class ModelWebixAdmin(WebixPermissionsMixin):
                 header: ["{header_title}", {{content: "{filter}" {extra_filter_options}}}],
                 {width_adapt},
                 sort: "{sort_option}",
+                {format_type}
                 serverFilterType: "{filter_type}",
                 {column_template}
                 {extra_header} }}'''.format(
                         field_name=field_name,
                         header_title=header_title,
                         filter=filter_option,
+                        format_type=' format: ' + format_type + ', ' if format_type is not None else '',
                         extra_filter_options=extra_filter_options,
                         width_adapt=width_adapt,
                         sort_option=sort_option,
@@ -499,4 +513,3 @@ class ModelWebixAdmin(WebixPermissionsMixin):
     @property
     def urls(self):
         return self.get_urls()
-
