@@ -491,23 +491,11 @@ class ModelWebixAdmin(WebixPermissionsMixin):
             return WebixAdminListView
 
     def get_urls(self):
-
-        # def wrap(view):
-        #    def wrapper(*args, **kwargs):
-        #        return self.admin_site.admin_view(view)(*args, **kwargs)
-
-        #    wrapper.model_admin = self
-        #    return update_wrapper(wrapper, view)
-
         return [
             path('', self.get_list_view().as_view(), name=self.get_url_pattern_list()),
             path('create/', self.get_add_view().as_view(), name=self.get_url_pattern_create()),
             path('<int:pk>/delete/', self.get_delete_view().as_view(), name=self.get_url_pattern_delete()),
             path('<int:pk>/update/', self.get_change_view().as_view(), name=self.get_url_pattern_update()),
-            #            path('', wrap(self.get_list_view), name='%s_%s_changelist' % info),
-            #            path('add/', wrap(self.get_add_view), name='%s_%s_add' % info),
-            #            path('<path:object_id>/delete/', wrap(self.get_delete_view), name='%s_%s_delete' % info),
-            #            path('<path:object_id>/change/', wrap(self.get_change_view), name='%s_%s_change' % info),
         ]
 
     @property
