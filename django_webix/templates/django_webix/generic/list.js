@@ -457,8 +457,8 @@ $$("{{ webix_container_id }}").addView({
             $$('{{ view_prefix }}datatable').view_count_total = {{ view_prefix }}objects_list.length;
             {% else %}
             $$('{{ view_prefix }}filter').setValue('0');
-            {% endif %}
             this.adjustRowHeight(); // for multirows
+            {% endif %}
             this.hideOverlay();
         },
         onItemDblClick: function (id, e, trg) {
