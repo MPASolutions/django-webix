@@ -286,7 +286,9 @@ $$("{{ webix_container_id }}").addView({
 $$("{{ webix_container_id }}").addView({
     id: '{{ view_prefix }}datatable',
     view: "datatable",
+    {% if adjust_row_height %}
     fixedRowHeight:false,
+    {% endif %}
     leftSplit: 1,
     //sort:"multi", // not works
     select: "row",
@@ -457,8 +459,12 @@ $$("{{ webix_container_id }}").addView({
             $$('{{ view_prefix }}datatable').view_count_total = {{ view_prefix }}objects_list.length;
             {% else %}
             $$('{{ view_prefix }}filter').setValue('0');
+            {% endif %}
+
+            {% if adjust_row_height %}
             this.adjustRowHeight(); // for multirows
             {% endif %}
+
             this.hideOverlay();
         },
         onItemDblClick: function (id, e, trg) {

@@ -40,6 +40,7 @@ class WebixListView(WebixBaseMixin,
     order_by = None
 
     actions = []  # [multiple_delete_action]
+    adjust_row_height = False
 
     # paging
     enable_json_loading = False
@@ -91,6 +92,9 @@ class WebixListView(WebixBaseMixin,
                         _select_related.append(_related)
             qs = qs.select_related(*_select_related)
         return qs
+
+    def get_adjust_row_height(self, request):
+        return self.adjust_row_height
 
     def get_fields(self):
         if self.fields is None:
@@ -505,6 +509,7 @@ class WebixListView(WebixBaseMixin,
             'is_enable_actions': self.is_enable_actions(self.request),
             'actions_style': self.get_actions_style(),
             'title': self.get_title(),
+            'adjust_row_height': self.get_adjust_row_height(self.request),
             # paging
             'is_json_loading': self.enable_json_loading,
             'paginate_count_default': self.paginate_count_default,
