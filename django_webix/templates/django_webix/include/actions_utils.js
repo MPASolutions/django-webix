@@ -35,12 +35,10 @@ function _{{ view_prefix }}action_execute(action, ids, all, response_type, short
             if (confirm == true) {
                 $$('{{ view_prefix }}datatable').showOverlay("<img src='{% static 'django_webix/loading.gif' %}'>");
                 if ((response_type == 'json') || (response_type == 'script')) {
-                    _params = {
-                        'action': action,
-                        'filters': JSON.stringify({{ view_prefix }}get_filters_qsets()),
-                        'params': JSON.stringify(input_params || {}),
-                        'csrfmiddlewaretoken': getCookie('csrftoken')
-                    };
+                    var _params = webixAppliedFilters['{{ model|getattr:'_meta'|getattr:'app_label'}}.{{ model|getattr:'_meta'|getattr:'model_name'}}'];
+                    _params['action'] = action;
+                    _params['params'] = JSON.stringify(input_params || {});
+                    _params['csrfmiddlewaretoken'] = getCookie('csrftoken');
                     if (all == false) {
                         _params['ids'] = ids.join(',');
                     }
@@ -114,12 +112,20 @@ function _{{ view_prefix }}action_execute(action, ids, all, response_type, short
                     form.setAttribute("method", "post");
                     form.setAttribute("action", "{{ url_list }}");
                     form.setAttribute("target", "view");
-                    _fields = [
+
+                    var _fields = [
                         ['action', action],
-                        ['filters', JSON.stringify({{ view_prefix }}get_filters_qsets())],
+                        ['params', JSON.stringify(input_params || {})],
                         ['csrfmiddlewaretoken', getCookie('csrftoken')],
-                        ['params', JSON.stringify(input_params || {})]
                     ];
+
+                    var _params = webixAppliedFilters['{{ model|getattr:'_meta'|getattr:'app_label'}}.{{ model|getattr:'_meta'|getattr:'model_name'}}'];
+                    for (var key in _params) {
+                        if (_params.hasOwnProperty(key)) {
+                            _fields.push([key, _params[key] || ""]);
+                        }
+                    }
+
                     if (all == false) {
                         _fields.push(['ids', ids.join(',')])
                     }
