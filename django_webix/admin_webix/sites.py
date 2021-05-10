@@ -257,8 +257,10 @@ class AdminWebixSite:
                 }
                 soons = WebixAdminMenu.objects.filter(parent=item, id__in=available_items).order_by('tree_id', 'lft')
                 children = self.get_tree(soons, available_items)
+
                 if children != []:
                     menu_item["submenu"] = children
+                    enable = True
                 elif (item.model is not None) or (item.url not in ['', None]):
                     if item.get_url is None:
                         URL = ""
@@ -266,7 +268,11 @@ class AdminWebixSite:
                         URL = item.get_url
                     menu_item["url"] = URL
                     menu_item["loading_type"] = "js_script"
-                out.append(menu_item)
+                    enable = True
+                else:
+                    enable = False
+                if enable is True:
+                    out.append(menu_item)
         return out
 
     def get_menu_list(self, request):
