@@ -29,6 +29,7 @@ from django.utils.translation import ugettext_lazy as _
 from random import randint
 from sorl.thumbnail import get_thumbnail
 from django.utils import formats
+from django.utils.http import urlencode
 
 if django.__version__ < '3.1':
     try:
@@ -165,12 +166,17 @@ class BaseWebixMixin:
     def _add_null_choice(self, choices):
         return [option for option in choices if option['id'] not in ['', u'', None]]
 
-    def _get_url_suggest(self, app_label, model_name, to_field_name=None):
+    def _get_url_suggest(self, app_label, model_name, to_field_name=None, limit_choices_to=None):
         """ Returns the url to autocomplete model choiche field """
 
         url = "{url}?app_label={app_label}&model_name={model_name}"
         if to_field_name:
             url += "&to_field={to_field}"
+        if limit_choices_to is not None and limit_choices_to != {}:
+            from django.contrib.admin.widgets import url_params_from_lookup_dict
+            dict_limit_choices_to = url_params_from_lookup_dict(limit_choices_to)
+            url += "&query_string=" + urlencode(dict_limit_choices_to)
+
         return url.format(
             url=reverse('webix_autocomplete_lookup'),
             model_name=model_name,
@@ -530,7 +536,8 @@ class BaseWebixMixin:
                         name: self._get_url_suggest(
                             field.queryset.model._meta.app_label,
                             field.queryset.model._meta.model_name,
-                            field.to_field_name
+                            field.to_field_name,
+                            field.get_limit_choices_to()
                         )
                     })
 
@@ -599,7 +606,8 @@ class BaseWebixMixin:
                         name: self._get_url_suggest(
                             field.queryset.model._meta.app_label,
                             field.queryset.model._meta.model_name,
-                            field.to_field_name
+                            field.to_field_name,
+                            field.get_limit_choices_to()
                         )
                     })
 
@@ -640,7 +648,8 @@ class BaseWebixMixin:
                         })
                         # Default if is required and there are only one option
                         if field.required and initial is None and count == 1:
-                            el.update({'value': '{}'.format(getattr(field.queryset.first(), field.to_field_name or 'pk'))})
+                            el.update(
+                                {'value': '{}'.format(getattr(field.queryset.first(), field.to_field_name or 'pk'))})
                     else:
                         el.update({
                             'view': 'combo',
