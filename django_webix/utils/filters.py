@@ -4,11 +4,18 @@ import json
 
 import django
 from dateutil.parser import parse
-from django.contrib.postgres.fields import ArrayField
 from django.db import models
 from django.db.models import Q
 from django.db.models.fields.reverse_related import ForeignObjectRel
 from django.utils.translation import ugettext as _
+from django.core.exceptions import FieldDoesNotExist
+
+try:
+    import psycopg2
+except ModuleNotFoundError:
+    ArrayField = None
+else:
+    from django.contrib.postgres.fields import ArrayField
 
 try:
     from django.contrib.gis.geos import GEOSGeometry
@@ -77,22 +84,21 @@ def from_dict_to_qset(data, model):
                 for _field in data_qset.get('path').split("__")[:-1]:
                     try:
                         _curr_field = _curr_model._meta.get_field(_field)
-                    except:
+                    except FieldDoesNotExist:
                         _curr_model = None
                         _curr_field = None
-                        break  # Non è un field sul modello (es. annotate)
-
-                    if issubclass(type(_curr_field), models.ForeignKey):
-                        _curr_model = _curr_field.remote_field.get_related_field().model
-                    elif issubclass(type(_curr_field), ForeignObjectRel):
-                        _curr_model = _curr_field.related_model
-                    elif issubclass(type(_curr_field), models.ManyToManyField):
-                        _curr_model = _curr_field.remote_field.get_related_field().model
                     else:
-                        pass  # Sono arrivato all'ultimo field, non serve fare altro
+                        if issubclass(type(_curr_field), models.ForeignKey):
+                            _curr_model = _curr_field.remote_field.get_related_field().model
+                        elif issubclass(type(_curr_field), ForeignObjectRel):
+                            _curr_model = _curr_field.related_model
+                        elif issubclass(type(_curr_field), models.ManyToManyField):
+                            _curr_model = _curr_field.remote_field.get_related_field().model
+                        else:
+                            pass  # Sono arrivato all'ultimo field, non serve fare altro
 
                 # Se si tratta di un array, allora lo metto in una lista
-                if isinstance(_curr_field, ArrayField):
+                if ArrayField and isinstance(_curr_field, ArrayField):
                     data_qset['val'] = [data_qset.get('val')]
 
                 if data_qset.get('path').endswith("__range"):
