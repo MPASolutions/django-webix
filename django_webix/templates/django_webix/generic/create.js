@@ -25,6 +25,9 @@
                 {% if template_style == 'tabs' %}
                     {% include "django_webix/include/form_tabs.js" %}
                 {% endif %}
+                {% if template_style == 'monotabs' %}
+                    {% include "django_webix/include/form_monotabs.js" %}
+                {% endif %}
             {% endblock %}
         {% endif %}
 

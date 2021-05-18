@@ -38,6 +38,7 @@ class BaseWebixInlineFormSet(BaseInlineFormSet):
         self.has_add_permission = kwargs.pop('has_add_permission', None)
         self.has_change_permission = kwargs.pop('has_change_permission', None)
         self.has_delete_permission = kwargs.pop('has_delete_permission', None)
+        self.name = kwargs.pop('name', None)
         super(BaseWebixInlineFormSet, self).__init__(**kwargs)
 
     def get_form_kwargs(self, index):
@@ -70,7 +71,9 @@ class BaseWebixInlineFormSet(BaseInlineFormSet):
         return rules_new
 
     def get_name(self):
-        if self.model is not None:
+        if self.name is not None:
+            return self.name
+        elif self.model is not None:
             return capfirst(self.model._meta.verbose_name_plural)
         return ""  # pragma: no cover
 
@@ -144,7 +147,8 @@ class WebixInlineFormSet(InlineFormSetFactory):
             'has_change_permission': self.has_change_permission(),
             'request': self.request,
             'container_id': getattr(self, 'container_id', None),
-            'initial': self.initial
+            'initial': self.initial,
+            'name': getattr(self, 'name', None)
         })
         return _formset_kwargs
 

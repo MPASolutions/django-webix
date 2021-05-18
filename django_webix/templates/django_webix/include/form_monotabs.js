@@ -27,24 +27,27 @@
                 {
                     view: "tabbar",
                     id: '{{ form.webix_id }}-inlines-tabbar',
-                    value: "{{ form.webix_id }}-group",
-                    //optionWidth: 150,
+                    value: "{{ form.webix_id }}-group-1",
                     multiview: true,
                     options: [
+                        {% for name in form.get_name %}
                         {
-                            id: '{{ form.webix_id }}-group',
-                            value: "{{ form.get_name }}"
+                            id: '{{ form.webix_id }}-group-{{forloop.counter}}',
+                            value: "{{ name }}"
                         },
+                        {% endfor %}
                         {% for inline in inlines %}
                             {% if not inline.get_container_id %}
                                 {
                                     id: '{{ inline.get_default_container_id }}',
-                                    value: "<div style='position: relative'>{{ inline.get_name|escapejs }} <span class='webix_badge' style='background-color:#888 !important; margin-top: -2px; margin-right: 5px;'><strong>" + {{ inline.initial_form_count }} + "</strong></span></div>"
+                                    value: "<div style='position: relative'>{{ inline.get_name|escapejs }} <span class='webix_badge' style='background-color:#888 !important;
+ margin-top: -2px; margin-right: 5px;'><strong>" + {{ inline.initial_form_count }} + "</strong></span></div>"
                                 },
                             {% else %}
                                 {
                                     id: '{{ inline.get_container_id }}',
-                                    value: "<div style='position: relative'>{{ inline.get_name|escapejs }} <span class='webix_badge' style='background-color:#888 !important; margin-top: -2px; margin-right: 5px;'><strong>" + {{ inline.initial_form_count }} + "</strong></span></div>"
+                                    value: "<div style='position: relative'>{{ inline.get_name|escapejs }} <span class='webix_badge' style='background-color:#888 !important;
+ margin-top: -2px; margin-right: 5px;'><strong>" + {{ inline.initial_form_count }} + "</strong></span></div>"
                                 },
                             {% endif %}
                         {% endfor %}
@@ -56,12 +59,7 @@
                 id: '{{ form.webix_id }}-inlines',
                 cells: [
                     {% block webix_form_elements %}
-                        {
-                            id: '{{ form.webix_id }}-group',
-                            rows: [
-                                {{ form.as_webix|safe }}
-                            ]
-                        },
+                        {{ form.as_webix|safe }},
                     {% endblock %}
                     {% for inline in inlines %}
                         {% if not inline.get_container_id %}
@@ -98,7 +96,8 @@
                 {# Table rules #}
                 {% for field_name, rules in form.get_rules.items %}
                     '{{ field_name }}': function (value) {
-                        return {% for r in rules %}{{r.rule}}('{{ field_name }}', value{% if r.max %},{{ r.max }}{% endif %}{% if r.min %}, {{ r.min }}{%endif %}){% if not forloop.last %} && {% endif %}{% endfor %}
+                        return {% for r in rules %}{{r.rule}}('{{ field_name }}', value{% if r.max %},{{ r.max }}{% endif %}{% if r.min %}, {{ r.min }}{%endif %}){% if not f
+orloop.last %} && {% endif %}{% endfor %}
                     },
                 {% endfor %}
             {% endblock %}
@@ -108,7 +107,8 @@
                 {% for inline in inlines %}
                     {% for field_name, rules in inline.get_rules.items %}
                         '{{ field_name }}': function (value) {
-                            return {% for r in rules %}{{r.rule}}('{{ field_name }}', value{% if r.max %},{{ r.max }}{% endif %}{% if r.min %}, {{ r.min }}{%endif %}){% if not forloop.last %} && {% endif %}{% endfor %}
+                            return {% for r in rules %}{{r.rule}}('{{ field_name }}', value{% if r.max %},{{ r.max }}{% endif %}{% if r.min %}, {{ r.min }}{%endif %}){% if n
+ot forloop.last %} && {% endif %}{% endfor %}
                         },
                     {% endfor %}
                 {% endfor %}
@@ -124,7 +124,8 @@
         {% for inline in inlines %}
             {% for field_name, rules in inline.get_rules_template.items %}
                 _prefix_rules['{{ field_name }}'] = function (value) {
-                    return {% for r in rules %}{{ r.rule }}('{{ field_name }}', value{% if r.max %},{{ r.max }}{% endif %}{% if r.min %}, {{ r.min }}{%endif %}){% if not forloop.last %} && {% endif %}{% endfor %}
+                    return {% for r in rules %}{{ r.rule }}('{{ field_name }}', value{% if r.max %},{{ r.max }}{% endif %}{% if r.min %}, {{ r.min }}{%endif %}){% if not for
+loop.last %} && {% endif %}{% endfor %}
                 };
             {% endfor %}
         {% endfor %}

@@ -583,8 +583,13 @@ class BaseWebixMixin:
                         },
                     })
                     # Default if is required and there are only one option
-                    if field.required and initial is None and len(field.queryset) == 1:
-                        el.update({'value': '{}'.format(getattr(field.queryset.first(), field.to_field_name or 'pk'))})
+                    if callable(field.choices):
+                        _choices = list(field.choices())
+                    else:
+                        _choices = list(field.choices)
+                    if field.required and initial is None and len(_choices) == 1:
+                        el.update({'value': '{}'.format(_choices[0][0])})
+
             # ModelChoiceField
             elif isinstance(field, forms.models.ModelChoiceField):
                 if initial is not None:
@@ -703,6 +708,11 @@ class BaseWebixMixin:
                             })
                 elif hasattr(field, 'base_field') and isinstance(field.base_field, forms.fields.TypedChoiceField) and \
                     hasattr(field.base_field, 'choices'):
+                    if callable(field.base_field.choices):
+                        _choices = list(field.base_field.choices())
+                    else:
+                        _choices = list(field.base_field.choices)
+
                     el.update({
                         "view": "multicombo",
                         'selectAll': True,
@@ -714,7 +724,7 @@ class BaseWebixMixin:
                                 'data': self._add_null_choice([{
                                     'id': '{}'.format(k),
                                     'value': '{}'.format(v)
-                                } for k, v in field.base_field.choices])
+                                } for k, v in _choices])
                             }
                         },
                     })
@@ -755,12 +765,15 @@ class BaseWebixMixin:
             # Widget RadioSelect
             if isinstance(field.widget, forms.RadioSelect):
                 _choices = field.choices if hasattr(field, 'choices') else field.widget.choices
+                if callable(_choices):
+                    _choices = _choices()
+
                 el.update({
                     "view": "radio",
                     "options": [{
                         "id": key,
                         "value": value
-                    } for key, value in _choices]
+                    } for key, value in list(_choices)]
                 })
                 if initial is not None:
                     el.update({'value': initial})

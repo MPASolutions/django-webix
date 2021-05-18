@@ -444,7 +444,7 @@ class ModelWebixAdmin(WebixPermissionsMixin):
                 url_pattern_update = 'admin_webix:' + _admin.get_url_pattern_update()
                 url_pattern_delete = 'admin_webix:' + _admin.get_url_pattern_delete()
 
-                adjust_row_height = True
+                adjust_row_height = False
 
                 model = _admin.model
                 pk_field = _admin.pk_field
