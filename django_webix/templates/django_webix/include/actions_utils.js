@@ -35,7 +35,7 @@ function _{{ view_prefix }}action_execute(action, ids, all, response_type, short
             if (confirm == true) {
                 $$('{{ view_prefix }}datatable').showOverlay("<img src='{% static 'django_webix/loading.gif' %}'>");
                 if ((response_type == 'json') || (response_type == 'script')) {
-                    var _params = webixAppliedFilters['{{ model|getattr:'_meta'|getattr:'app_label'}}.{{ model|getattr:'_meta'|getattr:'model_name'}}'];
+                    var _params = $.extend({}, webixAppliedFilters['{{ model|getattr:'_meta'|getattr:'app_label'}}.{{ model|getattr:'_meta'|getattr:'model_name'}}']);
                     _params['action'] = action;
                     _params['params'] = JSON.stringify(input_params || {});
                     _params['csrfmiddlewaretoken'] = getCookie('csrftoken');
@@ -119,7 +119,7 @@ function _{{ view_prefix }}action_execute(action, ids, all, response_type, short
                         ['csrfmiddlewaretoken', getCookie('csrftoken')],
                     ];
 
-                    var _params = webixAppliedFilters['{{ model|getattr:'_meta'|getattr:'app_label'}}.{{ model|getattr:'_meta'|getattr:'model_name'}}'];
+                    var _params = $.extend({}, webixAppliedFilters['{{ model|getattr:'_meta'|getattr:'app_label'}}.{{ model|getattr:'_meta'|getattr:'model_name'}}']);
                     for (var key in _params) {
                         if (_params.hasOwnProperty(key)) {
                             _fields.push([key, _params[key] || ""]);
