@@ -307,7 +307,7 @@ class WebixListView(WebixBaseMixin,
             'modal_title': action.modal_title,
             'modal_ok': action.modal_ok,
             'modal_cancel': action.modal_cancel,
-            'form': getattr(action,'form',None),
+            'form': getattr(action, 'form')(request=self.request) if hasattr(action, 'form') and action.form is not None else None,
             'reload_list': getattr(action,'reload_list',True),
         }
 

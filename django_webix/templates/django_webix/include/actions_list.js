@@ -16,6 +16,7 @@ var {{ view_prefix }}actions_list = [
 {% for action_key,action in actions.items %}
     {% if action.form %}
 function _{{ action_key }}_action_execute_form(ids, all) {
+  {% block action_execute_form %}
   webix.ui({
     view: "window",
     id: "{{ action_key }}_win",
@@ -86,6 +87,7 @@ function _{{ action_key }}_action_execute_form(ids, all) {
         },
     }
   }).show();
+  {% endblock %}
 }
 
     {% endif %}
@@ -114,7 +116,9 @@ function {{ view_prefix }}actions_execute(action, ids, all) {
                 '{{ action.modal_cancel }}'
         );
         {% endif %}
-    } {% if not forloop.last %} else {% endif %} {% endfor %}
+    } {% if not forloop.last %} else {% endif %}
+
+    {% endfor %}
 
     {% endblock %}
 
