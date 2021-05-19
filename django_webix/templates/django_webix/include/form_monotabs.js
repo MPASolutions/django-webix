@@ -37,13 +37,7 @@
                         },
                         {% endfor %}
                         {% for inline in inlines %}
-                            {% if not inline.get_container_id %}
-                                {
-                                    id: '{{ inline.get_default_container_id }}',
-                                    value: "<div style='position: relative'>{{ inline.get_name|escapejs }} <span class='webix_badge' style='background-color:#888 !important;
- margin-top: -2px; margin-right: 5px;'><strong>" + {{ inline.initial_form_count }} + "</strong></span></div>"
-                                },
-                            {% else %}
+                            {% if inline.auto_position %}
                                 {
                                     id: '{{ inline.get_container_id }}',
                                     value: "<div style='position: relative'>{{ inline.get_name|escapejs }} <span class='webix_badge' style='background-color:#888 !important;
@@ -62,12 +56,7 @@
                         {{ form.as_webix|safe }},
                     {% endblock %}
                     {% for inline in inlines %}
-                        {% if not inline.get_container_id %}
-                            {
-                                id: '{{ inline.get_default_container_id }}',
-                                rows: []
-                            },
-                        {% else %}
+                        {% if inline.auto_position %}
                             {
                                 id: '{{ inline.get_container_id }}',
                                 rows: []

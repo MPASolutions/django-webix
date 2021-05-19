@@ -29,17 +29,12 @@
                     {
                         view: "tabbar",
                         id: '{{ form.webix_id }}-inlines-tabbar',
-                        value: "{{ inlines.0.get_default_container_id }}",
+                        value: "{{ inlines.0.get_container_id }}",
                         //optionWidth: 150,
                         multiview: true,
                         options: [
                             {% for inline in inlines %}
-                                {% if not inline.get_container_id %}
-                                    {
-                                        id: '{{ inline.get_default_container_id }}',
-                                        value: "<div style='position: relative'>{{ inline.get_name|escapejs }} <span class='webix_badge' style='background-color:#888 !important; margin-top: -2px; margin-right: 5px;'><strong>" + {{ inline.initial_form_count }} + "</strong></span></div>"
-                                    },
-                               {% else %}
+                                {% if inline.auto_position %}
                                     {
                                         id: '{{ inline.get_container_id }}',
                                         value: "<div style='position: relative'>{{ inline.get_name|escapejs }} <span class='webix_badge' style='background-color:#888 !important; margin-top: -2px; margin-right: 5px;'><strong>" + {{ inline.initial_form_count }} + "</strong></span></div>"
@@ -53,12 +48,7 @@
                         id: '{{ form.webix_id }}-inlines',
                         cells: [
                             {% for inline in inlines %}
-                                {% if not inline.get_container_id %}
-                                    {
-                                        id: '{{ inline.get_default_container_id }}',
-                                        rows: []
-                                    },
-                                {% else %}
+                                {% if inline.auto_position %}
                                     {
                                         id: '{{ inline.get_container_id }}',
                                         rows: []

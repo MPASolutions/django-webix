@@ -35,6 +35,7 @@ class BaseWebixInlineFormSet(BaseInlineFormSet):
     def __init__(self, **kwargs):
         self.request = kwargs.pop('request', None)
         self.container_id = kwargs.pop('container_id', None)
+        self.auto_position = kwargs.pop('auto_position', True)
         self.has_add_permission = kwargs.pop('has_add_permission', None)
         self.has_change_permission = kwargs.pop('has_change_permission', None)
         self.has_delete_permission = kwargs.pop('has_delete_permission', None)
@@ -101,10 +102,10 @@ class BaseWebixInlineFormSet(BaseInlineFormSet):
         return '{}-group'.format(self.prefix)
 
     def get_container_id(self):
-        return self.container_id
-
-    def get_default_container_id(self):
-        return self.webix_id() + '-container'
+        if self.container_id is not None:
+            return self.container_id
+        else:
+            return self.webix_id() + '-container' # default
 
 
 class WebixInlineFormSet(InlineFormSetFactory):
@@ -147,6 +148,7 @@ class WebixInlineFormSet(InlineFormSetFactory):
             'has_change_permission': self.has_change_permission(),
             'request': self.request,
             'container_id': getattr(self, 'container_id', None),
+            'auto_position': getattr(self, 'auto_position', True),
             'initial': self.initial,
             'name': getattr(self, 'name', None)
         })
