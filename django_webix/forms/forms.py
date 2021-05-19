@@ -679,8 +679,12 @@ class BaseWebixMixin:
                 if initial is not None:
                     el.update({'value': initial})
                 # Default if is required and there are only one option
-                if field.required and initial is None and len(field.choices) == 1:
-                    el.update({'value': '{}'.format(field.choices[0][0])})
+                if callable(field.choices):
+                    _choices = list(field.choices())
+                else:
+                    _choices = list(field.choices)
+                if field.required and initial is None and len(_choices) == 1:
+                    el.update({'value': '{}'.format(_choices[0][0])})
             # JSONField (postgresql)
             elif connection.vendor == 'postgresql' and isinstance(field, JSONField):
                 if isinstance(field.widget, forms.widgets.Textarea):
