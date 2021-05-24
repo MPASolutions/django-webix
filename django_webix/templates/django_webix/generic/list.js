@@ -540,11 +540,13 @@ $$("{{ webix_container_id }}").addView({
 
 {% block toolbar_list %}
 
+{% if model %}
 {% include "django_webix/include/actions_utils.js" %}
 
 {% block toolbar_list_actions %}
 {% include "django_webix/include/actions_list.js" %}
 {% endblock %}
+{% endif  %}
 
 {% include "django_webix/include/toolbar_list.js" %}
 {% endblock %}
