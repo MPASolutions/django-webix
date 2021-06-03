@@ -13,6 +13,7 @@ $$("{{ webix_container_id }}").addView({
                         id: '{{ form.webix_id }}_delete',
                         view: "tootipButton",
                         type: "danger",
+                        css:"webix_danger",
                         align: "left",
                         label: "{{_("Delete")|escapejs}}",
                         {% if not has_delete_permission %}
@@ -37,6 +38,7 @@ $$("{{ webix_container_id }}").addView({
                         id: '{{ form.webix_id }}_save_continue',
                         view: "tootipButton",
                         type: "form",
+                        css:"webix_secondary",
                         align: "right",
                         label: "{{_("Save and continue")|escapejs}}",
                         {% if not has_change_permission %}
@@ -63,6 +65,7 @@ $$("{{ webix_container_id }}").addView({
                         id: '{{ form.webix_id }}_save_addanother',
                         view: "tootipButton",
                         type: "form",
+                        css:"webix_secondary",
                         align: "right",
                         label: "{{_("Save and add another")|escapejs}}",
                         {% if not has_add_permission %}
@@ -89,6 +92,7 @@ $$("{{ webix_container_id }}").addView({
                         id: '{{ form.webix_id }}_save',
                         view: "tootipButton",
                         type: "form",
+                        css:"webix_primary",
                         align: "right",
                         label: "{{_("Save")|escapejs}}",
                         {% if not has_view_permission %}
