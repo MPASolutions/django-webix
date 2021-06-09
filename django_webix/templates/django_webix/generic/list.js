@@ -1,5 +1,4 @@
-{% load django_webix_utils static i18n filtersmerger_utils %}
-{% get_request_filter_params %}
+{% load django_webix_utils static i18n %}
 
 {% block webix_content %}
 
@@ -37,7 +36,7 @@ $$("{{ webix_container_id }}").addView({
             borderless: true,
             template: '<div style="width:100%; text-align:center;"><span style="text-align:center;"><strong>{{ title }}</strong></span></div>'
         },
-
+        {% if is_json_loading %}
         {
             id: '{{ view_prefix }}_filter_locked_sql',
             view: "button",
@@ -85,9 +84,11 @@ $$("{{ webix_container_id }}").addView({
             }
         },
         {% endif %}
-
+        {% endif %}
     ]
 });
+
+{% if is_json_loading %}
 
 {% if model %}
 if (
@@ -106,6 +107,7 @@ if (
 ) {
     $$('{{ view_prefix }}_filter_geo').show();
 }
+{% endif %}
 {% endif %}
 
 {% endif %}
@@ -126,131 +128,11 @@ var {{ view_prefix }}objects_list = [
 {% endif %}
 {% endblock %}
 
-function {{ view_prefix }}get_filters_qsets() {
-    var qsets = [];
-
-    $.each($$('{{ view_prefix }}datatable').config.columns, function (index, el) {
-        el = $$('{{ view_prefix }}datatable').config.columns[index];
-        ds_filter = $$('{{ view_prefix }}datatable').getFilter(el.id);
-        if ((ds_filter != null) && (ds_filter != undefined)) {
-            if (ds_filter.getValue != undefined) {
-                value = ds_filter.getValue();
-            } else {
-                value = ds_filter.value;
-            }
-            if ((value != '') && (value != undefined)) {
-                if (el.serverFilterType == 'numbercompare') {
-                    var val = value;
-                    val = val.split(' ').join('');
-                    val = val.split(';')
-                    $.each(val, function (index, filter_txt) {
-                        if (isNumberCheck(filter_txt)) {
-                            qsets.push({'path': el.id, 'val': filter_txt});
-                        } else if ((filter_txt.substring(0, 2) == '>=') && (isNumberCheck(filter_txt.substring(2)))) {
-                            qsets.push({'path': el.id + '__gte', 'val': filter_txt.substring(2)});
-                        } else if ((filter_txt.substring(0, 2) == '<=') && (isNumberCheck(filter_txt.substring(2)))) {
-                            qsets.push({'path': el.id + '__lte', 'val': filter_txt.substring(2)});
-                        } else if ((filter_txt.substring(0, 1) == '>') && (isNumberCheck(filter_txt.substring(1)))) {
-                            qsets.push({'path': el.id + '__gt', 'val': filter_txt.substring(1)});
-                        } else if ((filter_txt.substring(0, 1) == '<') && (isNumberCheck(filter_txt.substring(1)))) {
-                            qsets.push({'path': el.id + '__lt', 'val': filter_txt.substring(1)});
-                        }
-                    })
-                } else {
-                    if ((el.serverFilterType=='') || (el.serverFilterType==undefined)){
-                        qsets.push({'path': el.id, 'val': value});
-                    } else{
-                        qsets.push({'path': el.id + '__' + el.serverFilterType, 'val': value});
-                    }
-                }
-            }
-        }
-    });
-
-    return {
-        'operator': 'AND',
-        'qsets': qsets
-    }
-}
+{% if is_json_loading %}
+{% include "django_webix/include/list_filters.js" %}
+{% endif %}
 
 {% block datatable %}
-
-function {{ view_prefix }}is_active_otf_filter(){
-    var key = '{{ model_name }}';
-    if(typeof otf_filter !== "undefined") {
-        if (otf_filter[key] != undefined) {
-            if (otf_filter[key]['list'] != undefined) {
-                if (otf_filter[key]['list']['active']) {
-                    return true;
-                }
-            }
-        }
-    }
-    return false;
-}
-
-function {{ view_prefix }}is_present_otf_filter(){
-    var key = '{{ model_name }}';
-    if(typeof otf_filter !== "undefined") {
-        if (otf_filter[key] != undefined) {
-            if (otf_filter[key]['list'] != undefined) {
-                if (otf_filter[key]['list']['json'] != undefined) {
-                    return true;
-                }
-            }
-        }
-    }
-    return false;
-}
-
-function {{ view_prefix }}get_otf_filter(){
-    var key = '{{ model_name }}';
-    if(typeof otf_filter !== "undefined") {
-        if (otf_filter[key] != undefined) {
-            if (otf_filter[key]['list'] != undefined) {
-                if (otf_filter[key]['list']['json'] != undefined) {
-                    return otf_filter[key]['list']['json'];
-                }
-            }
-        }
-    }
-    return undefined;
-}
-
-function {{ view_prefix }}deactivate_otf_filter(){
-    var key = '{{ model_name }}';
-    if(typeof otf_filter !== "undefined") {
-        if (otf_filter[key] != undefined) {
-            if (otf_filter[key]['list'] != undefined) {
-                otf_filter[key]['list']['active'] = false;
-                return true;
-            }
-        }
-    }
-    return false;
-}
-
-function {{ view_prefix }}apply_filters() {
-    var extra = ''
-    if({{ view_prefix }}is_active_otf_filter()){
-        extra = '+';
-    }
-    var advanced_filter_count = '0';
-    {% with param='DjangoAdvancedWebixFilter'|request_filter_param %}
-    {% if param and model_name %}
-    var advanced_filter = webixAppliedFilters['{{ model_name }}']['{{ param }}'];
-    if (advanced_filter){
-        advanced_filter_count = advanced_filter.split(',').length
-    }
-    {% endif %}
-    {% endwith %}
-    if(extra != '' && advanced_filter_count == '0'){
-        advanced_filter_count = '';
-    }
-    $('#{{ view_prefix }}django_webix_filter_counter').text(advanced_filter_count + extra);
-    $$('{{ view_prefix }}filter').setValue('1');
-    $$('{{ view_prefix }}datatable').filterByAll();
-}
 
 {% if is_enable_column_webgis %}
 {% for layer in layers %}
@@ -283,11 +165,17 @@ $$("{{ webix_container_id }}").addView({
 })
 {% endif %}
 
+{%  if is_json_loading %}
+{% include "django_webix/include/list_state.js" %}
+var {{ view_prefix }}_first_load = true;
+{% endif %}
+
+
 $$("{{ webix_container_id }}").addView({
     id: '{{ view_prefix }}datatable',
     view: "datatable",
     {% if adjust_row_height %}
-    fixedRowHeight:false,
+    fixedRowHeight: false,
     {% endif %}
     leftSplit: 1,
     //sort:"multi", // not works
@@ -298,6 +186,8 @@ $$("{{ webix_container_id }}").addView({
         width: 250
     },
     {% endblock %}
+    rightSplit:2,
+    leftSplit:1,
     columns: [
         {
             id: "checkbox_action",
@@ -311,7 +201,7 @@ $$("{{ webix_container_id }}").addView({
             width: 40,
             minWidth: 40,
             maxWidth: 40,
-            css: {'text-align': 'right'}
+            css: 'locked_column'
         },
         {% block datatable_columns %}
         {% for field in fields %}
@@ -335,30 +225,26 @@ $$("{{ webix_container_id }}").addView({
             id: "cmd_cp",
             {% if is_json_loading %}
             header: [
-                {
-                    text: "",
-                    colspan: 2
-                },
-                {
-                    text: '<div class="webix_view webix_control webix_el_button webix_secondary"><div title="{{_("Apply filters") }}" class="webix_el_box"><button id="button_filter_datatable" type="button" class="webix_button webix_img_btn" style="line-height:24px;" onclick="{{ view_prefix }}apply_filters(\'{{ model_name }}\');"> {{_("Filter") }} </button></div></div>',
-                    colspan: 2
-                }
+                { text: '<div class="webix_view webix_control webix_el_button webix_secondary"><div title="{{_("Remove filters") }}" class="webix_el_box"><button id="button_filter_datatable" type="button" class="webix_button webix_img_btn" style="line-height:24px;" onclick="{{ view_prefix }}remove_filters(\'{{ model_name }}\');"><span class="webix_icon fas fa-undo"></span></button></div></div>', colspan: 2},
+                { text: '<div class="webix_view webix_control webix_el_button webix_secondary"><div title="{{_("Apply filters") }}" class="webix_el_box"><button id="button_filter_datatable" type="button" class="webix_button webix_img_btn" style="line-height:24px;" onclick="{{ view_prefix }}apply_filters(\'{{ model_name }}\');">{{_("Filter") }}</button></div></div>', colspan: 2}
             ],
             {% else %}
             header: "",
             {% endif %}
             headermenu: false,
-            width:40,
+            width: 40,
             tooltip: false,
-            template: {% if has_add_permission and is_enable_column_copy %}custom_button_cp{% else %}'<div><i style="cursor:pointer" class="webix_icon far"></i></div>'{% endif %}
+            template: {% if has_add_permission and is_enable_column_copy %}custom_button_cp{% else %}'<div><i style="cursor:pointer" class="webix_icon far"></i></div>'{% endif %},
+            css: 'locked_column'
         },
         {
             id: "cmd_rm",
             header: "",
             headermenu: false,
-            width:40,
+            width: 40,
             tooltip: false,
-            template: {% if has_delete_permission and is_enable_column_delete %}custom_button_rm{% else %}'<div><i style="cursor:pointer" class="webix_icon far"></i></div>'{% endif %}
+            template: {% if has_delete_permission and is_enable_column_delete %}custom_button_rm{% else %}'<div><i style="cursor:pointer" class="webix_icon far"></i></div>'{% endif %},
+            css: 'locked_column'
         }
         {% endblock %}
     ],
@@ -369,36 +255,47 @@ $$("{{ webix_container_id }}").addView({
         $proxy: true,
         source: "{{ url_list }}{% if '?' in url_list %}&{% else %}?{% endif %}json",
         load: function (view, params) {
-            // elaborate paging
-            var _count = {{ paginate_count_default }};
-            var _start = 0;
-            if ((params) && (params.count)) {
-                _count = params.count;
-            }
-            if ((params) && (params.start)) {
-                _start = params.start;
-            }
-            {% if model %}
-            var _params = webixAppliedFilters['{{ model|getattr:'_meta'|getattr:'app_label'}}.{{ model|getattr:'_meta'|getattr:'model_name'}}'];
-            {% else %}
-            var _params = {};
-            {% endif %}
-            _params.start = _start;
-            _params.count = _count;
-            // elaborate filters
-            _params.filters = JSON.stringify( {{ view_prefix }}get_filters_qsets() );
+                console.log('loading params',params);
+                {% if model %}
+                var _params = webixAppliedFilters['{{ model|getattr:'_meta'|getattr:'app_label'}}.{{ model|getattr:'_meta'|getattr:'model_name'}}'];
+                {% else %}
+                var _params = {};
+                {% endif %}
 
-            // elaborate sort
-            sort = $$('{{ view_prefix }}datatable').getState().sort;
-            if (sort != undefined) {
-                if (sort.dir == 'desc') {
-                    _params.sort = ['-' + sort.id]
-                } else {
-                    _params.sort = ['' + sort.id]
+                // elaborate paging
+                var _count = {{ paginate_count_default }};
+                var _start = 0;
+                if ((params) && (params.count)) {
+                    _count = params.count;
                 }
-            }
+                if ((params) && (params.start)) {
+                    _start = params.start;
+                }
+                // load from state if save state is disabled
+                /*if ({{ view_prefix }}datatable_disable_savestate==true) {
+                    _state = {{ view_prefix }}get_state();
+                    console.log('sto restorando pager',_state.page )
+                    if (_state!=undefined) {
+                        $$('datatable_paging_{{ model_name }}').config.page = _state.page;
+                        _start = _state.page * _count;
+                    }
+                }*/
+                _params.start = _start;
+                _params.count = _count;
+                // elaborate filters
+                _params.filters = JSON.stringify({{ view_prefix }}get_filters_qsets());
 
-            return webix.ajax().bind(view).post(this.source, $.param(_params))
+                // elaborate sort
+                sort = $$('{{ view_prefix }}datatable').getState().sort;
+                if (sort != undefined) {
+                    if (sort.dir == 'desc') {
+                        _params.sort = ['-' + sort.id]
+                    } else {
+                        _params.sort = ['' + sort.id]
+                    }
+                }
+
+                return webix.ajax().bind(view).post(this.source, $.param(_params))
                     .then(function (data) {
                         _data = data.json();
                         $$('{{ view_prefix }}datatable').view_count = _data.data.length;
@@ -426,12 +323,13 @@ $$("{{ webix_container_id }}").addView({
     navigation: true,
     checkboxRefresh: true,
     on: {
-    {% block datatable_on %}
+        {% block datatable_on %}
         onCheck: function (row, column, state) {
             {{ view_prefix }}update_counter();
         },
-    {% if is_json_loading %}
+        {% if is_json_loading %}
         onBeforeFilter: function (id) {
+            if ({{ view_prefix }}_first_load==true) return false;
             if ($$('{{ view_prefix }}filter').getValue() == '0') {
                 return false
             } else {
@@ -441,6 +339,7 @@ $$("{{ webix_container_id }}").addView({
             }
         },
         onAfterFilter: function () {
+            console.log('onAfterFilter')
             var columns = this.config.columns;
             columns.forEach(function (obj) {
                 if ($$("{{ view_prefix }}datatable").getFilter(obj.id)) {
@@ -449,8 +348,11 @@ $$("{{ webix_container_id }}").addView({
             });
             $$('{{ view_prefix }}filter').setValue('0');
         },
-    {% endif %}
+        {% endif %}
         onBeforeLoad: function () {
+            {%  if is_json_loading %}
+            if ({{ view_prefix }}_first_load==true) return false;
+            {%  endif %}
             this.showOverlay("<img src='{% static 'django_webix/loading.gif' %}'>");
         },
         onAfterLoad: function () {
@@ -459,8 +361,10 @@ $$("{{ webix_container_id }}").addView({
             $$('{{ view_prefix }}datatable').view_count_total = {{ view_prefix }}objects_list.length;
             {% else %}
             $$('{{ view_prefix }}filter').setValue('0');
+            if ({{ view_prefix }}datatable_disable_savestate==false) {
+                {{ view_prefix }}save_state();
+            }
             {% endif %}
-
             {% if adjust_row_height %}
             this.adjustRowHeight(); // for multirows
             {% endif %}
@@ -517,7 +421,7 @@ $$("{{ webix_container_id }}").addView({
         }
         {% endblock %}
     }
-},1);
+}, 1);
 
 {% block footer %}
     {% if is_enable_footer %}
@@ -531,10 +435,6 @@ $$("{{ webix_container_id }}").addView({
         {% endif %}
     {% endif %}
 {% endblock %}
-
-// disable filter on first request
-// $$('{{ view_prefix }}filter').setValue('0');
-
 
 {% endblock %}
 
@@ -551,6 +451,19 @@ $$("{{ webix_container_id }}").addView({
 {% include "django_webix/include/toolbar_list.js" %}
 {% endblock %}
 
-{{ view_prefix }}apply_filters();
+{%  if is_json_loading %}
+var {{ view_prefix }}initial_state = {{ view_prefix }}get_state_ui();
+// lock all data loading until here
+if ({{ view_prefix }}get_state()) {
+   {{ view_prefix }}restore_state_grid();
+
+}
+setTimeout(function() {
+    {{ view_prefix }}_first_load = false;
+    {{ view_prefix }}apply_filters();
+    {{ view_prefix }}datatable_disable_savestate = false; // dopo mettere nel after load
+},100) // build grid browser timing
+{% endif %}
+
 {% block extrajs_post %}{% endblock %}
 {% endblock %}

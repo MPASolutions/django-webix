@@ -209,3 +209,7 @@
 .progress_result.company {
     background: #49cd81
 }
+
+.locked_column {
+    background-color: #DDDDDD !important;
+}
