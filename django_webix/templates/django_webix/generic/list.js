@@ -255,7 +255,6 @@ $$("{{ webix_container_id }}").addView({
         $proxy: true,
         source: "{{ url_list }}{% if '?' in url_list %}&{% else %}?{% endif %}json",
         load: function (view, params) {
-                console.log('loading params',params);
                 {% if model %}
                 var _params = webixAppliedFilters['{{ model|getattr:'_meta'|getattr:'app_label'}}.{{ model|getattr:'_meta'|getattr:'model_name'}}'];
                 {% else %}
@@ -271,15 +270,6 @@ $$("{{ webix_container_id }}").addView({
                 if ((params) && (params.start)) {
                     _start = params.start;
                 }
-                // load from state if save state is disabled
-                /*if ({{ view_prefix }}datatable_disable_savestate==true) {
-                    _state = {{ view_prefix }}get_state();
-                    console.log('sto restorando pager',_state.page )
-                    if (_state!=undefined) {
-                        $$('datatable_paging_{{ model_name }}').config.page = _state.page;
-                        _start = _state.page * _count;
-                    }
-                }*/
                 _params.start = _start;
                 _params.count = _count;
                 // elaborate filters
@@ -339,7 +329,6 @@ $$("{{ webix_container_id }}").addView({
             }
         },
         onAfterFilter: function () {
-            console.log('onAfterFilter')
             var columns = this.config.columns;
             columns.forEach(function (obj) {
                 if ($$("{{ view_prefix }}datatable").getFilter(obj.id)) {

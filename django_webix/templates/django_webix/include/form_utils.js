@@ -120,6 +120,4 @@ function delete_image(webix_id_block, webix_id_button) {
 
 
 function image_add(uploader_id) {
-    //console.log('ci siamo');
-    //console.log(uploader_id)
 }

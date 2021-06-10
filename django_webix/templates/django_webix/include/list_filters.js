@@ -104,7 +104,6 @@ function {{ view_prefix }}deactivate_otf_filter() {
 }
 
 function {{ view_prefix }}apply_filters() {
-    console.log('apply filters')
     var extra = ''
     if ({{ view_prefix }}is_active_otf_filter()) {
         extra = '+';
