@@ -485,9 +485,8 @@ class BaseWebixMixin:
                         'name_label': name,
                         'id_label': name,
                         'borderless': True,
-                        'view': "tootipButton",
+                        'view': "icon",
                         "type": "iconButton",
-                        "css": "webix_primary",
                         "icon": "fas fa-download",
                         "width": 35,
                         "on": {
