@@ -1,6 +1,7 @@
 {% extends 'admin_webix/base_no_auth.html' %}
 
 {% block webix_ready %}
+    webix.storage.local.clear();
     webix.ui({
         container: "container",
         rows: [

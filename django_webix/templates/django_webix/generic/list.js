@@ -445,7 +445,6 @@ var {{ view_prefix }}initial_state = {{ view_prefix }}get_state_ui();
 // lock all data loading until here
 if ({{ view_prefix }}get_state()) {
    {{ view_prefix }}restore_state_grid();
-
 }
 setTimeout(function() {
     {{ view_prefix }}_first_load = false;

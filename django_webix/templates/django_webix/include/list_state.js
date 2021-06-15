@@ -8,7 +8,11 @@ function {{ view_prefix }}restore_state_grid() {
     selector_grid = '{{ view_prefix }}datatable';
     var state = webix.storage.local.get(selector_grid + "_state");
     if (state) {
-        $$(selector_grid).setState(state.grid);
+        try { // if list change for different user etc...
+            $$(selector_grid).setState(state.grid);
+        } catch (error) {
+            {{ view_prefix }}drop_state();
+        }
     }
 }
 
