@@ -5,10 +5,11 @@ from django.apps import apps
 from django.core.exceptions import FieldDoesNotExist
 from django.core.exceptions import PermissionDenied, ImproperlyConfigured
 from django.db.models import F, ManyToManyField, Case, When, Value, BooleanField
+from django.db.models.functions import Coalesce
 from django.http import JsonResponse, Http404
 from django.template import Template, Context
 from django.template.loader import get_template
-from django.utils.translation import ugettext as _
+from django.utils.translation import gettext as _, get_language
 from django.views.generic import ListView
 from django.db.models.query import QuerySet
 
@@ -63,8 +64,6 @@ class WebixListView(WebixBaseMixin,
     def is_installed_django_webix_filter(self):
         return apps.is_installed('django_webix_filter')
 
-    # ##################################
-
     def _optimize_select_related(self, qs):
         # Estrapolo le informazione per popolare `select_related`
         _select_related = []
@@ -91,6 +90,34 @@ class WebixListView(WebixBaseMixin,
                     if _related != '':
                         _select_related.append(_related)
             qs = qs.select_related(*_select_related)
+        return qs
+
+    def _model_translations(self, qs):
+        if not apps.is_installed('modeltranslation'):
+            return qs
+        from modeltranslation.fields import TranslationFieldDescriptor
+        fields = [field for field in self.get_fields() if field.get('field_name') is not None]
+        for field in fields:
+            field_name = field.get('field_name')
+            _model = self.model
+            _field = None
+            for name in field_name.split('__'):
+                try:
+                    _field = _model._meta.get_field(name)
+                    if isinstance(_field, ManyToManyField):  # Check if field is M2M
+                        raise FieldDoesNotExist()
+                except FieldDoesNotExist:
+                    break  # name is probably a lookup or transform such as __contains
+                if hasattr(_field, 'related_model') and _field.related_model is not None:
+                    _model = _field.related_model  # field is a relation
+                else:
+                    break  # field is not a relation, any name that follows is probably a lookup or transform
+
+            # Check if last field of last model is translated (exclude initial model)
+            if _field is not None and _model != self.model:
+                _field_attribute = getattr(_model, _field.name, None)
+                if isinstance(_field_attribute, TranslationFieldDescriptor):
+                    qs = qs.annotate(**{field_name: Coalesce('{}_{}'.format(field_name, get_language()), field_name)})
         return qs
 
     def get_adjust_row_height(self, request):
@@ -152,6 +179,8 @@ class WebixListView(WebixBaseMixin,
                 qs = initial_queryset
             else:
                 qs = self.get_initial_queryset()
+
+            qs = self._model_translations(qs)  # Check model translations
 
             filter_merger = FilterMerger(request=self.request)
             qs = filter_merger.get_queryset(self.model, initial_queryset=qs)
