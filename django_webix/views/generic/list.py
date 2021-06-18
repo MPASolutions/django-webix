@@ -96,7 +96,7 @@ class WebixListView(WebixBaseMixin,
         if not apps.is_installed('modeltranslation'):
             return qs
         from modeltranslation.fields import TranslationFieldDescriptor
-        fields = [field for field in self.get_fields() if field.get('field_name') is not None]
+        fields = [field for field in self.get_fields() or [] if field.get('field_name') is not None]
         for field in fields:
             field_name = field.get('field_name')
             _model = self.model
