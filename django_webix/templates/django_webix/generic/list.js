@@ -177,14 +177,11 @@ $$("{{ webix_container_id }}").addView({
     {% if adjust_row_height %}
     fixedRowHeight: false,
     {% endif %}
-    leftSplit: 1,
     //sort:"multi", // not works
     select: "row",
     resizeColumn: true,
     {% block datatable_headermenu %}
-    headermenu: {
-        width: 250
-    },
+    headermenu: {width: 250},
     {% endblock %}
     rightSplit:2,
     leftSplit:1,

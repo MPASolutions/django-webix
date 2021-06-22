@@ -22,6 +22,15 @@
             }
         },
         {% endif %}
+        {% if is_hijack_enable %}
+        {
+            view: "icon", align: "right", icon: "fas fa-user-times", on: {
+                onItemClick: function (id, e) {
+                    window.open('/admin/');
+                }
+            }
+        },
+        {% endif %}
         {
             view: "icon", align: "right", icon: "fas fa-sign-out-alt", on: {
                 onItemClick: function (id, e) {

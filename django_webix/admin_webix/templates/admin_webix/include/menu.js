@@ -29,28 +29,27 @@
 
         {% block userprofile %}
         {
-            id: 'menu_profile',
-            value: "Utente",
+            id: 'menu_user',
+            value: "{{ _("User")|escapejs }}",
             icon: "fas fa-user",
             submenu: [
                 {
                     id: 'menu_profile_update',
-                    value: "Il mio profilo",
+                    value: "{{ _("Profile")|escapejs }}",
                     icon: "fas fa-user-edit",
                     loading_type: 'js_script',
-                    //url: 'account/update/' + "{{ user.pk }}"
                     url: "{% url 'admin_webix:account_update' user.pk %}"
                 },
                 {
                     id: 'menu_profile_change_password',
-                    value: "Cambia password",
+                    value: "{{ _("Password change")|escapejs }}",
                     icon: "fas fa-key",
                     loading_type: 'js_script',
                     url: "{% url 'admin_webix:password_change' %}"
                 },
                 {
                     id: 'menu_profile_reset_password',
-                    value: "Reimposta password",
+                    value: "{{ _("Password reset")|escapejs }}",
                     icon: "fas fa-mail-bulk",
                     loading_type: 'js_script',
                     url: "{% url 'admin_webix:password_reset' %}"
@@ -58,7 +57,7 @@
                 {% if 'two_factor'|is_app_installed %}
                 {
                     id: 'menu_profile_two_factor',
-                    value: "Autenticazione a 2 fattori",
+                    value: "{{ _("2 factor authentication")|escapejs }}",
                     icon: "fas fa-shield-alt",
                     loading_type: 'js_script',
                     url: "{% url 'admin_webix:two_factor_profile' %}"
@@ -66,6 +65,25 @@
                 {% endif %}
             ]
         },
+        {% endblock %}
+
+        {% block users %}
+        {% if user.is_superuser %}
+        {
+            id: 'menu_profile',
+            value: "{{ _("Manage users")|escapejs }}",
+            icon: "fas fa-users",
+            submenu: [
+                {
+                    id: 'menu_users',
+                    value: "{{ _("Users")|escapejs }}",
+                    icon: "fas fa-users",
+                    loading_type: 'js_script',
+                    url: "{% url 'admin_webix:users.user.list' %}"
+                },
+            ]
+        },
+        {% endif %}
         {% endblock %}
 
         {% for menu_item in menu_list %}

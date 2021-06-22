@@ -60,6 +60,9 @@ class AdminWebixSite:
         self.name = name
         all_sites.add(self)
 
+    def is_hijack_enable(self):
+        return apps.is_installed("hijack")
+
     def is_webgis_enable(self):
         return apps.is_installed("django_webix_leaflet")
 
@@ -432,6 +435,7 @@ class AdminWebixSite:
             'site_header': self.site_header,
             'site_url': site_url,
             'is_webgis_enable': self.is_webgis_enable(),
+            'is_hijack_enable': self.is_hijack_enable(),
             'is_webix_filter_enable': self.is_webix_filter_enable(),
             'has_permission': self.has_permission(request),  # utils for menu
             'menu_list': self.get_menu_list(request),  # utils for menu
