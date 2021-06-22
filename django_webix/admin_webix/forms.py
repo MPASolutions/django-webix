@@ -7,6 +7,7 @@ from django.contrib.auth import (
 )
 from django.contrib.auth.forms import AuthenticationForm, SetPasswordForm, PasswordResetForm
 from django.contrib.auth.models import Group, Permission
+from django.utils.translation import ugettext as _
 
 from django_webix.admin_webix.models import WebixAdminMenu
 from django_webix.forms import WebixForm, WebixModelForm
@@ -24,8 +25,8 @@ class GroupAdminForm(WebixModelForm):
         fs['permissions'].update({
             "view": "dbllist",
             "list": {"scroll": True},
-            "labelLeft": "Permessi disponibili",
-            "labelRight": "Selezionati",
+            "labelLeft": _("Available permissions"),
+            "labelRight": _("Selected"),
             "data": [{
                 'id': '{}'.format(getattr(record, 'pk')),
                 'value': '{}'.format(record)
@@ -51,19 +52,19 @@ class UserForm(WebixModelForm):
 
 class UserAdminCreateForm(WebixModelForm):
     error_messages = {
-        'password_mismatch': 'The two password fields didn’t match.',
+        'password_mismatch': _('The two password fields didn’t match.'),
     }
     password1 = forms.CharField(
-        label="Password",
+        label=_("Password"),
         strip=False,
         widget=forms.PasswordInput(attrs={'autocomplete': 'new-password'}),
         help_text=password_validation.password_validators_help_text_html(),
     )
     password2 = forms.CharField(
-        label="Password confirmation",
+        label=_("Password confirmation"),
         widget=forms.PasswordInput(attrs={'autocomplete': 'new-password'}),
         strip=False,
-        help_text="Enter the same password as before, for verification.",
+        help_text=_("Enter the same password as before, for verification.")
     )
 
     class Meta:
@@ -128,15 +129,15 @@ class UserAdminUpdateForm(WebixModelForm):
         fs['groups'].update({
             "view": "dbllist",
             "list": {"scroll": True},
-            "labelLeft": "Gruppi disponibili",
-            "labelRight": "Selezionati",
+            "labelLeft": _("Available permissions"),
+            "labelRight": _("Selected"),
             "data": fs['groups']['options']['body']['data']
         })
         fs['user_permissions'].update({
             "view": "dbllist",
             "list": {"scroll": True},
-            "labelLeft": "Permessi disponibili",
-            "labelRight": "Selezionati",
+            "labelLeft": _("Available permissions"),
+            "labelRight": _("Selected"),
             "data": [{
                 'id': '{}'.format(getattr(record, 'pk')),
                 'value': '{}'.format(record)
@@ -152,14 +153,14 @@ class UserAdminUpdateForm(WebixModelForm):
             {
                 'id': 'tabs_generali',
                 'view': "tabbar",
-                'value': "dettagli",
+                'value': _("Details"),
                 'optionWidth': 200,
                 'multiview': True,
                 'options': [
-                    {"id": "dettagli", "value": "Dati Personali"},
-                    {"id": "informazioni_personali", "value": "Informazioni Personali"},
-                    {"id": "permessi", "value": "Permessi"},
-                    {"id": "gruppi", "value": "Gruppi"},
+                    {"id": "dettagli", "value": _("Private data")},
+                    {"id": "informazioni_personali", "value": _("Private informations")},
+                    {"id": "permessi", "value": _("Permissions")},
+                    {"id": "gruppi", "value": _("Groups")},
                 ],
             },
             {
@@ -178,7 +179,7 @@ class UserAdminUpdateForm(WebixModelForm):
                                 {'cols': [{
                                     'width': 300,
                                     'view': 'button',
-                                    'label': "Cambia password",
+                                    'label': _("Change password"),
                                     'click': 'reset();'
                                 }, {}]},
                             ]
@@ -232,20 +233,20 @@ class AdminPasswordChangeForm(WebixModelForm):
         A form used to change the password of a user in the admin interface.
         """
     error_messages = {
-        'password_mismatch': 'The two password fields didn’t match.',
+        'password_mismatch': _('The two password fields didn’t match.'),
     }
     required_css_class = 'required'
     password1 = forms.CharField(
-        label="Password",
+        label=_("Password"),
         widget=forms.PasswordInput(attrs={'autocomplete': 'new-password', 'autofocus': True}),
         strip=False,
         help_text=password_validation.password_validators_help_text_html(),
     )
     password2 = forms.CharField(
-        label="Password (again)",
+        label=_("Password (again)"),
         widget=forms.PasswordInput(attrs={'autocomplete': 'new-password'}),
         strip=False,
-        help_text="Enter the same password as before, for verification.",
+        help_text=_("Enter the same password as before, for verification."),
     )
 
     class Meta:

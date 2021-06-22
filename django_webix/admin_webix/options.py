@@ -62,24 +62,43 @@ class ModelWebixAdmin(WebixPermissionsMixin):
     # permission custom
     only_superuser = False
 
+#    prefix = None
+#    def __init__(self, prefix=None):
+#        self.prefix = prefix
+
+    def get_prefix(self):
+        return getattr(self, 'prefix', None)
+
     def get_template_form_style(self):
         return self.template_form_style
 
     def get_url_pattern_list(self):
         info = self.model._meta.app_label, self.model._meta.model_name
-        return '%s.%s.list' % info
+        pattern = '%s.%s.list' % info
+        if self.get_prefix() not in ['', None]:
+            pattern += '.%s' % self.get_prefix()
+        return pattern
 
     def get_url_pattern_create(self):
         info = self.model._meta.app_label, self.model._meta.model_name
-        return '%s.%s.create' % info
+        pattern = '%s.%s.create' % info
+        if self.get_prefix() not in ['', None]:
+            pattern += '.%s' % self.get_prefix()
+        return pattern
 
     def get_url_pattern_update(self):
         info = self.model._meta.app_label, self.model._meta.model_name
-        return '%s.%s.update' % info
+        pattern = '%s.%s.update' % info
+        if self.get_prefix() not in ['', None]:
+            pattern += '.%s' % self.get_prefix()
+        return pattern
 
     def get_url_pattern_delete(self):
         info = self.model._meta.app_label, self.model._meta.model_name
-        return '%s.%s.delete' % info
+        pattern = '%s.%s.delete' % info
+        if self.get_prefix() not in ['', None]:
+            pattern += '.%s' % self.get_prefix()
+        return pattern
 
     def get_model_perms(self, request):
         """
@@ -240,7 +259,10 @@ class ModelWebixAdmin(WebixPermissionsMixin):
         super().__init__()
 
     def __str__(self):
-        return "%s.%s" % (self.model._meta.app_label, self.__class__.__name__)
+        _str = "%s.%s" % (self.model._meta.app_label, self.__class__.__name__)
+        if self.get_prefix() is not None:
+            _str += '.%s' % self.get_prefix()
+        return _str
 
     def get_queryset(self, request):
         return self.model._default_manager.all()
@@ -302,6 +324,17 @@ class ModelWebixAdmin(WebixPermissionsMixin):
             from django_webix.views import WebixCreateView
 
             class WebixAdminCreateView(WebixCreateView):
+
+                admin_prefix = _admin.get_prefix()
+                def get_view_prefix(self):
+                    if self.admin_prefix is not None:
+                        return '{}_{}_{}_'.format(self.admin_prefix,
+                                                  self.model._meta.app_label,
+                                                  self.model._meta.model_name)
+                    else:
+                        return '{}_{}_'.format(self.model._meta.app_label,
+                                               self.model._meta.model_name)
+
                 url_pattern_list = 'admin_webix:' + _admin.get_url_pattern_list()
                 url_pattern_create = 'admin_webix:' + _admin.get_url_pattern_create()
                 url_pattern_update = 'admin_webix:' + _admin.get_url_pattern_update()
@@ -350,6 +383,17 @@ class ModelWebixAdmin(WebixPermissionsMixin):
             from django_webix.views import WebixUpdateView
 
             class WebixAdminUpdateView(WebixUpdateView):
+
+                admin_prefix = _admin.get_prefix()
+                def get_view_prefix(self):
+                    if self.admin_prefix is not None:
+                        return '{}_{}_{}_'.format(self.admin_prefix,
+                                                  self.model._meta.app_label,
+                                                  self.model._meta.model_name)
+                    else:
+                        return '{}_{}_'.format(self.model._meta.app_label,
+                                               self.model._meta.model_name)
+
                 url_pattern_list = 'admin_webix:' + _admin.get_url_pattern_list()
                 url_pattern_create = 'admin_webix:' + _admin.get_url_pattern_create()
                 url_pattern_update = 'admin_webix:' + _admin.get_url_pattern_update()
@@ -398,6 +442,17 @@ class ModelWebixAdmin(WebixPermissionsMixin):
             from django_webix.views import WebixDeleteView
 
             class WebixAdminDeleteView(WebixDeleteView):
+
+                admin_prefix = _admin.get_prefix()
+                def get_view_prefix(self):
+                    if self.admin_prefix is not None:
+                        return '{}_{}_{}_'.format(self.admin_prefix,
+                                                  self.model._meta.app_label,
+                                                  self.model._meta.model_name)
+                    else:
+                        return '{}_{}_'.format(self.model._meta.app_label,
+                                               self.model._meta.model_name)
+
                 url_pattern_list = 'admin_webix:' + _admin.get_url_pattern_list()
                 url_pattern_create = 'admin_webix:' + _admin.get_url_pattern_create()
                 url_pattern_update = 'admin_webix:' + _admin.get_url_pattern_update()
@@ -439,6 +494,17 @@ class ModelWebixAdmin(WebixPermissionsMixin):
             from django_webix.views import WebixListView
 
             class WebixAdminListView(WebixListView):
+
+                admin_prefix = _admin.get_prefix()
+                def get_view_prefix(self):
+                    if self.admin_prefix is not None:
+                        return '{}_{}_{}_'.format(self.admin_prefix,
+                                                  self.model._meta.app_label,
+                                                  self.model._meta.model_name)
+                    else:
+                        return '{}_{}_'.format(self.model._meta.app_label,
+                                               self.model._meta.model_name)
+
                 url_pattern_list = 'admin_webix:' + _admin.get_url_pattern_list()
                 url_pattern_create = 'admin_webix:' + _admin.get_url_pattern_create()
                 url_pattern_update = 'admin_webix:' + _admin.get_url_pattern_update()
@@ -494,11 +560,17 @@ class ModelWebixAdmin(WebixPermissionsMixin):
             return WebixAdminListView
 
     def get_urls(self):
+        _prefix = self.get_prefix()
+        if _prefix not in [None, '']:
+            _prefix += '/'
+        else:
+            _prefix = ''
+
         return [
-            path('', self.get_list_view().as_view(), name=self.get_url_pattern_list()),
-            path('create/', self.get_add_view().as_view(), name=self.get_url_pattern_create()),
-            path('<int:pk>/delete/', self.get_delete_view().as_view(), name=self.get_url_pattern_delete()),
-            path('<int:pk>/update/', self.get_change_view().as_view(), name=self.get_url_pattern_update()),
+            path(_prefix+'', self.get_list_view().as_view(), name=self.get_url_pattern_list()),
+            path(_prefix+'create/', self.get_add_view().as_view(), name=self.get_url_pattern_create()),
+            path(_prefix+'<int:pk>/delete/', self.get_delete_view().as_view(), name=self.get_url_pattern_delete()),
+            path(_prefix+'<int:pk>/update/', self.get_change_view().as_view(), name=self.get_url_pattern_update()),
         ]
 
     @property

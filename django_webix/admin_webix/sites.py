@@ -85,7 +85,7 @@ class AdminWebixSite:
     #                errors.extend(modeladmin.check())
     #        return errors
 
-    def register(self, model_or_iterable, admin_class=None, **options):
+    def register(self, model_or_iterable, admin_class=None, prefix=None, **options):
         """
         Register the given model(s) with the given admin class.
         The model(s) should be Model classes, not instances.
@@ -95,6 +95,7 @@ class AdminWebixSite:
         If a model is already registered, raise AlreadyRegistered.
         If a model is abstract, raise ImproperlyConfigured.
         """
+
         admin_class = admin_class or ModelWebixAdmin
         if isinstance(model_or_iterable, ModelBase):
             model_or_iterable = [model_or_iterable]
@@ -104,8 +105,8 @@ class AdminWebixSite:
                     'The model %s is abstract, so it cannot be registered with admin.' % model.__name__
                 )
 
-            if model in self._registry:
-                registered_admin = str(self._registry[model])
+            if (model, prefix) in self._registry:
+                registered_admin = str(self._registry[(model, prefix)])
                 msg = 'The model %s is already registered ' % model.__name__
                 if registered_admin.endswith('.ModelWebixAdmin'):
                     # Most likely registered without a ModelWebixAdmin subclass.
@@ -116,7 +117,15 @@ class AdminWebixSite:
 
             # Ignore the registration if the model has been
             # swapped out.
+            if prefix is not None:
+                if options:
+                    options['prefix'] = prefix
+                else:
+                    options = {'prefix': prefix}
+
+
             if not model._meta.swapped:
+
                 # If we got **options then dynamically construct a subclass of
                 # admin_class with those **options.
                 if options:
@@ -127,27 +136,27 @@ class AdminWebixSite:
                     admin_class = type("%sAdmin" % model.__name__, (admin_class,), options)
 
                 # Instantiate the admin class to save in the registry
-                self._registry[model] = admin_class(model, self)
+                self._registry[(model, prefix)] = admin_class(model, self)
             # else:
             #     raise Exception(model, 'errore swap')
 
-    def unregister(self, model_or_iterable):
+    def unregister(self, model_or_iterable, prefix=None):
         """
         Unregister the given model(s).
         If a model isn't already registered, raise NotRegistered.
         """
         if isinstance(model_or_iterable, ModelBase):
-            model_or_iterable = [model_or_iterable]
+            model_or_iterable = [(model_or_iterable, prefix)]
         for model in model_or_iterable:
-            if model not in self._registry:
+            if (model, prefix) not in self._registry:
                 raise NotRegistered('The model %s is not registered' % model.__name__)
-            del self._registry[model]
+            del self._registry[(model, prefix)]
 
-    def is_registered(self, model):
+    def is_registered(self, model, prefix=None):
         """
         Check if a model class is registered with this `AdminWebixSite`.
         """
-        return model in self._registry
+        return (model, prefix) in self._registry
 
     def _build_app_dict(self, request, label=None):
         """
@@ -158,13 +167,13 @@ class AdminWebixSite:
 
         if label:
             models = {
-                m: m_a for m, m_a in self._registry.items()
+                m: m_a for m, (m_a, _p) in self._registry.items()
                 if m._meta.app_label == label
             }
         else:
             models = self._registry
 
-        for model, model_admin in models.items():
+        for (model, _prefix), model_admin in models.items():
             app_label = model._meta.app_label
 
             has_module_perms = model_admin.has_module_permission(request)
@@ -180,6 +189,7 @@ class AdminWebixSite:
 
             info = (app_label, model._meta.model_name)
             model_dict = {
+                'prefix': _prefix,
                 'name': capfirst(model._meta.verbose_name_plural),
                 'object_name': model._meta.object_name,
                 'model_name': model._meta.model_name,
@@ -383,10 +393,15 @@ class AdminWebixSite:
         # app_index
         valid_app_labels = []
 
-        for model, model_admin in self._registry.items():
-            urlpatterns += [
-                path('%s/%s/' % (model._meta.app_label, model._meta.model_name), include(model_admin.urls)),
-            ]
+        for (model, prefix), model_admin in self._registry.items():
+            if prefix is None:
+                urlpatterns += [
+                    path('%s/%s/' % (model._meta.app_label, model._meta.model_name), include(model_admin.urls)),
+                ]
+            else:
+                urlpatterns += [
+                    path('%s/%s/%s/' % (prefix, model._meta.app_label, model._meta.model_name), include(model_admin.urls)),
+                ]
             # if model._meta.app_label not in valid_app_labels:
             #    valid_app_labels.append(model._meta.app_label)
 

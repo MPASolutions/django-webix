@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-def register(*models, site=None):
+def register(*models, site=None, prefix=None):
     """
     Register the given model(s) classes and wrapped ModelWebixAdmin class with
     admin site:
@@ -24,12 +24,12 @@ def register(*models, site=None):
         admin_site = site or default_site
 
         if not isinstance(admin_site, AdminWebixSite):
-            raise ValueError('site must subclass AdminSite')
+            raise ValueError('Site must subclass AdminSite')
 
         if not issubclass(admin_class, ModelWebixAdmin):
             raise ValueError('Wrapped class must subclass ModelAdmin.')
 
-        admin_site.register(models, admin_class=admin_class)
+        admin_site.register(models, admin_class=admin_class, prefix=prefix)
 
         return admin_class
 
