@@ -1,4 +1,4 @@
-{% load django_webix_utils static i18n %}
+{% load django_webix_utils static i18n filtersmerger_utils %}
 
 function {{ view_prefix }}get_filters_qsets() {
     var qsets = [];
