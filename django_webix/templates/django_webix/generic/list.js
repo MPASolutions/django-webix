@@ -1,4 +1,5 @@
-{% load django_webix_utils static i18n %}
+{% load django_webix_utils static i18n filtersmerger_utils %}
+{% get_request_filter_params %}  // spatial_filter_params and extra_filter_params removal
 
 {% block webix_content %}
 
@@ -38,7 +39,7 @@ $$("{{ webix_container_id }}").addView({
         },
         {% if is_json_loading %}
         {
-            id: '{{ view_prefix }}_filter_locked_sql',
+            id: '{{ view_prefix }}_filter_extra',
             view: "button",
             label: "{{_("Extra filters removal")|escapejs}}",
             type: "icon",
@@ -97,7 +98,7 @@ if (
     || (webixAppliedFilters['{{ model|getattr:'_meta'|getattr:'app_label'}}.{{ model|getattr:'_meta'|getattr:'model_name'}}']['{{ param }}'] != null)
     {% endif %}{% endfor %}
 ) {
-    $$('{{ view_prefix }}_filter_locked_sql').show();
+    $$('{{ view_prefix }}_filter_extra').show();
 }
 if (
     false
