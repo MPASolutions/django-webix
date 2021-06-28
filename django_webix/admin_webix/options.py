@@ -9,6 +9,7 @@ from django.utils.text import capfirst
 from django.utils.translation import ugettext as _
 
 from django_webix.views.generic.base import WebixPermissionsMixin  # utils for permission
+from django_webix.views.generic.utils import get_layers
 
 
 class ModelWebixAdmin(WebixPermissionsMixin):
@@ -303,17 +304,8 @@ class ModelWebixAdmin(WebixPermissionsMixin):
 
     def get_layers(self):
         layers = []
-        if apps.is_installed("qxs") and \
-           apps.is_installed("django_webix_leaflet") and \
-           getattr(self, 'model', None) is not None:
-            from qxs import qxsreg
-            for model_layer in list(filter(lambda x: x.model == self.model, qxsreg.get_models())):
-                layers.append({
-                    'codename': model_layer.get_qxs_codename(),
-                    'layername': model_layer.get_title(),
-                    'qxsname': model_layer.get_qxs_name(),
-                    'geofieldname': model_layer.geo_field_name
-                })
+        if getattr(self, 'model', None) is not None:
+            layers = get_layers(getattr(self, 'model', None))
         return layers
 
     def get_add_view(self):

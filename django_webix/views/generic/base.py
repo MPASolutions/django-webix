@@ -8,6 +8,8 @@ from django.utils.translation import gettext as _
 from django.views.generic import TemplateView
 from django.views.generic.edit import BaseFormView
 
+from django_webix.views.generic.utils import get_layers
+
 
 class WebixPermissionsMixin:
     model = None
@@ -344,17 +346,8 @@ class WebixBaseMixin:
     def get_layers(self):
         layers = []
 
-        if apps.is_installed("qxs") and apps.is_installed("django_webix_leaflet") and getattr(self, 'model',
-                                                                                              None) is not None:
-            from qxs import qxsreg  # FIXME: add to requirements?
-
-            for model_layer in list(filter(lambda x: x.model == self.model, qxsreg.get_models())):
-                layers.append({
-                    'codename': model_layer.get_qxs_codename(),
-                    'layername': model_layer.get_title(),
-                    'qxsname': model_layer.get_qxs_name(),
-                    'geofieldname': model_layer.geo_field_name
-                })
+        if getattr(self, 'model', None) is not None:
+            layers = get_layers(getattr(self, 'model', None))
 
         return layers
 

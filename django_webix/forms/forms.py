@@ -7,7 +7,10 @@ from json import dumps, loads
 import django
 import six
 from django import forms
+from django.apps import apps
 from django.conf import settings
+
+from django_webix.views.generic.utils import get_layers
 
 try:
     from django.contrib.gis.geos import GEOSGeometry
@@ -54,6 +57,7 @@ class BaseWebixMixin:
     form_fix_height = None
     min_count_suggest = 100
     style = 'stacked'
+    label_width = 300
 
     class Meta:
         localized_fields = '__all__'  # to use comma as separator in i18n
@@ -184,14 +188,20 @@ class BaseWebixMixin:
             to_field=to_field_name,
         )
 
+    def get_model(self):
+        if hasattr(self.Meta, 'model'):
+            return self.Meta.model
+        else:
+            return None
+
     @property
     def webix_id(self):
         """ Returns the form id """
-
-        if hasattr(self.Meta, 'model'):
+        model = self.get_model()
+        if model is not None:
             return '{app_label}.{model_name}'.format(
-                app_label=self.Meta.model._meta.app_label,
-                model_name=self.Meta.model._meta.model_name
+                app_label=model._meta.app_label,
+                model_name=model._meta.model_name
             )
         return self.__class__.__name__
 
@@ -228,7 +238,7 @@ class BaseWebixMixin:
                 'label': label,
                 'name': self.add_prefix(name),
                 'id': self[name].auto_id,
-                'labelWidth': 200,
+                'labelWidth': self.label_width,
                 'django_type_field': str(type(field).__name__),
             }
             if hasattr(field, 'help_text') and \
@@ -594,7 +604,6 @@ class BaseWebixMixin:
                         _choices = list(field.choices)
                     if field.required and initial is None and len(_choices) == 1:
                         el.update({'value': '{}'.format(_choices[0][0])})
-
             # ModelChoiceField
             elif isinstance(field, forms.models.ModelChoiceField):
                 if initial is not None:
@@ -666,7 +675,6 @@ class BaseWebixMixin:
                             'placeholder': _('Click to select'),
                             'options': choices
                         })
-
             # TypedChoiceField ChoiceField
             elif isinstance(field, forms.TypedChoiceField) or isinstance(field, forms.ChoiceField):
                 choices = self._add_null_choice([{
@@ -754,6 +762,7 @@ class BaseWebixMixin:
             # GeoFields
             elif GeometryField is not None and isinstance(field, GeometryField):
                 el.update({
+                    'hidden': True,
                     'view': 'textarea'
                 })
                 if initial is not None:
@@ -764,6 +773,52 @@ class BaseWebixMixin:
                         el.update({'value': str(initial)})
                     else:
                         raise Exception(_('Initial value {} for geo field {} is not supported').format(initial, field))
+
+                if apps.is_installed("django_webix_leaflet") and \
+                   hasattr(self, 'instance') and \
+                   self.instance.pk is not None:
+                    model = self.get_model()
+                    if model is not None:
+                        layers = get_layers(model)
+                        if getattr(self.instance, name, None) is None:
+                            _mode = 'create'
+                        else:
+                            _mode = 'update'
+                    else:
+                        layers = []
+                        _mode = 'create'
+                    elements.update({
+                        '{}_block'.format(self[name].html_name): {
+                            'cols': [
+                                {
+                                    'id': self[name].auto_id+'_layer',
+                                    'name': self.add_prefix(name)+'_layer',
+                                    'label': self.add_prefix(name),
+                                    'labelWidth': self.label_width,
+                                    'view': "select",
+                                    'options': [ {'id': _layer['qxsname'], 'value': _layer['layername']} for _layer in layers]
+                                },
+                                {
+                                    'id': self[name].auto_id+'_edit',
+                                    'name': self.add_prefix(name)+'_edit',
+                                    'view': "button",
+                                    'value': _("Edit"),
+                                    'width': 70,
+                                    "on": {
+                                        "onItemClick": "(function (id, e) {{ $$('map').goToWebgisPk($$('{layer_selector}').getValue(),'{pk_field_name}', '{object_pk}', '{mode}', '{field_name}') }})".format(
+                                            layer_selector = self[name].auto_id + '_layer',
+                                            pk_field_name = model._meta.pk.name,
+                                            object_pk = self.instance.pk,
+                                            mode = _mode,
+                                            field_name =  self[name].auto_id,
+                                        )
+                                    }
+                                },
+                                el
+                            ]}
+                    })
+                    _pass = True
+
             # InlineForeignKey
             elif isinstance(field, forms.models.InlineForeignKeyField):
                 pass
@@ -983,7 +1038,8 @@ class BaseWebixModelForm(forms.BaseModelForm, BaseWebixMixin):
         return cleaned_data
 
     def get_name(self):
-        return capfirst(self.Meta.model._meta.verbose_name)
+        model = self.get_model()
+        return capfirst(model._meta.verbose_name)
 
 
 class WebixForm(six.with_metaclass(DeclarativeFieldsMetaclass, BaseWebixForm)):
