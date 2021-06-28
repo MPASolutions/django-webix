@@ -1,5 +1,4 @@
 {% load django_webix_utils static i18n filtersmerger_utils %}
-{% get_request_filter_params %}
 
 function {{ view_prefix }}get_filters_qsets() {
     var qsets = [];
