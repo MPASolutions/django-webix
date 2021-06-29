@@ -781,12 +781,12 @@ class BaseWebixMixin:
                     if model is not None:
                         layers = get_layers(model)
                         if getattr(self.instance, name, None) is None:
-                            _mode = 'create'
+                            _mode = 'draw'
                         else:
-                            _mode = 'update'
+                            _mode = 'edit'
                     else:
                         layers = []
-                        _mode = 'create'
+                        _mode = 'draw'
                     elements.update({
                         '{}_block'.format(self[name].html_name): {
                             'cols': [
@@ -799,8 +799,8 @@ class BaseWebixMixin:
                                     'options': [ {'id': _layer['qxsname'], 'value': _layer['layername']} for _layer in layers]
                                 },
                                 {
-                                    'id': self[name].auto_id+'_edit',
-                                    'name': self.add_prefix(name)+'_edit',
+                                    'id': self[name].auto_id+'_editbtn',
+                                    'name': self.add_prefix(name)+'_editbtn',
                                     'view': "button",
                                     'value': _("Edit"),
                                     'width': 70,
