@@ -153,7 +153,7 @@ class UserAdminUpdateForm(WebixModelForm):
             {
                 'id': 'tabs_generali',
                 'view': "tabbar",
-                'value': _("Details"),
+                'value': "dettagli",
                 'optionWidth': 200,
                 'multiview': True,
                 'options': [

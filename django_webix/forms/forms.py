@@ -396,7 +396,8 @@ class BaseWebixMixin:
                     'view': 'uploader',
                     'autosend': False,
                     'multiple': False,
-                    'width': 100,
+                    'width': 150,
+                    'height': 50,
                     'label': _('Upload new image'),
                     # 'on': {
                     #     'onAfterFileAdd': "image_add('" + self[name].auto_id + "');"
@@ -404,7 +405,6 @@ class BaseWebixMixin:
                 })
                 delete_hidden = True
                 if initial:
-
                     img_small = get_thumbnail(initial, '150x100', quality=85)
                     img_big = get_thumbnail(initial, '500x400', quality=85)
                     key = randint(1, 100000)
@@ -414,6 +414,8 @@ class BaseWebixMixin:
                     delete_hidden = False
                 else:
                     _template_file = ''
+
+
                 elements.update({
                     '{}_block'.format(self[name].html_name): {
                         'id': 'block_' + self[name].auto_id,
@@ -435,21 +437,49 @@ class BaseWebixMixin:
                                 'height': 100,
                                 'width': 170
                             },
-                            el,
                             {
-                                'id': self[name].auto_id + '_clean',
-                                'name': self.add_prefix(name) + '_clean',
-                                'view': "toggle",
-                                'type': "icon",
-                                'offIcon': 'fas fa-trash-alt',
-                                'onIcon': 'fas fa-trash-alt',
-                                'offLabel': '',
-                                'onLabel': _('Eliminato'),
-                                'width': 100,
-                                'css': "webix_danger",
-                                'hidden': delete_hidden,
-                                'click': "delete_image('block_{}', '{}_clean')".format(self[name].auto_id,
-                                                                                       self[name].auto_id),
+                                'id': self[name].auto_id + '_button_block',
+                                'width': 150,
+                                'height': 100,
+                                'rows':[
+                                    el,
+                                    {
+                                        'cols':[
+                                            {
+                                                'id': self[name].auto_id + '_download',
+                                                'view': "button",
+                                                'type': "icon",
+                                                'icon': 'fas fa-download',
+                                                'width': 75,
+                                                'height': 50,
+                                                'css': "webix_primary",
+                                                'hidden': delete_hidden,
+                                                "on": {
+                                                    "onItemClick": "(function (id, e) {{ window.open('{url}','_blank') }})".format(
+                                                        url=initial.url if initial and not isinstance(initial, six.string_types) else str(initial)
+                                                    )
+                                                }
+                                            },
+                                            {
+                                                'id': self[name].auto_id + '_clean',
+                                                'name': self.add_prefix(name) + '_clean',
+                                                'view': "toggle",
+                                                'type': "icon",
+                                                'offIcon': 'fas fa-trash-alt',
+                                                'onIcon': 'fas fa-trash-alt',
+                                                'offLabel': '',
+                                                'onLabel': _('Eliminato'),
+                                                'width': 75,
+                                                'height': 50,
+                                                'css': "webix_danger",
+                                                'hidden': delete_hidden,
+                                                'click': "delete_attachment('block_{}', '{}_clean')".format(
+                                                    self[name].auto_id,
+                                                    self[name].auto_id),
+                                            },
+                                        ]
+                                    }
+                                ]
                             },
                             {
                                 'borderless': True,
@@ -467,7 +497,8 @@ class BaseWebixMixin:
                     'autosend': False,
                     'multiple': False,
                     'directory': False,
-                    'width': 100,
+                    'width': 150,
+                    'heigth': 40,
                     'label': _('Upload file')
                 })
                 if isinstance(field.widget, forms.widgets.FileInput):
@@ -489,36 +520,72 @@ class BaseWebixMixin:
                             'label': _('Upload files')
                         })
 
-                _download = {}
+                delete_hidden = True
                 if initial:
-                    _download = {
-                        'name_label': name,
-                        'id_label': name,
-                        'borderless': True,
-                        'view': "icon",
-                        "type": "iconButton",
-                        "icon": "fas fa-download",
-                        "width": 35,
-                        "on": {
-                            "onItemClick": "(function (id, e) {{ window.open('{url}','_blank') }})".format(
-                                url=initial.url if not isinstance(initial, six.string_types) else str(initial)
-                            )
-                        }
-                    }
+                    delete_hidden = False
+
                 elements.update({
                     '{}_block'.format(self[name].html_name): {
+                        'id': 'block_' + self[name].auto_id,
                         'cols': [
                             {
                                 'name_label': name,
                                 'id_label': name,
                                 'borderless': True,
                                 'template': label,
-                                'height': 30,
+                                'height': 80,
                                 'css': {'background-color': 'transparent !important'}
                             },
-                            _download,
-                            el
-                        ]}})
+                            {
+                                'height': 80,
+                                'rows':[
+                                    el,
+                                    {
+                                        'height': 40,
+                                        'cols': [
+                                            {
+                                                'id': self[name].auto_id + '_download',
+                                                'name_label': name,
+                                                'id_label': name,
+                                                'borderless': True,
+                                                'view': "button",
+                                                'type': "icon",
+                                                "icon": "fas fa-download",
+                                                'css': "webix_primary",
+                                                'hidden': delete_hidden,
+                                                "width": 75,
+                                                'height': 40,
+                                                "on": {
+                                                    "onItemClick": "(function (id, e) {{ window.open('{url}','_blank') }})".format(
+                                                        url=initial.url if initial and not isinstance(
+                                                            initial, six.string_types) else str(initial)
+                                                    )
+                                                }
+                                            },
+                                            {
+                                                'id': self[name].auto_id + '_clean',
+                                                'name': self.add_prefix(name) + '_clean',
+                                                'view': "toggle",
+                                                'type': "icon",
+                                                'offIcon': 'fas fa-trash-alt',
+                                                'onIcon': 'fas fa-trash-alt',
+                                                'offLabel': '',
+                                                'onLabel': _('Eliminato'),
+                                                'width': 75,
+                                                'height': 40,
+                                                'css': "webix_danger",
+                                                'hidden': delete_hidden,
+                                                'click': "delete_attachment('block_{}', '{}_clean')".format(
+                                                    self[name].auto_id,
+                                                    self[name].auto_id),
+                                            },
+                                        ]
+                                    }
+                                ]
+                            },
+                        ]
+                    }
+                })
                 _pass = True
             # FilePathFied
             elif isinstance(field, forms.FilePathField):

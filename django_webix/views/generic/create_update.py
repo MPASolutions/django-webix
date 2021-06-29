@@ -4,7 +4,6 @@ from django.apps import apps
 from django.core.exceptions import ImproperlyConfigured, ValidationError
 from django.core.exceptions import PermissionDenied
 from django.forms import model_to_dict
-from django.forms.fields import FileField
 from django.forms.formsets import all_valid
 from django.forms.models import _get_foreign_key, ModelForm, fields_for_model
 from django.http import HttpResponseRedirect
@@ -15,6 +14,7 @@ from django.utils.text import get_text_list
 from django.utils.translation import gettext as _
 from extra_views import UpdateWithInlinesView, CreateWithInlinesView
 from sorl.thumbnail.fields import ImageField
+from django.db.models import FileField
 
 from django_webix.forms import WebixModelForm
 from django_webix.views.generic.base import WebixBaseMixin, WebixPermissionsMixin, WebixUrlMixin

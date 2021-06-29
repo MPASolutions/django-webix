@@ -7,10 +7,13 @@ from django.urls import reverse
 from mptt.models import TreeForeignKey
 from django.utils.translation import ugettext as _
 
+from django_dal.mptt_managers import DALTreeManager
 from django_dal.models import DALMPTTModel as MPTTModel
 
 
 class WebixAdminMenu(MPTTModel):
+    objects = DALTreeManager()
+
     label = models.CharField(verbose_name=_('Node name'), max_length=255, blank=True, null=True)
     icon = models.CharField(verbose_name=_('Icon'), max_length=255, blank=True, null=True)
     url = models.CharField(verbose_name=_('Web link'), max_length=1023, blank=True, null=True)
