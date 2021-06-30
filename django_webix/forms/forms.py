@@ -828,6 +828,8 @@ class BaseWebixMixin:
                     el.update({'value': initial})
             # GeoFields
             elif GeometryField is not None and isinstance(field, GeometryField):
+
+
                 el.update({
                     'hidden': True,
                     'view': 'textarea'
@@ -841,51 +843,58 @@ class BaseWebixMixin:
                     else:
                         raise Exception(_('Initial value {} for geo field {} is not supported').format(initial, field))
 
-                if apps.is_installed("django_webix_leaflet") and \
-                   hasattr(self, 'instance') and \
-                   self.instance.pk is not None:
-                    model = self.get_model()
-                    if model is not None:
-                        layers = get_layers(model)
-                        if getattr(self.instance, name, None) is None:
-                            _mode = 'draw'
+                if apps.is_installed("django_webix_leaflet"):
+                    if hasattr(self, 'instance') and \
+                       self.instance.pk is not None:
+                        model = self.get_model()
+                        if model is not None:
+                            layers = get_layers(model)
+                            if getattr(self.instance, name, None) is None:
+                                _mode = 'draw'
+                            else:
+                                _mode = 'edit'
                         else:
-                            _mode = 'edit'
-                    else:
-                        layers = []
-                        _mode = 'draw'
-                    elements.update({
-                        '{}_block'.format(self[name].html_name): {
-                            'cols': [
-                                {
-                                    'id': self[name].auto_id+'_layer',
-                                    'name': self.add_prefix(name)+'_layer',
-                                    'label': self.add_prefix(name),
-                                    'labelWidth': self.label_width,
-                                    'view': "select",
-                                    'options': [ {'id': _layer['qxsname'], 'value': _layer['layername']} for _layer in layers]
-                                },
-                                {
-                                    'id': self[name].auto_id+'_editbtn',
-                                    'name': self.add_prefix(name)+'_editbtn',
-                                    'view': "button",
-                                    'value': _("Edit"),
-                                    'width': 70,
-                                    "on": {
-                                        "onItemClick": "(function (id, e) {{ $$('map').goToWebgisPk($$('{layer_selector}').getValue(),'{pk_field_name}', '{object_pk}', '{mode}', '{field_name}') }})".format(
-                                            layer_selector = self[name].auto_id + '_layer',
-                                            pk_field_name = model._meta.pk.name,
-                                            object_pk = self.instance.pk,
-                                            mode = _mode,
-                                            field_name =  self[name].auto_id,
-                                        )
-                                    }
-                                },
-                                el
-                            ]}
-                    })
-                    _pass = True
+                            layers = []
+                            _mode = 'draw'
 
+                        elements.update({
+                            '{}_block'.format(self[name].html_name): {
+                                'cols': [
+                                    {
+                                        'id': self[name].auto_id+'_layer',
+                                        'name': self.add_prefix(name)+'_layer',
+                                        'label': self.add_prefix(name),
+                                        'labelWidth': self.label_width,
+                                        'view': "select",
+                                        'options': [ {'id': _layer['qxsname'], 'value': _layer['layername']} for _layer in layers]
+                                    },
+                                    {
+                                        'id': self[name].auto_id+'_editbtn',
+                                        'name': self.add_prefix(name)+'_editbtn',
+                                        'view': "button",
+                                        'value': _("Edit"),
+                                        'width': 70,
+                                        "on": {
+                                            "onItemClick": "(function (id, e) {{ $$('map').goToWebgisPk($$('{layer_selector}').getValue(),'{pk_field_name}', '{object_pk}', '{mode}', '{field_name}') }})".format(
+                                                layer_selector = self[name].auto_id + '_layer',
+                                                pk_field_name = model._meta.pk.name,
+                                                object_pk = self.instance.pk,
+                                                mode = _mode,
+                                                field_name =  self[name].auto_id,
+                                            )
+                                        }
+                                    },
+                                    el
+                                ]}
+                        })
+                    else:
+                        elements.update({
+                            '{}_block'.format(self[name].html_name): {
+                                'hidden': True,
+                                'cols': [el]
+                            }
+                        })
+                        _pass = True
             # InlineForeignKey
             elif isinstance(field, forms.models.InlineForeignKeyField):
                 pass
