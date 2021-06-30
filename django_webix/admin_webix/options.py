@@ -9,7 +9,7 @@ from django.utils.text import capfirst
 from django.utils.translation import ugettext as _
 
 from django_webix.views.generic.base import WebixPermissionsMixin  # utils for permission
-from django_webix.views.generic.utils import get_layers
+from django_webix.utils.layers import get_layers
 
 
 class ModelWebixAdmin(WebixPermissionsMixin):

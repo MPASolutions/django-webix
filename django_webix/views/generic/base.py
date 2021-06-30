@@ -8,7 +8,7 @@ from django.utils.translation import gettext as _
 from django.views.generic import TemplateView
 from django.views.generic.edit import BaseFormView
 
-from django_webix.views.generic.utils import get_layers
+from django_webix.utils.layers import get_layers
 
 
 class WebixPermissionsMixin:

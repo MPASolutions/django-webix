@@ -10,7 +10,7 @@ from django import forms
 from django.apps import apps
 from django.conf import settings
 
-from django_webix.views.generic.utils import get_layers
+from django_webix.utils.layers import get_layers
 
 try:
     from django.contrib.gis.geos import GEOSGeometry
