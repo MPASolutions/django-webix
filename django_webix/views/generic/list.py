@@ -128,6 +128,10 @@ class WebixListView(WebixBaseMixin,
             return None
         else:
             _fields = []
+            if self.enable_json_loading:
+                server_filter = False
+            else:
+                server_filter = None
             for _field in self.fields:
                 datalist_column = _field['datalist_column']
                 if type(datalist_column) == dict:
@@ -142,7 +146,13 @@ class WebixListView(WebixBaseMixin,
                     template = Template(datalist_column)
                     context = Context({})
                 _field['datalist_column'] = template.render(context)
+                # check server into datalist_column if is json loading
+                if self.enable_json_loading:
+                    if 'server' in _field['datalist_column']:
+                        server_filter = True
                 _fields.append(_field)
+            if server_filter == False:
+                raise Exception('Must be at least one server filter')
             return _fields
 
     def get_annotations_geoavailable(self, geo_field_names):
