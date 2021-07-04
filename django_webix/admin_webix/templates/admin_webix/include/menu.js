@@ -2,11 +2,13 @@
 {
     id:'main_menu',
     width: 180,
-    view:"menu",
+    view:"{{ webix_menu_type }}",
     openAction:"click",
+    {% if webix_menu_type == 'menu' %}
     type:{
         subsign: true
     },
+    {% endif %}
     scroll:"y",
     layout: "y",
     subMenuPos:"right",
@@ -32,7 +34,7 @@
             id: 'menu_user',
             value: "{{ _("User")|escapejs }}",
             icon: "fas fa-user",
-            submenu: [
+            {% if webix_menu_type == 'sidebar' %}data{% else %}submenu{% endif %}: [
                 {
                     id: 'menu_profile_update',
                     value: "{{ _("Profile")|escapejs }}",
@@ -73,7 +75,7 @@
             id: 'menu_profile',
             value: "{{ _("Manage users")|escapejs }}",
             icon: "fas fa-users",
-            submenu: [
+            {% if webix_menu_type == 'sidebar' %}data{% else %}submenu{% endif %}: [
                 {
                     id: 'menu_users',
                     value: "{{ _("Users")|escapejs }}",
@@ -96,11 +98,11 @@
         {# END EXTRA MENU AFTER #}
     ],
     on:{
-        onMenuItemClick: function (id) {
+        {% if webix_menu_type == 'sidebar' %}onAfterSelect{% else %}onMenuItemClick{% endif %}: function (id) {
             {% if is_webgis_enable %}
             $$('map').enableDataTab();
             {% endif %}
-            item = this.getMenuItem(id);
+            item = this.{% if webix_menu_type == 'sidebar' %}getItem{% else %}getMenuItem{% endif %}(id);
             loading_type = item.loading_type;
             url = item.url;
             if (loading_type == 'redirect') {

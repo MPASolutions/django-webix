@@ -47,6 +47,7 @@ class AdminWebixSite:
     login_form = None
 
     webix_container_id = 'content_right'
+    webix_menu_type = 'menu' # ['menu', 'sidebar']
 
     index_template = None
     login_template = None
@@ -272,7 +273,10 @@ class AdminWebixSite:
                 children = self.get_tree(soons, available_items)
 
                 if children != []:
-                    menu_item["submenu"] = children
+                    if self.webix_menu_type=='sidebar':
+                        menu_item["data"] = children # for sidebar
+                    elif self.webix_menu_type=='menu':
+                        menu_item["submenu"] = children # for menu
                     enable = True
                 elif (item.model is not None) or (item.url not in ['', None]):
                     if item.get_url is None:
@@ -441,6 +445,7 @@ class AdminWebixSite:
             'menu_list': self.get_menu_list(request),  # utils for menu
             'available_apps': self.get_app_list(request),  # utils for menu
             'webix_container_id': self.webix_container_id,
+            'webix_menu_type': self.webix_menu_type,
         }
 
     @never_cache

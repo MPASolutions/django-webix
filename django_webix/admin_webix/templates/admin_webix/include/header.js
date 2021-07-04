@@ -2,17 +2,30 @@
 {
     view: "toolbar",
     cols:[
+        {% if webix_menu_type == 'sidebar' %}
+        {
+            view: "icon",
+            icon: "fas fa-bars",
+            click: function(){
+                $$("main_menu").toggle();
+            }
+        },
+        {% endif %}
+        {% block header_left %}
         {
             align: "left",
             type:"clean",
             template: "<h3 style='margin:4px;'><a style='color:#fff;text-decoration:none;' href='{% url 'admin_webix:index' %}'>{{ title }}</a></h3>",
         },
         {$template: "Spacer"},
+        {% endblock %}
+        {% block header_right %}
         {
             align: "right",
             type:"clean",
             template: "<span style='color:#fff;font-size: 1.17em;float:right;padding-top:5px;'>{{ user }}</span>",
         },
+        {% endblock %}
         {% if user.is_superuser %}
         {
             view: "icon", align: "right", icon: "fas fa-cogs", on: {
