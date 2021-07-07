@@ -4,7 +4,7 @@ Views
 Usage
 -----
 
-Forms
+ModelForm
 ~~~~~
 
 Create the forms (e.g. <app_name>/forms.py)
@@ -19,9 +19,9 @@ Create the forms (e.g. <app_name>/forms.py)
         class Meta:
             model = MyModel
             fields = '__all__'
+            localized_fields = ('__all__')
 
-
-Views
+GenericViews
 ~~~~~
 
 Create the views (e.g. <app_name>/views.py)
@@ -52,6 +52,8 @@ Create the views (e.g. <app_name>/views.py)
         model = MyModel
 
         footer = True
+        order_by = None
+        actions = []  # [multiple_delete_action]
 
         # paging
         enable_json_loading = True
@@ -60,11 +62,20 @@ Create the views (e.g. <app_name>/views.py)
         paginate_count_key = 'count'
         paginate_start_key = 'start'
 
-        def get_queryset(self, initial_queryset=None):
-            # custom queryset with annotate etc? is possibile :-)
+        # template vars
+        template_name = 'django_webix/generic/list.js'
+        title = None
+        actions_style = None # ['buttons', 'select']
+        enable_column_webgis = True
+        enable_column_copy = True
+        enable_column_delete = True
+        enable_row_click = True
+        type_row_click = 'single'  # or 'double'
+        enable_actions = True
 
-            initial_queryset = MyModel.objects.all()
-            return super().get_queryset(initial_queryset=initial_queryset)
+
+        def get_initial_queryset(self,):
+            return super().get_initial_queryset()
 
         fields = [
             { # char example
@@ -83,18 +94,28 @@ Create the views (e.g. <app_name>/views.py)
             },
         ]
 
+There some example for filtering:
+- TextField ex. serverFilterType:"icontains"  {content: "serverFilter"}
+- FloatField ex. serverFilterType:"numbercompare"  {content: "numberFilter"}
+- ForeignKey ex. serverFilterType:"exact" {content: "serverSelectFilter" options:YYYY_options}
+- DateField ex. serverFilterType:"range" {content: "serverDateRangeFilter"}
+- BooleanField ex. use template:custom_checkbox_yesnonone and add {content: "serverSelectFilter" , options:[{id: 'True', value: 'Yes'}, {id: 'False', value: 'No'}] }
+
+.. code-block:: python
 
     class MyModelCreateView(WebixCreateView):
         model = MyModel
         inlines = [InlineModelInline]
         form_class = MyModelForm
 
+.. code-block:: python
 
     class MyModelUpdateView(WebixUpdateView):
         model = MyModel
         inlines = [InlineModelInline]
         form_class = MyModelForm
 
+.. code-block:: python
 
     class MyModelDeleteView(WebixDeleteView):
         model = MyModel

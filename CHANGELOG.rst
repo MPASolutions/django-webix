@@ -13,6 +13,37 @@ The format is based on KeepAChangelog_ and this project adheres to SemanticVersi
 [Unreleased]
 ++++++++++++
 
+[1.5.0] 2021-07-05
+++++++++++++++++++
+
+Added
+~~~~~
+* Support for Flexport package
+* Support for django-webix-leaflet package
+* Support for hijack package
+* Callback for action execution
+* User support for profile etc.
+* Added custom menu for django-admin-webix
+* Multiple translations
+* Monotabs forms
+* help_text support for forms
+* save state for ListView
+* widget and support for GeoFields
+* Multiple registration model
+
+Changed
+~~~~~~~
+* better colour for form buttons
+* better widget for FileField and ImageField
+
+Fixed
+~~~~~
+* Fixed TemplateListView without advancedlistfilter
+* Fixed ListView with json load mode with custom annotate on queryset
+* Fixed filter on ListView
+* Fixed Header on ListView
+* Fixed counter for action execution
+
 
 [1.4.0] 2021-03-02
 ++++++++++++++++++

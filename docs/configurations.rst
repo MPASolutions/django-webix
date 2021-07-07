@@ -73,8 +73,8 @@ Configuration variables
 .. code-block:: python
 
     WEBIX_LICENSE = 'PRO'  # FREE
-    WEBIX_VERSION = '7.0.3'
+    WEBIX_VERSION = '8.3.4'
     WEBIX_CONTAINER_ID = 'content_right'
     WEBIX_FONTAWESOME_CSS_URL = 'fontawesome/css/all.min.css'
-    WEBIX_FONTAWESOME_VERSION = '5.12.0'
+    WEBIX_FONTAWESOME_VERSION = '5.13.1'
     WEBIX_HISTORY_ENABLE = True # optional

@@ -90,8 +90,16 @@ Here an example:
                 }
 
             AdminWebixSiteClass.extra_index_context = extra_index_context
-
             self._wrapped = AdminWebixSiteClass()
+
+        def each_context(self, request):
+            return super().each_context(request)
+
+        def dashboard(self, request, extra_context=None):
+            return super().dashboard(request, extra_context)
+
+        def extra_index_context(self, request):
+            return {}
 
     custom_site = CustomSiteAdminWebixSite()
 
@@ -107,7 +115,9 @@ Here an example:
     custom_site.logout_template = None
     custom_site.password_change_template = None
     custom_site.password_change_done_template = None
-
+    custom_site.webix_menu_type = 'sidebar' # 'menu'
+    # for webgis support
+    custom_site.webgis_template = 'webgis_leaflet/init.js'
 
 Basic Usage
 -----
@@ -116,6 +126,7 @@ Admin Webix
 ~~~~~~~~~~~
 
 Create the files (e.g. <app_name>/admin_webix.py) and there is a simple example:
+- prefix could be used for multiple model registration
 
 .. code-block:: python
 
@@ -124,9 +135,23 @@ Create the files (e.g. <app_name>/admin_webix.py) and there is a simple example:
     from django_webix import admin_webix as admin
 
 
-    @admin.register(Conferente)
+    @admin.register(Conferente, prefix=prefix)
     class ConferenteAdmin(admin.ModelWebixAdmin):
+
         list_display = ['ragione_sociale', 'partita_iva', 'email']
+        # could be directly dicts or use list_display_header for specific cutomization
+        list_display_header = {
+          'ragione_sociale': {
+            'field_name': 'ragione_sociale',
+            'datalist_column': '''
+              {id: "ragione_sociale",
+               header: ["Ragione sociale", {content: "serverFilter"}],
+               adjust:"all",
+               sort: "server",
+               serverFilterType: "icontains",
+               }'''
+             }
+        },
         enable_json_loading = True
 
 

@@ -48,6 +48,15 @@ Install Django Webix:
 
     $ pip install django-webix
 
+Extra packages for Django Webix:
+
+.. code-block:: bash
+
+    $ pip install django-webix-sender
+    $ pip install django-dal
+    $ pip install django-filtersmerger
+    $ pip install django-webix-filter
+
 Add ``django-webix`` to your ``INSTALLED_APPS``
 
 .. code-block:: python

@@ -844,8 +844,11 @@ class BaseWebixMixin:
                         raise Exception(_('Initial value {} for geo field {} is not supported').format(initial, field))
 
                 if apps.is_installed("django_webix_leaflet"):
-                    if hasattr(self, 'instance') and \
-                       self.instance.pk is not None:
+                        if hasattr(self, 'instance') and \
+                           self.instance.pk is not None:
+                            object_pk = self.instance.pk
+                        else:
+                            object_pk = None
                         model = self.get_model()
                         if model is not None:
                             layers = get_layers(model)
@@ -875,10 +878,10 @@ class BaseWebixMixin:
                                         'value': _("Edit"),
                                         'width': 70,
                                         "on": {
-                                            "onItemClick": "(function (id, e) {{ $$('map').goToWebgisPk($$('{layer_selector}').getValue(),'{pk_field_name}', '{object_pk}', '{mode}', '{field_name}') }})".format(
+                                            "onItemClick": "(function (id, e) {{ $$('map').goToWebgisPk($$('{layer_selector}').getValue(),'{pk_field_name}', {object_pk}, '{mode}', '{field_name}') }})".format(
                                                 layer_selector = self[name].auto_id + '_layer',
                                                 pk_field_name = model._meta.pk.name,
-                                                object_pk = self.instance.pk,
+                                                object_pk = "'{}'".format(object_pk) if object_pk is not None else "undefined",
                                                 mode = _mode,
                                                 field_name =  self[name].auto_id,
                                             )
@@ -887,14 +890,14 @@ class BaseWebixMixin:
                                     el
                                 ]}
                         })
-                    else:
-                        elements.update({
-                            '{}_block'.format(self[name].html_name): {
-                                'hidden': True,
-                                'cols': [el]
-                            }
-                        })
-                        _pass = True
+                    #else:
+                    #    elements.update({
+                    #        '{}_block'.format(self[name].html_name): {
+                    #            'hidden': True,
+                    #            'cols': [el]
+                    #        }
+                    #    })
+                    #    _pass = True
             # InlineForeignKey
             elif isinstance(field, forms.models.InlineForeignKeyField):
                 pass
