@@ -7,6 +7,8 @@ from django.db.models.fields import BooleanField, DateField, DateTimeField
 from django.urls import path
 from django.utils.text import capfirst
 from django.utils.translation import ugettext as _
+from django_webix.utils.decorators import script_login_required
+from django.utils.decorators import method_decorator
 
 from django_webix.views.generic.base import WebixPermissionsMixin  # utils for permission
 from django_webix.utils.layers import get_layers
@@ -315,6 +317,7 @@ class ModelWebixAdmin(WebixPermissionsMixin):
         else:
             from django_webix.views import WebixCreateView
 
+            @method_decorator(script_login_required, name='dispatch')
             class WebixAdminCreateView(WebixCreateView):
 
                 admin_prefix = _admin.get_prefix()
@@ -374,6 +377,7 @@ class ModelWebixAdmin(WebixPermissionsMixin):
         else:
             from django_webix.views import WebixUpdateView
 
+            @method_decorator(script_login_required, name='dispatch')
             class WebixAdminUpdateView(WebixUpdateView):
 
                 admin_prefix = _admin.get_prefix()
@@ -433,6 +437,7 @@ class ModelWebixAdmin(WebixPermissionsMixin):
         else:
             from django_webix.views import WebixDeleteView
 
+            @method_decorator(script_login_required, name='dispatch')
             class WebixAdminDeleteView(WebixDeleteView):
 
                 admin_prefix = _admin.get_prefix()
@@ -485,6 +490,7 @@ class ModelWebixAdmin(WebixPermissionsMixin):
         else:
             from django_webix.views import WebixListView
 
+            @method_decorator(script_login_required, name='dispatch')
             class WebixAdminListView(WebixListView):
 
                 admin_prefix = _admin.get_prefix()
