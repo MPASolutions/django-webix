@@ -8,7 +8,7 @@ var {{ view_prefix }}actions_list = [
         {id: 'gotowebgis_{{ layer.codename }}', value: "{{_("Go to map")|escapejs}} ({{layer.layername}})"},
     {% endfor %}
     {% for action_key,action in actions.items %}
-    {id: '{{ action_key }}', value: '{{action.short_description}}'}{% if not forloop.last %}, {% endif %}
+    {id: '{{ action_key }}', value: '{{action.short_description}}'},
     {% endfor %}
     {% endblock %}
 ];
@@ -20,7 +20,7 @@ function _{{ action_key }}_action_execute_form(ids, all) {
   webix.ui({
     view: "window",
     id: "{{ action_key }}_win",
-    width: 340,
+    width: 550,
     maxHeigth: 600,
     scrool: 'y',
     position: "center",

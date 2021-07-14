@@ -103,7 +103,8 @@ class UserAdmin(admin.ModelWebixAdmin):
                 sort: "server"
                 }'''
         },
-        ]
+    ]
+
     def get_list_display(self, request=None):
         if apps.is_installed("hijack") and request.user.is_superuser:
             return self.list_display + [{
