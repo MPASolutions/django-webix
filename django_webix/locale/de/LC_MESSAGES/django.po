@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-06-29 22:25+0200\n"
+"POT-Creation-Date: 2021-07-20 12:30+0200\n"
 "PO-Revision-Date: 2021-02-13 10:31+0050\n"
 "Last-Translator: b'  <>'\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -124,11 +124,11 @@ msgstr ""
 msgid "Webix Admin Menu"
 msgstr ""
 
-#: django_webix/admin_webix/options.py:165
+#: django_webix/admin_webix/options.py:167
 msgid "Sì"
 msgstr ""
 
-#: django_webix/admin_webix/options.py:165
+#: django_webix/admin_webix/options.py:167
 #: django_webix/templates/django_webix/include/utils.js:171
 #: django_webix/templates/django_webix/include/utils.js:178
 msgid "No"
@@ -146,7 +146,7 @@ msgstr "Django webix Verwaltung"
 msgid "Site administration"
 msgstr "Site Verwaltung"
 
-#: django_webix/admin_webix/sites.py:631
+#: django_webix/admin_webix/sites.py:636
 #, python-format
 msgid ""
 "Please enter the correct %(username)s and password for a staff account. Note "
@@ -155,7 +155,7 @@ msgstr ""
 "Bitte geben Sie den korrekten %(username)s und Passwort für einen Staff-"
 "Nutzer. Achten Sie darauf dass beide Felder könnten case-sensitive sein."
 
-#: django_webix/admin_webix/sites.py:648
+#: django_webix/admin_webix/sites.py:653
 msgid "Log in"
 msgstr "Einloggen"
 
@@ -198,31 +198,31 @@ msgstr "DATEN"
 msgid "WEBGIS"
 msgstr "WEBGIS"
 
-#: django_webix/admin_webix/templates/admin_webix/include/menu.js:33
+#: django_webix/admin_webix/templates/admin_webix/include/menu.js:35
 msgid "User"
 msgstr ""
 
-#: django_webix/admin_webix/templates/admin_webix/include/menu.js:38
+#: django_webix/admin_webix/templates/admin_webix/include/menu.js:40
 msgid "Profile"
 msgstr ""
 
-#: django_webix/admin_webix/templates/admin_webix/include/menu.js:45
+#: django_webix/admin_webix/templates/admin_webix/include/menu.js:47
 msgid "Password change"
 msgstr ""
 
-#: django_webix/admin_webix/templates/admin_webix/include/menu.js:52
+#: django_webix/admin_webix/templates/admin_webix/include/menu.js:54
 msgid "Password reset"
 msgstr ""
 
-#: django_webix/admin_webix/templates/admin_webix/include/menu.js:60
+#: django_webix/admin_webix/templates/admin_webix/include/menu.js:62
 msgid "2 factor authentication"
 msgstr ""
 
-#: django_webix/admin_webix/templates/admin_webix/include/menu.js:74
+#: django_webix/admin_webix/templates/admin_webix/include/menu.js:76
 msgid "Manage users"
 msgstr ""
 
-#: django_webix/admin_webix/templates/admin_webix/include/menu.js:79
+#: django_webix/admin_webix/templates/admin_webix/include/menu.js:81
 msgid "Users"
 msgstr ""
 
@@ -269,15 +269,15 @@ msgstr "MehrfachauswahlFeld verfügbar nur mit PRO webix license"
 msgid "Click to select"
 msgstr "Klicken Sie zum Auswählen"
 
-#: django_webix/forms/forms.py:842
+#: django_webix/forms/forms.py:844
 msgid "Initial value {} for geo field {} is not supported"
 msgstr "Anfangswert {} für Geo Feld {} nicht unterstützt"
 
-#: django_webix/forms/forms.py:872
+#: django_webix/forms/forms.py:878
 msgid "Edit"
 msgstr ""
 
-#: django_webix/forms/forms.py:894
+#: django_webix/forms/forms.py:906
 msgid "Type of field {} not supported"
 msgstr "Feldtyp {} nicht unterstutzt "
 
@@ -607,7 +607,7 @@ msgstr ""
 #: django_webix/views/generic/create_update.py:394
 #: django_webix/views/generic/delete.py:42
 #: django_webix/views/generic/detail.py:21
-#: django_webix/views/generic/list.py:509
+#: django_webix/views/generic/list.py:519
 msgid "View permission is not allowed"
 msgstr "Ansichtsberechtigung nicht erlaubt"
 
@@ -629,17 +629,17 @@ msgid "and"
 msgstr "und"
 
 #: django_webix/views/generic/decorators.py:14
-#: django_webix/views/generic/list.py:361
+#: django_webix/views/generic/list.py:371
 msgid "Are you sure you want to proceed with this action?"
 msgstr "Möchten Sie mit dieser Aktion fortfahren?"
 
 #: django_webix/views/generic/decorators.py:15
-#: django_webix/views/generic/list.py:362
+#: django_webix/views/generic/list.py:372
 msgid "Proceed"
 msgstr "Fortfahren"
 
 #: django_webix/views/generic/decorators.py:16
-#: django_webix/views/generic/list.py:363
+#: django_webix/views/generic/list.py:373
 msgid "Undo"
 msgstr "Lösen"
 
@@ -653,38 +653,38 @@ msgid ""
 "get_absolute_url method on the Model."
 msgstr ""
 
-#: django_webix/views/generic/list.py:260
+#: django_webix/views/generic/list.py:270
 msgid "Paginate count is not integer"
 msgstr ""
 
-#: django_webix/views/generic/list.py:269
+#: django_webix/views/generic/list.py:279
 msgid "Paginate start is not integer"
 msgstr ""
 
-#: django_webix/views/generic/list.py:396
+#: django_webix/views/generic/list.py:406
 msgid ""
 "Actions style is improperly configured only options are 'buttons' or "
 "'select' (select by default)."
 msgstr ""
 
-#: django_webix/views/generic/list.py:469
+#: django_webix/views/generic/list.py:479
 msgid ""
 "Json response is available only if get_queryset() return a queryset and not "
 "a list"
 msgstr ""
 
-#: django_webix/views/generic/list.py:488
+#: django_webix/views/generic/list.py:498
 msgid "This action is not registered"
 msgstr "Diese aktion ist nicht registriert"
 
-#: django_webix/views/generic/list.py:494
+#: django_webix/views/generic/list.py:504
 msgid "Permission denied: {}"
 msgstr "Berechtigung verweigert: {}"
 
-#: django_webix/views/generic/list.py:496
+#: django_webix/views/generic/list.py:506
 msgid "This permission is not registered on this class"
 msgstr "Diese Berechtigung ist nicht auf dieser Klasse registriert"
 
-#: django_webix/views/generic/list.py:565
+#: django_webix/views/generic/list.py:575
 msgid "Generic TemplateListView needs to define data for datatable"
 msgstr ""
