@@ -546,3 +546,10 @@ function floateditor(obj, common, value, config) {
     }
     return floaticon;
 }
+
+function filter_icontains(item, value) {
+    if (item.value.toString().toLowerCase().indexOf(value.toLowerCase()) >= 0)
+        return true;
+    return false;
+}
+

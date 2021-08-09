@@ -133,3 +133,19 @@ def from_dict_to_qset(data, model):
     else:
         qset = Q()
     return qset
+
+
+def combo_with_icontains_filter(combo_widget):
+    if 'options' not in combo_widget:
+        return combo_widget
+
+    options_data = combo_widget['options']
+    combo_widget.update({
+        'options': {
+            'filter': 'filter_icontains',
+            'body': {
+                'data': options_data
+            }
+        }
+    })
+    return combo_widget
