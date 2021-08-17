@@ -35,15 +35,17 @@
             }
         },
         {% endif %}
-        {% if is_hijack_enable %}
+        {% if is_hijack_enable %}{% load hijack_tags %}
+        {% if request|is_hijacked %}
         {
             view: "icon", align: "right", icon: "fas fa-user-times", on: {
                 onItemClick: function (id, e) {
-                    window.open('/admin/');
+                    document.location.href = '{% url 'hijack:release' %}';
                 }
             }
         },
         {% endif %}
+    {% endif %}
         {
             view: "icon", align: "right", icon: "fas fa-sign-out-alt", on: {
                 onItemClick: function (id, e) {
