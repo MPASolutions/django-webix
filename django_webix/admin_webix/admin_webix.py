@@ -109,7 +109,7 @@ class UserAdmin(admin.ModelWebixAdmin):
         if apps.is_installed("hijack") and request.user.is_superuser:
             return self.list_display + [{
                 'field_name': 'userid',
-                'click_action': '''document.location.href="/hijack/"+el['id'];''',
+                'click_action': '''hijack_user(el['id']);''',
                 'datalist_column': '''{
                 id: "userid",
                 header: ['',''],

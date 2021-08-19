@@ -35,17 +35,17 @@
             }
         },
         {% endif %}
-        {% if is_hijack_enable %}{% load hijack_tags %}
-        {% if request|is_hijacked %}
+        {% if is_hijack_enable %}
+        {% if request.user.is_hijacked %}
         {
             view: "icon", align: "right", icon: "fas fa-user-times", on: {
                 onItemClick: function (id, e) {
-                    document.location.href = '{% url 'hijack:release' %}';
+                    unhijack_user();
                 }
             }
         },
         {% endif %}
-    {% endif %}
+        {% endif %}
         {
             view: "icon", align: "right", icon: "fas fa-sign-out-alt", on: {
                 onItemClick: function (id, e) {
