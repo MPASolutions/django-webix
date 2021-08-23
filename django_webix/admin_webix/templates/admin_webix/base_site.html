@@ -32,7 +32,18 @@
 </head>
 <body style="width:100%;height:100%;margin:0px;padding:0px;">
 <script type="text/javascript" charset="utf-8">
-
+{% if is_hijack_enable %}
+     function unhijack_user(){
+        webix_post('{% url 'hijack:release' %}', {})
+     }
+     {% if request.user.is_superuser %}
+         {% if not request.user.is_hijacked %}
+             function hijack_user(user_pk){
+                webix_post('{% url 'hijack:acquire' %}', {'user_pk': user_pk})
+             }
+         {% endif %}
+     {% endif %}
+ {% endif %}
   {% block full_content %}
   webix.ready(function(){
 
