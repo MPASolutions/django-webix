@@ -866,7 +866,7 @@ class BaseWebixMixin:
                                 {
                                     'id': self[name].auto_id + '_layer',
                                     'name': self.add_prefix(name) + '_layer',
-                                    'label': self.add_prefix(name),
+                                    'label': label,
                                     'labelWidth': self.label_width,
                                     'view': "select",
                                     'options': [{'id': _layer['qxsname'], 'value': _layer['layername']} for _layer in layers]
