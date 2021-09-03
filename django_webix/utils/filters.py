@@ -44,29 +44,6 @@ def decode_text_filters(filters_text):
     return filters  # by default filters are not set
 
 
-def from_geo_dict_to_qset(model, data):
-    if issubclass(GEOSGeometry, django.contrib.gis.geos.GEOSGeometry) and \
-        issubclass(MultiPolygon, django.contrib.gis.geos.GEOSGeometry):
-        if 'geo_field_name' in data and 'polygons_srid' in data and 'polygons' in data:
-            geo_field_name = data.get('geo_field_name')
-            polygons = []
-            for geo_text in data['polygons']:
-                polygons.append(GEOSGeometry(geo_text))
-            geo = MultiPolygon(polygons)
-            try:
-                geo.srid = int(data.get('polygons_srid'))
-            except ValueError:
-                print(_('ERROR: geo srid is incorrect'))
-            geo_field = model._meta.get_field(geo_field_name)
-            _geo = geo.transform(geo_field.srid, clone=True).buffer(
-                0)  # se l'unione del multipolygon risultasse invalida
-            qset = Q(**{geo_field_name + '__within': _geo})
-        else:
-            qset = Q()
-        return qset
-    return Q()
-
-
 def from_dict_to_qset(data, model):
     if 'qsets' in data and 'operator' in data:
         operator = data.get('operator')
