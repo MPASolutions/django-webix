@@ -26,7 +26,7 @@
             template: "<span style='color:#fff;font-size: 1.17em;float:right;padding-top:5px;'>{{ user }}</span>",
         },
         {% endblock %}
-        {% if user.is_superuser %}
+        {% if user.is_staff %}
         {
             view: "icon", align: "right", icon: "fas fa-cogs", on: {
                 onItemClick: function (id, e) {
