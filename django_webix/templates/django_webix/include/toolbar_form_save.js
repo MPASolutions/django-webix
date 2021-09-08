@@ -33,11 +33,11 @@ if (form_validate('{{ form.webix_id }}')) {
 
     $.ajax({
         {% if not object.pk and url_create and url_create != '' %}
-            url: "{{ url_create }}{% if extra_params_button %}{% if not '?' in url_create %}?{% else %}&{% endif %}{{ extra_params_button }}{% endif %}",
+            url: "{{ url_create|safe }}{% if extra_params_button %}{% if not '?' in url_create %}?{% else %}&{% endif %}{{ extra_params_button }}{% endif %}",
         {% elif url_update and url_update != '' %}
-            url: "{{ url_update }}{% if extra_params_button %}{% if not '?' in url_update %}?{% else %}&{% endif %}{{ extra_params_button }}{% endif %}",
+            url: "{{ url_update|safe }}{% if extra_params_button %}{% if not '?' in url_update %}?{% else %}&{% endif %}{{ extra_params_button }}{% endif %}",
         {% elif url_send and url_send != '' %}
-            url: "{{ url_send }}{% if extra_params_button %}{% if not '?' in url_send %}?{% else %}&{% endif %}{{ extra_params_button }}{% endif %}",
+            url: "{{ url_send|safe }}{% if extra_params_button %}{% if not '?' in url_send %}?{% else %}&{% endif %}{{ extra_params_button }}{% endif %}",
         {% endif %}
         dataType: "script",
         type: "POST",
