@@ -18,6 +18,7 @@ from django.utils.text import capfirst
 from django.utils.translation import gettext as _, gettext_lazy
 from django.views.decorators.cache import never_cache
 from django.views.decorators.csrf import csrf_protect
+from django.contrib.auth import get_user_model
 
 from django_webix.admin_webix import ModelWebixAdmin
 
@@ -46,6 +47,8 @@ class AdminWebixSite:
 
     login_form = None
 
+    label_width = None
+
     webix_container_id = 'content_right'
     webix_menu_type = 'menu' # ['menu', 'sidebar']
 
@@ -60,6 +63,9 @@ class AdminWebixSite:
         self._registry = {}
         self.name = name
         all_sites.add(self)
+
+    def get_label_width(self):
+        return self.label_width
 
     def is_hijack_enable(self):
         return apps.is_installed("hijack")
@@ -126,6 +132,12 @@ class AdminWebixSite:
                     options['prefix'] = prefix
                 else:
                     options = {'prefix': prefix}
+
+            if self.get_label_width() is not None:
+                if options:
+                    options['label_width'] = self.get_label_width()
+                else:
+                    options = {'label_width': self.get_label_width()}
 
 
             if not model._meta.swapped:
@@ -425,6 +437,13 @@ class AdminWebixSite:
     def urls(self):
         return self.get_urls(), 'admin_webix', self.name
 
+    def _get_user_model_list_url(self):
+        UserModel = get_user_model()
+        if UserModel is not None:
+            return 'admin_webix:'+UserModel._meta.app_label+'.'+UserModel._meta.model_name+'.list'
+        else:
+            return None
+
     def each_context(self, request):
         """
         Return a dictionary of variables to put in the template context for
@@ -446,6 +465,7 @@ class AdminWebixSite:
             'available_apps': self.get_app_list(request),  # utils for menu
             'webix_container_id': self.webix_container_id,
             'webix_menu_type': self.webix_menu_type,
+            'user_list_url': self._get_user_model_list_url(),
         }
 
     @never_cache

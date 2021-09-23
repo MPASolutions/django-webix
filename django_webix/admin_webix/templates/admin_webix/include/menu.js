@@ -70,7 +70,7 @@
         {% endblock %}
 
         {% block users %}
-        {% if user.is_superuser %}
+        {% if user.is_superuser and user_list_url %}
         {
             id: 'menu_profile',
             value: "{{ _("Manage users")|escapejs }}",
@@ -81,7 +81,7 @@
                     value: "{{ _("Users")|escapejs }}",
                     icon: "fas fa-users",
                     loading_type: 'js_script',
-                    url: "{% url 'admin_webix:users.user.list' %}"
+                    url: "{% url user_list_url %}"
                 },
             ]
         },
