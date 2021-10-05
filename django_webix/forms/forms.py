@@ -468,7 +468,7 @@ class BaseWebixMixin:
                                                 'offIcon': 'fas fa-trash-alt',
                                                 'onIcon': 'fas fa-trash-alt',
                                                 'offLabel': '',
-                                                'onLabel': _('Eliminato'),
+                                                'onLabel': _('Deleted'),
                                                 'width': 75,
                                                 'height': 50,
                                                 'css': "webix_danger",
@@ -570,7 +570,7 @@ class BaseWebixMixin:
                                                 'offIcon': 'fas fa-trash-alt',
                                                 'onIcon': 'fas fa-trash-alt',
                                                 'offLabel': '',
-                                                'onLabel': _('Eliminato'),
+                                                'onLabel': _('Deleted'),
                                                 'width': 75,
                                                 'height': 40,
                                                 'css': "webix_danger",
@@ -847,7 +847,7 @@ class BaseWebixMixin:
                         object_pk = self.instance.pk
                     else:
                         object_pk = None
-                        
+
                     model = self.get_model()
                     if model is not None:
                         layers = get_layers(model)
@@ -899,7 +899,7 @@ class BaseWebixMixin:
                 #        }
                 #    })
                 #    _pass = True
-                
+
             # InlineForeignKey
             elif isinstance(field, forms.models.InlineForeignKeyField):
                 pass

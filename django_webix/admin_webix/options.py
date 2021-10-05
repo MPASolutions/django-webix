@@ -169,7 +169,7 @@ class ModelWebixAdmin(WebixPermissionsMixin):
                 if type(model_field) == BooleanField:
                     filter_type = ''
                     filter_option = 'serverSelectFilter' if self.enable_json_loading else 'selectFilter'
-                    extra_filter_options = ", options:[{id: 'True', value: '" + _('Sì') + "'}, {id: 'False', value: '" + _("No") + "'}] "
+                    extra_filter_options = ", options:[{id: 'True', value: '" + _('Yes') + "'}, {id: 'False', value: '" + _("No") + "'}] "
                     column_template = ' template:custom_checkbox_yesnonone, '
                 elif type(model_field) == DateTimeField:
                     #width_adapt = 'width:"140"'
