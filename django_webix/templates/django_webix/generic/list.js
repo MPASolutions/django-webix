@@ -294,9 +294,9 @@ $$("{{ webix_container_id }}").addView({
                             // footer only for first page
                             for (var field_name in _data.footer) {
                                 var format = $$('{{ view_prefix }}datatable').getColumnConfig(field_name.replace('_footer', '')).footer[0].format;
-			        var text = _data.footer[field_name];
-			        if (format !== undefined) text = format(text);
-			        $$('{{ view_prefix }}datatable').getColumnConfig(field_name.replace('_footer', '')).footer[0].text = text;
+                                var text = _data.footer[field_name];
+                                if (format !== undefined) text = format(text);
+                                $$('{{ view_prefix }}datatable').getColumnConfig(field_name.replace('_footer', '')).footer[0].text = text;
                             }
                         {% endif %}
                         return data;
