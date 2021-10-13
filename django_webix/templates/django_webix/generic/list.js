@@ -291,11 +291,13 @@ $$("{{ webix_container_id }}").addView({
                         // counter
                         {{ view_prefix }}update_counter();
                         {% if is_enable_footer %}
-                        // footer only for first page
-                        for (var field_name in _data.footer) {
-                            $$('{{ view_prefix }}datatable').getColumnConfig(field_name.replace('_footer', '')).footer[0].text = _data.footer[field_name];
-                        }
-                        //$$('{{ view_prefix }}datatable').refreshColumns(); // will be refreshed alone
+                            // footer only for first page
+                            for (var field_name in _data.footer) {
+                                var format = $$('{{ view_prefix }}datatable').getColumnConfig(field_name.replace('_footer', '')).footer[0].format;
+			        var text = _data.footer[field_name];
+			        if (format !== undefined) text = format(text);
+			        $$('{{ view_prefix }}datatable').getColumnConfig(field_name.replace('_footer', '')).footer[0].text = text;
+                            }
                         {% endif %}
                         return data;
                     })
