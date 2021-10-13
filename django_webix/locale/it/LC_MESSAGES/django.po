@@ -345,7 +345,7 @@ msgstr "elementi"
 
 #: templates/django_webix/include/actions_utils.js:33
 msgid "selected"
-msgstr "elementi selezionati"
+msgstr "selezionati"
 
 #: templates/django_webix/include/actions_utils.js:61
 msgid "Action is not executable"
