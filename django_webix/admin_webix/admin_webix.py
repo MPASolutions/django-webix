@@ -64,7 +64,7 @@ class UserAdmin(admin.ModelWebixAdmin):
             'field_name': 'is_staff',
             'datalist_column': '''{
                 id: "is_staff",
-                header: ["Staff", {content: "serverSelectFilter" , options:[{id: 'True', value: 'Sì'}, {id: 'False', value: 'No'}] }],
+                header: ["Staff", {content: "serverSelectFilter" , options:[{id: 'True', value: 'Yes'}, {id: 'False', value: 'No'}] }],
                 adjust:"all",
                 sort: "server",
                 serverFilterType: "",
@@ -75,7 +75,7 @@ class UserAdmin(admin.ModelWebixAdmin):
             'field_name': 'is_superuser',
             'datalist_column': '''{
                 id: "is_superuser",
-                header: ["Superutente", {content: "serverSelectFilter" , options:[{id: 'True', value: 'Sì'}, {id: 'False', value: 'No'}] }],
+                header: ["Superutente", {content: "serverSelectFilter" , options:[{id: 'True', value: 'Yes'}, {id: 'False', value: 'No'}] }],
                 adjust:"all",
                 sort: "server",
                 serverFilterType: "",
@@ -86,7 +86,7 @@ class UserAdmin(admin.ModelWebixAdmin):
             'field_name': 'is_active',
             'datalist_column': '''{
                 id: "is_active",
-                header: ["Attivo", {content: "serverSelectFilter" , options:[{id: 'True', value: 'Sì'}, {id: 'False', value: 'No'}] }],
+                header: ["Attivo", {content: "serverSelectFilter" , options:[{id: 'True', value: 'Yes'}, {id: 'False', value: 'No'}] }],
                 adjust:"all",
                 sort: "server",
                 serverFilterType: "",

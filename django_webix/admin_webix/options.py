@@ -42,6 +42,8 @@ class ModelWebixAdmin(WebixPermissionsMixin):
 
     template_form_style = None
 
+    label_width = None
+
     inlines = []
 
     # LIST SETTINGS
@@ -68,6 +70,9 @@ class ModelWebixAdmin(WebixPermissionsMixin):
 #    prefix = None
 #    def __init__(self, prefix=None):
 #        self.prefix = prefix
+
+    def get_label_width(self):
+        return getattr(self, 'label_width', None)
 
     def get_prefix(self):
         return getattr(self, 'prefix', None)
@@ -164,7 +169,7 @@ class ModelWebixAdmin(WebixPermissionsMixin):
                 if type(model_field) == BooleanField:
                     filter_type = ''
                     filter_option = 'serverSelectFilter' if self.enable_json_loading else 'selectFilter'
-                    extra_filter_options = ", options:[{id: 'True', value: '" + _('Sì') + "'}, {id: 'False', value: '" + _("No") + "'}] "
+                    extra_filter_options = ", options:[{id: 'True', value: '" + _('Yes') + "'}, {id: 'False', value: '" + _("No") + "'}] "
                     column_template = ' template:custom_checkbox_yesnonone, '
                 elif type(model_field) == DateTimeField:
                     #width_adapt = 'width:"140"'
@@ -301,6 +306,8 @@ class ModelWebixAdmin(WebixPermissionsMixin):
                     super().__init__(*args, **kwargs)
                     self.readonly_fields = _admin.readonly_fields
                     self.autocomplete_fields = _admin.autocomplete_fields
+                    if _admin.get_label_width() is not None:
+                        self.label_width = _admin.get_label_width()
 
             return WebixAdminCreateUpdateForm
 
