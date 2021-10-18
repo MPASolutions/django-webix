@@ -5,7 +5,7 @@ from django.contrib.contenttypes.models import ContentType
 from django.db import models
 from django.urls import reverse
 from mptt.models import TreeForeignKey
-from django.utils.translation import ugettext as _
+from django.utils.translation import gettext_lazy as _
 
 from django_dal.mptt_managers import DALTreeManager
 from django_dal.models import DALMPTTModel as MPTTModel
