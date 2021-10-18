@@ -13,7 +13,7 @@ $$("{{ webix_container_id }}").addView({
                         id: '{{ form.webix_id }}_delete',
                         view: "tootipButton",
                         type: "danger",
-                        css:"webix_danger",
+                        css: "webix_danger",
                         align: "left",
                         label: "{{_("Delete")|escapejs}}",
                         {% if not has_delete_permission %}

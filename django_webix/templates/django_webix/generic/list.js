@@ -396,13 +396,17 @@ $$("{{ webix_container_id }}").addView({
                     {% endif %}
                 {% endblock %}
             } else {
-                {% if is_enable_row_click %}
-                    {% if type_row_click == 'single' %}
-                    load_js('{{ url_update }}'.replace('0', el.id), undefined, undefined, undefined, undefined, undefined, undefined, abortAllPending=true);
-                    {% else %}
-                    webix.message({type: "success", text: "{{_("Double click to edit the element")|escapejs}}"});
+                {% block update_click %}
+                    {% if is_enable_row_click %}
+                        {% if type_row_click == 'single' %}
+                        {% block update_url_call %}
+                        load_js('{{ url_update }}'.replace('0', el.id), undefined, undefined, undefined, undefined, undefined, undefined, abortAllPending=true);
+                        {% endblock %}
+                        {% else %}
+                        webix.message({type: "success", text: "{{_("Double click to edit the element")|escapejs}}"});
+                        {% endif %}
                     {% endif %}
-                {% endif %}
+                {% endblock %}
             }
             {% endblock %}
         }
