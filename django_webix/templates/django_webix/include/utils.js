@@ -6,9 +6,8 @@ webix.ui.datafilter.serverDateRangeFilter = webix.extend({
   getValue:function(t){
     var e=this.getInputNode(t);
     e.config.stringResult=true;
-    console.log(e.getValue());
+    //console.log(e.getValue());
     return e.getValue()
-
   }
 }, webix.ui.datafilter.serverDateRangeFilter)
 

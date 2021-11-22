@@ -387,13 +387,13 @@ $$("{{ webix_container_id }}").addView({
             {% endif %}
             if (id.column == 'cmd_cp') {
                 {% block cmd_cp_click %}
-                    {% if is_enable_column_copy %}
+                    {% if has_add_permission and is_enable_column_copy %}
                         load_js('{{ url_create }}?pk_copy=' + el.id, undefined, undefined, undefined, undefined, undefined, undefined, abortAllPending=true);
                     {% endif %}
                 {% endblock %}
             } else if (id.column == 'cmd_rm') {
                 {% block cmd_rm_click %}
-                    {% if is_enable_column_delete %}
+                    {% if has_delete_permission and is_enable_column_delete %}
                         load_js('{{ url_delete }}'.replace('0', el.id), undefined, undefined, undefined, undefined, undefined, undefined, abortAllPending=true);
                     {% endif %}
                 {% endblock %}
