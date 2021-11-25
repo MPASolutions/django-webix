@@ -1,7 +1,7 @@
 {% load static django_webix_admin_utils %}
 {
     id:'main_menu',
-    width: 180,
+    width: {{ webix_menu_width }},
     view:"{{ webix_menu_type }}",
     openAction:"click",
     {% if webix_menu_type == 'menu' %}

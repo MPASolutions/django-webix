@@ -51,6 +51,8 @@ class AdminWebixSite:
 
     webix_container_id = 'content_right'
     webix_menu_type = 'menu' # ['menu', 'sidebar']
+    webix_menu_width = 180
+
 
     index_template = None
     login_template = None
@@ -465,6 +467,7 @@ class AdminWebixSite:
             'available_apps': self.get_app_list(request),  # utils for menu
             'webix_container_id': self.webix_container_id,
             'webix_menu_type': self.webix_menu_type,
+            'webix_menu_width': self.webix_menu_width,
             'user_list_url': self._get_user_model_list_url(),
         }
 
