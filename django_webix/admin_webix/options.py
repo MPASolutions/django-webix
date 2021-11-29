@@ -71,6 +71,9 @@ class ModelWebixAdmin(WebixPermissionsMixin):
 #    def __init__(self, prefix=None):
 #        self.prefix = prefix
 
+    def is_enable_row_click(self, request):
+        return self.enable_row_click
+
     def get_label_width(self):
         return getattr(self, 'label_width', None)
 
@@ -527,6 +530,7 @@ class ModelWebixAdmin(WebixPermissionsMixin):
                 enable_column_copy = _admin.enable_column_copy
                 enable_column_delete = _admin.enable_column_delete
                 enable_row_click = _admin.enable_row_click
+                is_enable_row_click = _admin.is_enable_row_click
                 type_row_click = _admin.type_row_click
                 enable_actions = _admin.enable_actions
 

@@ -485,12 +485,14 @@ class AdminWebixSite:
         """
         Handle the "change password" task -- both form display and validation.
         """
-        from django.contrib.admin.forms import AdminPasswordChangeForm
-        # from django.contrib.auth.views import PasswordChangeView
+#        if apps.is_installed("gdpr"):
+#            from gdpr.forms import GDPRPasswordChangeForm as AdminPasswordChangeForm
+#        else:
+#            from django.contrib.admin.forms import AdminPasswordChangeForm
         from django_webix.admin_webix.views import PasswordChangeViewCustom
         url = reverse('admin_webix:password_change_done', current_app=self.name)
         defaults = {
-            'form_class': AdminPasswordChangeForm,
+#            'form_class': AdminPasswordChangeForm,
             'success_url': url,
             'extra_context': {**self.each_context(request), **(extra_context or {})},
             'template_name': self.password_change_template or 'admin_webix/account/password_change.js',
@@ -506,9 +508,9 @@ class AdminWebixSite:
         from django.contrib.auth.views import PasswordChangeDoneView
         defaults = {
             'extra_context': {**self.each_context(request), **(extra_context or {})},
+            'template_name': self.password_change_template or 'admin_webix/account/password_change_done.js',
+
         }
-        if self.password_change_done_template is not None:
-            defaults['template_name'] = self.password_change_done_template
         request.current_app = self.name
         return PasswordChangeDoneView.as_view(**defaults)(request)
 

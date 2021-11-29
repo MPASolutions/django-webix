@@ -450,6 +450,10 @@ var {{ view_prefix }}initial_state = {{ view_prefix }}get_state_ui();
 if ({{ view_prefix }}get_state()) {
    {{ view_prefix }}restore_state_grid();
 }
+
+{% block pre_json_load %}
+{% endblock %}
+
 setTimeout(function() {
     {{ view_prefix }}_first_load = false;
     {{ view_prefix }}apply_filters();

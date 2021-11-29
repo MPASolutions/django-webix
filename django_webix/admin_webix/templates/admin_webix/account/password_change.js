@@ -1,3 +1,5 @@
+{% load static i18n %}
+
 webix.ui([], $$("{{ webix_container_id }}"));
 
 
@@ -10,7 +12,7 @@ $$("{{ webix_container_id }}").addView({
             view: "template",
             type: "header",
             borderless: true,
-            template: '<div style="width:100%; text-align:center;"><strong>Cambio password utente {{ user }}</strong></div>'
+            template: '<div style="width:100%; text-align:center;"><strong>{{ _("Cambio password utente")|escapejs }} {{ user }}</strong></div>'
         }
     ]
 }, 0);
@@ -38,7 +40,7 @@ $$("{{ webix_container_id }}").addView({
                             id: "id_old_password",
                             name: "old_password",
                             type: "password",
-                            label: "Password attuale",
+                            label: "{{ _("Password attuale")|escapejs }}",
                             required: true
                         },
                         {
@@ -47,7 +49,7 @@ $$("{{ webix_container_id }}").addView({
                             name: "new_password1",
                             id: "id_new_password1",
                             type: "password",
-                            label: "Nuova password",
+                            label: "{{ _("Nuova password")|escapejs }}",
                             required: true
                         },
                         {
@@ -56,7 +58,7 @@ $$("{{ webix_container_id }}").addView({
                             name: "new_password2",
                             id: "id_new_password2",
                             type: "password",
-                            label: "Conferma password",
+                            label: "{{ _("Conferma password")|escapejs }}",
                             required: true
                         },
                         {
@@ -65,10 +67,23 @@ $$("{{ webix_container_id }}").addView({
                                 {
                                     view: "button",
                                     id: 'id_button_change_password',
-                                    label: "Conferma",
+                                    label: "{{ _("Conferma")|escapejs }}",
                                     click: function () {
                                         if ($$('password_change_form').validate()) {
-                                            webix.send("{% url 'admin_webix:password_change' %}", $$('password_change_form').getValues());
+                                            $$('{{ webix_container_id }}').showOverlay("<img src='{% static 'django_webix/loading.gif' %}'>");
+                                            console.log($$('password_change_form').getValues());
+                                            $.ajax({
+                                                url: "{% url 'admin_webix:password_change' %}",
+                                                dataType: "script",
+                                                type: "POST",
+                                                data: $$('password_change_form').getValues(),
+                                                success: function (data, textStatus, jqXHR) {
+                                                    $$('{{ webix_container_id }}').hideOverlay();
+                                                },
+                                                error: function (jqXHR, textStatus, errorThrown) {
+                                                }
+                                            });
+                                            //webix.send("{% url 'admin_webix:password_change' %}", $$('password_change_form').getValues());
                                         }
                                     }
                                 }

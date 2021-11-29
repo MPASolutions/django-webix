@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-
+from django.apps import apps
 from django.contrib.auth import get_user_model
 from django.contrib.auth.views import PasswordResetConfirmView, PasswordChangeView
 
@@ -62,6 +62,14 @@ class PasswordResetConfirmViewCustom(PasswordResetConfirmView):
 
 
 class PasswordChangeViewCustom(PasswordChangeView):
+
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        if apps.is_installed("gdpr"):
+            from gdpr.forms import GDPRPasswordChangeForm as AdminPasswordChangeForm
+        else:
+            from django.contrib.admin.forms import AdminPasswordChangeForm
+        self.form_class = AdminPasswordChangeForm
 
     def form_valid(self, form):
         try:
