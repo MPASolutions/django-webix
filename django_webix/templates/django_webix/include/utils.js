@@ -436,13 +436,21 @@ function set_autocomplete_reload(selector, QS) {
     var a = $$(selector);
     var d = a.getList();
     if(a.config.view === 'multicombo' || a.config.view === 'multiselect'){
-        d.define('dataFeed', QS);
+        if(d.config.dataFeed == undefined) {
+            d.define('dataFeed', QS);
+        }else{
+            d.config.dataFeed = QS
+        }
         d.clearAll();
     } else {
         var b = $$(a.config.suggest);
         var c = b.getBody();
-        c.define('dataFeed', QS);
-        c.clearAll()
+        if(c.config.dataFeed == undefined) {
+            c.define('dataFeed', QS);
+        }else{
+            c.config.dataFeed = QS
+        }
+        c.clearAll();
         c.refresh();
     }
     d.load(QS + '&filter[value]=');
@@ -453,12 +461,20 @@ function set_autocomplete_value(selector, QS, value) {
     var a = $$(selector);
     var d = a.getList();
     if(a.config.view === 'multicombo' || a.config.view === 'multiselect'){
-        d.define('dataFeed', QS);
+        if(d.config.dataFeed == undefined) {
+            d.define('dataFeed', QS);
+        }else{
+            d.config.dataFeed = QS
+        }
         d.clearAll();
     }else {
         var b = $$(a.config.suggest);
         var c = b.getBody();
-        c.define('dataFeed', QS);
+        if(c.config.dataFeed == undefined) {
+            c.define('dataFeed', QS);
+        }else{
+            c.config.dataFeed = QS
+        }
         c.refresh();
     }
     d.load(QS + '&filter[value]=' + value);
@@ -474,7 +490,11 @@ function set_autocomplete(selector, QS) {
     }else {
         var b = $$(a.config.suggest);
         var c = b.getBody();
-        c.define('dataFeed', QS);
+        if(c.config.dataFeed == undefined) {
+            c.define('dataFeed', QS);
+        }else{
+            c.config.dataFeed = QS
+        }
         c.refresh();
     }
     d.load(QS + '&filter[value]=');

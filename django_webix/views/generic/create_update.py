@@ -286,7 +286,10 @@ class WebixCreateView(WebixCreateUpdateMixin,
                 if inline.model._meta.pk.name in fields_to_copy:
                     fields_to_copy.remove(self.model._meta.pk.name)
                 datas = []
-                fk = _get_foreign_key(self.model, inline.model)
+                fk_name = None
+                if hasattr(inline, 'factory_kwargs') and inline.factory_kwargs.get('fk_name') is not None:
+                    fk_name = inline.factory_kwargs.get('fk_name')
+                fk = _get_foreign_key(self.model, inline.model, fk_name=fk_name)
                 for object in inline.model._default_manager.filter(**{fk.name: object_to_copy}):
                     datas.append(model_to_dict(object,
                                                fields=fields_to_copy))
