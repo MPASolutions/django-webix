@@ -71,8 +71,13 @@ class ModelWebixAdmin(WebixPermissionsMixin):
 #    def __init__(self, prefix=None):
 #        self.prefix = prefix
 
+<<<<<<< Updated upstream
     def is_enable_row_click(self, request):
         return self.enable_row_click
+=======
+    def get_extra_context(self):
+        return {}
+>>>>>>> Stashed changes
 
     def get_label_width(self):
         return getattr(self, 'label_width', None)
@@ -378,6 +383,11 @@ class ModelWebixAdmin(WebixPermissionsMixin):
                 def get_queryset(self):
                     return _admin.get_queryset(request=self.request)
 
+                def get_context_data(self, **kwargs):
+                    context = super().get_context_data(**kwargs)
+                    context.update(_admin.get_extra_context())
+                    return context
+
             return WebixAdminCreateView
 
     def get_change_view(self):
@@ -438,6 +448,11 @@ class ModelWebixAdmin(WebixPermissionsMixin):
                 def get_queryset(self):
                     return _admin.get_queryset(request=self.request)
 
+                def get_context_data(self, **kwargs):
+                    context = super().get_context_data(**kwargs)
+                    context.update(_admin.get_extra_context())
+                    return context
+
             return WebixAdminUpdateView
 
     def get_delete_view(self):
@@ -490,6 +505,11 @@ class ModelWebixAdmin(WebixPermissionsMixin):
 
                 def get_queryset(self):
                     return _admin.get_queryset(request=self.request)
+
+                def get_context_data(self, **kwargs):
+                    context = super().get_context_data(**kwargs)
+                    context.update(_admin.get_extra_context())
+                    return context
 
             return WebixAdminDeleteView
 
@@ -557,6 +577,11 @@ class ModelWebixAdmin(WebixPermissionsMixin):
 
                 def get_initial_queryset(self):
                     return _admin.get_queryset(request=self.request)
+
+                def get_context_data(self, **kwargs):
+                    context = super().get_context_data(**kwargs)
+                    context.update(_admin.get_extra_context())
+                    return context
 
                 # full mode
                 @property
