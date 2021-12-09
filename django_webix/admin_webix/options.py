@@ -71,13 +71,10 @@ class ModelWebixAdmin(WebixPermissionsMixin):
 #    def __init__(self, prefix=None):
 #        self.prefix = prefix
 
-<<<<<<< Updated upstream
     def is_enable_row_click(self, request):
         return self.enable_row_click
-=======
     def get_extra_context(self):
         return {}
->>>>>>> Stashed changes
 
     def get_label_width(self):
         return getattr(self, 'label_width', None)
