@@ -29,7 +29,7 @@ function _{{ action_key }}_action_execute_form(ids, all) {
     resize: true,
     head: {
       view: "toolbar", cols: [
-        {view: "label", label: '{{_("Fill in the form")|escapejs}}'},
+        {view: "label", label: '{{action.modal_header|escapejs}}'},
         {view: "button", label: '{{_("Close")|escapejs}}', width: 100, align: 'right', click: "$$('{{ action_key }}_win').destructor();"}
       ]
     },
@@ -51,7 +51,7 @@ function _{{ action_key }}_action_execute_form(ids, all) {
                         view: "tootipButton",
                         type: "form",
                         align: "right",
-                        label: "{{_("Go")|escapejs}}",
+                        label: "{{action.modal_click|escapejs}}",
                         click: function () {
                             if ($$('{{ action.form.webix_id }}').validate({hidden:true, disabled:true})) {
                                 webix.extend($$('{{ action.form.webix_id }}'), webix.OverlayBox);

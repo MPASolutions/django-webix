@@ -343,7 +343,9 @@ class WebixListView(WebixBaseMixin,
             'response_type': action.response_type,
             'allowed_permissions': action.allowed_permissions,
             'short_description': action.short_description,
+            'modal_header': action.modal_header,
             'modal_title': action.modal_title,
+            'modal_click': action.modal_click,
             'modal_ok': action.modal_ok,
             'modal_cancel': action.modal_cancel,
             'form': getattr(action, 'form')(request=self.request) if hasattr(action, 'form') and action.form is not None else None,
@@ -368,7 +370,9 @@ class WebixListView(WebixBaseMixin,
                 _action.short_description = export_instance.action_name
                 _action.action_key = 'flexport_{}'.format(export_instance.id)
                 _action.allowed_permissions = []
+                _action.modal_header = _('Fill in the form')
                 _action.modal_title = _("Are you sure you want to proceed with this action?")
+                _action.modal_click = _("Go")
                 _action.modal_ok = _("Proceed")
                 _action.modal_cancel = _("Undo")
                 _action.reload_list = False

@@ -11,7 +11,9 @@ def action_config(
     response_type,
     allowed_permissions=None,
     short_description=None,
+    modal_header=_('Fill in the form'),
     modal_title=_("Are you sure you want to proceed with this action?"),
+    modal_click=_("Go"),
     modal_ok=_("Proceed"),
     modal_cancel=_("Undo"),
     form=None,
@@ -46,7 +48,9 @@ def action_config(
         setattr(wrapper, 'response_type', response_type)
         setattr(wrapper, 'allowed_permissions', allowed_permissions)
         setattr(wrapper, 'short_description', short_description)
+        setattr(wrapper, 'modal_header', modal_header)
         setattr(wrapper, 'modal_title', modal_title)
+        setattr(wrapper, 'modal_click', modal_click)
         setattr(wrapper, 'modal_ok', modal_ok)
         setattr(wrapper, 'modal_cancel', modal_cancel)
         setattr(wrapper, 'form', form)
