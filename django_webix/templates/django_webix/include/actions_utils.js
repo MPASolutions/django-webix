@@ -68,42 +68,44 @@ function _{{ view_prefix }}action_execute(action, ids, all, response_type, short
                             }
                         },
                         success: function (data) { // TODO gestire response
-                            if (data.status == true) {
-                                if (data.message != undefined) {
-                                    message = data.message;
-                                } else {
-                                    message = "{{_("Action successful")|escapejs}}";
-                                }
-                                webix.message({
-                                    text: message,
-                                    type: "info",
-                                    expire: 5000
-                                });
-                                if (data.redirect_url != null) {
-                                    load_js(data.redirect_url, undefined, undefined, undefined, undefined, undefined, undefined, abortAllPending = true);
-                                }
-                                if (callback_success) {
-                                    callback_success();
-                                }
-                                if (reload_list) {
-                                    try {
-                                        {{ view_prefix }}apply_filters();
-                                    } catch (error) { // only for custom purpose
-                                        $$('{{ view_prefix }}datatable').filterByAll();
+                            if (response_type == 'json') {
+                                if (data.status == true) {
+                                    if (data.message != undefined) {
+                                        message = data.message;
+                                    } else {
+                                        message = "{{_("Action successful")|escapejs}}";
                                     }
-                                }
-                                // callback success by js
-                                try {
-                                    window['{{ view_prefix }}' + action + '_callback_success']();
-                                } catch (error) { // only for custom purpose
-                                }
+                                    webix.message({
+                                        text: message,
+                                        type: "info",
+                                        expire: 5000
+                                    });
+                                    if (data.redirect_url != null) {
+                                        load_js(data.redirect_url, undefined, undefined, undefined, undefined, undefined, undefined, abortAllPending = true);
+                                    }
+                                    if (callback_success) {
+                                        callback_success();
+                                    }
+                                    if (reload_list) {
+                                        try {
+                                            {{ view_prefix }}apply_filters();
+                                        } catch (error) { // only for custom purpose
+                                            $$('{{ view_prefix }}datatable').filterByAll();
+                                        }
+                                    }
+                                    // callback success by js
+                                    try {
+                                        window['{{ view_prefix }}' + action + '_callback_success']();
+                                    } catch (error) { // only for custom purpose
+                                    }
 
-                            } else {
-                                webix.message({
-                                    text: "{{_("Something gone wrong")|escapejs}}",
-                                    type: "error",
-                                    expire: 10000
-                                });
+                                } else {
+                                    webix.message({
+                                        text: "{{_("Something gone wrong")|escapejs}}",
+                                        type: "error",
+                                        expire: 10000
+                                    });
+                                }
                             }
                         },
                     });
@@ -164,4 +166,3 @@ function _{{ view_prefix }}action_execute(action, ids, all, response_type, short
         }
     })
 }
-
