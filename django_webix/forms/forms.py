@@ -981,7 +981,7 @@ class BaseWebixMixin:
                         f['header'] = [f['header']]
                     _field_header.update({'header': f['header']})
                 elif 'label' in f:
-                    _field_header.update({'header': force_text(f['label']).capitalize()})
+                    _field_header.update({'header': force_text(f['label'])})
 
                 if _field_header is not None:
                     fields_header.update({field_name: _field_header})
