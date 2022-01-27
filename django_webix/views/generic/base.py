@@ -141,6 +141,9 @@ class WebixPermissionsMixin:
             return request.user.has_module_perms(self.model._meta.app_label)
         return False
 
+    def get_remove_disabled_buttons(self, request):
+        return self.remove_disabled_buttons
+
     def get_context_data_webix_permissions(self, request, obj=None, **kwargs):
         _has_view_permission = self.has_view_permission(request=self.request, obj=obj)
         _has_add_permission = self.has_add_permission(request=self.request)
@@ -148,7 +151,7 @@ class WebixPermissionsMixin:
         _has_delete_permission = self.has_delete_permission(request=self.request, obj=obj)
         return {
             # Buttons
-            'remove_disabled_buttons': self.remove_disabled_buttons,
+            'remove_disabled_buttons': self.get_remove_disabled_buttons(request=self.request),
             # Permissions
             'has_view_permission': _has_view_permission,
             'has_add_permission': _has_add_permission,

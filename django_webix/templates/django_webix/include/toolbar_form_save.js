@@ -39,7 +39,7 @@ if (form_validate('{{ form.webix_id }}')) {
         {% elif url_send and url_send != '' %}
             url: "{{ url_send|safe }}{% if extra_params_button %}{% if not '?' in url_send %}?{% else %}&{% endif %}{{ extra_params_button }}{% endif %}",
         {% endif %}
-        dataType: "script",
+        dataType: {% block datatype %}"script"{% endblock %},
         type: "POST",
         data: form_data,
         processData: false,
