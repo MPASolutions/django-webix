@@ -30,7 +30,9 @@ if (form_validate('{{ form.webix_id }}')) {
     });
 
     {% block post_form_data %}{% endblock %}
-
+    if ($$('{{ form.webix_id }}-inlines-tabbar')!=undefined) {
+        var active_tab = $$('{{ form.webix_id }}-inlines-tabbar').getValue() + '';
+    }
     $.ajax({
         {% if not object.pk and url_create and url_create != '' %}
             url: "{{ url_create|safe }}{% if extra_params_button %}{% if not '?' in url_create %}?{% else %}&{% endif %}{{ extra_params_button }}{% endif %}",
@@ -47,6 +49,11 @@ if (form_validate('{{ form.webix_id }}')) {
         success: function (data, textStatus, jqXHR) {
             {% block save_success %}{% endblock %}
             webix.ui.resize();
+            {% if '_continue=true' in extra_params_button %}
+            if ($$('{{ form.webix_id }}-inlines-tabbar')!=undefined) {
+                $$('{{ form.webix_id }}-inlines-tabbar').setValue(active_tab);
+            }
+            {% endif %}
             if ($$('{{ webix_overlay_container_id }}') !== undefined && $$('{{ webix_overlay_container_id }}') !== null && $$('{{ webix_overlay_container_id }}').hideOverlay !== undefined)
                 $$('{{ webix_overlay_container_id }}').hideOverlay();
             else if ($$('{{ webix_container_id }}') !== undefined && $$('{{ webix_container_id }}') !== null && $$('{{ webix_container_id }}').hideOverlay !== undefined)

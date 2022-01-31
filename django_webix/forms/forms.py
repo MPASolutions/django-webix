@@ -740,7 +740,7 @@ class BaseWebixMixin:
                         el.update({
                             'view': 'combo',
                             'placeholder': _('Click to select'),
-                            'options': choices
+                            'options': choices,
                         })
             # TypedChoiceField ChoiceField
             elif isinstance(field, forms.TypedChoiceField) or isinstance(field, forms.ChoiceField):

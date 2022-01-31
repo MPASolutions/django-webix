@@ -71,7 +71,10 @@ class RelatedLookup(View):
         return qs
 
     def get_queryset(self):
-        qs = self.model._default_manager.get_queryset()
+        if hasattr(self.model,'objects_autocomplete'):
+            qs = self.model.objects_autocomplete.get_queryset()
+        else: # default
+            qs = self.model._default_manager.get_queryset()
         # model_admin = self.get_model_admin()
         # if model_admin is not None:
         #     qs = model_admin.get_queryset(self.request)
@@ -152,6 +155,7 @@ class AutocompleteWebixLookup(RelatedLookup):
         return ordering
 
     def get_queryset(self):
+
         qs = super(AutocompleteWebixLookup, self).get_queryset()
         qs = self.get_filtered_queryset(qs)
         qs = self.get_searched_queryset(qs)

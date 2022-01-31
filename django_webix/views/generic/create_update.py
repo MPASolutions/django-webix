@@ -258,7 +258,12 @@ class WebixCreateView(WebixCreateUpdateMixin,
         for inline, fields in _inlines_copy_fields.items():
             if fields is None:
                 fields = []
-            full_inlines_copy_fields.update({inline: list(inline.form_class.base_fields.keys())})
+            if hasattr(inline, 'form_class') and inline.form_class is not None:
+                full_inlines_copy_fields.update({inline: list(inline.form_class.base_fields.keys())})
+            elif hasattr(inline, 'fields'):
+                full_inlines_copy_fields.update({inline: list(inline.fields)})
+            else:
+                raise Exception('Not identified fields for copying')
 
         return full_inlines_copy_fields
 

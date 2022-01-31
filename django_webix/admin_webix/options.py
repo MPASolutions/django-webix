@@ -58,6 +58,8 @@ class ModelWebixAdmin(WebixPermissionsMixin):
     title = None
     actions_style = None
     enable_column_copy = True
+    model_copy_fields = None
+    inlines_copy_fields = None
     enable_column_delete = True
     enable_row_click = True
     type_row_click = 'single'
@@ -351,6 +353,7 @@ class ModelWebixAdmin(WebixPermissionsMixin):
                 form_class = _admin.get_form_create_update()
                 template_style = _admin.get_template_form_style()
                 inlines = _admin.inlines
+
                 model_copy_fields = _admin.get_form_fields()
                 enable_button_save_continue = _admin.enable_button_save_continue
                 enable_button_save_addanother = _admin.enable_button_save_addanother
