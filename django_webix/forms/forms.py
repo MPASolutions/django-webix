@@ -850,7 +850,10 @@ class BaseWebixMixin:
 
                     model = self.get_model()
                     if model is not None:
-                        layers = get_layers(model)
+                        if hasattr(self,'get_layers'):
+                            layers = self.get_layers(name)
+                        else:
+                            layers = get_layers(model)
                         if getattr(self.instance, name, None) is None:
                             _mode = 'draw'
                         else:
