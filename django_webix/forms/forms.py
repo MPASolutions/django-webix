@@ -1028,7 +1028,7 @@ class BaseWebixForm(forms.BaseForm, BaseWebixMixin):
                  initial=None, error_class=ErrorList, label_suffix=None,
                  empty_permitted=False, field_order=None, use_required_attribute=None,
                  renderer=None, request=None, inline_id=None,
-                 has_add_permission=None, has_change_permission=None, has_delete_permission=None):
+                 has_add_permission=None, has_change_permission=None, has_delete_permission=None, **kwparams):
 
         # Set default parameter
         self.readonly_fields = []

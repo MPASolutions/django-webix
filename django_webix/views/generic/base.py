@@ -373,6 +373,11 @@ class WebixFormView(WebixTemplateView, WebixUrlUtilsMixin, BaseFormView):
 
     url_pattern_send = None
 
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs.update({'request': self.request})
+        return kwargs
+
     def get_url_pattern_send(self):
         if self.url_pattern_send is not None:
             return self.url_pattern_send
