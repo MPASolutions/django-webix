@@ -295,8 +295,8 @@ class WebixCreateView(WebixCreateUpdateMixin,
                 if hasattr(inline, 'factory_kwargs') and inline.factory_kwargs.get('fk_name') is not None:
                     fk_name = inline.factory_kwargs.get('fk_name')
                 fk = _get_foreign_key(self.model, inline.model, fk_name=fk_name)
-                for object in inline.model._default_manager.filter(**{fk.name: object_to_copy}):
-                    datas.append(model_to_dict(object,
+                for obj in inline.model._default_manager.filter(**{fk.name: object_to_copy}):
+                    datas.append(model_to_dict(obj,
                                                fields=fields_to_copy))
                 initial_inlines.update({inline: datas})
         return initial_inlines
