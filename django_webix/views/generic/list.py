@@ -278,7 +278,7 @@ class WebixListView(WebixBaseMixin,
         except ValueError:
             raise Exception(_('Paginate start is not integer'))
 
-    def paginate_queryset(self, queryset):
+    def paginate_queryset(self, queryset, page_size): # page_size not used
         paginate_count = self.get_paginate_count()
         paginate_start = self.get_paginate_start()
         return queryset[paginate_start: paginate_start + paginate_count]
@@ -305,7 +305,7 @@ class WebixListView(WebixBaseMixin,
             qs = self.filters_objects_datatable(qs)
             # pagination (applied only for json request)
             # if self.is_json_request:
-            #    qs = self.paginate_queryset(qs)
+            #    qs = self.paginate_queryset(qs, None)
             # build output
             if qs is not None:
                 if type(qs) == list:
@@ -475,7 +475,7 @@ class WebixListView(WebixBaseMixin,
             # total count
             total_count = qs.count()
             # apply pagination
-            qs_paginate = self.paginate_queryset(qs)
+            qs_paginate = self.paginate_queryset(qs, None)
             # build output
             if qs_paginate is not None:
                 if type(qs_paginate) == list:
