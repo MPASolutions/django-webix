@@ -397,7 +397,7 @@ $$("{{ webix_container_id }}").addView({
                         load_js('{{ url_delete }}'.replace('0', el.id), undefined, undefined, undefined, undefined, undefined, undefined, abortAllPending=true);
                     {% endif %}
                 {% endblock %}
-            } else {
+            } else if (id.column!='checkbox_action') {
                 {% block update_click %}
                     {% if is_enable_row_click %}
                         {% if type_row_click == 'single' %}

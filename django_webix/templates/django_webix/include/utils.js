@@ -317,7 +317,9 @@ function load_js(lnk, hide, area, method, data, headers, dataType, abortAllPendi
             if (typeof fail === 'function') {
                 return fail(xhr, textStatus);
             } else {
-                webix.alert('{{_("Server error")|escapejs}}')
+                    if (textStatus!='abort') {
+                        webix.alert('{{_("Server error")|escapejs}}')
+                    }
             }
         }).always(function (data, textStatus, errorThrown) {
             if (typeof always === 'function') {
@@ -373,7 +375,9 @@ function load_js(lnk, hide, area, method, data, headers, dataType, abortAllPendi
                         $$('{{ webix_overlay_container_id }}').hideOverlay();
                     else if ($$(area) !== undefined && $$(area) !== null && $$(area).hideOverlay !== undefined)
                         $$(area).hideOverlay();
-                    webix.alert('{{_("Server error")|escapejs}}')
+                    if (textStatus!='abort') {
+                        webix.alert('{{_("Server error")|escapejs}}')
+                    }
                 }
             }).always(function (data, textStatus, errorThrown) {
                 if (typeof always === 'function') {

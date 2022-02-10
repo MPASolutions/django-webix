@@ -45,7 +45,7 @@ msgstr "Password"
 
 #: admin_webix/forms.py:64
 msgid "Password confirmation"
-msgstr "Conferma cancellazione"
+msgstr "Conferma password"
 
 #: admin_webix/forms.py:67 admin_webix/forms.py:249
 msgid "Enter the same password as before, for verification."
