@@ -36,8 +36,10 @@ if 'django_webix.admin_webix' in settings.INSTALLED_APPS:
         def __str__(self):
             if self.label:
                 return self.label
-            else:
+            elif self.model:
                 return (self.model().model_class()._meta.verbose_name_plural).title()
+            else:
+                raise Exception('Label or model needed')
 
         @property
         def get_url(self):
