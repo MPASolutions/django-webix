@@ -37,7 +37,7 @@ if 'django_webix.admin_webix' in settings.INSTALLED_APPS:
             if self.label:
                 return self.label
             elif self.model:
-                return (self.model().model_class()._meta.verbose_name_plural).title()
+                return (self.model.model_class()._meta.verbose_name_plural).title()
             else:
                 raise Exception('Label or model needed')
 
