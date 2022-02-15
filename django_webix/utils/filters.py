@@ -7,6 +7,7 @@ from dateutil.parser import parse
 from django.db import models
 from django.db.models import Q
 from django.db.models.fields.reverse_related import ForeignObjectRel
+from django.contrib.contenttypes.fields import GenericRelation, GenericForeignKey
 from django.utils.translation import ugettext as _
 from django.core.exceptions import FieldDoesNotExist
 
@@ -71,6 +72,8 @@ def from_dict_to_qset(data, model):
                             _curr_model = _curr_field.related_model
                         elif issubclass(type(_curr_field), models.ManyToManyField):
                             _curr_model = _curr_field.remote_field.get_related_field().model
+                        elif issubclass(type(_curr_field), GenericRelation):
+                            _curr_model = _curr_field.related_model
                         else:
                             pass  # Sono arrivato all'ultimo field, non serve fare altro
 
@@ -92,7 +95,17 @@ def from_dict_to_qset(data, model):
                     data_qset['val'] = data_qset['val'].split(",")
                     qset_to_applicate = Q(**{data_qset.get('path'): data_qset.get('val')})
                 else:
-                    qset_to_applicate = Q(**{data_qset.get('path'): data_qset.get('val')})
+                    valore_query = data_qset.get('val')
+                    if isinstance(_curr_field, models.BooleanField) or \
+                        isinstance(_curr_field, models.NullBooleanField) or \
+                        data_qset.get('path').endswith("__isnull"):
+
+                        # devo fare il cast forzato
+                        if valore_query.lower() == 'false':
+                            valore_query = False
+                        else:
+                            valore_query = True
+                    qset_to_applicate = Q(**{data_qset.get('path'): valore_query})
             if j == 0:
                 qset = qset_to_applicate
             else:
