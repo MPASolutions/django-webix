@@ -353,6 +353,9 @@ class ModelWebixAdmin(WebixPermissionsMixin):
                 form_class = _admin.get_form_create_update()
                 template_style = _admin.get_template_form_style()
                 inlines = _admin.inlines
+                if hasattr(_admin,'get_inlines'):
+                    def get_inlines(self):
+                        return _admin.get_inlines(self.object, self.request)
 
                 model_copy_fields = _admin.get_form_fields()
                 enable_button_save_continue = _admin.enable_button_save_continue
@@ -419,6 +422,9 @@ class ModelWebixAdmin(WebixPermissionsMixin):
                 form_class = _admin.get_form_create_update()
                 template_style = _admin.get_template_form_style()
                 inlines = _admin.inlines
+                if hasattr(_admin,'get_inlines'):
+                    def get_inlines(self):
+                        return _admin.get_inlines(self.object, self.request)
                 model_copy_fields = _admin.get_form_fields()
                 enable_button_save_continue = _admin.enable_button_save_continue
                 enable_button_save_addanother = _admin.enable_button_save_addanother

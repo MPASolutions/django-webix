@@ -2,6 +2,7 @@
 
 from copy import deepcopy
 from django.apps import apps
+from django.contrib.auth.decorators import login_required
 from django.core.exceptions import FieldDoesNotExist
 from django.core.exceptions import PermissionDenied, ImproperlyConfigured
 from django.db.models import F, ManyToManyField, Case, When, Value, BooleanField
@@ -9,11 +10,14 @@ from django.db.models.functions import Coalesce
 from django.http import JsonResponse, Http404
 from django.template import Template, Context
 from django.template.loader import get_template
+from django.utils.decorators import method_decorator
 from django.utils.translation import gettext as _, get_language
 from django.views.generic import ListView
 from django.db.models.query import QuerySet
 
 from django_filtersmerger import FilterMerger
+from django_webix.forms import WebixModelForm
+from django_webix.views import WebixUpdateView
 from django_webix.views.generic.base import WebixBaseMixin, WebixPermissionsMixin, WebixUrlMixin
 from django_webix.views.generic.utils import get_model_geo_field_names
 
@@ -60,6 +64,8 @@ class WebixListView(WebixBaseMixin,
     enable_row_click = True
     type_row_click = 'single'  # or 'double'
     enable_actions = True
+
+    fields_editable = []
 
     def is_installed_django_webix_filter(self):
         return apps.is_installed('django_webix_filter')
@@ -452,6 +458,45 @@ class WebixListView(WebixBaseMixin,
         else:
             return False
 
+    @property
+    def is_update_request(self):
+        if 'update' in self.request.GET or 'update' in self.request.POST:
+            return True
+        else:
+            return False
+
+    def is_editable(self):
+        return len(self.fields_editable) > 0
+
+    def get_update_form(self, request, *args, **kwargs):
+        _list_view = self
+        class UpdateForm(WebixModelForm):
+            class Meta:
+                localized_fields = ('__all__')
+                model = _list_view.model
+                fields = _list_view.get_fields_editable()
+        return UpdateForm
+
+
+    def get_update_view(self, request, *args, **kwargs):
+        kwargs.update({'pk':request.GET.get('id',request.POST.get('id'))})
+
+        _list_view = self
+        # TODO: is login is required depends if list has login required
+        @method_decorator(login_required, name='dispatch')
+        class ListUpdate(WebixUpdateView):
+            http_method_names = ['post'] # only update directly without render
+            model = _list_view.model
+            form_class = _list_view.get_update_form()
+            def response_valid(self, success_url=None, **kwargs):
+                return JsonResponse({'status': True})
+            def response_invalid(self, success_url=None, **kwargs):
+                return JsonResponse({'status': False})
+        return ListUpdate.as_view()(request, *args, **kwargs)
+
+    def get_fields_editable(self):
+        return self.fields_editable
+
     def get_request_action(self):
         action_name = self.request.POST.get('action', self.request.GET.get('action', None))
         return self.get_actions().get(action_name)['func']
@@ -518,14 +563,14 @@ class WebixListView(WebixBaseMixin,
             return action_function(self, request, qs)
 
     def dispatch(self, *args, **kwargs):
-
         if not self.has_view_permission(request=self.request):
             raise PermissionDenied(_('View permission is not allowed'))
-
         if self.is_action_request:  # added for action response
             return self.action_response(self.request, *args, **kwargs)
         elif self.is_json_request:  # added for json response with paging
             return self.json_response(self.request, *args, **kwargs)
+        elif self.is_update_request:  # added for row list update
+            return self.get_update_view(self.request, *args, **kwargs)
         else:  # standard response with js webix template structure
             return super(WebixListView, self).dispatch(*args, **kwargs)
 
@@ -544,6 +589,8 @@ class WebixListView(WebixBaseMixin,
             'is_enable_footer': self.is_enable_footer(),
             'get_pk_field': self.get_pk_field(),
             'objects_datatable': self.get_objects_datatable(),
+            'is_editable': self.is_editable(),
+            'fields_editable': self.get_fields_editable(),
             'is_enable_column_webgis': self.is_enable_column_webgis(self.request),
             'is_enable_column_copy': self.is_enable_column_copy(self.request),
             'is_enable_column_delete': self.is_enable_column_delete(self.request),

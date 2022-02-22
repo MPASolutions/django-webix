@@ -129,6 +129,10 @@ var {{ view_prefix }}objects_list = [
 {% endif %}
 {% endblock %}
 
+{% if is_editable %}
+var {{ view_prefix }}edit_mode_id = undefined;
+{% endif %}
+
 {% if is_json_loading %}
 {% include "django_webix/include/list_filters.js" %}
 {% endif %}
@@ -184,6 +188,10 @@ $$("{{ webix_container_id }}").addView({
     {% block datatable_headermenu %}
     headermenu: {width: 250},
     {% endblock %}
+    {% if is_editable %}
+    editable:true,
+    editaction: "custom",
+    {% endif %}
     rightSplit:2,
     leftSplit:1,
     columns: [
@@ -201,6 +209,17 @@ $$("{{ webix_container_id }}").addView({
             maxWidth: 40,
             css: 'locked_column'
         },
+        {% if is_editable %}
+        {
+            id: "cmd_edit",
+            header: "",
+            headermenu: false,
+            width: 40,
+            tooltip: false,
+            template: '<div><i style="cursor:pointer" class="webix_icon fas fa-edit"></i></div>',
+            css: 'locked_column'
+        },
+        {% endif %}
         {% block datatable_columns %}
         {% for field in fields %}
         {{ field.datalist_column|safe }},
@@ -364,13 +383,48 @@ $$("{{ webix_container_id }}").addView({
             var el = $$('{{ view_prefix }}datatable').getSelectedItem();
             {% block datatable_onitemdoubleclick %}
             {% if is_enable_row_click and type_row_click == 'double' %}
+            {% if is_editable %}if (id.column != 'cmd_edit'){{% endif %}
             load_js('{{ url_update }}'.replace('0', el.id), undefined, undefined, undefined, undefined, undefined, undefined, abortAllPending=true);
+            {% if is_editable %} } {{% endif %}
             {% endif %}
             {% endblock %}
         },
+//        onAfterEditStop: function(state, editor, ignoreUpdate){
+//            //if(state.value != state.old){
+//                webix.message("Cell value was changed")
+//            //}
+//        },
+
+            // PB: 1. cick fuori da lista disabilita edit
+            // PB: 2. sarebbeda togliere selezione verde sulla riga
+
         onItemClick: function (id, e, trg) {
             var el = $$('{{ view_prefix }}datatable').getSelectedItem();
             {% block datatable_onitemclick %}
+            {% if is_editable %}
+            if (id.column == 'cmd_edit') {
+
+                to_close = {{ view_prefix }}edit_mode_id == id.row;
+                // send to server
+                if ({{ view_prefix }}edit_mode_id != undefined){
+                    // TODO: send to server for validation
+                    _params = el;
+                    this.editStop();
+                    load_js('{{ url_list }}{% if '?' in url_list %}&{% else %}?{% endif %}update', undefined, undefined, 'POST', _params, undefined, 'json', abortAllPending=true);
+                }
+                // enable edit mode
+                if (({{ view_prefix }}edit_mode_id == undefined)||({{ view_prefix }}edit_mode_id != id.row)){
+                    {{ view_prefix }}edit_mode_id = id.row;
+                    this.editRow(id);
+                }
+                // close edit mode
+                if (to_close){
+                    //this.undo();
+                    this.editStop();
+                    {{ view_prefix }}edit_mode_id = undefined;
+                }
+            }
+            {% endif %}
             {% for field in fields %}
             {% if field.click_action %}
             if ((id.column == '{{ field.field_name }}') || (id.column == '{{ field.column_name }}')) {
@@ -400,13 +454,15 @@ $$("{{ webix_container_id }}").addView({
             } else if (id.column!='checkbox_action') {
                 {% block update_click %}
                     {% if is_enable_row_click %}
-                        {% if type_row_click == 'single' %}
-                        {% block update_url_call %}
-                        load_js('{{ url_update }}'.replace('0', el.id), undefined, undefined, undefined, undefined, undefined, undefined, abortAllPending=true);
-                        {% endblock %}
-                        {% else %}
-                        webix.message({type: "success", text: "{{_("Double click to edit the element")|escapejs}}"});
-                        {% endif %}
+                        {% if is_editable %}if (id.column != 'cmd_edit'){{% endif %}
+                            {% if type_row_click == 'single' %}
+                            {% block update_url_call %}
+                            load_js('{{ url_update }}'.replace('0', el.id), undefined, undefined, undefined, undefined, undefined, undefined, abortAllPending=true);
+                            {% endblock %}
+                            {% else %}
+                            webix.message({type: "success", text: "{{_("Double click to edit the element")|escapejs}}"});
+                            {% endif %}
+                        {% if is_editable %} } {% endif %}
                     {% endif %}
                 {% endblock %}
             }
