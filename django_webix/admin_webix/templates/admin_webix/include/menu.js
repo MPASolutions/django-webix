@@ -30,8 +30,9 @@
         {# END EXTRA MENU PREVIUS #}
 
         {% block userprofile %}
+        {% if not disable_userprofile %}
         {
-            id: 'menu_user',
+            id: 'menu_user{{ disable_userprofile }}',
             value: "{{ _("User")|escapejs }}",
             icon: "fas fa-user",
             {% if webix_menu_type == 'sidebar' %}data{% else %}submenu{% endif %}: [
@@ -67,9 +68,11 @@
                 {% endif %}
             ]
         },
+        {% endif %}
         {% endblock %}
 
         {% block users %}
+        {% if not disable_users %}
         {% if user.is_superuser and user_list_url %}
         {
             id: 'menu_profile',
@@ -85,6 +88,7 @@
                 },
             ]
         },
+        {% endif %}
         {% endif %}
         {% endblock %}
 
