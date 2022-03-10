@@ -9,15 +9,15 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-02-17 14:48+0100\n"
-"PO-Revision-Date: 2021-07-20 12:12+0050\n"
-"Last-Translator: b'Stefano Menegon <menegon@mpasol.it>'\n"
+"PO-Revision-Date: 2022-03-09 16:19+0050\n"
+"Last-Translator: Sambado Paolo CBC Spagna <>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Translated-Using: django-rosetta 0.9.6\n"
+"X-Translated-Using: django-rosetta 0.9.8\n"
 
 #: admin_webix/apps.py:12
 msgid "Administration"
@@ -25,11 +25,11 @@ msgstr "Administración"
 
 #: admin_webix/django_admin_utils.py:39 admin_webix/forms.py:162
 msgid "Groups"
-msgstr ""
+msgstr "Grupos"
 
 #: admin_webix/forms.py:28 admin_webix/forms.py:131 admin_webix/forms.py:138
 msgid "Available permissions"
-msgstr ""
+msgstr "Permisos disponibles"
 
 #: admin_webix/forms.py:29 admin_webix/forms.py:132 admin_webix/forms.py:139
 msgid "Selected"
@@ -37,27 +37,27 @@ msgstr "Seleccionados"
 
 #: admin_webix/forms.py:55 admin_webix/forms.py:235
 msgid "The two password fields didn’t match."
-msgstr ""
+msgstr "Las dos contraseñas no coinciden"
 
 #: admin_webix/forms.py:58 admin_webix/forms.py:239
 msgid "Password"
-msgstr ""
+msgstr "Contraseña"
 
 #: admin_webix/forms.py:64
 msgid "Password confirmation"
-msgstr "confirmación de contraseña"
+msgstr "Confirmación de contraseña"
 
 #: admin_webix/forms.py:67 admin_webix/forms.py:248
 msgid "Enter the same password as before, for verification."
-msgstr ""
+msgstr "Vuelve a escribir la contraseña para verificarla"
 
 #: admin_webix/forms.py:159
 msgid "Private data"
-msgstr ""
+msgstr "Datos privados"
 
 #: admin_webix/forms.py:160
 msgid "Private informations"
-msgstr "Informaciones privadas"
+msgstr "Información privada"
 
 #: admin_webix/forms.py:161
 msgid "Permissions"
@@ -69,52 +69,52 @@ msgstr "Cambiar la contraseña"
 
 #: admin_webix/forms.py:245
 msgid "Password (again)"
-msgstr ""
+msgstr "Contraseña (otra vez)"
 
 #: admin_webix/models.py:18
 msgid "Node name"
-msgstr ""
+msgstr "Nombre de nodo"
 
 #: admin_webix/models.py:19
 msgid "Icon"
-msgstr ""
+msgstr "Icono"
 
 #: admin_webix/models.py:20
 msgid "Web link"
-msgstr ""
+msgstr "Enlace web"
 
 #: admin_webix/models.py:21
 msgid "Enabled"
-msgstr ""
+msgstr "Habilitado"
 
 #: admin_webix/models.py:22
 msgid "Active for all"
-msgstr ""
+msgstr "Activo para todos"
 
 #: admin_webix/models.py:23
 msgid "Model"
-msgstr ""
+msgstr "Modelo"
 
 #: admin_webix/models.py:24
 msgid "Enabled groups"
-msgstr ""
+msgstr "Grupos habilitados"
 
 #: admin_webix/models.py:25
 msgid "Prefix"
-msgstr ""
+msgstr "Prefijo"
 
 #: admin_webix/models.py:27
 msgid "Parent"
-msgstr ""
+msgstr "Maestro"
 
 #: admin_webix/models.py:33 admin_webix/models.py:34
 msgid "Webix Admin Menu"
-msgstr ""
+msgstr "Webix Admin Menu"
 
 #: admin_webix/options.py:179 templates/django_webix/include/utils.js:178
 #: templates/django_webix/include/utils.js:185
 msgid "Yes"
-msgstr "Si"
+msgstr "Sí"
 
 #: admin_webix/options.py:179 templates/django_webix/include/utils.js:180
 #: templates/django_webix/include/utils.js:187
@@ -136,9 +136,11 @@ msgstr "Pagina de administración"
 #: admin_webix/sites.py:661
 #, python-format
 msgid ""
-"Please enter the correct %(username)s and password for a staff account. Note "
-"that both fields may be case-sensitive."
+"Please enter the correct %(username)s and password for a staff account. Note"
+" that both fields may be case-sensitive."
 msgstr ""
+"Please enter the correct %(username)s and password for a staff account. Note"
+" that both fields may be case-sensitive."
 
 #: admin_webix/sites.py:678
 msgid "Log in"
@@ -146,31 +148,29 @@ msgstr "Iniciar sesión"
 
 #: admin_webix/templates/admin_webix/account/password_change.js:15
 msgid "Cambio password utente"
-msgstr ""
+msgstr "Cambio de contraseña del usuario"
 
 #: admin_webix/templates/admin_webix/account/password_change.js:43
 msgid "Password attuale"
-msgstr ""
+msgstr "Contraseña actual"
 
 #: admin_webix/templates/admin_webix/account/password_change.js:52
-#, fuzzy
 #| msgid "Change password"
 msgid "Nuova password"
 msgstr "Cambiar la contraseña"
 
 #: admin_webix/templates/admin_webix/account/password_change.js:61
-#, fuzzy
 #| msgid "Change password"
 msgid "Conferma password"
 msgstr "Cambiar la contraseña"
 
 #: admin_webix/templates/admin_webix/account/password_change.js:70
 msgid "Conferma"
-msgstr ""
+msgstr "Confirma"
 
 #: admin_webix/templates/admin_webix/account/password_change_done.js:15
 msgid "Password cambiata correttamente"
-msgstr ""
+msgstr "Cambio de contraseña finalizado"
 
 #: admin_webix/templates/admin_webix/account/password_reset_email.html:2
 #: auth_webix/templates/auth_webix/password_reset/password_reset_email.html:2
@@ -179,63 +179,66 @@ msgid ""
 "You're receiving this email because you requested a password reset for your "
 "user account at %(site_name)s."
 msgstr ""
+"Está recibiendo este correo debido a una solicitud de reinicio de contraseña"
+" para el usuario de la página web %(site_name)s"
 
 #: admin_webix/templates/admin_webix/account/password_reset_email.html:4
 #: auth_webix/templates/auth_webix/password_reset/password_reset_email.html:4
 msgid "Please go to the following page and choose a new password:"
 msgstr ""
+"Por favor entre en el siguiente enlace para elegir una nueva contraseña:"
 
 #: admin_webix/templates/admin_webix/account/password_reset_email.html:8
 #: auth_webix/templates/auth_webix/password_reset/password_reset_email.html:8
 msgid "Your username, in case you’ve forgotten:"
-msgstr ""
+msgstr "Su usuario, en caso de necesitarlo:"
 
 #: admin_webix/templates/admin_webix/account/password_reset_email.html:10
 #: auth_webix/templates/auth_webix/password_reset/password_reset_email.html:10
 msgid "Thanks for using our site!"
-msgstr ""
+msgstr "¡Gracias por usar nuestra página!"
 
 #: admin_webix/templates/admin_webix/account/password_reset_email.html:12
 #: auth_webix/templates/auth_webix/password_reset/password_reset_email.html:12
 #, python-format
 msgid "The %(site_name)s team"
-msgstr ""
+msgstr "El equipo de %(site_name)s"
 
 #: admin_webix/templates/admin_webix/base_site.html:100
 msgid "DATA"
-msgstr ""
+msgstr "Datos"
 
 #: admin_webix/templates/admin_webix/base_site.html:101
 msgid "WEBGIS"
-msgstr ""
+msgstr "WebGIS"
 
 #: admin_webix/templates/admin_webix/include/menu.js:35
 msgid "User"
-msgstr ""
+msgstr "Usuario"
 
 #: admin_webix/templates/admin_webix/include/menu.js:40
 msgid "Profile"
-msgstr ""
+msgstr "Perfil"
 
 #: admin_webix/templates/admin_webix/include/menu.js:47
 msgid "Password change"
-msgstr ""
+msgstr "Cambio de contraseña"
 
 #: admin_webix/templates/admin_webix/include/menu.js:54
 msgid "Password reset"
-msgstr ""
+msgstr "Reinicio de contraseña"
 
 #: admin_webix/templates/admin_webix/include/menu.js:62
 msgid "2 factor authentication"
-msgstr ""
+msgstr "Autenticación en dos pasos"
 
 #: admin_webix/templates/admin_webix/include/menu.js:76
 msgid "Manage users"
-msgstr ""
+msgstr "Gestión de usuarios"
 
 #: admin_webix/templates/admin_webix/include/menu.js:81
 msgid "Users"
-msgstr ""
+msgstr "Usuarios"
 
 #: admin_webix/templates/admin_webix/logged_out.html:58
 msgid "Log in again"
@@ -243,18 +246,17 @@ msgstr "Ingresar de nuevo"
 
 #: auth_webix/forms.py:14
 msgid "Username"
-msgstr ""
+msgstr "Usuario"
 
 #: auth_webix/forms.py:42
 msgid "Enter your username"
-msgstr ""
+msgstr "Introduzca su usuario"
 
 #: forms/forms.py:401
 msgid "Upload new image"
 msgstr "Subir nueva imagen"
 
 #: forms/forms.py:471 forms/forms.py:573
-#, fuzzy
 #| msgid "Delete"
 msgid "Deleted"
 msgstr "Eliminar"
@@ -288,7 +290,7 @@ msgstr "El valor inicial {} para el campo geográfico {} no es compatible"
 
 #: forms/forms.py:881
 msgid "Edit"
-msgstr ""
+msgstr "Editar"
 
 #: forms/forms.py:911
 msgid "Type of field {} not supported"
@@ -316,7 +318,7 @@ msgstr "¡Atención! Todos los objetos vinculados también serán eliminados."
 
 #: templates/django_webix/generic/form.js:26
 msgid "Send"
-msgstr ""
+msgstr "Enviar"
 
 #: templates/django_webix/generic/list.js:44
 msgid "Extra filters removal"
@@ -373,7 +375,7 @@ msgstr "Esta acción no se puede ejecutar"
 
 #: templates/django_webix/include/actions_utils.js:76
 msgid "Action successful"
-msgstr ""
+msgstr "Acción completada con éxito"
 
 #: templates/django_webix/include/actions_utils.js:104
 msgid "Something gone wrong"
@@ -391,7 +393,8 @@ msgid "Add"
 msgstr "Añadir"
 
 #: templates/django_webix/include/form_standard.js:72
-msgid "You must fill in all the required fields before you can save this form!"
+msgid ""
+"You must fill in all the required fields before you can save this form!"
 msgstr ""
 "¡Debe completar todos los campos obligatorios antes de poder guardar este "
 "formulario!"
@@ -546,11 +549,11 @@ msgstr "Error del servidor"
 
 #: templates/django_webix/include/utils.js:576
 msgid "Click and change"
-msgstr ""
+msgstr "Haz click para cambiar"
 
 #: templates/django_webix/include/utils.js:578
 msgid "Locked data"
-msgstr ""
+msgstr "Datos bloqueados"
 
 #: templates/django_webix/redirect_to_login.js:2
 msgid "User is not authenticated"
@@ -567,7 +570,7 @@ msgstr "{count_delete_instances} elementos han sido borrados"
 
 #: views/generic/actions.py:34
 msgid "Download all attachments"
-msgstr ""
+msgstr "Descargar todos los ficheros adjuntos"
 
 #: views/generic/base.py:111
 msgid "You haven't add permission"
@@ -583,7 +586,7 @@ msgstr "No has eliminado el permiso"
 
 #: views/generic/base.py:126
 msgid "You haven't view permission"
-msgstr "No has visto el permiso"
+msgstr "No tienes permiso para ver esta información"
 
 #: views/generic/create_update.py:70
 msgid ""
@@ -626,7 +629,7 @@ msgstr "y"
 
 #: views/generic/decorators.py:14 views/generic/list.py:373
 msgid "Fill in the form"
-msgstr ""
+msgstr "Rellenar el formulario"
 
 #: views/generic/decorators.py:15 views/generic/list.py:374
 msgid "Are you sure you want to proceed with this action?"
