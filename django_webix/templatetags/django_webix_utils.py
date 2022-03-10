@@ -38,6 +38,10 @@ def get_value_from_dict(dict_data, key):
 def webix_version():
     return settings.WEBIX_VERSION
 
+@register.simple_tag(name='webix_debug')
+def webix_debug():
+    return getattr(settings, 'DEBUG_WEBIX') if hasattr(settings, 'DEBUG_WEBIX') else False
+
 
 @register.simple_tag(name='webix_license')
 def webix_license():

@@ -468,7 +468,7 @@ class WebixListView(WebixBaseMixin,
     def is_editable(self):
         return len(self.fields_editable) > 0
 
-    def get_update_form(self, request, *args, **kwargs):
+    def get_update_form_class(self):
         _list_view = self
         class UpdateForm(WebixModelForm):
             class Meta:
@@ -484,15 +484,17 @@ class WebixListView(WebixBaseMixin,
         _list_view = self
         # TODO: is login is required depends if list has login required
         @method_decorator(login_required, name='dispatch')
-        class ListUpdate(WebixUpdateView):
+        class ListUpdateView(WebixUpdateView):
+            success_url ='' #for exception bypass
             http_method_names = ['post'] # only update directly without render
             model = _list_view.model
-            form_class = _list_view.get_update_form()
+            def get_form_class(self):
+                return _list_view.get_update_form_class()
             def response_valid(self, success_url=None, **kwargs):
                 return JsonResponse({'status': True})
             def response_invalid(self, success_url=None, **kwargs):
                 return JsonResponse({'status': False})
-        return ListUpdate.as_view()(request, *args, **kwargs)
+        return ListUpdateView.as_view()(request, *args, **kwargs)
 
     def get_fields_editable(self):
         return self.fields_editable

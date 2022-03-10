@@ -52,6 +52,7 @@ class ModelWebixAdmin(WebixPermissionsMixin):
     list_display = []
     list_display_header = {}  # NEW OVERRIDE HEADER MODALITY
     extra_header = {}  # TO BE REMOVED IN FUTURE
+    list_editable = []
 
     enable_json_loading = True  # changed from the past
     pk_field = None
@@ -162,6 +163,7 @@ class ModelWebixAdmin(WebixPermissionsMixin):
                 extra_filter_options = ''
                 filter_option = 'serverFilter' if self.enable_json_loading else 'textFilter'
                 column_template = ''
+                editor = ''
                 extra_header = ''
                 width_adapt = 'fillspace:true' if j == 0 else 'adjust:"all"'
                 sort_option = 'server' if self.enable_json_loading else 'string'
@@ -174,12 +176,13 @@ class ModelWebixAdmin(WebixPermissionsMixin):
                     header_title = capfirst(model_field.verbose_name)
 
                 if type(model_field) == BooleanField:
+                    editor= 'editor:"select",collection: {}_options '.format(field_name)
                     filter_type = ''
                     filter_option = 'serverSelectFilter' if self.enable_json_loading else 'selectFilter'
                     extra_filter_options = ", options:[{id: 'True', value: '" + _('Yes') + "'}, {id: 'False', value: '" + _("No") + "'}] "
                     column_template = ' template:custom_checkbox_yesnonone, '
                 elif type(model_field) == DateTimeField:
-                    #width_adapt = 'width:"140"'
+                    editor= 'editor:"datetime", ' # our custom editor
                     filter_type = 'range'
                     filter_option = 'serverDateRangeFilter' if self.enable_json_loading else 'dateRangeFilter'
                     format_type = 'webix.i18n.fullDateFormatStr'
@@ -187,6 +190,7 @@ class ModelWebixAdmin(WebixPermissionsMixin):
                         field_name=field_name)
                 elif type(model_field) == DateField:
                     #width_adapt = 'width:"85"'
+                    editor = 'editor:"date", '
                     filter_type = 'range'
                     filter_option = 'serverDateRangeFilter' if self.enable_json_loading else 'dateRangeFilter'
                     format_type = 'webix.i18n.dateFormatStr'
@@ -198,16 +202,19 @@ class ModelWebixAdmin(WebixPermissionsMixin):
                     else:
                         if type(_first_field) == ForeignKey:
                             filter_type = 'iexact'
+                            editor = 'editor:"select",collection: {}_options '.format(field_name)
                             filter_option = 'serverRichSelectFilter' if self.enable_json_loading else 'selectFilter'
                             extra_filter_options = ", options: {}_options ".format(field_name)
                 # if choices... the same of FK
                 else:
+                    editor = 'editor:"text", '
                     try:
                         _first_field = self.model._meta.get_field(field_name)
                     except FieldDoesNotExist:
                         pass
                     else:
                         if hasattr(_first_field, 'choices') and _first_field.choices is not None:
+                            editor = 'editor:"select",collection: {}_options '.format(field_name)
                             filter_type = 'iexact'
                             filter_option = 'serverRichSelectFilter' if self.enable_json_loading else 'selectFilter'
                             extra_filter_options = ", options: {}_options ".format(field_name)
@@ -232,6 +239,8 @@ class ModelWebixAdmin(WebixPermissionsMixin):
                         extra_filter_options = conf_header.get('extra_filter_options', '')
                     if 'footer' in conf_header:
                         footer = conf_header.get('footer', None)
+                if field_name not in self.list_editable:
+                    editor = ''
                 field_list = {
                     'field_name': field_name,
                     'datalist_column': '''{{id: "{field_name}",
@@ -241,6 +250,7 @@ class ModelWebixAdmin(WebixPermissionsMixin):
                 {format_type}
                 serverFilterType: "{filter_type}",
                 {column_template}
+                {editor}
                 {extra_header} }}'''.format(
                         field_name=field_name,
                         header_title=header_title,
@@ -251,6 +261,7 @@ class ModelWebixAdmin(WebixPermissionsMixin):
                         sort_option=sort_option,
                         filter_type=filter_type,
                         column_template=column_template,
+                        editor = editor,
                         extra_header=extra_header
                     )
                 }
@@ -588,6 +599,10 @@ class ModelWebixAdmin(WebixPermissionsMixin):
                     context = super().get_context_data(**kwargs)
                     context.update(_admin.get_extra_context())
                     return context
+
+                @property
+                def fields_editable(self):
+                    return _admin.list_editable
 
                 # full mode
                 @property

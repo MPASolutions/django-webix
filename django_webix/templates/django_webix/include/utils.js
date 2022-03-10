@@ -2,6 +2,33 @@
 
 {% get_request_filter_params %}
 
+webix.editors.datetime = webix.extend( {
+	focus	:function(){},
+	popupType:"datetime",
+	setValue:function(value){
+		this._is_string = this.config.stringResult || (value && typeof value == "string");
+		webix.editors.popup.setValue.call(this, value);
+	},
+	getValue:function(){
+		return this.getInputNode().getValue(this._is_string?webix.i18n.parseFormatStr:"")||"";
+	},
+	popupInit:function(popup){
+		popup.getChildViews()[0].attachEvent("onDateSelect", function(value){
+			callEvent("onEditEnd",[value]);
+		});
+	}
+}, webix.editors.popup);
+
+webix.editors.$popup.datetime = {
+    height: 250,
+    width: 250,
+    padding: 0,
+    view: "popup",
+    body: {
+        view: "calendar", timepicker: true, icons: true, borderless: true
+    },
+}
+
 webix.ui.datafilter.serverDateRangeFilter = webix.extend({
   getValue:function(t){
     var e=this.getInputNode(t);
