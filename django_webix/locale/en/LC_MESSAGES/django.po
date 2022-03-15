@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-02-17 14:48+0100\n"
-"PO-Revision-Date: 2022-03-02 13:19+0050\n"
+"PO-Revision-Date: 2022-03-14 10:52+0050\n"
 "Last-Translator:   <>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: \n"
@@ -21,105 +21,105 @@ msgstr ""
 
 #: admin_webix/apps.py:12
 msgid "Administration"
-msgstr ""
+msgstr "Administration"
 
 #: admin_webix/django_admin_utils.py:39 admin_webix/forms.py:162
 msgid "Groups"
-msgstr ""
+msgstr "Groups"
 
 #: admin_webix/forms.py:28 admin_webix/forms.py:131 admin_webix/forms.py:138
 msgid "Available permissions"
-msgstr ""
+msgstr "Available permissions"
 
 #: admin_webix/forms.py:29 admin_webix/forms.py:132 admin_webix/forms.py:139
 msgid "Selected"
-msgstr ""
+msgstr "Selected"
 
 #: admin_webix/forms.py:55 admin_webix/forms.py:235
 msgid "The two password fields didn’t match."
-msgstr ""
+msgstr "The two password fields didn’t match."
 
 #: admin_webix/forms.py:58 admin_webix/forms.py:239
 msgid "Password"
-msgstr ""
+msgstr "Password"
 
 #: admin_webix/forms.py:64
 msgid "Password confirmation"
-msgstr ""
+msgstr "Password confirmation"
 
 #: admin_webix/forms.py:67 admin_webix/forms.py:248
 msgid "Enter the same password as before, for verification."
-msgstr ""
+msgstr "Enter the same password as before, for verification."
 
 #: admin_webix/forms.py:159
 msgid "Private data"
-msgstr ""
+msgstr "Private data"
 
 #: admin_webix/forms.py:160
 msgid "Private informations"
-msgstr ""
+msgstr "Private data"
 
 #: admin_webix/forms.py:161
 msgid "Permissions"
-msgstr ""
+msgstr "Permissions"
 
 #: admin_webix/forms.py:181
 msgid "Change password"
-msgstr ""
+msgstr "Change password"
 
 #: admin_webix/forms.py:245
 msgid "Password (again)"
-msgstr ""
+msgstr "Password (again)"
 
 #: admin_webix/models.py:18
 msgid "Node name"
-msgstr ""
+msgstr "Node name"
 
 #: admin_webix/models.py:19
 msgid "Icon"
-msgstr ""
+msgstr "Icon"
 
 #: admin_webix/models.py:20
 msgid "Web link"
-msgstr ""
+msgstr "Web link"
 
 #: admin_webix/models.py:21
 msgid "Enabled"
-msgstr ""
+msgstr "Enabled"
 
 #: admin_webix/models.py:22
 msgid "Active for all"
-msgstr ""
+msgstr "Active for all"
 
 #: admin_webix/models.py:23
 msgid "Model"
-msgstr ""
+msgstr "Model"
 
 #: admin_webix/models.py:24
 msgid "Enabled groups"
-msgstr ""
+msgstr "Enabled groups"
 
 #: admin_webix/models.py:25
 msgid "Prefix"
-msgstr ""
+msgstr "Prefix"
 
 #: admin_webix/models.py:27
 msgid "Parent"
-msgstr ""
+msgstr "Parent"
 
 #: admin_webix/models.py:33 admin_webix/models.py:34
 msgid "Webix Admin Menu"
-msgstr ""
+msgstr "Webix Admin Menu"
 
 #: admin_webix/options.py:179 templates/django_webix/include/utils.js:178
 #: templates/django_webix/include/utils.js:185
 msgid "Yes"
-msgstr ""
+msgstr "Yes"
 
 #: admin_webix/options.py:179 templates/django_webix/include/utils.js:180
 #: templates/django_webix/include/utils.js:187
 msgid "No"
-msgstr ""
+msgstr "No"
 
 #: admin_webix/sites.py:38
 msgid "Django webix site admin"
@@ -139,34 +139,36 @@ msgid ""
 "Please enter the correct %(username)s and password for a staff account. Note"
 " that both fields may be case-sensitive."
 msgstr ""
+"Please enter the correct %(username)s and password for a staff account. Note"
+" that both fields may be case-sensitive."
 
 #: admin_webix/sites.py:678
 msgid "Log in"
-msgstr ""
+msgstr "Log in"
 
 #: admin_webix/templates/admin_webix/account/password_change.js:15
 msgid "Cambio password utente"
-msgstr ""
+msgstr "Change user password"
 
 #: admin_webix/templates/admin_webix/account/password_change.js:43
 msgid "Password attuale"
-msgstr ""
+msgstr "Old password"
 
 #: admin_webix/templates/admin_webix/account/password_change.js:52
 msgid "Nuova password"
-msgstr ""
+msgstr "New password"
 
 #: admin_webix/templates/admin_webix/account/password_change.js:61
 msgid "Conferma password"
-msgstr ""
+msgstr "Confirm new password"
 
 #: admin_webix/templates/admin_webix/account/password_change.js:70
 msgid "Conferma"
-msgstr ""
+msgstr "Confirm"
 
 #: admin_webix/templates/admin_webix/account/password_change_done.js:15
 msgid "Password cambiata correttamente"
-msgstr ""
+msgstr "Password correctly changed"
 
 #: admin_webix/templates/admin_webix/account/password_reset_email.html:2
 #: auth_webix/templates/auth_webix/password_reset/password_reset_email.html:2
@@ -175,104 +177,106 @@ msgid ""
 "You're receiving this email because you requested a password reset for your "
 "user account at %(site_name)s."
 msgstr ""
+"You're receiving this email because you requested a password reset for your "
+"user account at %(site_name)s."
 
 #: admin_webix/templates/admin_webix/account/password_reset_email.html:4
 #: auth_webix/templates/auth_webix/password_reset/password_reset_email.html:4
 msgid "Please go to the following page and choose a new password:"
-msgstr ""
+msgstr "Please go to the following page and choose a new password:"
 
 #: admin_webix/templates/admin_webix/account/password_reset_email.html:8
 #: auth_webix/templates/auth_webix/password_reset/password_reset_email.html:8
 msgid "Your username, in case you’ve forgotten:"
-msgstr ""
+msgstr "Your username, in case you’ve forgotten:"
 
 #: admin_webix/templates/admin_webix/account/password_reset_email.html:10
 #: auth_webix/templates/auth_webix/password_reset/password_reset_email.html:10
 msgid "Thanks for using our site!"
-msgstr ""
+msgstr "Thanks for using our site!"
 
 #: admin_webix/templates/admin_webix/account/password_reset_email.html:12
 #: auth_webix/templates/auth_webix/password_reset/password_reset_email.html:12
 #, python-format
 msgid "The %(site_name)s team"
-msgstr ""
+msgstr "The %(site_name)s team"
 
 #: admin_webix/templates/admin_webix/base_site.html:100
 msgid "DATA"
-msgstr ""
+msgstr "DATA"
 
 #: admin_webix/templates/admin_webix/base_site.html:101
 msgid "WEBGIS"
-msgstr ""
+msgstr "WEBGIS"
 
 #: admin_webix/templates/admin_webix/include/menu.js:35
 msgid "User"
-msgstr ""
+msgstr "User"
 
 #: admin_webix/templates/admin_webix/include/menu.js:40
 msgid "Profile"
-msgstr ""
+msgstr "Profile"
 
 #: admin_webix/templates/admin_webix/include/menu.js:47
 msgid "Password change"
-msgstr ""
+msgstr "Password change"
 
 #: admin_webix/templates/admin_webix/include/menu.js:54
 msgid "Password reset"
-msgstr ""
+msgstr "Password reset"
 
 #: admin_webix/templates/admin_webix/include/menu.js:62
 msgid "2 factor authentication"
-msgstr ""
+msgstr "2 factor authentication"
 
 #: admin_webix/templates/admin_webix/include/menu.js:76
 msgid "Manage users"
-msgstr ""
+msgstr "Manage users"
 
 #: admin_webix/templates/admin_webix/include/menu.js:81
 msgid "Users"
-msgstr ""
+msgstr "Users"
 
 #: admin_webix/templates/admin_webix/logged_out.html:58
 msgid "Log in again"
-msgstr ""
+msgstr "Log in again"
 
 #: auth_webix/forms.py:14
 msgid "Username"
-msgstr ""
+msgstr "Username"
 
 #: auth_webix/forms.py:42
 msgid "Enter your username"
-msgstr ""
+msgstr "Enter your username"
 
 #: forms/forms.py:401
 msgid "Upload new image"
-msgstr ""
+msgstr "Upload new image"
 
 #: forms/forms.py:471 forms/forms.py:573
 msgid "Deleted"
-msgstr ""
+msgstr "Deleted"
 
 #: forms/forms.py:502
 msgid "Upload file"
-msgstr ""
+msgstr "Upload file"
 
 #: forms/forms.py:515
 msgid "Upload folder"
-msgstr ""
+msgstr "Upload folder"
 
 #: forms/forms.py:520
 msgid "Upload files"
-msgstr ""
+msgstr "Upload files"
 
 #: forms/forms.py:599
 msgid "MultipleChoiceField is available only with PRO webix license"
-msgstr ""
+msgstr "MultipleChoiceField is available only with PRO webix license"
 
 #: forms/forms.py:631 forms/forms.py:655 forms/forms.py:703 forms/forms.py:733
 #: forms/forms.py:742 forms/forms.py:756 forms/forms.py:803
 msgid "Click to select"
-msgstr ""
+msgstr "Click to select"
 
 #: forms/forms.py:842
 msgid "Initial value {} for geo field {} is not supported"
