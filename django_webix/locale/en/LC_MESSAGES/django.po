@@ -9,8 +9,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-02-17 14:48+0100\n"
-"PO-Revision-Date: 2022-03-14 10:52+0050\n"
-"Last-Translator:   <>\n"
+"PO-Revision-Date: 2022-03-15 12:22+0050\n"
+"Last-Translator: Traduzioni CBC <>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: \n"
 "MIME-Version: 1.0\n"
@@ -123,15 +123,15 @@ msgstr "No"
 
 #: admin_webix/sites.py:38
 msgid "Django webix site admin"
-msgstr ""
+msgstr "Django webix site admin"
 
 #: admin_webix/sites.py:41
 msgid "Django webix administration"
-msgstr ""
+msgstr "Django webix administration"
 
 #: admin_webix/sites.py:44
 msgid "Site administration"
-msgstr ""
+msgstr "Site administration"
 
 #: admin_webix/sites.py:661
 #, python-format
@@ -280,399 +280,410 @@ msgstr "Click to select"
 
 #: forms/forms.py:842
 msgid "Initial value {} for geo field {} is not supported"
-msgstr ""
+msgstr "Initial value {} for geo field {} is not supported"
 
 #: forms/forms.py:881
 msgid "Edit"
-msgstr ""
+msgstr "Edit"
 
 #: forms/forms.py:911
 msgid "Type of field {} not supported"
-msgstr ""
+msgstr "Type of field {} not supported"
 
 #: forms/formsets.py:89
 msgid "ManagementForm data is missing or has been tampered with"
-msgstr ""
+msgstr "ManagementForm data is missing or has been tampered with"
 
 #: templates/django_webix/generic/delete.js:26
 msgid "The following objects will be deleted"
-msgstr ""
+msgstr "The following objects will be deleted"
 
 #: templates/django_webix/generic/delete.js:57
 msgid "Confirm cancellation"
-msgstr ""
+msgstr "Confirm cancellation"
 
 #: templates/django_webix/generic/delete.js:63
 msgid "Delete confirmation"
-msgstr ""
+msgstr "Delete confirmation"
 
 #: templates/django_webix/generic/delete.js:64
 msgid "Warning! All linked objects will also be deleted."
-msgstr ""
+msgstr "Warning! All linked objects will also be deleted."
 
 #: templates/django_webix/generic/form.js:26
 msgid "Send"
-msgstr ""
+msgstr "Send"
 
 #: templates/django_webix/generic/list.js:44
 msgid "Extra filters removal"
-msgstr ""
+msgstr "Extra filters removal"
 
 #: templates/django_webix/generic/list.js:61
 msgid "Geographic filter removal"
-msgstr ""
+msgstr "Geographic filter removal"
 
 #: templates/django_webix/generic/list.js:79
 msgid "Advanced filter"
-msgstr ""
+msgstr "Advanced filter"
 
 #: templates/django_webix/generic/list.js:142
 #: templates/django_webix/include/actions_list.js:8
 #: templates/django_webix/include/toolbar_navigation.js:43
 msgid "Go to map"
-msgstr ""
+msgstr "Go to map"
 
 #: templates/django_webix/generic/list.js:226
 msgid "Remove filters"
-msgstr ""
+msgstr "Remove filters"
 
 #: templates/django_webix/generic/list.js:227
 msgid "Apply filters"
-msgstr ""
+msgstr "Apply filters"
 
 #: templates/django_webix/generic/list.js:227
 msgid "Filter"
-msgstr ""
+msgstr "Filter"
 
 #: templates/django_webix/generic/list.js:408
 msgid "Double click to edit the element"
-msgstr ""
+msgstr "Double click to edit the element"
 
 #: templates/django_webix/include/actions_list.js:33
 #: templates/django_webix/include/utils.js:244
 msgid "Close"
-msgstr ""
+msgstr "Close"
 
 #: templates/django_webix/include/actions_utils.js:33
 #: templates/django_webix/include/toolbar_list.js:23
 #: templates/django_webix/include/toolbar_list.js:40
 msgid "elements"
-msgstr ""
+msgstr "elements"
 
 #: templates/django_webix/include/actions_utils.js:33
 msgid "selected"
-msgstr ""
+msgstr "selected"
 
 #: templates/django_webix/include/actions_utils.js:61
 msgid "Action is not executable"
-msgstr ""
+msgstr "Action is not executable"
 
 #: templates/django_webix/include/actions_utils.js:76
 msgid "Action successful"
-msgstr ""
+msgstr "Action successful"
 
 #: templates/django_webix/include/actions_utils.js:104
 msgid "Something gone wrong"
-msgstr ""
+msgstr "Something gone wrong"
 
 #: templates/django_webix/include/edit_inline/stacked.js:19
 #: templates/django_webix/include/edit_inline/stacked.js:30
 msgid "New Item"
-msgstr ""
+msgstr "New Item"
 
 #: templates/django_webix/include/edit_inline/stacked.js:51
 #: templates/django_webix/include/edit_inline/tabular.js:50
 #: templates/django_webix/include/toolbar_navigation.js:35
 msgid "Add"
-msgstr ""
+msgstr "Add"
 
 #: templates/django_webix/include/form_standard.js:72
 msgid ""
 "You must fill in all the required fields before you can save this form!"
 msgstr ""
+"You must fill in all the required fields before you can save this form!"
 
 #: templates/django_webix/include/form_standard.js:72
 msgid "Error in the following fields"
-msgstr ""
+msgstr "Error in the following fields"
 
 #: templates/django_webix/include/form_validation.js:14
 msgid "Required field"
-msgstr ""
+msgstr "Required field"
 
 #: templates/django_webix/include/form_validation.js:29
 msgid "Invalid email"
-msgstr ""
+msgstr "Invalid email"
 
 #: templates/django_webix/include/form_validation.js:70
 msgid "Not integer field"
-msgstr ""
+msgstr "Not integer field"
 
 #: templates/django_webix/include/form_validation.js:74
 #: templates/django_webix/include/form_validation.js:115
 msgid "Value less than "
-msgstr ""
+msgstr "Value less than"
 
 #: templates/django_webix/include/form_validation.js:78
 #: templates/django_webix/include/form_validation.js:119
 msgid "Value greater than "
-msgstr ""
+msgstr "Value greater than"
 
 #: templates/django_webix/include/form_validation.js:111
 msgid "Not decimal field"
-msgstr ""
+msgstr "Not decimal field"
 
 #: templates/django_webix/include/form_validation.js:140
 msgid "String shorter than "
-msgstr ""
+msgstr "String shorter than"
 
 #: templates/django_webix/include/form_validation.js:144
 msgid "String longer than "
-msgstr ""
+msgstr "String longer than"
 
 #: templates/django_webix/include/list_failure_add_missing_objects.js:6
 msgid "Missing data to add item"
-msgstr ""
+msgstr "Missing data to add item"
 
 #: templates/django_webix/include/list_failure_related_objects.js:6
 msgid "These objects do not allow the requested operation"
-msgstr ""
+msgstr "These objects do not allow the requested operation"
 
 #: templates/django_webix/include/list_failure_related_objects.js:23
 msgid "Data type"
-msgstr ""
+msgstr "Data type"
 
 #: templates/django_webix/include/list_failure_related_objects.js:24
 msgid "Description"
-msgstr ""
+msgstr "Description"
 
 #: templates/django_webix/include/toolbar_form.js:18
 #: views/generic/actions.py:18
 msgid "Delete"
-msgstr ""
+msgstr "Description"
 
 #: templates/django_webix/include/toolbar_form.js:43
 msgid "Save and continue"
-msgstr ""
+msgstr "Save and continue"
 
 #: templates/django_webix/include/toolbar_form.js:70
 msgid "Save and add another"
-msgstr ""
+msgstr "Save and add another"
 
 #: templates/django_webix/include/toolbar_form.js:97
 msgid "Save"
-msgstr ""
+msgstr "Save"
 
 #: templates/django_webix/include/toolbar_list.js:23
 msgid "of"
-msgstr ""
+msgstr "of"
 
 #: templates/django_webix/include/toolbar_list.js:27
 msgid "Select all"
-msgstr ""
+msgstr "Select all"
 
 #: templates/django_webix/include/toolbar_list.js:29
 #: templates/django_webix/include/toolbar_list.js:35
 #: templates/django_webix/include/utils.js:542
 msgid "All"
-msgstr ""
+msgstr "All"
 
 #: templates/django_webix/include/toolbar_list.js:29
 #: templates/django_webix/include/toolbar_list.js:35
 msgid "elements selected"
-msgstr ""
+msgstr "elements selected"
 
 #: templates/django_webix/include/toolbar_list.js:30
 msgid "Cancel selection"
-msgstr ""
+msgstr "Cancel selection"
 
 #: templates/django_webix/include/toolbar_list.js:106
 msgid "No row has been selected"
-msgstr ""
+msgstr "No row has been selected"
 
 #: templates/django_webix/include/toolbar_list.js:150
 msgid "Add new"
-msgstr ""
+msgstr "Add new"
 
 #: templates/django_webix/include/toolbar_list_actions_select.js:14
 msgid "Select an action"
-msgstr ""
+msgstr "Select an action"
 
 #: templates/django_webix/include/toolbar_list_actions_select.js:20
 #: views/generic/decorators.py:16 views/generic/list.py:375
 msgid "Go"
-msgstr ""
+msgstr "Go"
 
 #: templates/django_webix/include/toolbar_navigation.js:13
 msgid "Back"
-msgstr ""
+msgstr "Back"
 
 #: templates/django_webix/include/toolbar_navigation.js:24
 msgid "Back to list"
-msgstr ""
+msgstr "Back to list"
 
 #: templates/django_webix/include/utils.js:199
 msgid "Default"
-msgstr ""
+msgstr "Default"
 
 #: templates/django_webix/include/utils.js:206
 msgid "Show on map"
-msgstr ""
+msgstr "Show on map"
 
 #: templates/django_webix/include/utils.js:212
 msgid "Duplicate element"
-msgstr ""
+msgstr "Duplicate element"
 
 #: templates/django_webix/include/utils.js:216
 msgid "Remove element"
-msgstr ""
+msgstr "Remove element"
 
 #: templates/django_webix/include/utils.js:220
 msgid "Detail"
-msgstr ""
+msgstr "Detail"
 
 #: templates/django_webix/include/utils.js:241
 msgid "Image"
-msgstr ""
+msgstr "Image"
 
 #: templates/django_webix/include/utils.js:321
 #: templates/django_webix/include/utils.js:379
 msgid "Server error"
-msgstr ""
+msgstr "Server error"
 
 #: templates/django_webix/include/utils.js:576
 msgid "Click and change"
-msgstr ""
+msgstr "Click and change"
 
 #: templates/django_webix/include/utils.js:578
 msgid "Locked data"
-msgstr ""
+msgstr "Locked data"
 
 #: templates/django_webix/redirect_to_login.js:2
 msgid "User is not authenticated"
-msgstr ""
+msgstr "User is not authenticated"
 
 #: templates/django_webix/redirect_to_login.js:5
 msgid "You are no longer authenticated, please login again."
-msgstr ""
+msgstr "You are no longer authenticated, please login again."
 
 #: views/generic/actions.py:26
 #, python-brace-format
 msgid "{count_delete_instances} elements have been deleted"
-msgstr ""
+msgstr "{count_delete_instances} elements have been deleted"
 
 #: views/generic/actions.py:34
 msgid "Download all attachments"
-msgstr ""
+msgstr "Download all attachments"
 
 #: views/generic/base.py:111
 msgid "You haven't add permission"
-msgstr ""
+msgstr "You haven't add permission"
 
 #: views/generic/base.py:116
 msgid "You haven't change permission"
-msgstr ""
+msgstr "You haven't change permission"
 
 #: views/generic/base.py:121
 msgid "You haven't delete permission"
-msgstr ""
+msgstr "You haven't delete permission"
 
 #: views/generic/base.py:126
 msgid "You haven't view permission"
-msgstr ""
+msgstr "You haven't view permission"
 
 #: views/generic/create_update.py:70
 msgid ""
 "Template style is improperly configured only options are 'standard' or "
 "'tabs' (standard by default)."
 msgstr ""
+"Template style is improperly configured only options are 'standard' or "
+"'tabs' (standard by default)."
 
 #: views/generic/create_update.py:107 views/generic/delete.py:72
 msgid ""
 "No URL to redirect to.  Either provide a url or define a get_absolute_url "
 "method on the Model."
 msgstr ""
+"No URL to redirect to. Either provide a url or define a get_absolute_url "
+"method on the Model."
 
 #: views/generic/create_update.py:321 views/generic/create_update.py:402
 #: views/generic/delete.py:42 views/generic/detail.py:21
 #: views/generic/list.py:523
 msgid "View permission is not allowed"
-msgstr ""
+msgstr "View permission is not allowed"
 
 #: views/generic/create_update.py:324
 msgid "Add permission is not allowed"
-msgstr ""
+msgstr "Add permission is not allowed"
 
 #: views/generic/create_update.py:405
 msgid "Change permission is not allowed"
-msgstr ""
+msgstr "Change permission is not allowed"
 
 #: views/generic/create_update.py:461
 #, python-format
 msgid "Changed %s."
-msgstr ""
+msgstr "Changed %s."
 
 #: views/generic/create_update.py:461
 msgid "and"
-msgstr ""
+msgstr "and"
 
 #: views/generic/decorators.py:14 views/generic/list.py:373
 msgid "Fill in the form"
-msgstr ""
+msgstr "Fill in the form"
 
 #: views/generic/decorators.py:15 views/generic/list.py:374
 msgid "Are you sure you want to proceed with this action?"
-msgstr ""
+msgstr "Are you sure you want to proceed with this action?"
 
 #: views/generic/decorators.py:17 views/generic/list.py:376
 msgid "Proceed"
-msgstr ""
+msgstr "Proceed"
 
 #: views/generic/decorators.py:18 views/generic/list.py:377
 msgid "Undo"
-msgstr ""
+msgstr "Undo"
 
 #: views/generic/delete.py:45
 msgid "Delete permission is not allowed"
-msgstr ""
+msgstr "Delete permission is not allowed"
 
 #: views/generic/delete.py:83
 msgid ""
 "No URL to failure redirect to.  Either provide a url or define a "
 "get_absolute_url method on the Model."
 msgstr ""
+"No URL to failure redirect to. Either provide a url or define a "
+"get_absolute_url method on the Model."
 
 #: views/generic/list.py:270
 msgid "Paginate count is not integer"
-msgstr ""
+msgstr "Paginate count is not integer"
 
 #: views/generic/list.py:279
 msgid "Paginate start is not integer"
-msgstr ""
+msgstr "Paginate start is not integer"
 
 #: views/generic/list.py:410
 msgid ""
 "Actions style is improperly configured only options are 'buttons' or "
 "'select' (select by default)."
 msgstr ""
+"Actions style is improperly configured only options are 'buttons' or "
+"'select' (select by default)."
 
 #: views/generic/list.py:483
 msgid ""
 "Json response is available only if get_queryset() return a queryset and not "
 "a list"
 msgstr ""
+"Json response is available only if get_queryset() return a queryset and not "
+"a list"
 
 #: views/generic/list.py:502
 msgid "This action is not registered"
-msgstr ""
+msgstr "This action is not registered"
 
 #: views/generic/list.py:508
 msgid "Permission denied: {}"
-msgstr ""
+msgstr "Permission denied: {}"
 
 #: views/generic/list.py:510
 msgid "This permission is not registered on this class"
-msgstr ""
+msgstr "Permission denied: {}"
 
 #: views/generic/list.py:579
 msgid "Generic TemplateListView needs to define data for datatable"
-msgstr ""
+msgstr "Generic TemplateListView needs to define data for datatable"

@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-02-17 14:48+0100\n"
-"PO-Revision-Date: 2022-02-10 16:48+0050\n"
-"Last-Translator: Stefano Menegon <menegon@mpasol.it>\n"
+"PO-Revision-Date: 2022-03-15 12:33+0050\n"
+"Last-Translator: Traduzioni CBC <>\n"
 "Language-Team: \n"
 "Language: it\n"
 "MIME-Version: 1.0\n"
@@ -136,8 +136,8 @@ msgstr "Amministrazione"
 #: admin_webix/sites.py:661
 #, python-format
 msgid ""
-"Please enter the correct %(username)s and password for a staff account. Note "
-"that both fields may be case-sensitive."
+"Please enter the correct %(username)s and password for a staff account. Note"
+" that both fields may be case-sensitive."
 msgstr ""
 "Perfavore inserisci il corretto %(username)s e password di un account staff."
 
@@ -147,33 +147,30 @@ msgstr "Entra"
 
 #: admin_webix/templates/admin_webix/account/password_change.js:15
 msgid "Cambio password utente"
-msgstr ""
+msgstr "Cambio password"
 
 #: admin_webix/templates/admin_webix/account/password_change.js:43
-#, fuzzy
 #| msgid "Password change"
 msgid "Password attuale"
-msgstr "Cambia password"
+msgstr "Password attuale"
 
 #: admin_webix/templates/admin_webix/account/password_change.js:52
-#, fuzzy
 #| msgid "Change password"
 msgid "Nuova password"
-msgstr "Cambia password"
+msgstr "Nuova password"
 
 #: admin_webix/templates/admin_webix/account/password_change.js:61
-#, fuzzy
 #| msgid "Change password"
 msgid "Conferma password"
-msgstr "Cambia password"
+msgstr "Conferma Nuova password"
 
 #: admin_webix/templates/admin_webix/account/password_change.js:70
 msgid "Conferma"
-msgstr ""
+msgstr "Conferma"
 
 #: admin_webix/templates/admin_webix/account/password_change_done.js:15
 msgid "Password cambiata correttamente"
-msgstr ""
+msgstr "Password cambiata correttamente"
 
 #: admin_webix/templates/admin_webix/account/password_reset_email.html:2
 #: auth_webix/templates/auth_webix/password_reset/password_reset_email.html:2
@@ -392,10 +389,11 @@ msgid "Add"
 msgstr "Aggiungi"
 
 #: templates/django_webix/include/form_standard.js:72
-msgid "You must fill in all the required fields before you can save this form!"
+msgid ""
+"You must fill in all the required fields before you can save this form!"
 msgstr ""
-"È necessario compilare tutti i campi richiesti prima di poter salvare questo "
-"modulo!"
+"È necessario compilare tutti i campi richiesti prima di poter salvare questo"
+" modulo!"
 
 #: templates/django_webix/include/form_standard.js:72
 msgid "Error in the following fields"
@@ -675,8 +673,8 @@ msgid ""
 "Json response is available only if get_queryset() return a queryset and not "
 "a list"
 msgstr ""
-"La risposta in json è disponibile solo se get_queryset() ritorna un queryset "
-"e non una lista"
+"La risposta in json è disponibile solo se get_queryset() ritorna un queryset"
+" e non una lista"
 
 #: views/generic/list.py:502
 msgid "This action is not registered"
@@ -692,7 +690,8 @@ msgstr "Questo permesso non è registrato su questa classe"
 
 #: views/generic/list.py:579
 msgid "Generic TemplateListView needs to define data for datatable"
-msgstr "In un generico TemplateListView vanno definiti i dati per il datatable"
+msgstr ""
+"In un generico TemplateListView vanno definiti i dati per il datatable"
 
 #~ msgid "Sì"
 #~ msgstr "Sì"
