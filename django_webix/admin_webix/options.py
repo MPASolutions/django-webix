@@ -76,7 +76,7 @@ class ModelWebixAdmin(WebixPermissionsMixin):
 
     def is_enable_row_click(self, request):
         return self.enable_row_click
-    def get_extra_context(self):
+    def get_extra_context(self, request=None):
         return {}
 
     def get_label_width(self):
@@ -399,7 +399,7 @@ class ModelWebixAdmin(WebixPermissionsMixin):
 
                 def get_context_data(self, **kwargs):
                     context = super().get_context_data(**kwargs)
-                    context.update(_admin.get_extra_context())
+                    context.update(_admin.get_extra_context(request = self.request))
                     return context
 
             return WebixAdminCreateView
