@@ -403,6 +403,11 @@ $$("{{ webix_container_id }}").addView({
             {% endif %}
             {% endblock %}
         },
+        onColumnResize: function (id,newWidth,oldWidth,user_action) {
+            if ({{ view_prefix }}_save_columns_state==true) {
+                {{ view_prefix }}save_state();
+            }
+        },
 //        onAfterEditStop: function(state, editor, ignoreUpdate){
 //            //if(state.value != state.old){
 //                webix.message("Cell value was changed")
