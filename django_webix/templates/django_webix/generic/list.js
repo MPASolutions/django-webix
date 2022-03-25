@@ -90,6 +90,7 @@ $$("{{ webix_container_id }}").addView({
 });
 
 {% if is_json_loading %}
+var {{ view_prefix }}datatable_disable_savestate = true;
 
 {% if model %}
 if (
@@ -404,7 +405,7 @@ $$("{{ webix_container_id }}").addView({
             {% endblock %}
         },
         onColumnResize: function (id,newWidth,oldWidth,user_action) {
-            if ({{ view_prefix }}_save_columns_state==true) {
+            if ({{ view_prefix }}datatable_disable_savestate==false) {
                 {{ view_prefix }}save_state();
             }
         },
