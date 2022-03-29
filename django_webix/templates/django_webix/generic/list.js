@@ -89,8 +89,9 @@ $$("{{ webix_container_id }}").addView({
     ]
 });
 
-{% if is_json_loading %}
 var {{ view_prefix }}datatable_disable_savestate = true;
+
+{% if is_json_loading %}
 
 {% if model %}
 if (
