@@ -332,7 +332,7 @@ class ModelWebixAdmin(WebixPermissionsMixin):
     def get_layers(self):
         layers = []
         if getattr(self, 'model', None) is not None:
-            layers = get_layers(getattr(self, 'model', None))
+            layers = get_layers(getattr(self, 'model', None), getattr(self, 'qxs_layers', None))
         return layers
 
     def get_add_view(self):

@@ -1,50 +1,50 @@
 # -*- coding: utf-8 -*-
 
 import types
-from django.apps import apps
 
 from django.contrib.admin.utils import NestedObjects
-from django.contrib.gis.db import models
 from django.utils.encoding import force_text
 from django.utils.text import capfirst
 
-geo_field_classes = {
-    "POINT": models.PointField,
-    "MULTIPOINT": models.MultiPointField,
-    "LINESTRING": models.LineStringField,
-    "MULTILINESTRING": models.MultiLineStringField,
-    "POLYGON": models.PolygonField,
-    "MULTIPOLYGON": models.MultiPolygonField,
-    "GEOMETRYCOLLECTION": models.GeometryCollectionField,
-    "GEOMETRY": models.GeometryField
-}
-
-
-def get_layers(model, geo_field_name=None):
-    layers = []
-
-    if apps.is_installed("qxs") and \
-        apps.is_installed("django_webix_leaflet") and \
-        model is not None:
-        from qxs import qxsreg  # FIXME: add to requirements?
-
-        for model_layer in list(filter(lambda x: x.model == model, qxsreg.get_models())):
-            if geo_field_name is None or model_layer.geo_field_name==geo_field_name:
-                layers.append({
-                    'codename': model_layer.get_qxs_codename(),
-                    'layername': model_layer.get_title(),
-                    'qxsname': model_layer.get_qxs_name(),
-                    'geofieldname': model_layer.geo_field_name
-                })
-
-    return layers
-
-def get_model_geo_field_names(model):
-    geo_field_names = []
-    for field in model._meta.fields:
-        if type(field) in geo_field_classes.values():
-            geo_field_names.append(field.name)
-    return geo_field_names
+# geo_field_classes = {
+#     "POINT": models.PointField,
+#     "MULTIPOINT": models.MultiPointField,
+#     "LINESTRING": models.LineStringField,
+#     "MULTILINESTRING": models.MultiLineStringField,
+#     "POLYGON": models.PolygonField,
+#     "MULTIPOLYGON": models.MultiPolygonField,
+#     "GEOMETRYCOLLECTION": models.GeometryCollectionField,
+#     "GEOMETRY": models.GeometryField
+# }
+#
+#
+# def get_layers(model, geo_field_name=None):
+#     layers = []
+#
+#     if apps.is_installed("qxs") and \
+#         apps.is_installed("django_webix_leaflet") and \
+#         model is not None:
+#         from qxs import qxsreg  # FIXME: add to requirements?
+#
+#         for model_layer in list(filter(lambda x: x.model == model, qxsreg.get_models())):
+#             if geo_field_name is None or model_layer.geo_field_name==geo_field_name:
+#                 layers.append({
+#                     'codename': model_layer.get_qxs_codename(),
+#                     'layername': model_layer.get_title(),
+#                     'qxsname': model_layer.get_qxs_name(),
+#                     'geofieldname': model_layer.geo_field_name
+#                 })
+#
+#     return layers
+#
+# def get_model_geo_field_names(model):
+#     geo_field_names = []
+#     for field in model._meta.fields:
+#         if type(field) in geo_field_classes.values():
+#             geo_field_names.append(field.name)
+#     return geo_field_names
+#
+# TODO REMOVE: sono state spostate in django_webix/utils/layers.py to fix circular import
 
 
 def walk_items(item_list):

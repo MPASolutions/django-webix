@@ -147,7 +147,7 @@ function custom_button_geo_{{layer.codename}}(obj, common, value) {
     if (obj.{{ layer.geofieldname }}_available==true)
         return '<div title="{{_("Go to map")|escapejs}} ({{layer.layername}})"><i style="cursor:pointer" class="webix_icon far fa-map-marker-alt"></i></div>';
     else
-        return ''
+        return '<div title="{{_("Geometry does not exist")|escapejs}}"><i style="cursor:not-allowed" class="webix_icon far fa-map-marker-alt-slash"></i></div>'
 }
 {% endfor %}
 {% endif %}
@@ -232,7 +232,8 @@ $$("{{ webix_container_id }}").addView({
             {% for layer in layers %}
                 {
                     id: "cmd_gotomap_{{layer.codename}}",
-                    header: "",
+                    // header: '<span title="{{_("Go to map")|escapejs}} ({{layer.layername}})" class="webix_icon fas fa-map-marked-alt"></span>',
+                    header: '',
                     headermenu: false,
                     width:40,
                     tooltip: false,
@@ -456,7 +457,9 @@ $$("{{ webix_container_id }}").addView({
             {% if is_enable_column_webgis %}
             {% for layer in layers %}
             if ((id.column == 'cmd_gotomap_{{layer.codename}}')) {
-                $$("map").goToWebgisPk('{{layer.qxsname}}', '{{ pk_field_name }}', el.id);
+                if (el.{{ layer.geofieldname }}_available==true) {
+                    $$("map").goToWebgisPk('{{layer.qxsname}}', '{{ pk_field_name }}', el.id);
+                }
             } else
             {% endfor %}
             {% endif %}

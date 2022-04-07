@@ -19,7 +19,7 @@ from django_filtersmerger import FilterMerger
 from django_webix.forms import WebixModelForm
 from django_webix.views import WebixUpdateView
 from django_webix.views.generic.base import WebixBaseMixin, WebixPermissionsMixin, WebixUrlMixin
-from django_webix.views.generic.utils import get_model_geo_field_names
+from django_webix.utils.layers import get_model_geo_field_names
 
 try:
     from django.contrib.gis.geos import GEOSGeometry

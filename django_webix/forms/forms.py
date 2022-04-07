@@ -851,9 +851,11 @@ class BaseWebixMixin:
                     model = self.get_model()
                     if model is not None:
                         if hasattr(self,'get_layers'):
-                            layers = self.get_layers(name)
+                            # nel WebixModelForm puo essere definita get_layers specifica
+                            layers = self.get_layers(name)  # name is geo field name
                         else:
-                            layers = get_layers(model)
+                            # altrimenti usa get_layers generica perchè non conosce la definzione della view
+                            layers = get_layers(model, getattr(self, 'qxs_layers', None))
                         if getattr(self.instance, name, None) is None:
                             _mode = 'draw'
                         else:

@@ -36,16 +36,20 @@ $$("{{ webix_container_id }}").addView({
         },
         {% if object.pk %}
             {% for layer in layers %}
-             {
-                view: "tootipButton",
-                type: "base",
-                align: "left",
-                label: "{{_("Go to map")|escapejs}} ({{layer.layername}})",
-                autowidth: true,
-                click: function () {
-                    $$("map").goToWebgisPk('{{layer.qxsname}}', '{{ pk_field_name }}', {{ object.pk }});
-                }
-            },
+                 {
+                    view: "tootipButton",
+                    {% if not object|getattr:layer.geofieldname %}
+                    disabled:true,
+                    tooltip: "{{_("Geometry does not exist")|escapejs}}",
+                    {% endif %}
+                    type: "base",
+                    align: "left",
+                    label: "{{_("Go to map")|escapejs}} ({{layer.layername}})",
+                    autowidth: true,
+                    click: function () {
+                        $$("map").goToWebgisPk('{{layer.qxsname}}', '{{ pk_field_name }}', {{ object.pk }});
+                    }
+                },
             {% endfor %}
         {% endif %}
     ]
