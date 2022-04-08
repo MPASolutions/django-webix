@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-02-17 14:48+0100\n"
+"POT-Creation-Date: 2022-04-07 15:43+0200\n"
 "PO-Revision-Date: 2021-02-13 10:31+0050\n"
 "Last-Translator: b'  <>'\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -121,13 +121,13 @@ msgstr ""
 msgid "Webix Admin Menu"
 msgstr ""
 
-#: admin_webix/options.py:179 templates/django_webix/include/utils.js:178
-#: templates/django_webix/include/utils.js:185
+#: admin_webix/options.py:182 templates/django_webix/include/utils.js:205
+#: templates/django_webix/include/utils.js:212
 msgid "Yes"
 msgstr "Ja"
 
-#: admin_webix/options.py:179 templates/django_webix/include/utils.js:180
-#: templates/django_webix/include/utils.js:187
+#: admin_webix/options.py:182 templates/django_webix/include/utils.js:207
+#: templates/django_webix/include/utils.js:214
 msgid "No"
 msgstr "Nein"
 
@@ -223,31 +223,31 @@ msgstr ""
 msgid "WEBGIS"
 msgstr "WEBGIS"
 
-#: admin_webix/templates/admin_webix/include/menu.js:35
+#: admin_webix/templates/admin_webix/include/menu.js:36
 msgid "User"
 msgstr ""
 
-#: admin_webix/templates/admin_webix/include/menu.js:40
+#: admin_webix/templates/admin_webix/include/menu.js:41
 msgid "Profile"
 msgstr ""
 
-#: admin_webix/templates/admin_webix/include/menu.js:47
+#: admin_webix/templates/admin_webix/include/menu.js:48
 msgid "Password change"
 msgstr ""
 
-#: admin_webix/templates/admin_webix/include/menu.js:54
+#: admin_webix/templates/admin_webix/include/menu.js:55
 msgid "Password reset"
 msgstr ""
 
-#: admin_webix/templates/admin_webix/include/menu.js:62
+#: admin_webix/templates/admin_webix/include/menu.js:63
 msgid "2 factor authentication"
 msgstr ""
 
-#: admin_webix/templates/admin_webix/include/menu.js:76
+#: admin_webix/templates/admin_webix/include/menu.js:79
 msgid "Manage users"
 msgstr ""
 
-#: admin_webix/templates/admin_webix/include/menu.js:81
+#: admin_webix/templates/admin_webix/include/menu.js:84
 msgid "Users"
 msgstr ""
 
@@ -298,11 +298,11 @@ msgstr "Klicken Sie zum Auswählen"
 msgid "Initial value {} for geo field {} is not supported"
 msgstr "Anfangswert {} für Geo Feld {} nicht unterstützt"
 
-#: forms/forms.py:881
+#: forms/forms.py:883
 msgid "Edit"
 msgstr ""
 
-#: forms/forms.py:911
+#: forms/forms.py:913
 msgid "Type of field {} not supported"
 msgstr "Feldtyp {} nicht unterstutzt "
 
@@ -342,32 +342,38 @@ msgstr "Geo filter beseitigung"
 msgid "Advanced filter"
 msgstr "Erweiterte Filter"
 
-#: templates/django_webix/generic/list.js:142
+#: templates/django_webix/generic/list.js:148
+#: templates/django_webix/generic/list.js:235
 #: templates/django_webix/include/actions_list.js:8
-#: templates/django_webix/include/toolbar_navigation.js:43
+#: templates/django_webix/include/toolbar_navigation.js:47
 msgid "Go to map"
 msgstr "Zur Karte"
 
-#: templates/django_webix/generic/list.js:226
+#: templates/django_webix/generic/list.js:150
+#: templates/django_webix/include/toolbar_navigation.js:43
+msgid "Geometry does not exist"
+msgstr ""
+
+#: templates/django_webix/generic/list.js:248
 #, fuzzy
 #| msgid "Remove element"
 msgid "Remove filters"
 msgstr "Element löschen"
 
-#: templates/django_webix/generic/list.js:227
+#: templates/django_webix/generic/list.js:249
 msgid "Apply filters"
 msgstr "Filter anwenden"
 
-#: templates/django_webix/generic/list.js:227
+#: templates/django_webix/generic/list.js:249
 msgid "Filter"
 msgstr "Filter"
 
-#: templates/django_webix/generic/list.js:408
+#: templates/django_webix/generic/list.js:487
 msgid "Double click to edit the element"
 msgstr "Doppelklicken um das Element zu ändern"
 
 #: templates/django_webix/include/actions_list.js:33
-#: templates/django_webix/include/utils.js:244
+#: templates/django_webix/include/utils.js:271
 msgid "Close"
 msgstr "Schließen"
 
@@ -490,7 +496,7 @@ msgstr "Wählen Sie alle"
 
 #: templates/django_webix/include/toolbar_list.js:29
 #: templates/django_webix/include/toolbar_list.js:35
-#: templates/django_webix/include/utils.js:542
+#: templates/django_webix/include/utils.js:569
 msgid "All"
 msgstr "Alle"
 
@@ -516,7 +522,7 @@ msgid "Select an action"
 msgstr "Aktion auswählen"
 
 #: templates/django_webix/include/toolbar_list_actions_select.js:20
-#: views/generic/decorators.py:16 views/generic/list.py:375
+#: views/generic/decorators.py:16 views/generic/list.py:381
 msgid "Go"
 msgstr "Los"
 
@@ -528,40 +534,40 @@ msgstr "Zurück"
 msgid "Back to list"
 msgstr "Zurück zur Liste"
 
-#: templates/django_webix/include/utils.js:199
+#: templates/django_webix/include/utils.js:226
 msgid "Default"
 msgstr "Default"
 
-#: templates/django_webix/include/utils.js:206
+#: templates/django_webix/include/utils.js:233
 msgid "Show on map"
 msgstr "Auf der Karte zeigen "
 
-#: templates/django_webix/include/utils.js:212
+#: templates/django_webix/include/utils.js:239
 msgid "Duplicate element"
 msgstr "Element verdoppeln"
 
-#: templates/django_webix/include/utils.js:216
+#: templates/django_webix/include/utils.js:243
 msgid "Remove element"
 msgstr "Element löschen"
 
-#: templates/django_webix/include/utils.js:220
+#: templates/django_webix/include/utils.js:247
 msgid "Detail"
 msgstr "Detail"
 
-#: templates/django_webix/include/utils.js:241
+#: templates/django_webix/include/utils.js:268
 msgid "Image"
 msgstr "Bild"
 
-#: templates/django_webix/include/utils.js:321
-#: templates/django_webix/include/utils.js:379
+#: templates/django_webix/include/utils.js:348
+#: templates/django_webix/include/utils.js:406
 msgid "Server error"
 msgstr "Server fehler"
 
-#: templates/django_webix/include/utils.js:576
+#: templates/django_webix/include/utils.js:603
 msgid "Click and change"
 msgstr ""
 
-#: templates/django_webix/include/utils.js:578
+#: templates/django_webix/include/utils.js:605
 msgid "Locked data"
 msgstr ""
 
@@ -616,7 +622,7 @@ msgstr ""
 
 #: views/generic/create_update.py:321 views/generic/create_update.py:402
 #: views/generic/delete.py:42 views/generic/detail.py:21
-#: views/generic/list.py:523
+#: views/generic/list.py:569
 msgid "View permission is not allowed"
 msgstr "Ansichtsberechtigung nicht erlaubt"
 
@@ -637,19 +643,19 @@ msgstr "Geändert  %s."
 msgid "and"
 msgstr "und"
 
-#: views/generic/decorators.py:14 views/generic/list.py:373
+#: views/generic/decorators.py:14 views/generic/list.py:379
 msgid "Fill in the form"
 msgstr "Form ausfüllen"
 
-#: views/generic/decorators.py:15 views/generic/list.py:374
+#: views/generic/decorators.py:15 views/generic/list.py:380
 msgid "Are you sure you want to proceed with this action?"
 msgstr "Möchten Sie mit dieser Aktion fortfahren?"
 
-#: views/generic/decorators.py:17 views/generic/list.py:376
+#: views/generic/decorators.py:17 views/generic/list.py:382
 msgid "Proceed"
 msgstr "Fortfahren"
 
-#: views/generic/decorators.py:18 views/generic/list.py:377
+#: views/generic/decorators.py:18 views/generic/list.py:383
 msgid "Undo"
 msgstr "Lösen"
 
@@ -663,39 +669,39 @@ msgid ""
 "get_absolute_url method on the Model."
 msgstr ""
 
-#: views/generic/list.py:270
+#: views/generic/list.py:276
 msgid "Paginate count is not integer"
 msgstr ""
 
-#: views/generic/list.py:279
+#: views/generic/list.py:285
 msgid "Paginate start is not integer"
 msgstr ""
 
-#: views/generic/list.py:410
+#: views/generic/list.py:416
 msgid ""
 "Actions style is improperly configured only options are 'buttons' or "
 "'select' (select by default)."
 msgstr ""
 
-#: views/generic/list.py:483
+#: views/generic/list.py:530
 msgid ""
 "Json response is available only if get_queryset() return a queryset and not "
 "a list"
 msgstr ""
 
-#: views/generic/list.py:502
+#: views/generic/list.py:549
 msgid "This action is not registered"
 msgstr "Diese aktion ist nicht registriert"
 
-#: views/generic/list.py:508
+#: views/generic/list.py:555
 msgid "Permission denied: {}"
 msgstr "Berechtigung verweigert: {}"
 
-#: views/generic/list.py:510
+#: views/generic/list.py:557
 msgid "This permission is not registered on this class"
 msgstr "Diese Berechtigung ist nicht auf dieser Klasse registriert"
 
-#: views/generic/list.py:579
+#: views/generic/list.py:628
 msgid "Generic TemplateListView needs to define data for datatable"
 msgstr ""
 
