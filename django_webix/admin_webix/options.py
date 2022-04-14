@@ -467,7 +467,7 @@ class ModelWebixAdmin(WebixPermissionsMixin):
 
                 def get_context_data(self, **kwargs):
                     context = super().get_context_data(**kwargs)
-                    context.update(_admin.get_extra_context())
+                    context.update(_admin.get_extra_context(request = self.request))
                     return context
 
             return WebixAdminUpdateView
@@ -525,7 +525,7 @@ class ModelWebixAdmin(WebixPermissionsMixin):
 
                 def get_context_data(self, **kwargs):
                     context = super().get_context_data(**kwargs)
-                    context.update(_admin.get_extra_context())
+                    context.update(_admin.get_extra_context(request = self.request))
                     return context
 
             return WebixAdminDeleteView
@@ -597,7 +597,7 @@ class ModelWebixAdmin(WebixPermissionsMixin):
 
                 def get_context_data(self, **kwargs):
                     context = super().get_context_data(**kwargs)
-                    context.update(_admin.get_extra_context())
+                    context.update(_admin.get_extra_context(request = self.request))
                     return context
 
                 @property
