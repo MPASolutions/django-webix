@@ -973,7 +973,7 @@ class BaseWebixMixin:
 
                 _field_header = {}
 
-                if field_name.endswith('-DELETE'):
+                if field_name.endswith('-DELETE') or field_name.endswith('-DELETE-icon') :
                     _field_header = {'header': '', 'width': 28}
                 else:
                     if 'width' in f:
@@ -989,6 +989,7 @@ class BaseWebixMixin:
                     _field_header.update({'header': force_text(f['label'])})
 
                 if _field_header is not None:
+                    _field_header.update({'id': 'id_header_{}'.format(field_name)})
                     fields_header.update({field_name: _field_header})
 
         return fields_header
