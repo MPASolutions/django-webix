@@ -8,9 +8,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-04-07 15:43+0200\n"
-"PO-Revision-Date: 2022-03-22 10:46+0050\n"
-"Last-Translator: Traduzioni CBC <>\n"
+"POT-Creation-Date: 2022-04-28 15:54+0200\n"
+"PO-Revision-Date: 2022-04-11 10:00+0050\n"
+"Last-Translator: Sambado Paolo CBC Spagna <>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: \n"
 "MIME-Version: 1.0\n"
@@ -338,7 +338,7 @@ msgstr "Mostrar en el mapa"
 #: templates/django_webix/generic/list.js:150
 #: templates/django_webix/include/toolbar_navigation.js:43
 msgid "Geometry does not exist"
-msgstr ""
+msgstr "La geometría no existe"
 
 #: templates/django_webix/generic/list.js:248
 msgid "Remove filters"
