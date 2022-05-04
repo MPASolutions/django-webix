@@ -59,7 +59,7 @@ if (form_validate('{{ form.webix_id }}')) {
             else if ($$('{{ webix_container_id }}') !== undefined && $$('{{ webix_container_id }}') !== null && $$('{{ webix_container_id }}').hideOverlay !== undefined)
                 $$('{{ webix_container_id }}').hideOverlay();
             if (typeof {{ form.webix_id|comma_to_underscore }}_success === "function"){
-                {{ form.webix_id }}_success();
+                {{ form.webix_id|comma_to_underscore }}_success();
             }
         },
         error: function (jqXHR, textStatus, errorThrown) {
