@@ -1058,6 +1058,13 @@ class BaseWebixForm(forms.BaseForm, BaseWebixMixin):
         super(BaseWebixForm, self).__init__(data, files, auto_id, prefix, initial, error_class, label_suffix,
                                             empty_permitted, field_order, use_required_attribute, renderer)
 
+        if not hasattr(self, 'fields_orig'):
+            self.fields_orig = copy.deepcopy(self.fields)
+        for field in self.fields:
+            if hasattr(self.fields[field], 'queryset'):
+                self.fields[field].queryset = self.fields_orig[field].queryset.filter(
+                    self.fields_orig[field].queryset.model.objects.get_filter())
+
         # Set localization fields
         if settings.USE_L10N is True:
             for field in self.fields:
@@ -1109,6 +1116,13 @@ class BaseWebixModelForm(forms.BaseModelForm, BaseWebixMixin):
         else:
             super(BaseWebixModelForm, self).__init__(data, files, auto_id, prefix, initial, error_class, label_suffix,
                                                      empty_permitted, instance, use_required_attribute)
+
+        if not hasattr(self, 'fields_orig'):
+            self.fields_orig = copy.deepcopy(self.fields)
+        for field in self.fields:
+            if hasattr(self.fields[field], 'queryset'):
+                self.fields[field].queryset = self.fields_orig[field].queryset.filter(
+                    self.fields_orig[field].queryset.model.objects.get_filter())
 
         # Set localization fields
         if settings.USE_L10N is True:
