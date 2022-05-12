@@ -1061,7 +1061,8 @@ class BaseWebixForm(forms.BaseForm, BaseWebixMixin):
         if not hasattr(self, 'fields_orig'):
             self.fields_orig = copy.deepcopy(self.fields)
         for field in self.fields:
-            if hasattr(self.fields[field], 'queryset'):
+            if hasattr(self.fields[field], 'queryset') and \
+                hasattr(self.fields_orig[field].queryset.model.objects,'get_filter'):
                 self.fields[field].queryset = self.fields_orig[field].queryset.filter(
                     self.fields_orig[field].queryset.model.objects.get_filter())
 
@@ -1120,7 +1121,8 @@ class BaseWebixModelForm(forms.BaseModelForm, BaseWebixMixin):
         if not hasattr(self, 'fields_orig'):
             self.fields_orig = copy.deepcopy(self.fields)
         for field in self.fields:
-            if hasattr(self.fields[field], 'queryset'):
+            if hasattr(self.fields[field], 'queryset') and \
+                hasattr(self.fields_orig[field].queryset.model.objects,'get_filter'):
                 self.fields[field].queryset = self.fields_orig[field].queryset.filter(
                     self.fields_orig[field].queryset.model.objects.get_filter())
 
