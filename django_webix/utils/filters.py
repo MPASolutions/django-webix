@@ -55,7 +55,7 @@ def from_dict_to_qset(data, model):
             if 'operator' in data_qset:
                 qset_to_applicate = from_dict_to_qset(data_qset, model=model)
             else:
-                # Recupero il tipo di field su cui andrò ad applicare il filtro
+                # search field type for filer applied
                 _curr_model = model
                 _curr_field = None
 
@@ -75,9 +75,9 @@ def from_dict_to_qset(data, model):
                         elif issubclass(type(_curr_field), GenericRelation):
                             _curr_model = _curr_field.related_model
                         else:
-                            pass  # Sono arrivato all'ultimo field, non serve fare altro
+                            pass  # there are no others field
 
-                # Se si tratta di un array, allora lo metto in una lista
+                # its an array so put in into array
                 if ArrayField and isinstance(_curr_field, ArrayField):
                     data_qset['val'] = [data_qset.get('val')]
 
@@ -89,7 +89,10 @@ def from_dict_to_qset(data, model):
                     if val is not None and val.get('start') is not None:
                         qset_to_applicate = Q(**{base_path + '__gte': parse(val.get('start'))})
                     if val is not None and val.get('end') is not None:
-                        qset_to_applicate &= Q(**{base_path + '__lte': parse(val.get('end'))})
+                        data_end = parse(val.get('end'))
+                        if datetime.datetime.combine(data_end.date(),datetime.datetime.min.time())==data_end:
+                            data_end += relativedelta(days=1)
+                        qset_to_applicate &= Q(**{base_path + '__lte': data_end})
                 elif data_qset.get('path').endswith("__exact_in"):
                     data_qset['path'] = data_qset['path'].replace("__exact_in", "__in")
                     data_qset['val'] = data_qset['val'].split(",")
@@ -99,8 +102,7 @@ def from_dict_to_qset(data, model):
                     if isinstance(_curr_field, models.BooleanField) or \
                         isinstance(_curr_field, models.NullBooleanField) or \
                         data_qset.get('path').endswith("__isnull"):
-
-                        # devo fare il cast forzato
+                        # force cast
                         if valore_query.lower() == 'false':
                             valore_query = False
                         else:
