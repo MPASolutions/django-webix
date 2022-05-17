@@ -304,7 +304,7 @@ class BaseWebixMixin:
                 })
                 if initial is not None:
                     if isinstance(initial, six.string_types):
-                        if settings.WEBIX_VERSION >= '7.0.0' and settings.WEBIX_VERSION < '8.0.0':
+                        if '7.0.0' <= settings.WEBIX_VERSION < '8.0.0':
                             el.update({
                                 'value': '2020-01-01 {}'.format(initial).replace('-', ',').replace(' ', ',').replace(
                                     ':', ',')
@@ -324,7 +324,7 @@ class BaseWebixMixin:
                     else:
                         if not is_naive(initial):
                             initial = make_naive(initial)
-                        if settings.WEBIX_VERSION >= '7.0.0' and settings.WEBIX_VERSION < '8.0.0':
+                        if '7.0.0' <= settings.WEBIX_VERSION < '8.0.0':
                             el.update({'value': '2020-01-01 {}'.format(initial.strftime('%H,%M'))})
                         else:
                             el.update({'value': '{}'.format(initial.strftime('%H,%M'))})
