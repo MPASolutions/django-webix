@@ -1,14 +1,23 @@
 # -*- coding: utf-8 -*-
 
 import json
-
+import datetime
 import django
 from dateutil.parser import parse
-from django.contrib.postgres.fields import ArrayField
 from django.db import models
 from django.db.models import Q
 from django.db.models.fields.reverse_related import ForeignObjectRel
+from django.contrib.contenttypes.fields import GenericRelation, GenericForeignKey
 from django.utils.translation import ugettext as _
+from django.core.exceptions import FieldDoesNotExist
+from dateutil.relativedelta import relativedelta
+
+try:
+    import psycopg2
+except ModuleNotFoundError:
+    ArrayField = None
+else:
+    from django.contrib.postgres.fields import ArrayField
 
 try:
     from django.contrib.gis.geos import GEOSGeometry
@@ -37,29 +46,6 @@ def decode_text_filters(filters_text):
     return filters  # by default filters are not set
 
 
-def from_geo_dict_to_qset(model, data):
-    if issubclass(GEOSGeometry, django.contrib.gis.geos.GEOSGeometry) and \
-        issubclass(MultiPolygon, django.contrib.gis.geos.GEOSGeometry):
-        if 'geo_field_name' in data and 'polygons_srid' in data and 'polygons' in data:
-            geo_field_name = data.get('geo_field_name')
-            polygons = []
-            for geo_text in data['polygons']:
-                polygons.append(GEOSGeometry(geo_text))
-            geo = MultiPolygon(polygons)
-            try:
-                geo.srid = int(data.get('polygons_srid'))
-            except ValueError:
-                print(_('ERROR: geo srid is incorrect'))
-            geo_field = model._meta.get_field(geo_field_name)
-            _geo = geo.transform(geo_field.srid, clone=True).buffer(
-                0)  # se l'unione del multipolygon risultasse invalida
-            qset = Q(**{geo_field_name + '__within': _geo})
-        else:
-            qset = Q()
-        return qset
-    return Q()
-
-
 def from_dict_to_qset(data, model):
     if 'qsets' in data and 'operator' in data:
         operator = data.get('operator')
@@ -70,23 +56,30 @@ def from_dict_to_qset(data, model):
             if 'operator' in data_qset:
                 qset_to_applicate = from_dict_to_qset(data_qset, model=model)
             else:
-                # Recupero il tipo di field su cui andrò ad applicare il filtro
+                # search field type for filer applied
                 _curr_model = model
                 _curr_field = None
+
                 for _field in data_qset.get('path').split("__")[:-1]:
-                    _curr_field = _curr_model._meta.get_field(_field)
-
-                    if issubclass(type(_curr_field), models.ForeignKey):
-                        _curr_model = _curr_field.remote_field.get_related_field().model
-                    elif issubclass(type(_curr_field), ForeignObjectRel):
-                        _curr_model = _curr_field.related_model
-                    elif issubclass(type(_curr_field), models.ManyToManyField):
-                        _curr_model = _curr_field.remote_field.get_related_field().model
+                    try:
+                        _curr_field = _curr_model._meta.get_field(_field)
+                    except FieldDoesNotExist:
+                        _curr_model = None
+                        _curr_field = None
                     else:
-                        pass  # Sono arrivato all'ultimo field, non serve fare altro
+                        if issubclass(type(_curr_field), models.ForeignKey):
+                            _curr_model = _curr_field.remote_field.get_related_field().model
+                        elif issubclass(type(_curr_field), ForeignObjectRel):
+                            _curr_model = _curr_field.related_model
+                        elif issubclass(type(_curr_field), models.ManyToManyField):
+                            _curr_model = _curr_field.remote_field.get_related_field().model
+                        elif issubclass(type(_curr_field), GenericRelation):
+                            _curr_model = _curr_field.related_model
+                        else:
+                            pass  # there are no others field
 
-                # Se si tratta di un array, allora lo metto in una lista
-                if isinstance(_curr_field, ArrayField):
+                # its an array so put in into array
+                if ArrayField and isinstance(_curr_field, ArrayField):
                     data_qset['val'] = [data_qset.get('val')]
 
                 if data_qset.get('path').endswith("__range"):
@@ -97,13 +90,25 @@ def from_dict_to_qset(data, model):
                     if val is not None and val.get('start') is not None:
                         qset_to_applicate = Q(**{base_path + '__gte': parse(val.get('start'))})
                     if val is not None and val.get('end') is not None:
-                        qset_to_applicate &= Q(**{base_path + '__lte': parse(val.get('end'))})
+                        data_end = parse(val.get('end'))
+                        if datetime.datetime.combine(data_end.date(),datetime.datetime.min.time())==data_end:
+                            data_end += relativedelta(days=1)
+                        qset_to_applicate &= Q(**{base_path + '__lte': data_end})
                 elif data_qset.get('path').endswith("__exact_in"):
                     data_qset['path'] = data_qset['path'].replace("__exact_in", "__in")
                     data_qset['val'] = data_qset['val'].split(",")
                     qset_to_applicate = Q(**{data_qset.get('path'): data_qset.get('val')})
                 else:
-                    qset_to_applicate = Q(**{data_qset.get('path'): data_qset.get('val')})
+                    valore_query = data_qset.get('val')
+                    if isinstance(_curr_field, models.BooleanField) or \
+                        isinstance(_curr_field, models.NullBooleanField) or \
+                        data_qset.get('path').endswith("__isnull"):
+                        # force cast
+                        if valore_query.lower() == 'false':
+                            valore_query = False
+                        else:
+                            valore_query = True
+                    qset_to_applicate = Q(**{data_qset.get('path'): valore_query})
             if j == 0:
                 qset = qset_to_applicate
             else:
@@ -121,3 +126,19 @@ def from_dict_to_qset(data, model):
     else:
         qset = Q()
     return qset
+
+
+def combo_with_icontains_filter(combo_widget):
+    if 'options' not in combo_widget:
+        return combo_widget
+
+    options_data = combo_widget['options']
+    combo_widget.update({
+        'options': {
+            'filter': 'filter_icontains',
+            'body': {
+                'data': options_data
+            }
+        }
+    })
+    return combo_widget
