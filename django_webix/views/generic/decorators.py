@@ -36,12 +36,37 @@ def action_config(
                         params = {}
                     _form = form(params, request.FILES, request=request)
                     if _form.is_valid():
+                        # log execute action
+                        from django.contrib.admin.models import LogEntry, CHANGE
+                        from django.contrib.contenttypes.models import ContentType
+                        LogEntry.objects.log_action(
+                            user_id=request.user.pk,
+                            content_type_id=ContentType.objects.get_for_model(qs.model).pk,
+                            object_id=None, # on a QS
+                            object_repr=','.join([str(i) for i in qs.values_list('id',flat=True)]),
+                            action_flag=CHANGE,
+                            change_message=_('Action success: {} data:{}').format(wrapper.short_description,
+                                                                               _form.cleaned_data)
+                            )
                         return func(self, request, qs, _form)
                     else:
                         return JsonResponse({
                             'status': False,
                             'errors': [', '.join(['{}: {}'.format(k, v) for k, v in _form.errors.items()])]
                         }, status=400)
+            else:
+                # log execute action
+                from django.contrib.admin.models import LogEntry, CHANGE
+                from django.contrib.contenttypes.models import ContentType
+                LogEntry.objects.log_action(
+                    user_id=request.user.pk,
+                    content_type_id=ContentType.objects.get_for_model(qs.model).pk,
+                    object_id=None,  # on a QS
+                    object_repr=','.join([str(i) for i in qs.values_list('id', flat=True)]),
+                    action_flag=CHANGE,
+                    change_message=_('Action success: {}').format(wrapper.short_description)
+                )
+
             return func(self, request, qs)
 
         setattr(wrapper, 'action_key', action_key)
