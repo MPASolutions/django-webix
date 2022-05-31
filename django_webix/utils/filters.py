@@ -8,7 +8,7 @@ from dateutil.relativedelta import relativedelta
 from django.contrib.contenttypes.fields import GenericRelation
 from django.core.exceptions import FieldDoesNotExist
 from django.db import models
-from django.db.models import Q
+from django.db.models import Q, DateTimeField
 from django.db.models.fields.reverse_related import ForeignObjectRel
 
 try:
@@ -90,7 +90,8 @@ def from_dict_to_qset(data, model):
                         qset_to_applicate = Q(**{base_path + '__gte': parse(val.get('start'))})
                     if val is not None and val.get('end') is not None:
                         data_end = parse(val.get('end'))
-                        if datetime.datetime.combine(data_end.date(), datetime.datetime.min.time()) == data_end:
+                        if isinstance(_curr_field, DateTimeField) and \
+                            datetime.datetime.combine(data_end.date(), datetime.datetime.min.time()) == data_end:
                             data_end += relativedelta(days=1)
                         qset_to_applicate &= Q(**{base_path + '__lte': data_end})
                 elif data_qset.get('path').endswith("__exact_in"):
