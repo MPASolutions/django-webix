@@ -330,8 +330,9 @@ class FieldSetMixin:
 
 
 if apps.is_installed("two_factor"):
+
     from two_factor.forms import (AuthenticationTokenForm, BackupTokenForm, DisableForm, MethodForm, TOTPDeviceForm,
-                                  PhoneNumberForm, DeviceValidationForm, YubiKeyDeviceForm)
+                                  DeviceValidationForm)
     from django_otp.forms import OTPAuthenticationFormMixin
 
     # ################################ Autenticazione a 2 fattori - django-two-factor-auth ################################
@@ -358,14 +359,18 @@ if apps.is_installed("two_factor"):
     TOTPDeviceForm.__bases__ = (WebixForm,)
     WebixTOTPDeviceForm = type(str('WebixTOTPDeviceForm'), (TOTPDeviceForm,), {})
 
-    PhoneNumberForm.__bases__ = (WebixModelForm,)
-    WebixPhoneNumberForm = type(str('WebixPhoneNumberForm'), (PhoneNumberForm,), {})
+    if apps.is_installed("two_factor.plugins.phonenumber"):
+        from two_factor.plugins.phonenumber.forms import PhoneNumberForm
+        PhoneNumberForm.__bases__ = (WebixModelForm,)
+        WebixPhoneNumberForm = type(str('WebixPhoneNumberForm'), (PhoneNumberForm,), {})
 
     DeviceValidationForm.__bases__ = (WebixForm,)
     WebixDeviceValidationForm = type(str('WebixDeviceValidationForm'), (DeviceValidationForm,), {})
 
-    YubiKeyDeviceForm.__bases__ = (WebixDeviceValidationForm,)
-    WebixYubiKeyDeviceForm = type(str('WebixYubiKeyDeviceForm'), (YubiKeyDeviceForm,), {})
+    if apps.is_installed("two_factor.plugins.yubikey"):
+        from two_factor.plugins.yubikey.forms import YubiKeyDeviceForm
+        YubiKeyDeviceForm.__bases__ = (WebixDeviceValidationForm,)
+        WebixYubiKeyDeviceForm = type(str('WebixYubiKeyDeviceForm'), (YubiKeyDeviceForm,), {})
 
     # ############################################## Reset password by email ##############################################
     PasswordResetForm.__bases__ = (WebixForm,)

@@ -72,12 +72,12 @@ class WebixCreateUpdateMixin:
         return _template_style
 
     def is_enable_button_save_continue(self, request):
-        if self.success_url is not None:
+        if self.get_success_url() is None:
             return False
         return self.enable_button_save_continue
 
     def is_enable_button_save_addanother(self, request):
-        if self.success_url is not None:
+        if self.get_success_url() is None:
             return False
         return self.enable_button_save_addanother
 
@@ -103,9 +103,8 @@ class WebixCreateUpdateMixin:
             url = self.get_url_list()
 
         else:
-            raise ImproperlyConfigured(_(
-                "No URL to redirect to.  Either provide a url or define"
-                " a get_absolute_url method on the Model."))
+            url = None # bypass for permission
+            
         return url
 
     def get_context_data_webix_create_update(self, request, obj=None, **kwargs):
@@ -327,9 +326,9 @@ class WebixCreateView(WebixCreateUpdateMixin,
     def get_context_data(self, **kwargs):
         context = super(WebixCreateView, self).get_context_data(**kwargs)
         context.update(self.get_context_data_webix_permissions(request=self.request))
-        context.update(self.get_context_data_webix_create_update(request=self.request))
         context.update(self.get_context_data_webix_url(request=self.request))
         context.update(self.get_context_data_webix_base(request=self.request))
+        context.update(self.get_context_data_webix_create_update(request=self.request))
         return context
 
     def pre_forms_valid(self, form=None, inlines=None, **kwargs):
