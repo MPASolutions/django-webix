@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-05-20 18:10+0200\n"
+"POT-Creation-Date: 2022-06-04 11:05+0200\n"
 "PO-Revision-Date: 2022-04-07 16:07+0050\n"
 "Last-Translator: Stefano Menegon <menegon@mpasol.it>\n"
 "Language-Team: \n"
@@ -641,6 +641,18 @@ msgstr "Procedi"
 #: views/generic/decorators.py:18 views/generic/list.py:383
 msgid "Undo"
 msgstr "Annulla"
+
+#: views/generic/decorators.py:48
+#, fuzzy
+#| msgid "Action successful"
+msgid "Action success: {} data:{}"
+msgstr "Azione avvenuta con successo"
+
+#: views/generic/decorators.py:67
+#, fuzzy
+#| msgid "Action successful"
+msgid "Action success: {}"
+msgstr "Azione avvenuta con successo"
 
 #: views/generic/delete.py:45
 msgid "Delete permission is not allowed"

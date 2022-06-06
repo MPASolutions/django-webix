@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-05-20 18:10+0200\n"
+"POT-Creation-Date: 2022-06-04 11:05+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -629,6 +629,14 @@ msgstr ""
 
 #: views/generic/decorators.py:18 views/generic/list.py:383
 msgid "Undo"
+msgstr ""
+
+#: views/generic/decorators.py:48
+msgid "Action success: {} data:{}"
+msgstr ""
+
+#: views/generic/decorators.py:67
+msgid "Action success: {}"
 msgstr ""
 
 #: views/generic/delete.py:45

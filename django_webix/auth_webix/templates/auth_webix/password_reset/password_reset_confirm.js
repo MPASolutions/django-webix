@@ -93,5 +93,7 @@
         ]
     });
 
+    $$('{{ form.webix_id }}').setValues({csrfmiddlewaretoken: "{{ csrf_token }}"});
+
     {% include "django_webix/include/toolbar_form_validate.js" %}
 {% endblock %}
