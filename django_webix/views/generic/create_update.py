@@ -72,29 +72,29 @@ class WebixCreateUpdateMixin:
         return _template_style
 
     def is_enable_button_save_continue(self, request):
-        if self.success_url is None:
+        if self.get_success_url(next_step='_continue') is None:
             return False
         return self.enable_button_save_continue
 
     def is_enable_button_save_addanother(self, request):
-        if self.success_url is None:
+        if self.get_success_url(next_step='_addanother') is None:
             return False
         return self.enable_button_save_addanother
 
     def is_enable_button_save_gotolist(self, request):
         return self.enable_button_save_gotolist
 
-    def get_success_url(self):
+    def get_success_url(self, next_step=None):
         if self.success_url is not None:
             url = self.success_url
 
-        elif self.request.GET.get('_addanother', None) is not None and \
-            self.is_enable_button_save_addanother(request=self.request) and \
+        elif (self.request.GET.get('_addanother', None) is not None or next_step=='_addanother') and \
+            self.enable_button_save_continue and \
             self.get_url_create() is not None:
             url = self.get_url_create()
 
-        elif self.request.GET.get('_continue', None) is not None and \
-            self.is_enable_button_save_continue(request=self.request) and \
+        elif (self.request.GET.get('_continue', None) is not None or next_step=='_continue') and \
+            self.enable_button_save_addanother and \
             self.get_url_update(obj=self.object) is not None:
             url = self.get_url_update(obj=self.object)
 
