@@ -224,6 +224,8 @@ class WebixUrlMixin(WebixUrlUtilsMixin):
     url_pattern_update = None
     url_pattern_delete = None
 
+    url_using_namespace = False
+
     def get_url_pattern_list(self):
         if self.url_pattern_list is not None:
             return self.url_pattern_list
@@ -250,7 +252,13 @@ class WebixUrlMixin(WebixUrlUtilsMixin):
 
     def get_model_name(self):
         if self.model is not None:
-            return '{}.{}'.format(self.model._meta.app_label, self.model._meta.model_name)
+            if self.url_using_namespace==True:
+                _separator = ':'
+            else:
+                _separator = '.'
+            return '{}{}{}'.format(self.model._meta.app_label,
+                                   _separator,
+                                   self.model._meta.model_name)
         return None
 
     def get_url_list(self):

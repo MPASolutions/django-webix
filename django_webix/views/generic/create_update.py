@@ -72,12 +72,12 @@ class WebixCreateUpdateMixin:
         return _template_style
 
     def is_enable_button_save_continue(self, request):
-        if self.get_success_url() is None:
+        if self.success_url is None:
             return False
         return self.enable_button_save_continue
 
     def is_enable_button_save_addanother(self, request):
-        if self.get_success_url() is None:
+        if self.success_url is None:
             return False
         return self.enable_button_save_addanother
 
@@ -103,8 +103,8 @@ class WebixCreateUpdateMixin:
             url = self.get_url_list()
 
         else:
-            url = None # bypass for permission
-            
+            url = None # default
+
         return url
 
     def get_context_data_webix_create_update(self, request, obj=None, **kwargs):
