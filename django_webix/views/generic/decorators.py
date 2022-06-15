@@ -18,6 +18,7 @@ def action_config(
     modal_cancel=_("Undo"),
     form=None,
     reload_list=True,
+    maximum_count=None,
 ):  # TODO: permission check before execution
 
     if allowed_permissions is None:
@@ -28,6 +29,12 @@ def action_config(
 
     def decorator(func):
         def wrapper(self, request, qs):
+            if maximum_count is not None and qs.count() > maximum_count:
+                return JsonResponse({
+                    'status': False,
+                    'errors': [_('You can perform this action on a maximum of {} raws').format(maximum_count)]
+                }, status=400)
+
             if form is not None:
                 if request.method == 'POST':
                     try:
@@ -80,6 +87,7 @@ def action_config(
         setattr(wrapper, 'modal_cancel', modal_cancel)
         setattr(wrapper, 'form', form)
         setattr(wrapper, 'reload_list', reload_list)
+        setattr(wrapper, 'maximum_count', maximum_count)
 
         return wrapper
 
