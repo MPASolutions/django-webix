@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-06-04 11:05+0200\n"
+"POT-Creation-Date: 2022-06-22 18:50+0200\n"
 "PO-Revision-Date: 2022-04-11 10:00+0050\n"
 "Last-Translator: Sambado Paolo CBC Spagna <>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -111,13 +111,13 @@ msgstr "Maestro"
 msgid "Webix Admin Menu"
 msgstr "Menú administración Webix"
 
-#: admin_webix/options.py:182 templates/django_webix/include/utils.js:205
-#: templates/django_webix/include/utils.js:212
+#: admin_webix/options.py:182 templates/django_webix/include/utils.js:209
+#: templates/django_webix/include/utils.js:216
 msgid "Yes"
 msgstr "Sí"
 
-#: admin_webix/options.py:182 templates/django_webix/include/utils.js:207
-#: templates/django_webix/include/utils.js:214
+#: admin_webix/options.py:182 templates/django_webix/include/utils.js:211
+#: templates/django_webix/include/utils.js:218
 msgid "No"
 msgstr "No"
 
@@ -357,7 +357,8 @@ msgid "Double click to edit the element"
 msgstr "Doble clic para editar el elemento"
 
 #: templates/django_webix/include/actions_list.js:33
-#: templates/django_webix/include/utils.js:271
+#: templates/django_webix/include/form_errors_popup.js:16
+#: templates/django_webix/include/utils.js:275
 msgid "Close"
 msgstr "Cerrar"
 
@@ -394,15 +395,24 @@ msgstr "Nuevo artículo"
 msgid "Add"
 msgstr "Añadir"
 
-#: templates/django_webix/include/form_standard.js:72
-msgid "You must fill in all the required fields before you can save this form!"
-msgstr ""
-"Debe completar todos los campos obligatorios antes de poder guardar este "
-"formulario"
+#: templates/django_webix/include/form_errors_message.js:13
+#: templates/django_webix/include/form_errors_popup.js:13
+#, fuzzy
+#| msgid "Something gone wrong"
+msgid "Oops! Something went wrong..."
+msgstr "Algo salió mal"
 
-#: templates/django_webix/include/form_standard.js:72
-msgid "Error in the following fields"
+#: templates/django_webix/include/form_errors_message.js:15
+#, fuzzy
+#| msgid "Error in the following fields"
+msgid "Error in the following fields:"
 msgstr "Error en los siguientes campos"
+
+#: templates/django_webix/include/form_monotabs.js:64
+#: templates/django_webix/include/form_standard.js:59
+#: templates/django_webix/include/form_tabs.js:68
+msgid "Empty or incorrect value"
+msgstr ""
 
 #: templates/django_webix/include/form_validation.js:14
 msgid "Required field"
@@ -454,20 +464,20 @@ msgstr "Tipo de datos"
 msgid "Description"
 msgstr "Descripción"
 
-#: templates/django_webix/include/toolbar_form.js:18
+#: templates/django_webix/include/toolbar_form.js:17
 #: views/generic/actions.py:18
 msgid "Delete"
 msgstr "Eliminar"
 
-#: templates/django_webix/include/toolbar_form.js:43
+#: templates/django_webix/include/toolbar_form.js:42
 msgid "Save and continue"
 msgstr "Guardar y continuar"
 
-#: templates/django_webix/include/toolbar_form.js:70
+#: templates/django_webix/include/toolbar_form.js:66
 msgid "Save and add another"
 msgstr "Guardar y añadir otro"
 
-#: templates/django_webix/include/toolbar_form.js:97
+#: templates/django_webix/include/toolbar_form.js:90
 msgid "Save"
 msgstr "Guardar"
 
@@ -481,7 +491,7 @@ msgstr "Seleccionar todo"
 
 #: templates/django_webix/include/toolbar_list.js:29
 #: templates/django_webix/include/toolbar_list.js:35
-#: templates/django_webix/include/utils.js:569
+#: templates/django_webix/include/utils.js:573
 msgid "All"
 msgstr "Todo"
 
@@ -519,40 +529,40 @@ msgstr "Volver"
 msgid "Back to list"
 msgstr "Volver a la lista"
 
-#: templates/django_webix/include/utils.js:226
+#: templates/django_webix/include/utils.js:230
 msgid "Default"
 msgstr "Por defecto"
 
-#: templates/django_webix/include/utils.js:233
+#: templates/django_webix/include/utils.js:237
 msgid "Show on map"
 msgstr "Mostrar en el mapa"
 
-#: templates/django_webix/include/utils.js:239
+#: templates/django_webix/include/utils.js:243
 msgid "Duplicate element"
 msgstr "Duplicar elemento"
 
-#: templates/django_webix/include/utils.js:243
+#: templates/django_webix/include/utils.js:247
 msgid "Remove element"
 msgstr "Eliminar elemento"
 
-#: templates/django_webix/include/utils.js:247
+#: templates/django_webix/include/utils.js:251
 msgid "Detail"
 msgstr "Detalle"
 
-#: templates/django_webix/include/utils.js:268
+#: templates/django_webix/include/utils.js:272
 msgid "Image"
 msgstr "Imagen"
 
-#: templates/django_webix/include/utils.js:348
-#: templates/django_webix/include/utils.js:406
+#: templates/django_webix/include/utils.js:352
+#: templates/django_webix/include/utils.js:410
 msgid "Server error"
 msgstr "Error del servidor"
 
-#: templates/django_webix/include/utils.js:603
+#: templates/django_webix/include/utils.js:607
 msgid "Click and change"
 msgstr "Haz click para cambiar"
 
-#: templates/django_webix/include/utils.js:605
+#: templates/django_webix/include/utils.js:609
 msgid "Locked data"
 msgstr "Datos bloqueados"
 
@@ -589,7 +599,7 @@ msgstr "No has eliminado el permiso"
 msgid "You haven't view permission"
 msgstr "No tienes permiso para ver esta información"
 
-#: views/generic/create_update.py:70
+#: views/generic/create_update.py:72
 msgid ""
 "Template style is improperly configured only options are 'standard' or "
 "'tabs' (standard by default)."
@@ -597,34 +607,26 @@ msgstr ""
 "El estilo de la plantilla está configurado incorrectamente, las opciones son "
 "'estándar' o 'pestañas' (estándar por defecto)."
 
-#: views/generic/create_update.py:107 views/generic/delete.py:72
-msgid ""
-"No URL to redirect to.  Either provide a url or define a get_absolute_url "
-"method on the Model."
-msgstr ""
-"No hay URL a la que redirigir. Proporcione una url o defina un método "
-"get_absolute_url en el Modelo."
-
-#: views/generic/create_update.py:321 views/generic/create_update.py:402
+#: views/generic/create_update.py:325 views/generic/create_update.py:406
 #: views/generic/delete.py:42 views/generic/detail.py:21
 #: views/generic/list.py:569
 msgid "View permission is not allowed"
 msgstr "Ver permiso no está permitido"
 
-#: views/generic/create_update.py:324
+#: views/generic/create_update.py:328
 msgid "Add permission is not allowed"
 msgstr "Añadir permiso no está permitido"
 
-#: views/generic/create_update.py:405
+#: views/generic/create_update.py:409
 msgid "Change permission is not allowed"
 msgstr "Cambiar permiso no está permitido"
 
-#: views/generic/create_update.py:461
+#: views/generic/create_update.py:465
 #, python-format
 msgid "Changed %s."
 msgstr "Cambiar %s."
 
-#: views/generic/create_update.py:461
+#: views/generic/create_update.py:465
 msgid "and"
 msgstr "y"
 
@@ -644,13 +646,17 @@ msgstr "Continua"
 msgid "Undo"
 msgstr "Deshacer"
 
-#: views/generic/decorators.py:48
+#: views/generic/decorators.py:35
+msgid "You can perform this action on a maximum of {} raws"
+msgstr ""
+
+#: views/generic/decorators.py:55
 #, fuzzy
 #| msgid "Action successful"
 msgid "Action success: {} data:{}"
 msgstr "Acción ejecutada correctamente"
 
-#: views/generic/decorators.py:67
+#: views/generic/decorators.py:74
 #, fuzzy
 #| msgid "Action successful"
 msgid "Action success: {}"
@@ -659,6 +665,14 @@ msgstr "Acción ejecutada correctamente"
 #: views/generic/delete.py:45
 msgid "Delete permission is not allowed"
 msgstr "Eliminar permiso no está permitido"
+
+#: views/generic/delete.py:72
+msgid ""
+"No URL to redirect to.  Either provide a url or define a get_absolute_url "
+"method on the Model."
+msgstr ""
+"No hay URL a la que redirigir. Proporcione una url o defina un método "
+"get_absolute_url en el Modelo."
 
 #: views/generic/delete.py:83
 msgid ""
@@ -708,6 +722,12 @@ msgstr "Este permiso no está registrado en esta clase"
 msgid "Generic TemplateListView needs to define data for datatable"
 msgstr ""
 "TemplateListView genérico necesita definir datos para la tabla de datos"
+
+#~ msgid ""
+#~ "You must fill in all the required fields before you can save this form!"
+#~ msgstr ""
+#~ "Debe completar todos los campos obligatorios antes de poder guardar este "
+#~ "formulario"
 
 #~ msgid "ERROR: geo srid is incorrect"
 #~ msgstr "Error: srid geográfico es incorrecto"

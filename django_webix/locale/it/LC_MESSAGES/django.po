@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-06-04 11:05+0200\n"
-"PO-Revision-Date: 2022-04-07 16:07+0050\n"
+"POT-Creation-Date: 2022-06-22 18:50+0200\n"
+"PO-Revision-Date: 2022-06-22 18:49+0050\n"
 "Last-Translator: Stefano Menegon <menegon@mpasol.it>\n"
 "Language-Team: \n"
 "Language: it\n"
@@ -61,7 +61,7 @@ msgstr "Informazioni personali"
 
 #: admin_webix/forms.py:161
 msgid "Permissions"
-msgstr "Permesso negato: {}"
+msgstr "Permessi"
 
 #: admin_webix/forms.py:181
 msgid "Change password"
@@ -111,13 +111,13 @@ msgstr "Padre"
 msgid "Webix Admin Menu"
 msgstr "Menu"
 
-#: admin_webix/options.py:182 templates/django_webix/include/utils.js:205
-#: templates/django_webix/include/utils.js:212
+#: admin_webix/options.py:182 templates/django_webix/include/utils.js:209
+#: templates/django_webix/include/utils.js:216
 msgid "Yes"
 msgstr "Sì"
 
-#: admin_webix/options.py:182 templates/django_webix/include/utils.js:207
-#: templates/django_webix/include/utils.js:214
+#: admin_webix/options.py:182 templates/django_webix/include/utils.js:211
+#: templates/django_webix/include/utils.js:218
 msgid "No"
 msgstr "No"
 
@@ -139,11 +139,13 @@ msgid ""
 "Please enter the correct %(username)s and password for a staff account. Note "
 "that both fields may be case-sensitive."
 msgstr ""
-"Per favore inserisci il corretto %(username)s e password di un account staff."
+"Per favore inserisci il corretto %(username)s e password di un account "
+"staff.\n"
+"Attenzione alle lettere maiuscole e minuscole."
 
 #: admin_webix/sites.py:678
 msgid "Log in"
-msgstr "Registrati"
+msgstr "Entra"
 
 #: admin_webix/templates/admin_webix/account/password_change.js:15
 msgid "Cambio password utente"
@@ -262,11 +264,11 @@ msgstr "Carica un file"
 
 #: forms/forms.py:515
 msgid "Upload folder"
-msgstr "Carica un file"
+msgstr "Carica una cartella"
 
 #: forms/forms.py:520
 msgid "Upload files"
-msgstr "Carica un file"
+msgstr "Carica files"
 
 #: forms/forms.py:599
 msgid "MultipleChoiceField is available only with PRO webix license"
@@ -354,7 +356,8 @@ msgid "Double click to edit the element"
 msgstr "Doppio click per editare l'elemento"
 
 #: templates/django_webix/include/actions_list.js:33
-#: templates/django_webix/include/utils.js:271
+#: templates/django_webix/include/form_errors_popup.js:16
+#: templates/django_webix/include/utils.js:275
 msgid "Close"
 msgstr "Chiudi"
 
@@ -391,15 +394,20 @@ msgstr "Nuovo elemento"
 msgid "Add"
 msgstr "Aggiungi"
 
-#: templates/django_webix/include/form_standard.js:72
-msgid "You must fill in all the required fields before you can save this form!"
-msgstr ""
-"È necessario compilare tutti i campi richiesti prima di poter salvare questo "
-"modulo!"
+#: templates/django_webix/include/form_errors_message.js:13
+#: templates/django_webix/include/form_errors_popup.js:13
+msgid "Oops! Something went wrong..."
+msgstr "Oops! qualcosa è andato storto..."
 
-#: templates/django_webix/include/form_standard.js:72
-msgid "Error in the following fields"
-msgstr "Errore nei seguenti campi"
+#: templates/django_webix/include/form_errors_message.js:15
+msgid "Error in the following fields:"
+msgstr "Errore nei seguenti campi:"
+
+#: templates/django_webix/include/form_monotabs.js:64
+#: templates/django_webix/include/form_standard.js:59
+#: templates/django_webix/include/form_tabs.js:68
+msgid "Empty or incorrect value"
+msgstr "Vuoto o valore sbagliato"
 
 #: templates/django_webix/include/form_validation.js:14
 msgid "Required field"
@@ -451,20 +459,20 @@ msgstr "Tipo di dato"
 msgid "Description"
 msgstr "Descrizione"
 
-#: templates/django_webix/include/toolbar_form.js:18
+#: templates/django_webix/include/toolbar_form.js:17
 #: views/generic/actions.py:18
 msgid "Delete"
-msgstr "Cancellazione"
+msgstr "Cancella"
 
-#: templates/django_webix/include/toolbar_form.js:43
+#: templates/django_webix/include/toolbar_form.js:42
 msgid "Save and continue"
 msgstr "Salva e continua"
 
-#: templates/django_webix/include/toolbar_form.js:70
+#: templates/django_webix/include/toolbar_form.js:66
 msgid "Save and add another"
 msgstr "Salva e aggiungi un altro"
 
-#: templates/django_webix/include/toolbar_form.js:97
+#: templates/django_webix/include/toolbar_form.js:90
 msgid "Save"
 msgstr "Salva"
 
@@ -478,7 +486,7 @@ msgstr "Seleziona tutti"
 
 #: templates/django_webix/include/toolbar_list.js:29
 #: templates/django_webix/include/toolbar_list.js:35
-#: templates/django_webix/include/utils.js:569
+#: templates/django_webix/include/utils.js:573
 msgid "All"
 msgstr "Tutti"
 
@@ -489,7 +497,7 @@ msgstr "elementi selezionati"
 
 #: templates/django_webix/include/toolbar_list.js:30
 msgid "Cancel selection"
-msgstr "Annulla seleziona"
+msgstr "Annulla selezione"
 
 #: templates/django_webix/include/toolbar_list.js:106
 msgid "No row has been selected"
@@ -516,40 +524,40 @@ msgstr "Indietro"
 msgid "Back to list"
 msgstr "Torna alla lista"
 
-#: templates/django_webix/include/utils.js:226
+#: templates/django_webix/include/utils.js:230
 msgid "Default"
 msgstr "Default"
 
-#: templates/django_webix/include/utils.js:233
+#: templates/django_webix/include/utils.js:237
 msgid "Show on map"
 msgstr "Mostra in mappa"
 
-#: templates/django_webix/include/utils.js:239
+#: templates/django_webix/include/utils.js:243
 msgid "Duplicate element"
 msgstr "Duplica elemento"
 
-#: templates/django_webix/include/utils.js:243
+#: templates/django_webix/include/utils.js:247
 msgid "Remove element"
 msgstr "Rimuovi elemento"
 
-#: templates/django_webix/include/utils.js:247
+#: templates/django_webix/include/utils.js:251
 msgid "Detail"
 msgstr "Dettaglio"
 
-#: templates/django_webix/include/utils.js:268
+#: templates/django_webix/include/utils.js:272
 msgid "Image"
 msgstr "Immagine"
 
-#: templates/django_webix/include/utils.js:348
-#: templates/django_webix/include/utils.js:406
+#: templates/django_webix/include/utils.js:352
+#: templates/django_webix/include/utils.js:410
 msgid "Server error"
 msgstr "Errore sul server"
 
-#: templates/django_webix/include/utils.js:603
+#: templates/django_webix/include/utils.js:607
 msgid "Click and change"
 msgstr "Clicca e cambia"
 
-#: templates/django_webix/include/utils.js:605
+#: templates/django_webix/include/utils.js:609
 msgid "Locked data"
 msgstr "Dati bloccati"
 
@@ -577,7 +585,7 @@ msgstr "Non hai il permesso di aggiunta"
 
 #: views/generic/base.py:116
 msgid "You haven't change permission"
-msgstr "Non hai il permesso di cambiare"
+msgstr "Non hai il permesso di modifica"
 
 #: views/generic/base.py:121
 msgid "You haven't delete permission"
@@ -587,7 +595,7 @@ msgstr "Non hai il permesso di cancellare"
 msgid "You haven't view permission"
 msgstr "Non hai il permesso di vedere"
 
-#: views/generic/create_update.py:70
+#: views/generic/create_update.py:72
 msgid ""
 "Template style is improperly configured only options are 'standard' or "
 "'tabs' (standard by default)."
@@ -595,34 +603,26 @@ msgstr ""
 "Lo stile del modello è configurato in modo errato, le sole opzioni "
 "disponibili sono 'standard' o 'tabs' (standard di default)."
 
-#: views/generic/create_update.py:107 views/generic/delete.py:72
-msgid ""
-"No URL to redirect to.  Either provide a url or define a get_absolute_url "
-"method on the Model."
-msgstr ""
-"Nessun URL a cui reindirizzare. O fornire un URL o definire un metodo "
-"get_absolute_url sul modello."
-
-#: views/generic/create_update.py:321 views/generic/create_update.py:402
+#: views/generic/create_update.py:325 views/generic/create_update.py:406
 #: views/generic/delete.py:42 views/generic/detail.py:21
 #: views/generic/list.py:569
 msgid "View permission is not allowed"
 msgstr "Non disponi del permesso di visione"
 
-#: views/generic/create_update.py:324
+#: views/generic/create_update.py:328
 msgid "Add permission is not allowed"
 msgstr "Non disponi del permesso di aggiunta"
 
-#: views/generic/create_update.py:405
+#: views/generic/create_update.py:409
 msgid "Change permission is not allowed"
-msgstr "Non disponi del permesso di cambiare"
+msgstr "Non disponi del permesso di modifica"
 
-#: views/generic/create_update.py:461
+#: views/generic/create_update.py:465
 #, python-format
 msgid "Changed %s."
 msgstr "Modificato %s."
 
-#: views/generic/create_update.py:461
+#: views/generic/create_update.py:465
 msgid "and"
 msgstr "e"
 
@@ -642,21 +642,29 @@ msgstr "Procedi"
 msgid "Undo"
 msgstr "Annulla"
 
-#: views/generic/decorators.py:48
-#, fuzzy
-#| msgid "Action successful"
-msgid "Action success: {} data:{}"
-msgstr "Azione avvenuta con successo"
+#: views/generic/decorators.py:35
+msgid "You can perform this action on a maximum of {} raws"
+msgstr "Puoi eseguire questa azione su un massimo di {} righe"
 
-#: views/generic/decorators.py:67
-#, fuzzy
-#| msgid "Action successful"
+#: views/generic/decorators.py:55
+msgid "Action success: {} data:{}"
+msgstr "Azione avvenuta con successo: {} dati:{}"
+
+#: views/generic/decorators.py:74
 msgid "Action success: {}"
-msgstr "Azione avvenuta con successo"
+msgstr "Azione avvenuta con successo: {}"
 
 #: views/generic/delete.py:45
 msgid "Delete permission is not allowed"
-msgstr "Non disponi del permesso di cancellare"
+msgstr "Non disponi del permesso di cancellazione"
+
+#: views/generic/delete.py:72
+msgid ""
+"No URL to redirect to.  Either provide a url or define a get_absolute_url "
+"method on the Model."
+msgstr ""
+"Nessun URL a cui reindirizzare. O fornire un URL o definire un metodo "
+"get_absolute_url sul modello."
 
 #: views/generic/delete.py:83
 msgid ""
@@ -668,7 +676,7 @@ msgstr ""
 
 #: views/generic/list.py:276
 msgid "Paginate count is not integer"
-msgstr "Il valore di paginazione no è intero"
+msgstr "Il valore di paginazione non è intero"
 
 #: views/generic/list.py:285
 msgid "Paginate start is not integer"
@@ -705,6 +713,12 @@ msgstr "Questo permesso non è registrato su questa classe"
 #: views/generic/list.py:628
 msgid "Generic TemplateListView needs to define data for datatable"
 msgstr "In un generico TemplateListView vanno definiti i dati per il datatable"
+
+#~ msgid ""
+#~ "You must fill in all the required fields before you can save this form!"
+#~ msgstr ""
+#~ "È necessario compilare tutti i campi richiesti prima di poter salvare "
+#~ "questo modulo!"
 
 #~ msgid "Sì"
 #~ msgstr "Sì"
