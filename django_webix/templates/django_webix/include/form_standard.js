@@ -1,21 +1,12 @@
 {% load django_webix_utils i18n %}
 
 {# Errors #}
-{% block webix_form_errors %}
-    {% if form.errors %}
-        webix.message({type: "error", expire: 10000, text: "{{ form.errors|safe|escapejs }}"});
-    {% endif %}
-{% endblock %}
-
-{% block webix_inline_errors %}
-    {% for inline in inlines %}
-        {% for field in inline %}
-            {% if field.errors %}
-                webix.message({type: "error", expire: 10000, text: "{{ field.errors|safe|escapejs }}"});
-            {% endif %}
-        {% endfor %}
-    {% endfor %}
-{% endblock %}
+{% include "django_webix/include/form_errors_server.js" %}
+{% if is_errors_on_popup %}
+    {% include "django_webix/include/form_errors_popup.js" %}
+{% else %}
+    {% include "django_webix/include/form_errors_message.js" %}
+{% endif %}
 
 {# Form #}
 {% block webix_form %}
@@ -63,14 +54,11 @@
         on: {
             onAfterValidation: function (result, value) {
                 if (!result) {
-                    var text = "";
-                    for (var key in value) {
-                        text += "<li>" + key + "</li>"
-                    }
-                    webix.message({
-                        type: "error",
-                        text: "{{_("You must fill in all the required fields before you can save this form!")|escapejs}}<br><br>{{_("Error in the following fields")|escapejs}}:<br>" + text
-                    });
+                    errors = [];
+                    for (var item in value) {
+                        errors.push({"label":item.toTitle(), "error":"{{_("Empty or incorrect value")|escapejs}}"});
+                    };
+                    show_errors(errors);
                 }
             }
         },

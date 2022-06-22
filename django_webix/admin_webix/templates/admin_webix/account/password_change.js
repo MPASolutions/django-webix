@@ -99,8 +99,10 @@ $$("{{ webix_container_id }}").addView({
 
 $$('password_change_form').setValues({csrfmiddlewaretoken: "{{ csrf_token }}"});
 
-{% block webix_form_errors %}
-    {% if form.errors %}
-        webix.message({type: "error", expire: 10000, text: "{{ form.errors|safe|escapejs }}"});
-    {% endif %}
-{% endblock %}
+{# Errors #}
+{% include "django_webix/include/form_errors_server.js" %}
+{% if is_errors_on_popup %}
+    {% include "django_webix/include/form_errors_popup.js" %}
+{% else %}
+    {% include "django_webix/include/form_errors_message.js" %}
+{% endif %}

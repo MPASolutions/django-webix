@@ -4,9 +4,13 @@
     webix.ui([], $$("{{ webix_container_id }}"));
 
     {# Errors #}
-    {% if form.errors %}
-        webix.message({type: "error", expire: 10000, text: "{{ form.errors|safe|escapejs }}"});
+    {% include "django_webix/include/form_errors_server.js" %}
+    {% if is_errors_on_popup %}
+        {% include "django_webix/include/form_errors_popup.js" %}
+    {% else %}
+        {% include "django_webix/include/form_errors_message.js" %}
     {% endif %}
+
 
     $$("{{ webix_container_id }}").addView({
         cols: [

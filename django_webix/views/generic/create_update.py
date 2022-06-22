@@ -29,6 +29,8 @@ class WebixCreateUpdateMixin:
     model = None
     request = None
 
+    errors_on_popup = False
+
     enable_button_save_continue = True
     enable_button_save_addanother = True
     enable_button_save_gotolist = True
@@ -71,6 +73,9 @@ class WebixCreateUpdateMixin:
                 " only options are 'standard' or 'tabs' (standard by default)."))
         return _template_style
 
+    def is_errors_on_popup(self, request):
+        return self.errors_on_popup
+
     def is_enable_button_save_continue(self, request):
         if self.get_success_url(next_step='_continue') is None:
             return False
@@ -89,12 +94,12 @@ class WebixCreateUpdateMixin:
             url = self.success_url
 
         elif (self.request.GET.get('_addanother', None) is not None or next_step=='_addanother') and \
-            self.enable_button_save_continue and \
+            self.enable_button_save_addanother and \
             self.get_url_create() is not None:
             url = self.get_url_create()
 
         elif (self.request.GET.get('_continue', None) is not None or next_step=='_continue') and \
-            self.enable_button_save_addanother and \
+            self.enable_button_save_continue and \
             self.get_url_update(obj=self.object) is not None:
             url = self.get_url_update(obj=self.object)
 
@@ -108,13 +113,13 @@ class WebixCreateUpdateMixin:
         return url
 
     def get_context_data_webix_create_update(self, request, obj=None, **kwargs):
-
         return {
             # buttons for saving
             'is_enable_button_save_continue': self.is_enable_button_save_continue(request=self.request),
             'is_enable_button_save_addanother': self.is_enable_button_save_addanother(request=self.request),
             'is_enable_button_save_gotolist': self.is_enable_button_save_gotolist(request=self.request),
             # Template style
+            'is_errors_on_popup': self.is_errors_on_popup(request=self.request),
             'template_style': self.get_template_style(),
         }
 

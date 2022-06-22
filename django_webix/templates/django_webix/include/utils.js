@@ -2,6 +2,10 @@
 
 {% get_request_filter_params %}
 
+String.prototype.toTitle = function () {
+    return this.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
+};
+
 webix.editors.datetime = webix.extend( {
 	focus	:function(){},
 	popupType:"datetime",

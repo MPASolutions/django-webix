@@ -78,7 +78,7 @@ function _{{ view_prefix }}action_execute(action, ids, all, response_type, short
                                     webix.message({
                                         text: message,
                                         type: "info",
-                                        expire: 5000
+                                        expire: 10000
                                     });
                                     if (data.redirect_url != null) {
                                         load_js(data.redirect_url, undefined, undefined, undefined, undefined, undefined, undefined, abortAllPending = true);

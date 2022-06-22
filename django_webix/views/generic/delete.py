@@ -62,7 +62,7 @@ class WebixDeleteView(WebixBaseMixin, WebixPermissionsMixin, WebixUrlMixin, Dele
 
         return context
 
-    def get_success_url(self):
+    def get_success_url(self, next_step=None):
         if self.success_url is not None:
             url = self.success_url
         elif self.get_url_list() is not None:
