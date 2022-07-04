@@ -155,6 +155,7 @@ class WebixInlineFormSet(InlineFormSetFactory):
         return _formset_kwargs
 
     def get_factory_kwargs(self):
+
         _factory_kwargs = super(WebixInlineFormSet, self).get_factory_kwargs()
         if self.has_add_permission():
             extra_forms = _factory_kwargs.get('extra', 3)
@@ -164,6 +165,11 @@ class WebixInlineFormSet(InlineFormSetFactory):
         _factory_kwargs.update({
             'extra': extra_forms
         })
+        # FIX for CUSTOM factory_kwargs !
+        if len(self.initial) > _factory_kwargs['extra']:
+            _factory_kwargs.update({
+                'extra': len(self.initial)
+            })
         return _factory_kwargs
 
     def has_add_permission(self):
