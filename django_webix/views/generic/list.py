@@ -11,7 +11,8 @@ from django.http import JsonResponse, Http404
 from django.template import Template, Context
 from django.template.loader import get_template
 from django.utils.decorators import method_decorator
-from django.utils.translation import gettext as _, get_language
+from django.utils.translation import gettext as _
+from django.utils.translation import get_language
 from django.views.generic import ListView
 from django.db.models.query import QuerySet
 

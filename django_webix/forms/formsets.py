@@ -7,7 +7,7 @@ from django.forms.formsets import TOTAL_FORM_COUNT, INITIAL_FORM_COUNT, MIN_NUM_
 from django.forms.widgets import HiddenInput
 from django.utils.functional import cached_property
 from django.utils.text import capfirst
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import ugettext_lazy as __
 from extra_views import InlineFormSetFactory
 
 from django_webix.forms import WebixForm, WebixModelForm
@@ -86,7 +86,7 @@ class BaseWebixInlineFormSet(BaseInlineFormSet):
             form = WebixManagementForm(self.data, auto_id=self.auto_id, prefix=self.prefix)
             if not form.is_valid():
                 raise ValidationError(
-                    _('ManagementForm data is missing or has been tampered with'),
+                    __('ManagementForm data is missing or has been tampered with'),
                     code='missing_management_form',
                 )
         else:

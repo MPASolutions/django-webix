@@ -15,7 +15,8 @@ from django.urls import NoReverseMatch, reverse, reverse_lazy, resolve
 from django.utils.functional import LazyObject
 from django.utils.module_loading import import_string
 from django.utils.text import capfirst
-from django.utils.translation import gettext as _, gettext_lazy
+from django.utils.translation import gettext as _
+from django.utils.translation import gettext_lazy as __
 from django.views.decorators.cache import never_cache
 from django.views.decorators.csrf import csrf_protect
 from django.contrib.auth import get_user_model
@@ -35,13 +36,13 @@ class NotRegistered(Exception):
 
 class AdminWebixSite:
     # Text to put at the end of each page's <title>.
-    site_title = gettext_lazy('Django webix site admin')
+    site_title = __('Django webix site admin')
 
     # Text to put in each page's <h1>.
-    site_header = gettext_lazy('Django webix administration')
+    site_header = __('Django webix administration')
 
     # Text to put at the top of the admin index page.
-    index_title = gettext_lazy('Site administration')
+    index_title = __('Site administration')
 
     site_url = '/'
 
