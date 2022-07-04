@@ -439,7 +439,7 @@ class WebixListView(WebixBaseMixin,
         if self.title is not None:
             return self.title
         if self.model is not None:
-            return self.model._meta.verbose_name
+            return self.model._meta.verbose_name_plural
         return None
 
     ########### RESPONSE BUILDER ###########
