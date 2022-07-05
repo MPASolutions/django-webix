@@ -11,7 +11,8 @@ from django.http import JsonResponse, Http404
 from django.template import Template, Context
 from django.template.loader import get_template
 from django.utils.decorators import method_decorator
-from django.utils.translation import gettext as _, get_language
+from django.utils.translation import gettext as _
+from django.utils.translation import get_language
 from django.views.generic import ListView
 from django.db.models.query import QuerySet
 
@@ -439,7 +440,7 @@ class WebixListView(WebixBaseMixin,
         if self.title is not None:
             return self.title
         if self.model is not None:
-            return self.model._meta.verbose_name
+            return self.model._meta.verbose_name_plural
         return None
 
     ########### RESPONSE BUILDER ###########
