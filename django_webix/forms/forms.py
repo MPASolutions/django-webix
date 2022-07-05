@@ -734,6 +734,7 @@ class BaseWebixMixin:
                         })
                         # Default if is required and there are only one option
                         if field.required and initial is None and count == 1:
+                            #  TODO attenzione da rivedere perche puo dare problemi su inlines
                             el.update(
                                 {'value': '{}'.format(getattr(field.queryset.first(), field.to_field_name or 'pk'))})
                     else:
