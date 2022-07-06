@@ -8,9 +8,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-06-22 18:50+0200\n"
-"PO-Revision-Date: 2022-04-11 10:00+0050\n"
-"Last-Translator: Sambado Paolo CBC Spagna <>\n"
+"POT-Creation-Date: 2022-07-06 15:26+0200\n"
+"PO-Revision-Date: 2022-06-28 08:49+0050\n"
+"Last-Translator: Traduzioni CBC <>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: \n"
 "MIME-Version: 1.0\n"
@@ -121,19 +121,7 @@ msgstr "Sí"
 msgid "No"
 msgstr "No"
 
-#: admin_webix/sites.py:38
-msgid "Django webix site admin"
-msgstr "Administración Django"
-
-#: admin_webix/sites.py:41
-msgid "Django webix administration"
-msgstr "Menú administración Django"
-
-#: admin_webix/sites.py:44
-msgid "Site administration"
-msgstr "Pagina de administración"
-
-#: admin_webix/sites.py:661
+#: admin_webix/sites.py:662
 #, python-format
 msgid ""
 "Please enter the correct %(username)s and password for a staff account. Note "
@@ -142,7 +130,7 @@ msgstr ""
 "Por favor inserte correctamente el usuario %(username)s y su contraseña para "
 "los miembros del equipo. Tenga en cuenta el uso de mayúsculas y minúsculas."
 
-#: admin_webix/sites.py:678
+#: admin_webix/sites.py:679
 msgid "Log in"
 msgstr "Iniciar sesión"
 
@@ -249,53 +237,6 @@ msgstr "Usuario"
 msgid "Enter your username"
 msgstr "Introducir usuario"
 
-#: forms/forms.py:401
-msgid "Upload new image"
-msgstr "Subir nueva imagen"
-
-#: forms/forms.py:471 forms/forms.py:573
-msgid "Deleted"
-msgstr "Eliminado"
-
-#: forms/forms.py:502
-msgid "Upload file"
-msgstr "Subir archivo"
-
-#: forms/forms.py:515
-msgid "Upload folder"
-msgstr "Subir carpeta"
-
-#: forms/forms.py:520
-msgid "Upload files"
-msgstr "Subir archivos"
-
-#: forms/forms.py:599
-msgid "MultipleChoiceField is available only with PRO webix license"
-msgstr ""
-"La elección de múltiples campos solo está permitida con la licencia webix "
-"PRO "
-
-#: forms/forms.py:631 forms/forms.py:655 forms/forms.py:703 forms/forms.py:733
-#: forms/forms.py:742 forms/forms.py:756 forms/forms.py:803
-msgid "Click to select"
-msgstr "Clic para seleccionar"
-
-#: forms/forms.py:842
-msgid "Initial value {} for geo field {} is not supported"
-msgstr "El valor inicial {} para el campo geográfico {} no es compatible"
-
-#: forms/forms.py:883
-msgid "Edit"
-msgstr "Editar"
-
-#: forms/forms.py:913
-msgid "Type of field {} not supported"
-msgstr "El tipo de campo {} no compatible"
-
-#: forms/formsets.py:89
-msgid "ManagementForm data is missing or has been tampered with"
-msgstr "Faltan datos de ManagementForm o han sido alterados"
-
 #: templates/django_webix/generic/delete.js:26
 msgid "The following objects will be deleted"
 msgstr "Los siguientes objetos serán eliminados"
@@ -397,22 +338,18 @@ msgstr "Añadir"
 
 #: templates/django_webix/include/form_errors_message.js:13
 #: templates/django_webix/include/form_errors_popup.js:13
-#, fuzzy
-#| msgid "Something gone wrong"
 msgid "Oops! Something went wrong..."
 msgstr "Algo salió mal"
 
 #: templates/django_webix/include/form_errors_message.js:15
-#, fuzzy
-#| msgid "Error in the following fields"
 msgid "Error in the following fields:"
-msgstr "Error en los siguientes campos"
+msgstr "Error en los siguientes campos:"
 
 #: templates/django_webix/include/form_monotabs.js:64
 #: templates/django_webix/include/form_standard.js:59
 #: templates/django_webix/include/form_tabs.js:68
 msgid "Empty or incorrect value"
-msgstr ""
+msgstr "Valor incorrecto o ausente"
 
 #: templates/django_webix/include/form_validation.js:14
 msgid "Required field"
@@ -517,7 +454,7 @@ msgid "Select an action"
 msgstr "Seleccionar una acción"
 
 #: templates/django_webix/include/toolbar_list_actions_select.js:20
-#: views/generic/decorators.py:16 views/generic/list.py:381
+#: views/generic/decorators.py:16 views/generic/list.py:382
 msgid "Go"
 msgstr "Ir"
 
@@ -609,7 +546,7 @@ msgstr ""
 
 #: views/generic/create_update.py:325 views/generic/create_update.py:406
 #: views/generic/delete.py:42 views/generic/detail.py:21
-#: views/generic/list.py:569
+#: views/generic/list.py:570
 msgid "View permission is not allowed"
 msgstr "Ver permiso no está permitido"
 
@@ -630,37 +567,33 @@ msgstr "Cambiar %s."
 msgid "and"
 msgstr "y"
 
-#: views/generic/decorators.py:14 views/generic/list.py:379
+#: views/generic/decorators.py:14 views/generic/list.py:380
 msgid "Fill in the form"
 msgstr "Rellenar el formulario"
 
-#: views/generic/decorators.py:15 views/generic/list.py:380
+#: views/generic/decorators.py:15 views/generic/list.py:381
 msgid "Are you sure you want to proceed with this action?"
 msgstr "¿Estás seguro que quieres seguir con esta acción?"
 
-#: views/generic/decorators.py:17 views/generic/list.py:382
+#: views/generic/decorators.py:17 views/generic/list.py:383
 msgid "Proceed"
 msgstr "Continua"
 
-#: views/generic/decorators.py:18 views/generic/list.py:383
+#: views/generic/decorators.py:18 views/generic/list.py:384
 msgid "Undo"
 msgstr "Deshacer"
 
 #: views/generic/decorators.py:35
 msgid "You can perform this action on a maximum of {} raws"
-msgstr ""
+msgstr "Se puede realizar esta acción en un máximo de {} elementos"
 
 #: views/generic/decorators.py:55
-#, fuzzy
-#| msgid "Action successful"
 msgid "Action success: {} data:{}"
-msgstr "Acción ejecutada correctamente"
+msgstr "Acción ejecutada correctamente: {} data:{}"
 
 #: views/generic/decorators.py:74
-#, fuzzy
-#| msgid "Action successful"
 msgid "Action success: {}"
-msgstr "Acción ejecutada correctamente"
+msgstr "Acción ejecutada correctamente: {}"
 
 #: views/generic/delete.py:45
 msgid "Delete permission is not allowed"
@@ -682,15 +615,15 @@ msgstr ""
 "No hay URL a la que redirigir. Proporcione una url o defina un método \"\n"
 "\"get_absolute_url en el Modelo."
 
-#: views/generic/list.py:276
+#: views/generic/list.py:277
 msgid "Paginate count is not integer"
 msgstr "El recuento del paginado no es entero"
 
-#: views/generic/list.py:285
+#: views/generic/list.py:286
 msgid "Paginate start is not integer"
 msgstr "El inicio del paginado no es entero"
 
-#: views/generic/list.py:416
+#: views/generic/list.py:417
 msgid ""
 "Actions style is improperly configured only options are 'buttons' or "
 "'select' (select by default)."
@@ -698,7 +631,7 @@ msgstr ""
 "El estilo de acciones no está bien configurado las únicas opciones son "
 "'botones' o 'seleccionar' (seleccionar por defecto)."
 
-#: views/generic/list.py:530
+#: views/generic/list.py:531
 msgid ""
 "Json response is available only if get_queryset() return a queryset and not "
 "a list"
@@ -706,22 +639,66 @@ msgstr ""
 "La respuesta de Json solo está disponible si get_queryset () devuelve un "
 "conjunto de consultas y no una lista"
 
-#: views/generic/list.py:549
+#: views/generic/list.py:550
 msgid "This action is not registered"
 msgstr "Esta acción no está registrada"
 
-#: views/generic/list.py:555
+#: views/generic/list.py:556
 msgid "Permission denied: {}"
 msgstr "Permiso denegado:{}"
 
-#: views/generic/list.py:557
+#: views/generic/list.py:558
 msgid "This permission is not registered on this class"
 msgstr "Este permiso no está registrado en esta clase"
 
-#: views/generic/list.py:628
+#: views/generic/list.py:629
 msgid "Generic TemplateListView needs to define data for datatable"
 msgstr ""
 "TemplateListView genérico necesita definir datos para la tabla de datos"
+
+#~ msgid "Django webix site admin"
+#~ msgstr "Administración Django"
+
+#~ msgid "Django webix administration"
+#~ msgstr "Menú administración Django"
+
+#~ msgid "Site administration"
+#~ msgstr "Pagina de administración"
+
+#~ msgid "Upload new image"
+#~ msgstr "Subir nueva imagen"
+
+#~ msgid "Deleted"
+#~ msgstr "Eliminado"
+
+#~ msgid "Upload file"
+#~ msgstr "Subir archivo"
+
+#~ msgid "Upload folder"
+#~ msgstr "Subir carpeta"
+
+#~ msgid "Upload files"
+#~ msgstr "Subir archivos"
+
+#~ msgid "MultipleChoiceField is available only with PRO webix license"
+#~ msgstr ""
+#~ "La elección de múltiples campos solo está permitida con la licencia webix "
+#~ "PRO "
+
+#~ msgid "Click to select"
+#~ msgstr "Clic para seleccionar"
+
+#~ msgid "Initial value {} for geo field {} is not supported"
+#~ msgstr "El valor inicial {} para el campo geográfico {} no es compatible"
+
+#~ msgid "Edit"
+#~ msgstr "Editar"
+
+#~ msgid "Type of field {} not supported"
+#~ msgstr "El tipo de campo {} no compatible"
+
+#~ msgid "ManagementForm data is missing or has been tampered with"
+#~ msgstr "Faltan datos de ManagementForm o han sido alterados"
 
 #~ msgid ""
 #~ "You must fill in all the required fields before you can save this form!"

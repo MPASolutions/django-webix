@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-06-22 18:50+0200\n"
+"POT-Creation-Date: 2022-07-06 15:26+0200\n"
 "PO-Revision-Date: 2022-06-22 18:49+0050\n"
 "Last-Translator: Stefano Menegon <menegon@mpasol.it>\n"
 "Language-Team: \n"
@@ -121,19 +121,7 @@ msgstr "Sì"
 msgid "No"
 msgstr "No"
 
-#: admin_webix/sites.py:38
-msgid "Django webix site admin"
-msgstr "Area amministrazione"
-
-#: admin_webix/sites.py:41
-msgid "Django webix administration"
-msgstr "Amministrazione"
-
-#: admin_webix/sites.py:44
-msgid "Site administration"
-msgstr "Amministrazione"
-
-#: admin_webix/sites.py:661
+#: admin_webix/sites.py:662
 #, python-format
 msgid ""
 "Please enter the correct %(username)s and password for a staff account. Note "
@@ -143,7 +131,7 @@ msgstr ""
 "staff.\n"
 "Attenzione alle lettere maiuscole e minuscole."
 
-#: admin_webix/sites.py:678
+#: admin_webix/sites.py:679
 msgid "Log in"
 msgstr "Entra"
 
@@ -249,51 +237,6 @@ msgstr "Nome utente"
 #: auth_webix/forms.py:42
 msgid "Enter your username"
 msgstr "Inserisci il tuo nome utente"
-
-#: forms/forms.py:401
-msgid "Upload new image"
-msgstr "Carica un’immagine"
-
-#: forms/forms.py:471 forms/forms.py:573
-msgid "Deleted"
-msgstr "Cancella"
-
-#: forms/forms.py:502
-msgid "Upload file"
-msgstr "Carica un file"
-
-#: forms/forms.py:515
-msgid "Upload folder"
-msgstr "Carica una cartella"
-
-#: forms/forms.py:520
-msgid "Upload files"
-msgstr "Carica files"
-
-#: forms/forms.py:599
-msgid "MultipleChoiceField is available only with PRO webix license"
-msgstr "MultipleChoiceField è disponibile solo con licenza PRO webix"
-
-#: forms/forms.py:631 forms/forms.py:655 forms/forms.py:703 forms/forms.py:733
-#: forms/forms.py:742 forms/forms.py:756 forms/forms.py:803
-msgid "Click to select"
-msgstr "Clicca per selezionare"
-
-#: forms/forms.py:842
-msgid "Initial value {} for geo field {} is not supported"
-msgstr "Il valore iniziale {} per il campo geografico {} non è supportato"
-
-#: forms/forms.py:883
-msgid "Edit"
-msgstr "Modifica"
-
-#: forms/forms.py:913
-msgid "Type of field {} not supported"
-msgstr "Tipo di campo {} non supportato"
-
-#: forms/formsets.py:89
-msgid "ManagementForm data is missing or has been tampered with"
-msgstr "Dati di ManagementForm mancanti o manomessi"
 
 #: templates/django_webix/generic/delete.js:26
 msgid "The following objects will be deleted"
@@ -512,7 +455,7 @@ msgid "Select an action"
 msgstr "Scegli una azione"
 
 #: templates/django_webix/include/toolbar_list_actions_select.js:20
-#: views/generic/decorators.py:16 views/generic/list.py:381
+#: views/generic/decorators.py:16 views/generic/list.py:382
 msgid "Go"
 msgstr "Vai"
 
@@ -605,7 +548,7 @@ msgstr ""
 
 #: views/generic/create_update.py:325 views/generic/create_update.py:406
 #: views/generic/delete.py:42 views/generic/detail.py:21
-#: views/generic/list.py:569
+#: views/generic/list.py:570
 msgid "View permission is not allowed"
 msgstr "Non disponi del permesso di visione"
 
@@ -626,19 +569,19 @@ msgstr "Modificato %s."
 msgid "and"
 msgstr "e"
 
-#: views/generic/decorators.py:14 views/generic/list.py:379
+#: views/generic/decorators.py:14 views/generic/list.py:380
 msgid "Fill in the form"
 msgstr "Compila i campi"
 
-#: views/generic/decorators.py:15 views/generic/list.py:380
+#: views/generic/decorators.py:15 views/generic/list.py:381
 msgid "Are you sure you want to proceed with this action?"
 msgstr "Sei certo che vuoi procedere con questa azione?"
 
-#: views/generic/decorators.py:17 views/generic/list.py:382
+#: views/generic/decorators.py:17 views/generic/list.py:383
 msgid "Proceed"
 msgstr "Procedi"
 
-#: views/generic/decorators.py:18 views/generic/list.py:383
+#: views/generic/decorators.py:18 views/generic/list.py:384
 msgid "Undo"
 msgstr "Annulla"
 
@@ -674,15 +617,15 @@ msgstr ""
 "Nessun URL a cui reindirizzare. O fornire un URL o definire un metodo "
 "get_absolute_url sul modello."
 
-#: views/generic/list.py:276
+#: views/generic/list.py:277
 msgid "Paginate count is not integer"
 msgstr "Il valore di paginazione non è intero"
 
-#: views/generic/list.py:285
+#: views/generic/list.py:286
 msgid "Paginate start is not integer"
 msgstr "Il valore di partenza non è intero"
 
-#: views/generic/list.py:416
+#: views/generic/list.py:417
 msgid ""
 "Actions style is improperly configured only options are 'buttons' or "
 "'select' (select by default)."
@@ -690,7 +633,7 @@ msgstr ""
 "Lo stile delle azioni è configurato in modo errato solo le opzioni sono "
 "'buttons' o 'select' (il default è select)."
 
-#: views/generic/list.py:530
+#: views/generic/list.py:531
 msgid ""
 "Json response is available only if get_queryset() return a queryset and not "
 "a list"
@@ -698,21 +641,63 @@ msgstr ""
 "La risposta in json è disponibile solo se get_queryset() ritorna un queryset "
 "e non una lista"
 
-#: views/generic/list.py:549
+#: views/generic/list.py:550
 msgid "This action is not registered"
 msgstr "Questa azione non è registrata"
 
-#: views/generic/list.py:555
+#: views/generic/list.py:556
 msgid "Permission denied: {}"
 msgstr "Permesso negato: {}"
 
-#: views/generic/list.py:557
+#: views/generic/list.py:558
 msgid "This permission is not registered on this class"
 msgstr "Questo permesso non è registrato su questa classe"
 
-#: views/generic/list.py:628
+#: views/generic/list.py:629
 msgid "Generic TemplateListView needs to define data for datatable"
 msgstr "In un generico TemplateListView vanno definiti i dati per il datatable"
+
+#~ msgid "Django webix site admin"
+#~ msgstr "Area amministrazione"
+
+#~ msgid "Django webix administration"
+#~ msgstr "Amministrazione"
+
+#~ msgid "Site administration"
+#~ msgstr "Amministrazione"
+
+#~ msgid "Upload new image"
+#~ msgstr "Carica un’immagine"
+
+#~ msgid "Deleted"
+#~ msgstr "Cancella"
+
+#~ msgid "Upload file"
+#~ msgstr "Carica un file"
+
+#~ msgid "Upload folder"
+#~ msgstr "Carica una cartella"
+
+#~ msgid "Upload files"
+#~ msgstr "Carica files"
+
+#~ msgid "MultipleChoiceField is available only with PRO webix license"
+#~ msgstr "MultipleChoiceField è disponibile solo con licenza PRO webix"
+
+#~ msgid "Click to select"
+#~ msgstr "Clicca per selezionare"
+
+#~ msgid "Initial value {} for geo field {} is not supported"
+#~ msgstr "Il valore iniziale {} per il campo geografico {} non è supportato"
+
+#~ msgid "Edit"
+#~ msgstr "Modifica"
+
+#~ msgid "Type of field {} not supported"
+#~ msgstr "Tipo di campo {} non supportato"
+
+#~ msgid "ManagementForm data is missing or has been tampered with"
+#~ msgstr "Dati di ManagementForm mancanti o manomessi"
 
 #~ msgid ""
 #~ "You must fill in all the required fields before you can save this form!"
