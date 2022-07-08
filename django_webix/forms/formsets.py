@@ -159,16 +159,19 @@ class WebixInlineFormSet(InlineFormSetFactory):
         _factory_kwargs = super(WebixInlineFormSet, self).get_factory_kwargs()
         if self.has_add_permission():
             extra_forms = _factory_kwargs.get('extra', 3)
+            min_num_forms = _factory_kwargs.get('min_num', 0)
         else:
             extra_forms = 0
+            min_num_forms = 0
         # FIX for initial data values (list of dict and not instances)
         _factory_kwargs.update({
-            'extra': extra_forms
+            'extra': extra_forms,
+            'min_num': min_num_forms,
         })
         # FIX for CUSTOM factory_kwargs !
-        if len(self.initial) > _factory_kwargs['extra']:
+        if len(self.initial) > _factory_kwargs['extra'] + _factory_kwargs['min_num']:
             _factory_kwargs.update({
-                'extra': len(self.initial)
+                'extra': len(self.initial) - _factory_kwargs['min_num']
             })
         return _factory_kwargs
 
