@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-07-12 10:30+0200\n"
+"POT-Creation-Date: 2022-07-13 14:41+0200\n"
 "PO-Revision-Date: 2022-06-22 18:49+0050\n"
 "Last-Translator: Stefano Menegon <menegon@mpasol.it>\n"
 "Language-Team: \n"
@@ -512,7 +512,7 @@ msgid "Select an action"
 msgstr "Scegli una azione"
 
 #: templates/django_webix/include/toolbar_list_actions_select.js:20
-#: views/generic/decorators.py:16 views/generic/list.py:382
+#: views/generic/decorators.py:16 views/generic/list.py:388
 msgid "Go"
 msgstr "Vai"
 
@@ -605,7 +605,7 @@ msgstr ""
 
 #: views/generic/create_update.py:325 views/generic/create_update.py:406
 #: views/generic/delete.py:42 views/generic/detail.py:21
-#: views/generic/list.py:570
+#: views/generic/list.py:576
 msgid "View permission is not allowed"
 msgstr "Non disponi del permesso di visione"
 
@@ -626,19 +626,19 @@ msgstr "Modificato %s."
 msgid "and"
 msgstr "e"
 
-#: views/generic/decorators.py:14 views/generic/list.py:380
+#: views/generic/decorators.py:14 views/generic/list.py:386
 msgid "Fill in the form"
 msgstr "Compila i campi"
 
-#: views/generic/decorators.py:15 views/generic/list.py:381
+#: views/generic/decorators.py:15 views/generic/list.py:387
 msgid "Are you sure you want to proceed with this action?"
 msgstr "Sei certo che vuoi procedere con questa azione?"
 
-#: views/generic/decorators.py:17 views/generic/list.py:383
+#: views/generic/decorators.py:17 views/generic/list.py:389
 msgid "Proceed"
 msgstr "Procedi"
 
-#: views/generic/decorators.py:18 views/generic/list.py:384
+#: views/generic/decorators.py:18 views/generic/list.py:390
 msgid "Undo"
 msgstr "Annulla"
 
@@ -674,15 +674,15 @@ msgstr ""
 "Nessun URL a cui reindirizzare. O fornire un URL o definire un metodo "
 "get_absolute_url sul modello."
 
-#: views/generic/list.py:277
+#: views/generic/list.py:283
 msgid "Paginate count is not integer"
 msgstr "Il valore di paginazione non è intero"
 
-#: views/generic/list.py:286
+#: views/generic/list.py:292
 msgid "Paginate start is not integer"
 msgstr "Il valore di partenza non è intero"
 
-#: views/generic/list.py:417
+#: views/generic/list.py:423
 msgid ""
 "Actions style is improperly configured only options are 'buttons' or "
 "'select' (select by default)."
@@ -690,7 +690,7 @@ msgstr ""
 "Lo stile delle azioni è configurato in modo errato solo le opzioni sono "
 "'buttons' o 'select' (il default è select)."
 
-#: views/generic/list.py:531
+#: views/generic/list.py:537
 msgid ""
 "Json response is available only if get_queryset() return a queryset and not "
 "a list"
@@ -698,19 +698,19 @@ msgstr ""
 "La risposta in json è disponibile solo se get_queryset() ritorna un queryset "
 "e non una lista"
 
-#: views/generic/list.py:550
+#: views/generic/list.py:556
 msgid "This action is not registered"
 msgstr "Questa azione non è registrata"
 
-#: views/generic/list.py:556
+#: views/generic/list.py:562
 msgid "Permission denied: {}"
 msgstr "Permesso negato: {}"
 
-#: views/generic/list.py:558
+#: views/generic/list.py:564
 msgid "This permission is not registered on this class"
 msgstr "Questo permesso non è registrato su questa classe"
 
-#: views/generic/list.py:629
+#: views/generic/list.py:635
 msgid "Generic TemplateListView needs to define data for datatable"
 msgstr "In un generico TemplateListView vanno definiti i dati per il datatable"
 
