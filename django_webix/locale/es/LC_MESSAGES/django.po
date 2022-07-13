@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-07-06 15:26+0200\n"
+"POT-Creation-Date: 2022-07-12 10:30+0200\n"
 "PO-Revision-Date: 2022-06-28 08:49+0050\n"
 "Last-Translator: Traduzioni CBC <>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -120,6 +120,18 @@ msgstr "Sí"
 #: templates/django_webix/include/utils.js:218
 msgid "No"
 msgstr "No"
+
+#: admin_webix/sites.py:39
+msgid "Django webix site admin"
+msgstr "Administración Django"
+
+#: admin_webix/sites.py:42
+msgid "Django webix administration"
+msgstr "Menú administración Django"
+
+#: admin_webix/sites.py:45
+msgid "Site administration"
+msgstr "Pagina de administración"
 
 #: admin_webix/sites.py:662
 #, python-format
@@ -236,6 +248,53 @@ msgstr "Usuario"
 #: auth_webix/forms.py:42
 msgid "Enter your username"
 msgstr "Introducir usuario"
+
+#: forms/forms.py:401
+msgid "Upload new image"
+msgstr "Subir nueva imagen"
+
+#: forms/forms.py:471 forms/forms.py:573
+msgid "Deleted"
+msgstr "Eliminado"
+
+#: forms/forms.py:502
+msgid "Upload file"
+msgstr "Subir archivo"
+
+#: forms/forms.py:515
+msgid "Upload folder"
+msgstr "Subir carpeta"
+
+#: forms/forms.py:520
+msgid "Upload files"
+msgstr "Subir archivos"
+
+#: forms/forms.py:599
+msgid "MultipleChoiceField is available only with PRO webix license"
+msgstr ""
+"La elección de múltiples campos solo está permitida con la licencia webix "
+"PRO "
+
+#: forms/forms.py:631 forms/forms.py:655 forms/forms.py:703 forms/forms.py:733
+#: forms/forms.py:743 forms/forms.py:757 forms/forms.py:804
+msgid "Click to select"
+msgstr "Clic para seleccionar"
+
+#: forms/forms.py:843
+msgid "Initial value {} for geo field {} is not supported"
+msgstr "El valor inicial {} para el campo geográfico {} no es compatible"
+
+#: forms/forms.py:884
+msgid "Edit"
+msgstr "Editar"
+
+#: forms/forms.py:914
+msgid "Type of field {} not supported"
+msgstr "El tipo de campo {} no compatible"
+
+#: forms/formsets.py:89
+msgid "ManagementForm data is missing or has been tampered with"
+msgstr "Faltan datos de ManagementForm o han sido alterados"
 
 #: templates/django_webix/generic/delete.js:26
 msgid "The following objects will be deleted"
@@ -655,50 +714,6 @@ msgstr "Este permiso no está registrado en esta clase"
 msgid "Generic TemplateListView needs to define data for datatable"
 msgstr ""
 "TemplateListView genérico necesita definir datos para la tabla de datos"
-
-#~ msgid "Django webix site admin"
-#~ msgstr "Administración Django"
-
-#~ msgid "Django webix administration"
-#~ msgstr "Menú administración Django"
-
-#~ msgid "Site administration"
-#~ msgstr "Pagina de administración"
-
-#~ msgid "Upload new image"
-#~ msgstr "Subir nueva imagen"
-
-#~ msgid "Deleted"
-#~ msgstr "Eliminado"
-
-#~ msgid "Upload file"
-#~ msgstr "Subir archivo"
-
-#~ msgid "Upload folder"
-#~ msgstr "Subir carpeta"
-
-#~ msgid "Upload files"
-#~ msgstr "Subir archivos"
-
-#~ msgid "MultipleChoiceField is available only with PRO webix license"
-#~ msgstr ""
-#~ "La elección de múltiples campos solo está permitida con la licencia webix "
-#~ "PRO "
-
-#~ msgid "Click to select"
-#~ msgstr "Clic para seleccionar"
-
-#~ msgid "Initial value {} for geo field {} is not supported"
-#~ msgstr "El valor inicial {} para el campo geográfico {} no es compatible"
-
-#~ msgid "Edit"
-#~ msgstr "Editar"
-
-#~ msgid "Type of field {} not supported"
-#~ msgstr "El tipo de campo {} no compatible"
-
-#~ msgid "ManagementForm data is missing or has been tampered with"
-#~ msgstr "Faltan datos de ManagementForm o han sido alterados"
 
 #~ msgid ""
 #~ "You must fill in all the required fields before you can save this form!"

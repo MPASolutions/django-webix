@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-07-06 15:26+0200\n"
+"POT-Creation-Date: 2022-07-12 10:30+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -118,6 +118,18 @@ msgstr ""
 #: admin_webix/options.py:182 templates/django_webix/include/utils.js:211
 #: templates/django_webix/include/utils.js:218
 msgid "No"
+msgstr ""
+
+#: admin_webix/sites.py:39
+msgid "Django webix site admin"
+msgstr ""
+
+#: admin_webix/sites.py:42
+msgid "Django webix administration"
+msgstr ""
+
+#: admin_webix/sites.py:45
+msgid "Site administration"
 msgstr ""
 
 #: admin_webix/sites.py:662
@@ -230,6 +242,51 @@ msgstr ""
 
 #: auth_webix/forms.py:42
 msgid "Enter your username"
+msgstr ""
+
+#: forms/forms.py:401
+msgid "Upload new image"
+msgstr ""
+
+#: forms/forms.py:471 forms/forms.py:573
+msgid "Deleted"
+msgstr ""
+
+#: forms/forms.py:502
+msgid "Upload file"
+msgstr ""
+
+#: forms/forms.py:515
+msgid "Upload folder"
+msgstr ""
+
+#: forms/forms.py:520
+msgid "Upload files"
+msgstr ""
+
+#: forms/forms.py:599
+msgid "MultipleChoiceField is available only with PRO webix license"
+msgstr ""
+
+#: forms/forms.py:631 forms/forms.py:655 forms/forms.py:703 forms/forms.py:733
+#: forms/forms.py:743 forms/forms.py:757 forms/forms.py:804
+msgid "Click to select"
+msgstr ""
+
+#: forms/forms.py:843
+msgid "Initial value {} for geo field {} is not supported"
+msgstr ""
+
+#: forms/forms.py:884
+msgid "Edit"
+msgstr ""
+
+#: forms/forms.py:914
+msgid "Type of field {} not supported"
+msgstr ""
+
+#: forms/formsets.py:89
+msgid "ManagementForm data is missing or has been tampered with"
 msgstr ""
 
 #: templates/django_webix/generic/delete.js:26

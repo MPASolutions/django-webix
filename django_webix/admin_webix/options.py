@@ -6,7 +6,7 @@ from django.db.models import AutoField, ForeignKey
 from django.db.models.fields import BooleanField, DateField, DateTimeField
 from django.urls import path
 from django.utils.text import capfirst
-from django.utils.translation import ugettext as _
+from django.utils.translation import gettext as _
 from django_webix.utils.decorators import script_login_required
 from django.utils.decorators import method_decorator
 

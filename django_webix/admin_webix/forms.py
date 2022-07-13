@@ -8,7 +8,7 @@ from django.contrib.auth import (
 )
 from django.contrib.auth.forms import AuthenticationForm, SetPasswordForm, PasswordResetForm
 from django.contrib.auth.models import Group, Permission
-from django.utils.translation import ugettext as _
+from django.utils.translation import gettext as _
 
 from django_webix.forms import WebixForm, WebixModelForm
 

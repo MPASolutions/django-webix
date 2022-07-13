@@ -130,8 +130,14 @@ class WebixListView(WebixBaseMixin,
     def get_adjust_row_height(self, request):
         return self.adjust_row_height
 
-    def get_fields(self):
-        if self.fields is None:
+    def get_fields(self, fields=None):
+        if self.fields is not None:
+            _in_fields = self.fields
+        elif fields is not None:
+            _in_fields = fields
+        else:
+            _in_fields = None
+        if _in_fields is None:
             return None
         else:
             _fields = []
@@ -139,7 +145,7 @@ class WebixListView(WebixBaseMixin,
                 server_filter = False
             else:
                 server_filter = None
-            for _field in self.fields:
+            for _field in _in_fields:
                 datalist_column = _field['datalist_column']
                 if type(datalist_column) == dict:
                     if 'template_string' in datalist_column:

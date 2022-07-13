@@ -28,7 +28,7 @@ from django.urls import reverse
 from django.utils.encoding import force_text
 from django.utils.text import capfirst
 from django.utils.timezone import is_naive, make_naive
-from django.utils.translation import ugettext_lazy as __
+from django.utils.translation import gettext_lazy as _
 from random import randint
 from sorl.thumbnail import get_thumbnail
 from django.utils import formats
@@ -100,7 +100,7 @@ class BaseWebixMixin:
                     isinstance(_field, django.forms.fields.DateTimeInput):
                     # TODO: it can be improved
                     self.fields[readonly_field] = forms.CharField(
-                        label=__(_field.verbose_name).capitalize(),
+                        label=_(_field.verbose_name).capitalize(),
                         required=False
                     )
                     if hasattr(self, 'instance') and \
@@ -115,7 +115,7 @@ class BaseWebixMixin:
                     isinstance(_field, django.forms.fields.DateField):
                     # TODO: it can be improved
                     self.fields[readonly_field] = forms.CharField(
-                        label=__(_field.verbose_name).capitalize(),
+                        label=_(_field.verbose_name).capitalize(),
                         required=False
                     )
                     if hasattr(self, 'instance') and \
@@ -127,7 +127,7 @@ class BaseWebixMixin:
                     isinstance(_field, django.forms.fields.CheckboxInput):
                     # TODO: it can be improved
                     self.fields[readonly_field] = forms.BooleanField(
-                        label=__(_field.verbose_name).capitalize(),
+                        label=_(_field.verbose_name).capitalize(),
                         required=False
                     )
                     if hasattr(self, 'instance') and self.instance.pk is not None:
@@ -136,7 +136,7 @@ class BaseWebixMixin:
                         value = None
                 else:
                     self.fields[readonly_field] = forms.CharField(
-                        label=__(_field.verbose_name).capitalize(),
+                        label=_(_field.verbose_name).capitalize(),
                         required=False
                     )
                     if hasattr(self, 'instance') and self.instance.pk is not None:
@@ -398,7 +398,7 @@ class BaseWebixMixin:
                     'multiple': False,
                     'width': 150,
                     'height': 50,
-                    'label': __('Upload new image'),
+                    'label': _('Upload new image'),
                     # 'on': {
                     #     'onAfterFileAdd': "image_add('" + self[name].auto_id + "');"
                     # }
@@ -468,7 +468,7 @@ class BaseWebixMixin:
                                                 'offIcon': 'fas fa-trash-alt',
                                                 'onIcon': 'fas fa-trash-alt',
                                                 'offLabel': '',
-                                                'onLabel': __('Deleted'),
+                                                'onLabel': _('Deleted'),
                                                 'width': 75,
                                                 'height': 50,
                                                 'css': "webix_danger",
@@ -499,7 +499,7 @@ class BaseWebixMixin:
                     'directory': False,
                     'width': 150,
                     'heigth': 40,
-                    'label': __('Upload file')
+                    'label': _('Upload file')
                 })
                 if isinstance(field.widget, forms.widgets.FileInput):
                     directory = field.widget.attrs.get('directory', False)
@@ -512,12 +512,12 @@ class BaseWebixMixin:
 
                     if directory:
                         el.update({
-                            'label': __('Upload folder')
+                            'label': _('Upload folder')
                         })
 
                     if multiple and not directory:
                         el.update({
-                            'label': __('Upload files')
+                            'label': _('Upload files')
                         })
 
                 delete_hidden = True
@@ -570,7 +570,7 @@ class BaseWebixMixin:
                                                 'offIcon': 'fas fa-trash-alt',
                                                 'onIcon': 'fas fa-trash-alt',
                                                 'offLabel': '',
-                                                'onLabel': __('Deleted'),
+                                                'onLabel': _('Deleted'),
                                                 'width': 75,
                                                 'height': 40,
                                                 'css': "webix_danger",
@@ -596,7 +596,7 @@ class BaseWebixMixin:
             elif type(field) == forms.models.ModelMultipleChoiceField:
                 if settings.WEBIX_LICENSE != 'PRO':
                     raise ImproperlyConfigured(
-                        __("MultipleChoiceField is available only with PRO webix license")
+                        _("MultipleChoiceField is available only with PRO webix license")
                     )
                 if initial is not None:
                     el.update({
@@ -628,7 +628,7 @@ class BaseWebixMixin:
                     el.update({
                         "view": "multicombo",
                         'selectAll': True,
-                        'placeholder': __('Click to select'),
+                        'placeholder': _('Click to select'),
                         'options': {
                             'dynamic': True,
                             'body': {
@@ -652,7 +652,7 @@ class BaseWebixMixin:
                     el.update({
                         "view": "multicombo",
                         'selectAll': True,
-                        'placeholder': __('Click to select'),
+                        'placeholder': _('Click to select'),
                         'options': {
                             'selectAll': True,
                             'dynamic': True,
@@ -700,7 +700,7 @@ class BaseWebixMixin:
                 if name in self.autocomplete_fields:
                     el.update({
                         'view': 'combo',
-                        'placeholder': __('Click to select'),
+                        'placeholder': _('Click to select'),
                         'suggest': {
                             'view': "suggest",
                             'keyPressTimeout': 400,
@@ -730,7 +730,7 @@ class BaseWebixMixin:
                             'options': choices,
                             'view': 'richselect',
                             'selectAll': True,
-                            'placeholder': __('Click to select')
+                            'placeholder': _('Click to select')
                         })
                         # Default if is required and there are only one option
                         if field.required and initial is None and count == 1:
@@ -740,7 +740,7 @@ class BaseWebixMixin:
                     else:
                         el.update({
                             'view': 'combo',
-                            'placeholder': __('Click to select'),
+                            'placeholder': _('Click to select'),
                             'options': choices,
                         })
             # TypedChoiceField ChoiceField
@@ -754,7 +754,7 @@ class BaseWebixMixin:
                 el.update({
                     'selectAll': True,
                     'view': 'richselect',
-                    'placeholder': __('Click to select'),
+                    'placeholder': _('Click to select'),
                     'options': choices
                 })
                 if initial is not None:
@@ -801,7 +801,7 @@ class BaseWebixMixin:
                     el.update({
                         "view": "multicombo",
                         'selectAll': True,
-                        'placeholder': __('Click to select'),
+                        'placeholder': _('Click to select'),
                         'options': {
                             'selectAll': True,
                             'dynamic': True,
@@ -840,7 +840,7 @@ class BaseWebixMixin:
                     elif type(initial) == str:
                         el.update({'value': str(initial)})
                     else:
-                        raise Exception(__('Initial value {} for geo field {} is not supported').format(initial, field))
+                        raise Exception(_('Initial value {} for geo field {} is not supported').format(initial, field))
 
                 if apps.is_installed("django_webix_leaflet"):
                     if hasattr(self, 'instance') and \
@@ -881,7 +881,7 @@ class BaseWebixMixin:
                                     'id': self[name].auto_id + '_editbtn',
                                     'name': self.add_prefix(name) + '_editbtn',
                                     'view': "button",
-                                    'value': __("Edit"),
+                                    'value': _("Edit"),
                                     'width': 70,
                                     "on": {
                                         "onItemClick": "(function (id, e) {{ $$('map').goToWebgisPk($$('{layer_selector}').getValue(),'{pk_field_name}', {object_pk}, '{mode}', '{field_name}') }})".format(
@@ -911,7 +911,7 @@ class BaseWebixMixin:
                 pass
             # Field not supported
             else:
-                raise Exception(__('Type of field {} not supported').format(field))
+                raise Exception(_('Type of field {} not supported').format(field))
 
             # Widget RadioSelect
             if isinstance(field.widget, forms.RadioSelect):
