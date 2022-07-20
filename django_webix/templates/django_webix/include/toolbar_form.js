@@ -64,7 +64,7 @@ $$("{{ webix_container_id }}").addView({
                         css:"webix_secondary",
                         align: "right",
                         label: "{{_("Save and add another")|escapejs}}",
-                        width: 160,
+                        width: 260,
                         {% if not object.pk and not has_add_permission %}
                             {% if remove_disabled_buttons %} hidden: true, {% endif %}
                             disabled: true,

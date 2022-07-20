@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-07-13 14:41+0200\n"
-"PO-Revision-Date: 2022-07-13 14:41+0050\n"
+"POT-Creation-Date: 2022-07-20 06:09+0200\n"
+"PO-Revision-Date: 2022-07-19 15:50+0050\n"
 "Last-Translator: Stefano Menegon <menegon@mpasol.it>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: \n"
@@ -29,7 +29,7 @@ msgstr "Gruppen"
 
 #: admin_webix/forms.py:28 admin_webix/forms.py:131 admin_webix/forms.py:138
 msgid "Available permissions"
-msgstr ""
+msgstr "Verfügbare Berechtigungen"
 
 #: admin_webix/forms.py:29 admin_webix/forms.py:132 admin_webix/forms.py:139
 msgid "Selected"
@@ -56,15 +56,12 @@ msgid "Private data"
 msgstr "Private data"
 
 #: admin_webix/forms.py:160
-#| msgid "Delete confirmation"
 msgid "Private informations"
 msgstr "Private Informationen"
 
 #: admin_webix/forms.py:161
-#, fuzzy
-#| msgid "Permission denied: {}"
 msgid "Permissions"
-msgstr "Berechtigung verweigert: {}"
+msgstr "Berechtigungen"
 
 #: admin_webix/forms.py:181
 msgid "Change password"
@@ -88,31 +85,31 @@ msgstr "Web link"
 
 #: admin_webix/models.py:21
 msgid "Enabled"
-msgstr ""
+msgstr "Aktiviert"
 
 #: admin_webix/models.py:22
 msgid "Active for all"
-msgstr ""
+msgstr "Aktiv für alle"
 
 #: admin_webix/models.py:23
 msgid "Model"
-msgstr ""
+msgstr "Modell"
 
 #: admin_webix/models.py:24
 msgid "Enabled groups"
-msgstr ""
+msgstr "Aktivierte Gruppen"
 
 #: admin_webix/models.py:25
 msgid "Prefix"
-msgstr ""
+msgstr "Prefix"
 
 #: admin_webix/models.py:27
 msgid "Parent"
-msgstr ""
+msgstr "Parent"
 
 #: admin_webix/models.py:33 admin_webix/models.py:34
 msgid "Webix Admin Menu"
-msgstr ""
+msgstr "Webix Admin Menu"
 
 #: admin_webix/options.py:182 templates/django_webix/include/utils.js:209
 #: templates/django_webix/include/utils.js:216
@@ -139,8 +136,8 @@ msgstr "Site Verwaltung"
 #: admin_webix/sites.py:662
 #, python-format
 msgid ""
-"Please enter the correct %(username)s and password for a staff account. Note"
-" that both fields may be case-sensitive."
+"Please enter the correct %(username)s and password for a staff account. Note "
+"that both fields may be case-sensitive."
 msgstr ""
 "Bitte geben Sie den korrekten %(username)s und Passwort für einen Staff-"
 "Nutzer. Achten Sie darauf dass beide Felder könnten case-sensitive sein."
@@ -158,10 +155,8 @@ msgid "Password attuale"
 msgstr "Aktuelles Passwort"
 
 #: admin_webix/templates/admin_webix/account/password_change.js:52
-#, fuzzy
-#| msgid "Changed %s."
 msgid "Nuova password"
-msgstr "Geändert  %s."
+msgstr "Neues Passwort"
 
 #: admin_webix/templates/admin_webix/account/password_change.js:61
 msgid "Conferma password"
@@ -341,13 +336,11 @@ msgstr "Zur Karte"
 #: templates/django_webix/generic/list.js:150
 #: templates/django_webix/include/toolbar_navigation.js:43
 msgid "Geometry does not exist"
-msgstr ""
+msgstr "Die Geometrie existiert nicht"
 
 #: templates/django_webix/generic/list.js:248
-#, fuzzy
-#| msgid "Remove element"
 msgid "Remove filters"
-msgstr "Element löschen"
+msgstr "Filter entfernen"
 
 #: templates/django_webix/generic/list.js:249
 msgid "Apply filters"
@@ -406,8 +399,6 @@ msgid "Oops! Something went wrong..."
 msgstr "Etwas is schief gegangen"
 
 #: templates/django_webix/include/form_errors_message.js:15
-#, fuzzy
-#| msgid "Error in the following fields"
 msgid "Error in the following fields:"
 msgstr "Fehler in folgenden Felder"
 
@@ -415,7 +406,7 @@ msgstr "Fehler in folgenden Felder"
 #: templates/django_webix/include/form_standard.js:59
 #: templates/django_webix/include/form_tabs.js:68
 msgid "Empty or incorrect value"
-msgstr ""
+msgstr "Leerer oder falscher Wert"
 
 #: templates/django_webix/include/form_validation.js:14
 msgid "Required field"
@@ -522,7 +513,7 @@ msgstr "Aktion auswählen"
 #: templates/django_webix/include/toolbar_list_actions_select.js:20
 #: views/generic/decorators.py:16 views/generic/list.py:388
 msgid "Go"
-msgstr "Los"
+msgstr "Ausführen"
 
 #: templates/django_webix/include/toolbar_navigation.js:13
 msgid "Back"
@@ -563,11 +554,11 @@ msgstr "Server fehler"
 
 #: templates/django_webix/include/utils.js:607
 msgid "Click and change"
-msgstr ""
+msgstr "Klicken und ändern"
 
 #: templates/django_webix/include/utils.js:609
 msgid "Locked data"
-msgstr ""
+msgstr "Gesperrte Daten"
 
 #: templates/django_webix/redirect_to_login.js:2
 msgid "User is not authenticated"
@@ -584,7 +575,7 @@ msgstr "{count_delete_instances} Elemente wurden gelöscht"
 
 #: views/generic/actions.py:34
 msgid "Download all attachments"
-msgstr ""
+msgstr "Alle Anhänge herunterladen"
 
 #: views/generic/base.py:111
 msgid "You haven't add permission"
@@ -651,19 +642,15 @@ msgstr "Lösen"
 
 #: views/generic/decorators.py:35
 msgid "You can perform this action on a maximum of {} raws"
-msgstr ""
+msgstr "Sie können diese Aktion für maximal {} Zeilen durchführen"
 
 #: views/generic/decorators.py:55
-#, fuzzy
-#| msgid "Action successful"
 msgid "Action success: {} data:{}"
-msgstr "Erfolgreiche Aktion"
+msgstr "Action success: {} data:{}"
 
 #: views/generic/decorators.py:74
-#, fuzzy
-#| msgid "Action successful"
 msgid "Action success: {}"
-msgstr "Erfolgreiche Aktion"
+msgstr "Action success: {}"
 
 #: views/generic/delete.py:45
 msgid "Delete permission is not allowed"

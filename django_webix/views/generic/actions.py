@@ -8,7 +8,7 @@ import mimetypes
 from wsgiref.util import FileWrapper
 from django.db import models
 from django.http import JsonResponse, HttpResponse
-from django.utils.translation import gettext as _
+from django.utils.translation import gettext_lazy as _
 
 from django_webix.views.generic.decorators import action_config
 
