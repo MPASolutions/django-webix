@@ -724,6 +724,15 @@ class BaseWebixMixin:
                     if not field.required:
                         choices.insert(0, {'id': "", 'value': "------", '$empty': True})
                     count = len(choices)
+
+                    # add initial value with text for other purpose
+                    if 'value' in el and el['value'] != '':
+                        record = field.queryset.get(**{field.to_field_name or 'pk': el['value']})
+                        el['initial'] = {
+                            'id': '{}'.format(getattr(record, field.to_field_name or 'pk')),
+                            'value': '{}'.format(record)
+                        }
+
                     # regular field without autocomplete
                     if count <= 6:
                         el.update({
