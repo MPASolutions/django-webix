@@ -527,6 +527,7 @@ class BaseWebixMixin:
                 elements.update({
                     '{}_block'.format(self[name].html_name): {
                         'id': 'block_' + self[name].auto_id,
+                        'label': label,
                         'cols': [
                             {
                                 'name_label': name,
