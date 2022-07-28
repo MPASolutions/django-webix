@@ -241,15 +241,16 @@ class BaseWebixMixin:
                 'labelWidth': self.label_width,
                 'django_type_field': str(type(field).__name__),
             }
+
+            if field.required:
+                el['label'] = label = '<strong>{}</strong>'.format(label)
+                # el['required'] = True  # FIXME: problems with inlines
+
             if hasattr(field, 'help_text') and \
                 field.help_text is not None and \
                 field.help_text!='':
                 el["tooltip"] = {"template": "{}".format(field.help_text)}
                 el["label"] = el["label"] + "&nbsp;<i style='font-size:14px;' class='webix_icon far fa-info-circle'></i>"
-
-            if field.required:
-                el['label'] = label = '<strong>{}</strong>'.format(label)
-                # el['required'] = True  # FIXME: problems with inlines
 
             if name in self.get_readonly_fields():
                 el.update({
