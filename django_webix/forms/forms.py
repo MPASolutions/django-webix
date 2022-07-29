@@ -33,6 +33,7 @@ from random import randint
 from sorl.thumbnail import get_thumbnail
 from django.utils import formats
 from django.utils.http import urlencode
+import os
 
 if django.__version__ < '3.1':
     try:
@@ -530,13 +531,25 @@ class BaseWebixMixin:
                         'id': 'block_' + self[name].auto_id,
                         'label': label,
                         'cols': [
-                            {
-                                'name_label': name,
-                                'id_label': name,
-                                'borderless': True,
-                                'template': label,
-                                'height': 80,
-                                'css': {'background-color': 'transparent !important'}
+                            {'height': 80,
+                             'rows': [
+                                    {
+                                        'name_label': name,
+                                        'id_label': name,
+                                        'borderless': True,
+                                        'template': label,
+                                        'height': 40,
+                                        'css': {'background-color': 'transparent !important'}
+                                    },
+                                    {
+                                        'name_label': name,
+                                        'id_label': name,
+                                        'borderless': True,
+                                        'template': '{}'.format(os.path.basename(initial.name) if initial else ''),
+                                        'height': 40,
+                                        'css': {'background-color': 'transparent !important', 'color': 'blue'}
+                                    },
+                                ]
                             },
                             {
                                 'height': 80,
