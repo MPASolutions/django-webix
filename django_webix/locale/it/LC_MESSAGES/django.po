@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-07-21 17:01+0200\n"
+"POT-Creation-Date: 2022-08-11 14:43+0200\n"
 "PO-Revision-Date: 2022-06-22 18:49+0050\n"
 "Last-Translator: Stefano Menegon <menegon@mpasol.it>\n"
 "Language-Team: \n"
@@ -250,44 +250,44 @@ msgstr "Nome utente"
 msgid "Enter your username"
 msgstr "Inserisci il tuo nome utente"
 
-#: forms/forms.py:401
+#: forms/forms.py:403
 msgid "Upload new image"
 msgstr "Carica un’immagine"
 
-#: forms/forms.py:471 forms/forms.py:573
+#: forms/forms.py:473 forms/forms.py:588
 msgid "Deleted"
 msgstr "Cancella"
 
-#: forms/forms.py:502
+#: forms/forms.py:504
 msgid "Upload file"
 msgstr "Carica un file"
 
-#: forms/forms.py:515
+#: forms/forms.py:517
 msgid "Upload folder"
 msgstr "Carica una cartella"
 
-#: forms/forms.py:520
+#: forms/forms.py:522
 msgid "Upload files"
 msgstr "Carica files"
 
-#: forms/forms.py:599
+#: forms/forms.py:614
 msgid "MultipleChoiceField is available only with PRO webix license"
 msgstr "MultipleChoiceField è disponibile solo con licenza PRO webix"
 
-#: forms/forms.py:631 forms/forms.py:655 forms/forms.py:703 forms/forms.py:733
-#: forms/forms.py:743 forms/forms.py:757 forms/forms.py:804
+#: forms/forms.py:646 forms/forms.py:670 forms/forms.py:724 forms/forms.py:755
+#: forms/forms.py:765 forms/forms.py:779 forms/forms.py:826
 msgid "Click to select"
 msgstr "Clicca per selezionare"
 
-#: forms/forms.py:843
+#: forms/forms.py:865
 msgid "Initial value {} for geo field {} is not supported"
 msgstr "Il valore iniziale {} per il campo geografico {} non è supportato"
 
-#: forms/forms.py:884
+#: forms/forms.py:906
 msgid "Edit"
 msgstr "Modifica"
 
-#: forms/forms.py:914
+#: forms/forms.py:936
 msgid "Type of field {} not supported"
 msgstr "Tipo di campo {} non supportato"
 
