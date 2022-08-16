@@ -688,7 +688,7 @@ class BaseWebixMixin:
                         el.update({'value': '{}'.format(_choices[0][0])})
             # ModelChoiceField
             elif isinstance(field, forms.models.ModelChoiceField):
-                if initial is not None:
+                if initial not in [None,'']:
                     el.update({
                         'value': str(getattr(initial, field.to_field_name or 'pk'))
                         if isinstance(initial, models.Model) else
