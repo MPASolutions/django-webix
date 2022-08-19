@@ -132,11 +132,13 @@ class WebixListView(WebixBaseMixin,
 
     def get_fields(self, fields=None):
         if self.fields is not None:
-            _in_fields = self.fields
+            _in_fields = deepcopy(self.fields)
+            # altrimenti nel loop sotto viene ridefinito l'attributo statico fields e non funzionano lazy_translations
         elif fields is not None:
             _in_fields = fields
         else:
             _in_fields = None
+
         if _in_fields is None:
             return None
         else:
