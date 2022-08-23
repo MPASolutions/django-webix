@@ -360,6 +360,8 @@ if apps.is_installed("two_factor"):
     WebixTOTPDeviceForm = type(str('WebixTOTPDeviceForm'), (TOTPDeviceForm,), {})
 
     if apps.is_installed("two_factor.plugins.phonenumber"):
+
+        # noinspection PyUnresolvedReferences
         from two_factor.plugins.phonenumber.forms import PhoneNumberForm
         PhoneNumberForm.__bases__ = (WebixModelForm,)
         WebixPhoneNumberForm = type(str('WebixPhoneNumberForm'), (PhoneNumberForm,), {})
@@ -368,6 +370,7 @@ if apps.is_installed("two_factor"):
     WebixDeviceValidationForm = type(str('WebixDeviceValidationForm'), (DeviceValidationForm,), {})
 
     if apps.is_installed("two_factor.plugins.yubikey"):
+        # noinspection PyUnresolvedReferences
         from two_factor.plugins.yubikey.forms import YubiKeyDeviceForm
         YubiKeyDeviceForm.__bases__ = (WebixDeviceValidationForm,)
         WebixYubiKeyDeviceForm = type(str('WebixYubiKeyDeviceForm'), (YubiKeyDeviceForm,), {})
