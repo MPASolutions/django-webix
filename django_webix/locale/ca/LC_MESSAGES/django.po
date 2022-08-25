@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-08-11 14:43+0200\n"
+"POT-Creation-Date: 2022-08-25 14:41+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -506,7 +506,7 @@ msgid "Select an action"
 msgstr ""
 
 #: templates/django_webix/include/toolbar_list_actions_select.js:20
-#: views/generic/decorators.py:16 views/generic/list.py:388
+#: views/generic/decorators.py:16 views/generic/list.py:390
 msgid "Go"
 msgstr ""
 
@@ -596,7 +596,7 @@ msgstr ""
 
 #: views/generic/create_update.py:325 views/generic/create_update.py:406
 #: views/generic/delete.py:42 views/generic/detail.py:21
-#: views/generic/list.py:576
+#: views/generic/list.py:578
 msgid "View permission is not allowed"
 msgstr ""
 
@@ -617,19 +617,19 @@ msgstr ""
 msgid "and"
 msgstr ""
 
-#: views/generic/decorators.py:14 views/generic/list.py:386
+#: views/generic/decorators.py:14 views/generic/list.py:388
 msgid "Fill in the form"
 msgstr ""
 
-#: views/generic/decorators.py:15 views/generic/list.py:387
+#: views/generic/decorators.py:15 views/generic/list.py:389
 msgid "Are you sure you want to proceed with this action?"
 msgstr ""
 
-#: views/generic/decorators.py:17 views/generic/list.py:389
+#: views/generic/decorators.py:17 views/generic/list.py:391
 msgid "Proceed"
 msgstr ""
 
-#: views/generic/decorators.py:18 views/generic/list.py:390
+#: views/generic/decorators.py:18 views/generic/list.py:392
 msgid "Undo"
 msgstr ""
 
@@ -661,38 +661,38 @@ msgid ""
 "get_absolute_url method on the Model."
 msgstr ""
 
-#: views/generic/list.py:283
+#: views/generic/list.py:285
 msgid "Paginate count is not integer"
 msgstr ""
 
-#: views/generic/list.py:292
+#: views/generic/list.py:294
 msgid "Paginate start is not integer"
 msgstr ""
 
-#: views/generic/list.py:423
+#: views/generic/list.py:425
 msgid ""
 "Actions style is improperly configured only options are 'buttons' or "
 "'select' (select by default)."
 msgstr ""
 
-#: views/generic/list.py:537
+#: views/generic/list.py:539
 msgid ""
 "Json response is available only if get_queryset() return a queryset and not "
 "a list"
 msgstr ""
 
-#: views/generic/list.py:556
+#: views/generic/list.py:558
 msgid "This action is not registered"
 msgstr ""
 
-#: views/generic/list.py:562
+#: views/generic/list.py:564
 msgid "Permission denied: {}"
 msgstr ""
 
-#: views/generic/list.py:564
+#: views/generic/list.py:566
 msgid "This permission is not registered on this class"
 msgstr ""
 
-#: views/generic/list.py:635
+#: views/generic/list.py:637
 msgid "Generic TemplateListView needs to define data for datatable"
 msgstr ""
