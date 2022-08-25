@@ -70,12 +70,13 @@ class ModelWebixAdmin(WebixPermissionsMixin):
     # permission custom
     only_superuser = False
 
-#    prefix = None
-#    def __init__(self, prefix=None):
-#        self.prefix = prefix
+    # prefix = None
+    # def __init__(self, prefix=None):
+    #    self.prefix = prefix
 
     def is_enable_row_click(self, request):
         return self.enable_row_click
+
     def get_extra_context(self, request=None):
         return {}
 

@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 
 import re
+import datetime
+
 from functools import update_wrapper
 from weakref import WeakSet
 
@@ -51,9 +53,8 @@ class AdminWebixSite:
     label_width = None
 
     webix_container_id = 'content_right'
-    webix_menu_type = 'menu' # ['menu', 'sidebar']
+    webix_menu_type = 'menu'  # ['menu', 'sidebar']
     webix_menu_width = 180
-
 
     index_template = None
     login_template = None
@@ -640,7 +641,7 @@ class AdminWebixSite:
         """
         Display the login form for the given HttpRequest.
         """
-        if request.method == 'GET' and self.has_permission(request):
+        if request.method == 'GET' and request.user.is_authenticated and self.has_permission(request):
             # Already logged-in, redirect to admin index
             index_path = reverse('admin_webix:index', current_app=self.name)
             return HttpResponseRedirect(index_path)
@@ -681,6 +682,7 @@ class AdminWebixSite:
             'username': request.user.get_username(),
             'site_title': self.site_title,
         }
+
         if (REDIRECT_FIELD_NAME not in request.GET and
             REDIRECT_FIELD_NAME not in request.POST):
             context[REDIRECT_FIELD_NAME] = reverse('admin_webix:index', current_app=self.name)
