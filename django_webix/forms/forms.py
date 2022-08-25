@@ -319,7 +319,7 @@ class BaseWebixMixin:
                         _value = initial()
                         if not is_naive(_value):
                             _value = make_naive(_value)
-                        if settings.WEBIX_VERSION >= '7.0.0' and settings.WEBIX_VERSION < '8.0.0':
+                        if '7.0.0' <= settings.WEBIX_VERSION < '8.0.0':
                             el.update({'value': '2020-01-01 {}'.format(_value.strftime('%H,%M'))})
                         else:
                             el.update({'value': '{}'.format(_value.strftime('%H,%M'))})

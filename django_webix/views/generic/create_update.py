@@ -152,6 +152,7 @@ class WebixCreateUpdateMixin:
             formset.save()
         return None
 
+
     def forms_valid(self, form, inlines, **kwargs):
         # pre forms valid
         self.pre_forms_valid(form=form, inlines=inlines, **kwargs)
@@ -168,6 +169,7 @@ class WebixCreateUpdateMixin:
         # post form save
         self.post_form_save(form=form, inlines=inlines, **kwargs)
         # inlines save
+        # noinspection PyNoneFunctionAssignment
         exception_response = self.inlines_save(inlines)
         if exception_response is not None:
             return exception_response

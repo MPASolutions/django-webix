@@ -272,7 +272,9 @@ class WebixUrlMixin(WebixUrlUtilsMixin):
         return None
 
     def get_url_create(self):
+
         if self.model is not None:
+            # noinspection PyNoneFunctionAssignment
             create_kwargs = self.get_url_create_kwargs()
             if create_kwargs is not None:
                 _url_pattern_name = self._check_url(self.get_url_pattern_create(),
