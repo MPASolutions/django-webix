@@ -35,7 +35,7 @@
                         view: "text",
                         name: "username",
                         id: "id_username",
-                        label: "Username",
+                        label: "{{ _("Username")|escapejs }}",
                         required: true
                     },
                     {
@@ -44,14 +44,14 @@
                         name: "password",
                         id: "id_password",
                         type: "password",
-                        label: "Password",
+                        label: "{{ _("Password")|escapejs }}",
                         required: true
                     },
                     {
                         margin: 5, cols: [{
                             view: "button",
                             id: 'id_login_button',
-                            label: "Login",
+                            label: "{{ _("Login")|escapejs }}",
                             click: function () {
                                 if ($$('login_form').validate()) {
                                     webix.send(".", $$('login_form').getValues());
@@ -68,7 +68,7 @@
                     {
                         view: "button",
                         margin: 30,
-                        value: "Recupera password",
+                        value: "{{ _("Password recovery")|escapejs }}",
                         click: function() {
                             location.href = "{% url "admin_webix:password_reset" %}"
                         }

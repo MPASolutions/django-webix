@@ -9,7 +9,7 @@ $$("{{ webix_container_id }}").addView({
             view: "template",
             type: "header",
             borderless: true,
-            template: '<div style="width:100%; text-align:center;"><strong>Reimposta la password</strong></div>'
+            template: '<div style="width:100%; text-align:center;"><strong>{{ _("Password reset")|escapejs }}</strong></div>'
         }
     ]
 }, 0);
@@ -23,7 +23,7 @@ $$("{{ webix_container_id }}").addView({
                 {$template: "Spacer", height: 20},
                 {
                     view: "template",
-                    template: "Password dimenticata? Inserisci il tuo indirizzo email qui sotto, e ti invieremo istruzioni per impostarne una nuova.",
+                    template: '{{ _("Forgot password? Enter your email address below, and we will send you instructions to set up a new one")|escapejs }}',
                     autoheight: true,
                     borderless: true,
                     css: {"text-align": 'center'}
@@ -42,7 +42,7 @@ $$("{{ webix_container_id }}").addView({
                                 {
                                     view: "button",
                                     id: 'id_button_reset_password',
-                                    label: "Conferma",
+                                    label: '"{{ _("Confirm")|escapejs }}',
                                     click: function () {
                                         if ($$('{{ form.webix_id }}').validate()) {
                                             webix.send("{% url 'admin_webix:password_reset' %}", $$('{{ form.webix_id }}').getValues());

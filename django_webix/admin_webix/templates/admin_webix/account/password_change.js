@@ -40,7 +40,7 @@ $$("{{ webix_container_id }}").addView({
                             id: "id_old_password",
                             name: "old_password",
                             type: "password",
-                            label: "{{ _("Password attuale")|escapejs }}",
+                            label: "{{ _("Current password")|escapejs }}",
                             required: true
                         },
                         {
@@ -49,7 +49,7 @@ $$("{{ webix_container_id }}").addView({
                             name: "new_password1",
                             id: "id_new_password1",
                             type: "password",
-                            label: "{{ _("Nuova password")|escapejs }}",
+                            label: "{{ _("New password")|escapejs }}",
                             required: true
                         },
                         {
@@ -58,7 +58,7 @@ $$("{{ webix_container_id }}").addView({
                             name: "new_password2",
                             id: "id_new_password2",
                             type: "password",
-                            label: "{{ _("Conferma password")|escapejs }}",
+                            label: "{{ _("Password confirm")|escapejs }}",
                             required: true
                         },
                         {
@@ -67,7 +67,7 @@ $$("{{ webix_container_id }}").addView({
                                 {
                                     view: "button",
                                     id: 'id_button_change_password',
-                                    label: "{{ _("Conferma")|escapejs }}",
+                                    label: "{{ _("Confirm")|escapejs }}",
                                     click: function () {
                                         if ($$('password_change_form').validate()) {
                                             $$('{{ webix_container_id }}').showOverlay("<img src='{% static 'django_webix/loading.gif' %}'>");
@@ -105,4 +105,4 @@ $$('password_change_form').setValues({csrfmiddlewaretoken: "{{ csrf_token }}"});
     {% include "django_webix/include/form_errors_popup.js" %}
 {% else %}
     {% include "django_webix/include/form_errors_message.js" %}
-{% endif %}
+{% end

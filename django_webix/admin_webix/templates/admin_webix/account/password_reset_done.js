@@ -17,11 +17,10 @@ $$("{{ webix_container_id }}").addView({
             view: "template",
             type: "header",
             borderless: true,
-            template: '<div style="width:100%; text-align:center;"><strong>Reimposta la password</strong></div>'
+            template: '<div style="width:100%; text-align:center;"><strong>{{ _("Reset password")|escapejs }}</strong></div>'
         }
     ]
 }, 0);
-
 
 $$("{{ webix_container_id }}").addView({
     cols: [
@@ -31,14 +30,14 @@ $$("{{ webix_container_id }}").addView({
                 {$template: "Spacer", height: 20},
                 {
                     view: "template",
-                    template: "Abbiamo inviato istruzioni per impostare la password all'indirizzo email che hai indicato. Dovresti riceverle a breve a patto che l'indirizzo che hai inserito sia valido.",
+                    template: '{{ _("We have sent instructions for setting the password to the email address you provided. You should receive them shortly as long as the address you entered is valid.")|escapejs }}',
                     autoheight: true,
                     borderless: true,
                     css: {"text-align": 'center'}
                 },
                 {
                     view: "template",
-                    template: "Se non ricevi un messaggio email, accertati di aver inserito l'indirizzo con cui ti sei registrato, e controlla la cartella dello spam.",
+                    template: '{{ _("If you do not receive an email, make sure you have entered the address you registered with, and check your spam folder")|escapejs }}',
                     autoheight: true,
                     borderless: true,
                     css: {"text-align": 'center'}
@@ -49,6 +48,5 @@ $$("{{ webix_container_id }}").addView({
         {}
     ]
 });
-
 
 {% endblock %}

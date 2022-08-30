@@ -9,7 +9,7 @@ $$("{{ webix_container_id }}").addView({
             view: "template",
             type: "header",
             borderless: true,
-            template: '<div style="width:100%; text-align:center;"><strong>Sicurezza account</strong></div>'
+            template: '<div style="width:100%; text-align:center;"><strong>{{ _("Account security")|escapejs }}</strong></div>'
         }
     ]
 }, 0);
@@ -23,7 +23,7 @@ $$("{{ webix_container_id }}").addView({
                 {$template: "Spacer", height: 20},
                 {
                     view: "template",
-                    template: "In costruzione",
+                    template: '{{ _("Under construction")|escapejs }}',
                     autoheight: true,
                     borderless: true,
                     css: {"text-align": 'center'}
