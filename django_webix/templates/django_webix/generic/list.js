@@ -30,6 +30,7 @@ $$("{{ webix_container_id }}").addView({
             value: "0", // disable by default
             hidden: true,
         },
+
         {
             view: "template",
             type: "header",
@@ -115,14 +116,12 @@ if (
 {% endif %}
 {% endblock %}
 
-{% if failure_view_blocking_objects %}
-    {% block failure_blocking_objects %}
-        {% include "django_webix/include/list_failure_blocking_objects.js"  with failure_blocking_objects=failure_view_blocking_objects %}
-    {% endblock %}
+{% if failure_change_blocking_objects %}
+    {% include "django_webix/include/list_failure_blocking_objects.js"  with failure_blocking_objects=failure_change_blocking_objects %}
 {% else %}
-    {% if failure_view_related_objects %}
+    {% if failure_change_related_objects %}
         {% block failure_related_objects %}
-            {% include "django_webix/include/list_failure_related_objects.js" with failure_related_objects=failure_view_related_objects %}
+            {% include "django_webix/include/list_failure_related_objects.js" with failure_related_objects=failure_change_related_objects %}
         {% endblock %}
     {% else %}
 
@@ -421,14 +420,14 @@ if (
                         {{ view_prefix }}save_state();
                     }
                 },
-        //        onAfterEditStop: function(state, editor, ignoreUpdate){
-        //            //if(state.value != state.old){
-        //                webix.message("Cell value was changed")
-        //            //}
-        //        },
+                // onAfterEditStop: function(state, editor, ignoreUpdate){
+                //    //if(state.value != state.old){
+                //        webix.message("Cell value was changed")
+                //    //}
+                // },
 
-                    // PB: 1. cick fuori da lista disabilita edit
-                    // PB: 2. sarebbeda togliere selezione verde sulla riga
+                // PB: 1. cick fuori da lista disabilita edit
+                // PB: 2. sarebbeda togliere selezione verde sulla riga
 
                 onItemClick: function (id, e, trg) {
                     var el = $$('{{ view_prefix }}datatable').getSelectedItem();
@@ -503,7 +502,8 @@ if (
                     {% endblock %}
                 }
                 {% endblock %}
-            }
+            },
+            {% block extra_datatable_options %}{% endblock %}
         }, 1);
 
         {% block footer %}
@@ -550,6 +550,8 @@ if (
         {% endif %}
 
     {% endif %}
+
 {% endif %}
+
 {% block extrajs_post %}{% endblock %}
 {% endblock %}

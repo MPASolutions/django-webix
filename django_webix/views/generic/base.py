@@ -116,8 +116,8 @@ class WebixPermissionsMixin:
         elif self.model is not None:
             has_permission = getattr(self.model, 'has_change_permission', None)
             if has_permission is not None:
-                return has_permission(request=request)
-        return self.has_change_django_user_permission(user=request.user, obj=obj)
+                return has_permission(request=request, obj=obj)
+        return self.has_change_django_user_permission(user=request.user)
 
     def has_delete_permission(self, request, obj=None):
         if not self.check_permissions:
@@ -129,8 +129,8 @@ class WebixPermissionsMixin:
         elif self.model is not None:
             has_permission = getattr(self.model, 'has_delete_permission', None)
             if has_permission is not None:
-                return has_permission(request=request)
-        return self.has_delete_django_user_permission(user=request.user, obj=obj)
+                return has_permission(request=request, obj=obj)
+        return self.has_delete_django_user_permission(user=request.user)
 
     def has_view_permission(self, request, obj=None):
         if not self.check_permissions:
@@ -142,8 +142,8 @@ class WebixPermissionsMixin:
         elif self.model is not None:
             has_permission = getattr(self.model, 'has_view_permission', None)
             if has_permission is not None:
-                return has_permission(request=request)
-        return self.has_view_django_user_permission(user=request.user, obj=obj)
+                return has_permission(request=request, obj=obj)
+        return self.has_view_django_user_permission(user=request.user)
 
     def get_info_no_add_permission(self, has_permission, request):
         if not has_permission:
