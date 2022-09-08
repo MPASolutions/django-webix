@@ -411,14 +411,14 @@ $$("{{ webix_container_id }}").addView({
                 {{ view_prefix }}save_state();
             }
         },
-//        onAfterEditStop: function(state, editor, ignoreUpdate){
-//            //if(state.value != state.old){
-//                webix.message("Cell value was changed")
-//            //}
-//        },
+        // onAfterEditStop: function(state, editor, ignoreUpdate){
+        //    //if(state.value != state.old){
+        //        webix.message("Cell value was changed")
+        //    //}
+        // },
 
-            // PB: 1. cick fuori da lista disabilita edit
-            // PB: 2. sarebbeda togliere selezione verde sulla riga
+        // PB: 1. cick fuori da lista disabilita edit
+        // PB: 2. sarebbeda togliere selezione verde sulla riga
 
         onItemClick: function (id, e, trg) {
             var el = $$('{{ view_prefix }}datatable').getSelectedItem();
@@ -493,7 +493,8 @@ $$("{{ webix_container_id }}").addView({
             {% endblock %}
         }
         {% endblock %}
-    }
+    },
+    {% block extra_datatable_options %}{% endblock %}
 }, 1);
 
 {% block footer %}
