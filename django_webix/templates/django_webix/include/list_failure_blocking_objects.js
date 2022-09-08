@@ -11,7 +11,7 @@ $$("{{ webix_container_id }}").addView({
     height:70
 });
 
-{% for el in failure_add_blocking_objects %}
+{% for el in failure_blocking_objects %}
     $$("{{ webix_container_id }}").addView({
         id: "button_{{ forloop.counter }}",
         view: "button",
@@ -19,9 +19,11 @@ $$("{{ webix_container_id }}").addView({
         css: 'failure_blocking_objects',
         height: 50,
         padding: 10,
-        margin: 2,
-        click: function () {
+        margin: 2
+        {% if el.url %}
+        ,click: function () {
             load_js("{{ el.url }}", undefined, undefined, undefined, undefined, undefined, undefined, abortAllPending=true);
         }
+        {% endif %}
     });
 {% endfor %}

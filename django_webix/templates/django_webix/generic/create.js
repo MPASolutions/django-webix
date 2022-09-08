@@ -11,11 +11,13 @@
     {% endblock %}
 
     {% if failure_add_blocking_objects %}
-        {% include "django_webix/include/list_failure_blocking_objects.js" %}
+        {% block failure_blocking_objects %}
+            {% include "django_webix/include/list_failure_blocking_objects.js" with failure_blocking_objects=failure_add_blocking_objects %}
+        {% endblock %}
     {% else %}
-        {% if failure_create_related_objects %}
+        {% if failure_add_related_objects %}
             {% block failure_related_objects %}
-                {% include "django_webix/include/list_failure_related_objects.js" with failure_related_objects=failure_create_related_objects %}
+                {% include "django_webix/include/list_failure_related_objects.js" with failure_related_objects=failure_add_related_objects %}
             {% endblock %}
         {% else %}
             {% block form_standard %}
