@@ -617,3 +617,23 @@ function filter_icontains(item, value) {
     return false;
 }
 
+function update_geo_ewkt_point(geo_field_selector){
+    //'SRID=32632;POINT (663156.5901635507 5099188.654177771)'
+    if ( ($$(selector + '_long')!='') && ($$(selector + '_lat')!='') && ($$(selector + '_srid')!='') ) {
+        $$(selector).setValue('SRID='+$$(selector + '_srid').getValue()+';POINT ('+$$(selector + '_long').getValue()+' '+$$(selector + '_lat').getValue()+')');
+    }
+}
+
+function geo_change(geo_type, field_name){
+    /*
+    str = 'Content(cap)(cap2)(cap3)'
+    str.match(/(\(.*?\))/g)
+    var i = $(this).attr("id").match(/(?:-\d+)?(-\d+-)/);
+    //'SRID=32632;POINT (663156.5901635507 5099188.654177771)'
+    var str = $$(geo_field_selector).getValue()
+    let pattern = /SRID=(?P<srid>-?\d+);POINT \((?P<longitude>-?\d+\.\d+) (?P<latitude>-?\d+\.\d+)\)/g
+    str.match(pattern);
+    let arr = patter.exec( str );
+  return arr[1];
+     */
+}

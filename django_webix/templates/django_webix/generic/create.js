@@ -10,8 +10,8 @@
         {% include "django_webix/include/toolbar_navigation.js" %}
     {% endblock %}
 
-    {% if failure_add_missing_objects %}
-        {% include "django_webix/include/list_failure_add_missing_objects.js" %}
+    {% if failure_add_blocking_objects %}
+        {% include "django_webix/include/list_failure_blocking_objects.js" %}
     {% else %}
         {% if failure_create_related_objects %}
             {% block failure_related_objects %}

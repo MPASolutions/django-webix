@@ -11,12 +11,12 @@ $$("{{ webix_container_id }}").addView({
     height:70
 });
 
-{% for el in failure_add_missing_objects %}
+{% for el in failure_add_blocking_objects %}
     $$("{{ webix_container_id }}").addView({
         id: "button_{{ forloop.counter }}",
         view: "button",
         value: "{{ el.text }}",
-        css: 'failure_add_missing_objects',
+        css: 'failure_blocking_objects',
         height: 50,
         padding: 10,
         margin: 2,
