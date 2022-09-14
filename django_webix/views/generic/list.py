@@ -251,7 +251,7 @@ class WebixListView(WebixBaseMixin,
         return is_footer
 
     def get_footer(self):
-        if self.is_enable_footer():
+        if self.is_enable_footer() and self.model is not None:
             qs = self.get_queryset()
             aggregation_dict = {}
             for field in self.get_fields():
@@ -340,7 +340,7 @@ class WebixListView(WebixBaseMixin,
                 for item in qs:
                     if item.get('id') not in ids:
                         qs.remove(item)
-            else:
+            elif self.model is not None:
                 auto_field_name = self.model._meta.get_field(self.get_pk_field()).name
                 qs = qs.filter(**{auto_field_name + '__in': ids})
         return qs
@@ -370,7 +370,7 @@ class WebixListView(WebixBaseMixin,
     def _get_actions_flexport(self):
         _actions = []
         # add flexport actions
-        if apps.is_installed('flexport'):
+        if apps.is_installed('flexport') and self.model is not None:
             from django.contrib.contenttypes.models import ContentType
             from flexport.views import create_extraction
             from flexport.models import Export
