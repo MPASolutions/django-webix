@@ -887,14 +887,14 @@ class BaseWebixMixin:
                         layers = []
                         _mode = 'draw'
 
-                    el.update({
-                        "on": {
-                            "onChange": "(function (newv, oldv) {{ geo_change('{geo_type}','{field_name}'); }})".format(
-                                geo_type=field.__class__.__name__,
-                                field_name=self[name].auto_id,
-                            )
-                        }
-                    })
+                    # el.update({
+                    #     "on": {
+                    #         "onChange": "(function (newv, oldv) {{ geo_change('{geo_type}','{field_name}'); }})".format(
+                    #             geo_type=field.__class__.__name__,
+                    #             field_name=self[name].auto_id,
+                    #         )
+                    #     }
+                    # })
 
                     _row_1 = [
                         {
@@ -922,135 +922,135 @@ class BaseWebixMixin:
                                 )
                             }
                         },
-                        {
-                            "id": self[name].auto_id + '_cp',
-                            "name": self.add_prefix(name) + '_cp',
-                            'borderless': True,
-                            "view": "template",
-                            'template': '<div title="{}"><i style="cursor:pointer" class="webix_icon far fa-copy"></i></div>'.format(_('Copy wkt')),
-                            'width': 40,
-                            "on": {
-                                "onItemClick": "(function (id, e) {{   navigator.clipboard.writeText($$('{geo_field}').getValue()); }})".format(
-                                    geo_field=self[name].auto_id
-                                )
-                            },
-                        },
-                        {
-                            "id": self[name].auto_id + '_rm',
-                            "name": self.add_prefix(name) + '_rm',
-                            'borderless': True,
-                            "view": "template",
-                            'template': '<div title="{}"><i style="cursor:pointer" class="webix_icon far fa-trash-alt"></i></div>'.format(_('Empty geometry')),
-                            'width': 40,
-                            "on": {
-                                "onItemClick": "(function (id, e) {{ $$('{geo_field}').setValue(''); }})".format(
-                                    geo_field=self[name].auto_id
-                                )
-                            }
-                        },
+                        # {
+                        #     "id": self[name].auto_id + '_cp',
+                        #     "name": self.add_prefix(name) + '_cp',
+                        #     'borderless': True,
+                        #     "view": "template",
+                        #     'template': '<div title="{}"><i style="cursor:pointer" class="webix_icon far fa-copy"></i></div>'.format(_('Copy wkt')),
+                        #     'width': 40,
+                        #     "on": {
+                        #         "onItemClick": "(function (id, e) {{   navigator.clipboard.writeText($$('{geo_field}').getValue()); }})".format(
+                        #             geo_field=self[name].auto_id
+                        #         )
+                        #     },
+                        # },
+                        # {
+                        #     "id": self[name].auto_id + '_rm',
+                        #     "name": self.add_prefix(name) + '_rm',
+                        #     'borderless': True,
+                        #     "view": "template",
+                        #     'template': '<div title="{}"><i style="cursor:pointer" class="webix_icon far fa-trash-alt"></i></div>'.format(_('Empty geometry')),
+                        #     'width': 40,
+                        #     "on": {
+                        #         "onItemClick": "(function (id, e) {{ $$('{geo_field}').setValue(''); }})".format(
+                        #             geo_field=self[name].auto_id
+                        #         )
+                        #     }
+                        # },
                         el
                     ]
-                    _row_2 = []
-                    if PointField is not None and isinstance(field, PointField):# point
-                        _row_2 = [
-                            {
-                                'width': self.label_width
-                            },
-                            {
-                                'id': self[name].auto_id + '_srid',
-                                'name': self.add_prefix(name) + '_srid',
-                                'label': 'SRID',
-                                "view": "text",
-                                "labelWidth": 40,
-                                "width": 100,
-                                "on": {
-                                    "onChange": "(function (newv, oldv) {{ update_geo_ewkt_point('{geo_field_selector}'); }})".format(
-                                        geo_field_selector=self[name].auto_id,
-                                    )
-                                }
-                            },
-                            {
-                                "id": self[name].auto_id + '_long',
-                                "name": self.add_prefix(name) + '_long',
-                                "label": "Long.",
-                                "view": "text",
-                                "labelWidth": 16,
-                                "width": 140,
-                                "on": {
-                                    "onChange": "(function (newv, oldv) {{ update_geo_ewkt_point('{geo_field_selector}'); }})".format(
-                                        geo_field_selector=self[name].auto_id,
-                                    )
-                                }
-                            },
-                            {
-                                "id": self[name].auto_id + '_lat',
-                                "name": self.add_prefix(name) + '_lat',
-                                "label": "Lat.",
-                                "view": "text",
-                                "labelWidth": 16,
-                                "width": 140,
-                                "on": {
-                                    "onChange": "(function (newv, oldv) {{ update_geo_ewkt_point('{geo_field_selector}'); }})".format(
-                                        geo_field_selector=self[name].auto_id,
-                                    )
-                                }
-                            },
-                        {}
-                        ]
-                    elif (LineStringField is not None and isinstance(field, LineStringField)) or \
-                        (MultiLineStringField is not None and isinstance(field, MultiLineStringField)):
-                        _row_2 = [
-                            {
-                                'width': self.label_width
-                            },
-                            {
-                                'id': self[name].auto_id + '_elements',
-                                'name': self.add_prefix(name) + '_elements',
-                                'label': _('N.elements'),
-                                "view": "text",
-                                "labelWidth": 40,
-                                "width": 100
-                            },
-                            {
-                                'id': self[name].auto_id + '_area',
-                                'name': self.add_prefix(name) + '_area',
-                                'label': _('Area'),
-                                "view": "text",
-                                "labelWidth": 40,
-                                "width": 100
-                            },
-                            {
-                                'id': self[name].auto_id + '_perimeter',
-                                'name': self.add_prefix(name) + '_perimeter',
-                                'label': _('Perimeter'),
-                                "view": "text",
-                                "labelWidth": 40,
-                                "width": 100
-                            },
-                            {}
-                        ]
-                    elif (PolygonField is not None and isinstance(field, PolygonField)) or \
-                        (MultiPolygonField is not None and isinstance(field, MultiPolygonField)):
-                        _row_2 = [
-                            {
-                                'width': self.label_width
-                            },
-                            {
-                                'id': self[name].auto_id + '_lenght',
-                                'name': self.add_prefix(name) + '_lenght',
-                                'label': _('Lenght'),
-                                "view": "text",
-                                "labelWidth": 40,
-                                "width": 100
-                            },
-                            {}
-                        ]
+                    # _row_2 = []
+                    # if PointField is not None and isinstance(field, PointField):# point
+                    #     _row_2 = [
+                    #         {
+                    #             'width': self.label_width
+                    #         },
+                    #         {
+                    #             'id': self[name].auto_id + '_srid',
+                    #             'name': self.add_prefix(name) + '_srid',
+                    #             'label': 'SRID',
+                    #             "view": "text",
+                    #             "labelWidth": 40,
+                    #             "width": 100,
+                    #             "on": {
+                    #                 "onChange": "(function (newv, oldv) {{ update_geo_ewkt_point('{geo_field_selector}'); }})".format(
+                    #                     geo_field_selector=self[name].auto_id,
+                    #                 )
+                    #             }
+                    #         },
+                    #         {
+                    #             "id": self[name].auto_id + '_long',
+                    #             "name": self.add_prefix(name) + '_long',
+                    #             "label": "Long.",
+                    #             "view": "text",
+                    #             "labelWidth": 16,
+                    #             "width": 140,
+                    #             "on": {
+                    #                 "onChange": "(function (newv, oldv) {{ update_geo_ewkt_point('{geo_field_selector}'); }})".format(
+                    #                     geo_field_selector=self[name].auto_id,
+                    #                 )
+                    #             }
+                    #         },
+                    #         {
+                    #             "id": self[name].auto_id + '_lat',
+                    #             "name": self.add_prefix(name) + '_lat',
+                    #             "label": "Lat.",
+                    #             "view": "text",
+                    #             "labelWidth": 16,
+                    #             "width": 140,
+                    #             "on": {
+                    #                 "onChange": "(function (newv, oldv) {{ update_geo_ewkt_point('{geo_field_selector}'); }})".format(
+                    #                     geo_field_selector=self[name].auto_id,
+                    #                 )
+                    #             }
+                    #         },
+                    #     {}
+                    #     ]
+                    # elif (LineStringField is not None and isinstance(field, LineStringField)) or \
+                    #     (MultiLineStringField is not None and isinstance(field, MultiLineStringField)):
+                    #     _row_2 = [
+                    #         {
+                    #             'width': self.label_width
+                    #         },
+                    #         {
+                    #             'id': self[name].auto_id + '_elements',
+                    #             'name': self.add_prefix(name) + '_elements',
+                    #             'label': _('N.elements'),
+                    #             "view": "text",
+                    #             "labelWidth": 40,
+                    #             "width": 100
+                    #         },
+                    #         {
+                    #             'id': self[name].auto_id + '_area',
+                    #             'name': self.add_prefix(name) + '_area',
+                    #             'label': _('Area'),
+                    #             "view": "text",
+                    #             "labelWidth": 40,
+                    #             "width": 100
+                    #         },
+                    #         {
+                    #             'id': self[name].auto_id + '_perimeter',
+                    #             'name': self.add_prefix(name) + '_perimeter',
+                    #             'label': _('Perimeter'),
+                    #             "view": "text",
+                    #             "labelWidth": 40,
+                    #             "width": 100
+                    #         },
+                    #         {}
+                    #     ]
+                    # elif (PolygonField is not None and isinstance(field, PolygonField)) or \
+                    #     (MultiPolygonField is not None and isinstance(field, MultiPolygonField)):
+                    #     _row_2 = [
+                    #         {
+                    #             'width': self.label_width
+                    #         },
+                    #         {
+                    #             'id': self[name].auto_id + '_lenght',
+                    #             'name': self.add_prefix(name) + '_lenght',
+                    #             'label': _('Lenght'),
+                    #             "view": "text",
+                    #             "labelWidth": 40,
+                    #             "width": 100
+                    #         },
+                    #         {}
+                    #     ]
                     elements.update({
                         '{}_block'.format(self[name].html_name): {
                             'id': 'block_' + self[name].auto_id,
                             'rows': [
                                 {'cols': _row_1},
-                                {'cols': _row_2},
+                           #     {'cols': _row_2},
                             ]
                         }
                     })
