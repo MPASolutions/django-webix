@@ -467,7 +467,7 @@ function webix_post(path, params) {
 }
 {# autocomplete #}
 
-function set_autocomplete_reload(selector, QS) {
+function set_autocomplete_reload(selector, QS, finally_function) {
     var a = $$(selector);
     var d = a.getList();
     if(a.config.view === 'multicombo' || a.config.view === 'multiselect'){
@@ -488,7 +488,10 @@ function set_autocomplete_reload(selector, QS) {
         c.clearAll();
         c.refresh();
     }
-    d.load(QS + '&filter[value]=');
+    if (finally_function==undefined){
+        finally_function=function(){}
+    }
+    d.load(QS + '&filter[value]=').finally(finally_function);
     d.refresh();
 }
 
