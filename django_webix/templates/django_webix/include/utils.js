@@ -495,7 +495,7 @@ function set_autocomplete_reload(selector, QS, finally_function) {
     d.refresh();
 }
 
-function set_autocomplete_value(selector, QS, value) {
+function set_autocomplete_value(selector, QS, value, finally_function) {
     var a = $$(selector);
     var d = a.getList();
     if(a.config.view === 'multicombo' || a.config.view === 'multiselect'){
@@ -515,11 +515,11 @@ function set_autocomplete_value(selector, QS, value) {
         }
         c.refresh();
     }
-    d.load(QS + '&filter[value]=' + value);
+    d.load(QS + '&filter[value]=' + value).finally(finally_function);
     d.refresh();
 }
 
-function set_autocomplete(selector, QS) {
+function set_autocomplete(selector, QS, finally_function) {
     var a = $$(selector);
     var d = a.getList();
     if(a.config.view === 'multicombo' || a.config.view === 'multiselect'){
@@ -535,14 +535,14 @@ function set_autocomplete(selector, QS) {
         }
         c.refresh();
     }
-    d.load(QS + '&filter[value]=');
+    d.load(QS + '&filter[value]=').finally(finally_function);
     d.refresh();
 }
 
-function set_autocomplete_empty(selector, QS) {
+function set_autocomplete_empty(selector, QS, finally_function) {
     a = $$(selector);
     d = a.getList();
-    d.load(QS + '&filter[value]=');
+    d.load(QS + '&filter[value]=').finally(finally_function);
 }
 
 {# webix extensions #}
