@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-08-25 14:41+0200\n"
+"POT-Creation-Date: 2022-09-20 10:21+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -39,6 +39,7 @@ msgid "The two password fields didn’t match."
 msgstr ""
 
 #: admin_webix/forms.py:58 admin_webix/forms.py:239
+#: admin_webix/templates/admin_webix/login.html:47
 msgid "Password"
 msgstr ""
 
@@ -110,36 +111,36 @@ msgstr ""
 msgid "Webix Admin Menu"
 msgstr ""
 
-#: admin_webix/options.py:182 templates/django_webix/include/utils.js:209
+#: admin_webix/options.py:183 templates/django_webix/include/utils.js:209
 #: templates/django_webix/include/utils.js:216
 msgid "Yes"
 msgstr ""
 
-#: admin_webix/options.py:182 templates/django_webix/include/utils.js:211
+#: admin_webix/options.py:183 templates/django_webix/include/utils.js:211
 #: templates/django_webix/include/utils.js:218
 msgid "No"
 msgstr ""
 
-#: admin_webix/sites.py:39
+#: admin_webix/sites.py:41
 msgid "Django webix site admin"
 msgstr ""
 
-#: admin_webix/sites.py:42
+#: admin_webix/sites.py:44
 msgid "Django webix administration"
 msgstr ""
 
-#: admin_webix/sites.py:45
+#: admin_webix/sites.py:47
 msgid "Site administration"
 msgstr ""
 
-#: admin_webix/sites.py:662
+#: admin_webix/sites.py:663
 #, python-format
 msgid ""
 "Please enter the correct %(username)s and password for a staff account. Note "
 "that both fields may be case-sensitive."
 msgstr ""
 
-#: admin_webix/sites.py:679
+#: admin_webix/sites.py:680
 msgid "Log in"
 msgstr ""
 
@@ -148,23 +149,81 @@ msgid "Cambio password utente"
 msgstr ""
 
 #: admin_webix/templates/admin_webix/account/password_change.js:43
-msgid "Password attuale"
+#: admin_webix/templates/admin_webix/account/password_reset.html:31
+#: admin_webix/templates/admin_webix/password_change.html:29
+msgid "Current password"
 msgstr ""
 
 #: admin_webix/templates/admin_webix/account/password_change.js:52
-msgid "Nuova password"
+#: admin_webix/templates/admin_webix/account/password_reset.html:40
+#: admin_webix/templates/admin_webix/password_change.html:38
+msgid "New password"
 msgstr ""
 
 #: admin_webix/templates/admin_webix/account/password_change.js:61
-msgid "Conferma password"
+#: admin_webix/templates/admin_webix/account/password_reset.html:49
+#: admin_webix/templates/admin_webix/password_change.html:47
+msgid "Password confirm"
 msgstr ""
 
 #: admin_webix/templates/admin_webix/account/password_change.js:70
-msgid "Conferma"
+#: admin_webix/templates/admin_webix/account/password_reset.html:56
+#: admin_webix/templates/admin_webix/account/password_reset_confirm.html:35
+#: admin_webix/templates/admin_webix/account/password_reset_form.html:34
+#: admin_webix/templates/admin_webix/account/password_reset_form.js:45
+#: admin_webix/templates/admin_webix/password_change.html:54
+msgid "Confirm"
 msgstr ""
 
 #: admin_webix/templates/admin_webix/account/password_change_done.js:15
 msgid "Password cambiata correttamente"
+msgstr ""
+
+#: admin_webix/templates/admin_webix/account/password_reset.html:13
+#: admin_webix/templates/admin_webix/password_change.html:13
+msgid "User password change"
+msgstr ""
+
+#: admin_webix/templates/admin_webix/account/password_reset_complete.html:17
+msgid "Your password has been set. You can log-in"
+msgstr ""
+
+#: admin_webix/templates/admin_webix/account/password_reset_complete.html:32
+#: admin_webix/templates/admin_webix/login.html:54
+msgid "Login"
+msgstr ""
+
+#: admin_webix/templates/admin_webix/account/password_reset_complete.html:42
+#: templates/django_webix/include/toolbar_navigation.js:13
+msgid "Back"
+msgstr ""
+
+#: admin_webix/templates/admin_webix/account/password_reset_confirm.html:11
+msgid "Insert new password"
+msgstr ""
+
+#: admin_webix/templates/admin_webix/account/password_reset_confirm.html:16
+msgid ""
+"Enter the new password twice, to verify that you have written it correctly"
+msgstr ""
+
+#: admin_webix/templates/admin_webix/account/password_reset_done.html:15
+#: admin_webix/templates/admin_webix/account/password_reset_done.js:33
+msgid ""
+"We have sent instructions for setting the password to the email address you "
+"provided. You should receive them shortly as long as the address you entered "
+"is valid."
+msgstr ""
+
+#: admin_webix/templates/admin_webix/account/password_reset_done.html:23
+#: admin_webix/templates/admin_webix/account/password_reset_done.js:40
+msgid ""
+"If you do not receive an email, make sure you have entered the address you "
+"registered with, and check your spam folder"
+msgstr ""
+
+#: admin_webix/templates/admin_webix/account/password_reset_done.js:20
+msgid "Reset password"
 msgstr ""
 
 #: admin_webix/templates/admin_webix/account/password_reset_email.html:2
@@ -196,6 +255,26 @@ msgstr ""
 msgid "The %(site_name)s team"
 msgstr ""
 
+#: admin_webix/templates/admin_webix/account/password_reset_form.html:16
+#: admin_webix/templates/admin_webix/account/password_reset_form.js:26
+msgid ""
+"Forgot password? Enter your email address below, and we will send you "
+"instructions to set up a new one"
+msgstr ""
+
+#: admin_webix/templates/admin_webix/account/password_reset_form.js:12
+#: admin_webix/templates/admin_webix/include/menu.js:55
+msgid "Password reset"
+msgstr ""
+
+#: admin_webix/templates/admin_webix/account/two_factor.js:12
+msgid "Account security"
+msgstr ""
+
+#: admin_webix/templates/admin_webix/account/two_factor.js:26
+msgid "Under construction"
+msgstr ""
+
 #: admin_webix/templates/admin_webix/base_site.html:100
 msgid "DATA"
 msgstr ""
@@ -216,10 +295,6 @@ msgstr ""
 msgid "Password change"
 msgstr ""
 
-#: admin_webix/templates/admin_webix/include/menu.js:55
-msgid "Password reset"
-msgstr ""
-
 #: admin_webix/templates/admin_webix/include/menu.js:63
 msgid "2 factor authentication"
 msgstr ""
@@ -236,8 +311,12 @@ msgstr ""
 msgid "Log in again"
 msgstr ""
 
-#: auth_webix/forms.py:14
+#: admin_webix/templates/admin_webix/login.html:38 auth_webix/forms.py:14
 msgid "Username"
+msgstr ""
+
+#: admin_webix/templates/admin_webix/login.html:71
+msgid "Password recovery"
 msgstr ""
 
 #: auth_webix/forms.py:42
@@ -277,11 +356,11 @@ msgstr ""
 msgid "Initial value {} for geo field {} is not supported"
 msgstr ""
 
-#: forms/forms.py:906
+#: forms/forms.py:913
 msgid "Edit"
 msgstr ""
 
-#: forms/forms.py:936
+#: forms/forms.py:1064
 msgid "Type of field {} not supported"
 msgstr ""
 
@@ -289,19 +368,19 @@ msgstr ""
 msgid "ManagementForm data is missing or has been tampered with"
 msgstr ""
 
-#: templates/django_webix/generic/delete.js:26
+#: templates/django_webix/generic/delete.js:32
 msgid "The following objects will be deleted"
 msgstr ""
 
-#: templates/django_webix/generic/delete.js:57
+#: templates/django_webix/generic/delete.js:63
 msgid "Confirm cancellation"
 msgstr ""
 
-#: templates/django_webix/generic/delete.js:63
+#: templates/django_webix/generic/delete.js:69
 msgid "Delete confirmation"
 msgstr ""
 
-#: templates/django_webix/generic/delete.js:64
+#: templates/django_webix/generic/delete.js:70
 msgid "Warning! All linked objects will also be deleted."
 msgstr ""
 
@@ -321,31 +400,31 @@ msgstr ""
 msgid "Advanced filter"
 msgstr ""
 
-#: templates/django_webix/generic/list.js:148
-#: templates/django_webix/generic/list.js:235
+#: templates/django_webix/generic/list.js:157
+#: templates/django_webix/generic/list.js:244
 #: templates/django_webix/include/actions_list.js:8
 #: templates/django_webix/include/toolbar_navigation.js:47
 msgid "Go to map"
 msgstr ""
 
-#: templates/django_webix/generic/list.js:150
+#: templates/django_webix/generic/list.js:159
 #: templates/django_webix/include/toolbar_navigation.js:43
 msgid "Geometry does not exist"
 msgstr ""
 
-#: templates/django_webix/generic/list.js:248
+#: templates/django_webix/generic/list.js:257
 msgid "Remove filters"
 msgstr ""
 
-#: templates/django_webix/generic/list.js:249
+#: templates/django_webix/generic/list.js:258
 msgid "Apply filters"
 msgstr ""
 
-#: templates/django_webix/generic/list.js:249
+#: templates/django_webix/generic/list.js:258
 msgid "Filter"
 msgstr ""
 
-#: templates/django_webix/generic/list.js:487
+#: templates/django_webix/generic/list.js:496
 msgid "Double click to edit the element"
 msgstr ""
 
@@ -437,7 +516,7 @@ msgstr ""
 msgid "String longer than "
 msgstr ""
 
-#: templates/django_webix/include/list_failure_add_missing_objects.js:6
+#: templates/django_webix/include/list_failure_blocking_objects.js:6
 msgid "Missing data to add item"
 msgstr ""
 
@@ -480,7 +559,7 @@ msgstr ""
 
 #: templates/django_webix/include/toolbar_list.js:29
 #: templates/django_webix/include/toolbar_list.js:35
-#: templates/django_webix/include/utils.js:573
+#: templates/django_webix/include/utils.js:576
 msgid "All"
 msgstr ""
 
@@ -508,10 +587,6 @@ msgstr ""
 #: templates/django_webix/include/toolbar_list_actions_select.js:20
 #: views/generic/decorators.py:16 views/generic/list.py:390
 msgid "Go"
-msgstr ""
-
-#: templates/django_webix/include/toolbar_navigation.js:13
-msgid "Back"
 msgstr ""
 
 #: templates/django_webix/include/toolbar_navigation.js:24
@@ -547,11 +622,11 @@ msgstr ""
 msgid "Server error"
 msgstr ""
 
-#: templates/django_webix/include/utils.js:607
+#: templates/django_webix/include/utils.js:610
 msgid "Click and change"
 msgstr ""
 
-#: templates/django_webix/include/utils.js:609
+#: templates/django_webix/include/utils.js:612
 msgid "Locked data"
 msgstr ""
 
@@ -572,19 +647,19 @@ msgstr ""
 msgid "Download all attachments"
 msgstr ""
 
-#: views/generic/base.py:111
+#: views/generic/base.py:159
 msgid "You haven't add permission"
 msgstr ""
 
-#: views/generic/base.py:116
+#: views/generic/base.py:164
 msgid "You haven't change permission"
 msgstr ""
 
-#: views/generic/base.py:121
+#: views/generic/base.py:169
 msgid "You haven't delete permission"
 msgstr ""
 
-#: views/generic/base.py:126
+#: views/generic/base.py:174
 msgid "You haven't view permission"
 msgstr ""
 
@@ -594,26 +669,26 @@ msgid ""
 "'tabs' (standard by default)."
 msgstr ""
 
-#: views/generic/create_update.py:325 views/generic/create_update.py:406
+#: views/generic/create_update.py:327 views/generic/create_update.py:408
 #: views/generic/delete.py:42 views/generic/detail.py:21
 #: views/generic/list.py:578
 msgid "View permission is not allowed"
 msgstr ""
 
-#: views/generic/create_update.py:328
+#: views/generic/create_update.py:330
 msgid "Add permission is not allowed"
 msgstr ""
 
-#: views/generic/create_update.py:409
+#: views/generic/create_update.py:411
 msgid "Change permission is not allowed"
 msgstr ""
 
-#: views/generic/create_update.py:465
+#: views/generic/create_update.py:467
 #, python-format
 msgid "Changed %s."
 msgstr ""
 
-#: views/generic/create_update.py:465
+#: views/generic/create_update.py:467
 msgid "and"
 msgstr ""
 
