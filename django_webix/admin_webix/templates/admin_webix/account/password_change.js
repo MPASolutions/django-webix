@@ -105,4 +105,4 @@ $$('password_change_form').setValues({csrfmiddlewaretoken: "{{ csrf_token }}"});
     {% include "django_webix/include/form_errors_popup.js" %}
 {% else %}
     {% include "django_webix/include/form_errors_message.js" %}
-{% end
+{% endif %}
