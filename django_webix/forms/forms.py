@@ -59,6 +59,7 @@ class BaseWebixMixin:
     min_count_suggest = 100
     style = 'stacked'
     label_width = 300
+    label_align = 'left'
 
     class Meta:
         localized_fields = '__all__'  # to use comma as separator in i18n
@@ -240,6 +241,7 @@ class BaseWebixMixin:
                 'name': self.add_prefix(name),
                 'id': self[name].auto_id,
                 'labelWidth': self.label_width,
+                'labelAlign': self.label_align,
                 'django_type_field': str(type(field).__name__),
             }
 
@@ -401,6 +403,7 @@ class BaseWebixMixin:
                     'width': 150,
                     'height': 50,
                     'label': _('Upload new image'),
+                    'labelAlign': self.label_align,
                     # 'on': {
                     #     'onAfterFileAdd': "image_add('" + self[name].auto_id + "');"
                     # }
@@ -421,21 +424,26 @@ class BaseWebixMixin:
                     '{}_block'.format(self[name].html_name): {
                         'id': 'block_' + self[name].auto_id,
                         'label': label,
+                        'labelAlign': self.label_align,
                         'cols': [
                             {
                                 'name_label': name,
                                 'id_label': 'label_' + name,
+                                'id': 'block_label_' + self[name].auto_id,
                                 'borderless': True,
                                 'template': label,
+                                'labelAlign': self.label_align,
                                 'height': 30,
-                                'width': 200,
-                                'css': {'background-color': 'transparent !important'}
+                                'width': self.label_width,
+                                # attenzione qui non funziona il labelAlign perche non è un input ma è un template
+                                'css': {'background-color': 'transparent !important', 'text-align': self.label_align}
                             },
                             {
                                 'name_label': name,
                                 'id_label': 'preview_' + self[name].auto_id,
                                 'borderless': True,
                                 'template': _template_file,
+                                'labelAlign': self.label_align,
                                 'height': 100,
                                 'width': 170
                             },
@@ -446,7 +454,7 @@ class BaseWebixMixin:
                                 'rows':[
                                     el,
                                     {
-                                        'cols':[
+                                        'cols': [
                                             {
                                                 'id': self[name].auto_id + '_download',
                                                 'view': "button",
@@ -501,7 +509,8 @@ class BaseWebixMixin:
                     'directory': False,
                     'width': 150,
                     'heigth': 40,
-                    'label': _('Upload file')
+                    'label': _('Upload file'),
+                    'labelAlign': self.label_align,
                 })
                 if isinstance(field.widget, forms.widgets.FileInput):
                     directory = field.widget.attrs.get('directory', False)
@@ -530,16 +539,20 @@ class BaseWebixMixin:
                     '{}_block'.format(self[name].html_name): {
                         'id': 'block_' + self[name].auto_id,
                         'label': label,
+                        'labelAlign': self.label_align,
                         'cols': [
-                            {'height': 80,
-                             'rows': [
+                            {
+                                'height': 80,
+                                'rows': [
                                     {
                                         'name_label': name,
                                         'id_label': name,
                                         'borderless': True,
                                         'template': label,
+                                        'labelAlign': self.label_align,
                                         'height': 40,
-                                        'css': {'background-color': 'transparent !important'}
+                                        'css': {'background-color': 'transparent !important',
+                                                'text-align': self.label_align}
                                     },
                                     {
                                         'name_label': name,
@@ -553,7 +566,7 @@ class BaseWebixMixin:
                             },
                             {
                                 'height': 80,
-                                'rows':[
+                                'rows': [
                                     el,
                                     {
                                         'height': 40,
@@ -902,6 +915,7 @@ class BaseWebixMixin:
                             'name': self.add_prefix(name) + '_layer',
                             'label': label,
                             'labelWidth': self.label_width,
+                            'labelAlign': self.label_align,
                             'view': "select",
                             'options': [{'id': _layer['qxsname'], 'value': _layer['layername']} for _layer in
                                         layers]
