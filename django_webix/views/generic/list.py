@@ -32,6 +32,54 @@ try:
 except ImportError:
     MultiPolygon = object
 
+def get_action_dict(request, action):
+    return {
+        'func': action,
+        'action_key': action.action_key,
+        'response_type': action.response_type,
+        'allowed_permissions': action.allowed_permissions,
+        'short_description': action.short_description,
+        'modal_header': action.modal_header,
+        'modal_title': action.modal_title,
+        'modal_click': action.modal_click,
+        'modal_ok': action.modal_ok,
+        'modal_cancel': action.modal_cancel,
+        'form': getattr(action, 'form')(request=request) if hasattr(action,
+                                                                    'form') and action.form is not None else None,
+        'reload_list': getattr(action, 'reload_list', True),
+    }
+
+def get_actions_flexport(request, model):
+    _actions = []
+    # add flexport actions
+    if apps.is_installed('flexport') and model is not None:
+        from django.contrib.contenttypes.models import ContentType
+        from flexport.views import create_extraction
+        from flexport.models import Export
+
+        model_ct = ContentType.objects.get(model=model._meta.model_name,
+                                           app_label=model._meta.app_label)
+        flexport_actions = {}
+
+        def action_builder(export_instance):
+            _action = lambda listview, request, qs: create_extraction(request, export_instance.id, qs)
+            _action.__name__ = 'flexport_action_%s' % export_instance.id  # verificare se è corretto
+            _action.response_type = 'blank'
+            _action.short_description = export_instance.action_name
+            _action.action_key = 'flexport_{}'.format(export_instance.id)
+            _action.allowed_permissions = []
+            _action.modal_header = _('Fill in the form')
+            _action.modal_title = _("Are you sure you want to proceed with this action?")
+            _action.modal_click = _("Go")
+            _action.modal_ok = _("Proceed")
+            _action.modal_cancel = _("Undo")
+            _action.reload_list = False
+            return _action
+
+        for export_instance in Export.objects.filter(model=model_ct, active=True):
+            if export_instance.is_enabled(request):
+                _actions.append(action_builder(export_instance))
+    return _actions
 
 class WebixListView(WebixBaseMixin,
                     WebixPermissionsMixin,
@@ -351,56 +399,13 @@ class WebixListView(WebixBaseMixin,
         return 'id'
 
     ########### TEMPLATE BUILDER ###########
-    def _get_action_dict(self, action):
-        return {
-            'func': action,
-            'action_key': action.action_key,
-            'response_type': action.response_type,
-            'allowed_permissions': action.allowed_permissions,
-            'short_description': action.short_description,
-            'modal_header': action.modal_header,
-            'modal_title': action.modal_title,
-            'modal_click': action.modal_click,
-            'modal_ok': action.modal_ok,
-            'modal_cancel': action.modal_cancel,
-            'form': getattr(action, 'form')(request=self.request) if hasattr(action, 'form') and action.form is not None else None,
-            'reload_list': getattr(action,'reload_list',True),
-        }
 
     def _get_actions_flexport(self):
-        _actions = []
-        # add flexport actions
-        if apps.is_installed('flexport') and self.model is not None:
-            from django.contrib.contenttypes.models import ContentType
-            from flexport.views import create_extraction
-            from flexport.models import Export
-
-            model_ct = ContentType.objects.get(model=self.model._meta.model_name, app_label=self.model._meta.app_label)
-            flexport_actions = {}
-
-            def action_builder(export_instance):
-                _action = lambda listview, request, qs: create_extraction(request, export_instance.id, qs)
-                _action.__name__ = 'flexport_action_%s' % export_instance.id  # verificare se è corretto
-                _action.response_type = 'blank'
-                _action.short_description = export_instance.action_name
-                _action.action_key = 'flexport_{}'.format(export_instance.id)
-                _action.allowed_permissions = []
-                _action.modal_header = _('Fill in the form')
-                _action.modal_title = _("Are you sure you want to proceed with this action?")
-                _action.modal_click = _("Go")
-                _action.modal_ok = _("Proceed")
-                _action.modal_cancel = _("Undo")
-                _action.reload_list = False
-                return _action
-
-            for export_instance in Export.objects.filter(model=model_ct, active=True):
-                if export_instance.is_enabled(self.request):
-                    _actions.append(action_builder(export_instance))
-        return _actions
+        return get_actions_flexport(self.request, self.model)
 
     def get_actions(self):
         '''
-        Return list ov actions to be executed on listview
+        Return list of actions to be executed on listview
         :return:
         '''
         # _actions = self.actions
@@ -410,7 +415,7 @@ class WebixListView(WebixBaseMixin,
 
         _dict_actions = {}
         for _action in _actions:
-            _dict_actions[_action.action_key] = self._get_action_dict(_action)
+            _dict_actions[_action.action_key] = get_action_dict(self.request, _action)
 
         return _dict_actions
 

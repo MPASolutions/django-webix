@@ -39,12 +39,16 @@ class ModelWebixAdmin(WebixPermissionsMixin):
     exclude = None
     # DJANGO WEBIX FORM: OPTION 2
     form = None
+    form_create = None
+    form_update = None
 
     template_form_style = None
 
     label_width = None
 
     inlines = []
+
+    errors_on_popup = False
 
     # LIST SETTINGS
     ordering = None
@@ -77,7 +81,7 @@ class ModelWebixAdmin(WebixPermissionsMixin):
     def is_enable_row_click(self, request):
         return self.enable_row_click
 
-    def get_extra_context(self, request=None):
+    def get_extra_context(self, view=None, request=None):
         return {}
 
     def get_label_width(self):
@@ -85,6 +89,12 @@ class ModelWebixAdmin(WebixPermissionsMixin):
 
     def get_prefix(self):
         return getattr(self, 'prefix', None)
+
+    def get_model_copy_fields(self):
+        if self.model_copy_fields is not None:
+            return self.model_copy_fields
+        else:
+            return self.get_form_fields()
 
     def get_template_form_style(self):
         return self.template_form_style
@@ -291,7 +301,7 @@ class ModelWebixAdmin(WebixPermissionsMixin):
             _str += '.%s' % self.get_prefix()
         return _str
 
-    def get_queryset(self, request):
+    def get_queryset(self, view=None, request=None):
         return self.model._default_manager.all()
 
     def get_form_fields(self):
@@ -307,10 +317,14 @@ class ModelWebixAdmin(WebixPermissionsMixin):
                     _fields.append(_field.name)
         return _fields
 
-    def get_form_create_update(self):
+    def get_form_class(self, view=None):
         _admin = self
         if self.form:
             return self.form
+        elif issubclass(type(view), WebixCreateView) and self.form_create is None:
+            return self.form_create
+        elif issubclass(type(view), WebixUpdateView) and self.form_update is None:
+            return self.form_update
         else:
             from django_webix.forms import WebixModelForm
 
@@ -362,14 +376,44 @@ class ModelWebixAdmin(WebixPermissionsMixin):
                 url_pattern_delete = 'admin_webix:' + _admin.get_url_pattern_delete()
 
                 model = _admin.model
-                form_class = _admin.get_form_create_update()
+
+                def get_form_class(self):
+                    return _admin.get_form_class(view=self)
+
                 template_style = _admin.get_template_form_style()
                 inlines = _admin.inlines
-                if hasattr(_admin,'get_inlines'):
+
+                if hasattr(_admin, 'get_container_id'):
+                    def get_container_id(self, request):
+                        return _admin.get_container_id(view=self, request=request)
+
+                if hasattr(_admin, 'get_form'):
+                    def get_form(self, form_class=None):
+                        return _admin.get_form(view=self, form_class=form_class)
+
+                if hasattr(_admin, 'pre_forms_valid'):
+                    def pre_forms_valid(self, form, inlines, **kwargs):
+                        return _admin.pre_forms_valid(view=self, form=form, inlines=inlines, **kwargs)
+
+                if hasattr(_admin, 'post_form_save'):
+                    def post_form_save(self, form, inlines, **kwargs):
+                        return _admin.post_form_save(view=self, form=form, inlines=inlines, **kwargs)
+
+                if hasattr(_admin, 'post_forms_valid'):
+                    def post_forms_valid(self, form, inlines, **kwargs):
+                        return _admin.post_forms_valid(view=self, form=form, inlines=inlines, **kwargs)
+
+                if hasattr(_admin, 'get_initial'):
+                    def get_initial(self):
+                        return _admin.get_initial(view=self)
+
+                if hasattr(_admin, 'get_inlines'):
                     def get_inlines(self):
                         return _admin.get_inlines(self.object, self.request)
 
-                model_copy_fields = _admin.get_form_fields()
+                errors_on_popup = _admin.errors_on_popup
+
+                model_copy_fields = _admin.get_model_copy_fields()
                 enable_button_save_continue = _admin.enable_button_save_continue
                 enable_button_save_addanother = _admin.enable_button_save_addanother
                 enable_button_save_gotolist = _admin.enable_button_save_gotolist
@@ -396,11 +440,11 @@ class ModelWebixAdmin(WebixPermissionsMixin):
                     template_name = _admin.add_form_template
 
                 def get_queryset(self):
-                    return _admin.get_queryset(request=self.request)
+                    return _admin.get_queryset(view=self, request=self.request)
 
                 def get_context_data(self, **kwargs):
                     context = super().get_context_data(**kwargs)
-                    context.update(_admin.get_extra_context(request = self.request))
+                    context.update(_admin.get_extra_context(view=self, request=self.request))
                     return context
 
             return WebixAdminCreateView
@@ -430,14 +474,47 @@ class ModelWebixAdmin(WebixPermissionsMixin):
                 url_pattern_update = 'admin_webix:' + _admin.get_url_pattern_update()
                 url_pattern_delete = 'admin_webix:' + _admin.get_url_pattern_delete()
 
+                errors_on_popup = _admin.errors_on_popup
+
                 model = _admin.model
-                form_class = _admin.get_form_create_update()
+
+                def get_form_class(self):
+                    return _admin.get_form_class(view=self)
+
                 template_style = _admin.get_template_form_style()
                 inlines = _admin.inlines
-                if hasattr(_admin,'get_inlines'):
+
+                if hasattr(_admin, 'get_container_id'):
+                    def get_container_id(self, request):
+                        return _admin.get_container_id(view=self, request=request)
+
+                if hasattr(_admin, 'get_form'):
+                    def get_form(self, form_class=None):
+                        return _admin.get_form(view=self, form_class=form_class)
+
+                if hasattr(_admin, 'pre_forms_valid'):
+                    def pre_forms_valid(self, form, inlines, **kwargs):
+                        return _admin.pre_forms_valid(view=self, form=form, inlines=inlines, **kwargs)
+
+                if hasattr(_admin, 'post_form_save'):
+                    def post_form_save(self, form, inlines, **kwargs):
+                        return _admin.post_form_save(view=self, form=form, inlines=inlines, **kwargs)
+
+                if hasattr(_admin, 'post_forms_valid'):
+                    def post_forms_valid(self, form, inlines, **kwargs):
+                        return _admin.post_forms_valid(view=self, form=form, inlines=inlines, **kwargs)
+
+                if hasattr(_admin, 'get_initial'):
+                    def get_initial(self):
+                        return _admin.get_initial(view=self)
+
+                if hasattr(_admin, 'get_inlines'):
                     def get_inlines(self):
                         return _admin.get_inlines(self.object, self.request)
-                model_copy_fields = _admin.get_form_fields()
+
+                errors_on_popup = _admin.errors_on_popup
+
+                model_copy_fields = _admin.get_model_copy_fields()
                 enable_button_save_continue = _admin.enable_button_save_continue
                 enable_button_save_addanother = _admin.enable_button_save_addanother
                 enable_button_save_gotolist = _admin.enable_button_save_gotolist
@@ -464,11 +541,14 @@ class ModelWebixAdmin(WebixPermissionsMixin):
                     template_name = _admin.change_form_template
 
                 def get_queryset(self):
-                    return _admin.get_queryset(request=self.request)
+                    return _admin.get_queryset(view=self,
+                                               request=self.request)
 
                 def get_context_data(self, **kwargs):
                     context = super().get_context_data(**kwargs)
-                    context.update(_admin.get_extra_context(request = self.request))
+                    context.update(_admin.get_extra_context(view=self,
+                                                            request=self.request
+                                                            ))
                     return context
 
             return WebixAdminUpdateView
@@ -522,11 +602,13 @@ class ModelWebixAdmin(WebixPermissionsMixin):
                     template_name = _admin.delete_template
 
                 def get_queryset(self):
-                    return _admin.get_queryset(request=self.request)
+                    return _admin.get_queryset(view=self,
+                                               request=self.request)
 
                 def get_context_data(self, **kwargs):
                     context = super().get_context_data(**kwargs)
-                    context.update(_admin.get_extra_context(request = self.request))
+                    context.update(_admin.get_extra_context(view=self,
+                                                            request=self.request))
                     return context
 
             return WebixAdminDeleteView
@@ -562,6 +644,11 @@ class ModelWebixAdmin(WebixPermissionsMixin):
                 pk_field = _admin.pk_field
                 order_by = _admin.ordering
                 actions = _admin.actions
+
+                if hasattr(_admin, 'get_actions'):
+                    def get_actions(self):
+                        return _admin.get_actions(view=self)
+
                 enable_json_loading = _admin.enable_json_loading
                 title = _admin.title
                 actions_style = _admin.actions_style
@@ -594,11 +681,13 @@ class ModelWebixAdmin(WebixPermissionsMixin):
                     template_name = _admin.change_list_template
 
                 def get_initial_queryset(self):
-                    return _admin.get_queryset(request=self.request)
+                    return _admin.get_queryset(view=self,
+                                               request=self.request)
 
                 def get_context_data(self, **kwargs):
                     context = super().get_context_data(**kwargs)
-                    context.update(_admin.get_extra_context(request = self.request))
+                    context.update(_admin.get_extra_context(view=self,
+                                                            request=self.request))
                     return context
 
                 @property

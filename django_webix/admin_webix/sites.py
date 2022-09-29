@@ -1,13 +1,9 @@
 # -*- coding: utf-8 -*-
 
 import re
-import datetime
-
-from functools import update_wrapper
-from weakref import WeakSet
-
 from django.apps import apps
 from django.contrib.auth import REDIRECT_FIELD_NAME
+from django.contrib.auth import get_user_model
 from django.core.exceptions import ImproperlyConfigured
 from django.db.models import Q
 from django.db.models.base import ModelBase
@@ -21,9 +17,9 @@ from django.utils.translation import gettext
 from django.utils.translation import gettext_lazy as _
 from django.views.decorators.cache import never_cache
 from django.views.decorators.csrf import csrf_protect
-from django.contrib.auth import get_user_model
-
 from django_webix.admin_webix import ModelWebixAdmin
+from functools import update_wrapper
+from weakref import WeakSet
 
 all_sites = WeakSet()
 
@@ -142,7 +138,6 @@ class AdminWebixSite:
                     options['label_width'] = self.get_label_width()
                 else:
                     options = {'label_width': self.get_label_width()}
-
 
             if not model._meta.swapped:
 
@@ -289,10 +284,10 @@ class AdminWebixSite:
                 children = self.get_tree(soons, available_items)
 
                 if children != []:
-                    if self.webix_menu_type=='sidebar':
-                        menu_item["data"] = children # for sidebar
-                    elif self.webix_menu_type=='menu':
-                        menu_item["submenu"] = children # for menu
+                    if self.webix_menu_type == 'sidebar':
+                        menu_item["data"] = children  # for sidebar
+                    elif self.webix_menu_type == 'menu':
+                        menu_item["submenu"] = children  # for menu
                     enable = True
                 elif (item.model is not None) or (item.url not in ['', None]):
                     if item.get_url is None:
@@ -423,7 +418,8 @@ class AdminWebixSite:
                 ]
             else:
                 urlpatterns += [
-                    path('%s/%s/%s/' % (prefix, model._meta.app_label, model._meta.model_name), include(model_admin.urls)),
+                    path('%s/%s/%s/' % (prefix, model._meta.app_label, model._meta.model_name),
+                         include(model_admin.urls)),
                 ]
             # if model._meta.app_label not in valid_app_labels:
             #    valid_app_labels.append(model._meta.app_label)
@@ -444,7 +440,7 @@ class AdminWebixSite:
     def _get_user_model_list_url(self):
         UserModel = get_user_model()
         if UserModel is not None:
-            return 'admin_webix:'+UserModel._meta.app_label+'.'+UserModel._meta.model_name+'.list'
+            return 'admin_webix:' + UserModel._meta.app_label + '.' + UserModel._meta.model_name + '.list'
         else:
             return None
 
@@ -487,14 +483,14 @@ class AdminWebixSite:
         """
         Handle the "change password" task -- both form display and validation.
         """
-#        if apps.is_installed("gdpr"):
-#            from gdpr.forms import GDPRPasswordChangeForm as AdminPasswordChangeForm
-#        else:
-#            from django.contrib.admin.forms import AdminPasswordChangeForm
+        #        if apps.is_installed("gdpr"):
+        #            from gdpr.forms import GDPRPasswordChangeForm as AdminPasswordChangeForm
+        #        else:
+        #            from django.contrib.admin.forms import AdminPasswordChangeForm
         from django_webix.admin_webix.views import PasswordChangeViewCustom
         url = reverse('admin_webix:password_change_done', current_app=self.name)
         defaults = {
-#            'form_class': AdminPasswordChangeForm,
+            #            'form_class': AdminPasswordChangeForm,
             'success_url': url,
             'extra_context': {**self.each_context(request), **(extra_context or {})},
             'template_name': self.password_change_template or 'admin_webix/account/password_change.js',
