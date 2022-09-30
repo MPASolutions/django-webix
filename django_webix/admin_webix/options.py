@@ -318,6 +318,7 @@ class ModelWebixAdmin(WebixPermissionsMixin):
         return _fields
 
     def get_form_class(self, view=None):
+        from django_webix.views import WebixCreateView, WebixUpdateView
         _admin = self
         if self.form:
             return self.form
