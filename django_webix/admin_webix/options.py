@@ -322,9 +322,9 @@ class ModelWebixAdmin(WebixPermissionsMixin):
         _admin = self
         if self.form:
             return self.form
-        elif issubclass(type(view), WebixCreateView) and self.form_create is None:
+        elif issubclass(type(view), WebixCreateView) and self.form_create is not None:
             return self.form_create
-        elif issubclass(type(view), WebixUpdateView) and self.form_update is None:
+        elif issubclass(type(view), WebixUpdateView) and self.form_update is not None:
             return self.form_update
         else:
             from django_webix.forms import WebixModelForm
