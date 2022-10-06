@@ -54,7 +54,7 @@
                             label: "{{ _("Login")|escapejs }}",
                             click: function () {
                                 if ($$('login_form').validate()) {
-                                    webix.send(".", $$('login_form').getValues());
+                                    webix.send("", $$('login_form').getValues());
                                 }
                             }
                         }
