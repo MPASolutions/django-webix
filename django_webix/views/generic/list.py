@@ -15,7 +15,6 @@ from django.utils.translation import gettext as _
 from django.utils.translation import get_language
 from django.views.generic import ListView
 from django.db.models.query import QuerySet
-
 from django_filtersmerger import FilterMerger
 from django_webix.forms import WebixModelForm
 from django_webix.views import WebixUpdateView
@@ -400,6 +399,9 @@ class WebixListView(WebixBaseMixin,
 
     ########### TEMPLATE BUILDER ###########
 
+    def _get_action_dict(self, action):
+        return get_action_dict(self.request, _action)
+
     def _get_actions_flexport(self):
         return get_actions_flexport(self.request, self.model)
 
@@ -415,7 +417,7 @@ class WebixListView(WebixBaseMixin,
 
         _dict_actions = {}
         for _action in _actions:
-            _dict_actions[_action.action_key] = get_action_dict(self.request, _action)
+            _dict_actions[_action.action_key] = self._get_action_dict(_action)
 
         return _dict_actions
 
