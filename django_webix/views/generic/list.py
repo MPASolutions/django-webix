@@ -400,7 +400,7 @@ class WebixListView(WebixBaseMixin,
     ########### TEMPLATE BUILDER ###########
 
     def _get_action_dict(self, action):
-        return get_action_dict(self.request, _action)
+        return get_action_dict(self.request, action)
 
     def _get_actions_flexport(self):
         return get_actions_flexport(self.request, self.model)
