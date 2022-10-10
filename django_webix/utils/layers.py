@@ -29,7 +29,7 @@ def get_layers(model, qxs_layers=None, geo_field_name=None):
     if apps.is_installed("qxs") and \
         apps.is_installed("django_webix_leaflet") and \
         model is not None:
-        from qxs import qxsreg  # FIXME: add to requirements?
+        from qxs.registry import qxsreg  # FIXME: add to requirements?
 
         if qxs_layers is not None:
             for layer_name in qxs_layers:

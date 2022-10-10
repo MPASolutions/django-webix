@@ -24,7 +24,7 @@ from django.utils.text import capfirst
 #     if apps.is_installed("qxs") and \
 #         apps.is_installed("django_webix_leaflet") and \
 #         model is not None:
-#         from qxs import qxsreg  # FIXME: add to requirements?
+#         from qxs.registry import qxsreg  # FIXME: add to requirements?
 #
 #         for model_layer in list(filter(lambda x: x.model == model, qxsreg.get_models())):
 #             if geo_field_name is None or model_layer.geo_field_name==geo_field_name:
