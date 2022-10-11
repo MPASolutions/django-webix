@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+
 from django.apps import apps
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import Group
@@ -11,10 +12,9 @@ from django_webix.admin_webix.views import UserAdminCreate, UserAdminUpdate
 from django_webix.views.generic.actions import multiple_delete_action
 
 
-
 class UserAdmin(admin.ModelWebixAdmin):
 
-    def get_queryset(self, request):
+    def get_queryset(self, view=None, request=None):
         qs = super().get_queryset(request)
         qs = qs.annotate(userid=F('id'))
         return qs
@@ -28,7 +28,7 @@ class UserAdmin(admin.ModelWebixAdmin):
                 fillspace:true,
                 sort: "server",
                 serverFilterType: "icontains",
-                }'''
+            }'''
         },
         {
             'field_name': 'email',
@@ -38,7 +38,7 @@ class UserAdmin(admin.ModelWebixAdmin):
                 adjust:"all",
                 sort: "server",
                 serverFilterType: "icontains",
-                }'''
+            }'''
         },
         {
             'field_name': 'first_name',
@@ -48,7 +48,7 @@ class UserAdmin(admin.ModelWebixAdmin):
                 adjust:"all",
                 sort: "server",
                 serverFilterType: "icontains",
-                }'''
+            }'''
         },
         {
             'field_name': 'last_name',
@@ -58,40 +58,43 @@ class UserAdmin(admin.ModelWebixAdmin):
                 adjust:"all",
                 sort: "server",
                 serverFilterType: "icontains",
-                }'''
+            }'''
         },
         {
             'field_name': 'is_staff',
             'datalist_column': '''{
                 id: "is_staff",
-                header: ["Staff", {content: "serverSelectFilter" , options:[{id: 'True', value: 'Yes'}, {id: 'False', value: 'No'}] }],
+                header: ["Staff", {content: "serverSelectFilter" ,
+                        options:[{id: 'True', value: 'Yes'}, {id: 'False', value: 'No'}] }],
                 adjust:"all",
                 sort: "server",
                 serverFilterType: "",
                 template:custom_checkbox_yesnonone,
-                }'''
+            }'''
         },
         {
             'field_name': 'is_superuser',
             'datalist_column': '''{
                 id: "is_superuser",
-                header: ["Superutente", {content: "serverSelectFilter" , options:[{id: 'True', value: 'Yes'}, {id: 'False', value: 'No'}] }],
+                header: ["Superutente", {content: "serverSelectFilter" ,
+                        options:[{id: 'True', value: 'Yes'}, {id: 'False', value: 'No'}] }],
                 adjust:"all",
                 sort: "server",
                 serverFilterType: "",
                  template:custom_checkbox_yesnonone,
-                }'''
+            }'''
         },
         {
             'field_name': 'is_active',
             'datalist_column': '''{
                 id: "is_active",
-                header: ["Attivo", {content: "serverSelectFilter" , options:[{id: 'True', value: 'Yes'}, {id: 'False', value: 'No'}] }],
+                header: ["Attivo", {content: "serverSelectFilter" ,
+                        options:[{id: 'True', value: 'Yes'}, {id: 'False', value: 'No'}] }],
                 adjust:"all",
                 sort: "server",
                 serverFilterType: "",
                 template:custom_checkbox_yesnonone,
-                }'''
+            }'''
         },
         {
             'field_name': 'groups__name',
@@ -101,22 +104,23 @@ class UserAdmin(admin.ModelWebixAdmin):
                 adjust:"all",
                 header: ["Gruppi", {content: "serverFilter"}],
                 sort: "server"
-                }'''
+            }'''
         },
     ]
 
     def get_list_display(self, request=None):
         if apps.is_installed("hijack") and request.user.is_superuser:
-            return self.list_display + [{
+            hijack_column = {
                 'field_name': 'userid',
                 'click_action': '''hijack_user(el['id']);''',
                 'datalist_column': '''{
-                id: "userid",
-                header: ['',''],
-                adjust: "data",
-                template: 'Hijack'
+                    id: "userid",
+                    header: ['',''],
+                    adjust: "data",
+                    template: 'Hijack'
                 }'''
-            }]
+            }
+            return self.list_display + [hijack_column]
         else:
             return self.list_display
 
@@ -159,6 +163,7 @@ class UserAdmin(admin.ModelWebixAdmin):
 
         return WebixAdminUpdateView
 
+
 admin.site.register(get_user_model(), admin_class=UserAdmin)
 
 
@@ -168,5 +173,5 @@ class GroupAdmin(admin.ModelWebixAdmin):
     only_superuser = True
     form = GroupAdminForm
 
-admin.site.register(Group, admin_class=GroupAdmin)
 
+admin.site.register(Group, admin_class=GroupAdmin)
