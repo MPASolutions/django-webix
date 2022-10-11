@@ -361,6 +361,11 @@ class ModelWebixAdmin(WebixPermissionsMixin):
             @method_decorator(script_login_required, name='dispatch')
             class WebixAdminCreateView(WebixCreateView):
 
+                if hasattr(_admin, 'dispatch'):
+                    def dispatch(self, *args, **kwargs):
+                        kwargs.update({'view': self})
+                        return _admin.dispatch(*args, **kwargs)
+
                 admin_prefix = _admin.get_prefix()
                 def get_view_prefix(self):
                     if self.admin_prefix is not None:
@@ -384,6 +389,22 @@ class ModelWebixAdmin(WebixPermissionsMixin):
                 template_style = _admin.get_template_form_style()
                 inlines = _admin.inlines
 
+                if hasattr(_admin, 'get_url_create'):
+                    def get_url_create(self):
+                        return _admin.get_url_create(view=self)
+
+                if hasattr(_admin, 'get_url_update'):
+                    def get_url_update(self, obj=None):
+                        return _admin.get_url_update(view=self, obj=obj)
+
+                if hasattr(_admin, 'get_url_delete'):
+                    def get_url_delete(self, obj=None):
+                        return _admin.get_url_delete(view=self, obj=obj)
+
+                if hasattr(_admin, 'get_url_list'):
+                    def get_url_list(self):
+                        return _admin.get_url_list(view=self)
+
                 if hasattr(_admin, 'get_container_id'):
                     def get_container_id(self, request):
                         return _admin.get_container_id(view=self, request=request)
@@ -391,6 +412,10 @@ class ModelWebixAdmin(WebixPermissionsMixin):
                 if hasattr(_admin, 'get_form'):
                     def get_form(self, form_class=None):
                         return _admin.get_form(view=self, form_class=form_class)
+
+                if hasattr(_admin, 'get_form_kwargs'):
+                    def get_form_kwargs(self):
+                        return _admin.get_form_kwargs(view=self)
 
                 if hasattr(_admin, 'pre_forms_valid'):
                     def pre_forms_valid(self, form, inlines, **kwargs):
@@ -460,6 +485,11 @@ class ModelWebixAdmin(WebixPermissionsMixin):
             @method_decorator(script_login_required, name='dispatch')
             class WebixAdminUpdateView(WebixUpdateView):
 
+                if hasattr(_admin, 'dispatch'):
+                    def dispatch(self, *args, **kwargs):
+                        kwargs.update({'view': self})
+                        return _admin.dispatch(*args, **kwargs)
+
                 admin_prefix = _admin.get_prefix()
                 def get_view_prefix(self):
                     if self.admin_prefix is not None:
@@ -485,6 +515,22 @@ class ModelWebixAdmin(WebixPermissionsMixin):
                 template_style = _admin.get_template_form_style()
                 inlines = _admin.inlines
 
+                if hasattr(_admin, 'get_url_create'):
+                    def get_url_create(self):
+                        return _admin.get_url_create(view=self)
+
+                if hasattr(_admin, 'get_url_update'):
+                    def get_url_update(self, obj=None):
+                        return _admin.get_url_update(view=self, obj=obj)
+
+                if hasattr(_admin, 'get_url_delete'):
+                    def get_url_delete(self, obj=None):
+                        return _admin.get_url_delete(view=self, obj=obj)
+
+                if hasattr(_admin, 'get_url_list'):
+                    def get_url_list(self):
+                        return _admin.get_url_list(view=self)
+
                 if hasattr(_admin, 'get_container_id'):
                     def get_container_id(self, request):
                         return _admin.get_container_id(view=self, request=request)
@@ -492,6 +538,10 @@ class ModelWebixAdmin(WebixPermissionsMixin):
                 if hasattr(_admin, 'get_form'):
                     def get_form(self, form_class=None):
                         return _admin.get_form(view=self, form_class=form_class)
+
+                if hasattr(_admin, 'get_form_kwargs'):
+                    def get_form_kwargs(self):
+                        return _admin.get_form_kwargs(view=self)
 
                 if hasattr(_admin, 'pre_forms_valid'):
                     def pre_forms_valid(self, form, inlines, **kwargs):
@@ -564,6 +614,11 @@ class ModelWebixAdmin(WebixPermissionsMixin):
             @method_decorator(script_login_required, name='dispatch')
             class WebixAdminDeleteView(WebixDeleteView):
 
+                if hasattr(_admin, 'dispatch'):
+                    def dispatch(self, *args, **kwargs):
+                        kwargs.update({'view': self})
+                        return _admin.dispatch(*args, **kwargs)
+
                 admin_prefix = _admin.get_prefix()
                 def get_view_prefix(self):
                     if self.admin_prefix is not None:
@@ -599,6 +654,26 @@ class ModelWebixAdmin(WebixPermissionsMixin):
 
                 model = _admin.model
 
+                if hasattr(_admin, 'get_container_id'):
+                    def get_container_id(self, request):
+                        return _admin.get_container_id(view=self, request=request)
+
+                if hasattr(_admin, 'get_url_create'):
+                    def get_url_create(self):
+                        return _admin.get_url_create(view=self)
+
+                if hasattr(_admin, 'get_url_update'):
+                    def get_url_update(self, obj=None):
+                        return _admin.get_url_update(view=self, obj=obj)
+
+                if hasattr(_admin, 'get_url_delete'):
+                    def get_url_delete(self, obj=None):
+                        return _admin.get_url_delete(view=self, obj=obj)
+
+                if hasattr(_admin, 'get_url_list'):
+                    def get_url_list(self):
+                        return _admin.get_url_list(view=self)
+
                 if _admin.delete_template is not None:
                     template_name = _admin.delete_template
 
@@ -623,6 +698,11 @@ class ModelWebixAdmin(WebixPermissionsMixin):
 
             @method_decorator(script_login_required, name='dispatch')
             class WebixAdminListView(WebixListView):
+
+                if hasattr(_admin, 'dispatch'):
+                    def dispatch(self, *args, **kwargs):
+                        kwargs.update({'view': self})
+                        return _admin.dispatch(*args, **kwargs)
 
                 admin_prefix = _admin.get_prefix()
                 def get_view_prefix(self):
@@ -680,6 +760,26 @@ class ModelWebixAdmin(WebixPermissionsMixin):
 
                 if _admin.change_list_template is not None:
                     template_name = _admin.change_list_template
+
+                if hasattr(_admin, 'get_container_id'):
+                    def get_container_id(self, request):
+                        return _admin.get_container_id(view=self, request=request)
+
+                if hasattr(_admin, 'get_url_create'):
+                    def get_url_create(self):
+                        return _admin.get_url_create(view=self)
+
+                if hasattr(_admin, 'get_url_update'):
+                    def get_url_update(self, obj=None):
+                        return _admin.get_url_update(view=self, obj=obj)
+
+                if hasattr(_admin, 'get_url_delete'):
+                    def get_url_delete(self, obj=None):
+                        return _admin.get_url_delete(view=self, obj=obj)
+
+                if hasattr(_admin, 'get_url_list'):
+                    def get_url_list(self):
+                        return _admin.get_url_list(view=self)
 
                 def get_initial_queryset(self):
                     return _admin.get_queryset(view=self,
