@@ -390,7 +390,6 @@ class ModelWebixAdmin(WebixPermissionsMixin):
                 if hasattr(_admin, 'dispatch'):
                     def dispatch(self, *args, **kwargs):
                         kwargs.update({'view': self})
-                        # raise Exception(_admin, self)
                         return _admin.dispatch(*args, **kwargs)
 
                 admin_prefix = _admin.get_prefix()
@@ -416,6 +415,10 @@ class ModelWebixAdmin(WebixPermissionsMixin):
 
                 template_style = _admin.get_template_form_style()
                 inlines = _admin.inlines
+
+                if hasattr(_admin, 'get_success_url'):
+                    def get_success_url(self, next_step=None):
+                        return _admin.get_success_url(view=self, next_step=next_step)
 
                 if hasattr(_admin, 'get_url_create_kwargs'):
                     def get_url_create_kwargs(self):
@@ -467,7 +470,7 @@ class ModelWebixAdmin(WebixPermissionsMixin):
 
                 if hasattr(_admin, 'get_inlines'):
                     def get_inlines(self):
-                        return _admin.get_inlines(self.object, self.request)
+                        return _admin.get_inlines(view=self, object=self.object, request=self.request)
 
                 errors_on_popup = _admin.errors_on_popup
 
@@ -555,6 +558,10 @@ class ModelWebixAdmin(WebixPermissionsMixin):
                 template_style = _admin.get_template_form_style()
                 inlines = _admin.inlines
 
+                if hasattr(_admin, 'get_success_url'):
+                    def get_success_url(self, next_step=None):
+                        return _admin.get_success_url(view=self, next_step=next_step)
+
                 if hasattr(_admin, 'get_url_create_kwargs'):
                     def get_url_create_kwargs(self):
                         return _admin.get_url_create_kwargs(view=self)
@@ -605,7 +612,7 @@ class ModelWebixAdmin(WebixPermissionsMixin):
 
                 if hasattr(_admin, 'get_inlines'):
                     def get_inlines(self):
-                        return _admin.get_inlines(self.object, self.request)
+                        return _admin.get_inlines(view=self, object=self.object, request=self.request)
 
                 errors_on_popup = _admin.errors_on_popup
 
@@ -717,6 +724,10 @@ class ModelWebixAdmin(WebixPermissionsMixin):
                 if hasattr(_admin, 'get_container_id'):
                     def get_container_id(self, request):
                         return _admin.get_container_id(view=self, request=request)
+
+                if hasattr(_admin, 'get_success_url'):
+                    def get_success_url(self, next_step=None):
+                        return _admin.get_success_url(view=self, next_step=next_step)
 
                 if hasattr(_admin, 'get_url_create_kwargs'):
                     def get_url_create_kwargs(self):

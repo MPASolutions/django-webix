@@ -1,102 +1,41 @@
-Advanced Usage
+List/Admin Actions
 ==============
 
-Inline Templates
-----------------
+ListView Actions
+~~~~~
+
+Create the actions (e.g. <app_name>/actions.py) and load it into ListView or Admin.
 
 .. code-block:: python
 
-    from django_webix.formsets import WebixTabularInlineFormSet, WebixStackedInlineFormSet
-    from django_webix.views import WebixCreateWithInlinesUnmergedView, WebixUpdateWithInlinesUnmergedView
+    from django.http import JsonResponse
 
-    from <app_name>.forms import MyModelForm
-    from <app_name>.models import MyModel, InlineModel
+    from django_webix.views.generic.decorators import action_config
 
-
-    class InlineModelInline(WebixStackedInlineFormSet):
-        model = InlineModel
-        fields = '__all__'
-
-
-    class MyModelCreateView(WebixCreateWithInlinesUnmergedView):
-        model = MyModel
-        inlines = [InlineModelInline]
-        form_class = MyModelForm
-
-
-    class MyModelUpdateView(WebixUpdateWithInlinesUnmergedView):
-        model = MyModel
-        inlines = [InlineModelInline]
-        form_class = MyModelForm
-
-
-Inline QuerySet
----------------
-
-.. code-block:: python
-
-    from django_webix.formsets import WebixStackedInlineFormSet
-    from django_webix.views import WebixCreateWithInlinesView, WebixUpdateWithInlinesView, WebixDeleteView
-
-    from <app_name>.models import InlineModel
-
-
-    class InlineModelInline(WebixStackedInlineFormSet):
-        model = InlineModel
-        fields = '__all__'
-
-        def get_queryset(self):
-            return self.inline_model.objects.filter(**filters)
-
-
-Custom FormSet Class
---------------------
-
-.. code-block:: python
-
-    from django_webix.formsets import BaseWebixInlineFormSet
-
-
-    class CustomInlineFormSet(BaseWebixInlineFormSet):
-        # ...
-
-
-    class InlineModelInline(WebixStackedInlineFormSet):
-        # ...
-        custom_formset_class = CustomInlineFormSet
-        # ...
-
-
-Add custom action with user input request
------------------------------------------
-
-Write custom ui to django-webix acton with input parametrs asked to users.
-
-Python view
-~~~~~~~~~~~
-
-In python view write the action as usual with `@action_config`
-
-.. code-block:: python
-
-    @action_config(action_key='my_action_name',
+    # list checkboxes actions
+    @action_config(action_key='CUSTOMKEY',
                    response_type='json',
-                   short_description=_("Action title"),
-                   allowed_permissions=[])
-    def my_action(self, request, qs):
-        _elements_count = int(qs.count())
-        # ...
+                   short_description='TEXT4')
+                   allowed_permissions=['delete'],
+                   reload_list=True,
+                   maximum_count=None, # limit for action execution
+                   modal_title="Are you sure you want to proceed with this action?",
+                   modal_header="method for elaborate...",
+                   modal_click='Elaborate',
+                   modal_ok="Proceed",
+                   modal_cancel="Undo",
+                   form=ElabForm)
+    def my_action(self, request, qs, form):
+        data = form.cleaned_data
+        qs.update(status='p')
         return JsonResponse({
             "status": True,
-            "message": _("{elements_count} elements succesfully updated").format(
-                elements_count=_elements_count
-            ),
+            "message": 'Updated {} items'.format(qs.count()),
             "redirect_url": self.get_url_list(),
-        })
-
+        }, safe=False)
 
 Javascript template
-~~~~~~~~~~~~~~~~~~~
+~~~~~
 
 In javascript list template overwrite the `toolbar_list_actions` block
 
@@ -234,7 +173,7 @@ In javascript list template overwrite the `toolbar_list_actions` block
         {% endblock %}
 
 Conclusions
-~~~~~~~~~~~
+~~~~~
 
 Finally you can access the input parametrs as request POST data in the action method `my_action(self, request, qs)`
 

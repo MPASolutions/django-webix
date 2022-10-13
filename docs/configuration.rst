@@ -1,4 +1,4 @@
-Configurations
+Configuration
 ==============
 
 Install
@@ -73,7 +73,7 @@ Configuration variables
 .. code-block:: python
 
     WEBIX_LICENSE = 'PRO'  # FREE
-    WEBIX_VERSION = '8.3.4'
+    WEBIX_VERSION = '9.4.0'
     WEBIX_CONTAINER_ID = 'content_right'
     WEBIX_FONTAWESOME_CSS_URL = 'fontawesome/css/all.min.css'
     WEBIX_FONTAWESOME_VERSION = '5.13.1'

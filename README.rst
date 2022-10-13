@@ -42,6 +42,14 @@ The full documentation is at https://django-webix.readthedocs.io.
 Quickstart
 ----------
 
+Create a new virtualenv:
+
+.. code-block:: bash
+
+    $ python -m venv django-webix
+    $ source django-webix/bin/activate
+
+
 Install Django Webix:
 
 .. code-block:: bash

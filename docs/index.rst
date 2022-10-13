@@ -16,10 +16,15 @@ Contents
    :maxdepth: 2
 
    readme
-   configurations
-   usage_views
-   usage_admin
-   advanced
+   configuration
+   forms
+   views
+   urls
+   admin_configuration
+   admin_use_base
+   admin_site
+   admin_model
+   actions
    contributing
    authors
    class-reference
