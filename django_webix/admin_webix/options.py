@@ -33,6 +33,14 @@ class ModelWebixAdmin(WebixPermissionsMixin):
     enable_button_save_addanother = True
     enable_button_save_gotolist = True
 
+    enable_button_save_continue_create = None
+    enable_button_save_addanother_create = None
+    enable_button_save_gotolist_create = None
+
+    enable_button_save_continue_update = None
+    enable_button_save_addanother_update = None
+    enable_button_save_gotolist_update = None
+
     # DJANGO WEBIX FORM: OPTION 1
     autocomplete_fields = []
     readonly_fields = []
@@ -80,28 +88,28 @@ class ModelWebixAdmin(WebixPermissionsMixin):
     #    self.prefix = prefix
 
     # over
-    def has_add_permission(self, request, view=None):
+    def has_add_permission(self, view, request):
         return super().has_add_permission(request)
 
-    def has_change_permission(self, request, obj=None, view=None):
+    def has_change_permission(self, view, request, obj=None):
         return super().has_change_permission(request, obj)
 
-    def has_delete_permission(self, request, obj=None, view=None):
+    def has_delete_permission(self, view, request, obj=None):
         return super().has_delete_permission(request, obj)
 
-    def has_view_permission(self, request, obj=None, view=None):
+    def has_view_permission(self, view, request, obj=None):
         return super().has_view_permission(request, obj)
 
-    def get_info_no_add_permission(self, has_permission, request, view=None):
+    def get_info_no_add_permission(self, view, has_permission, request):
         return super().get_info_no_add_permission(has_permission, request)
 
-    def get_info_no_change_permission(self, has_permission, request, obj=None, view=None):
+    def get_info_no_change_permission(self, view, has_permission, request, obj=None):
         return super().get_info_no_change_permission(has_permission, request, obj)
 
-    def get_info_no_delete_permission(self, has_permission, request, obj=None, view=None):
+    def get_info_no_delete_permission(self, view, has_permission, request, obj=None):
         return super().get_info_no_delete_permission(has_permission, request, obj)
 
-    def get_info_no_view_permission(self, has_permission, request, obj=None, view=None):
+    def get_info_no_view_permission(self, view, has_permission, request, obj=None):
         return super().get_info_no_view_permission(has_permission, request, obj)
 
     def is_enable_row_click(self, request):
@@ -475,9 +483,9 @@ class ModelWebixAdmin(WebixPermissionsMixin):
                 errors_on_popup = _admin.errors_on_popup
 
                 model_copy_fields = _admin.get_model_copy_fields()
-                enable_button_save_continue = _admin.enable_button_save_continue
-                enable_button_save_addanother = _admin.enable_button_save_addanother
-                enable_button_save_gotolist = _admin.enable_button_save_gotolist
+                enable_button_save_continue = _admin.enable_button_save_continue_create if _admin.enable_button_save_continue_create is not None else _admin.enable_button_save_continue
+                enable_button_save_addanother = _admin.enable_button_save_addanother_create if _admin.enable_button_save_addanother_create is not None else _admin.enable_button_save_addanother
+                enable_button_save_gotolist = _admin.enable_button_save_gotolist_create if _admin.enable_button_save_gotolist_create is not None else _admin.enable_button_save_gotolist
 
                 def has_add_permission(self, request, view=None):
                     return _admin.has_add_permission(request, view=self)
@@ -617,9 +625,9 @@ class ModelWebixAdmin(WebixPermissionsMixin):
                 errors_on_popup = _admin.errors_on_popup
 
                 model_copy_fields = _admin.get_model_copy_fields()
-                enable_button_save_continue = _admin.enable_button_save_continue
-                enable_button_save_addanother = _admin.enable_button_save_addanother
-                enable_button_save_gotolist = _admin.enable_button_save_gotolist
+                enable_button_save_continue = _admin.enable_button_save_continue_update if _admin.enable_button_save_continue_update is not None else _admin.enable_button_save_continue
+                enable_button_save_addanother = _admin.enable_button_save_addanother_update if _admin.enable_button_save_addanother_update is not None else _admin.enable_button_save_addanother
+                enable_button_save_gotolist = _admin.enable_button_save_gotolist_update if _admin.enable_button_save_gotolist_update is not None else _admin.enable_button_save_gotolist
 
                 def has_add_permission(self, request, view=None):
                     return _admin.has_add_permission(request, view=self)
@@ -892,6 +900,11 @@ class ModelWebixAdmin(WebixPermissionsMixin):
 
             return WebixAdminListView
 
+    enable_url_list = True
+    enable_url_create = True
+    enable_url_delete = True
+    enable_url_update = True
+
     def get_urls(self):
         _prefix = self.get_prefix()
         if _prefix not in [None, '']:
@@ -899,12 +912,16 @@ class ModelWebixAdmin(WebixPermissionsMixin):
         else:
             _prefix = ''
 
-        return [
-            path(_prefix+'', self.get_list_view().as_view(), name=self.get_url_pattern_list()),
-            path(_prefix+'create/', self.get_add_view().as_view(), name=self.get_url_pattern_create()),
-            path(_prefix+'<int:pk>/delete/', self.get_delete_view().as_view(), name=self.get_url_pattern_delete()),
-            path(_prefix+'<int:pk>/update/', self.get_change_view().as_view(), name=self.get_url_pattern_update()),
-        ]
+        _urls = []
+        if self.enable_url_list == True:
+            _urls.append(path(_prefix+'', self.get_list_view().as_view(), name=self.get_url_pattern_list()))
+        if self.enable_url_create == True:
+            _urls.append(path(_prefix+'create/', self.get_add_view().as_view(), name=self.get_url_pattern_create()))
+        if self.enable_url_delete == True:
+            _urls.append(path(_prefix+'<int:pk>/delete/', self.get_delete_view().as_view(), name=self.get_url_pattern_delete()))
+        if self.enable_url_update == True:
+            _urls.append(path(_prefix+'<int:pk>/update/', self.get_change_view().as_view(), name=self.get_url_pattern_update()))
+        return _urls
 
     @property
     def urls(self):

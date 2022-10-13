@@ -33,6 +33,14 @@ Here there is an example of main list of parameters and functions that can be ov
         enable_button_save_addanother = True
         enable_button_save_gotolist = True
 
+        enable_button_save_continue_create = None
+        enable_button_save_addanother_create = None
+        enable_button_save_gotolist_create = None
+
+        enable_button_save_continue_update = None
+        enable_button_save_addanother_update = None
+        enable_button_save_gotolist_update = None
+
         # DJANGO WEBIX FORM: OPTION 1
         autocomplete_fields = []
         readonly_fields = []
@@ -144,6 +152,12 @@ Here there is an example of main list of parameters and functions that can be ov
             ...
 
         # URLS
+
+        enable_url_list = True
+        enable_url_create = True
+        enable_url_delete = True
+        enable_url_update = True
+
         def get_urls(self):
             _prefix = self.get_prefix()
             if _prefix not in [None, '']:
@@ -151,12 +165,16 @@ Here there is an example of main list of parameters and functions that can be ov
             else:
                 _prefix = ''
 
-            return [
-                path(_prefix+'', self.get_list_view().as_view(), name=self.get_url_pattern_list()),
-                path(_prefix+'create/', self.get_add_view().as_view(), name=self.get_url_pattern_create()),
-                path(_prefix+'<int:pk>/delete/', self.get_delete_view().as_view(), name=self.get_url_pattern_delete()),
-                path(_prefix+'<int:pk>/update/', self.get_change_view().as_view(), name=self.get_url_pattern_update()),
-            ]
+            _urls = []
+            if self.enable_url_list == True:
+                _urls.append(path(_prefix+'', self.get_list_view().as_view(), name=self.get_url_pattern_list()))
+            if self.enable_url_create == True:
+                _urls.append(path(_prefix+'create/', self.get_add_view().as_view(), name=self.get_url_pattern_create()))
+            if self.enable_url_delete == True:
+                _urls.append(path(_prefix+'<int:pk>/delete/', self.get_delete_view().as_view(), name=self.get_url_pattern_delete()))
+            if self.enable_url_update == True:
+                _urls.append(path(_prefix+'<int:pk>/update/', self.get_change_view().as_view(), name=self.get_url_pattern_update()))
+            return _urls
 
         # EXTRA functions
         # in all these functions is added view as parameter
