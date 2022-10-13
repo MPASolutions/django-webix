@@ -66,6 +66,7 @@ function _{{ view_prefix }}action_execute(action, ids, all, response_type, short
                             if (callback_error) {
                                 callback_error();
                             }
+                            $$('{{ view_prefix }}datatable').hideOverlay();
                         },
                         success: function (data) { // TODO gestire response
                             if (response_type == 'json') {
@@ -107,6 +108,7 @@ function _{{ view_prefix }}action_execute(action, ids, all, response_type, short
                                     });
                                 }
                             }
+                            $$('{{ view_prefix }}datatable').hideOverlay();
                         },
                     });
                 } else if (response_type == 'blank') {
@@ -147,17 +149,17 @@ function _{{ view_prefix }}action_execute(action, ids, all, response_type, short
                         hiddenField.setAttribute("value", input_params[key]);
                         form.appendChild(hiddenField);
                     }
-                    ;
                     document.body.appendChild(form);
                     form.target = '_blabk';
                     form.submit();
                     if (callback_success) {
                         callback_success();
                     }
+                    $$('{{ view_prefix }}datatable').hideOverlay();
                 } else {
-
+                    $$('{{ view_prefix }}datatable').hideOverlay();
                 }
-                $$('{{ view_prefix }}datatable').hideOverlay();
+
             } else {
                 if (callback_error) {
                     callback_error();

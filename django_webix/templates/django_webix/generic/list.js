@@ -500,7 +500,7 @@ if (
                         {% endblock %}
                     }
                     {% endblock %}
-                }
+                },
                 {% endblock %}
             },
             {% block extra_datatable_options %}{% endblock %}
