@@ -93,7 +93,7 @@ class WebixPermissionsMixin:
             return user.has_perm('{}.view_{}'.format(self.model._meta.app_label, self.model._meta.model_name))
         return False
 
-    def has_add_permission(self, request, view=None):
+    def has_add_permission(self, request):
         self.has_add_django_user_permission(user=request.user)
         if not self.check_permissions:
             return True
@@ -109,7 +109,7 @@ class WebixPermissionsMixin:
                 return has_permission(request=request)
         return True
 
-    def has_change_permission(self, request, obj=None, view=None):
+    def has_change_permission(self, request, obj=None):
         if not self.check_permissions:
             return True
         elif self.change_permission is not None:
@@ -124,7 +124,7 @@ class WebixPermissionsMixin:
                 return has_permission(request=request, obj=obj)
         return True
 
-    def has_delete_permission(self, request, obj=None, view=None):
+    def has_delete_permission(self, request, obj=None):
         if not self.check_permissions:
             return True
         elif self.delete_permission is not None:
@@ -139,7 +139,7 @@ class WebixPermissionsMixin:
                 return has_permission(request=request, obj=obj)
         return True
 
-    def has_view_permission(self, request, obj=None, view=None):
+    def has_view_permission(self, request, obj=None):
         if not self.check_permissions:
             return True
         elif self.view_permission is not None:
@@ -154,22 +154,22 @@ class WebixPermissionsMixin:
                 return has_permission(request=request, obj=obj)
         return True
 
-    def get_info_no_add_permission(self, has_permission, request, view=None):
+    def get_info_no_add_permission(self, has_permission, request):
         if not has_permission:
             return [_("You haven't add permission")]
         return []
 
-    def get_info_no_change_permission(self, has_permission, request, obj=None, view=None):
+    def get_info_no_change_permission(self, has_permission, request, obj=None,):
         if not has_permission:
             return [_("You haven't change permission")]
         return []
 
-    def get_info_no_delete_permission(self, has_permission, request, obj=None, view=None):
+    def get_info_no_delete_permission(self, has_permission, request, obj=None):
         if not has_permission:
             return [_("You haven't delete permission")]
         return []
 
-    def get_info_no_view_permission(self, has_permission, request, obj=None, view=None):
+    def get_info_no_view_permission(self, has_permission, request, obj=None):
         if not has_permission:
             return [_("You haven't view permission")]
         return []
@@ -193,10 +193,10 @@ class WebixPermissionsMixin:
         return self.remove_disabled_buttons
 
     def get_context_data_webix_permissions(self, request, obj=None, **kwargs):
-        _has_view_permission = self.has_view_permission(request=self.request, obj=obj, view=self)
-        _has_add_permission = self.has_add_permission(request=self.request, view=self)
-        _has_change_permission = self.has_change_permission(request=self.request, obj=obj, view=self)
-        _has_delete_permission = self.has_delete_permission(request=self.request, obj=obj, view=self)
+        _has_view_permission = self.has_view_permission(request=self.request, obj=obj)
+        _has_add_permission = self.has_add_permission(request=self.request)
+        _has_change_permission = self.has_change_permission(request=self.request, obj=obj)
+        _has_delete_permission = self.has_delete_permission(request=self.request, obj=obj)
         return {
             # Buttons
             'remove_disabled_buttons': self.get_remove_disabled_buttons(request=self.request),

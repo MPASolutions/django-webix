@@ -79,6 +79,31 @@ class ModelWebixAdmin(WebixPermissionsMixin):
     # def __init__(self, prefix=None):
     #    self.prefix = prefix
 
+    # over
+    def has_add_permission(self, request, view=None):
+        return super().has_add_permission(request)
+
+    def has_change_permission(self, request, obj=None, view=None):
+        return super().has_change_permission(request, obj)
+
+    def has_delete_permission(self, request, obj=None, view=None):
+        return super().has_delete_permission(request, obj)
+
+    def has_view_permission(self, request, obj=None, view=None):
+        return super().has_view_permission(request, obj)
+
+    def get_info_no_add_permission(self, has_permission, request, view=None):
+        return super().get_info_no_add_permission(has_permission, request)
+
+    def get_info_no_change_permission(self, has_permission, request, obj=None, view=None):
+        return super().get_info_no_change_permission(has_permission, request, obj)
+
+    def get_info_no_delete_permission(self, has_permission, request, obj=None, view=None):
+        return super().get_info_no_delete_permission(has_permission, request, obj)
+
+    def get_info_no_view_permission(self, has_permission, request, obj=None, view=None):
+        return super().get_info_no_view_permission(has_permission, request, obj)
+
     def is_enable_row_click(self, request):
         return self.enable_row_click
 
@@ -365,10 +390,11 @@ class ModelWebixAdmin(WebixPermissionsMixin):
                 if hasattr(_admin, 'dispatch'):
                     def dispatch(self, *args, **kwargs):
                         kwargs.update({'view': self})
-                        raise Exception(_admin, self)
+                        # raise Exception(_admin, self)
                         return _admin.dispatch(*args, **kwargs)
 
                 admin_prefix = _admin.get_prefix()
+
                 def get_view_prefix(self):
                     if self.admin_prefix is not None:
                         return '{}_{}_{}_'.format(self.admin_prefix,
