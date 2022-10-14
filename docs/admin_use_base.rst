@@ -16,6 +16,7 @@ Admin Webix Model registration
 Create the files (e.g. <app_name>/admin_webix.py)
 - prefix could be used for multiple model registration
 Here an example:
+
 .. code-block:: python
 
     from <app_name>.models import ModelName
