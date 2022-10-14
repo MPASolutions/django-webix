@@ -424,6 +424,10 @@ class ModelWebixAdmin(WebixPermissionsMixin):
                 template_style = _admin.get_template_form_style()
                 inlines = _admin.inlines
 
+                if hasattr(_admin, 'response_valid'):
+                    def response_valid(self, view=None, success_url=None, **kwargs):
+                        return _admin.response_valid(view=self, success_url=success_url, **kwargs)
+
                 if hasattr(_admin, 'get_success_url'):
                     def get_success_url(self, next_step=None):
                         return _admin.get_success_url(view=self, next_step=next_step)
@@ -565,6 +569,10 @@ class ModelWebixAdmin(WebixPermissionsMixin):
 
                 template_style = _admin.get_template_form_style()
                 inlines = _admin.inlines
+
+                if hasattr(_admin, 'response_valid'):
+                    def response_valid(self, view=None, success_url=None, **kwargs):
+                        return _admin.response_valid(view=self, success_url=success_url, **kwargs)
 
                 if hasattr(_admin, 'get_success_url'):
                     def get_success_url(self, next_step=None):
@@ -728,6 +736,10 @@ class ModelWebixAdmin(WebixPermissionsMixin):
                 get_layers = _admin.get_layers
 
                 model = _admin.model
+
+                if hasattr(_admin, 'response_valid'):
+                    def response_valid(self, view=None, success_url=None, **kwargs):
+                        return _admin.response_valid(view=self, success_url=success_url, **kwargs)
 
                 if hasattr(_admin, 'get_container_id'):
                     def get_container_id(self, request):

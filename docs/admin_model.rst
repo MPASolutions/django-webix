@@ -200,6 +200,9 @@ Here there is an example of main list of parameters and functions that can be ov
         def get_url_list(self, view=None)
             return super(view.__class__).get_url_list()
 
+        def response_valid(self, view=None, success_url=None, **kwargs):
+            return super(view.__class__).response_valid(success_url=success_url, **kwargs)
+
         def get_container_id(self, view, request):
 
         def get_form(self, view, form_class):
