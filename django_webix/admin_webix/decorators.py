@@ -6,7 +6,6 @@ def register(*models, site=None, prefix=None):
     admin site:
     @register(Author)
     class AuthorAdmin(admin.ModelAdmin):
-        pass
     The `site` kwarg is an admin site to use instead of the default admin site.
 
     :param models:

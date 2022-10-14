@@ -27,7 +27,6 @@ Contents
    actions
    contributing
    authors
-   class-reference
    changelog
 
 Indices and tables

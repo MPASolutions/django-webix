@@ -49,7 +49,7 @@ master_doc = 'index'
 
 # General information about the project.
 project = u'Django Webix'
-copyright = u'2018, MPA Solutions'
+copyright = u'2022, MPA Solutions soc. coop., Enogis srl'
 
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the
