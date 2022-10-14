@@ -129,6 +129,18 @@ Does the code actually work?
     $ (myenv) $ tox
 
 
+Sponsors
+--------
+
+.. image:: https://mpasolutions.it/img/logo.png
+    :target: https://mpasolutions.it
+    :alt: MPA Solutions
+
+.. image:: https://www.enogis.it/wp-content/uploads/2020/09/enogis_flat_logo.png
+    :target: https://enogis.it
+    :alt: Enogis
+
+
 Contributors
 ------------
 
