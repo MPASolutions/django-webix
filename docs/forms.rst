@@ -2,7 +2,7 @@ Forms
 =====
 
 Form
-~~~~~
+~~~~
 
 Create the forms (e.g. <app_name>/forms.py)
 
@@ -24,7 +24,7 @@ Create the forms (e.g. <app_name>/forms.py)
             localized_fields = ('__all__') # to use comma as separator in i18n
 
 How to customization parameters of Form/ModelForm (extra from django standard form)
-~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. code-block:: python
 
@@ -63,10 +63,10 @@ Used as width for label of field.
 Used as align for label of field.
 
 How to customization rendering of Form/ModelForm (used from as_webix)
-~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 get_elements
-_____
+____________
 
 .. code-block:: python
 
@@ -97,7 +97,7 @@ Example of override it:
         return elements
 
 get_fieldsets
-_____
+_____________
 
 .. code-block:: python
 
@@ -128,7 +128,7 @@ Example of override it:
         ]
 
 Permissions and request
-~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~
 
 Into __init__ function of form set are set request and permissions that are used into get_fieldsets or get_elements to custumization pourposes.
 

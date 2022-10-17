@@ -1,8 +1,8 @@
 Admin Base
-=====
+==========
 
 Admin Webix Site
------
+----------------
 
 Use base admin site.
 
@@ -11,7 +11,7 @@ Use base admin site.
     from django_webix import admin_webix as admin
 
 Admin Webix Model registration
------
+------------------------------
 
 Create the files (e.g. <app_name>/admin_webix.py)
 - prefix could be used for multiple model registration

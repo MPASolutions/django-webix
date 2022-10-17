@@ -1,8 +1,8 @@
 List/Admin Actions
-==============
+==================
 
 ListView Actions
-~~~~~
+~~~~~~~~~~~~~~~~
 
 Create the actions (e.g. <app_name>/actions.py) and load it into ListView or Admin.
 
@@ -35,7 +35,7 @@ Create the actions (e.g. <app_name>/actions.py) and load it into ListView or Adm
         }, safe=False)
 
 Javascript template
-~~~~~
+~~~~~~~~~~~~~~~~~~~
 
 In javascript list template overwrite the `toolbar_list_actions` block
 
@@ -173,7 +173,7 @@ In javascript list template overwrite the `toolbar_list_actions` block
         {% endblock %}
 
 Conclusions
-~~~~~
+~~~~~~~~~~~
 
 Finally you can access the input parametrs as request POST data in the action method `my_action(self, request, qs)`
 

@@ -68,6 +68,7 @@ class ModelWebixAdmin(WebixPermissionsMixin):
     list_editable = []
 
     enable_json_loading = True  # changed from the past
+    paginate_count_default = 100
     pk_field = None
     title = None
     actions_style = None
@@ -826,6 +827,7 @@ class ModelWebixAdmin(WebixPermissionsMixin):
                         return _admin.get_actions(view=self)
 
                 enable_json_loading = _admin.enable_json_loading
+                paginate_count_default = _admin.paginate_count_default
                 title = _admin.title
                 actions_style = _admin.actions_style
                 enable_column_copy = _admin.enable_column_copy

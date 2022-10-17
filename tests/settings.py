@@ -1,7 +1,5 @@
 # -*- coding: utf-8
 
-from __future__ import unicode_literals, absolute_import
-
 import os
 
 import django
@@ -11,6 +9,8 @@ USE_TZ = True
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = "=================================================="
+
+DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 DATABASES = {
     'default': {
@@ -36,6 +36,9 @@ INSTALLED_APPS = [
     "sorl.thumbnail",
 
     "django_webix",
+    'django_webix.admin_webix',
+    'feincms', # to remove in future
+    "django_filtersmerger",
     "tests.app_name"
 ]
 
@@ -43,8 +46,7 @@ ROOT_URLCONF = 'tests.urls'
 
 SITE_ID = 1
 
-if django.VERSION >= (1, 10):
-    MIDDLEWARE = (
+MIDDLEWARE = (
         'django.middleware.security.SecurityMiddleware',
         'django.contrib.sessions.middleware.SessionMiddleware',
         'django.middleware.common.CommonMiddleware',
@@ -53,17 +55,7 @@ if django.VERSION >= (1, 10):
         'django.contrib.messages.middleware.MessageMiddleware',
         'django.middleware.clickjacking.XFrameOptionsMiddleware',
     )
-else:
-    MIDDLEWARE_CLASSES = (
-        'django.middleware.security.SecurityMiddleware',
-        'django.contrib.sessions.middleware.SessionMiddleware',
-        'django.middleware.common.CommonMiddleware',
-        'django.middleware.csrf.CsrfViewMiddleware',
-        'django.contrib.auth.middleware.AuthenticationMiddleware',
-        'django.contrib.auth.middleware.SessionAuthenticationMiddleware',
-        'django.contrib.messages.middleware.MessageMiddleware',
-        'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    )
+
 
 TEMPLATES = [
     {
@@ -82,8 +74,19 @@ TEMPLATES = [
     },
 ]
 
+CONTEXT_PARAMS = 'tests.app_name.context_params.TestContextParams'
+
+
+FILTER_MERGER_CLASSES = [
+#    'django_webix_filter.filters.defaults.DjangoAdvancedOTFWebixFilter',  # advance otf filter
+#    'django_webix_filter.filters.defaults.DjangoAdvancedWebixFilter',  # advanced filter
+    'django_webix.filters.defaults.DjangoBaseLockedWebixFilter',  # id selezioanti da webgis
+    'django_webix.filters.defaults.DjangoBaseWebixFilter',  # liste webix
+#    'django_webix_leaflet.filters.defaults.SpatialFilter',  # spatial filter (rectangular/polygonal)
+#    'django_webix_leaflet.filters.defaults.LocationInfo',  # featureinfo
+]
 WEBIX_LICENSE = 'FREE'
-WEBIX_VERSION = '7.0.3'
+WEBIX_VERSION = '9.4.0'
 WEBIX_CONTAINER_ID = 'content_right'
 WEBIX_FONTAWESOME_CSS_URL = 'fontawesome/css/all.min.css'
 WEBIX_FONTAWESOME_VERSION = '5.12.0'

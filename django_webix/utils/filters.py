@@ -5,11 +5,11 @@ import json
 
 from dateutil.parser import parse
 from dateutil.relativedelta import relativedelta
-from django.contrib.contenttypes.fields import GenericRelation
 from django.core.exceptions import FieldDoesNotExist
 from django.db import models
 from django.db.models import Q, DateTimeField
 from django.db.models.fields.reverse_related import ForeignObjectRel
+import django
 
 try:
     import psycopg2
@@ -72,7 +72,7 @@ def from_dict_to_qset(data, model):
                             _curr_model = _curr_field.related_model
                         elif issubclass(type(_curr_field), models.ManyToManyField):
                             _curr_model = _curr_field.remote_field.get_related_field().model
-                        elif issubclass(type(_curr_field), GenericRelation):
+                        elif issubclass(type(_curr_field), django.contrib.contenttypes.fields.GenericRelation):
                             _curr_model = _curr_field.related_model
                         else:
                             pass  # there are no others field

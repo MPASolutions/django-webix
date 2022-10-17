@@ -317,15 +317,6 @@ class AdminWebixSite:
         Decorator to create an admin view attached to this ``AdminWebixSite``. This
         wraps the view and provides permission checking by calling
         ``self.has_permission``.
-        You'll want to use this from within ``AdminWebixSite.get_urls()``:
-            class MyAdminWebixSite(AdminWebixSite):
-                def get_urls(self):
-                    from django.urls import path
-                    urls = super().get_urls()
-                    urls += [
-                        path('my_view/', self.admin_view(some_view))
-                    ]
-                    return urls
         By default, admin_views are marked non-cacheable using the
         ``never_cache`` decorator. If the view can be safely cached, set
         cacheable=True.

@@ -2,7 +2,7 @@ Views
 =====
 
 WebixTemplateView (used for webix rendering)
------
+--------------------------------------------
 
 To use instead of TemplateView to can override these extra functions.
 
@@ -21,7 +21,7 @@ To use instead of TemplateView to can override these extra functions.
             return getattr(settings, 'WEBIX_OVERLAY_CONTAINER_ID', settings.WEBIX_CONTAINER_ID)
 
 Base Template
-~~~~~
+~~~~~~~~~~~~~
 
 Create a base html template (e.g. <app_name>/templates/base.html)
 
@@ -55,7 +55,7 @@ Create a base html template (e.g. <app_name>/templates/base.html)
     </html>
 
 WebixFormView
------
+-------------
 
 Custom View for manage WebixForm and WebixModelForm
 
@@ -69,7 +69,7 @@ Custom View for manage WebixForm and WebixModelForm
 
 
 WebixListView
------
+-------------
 
 Mainly is based on a model and his queryset.
 
@@ -138,10 +138,10 @@ There some example for filtering:
 
 
 WebixCreateView and WebixUpdateView
------
+-----------------------------------
 
 WebixCreateUpdateMixin
-~~~~~
+~~~~~~~~~~~~~~~~~~~~~~
 
 .. code-block:: python
 
@@ -155,7 +155,8 @@ WebixCreateUpdateMixin
 
 
 Inlines
-~~~~~
+~~~~~~~
+
 .. code-block:: python
 
     from django_webix.formsets import WebixTabularInlineFormSet, WebixStackedInlineFormSet
@@ -169,8 +170,10 @@ Inlines
             return self.inline_model.objects.filter(**filters)
 
 Custom formset for Inlines
-~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~
+
 .. code-block:: python
+
     from django_webix.formsets import BaseWebixInlineFormSet
 
     class CustomInlineFormSet(BaseWebixInlineFormSet):
@@ -182,7 +185,7 @@ Custom formset for Inlines
         # ...
 
 WebixCreateView and WebixUpdateView
-~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. code-block:: python
 
@@ -216,7 +219,7 @@ WebixCreateView and WebixUpdateView
         '''
 
 CreateView and UpdateView Signals
-~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 When createview and updateview work some signals are sended.
 
@@ -239,7 +242,7 @@ When createview and updateview work some signals are sended.
                     inlines=inlines)
 
 WebixDeleteView
------
+---------------
 
 .. code-block:: python
 
@@ -258,7 +261,7 @@ WebixDeleteView
 
 
 DeleteView Signals
-~~~~~
+~~~~~~~~~~~~~~~~~~
 
 When deleteview works some signals are sended.
 

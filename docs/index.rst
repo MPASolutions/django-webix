@@ -25,6 +25,7 @@ Contents
    admin_site
    admin_model
    actions
+   class-reference
    contributing
    authors
    changelog

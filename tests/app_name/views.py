@@ -1,85 +1,29 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-from __future__ import unicode_literals
-
 import json
 
-from django import forms
 from django.views.generic import TemplateView, FormView
 
-from django_webix.forms import WebixModelForm, WebixForm
-from django_webix.forms import WebixTabularInlineFormSet, WebixStackedInlineFormSet
-from django_webix.forms.formsets import BaseWebixInlineFormSet
+from django_webix.views import (WebixCreateView,
+                                WebixUpdateView,
+                                WebixDeleteView, WebixListView)
+from .forms import (MyLoginForm,
+                    InlineStackedModelInline,
+                    InlineModelInline,
+                    InlineEmptyModelInline,
+                    MyModelForm)
+from .models import (MyModel,
+                     InlineModel,
+                     InlineStackedModel)
 
-from django_webix.views import WebixCreateWithInlinesView, WebixCreateWithInlinesUnmergedView, \
-    WebixUpdateWithInlinesView, WebixUpdateWithInlinesUnmergedView, \
-    WebixDeleteView
-from .models import MyModel, InlineModel, InlineStackedModel, InlineEmptyModel, UrlsModel
-
-
-class MyLoginForm(WebixForm):
-    username = forms.CharField(required=True)
-    password = forms.CharField(widget=forms.PasswordInput(), required=True)
-
+####################### FORMVIEW #######################
 
 class MyLoginView(FormView):
     form_class = MyLoginForm
     template_name = 'django_webix/generic/create.js'
 
-
-class InlineModelInline(WebixTabularInlineFormSet):
-    model = InlineModel
-    fields = '__all__'
-
-    def get_queryset(self):
-        return self.inline_model.objects.all()
-
-
-class InlineStackedModelForm(WebixModelForm):
-    min_count_suggest = 0
-
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.autocomplete_fields = ['inlinemodel']
-
-    class Meta:
-        model = InlineStackedModel
-        fields = '__all__'
-
-
-class InlineStackedModelInline(WebixStackedInlineFormSet):
-    model = InlineStackedModel
-    fields = '__all__'
-    form_class = InlineStackedModelForm
-
-
-class InlineEmptyModelForm(WebixModelForm):
-    factory_kwargs = {
-        'extra': 0
-    }
-
-
-class InlineEmptyModelFormSet(BaseWebixInlineFormSet):
-    def get_queryset(self):
-        return self.queryset
-
-
-class InlineEmptyModelInline(WebixTabularInlineFormSet):
-    model = InlineEmptyModel
-    fields = '__all__'
-    form_class = InlineEmptyModelForm
-    custom_formset_class = InlineEmptyModelFormSet
-
-
-class MyModelForm(WebixModelForm):
-    readonly_fields = ['readonly', 'raise_error', 'datetimefield', 'datefield', 'booleanfield', 'datefield_empty',
-                       'datetimefield_empty']
-
-    class Meta:
-        model = MyModel
-        fields = '__all__'
-
+####################### LISTVIEW #######################
 
 class MyModelListView(TemplateView):
     template_name = 'list.js'
@@ -92,24 +36,21 @@ class MyModelListView(TemplateView):
         } for i in MyModel.objects.all()])
         return context
 
+####################### CREATEVIEW #######################
 
-class MyModelCreateView(WebixCreateWithInlinesView):
+class MyModelCreateBaseView(WebixCreateView):
+    model = MyModel
+    form_class = MyModelForm
+
+
+class MyModelCreateView(WebixCreateView):
     model = MyModel
     inlines = [InlineModelInline, InlineStackedModelInline, InlineEmptyModelInline]
     form_class = MyModelForm
     permissions = False
 
 
-class MyModelCreateUnmergedView(WebixCreateWithInlinesUnmergedView):
-    model = MyModel
-    inlines = [InlineModelInline, InlineStackedModelInline, InlineEmptyModelInline]
-    form_class = MyModelForm
-    permissions = False
-
-    url_create = 'app_name.mymodel.create_unmerged'
-
-
-class MyModelCreateErrorView(WebixCreateWithInlinesView):
+class MyModelCreateErrorView(WebixCreateView):
     model = MyModel
     inlines = [InlineModelInline, InlineStackedModelInline, InlineEmptyModelInline]
     form_class = MyModelForm
@@ -117,14 +58,19 @@ class MyModelCreateErrorView(WebixCreateWithInlinesView):
 
     url_create = 'app_name.mymodel.create_error'
 
+####################### UPDATEVIEW #######################
 
-class MyModelUpdateView(WebixUpdateWithInlinesView):
+class MyModelUpdateBaseView(WebixUpdateView):
+    model = MyModel
+    form_class = MyModelForm
+
+class MyModelUpdateView(WebixUpdateView):
     model = MyModel
     inlines = [InlineModelInline, InlineStackedModelInline, InlineEmptyModelInline]
     form_class = MyModelForm
 
 
-class MyModelUpdateErrorView(WebixUpdateWithInlinesView):
+class MyModelUpdateErrorView(WebixUpdateView):
     model = MyModel
     inlines = [InlineModelInline, InlineStackedModelInline, InlineEmptyModelInline]
     form_class = MyModelForm
@@ -132,76 +78,24 @@ class MyModelUpdateErrorView(WebixUpdateWithInlinesView):
 
     url_create = 'app_name.mymodel.update_error'
 
+####################### DELETEVIEW #######################
+
+class MyModelDeleteBaseView(WebixDeleteView):
+    model = MyModel
 
 class MyModelDeleteView(WebixDeleteView):
     model = MyModel
 
+####################### LISTVIEW #######################
 
-class InlineModelUpdateView(WebixUpdateWithInlinesUnmergedView):
-    model = InlineModel
-    fields = '__all__'
+class MyModelListBaseView(WebixListView):
+    model = MyModel
 
-
-class InlineStackedModelDelete(WebixDeleteView):
-    model = InlineStackedModel
-
-
-class CreateSuccessUrlView(WebixCreateWithInlinesView):
-    model = UrlsModel
-    fields = '__all__'
-    success_url = '/'
+####################### EXTRA TO CHECK #######################
+#class InlineModelUpdateView(WebixUpdateView):
+#    model = InlineModel
+#    fields = '__all__'
 
 
-class CreateUrlUpdateView(WebixCreateWithInlinesView):
-    model = UrlsModel
-    fields = '__all__'
-    url_update = 'app_name.mymodel.create_urlupdate'
-
-
-class CreateUrlListView(WebixCreateWithInlinesView):
-    model = UrlsModel
-    fields = '__all__'
-    url_update = None
-    url_list = 'app_name.mymodel.create_urllist'
-
-
-class CreateNoUrlView(WebixCreateWithInlinesView):
-    model = UrlsModel
-    fields = '__all__'
-    url_update = None
-    url_list = None
-
-
-class UpdateSuccessUrlView(WebixUpdateWithInlinesView):
-    model = UrlsModel
-    fields = '__all__'
-    success_url = '/'
-
-
-class UpdateUrlUpdateView(WebixUpdateWithInlinesView):
-    model = UrlsModel
-    fields = '__all__'
-    url_update = 'app_name.mymodel.update_urlupdate'
-
-
-class UpdateNoUrlView(WebixUpdateWithInlinesView):
-    model = UrlsModel
-    fields = '__all__'
-    url_update = None
-    url_list = None
-
-
-class DeleteSuccessUrlView(WebixDeleteView):
-    model = UrlsModel
-    success_url = '/'
-
-
-class DeleteUrlListView(WebixDeleteView):
-    model = UrlsModel
-    url_list = 'app_name.mymodel.delete_urllist'
-
-
-class DeleteNoUrlView(WebixDeleteView):
-    model = UrlsModel
-    url_update = None
-    url_list = None
+#class InlineStackedModelDelete(WebixDeleteView):
+#    model = InlineStackedModel

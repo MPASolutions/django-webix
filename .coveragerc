@@ -4,6 +4,7 @@ branch = true
 [report]
 omit =
     *site-packages*
+    *migrations*
     *tests*
     *.tox*
     *django_webix_utils.py

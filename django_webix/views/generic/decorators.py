@@ -3,7 +3,7 @@
 import json
 
 from django.http import JsonResponse
-from django.utils.translation import gettext as _
+from django.utils.translation import gettext_lazy as _
 
 
 def action_config(
@@ -19,7 +19,7 @@ def action_config(
     form=None,
     reload_list=True,
     maximum_count=None,
-):  # TODO: permission check before execution
+    ):  # TODO: permission check before execution
 
     if allowed_permissions is None:
         allowed_permissions = []
