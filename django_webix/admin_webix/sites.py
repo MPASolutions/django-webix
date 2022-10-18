@@ -110,50 +110,51 @@ class AdminWebixSite:
         if isinstance(model_or_iterable, ModelBase):
             model_or_iterable = [model_or_iterable]
         for model in model_or_iterable:
-            if model._meta.abstract:
-                raise ImproperlyConfigured(
-                    'The model %s is abstract, so it cannot be registered with admin.' % model.__name__
-                )
+            if model is not None:
+                if model._meta.abstract:
+                    raise ImproperlyConfigured(
+                        'The model %s is abstract, so it cannot be registered with admin.' % model.__name__
+                    )
 
-            if (model, prefix) in self._registry:
-                registered_admin = str(self._registry[(model, prefix)])
-                msg = 'The model %s is already registered ' % model.__name__
-                if registered_admin.endswith('.ModelWebixAdmin'):
-                    # Most likely registered without a ModelWebixAdmin subclass.
-                    msg += 'in app %r.' % re.sub(r'\.ModelWebixAdmin$', '', registered_admin)
-                else:
-                    msg += 'with %r.' % registered_admin
-                raise AlreadyRegistered(msg)
+                if (model, prefix) in self._registry:
+                    registered_admin = str(self._registry[(model, prefix)])
+                    msg = 'The model %s is already registered ' % model.__name__
+                    if registered_admin.endswith('.ModelWebixAdmin'):
+                        # Most likely registered without a ModelWebixAdmin subclass.
+                        msg += 'in app %r.' % re.sub(r'\.ModelWebixAdmin$', '', registered_admin)
+                    else:
+                        msg += 'with %r.' % registered_admin
+                    raise AlreadyRegistered(msg)
 
-            # Ignore the registration if the model has been
-            # swapped out.
-            if prefix is not None:
-                if options:
-                    options['prefix'] = prefix
-                else:
-                    options = {'prefix': prefix}
+                # Ignore the registration if the model has been
+                # swapped out.
+                if prefix is not None:
+                    if options:
+                        options['prefix'] = prefix
+                    else:
+                        options = {'prefix': prefix}
 
-            if self.get_label_width() is not None:
-                if options:
-                    options['label_width'] = self.get_label_width()
-                else:
-                    options = {'label_width': self.get_label_width()}
+                if self.get_label_width() is not None:
+                    if options:
+                        options['label_width'] = self.get_label_width()
+                    else:
+                        options = {'label_width': self.get_label_width()}
 
-            if not model._meta.swapped:
+                if not model._meta.swapped:
 
-                # If we got **options then dynamically construct a subclass of
-                # admin_class with those **options.
-                if options:
-                    # For reasons I don't quite understand, without a __module__
-                    # the created class appears to "live" in the wrong place,
-                    # which causes issues later on.
-                    options['__module__'] = __name__
-                    admin_class = type("%sAdmin" % model.__name__, (admin_class,), options)
+                    # If we got **options then dynamically construct a subclass of
+                    # admin_class with those **options.
+                    if options:
+                        # For reasons I don't quite understand, without a __module__
+                        # the created class appears to "live" in the wrong place,
+                        # which causes issues later on.
+                        options['__module__'] = __name__
+                        admin_class = type("%sAdmin" % model.__name__, (admin_class,), options)
 
-                # Instantiate the admin class to save in the registry
-                self._registry[(model, prefix)] = admin_class(model, self)
-            # else:
-            #     raise Exception(model, 'errore swap')
+                    # Instantiate the admin class to save in the registry
+                    self._registry[(model, prefix)] = admin_class(model, self)
+                # else:
+                #     raise Exception(model, 'errore swap')
 
     def unregister(self, model_or_iterable, prefix=None):
         """

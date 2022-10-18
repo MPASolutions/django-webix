@@ -33,11 +33,14 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.sites",
 
-    "sorl.thumbnail",
+  #  "sorl.thumbnail",
 
     "django_webix",
     'django_webix.admin_webix',
+    'django_webix.auth_webix',
     'feincms', # to remove in future
+    #'hijack', # 2.3.0
+    'django_dal',
     "django_filtersmerger",
     "tests.app_name"
 ]
@@ -54,6 +57,8 @@ MIDDLEWARE = (
         'django.contrib.auth.middleware.AuthenticationMiddleware',
         'django.contrib.messages.middleware.MessageMiddleware',
         'django.middleware.clickjacking.XFrameOptionsMiddleware',
+        #'hijack.middleware.HijackUserMiddleware',
+        'django_dal.middleware.ContextParamsMiddleware',
     )
 
 
@@ -85,7 +90,7 @@ FILTER_MERGER_CLASSES = [
 #    'django_webix_leaflet.filters.defaults.SpatialFilter',  # spatial filter (rectangular/polygonal)
 #    'django_webix_leaflet.filters.defaults.LocationInfo',  # featureinfo
 ]
-WEBIX_LICENSE = 'FREE'
+WEBIX_LICENSE = 'PRO' # FREE
 WEBIX_VERSION = '9.4.0'
 WEBIX_CONTAINER_ID = 'content_right'
 WEBIX_FONTAWESOME_CSS_URL = 'fontawesome/css/all.min.css'

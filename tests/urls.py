@@ -1,5 +1,6 @@
 from django.urls import path, include
 
+from django_webix import admin_webix
 #from tests.app_name.views import InlineModelUpdateView
 #from tests.app_name.views import InlineStackedModelDelete
 from tests.app_name.views import MyLoginView, MyModelCreateBaseView, MyModelUpdateBaseView, MyModelDeleteBaseView, \
@@ -13,11 +14,17 @@ from tests.app_name.views import (MyModelListView,
 from tests.app_name.views_urls import (CreateSuccessUrlView, CreateUrlUpdateView, CreateUrlListView, CreateNoUrlView,
                                        UpdateSuccessUrlView, UpdateUrlUpdateView, UpdateNoUrlView,
                                        DeleteSuccessUrlView, DeleteUrlListView, DeleteNoUrlView)
+from django.contrib import admin
 
 urlpatterns = [
-    path('django-webix/', include('django_webix.urls')),
+    path('admin/', admin.site.urls),
 
-    path(r'mylogin', MyLoginView.as_view(), name='mylogin'),
+    path('django-webix/', include('django_webix.urls')),
+    path('main/', admin_webix.site.urls),
+    path('auth_webix/', include('django_webix.auth_webix.urls')),
+    #path('hijack/', include('hijack.urls', namespace='hijack')),
+
+    path('mylogin', MyLoginView.as_view(), name='mylogin'),
 
     path('mymodel/base/create', MyModelCreateBaseView.as_view(), name='app_name.mymodel.base.create'),
     path('mymodel/base/update/<int:pk>', MyModelUpdateBaseView.as_view(), name='app_name.mymodel.base.update'),
