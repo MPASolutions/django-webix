@@ -10,12 +10,11 @@ from django.utils.translation import gettext as _
 from django_webix.utils.decorators import script_login_required
 from django.utils.decorators import method_decorator
 
-from django_webix.views.generic.base import WebixPermissionsMixin  # utils for permission
+from django_webix.views.generic.base import WebixPermissionsBaseMixin
 from django_webix.utils.layers import get_layers
 
 
-
-class ModelWebixAdmin(WebixPermissionsMixin):
+class ModelWebixAdmin(WebixPermissionsBaseMixin):
     # WEBIX VIEWS (for fully override)
     create_view = None
     update_view = None

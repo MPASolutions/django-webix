@@ -11,7 +11,7 @@ from django.views.generic.edit import BaseFormView
 from django_webix.utils.layers import get_layers
 
 
-class WebixPermissionsMixin:
+class WebixPermissionsBaseMixin:
     model = None
     request = None
     check_permissions = True
@@ -92,6 +92,66 @@ class WebixPermissionsMixin:
         if self.model is not None:
             return user.has_perm('{}.view_{}'.format(self.model._meta.app_label, self.model._meta.model_name))
         return False
+
+    def has_view_or_change_permission(self, request, obj=None):
+        if self.view_permission is not None or self.change_permission is not None:
+            return self.view_permission or self.change_permission
+        return self.has_view_permission(request=request, obj=obj) or \
+               self.has_change_permission(request=request, obj=obj)
+
+    def has_module_permission(self, request):
+        if not self.check_permissions:
+            return True
+        if self.module_permission is not None:
+            return self.module_permission
+        if self.model is not None:
+            return request.user.has_module_perms(self.model._meta.app_label)
+        return False
+
+    def get_remove_disabled_buttons(self, request):
+        return self.remove_disabled_buttons
+
+    def get_context_data_webix_permissions(self, request, obj=None, **kwargs):
+        _has_view_permission = self.has_view_permission(request=self.request, obj=obj)
+        _has_add_permission = self.has_add_permission(request=self.request)
+        _has_change_permission = self.has_change_permission(request=self.request, obj=obj)
+        _has_delete_permission = self.has_delete_permission(request=self.request, obj=obj)
+        return {
+            # Buttons
+            'remove_disabled_buttons': self.get_remove_disabled_buttons(request=self.request),
+            # Permissions
+            'has_view_permission': _has_view_permission,
+            'has_add_permission': _has_add_permission,
+            'has_change_permission': _has_change_permission,
+            'has_delete_permission': _has_delete_permission,
+            'has_view_or_change_permission': self.has_view_or_change_permission(request=self.request, obj=obj),
+            'has_module_permission': self.has_module_permission(request=self.request),
+            # info no permissions
+            'info_no_add_permission': self.get_info_no_add_permission(has_permission=_has_add_permission,
+                                                                      request=self.request),
+            'info_no_change_permission': self.get_info_no_change_permission(has_permission=_has_change_permission,
+                                                                            request=self.request,
+                                                                            obj=obj),
+            'info_no_delete_permission': self.get_info_no_delete_permission(has_permission=_has_delete_permission,
+                                                                            request=self.request,
+                                                                            obj=obj),
+            'info_no_view_permission': self.get_info_no_view_permission(has_permission=_has_view_permission,
+                                                                        request=self.request,
+                                                                        obj=obj),
+            # failure related objects
+            'failure_view_related_objects': self.get_failure_view_related_objects(request=self.request,
+                                                                                  obj=obj),
+            'failure_add_related_objects': self.get_failure_add_related_objects(request=self.request),
+            'failure_change_related_objects': self.get_failure_change_related_objects(request=self.request,
+                                                                                      obj=obj),
+            'failure_delete_related_objects': self.get_failure_delete_related_objects(request=self.request,
+                                                                                      obj=obj),
+            # filure add missing_objects
+            'failure_add_blocking_objects': self.get_failure_add_blocking_objects(request=self.request),
+        }
+
+
+class WebixPermissionsCheckRequestMixin:
 
     def has_add_permission(self, request):
         self.has_add_django_user_permission(user=request.user)
@@ -174,63 +234,9 @@ class WebixPermissionsMixin:
             return [_("You haven't view permission")]
         return []
 
-    def has_view_or_change_permission(self, request, obj=None):
-        if self.view_permission is not None or self.change_permission is not None:
-            return self.view_permission or self.change_permission
-        return self.has_view_permission(request=request, obj=obj) or \
-               self.has_change_permission(request=request, obj=obj)
 
-    def has_module_permission(self, request):
-        if not self.check_permissions:
-            return True
-        if self.module_permission is not None:
-            return self.module_permission
-        if self.model is not None:
-            return request.user.has_module_perms(self.model._meta.app_label)
-        return False
-
-    def get_remove_disabled_buttons(self, request):
-        return self.remove_disabled_buttons
-
-    def get_context_data_webix_permissions(self, request, obj=None, **kwargs):
-        _has_view_permission = self.has_view_permission(request=self.request, obj=obj)
-        _has_add_permission = self.has_add_permission(request=self.request)
-        _has_change_permission = self.has_change_permission(request=self.request, obj=obj)
-        _has_delete_permission = self.has_delete_permission(request=self.request, obj=obj)
-        return {
-            # Buttons
-            'remove_disabled_buttons': self.get_remove_disabled_buttons(request=self.request),
-            # Permissions
-            'has_view_permission': _has_view_permission,
-            'has_add_permission': _has_add_permission,
-            'has_change_permission': _has_change_permission,
-            'has_delete_permission': _has_delete_permission,
-            'has_view_or_change_permission': self.has_view_or_change_permission(request=self.request, obj=obj),
-            'has_module_permission': self.has_module_permission(request=self.request),
-            # info no permissions
-            'info_no_add_permission': self.get_info_no_add_permission(has_permission=_has_add_permission,
-                                                                      request=self.request),
-            'info_no_change_permission': self.get_info_no_change_permission(has_permission=_has_change_permission,
-                                                                            request=self.request,
-                                                                            obj=obj),
-            'info_no_delete_permission': self.get_info_no_delete_permission(has_permission=_has_delete_permission,
-                                                                            request=self.request,
-                                                                            obj=obj),
-            'info_no_view_permission': self.get_info_no_view_permission(has_permission=_has_view_permission,
-                                                                        request=self.request,
-                                                                        obj=obj),
-            # failure related objects
-            'failure_view_related_objects': self.get_failure_view_related_objects(request=self.request,
-                                                                                  obj=obj),
-            'failure_add_related_objects': self.get_failure_add_related_objects(request=self.request),
-            'failure_change_related_objects': self.get_failure_change_related_objects(request=self.request,
-                                                                                      obj=obj),
-            'failure_delete_related_objects': self.get_failure_delete_related_objects(request=self.request,
-                                                                                      obj=obj),
-            # filure add missing_objects
-            'failure_add_blocking_objects': self.get_failure_add_blocking_objects(request=self.request),
-        }
-
+class WebixPermissionsBaseMixin(WebixPermissionsCheckRequestMixin, WebixPermissionsBaseMixin):
+    pass
 
 class WebixUrlUtilsMixin:
 
