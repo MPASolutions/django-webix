@@ -492,28 +492,28 @@ class ModelWebixAdmin(WebixPermissionsMixin):
                 enable_button_save_addanother = _admin.enable_button_save_addanother_create if _admin.enable_button_save_addanother_create is not None else _admin.enable_button_save_addanother
                 enable_button_save_gotolist = _admin.enable_button_save_gotolist_create if _admin.enable_button_save_gotolist_create is not None else _admin.enable_button_save_gotolist
 
-                def has_add_permission(self, request, view=None):
-                    return _admin.has_add_permission(request, view=self)
-                def has_change_permission(self, request, obj=None, view=None):
-                    return _admin.has_change_permission(request, obj=obj, view=self)
-                def has_delete_permission(self, request, obj=None, view=None):
-                    return _admin.has_delete_permission(request, obj=obj, view=self)
-                def has_view_permission(self, request, obj=None, view=None):
-                    return _admin.has_view_permission(request, obj=obj, view=self)
+                def has_add_permission(self, request):
+                    return _admin.has_add_permission(view=self, request=request)
+                def has_change_permission(self, request, obj=None):
+                    return _admin.has_change_permission(view=self, request=request, obj=obj)
+                def has_delete_permission(self, request, obj=None):
+                    return _admin.has_delete_permission(view=self, request=request, obj=obj)
+                def has_view_permission(self, request, obj=None):
+                    return _admin.has_view_permission(view=self, request=request, obj=obj)
 
                 get_failure_add_related_objects = _admin.get_failure_add_related_objects
                 get_failure_change_related_objects = _admin.get_failure_change_related_objects
                 get_failure_delete_related_objects = _admin.get_failure_delete_related_objects
                 get_failure_view_related_objects = _admin.get_failure_view_related_objects
 
-                def get_info_no_add_permission(self, has_permission, request, view=None):
-                    return _admin.get_info_no_add_permission(has_permission, request, view=self)
+                def get_info_no_add_permission(self, has_permission, view, request):
+                    return _admin.get_info_no_add_permission(view, has_permission, request)
                 def get_info_no_change_permission(self, has_permission, request, obj=None, view=None):
-                    return _admin.get_info_no_change_permission(has_permission, request, obj=obj, view=self)
+                    return _admin.get_info_no_change_permission(view, has_permission, request, obj=obj)
                 def get_info_no_delete_permission(self, has_permission, request, obj=None, view=None):
-                    return _admin.get_info_no_delete_permission(has_permission, request, obj=obj, view=self)
+                    return _admin.get_info_no_delete_permission(view, has_permission, request, obj=obj)
                 def get_info_no_view_permission(self, has_permission, request, obj=None, view=None):
-                    return _admin.get_info_no_view_permission(has_permission, request, obj=obj, view=self)
+                    return _admin.get_info_no_view_permission(view, has_permission, request, obj=obj)
 
                 remove_disabled_buttons = _admin.remove_disabled_buttons
                 get_layers = _admin.get_layers
@@ -638,28 +638,28 @@ class ModelWebixAdmin(WebixPermissionsMixin):
                 enable_button_save_addanother = _admin.enable_button_save_addanother_update if _admin.enable_button_save_addanother_update is not None else _admin.enable_button_save_addanother
                 enable_button_save_gotolist = _admin.enable_button_save_gotolist_update if _admin.enable_button_save_gotolist_update is not None else _admin.enable_button_save_gotolist
 
-                def has_add_permission(self, request, view=None):
-                    return _admin.has_add_permission(request, view=self)
-                def has_change_permission(self, request, obj=None, view=None):
-                    return _admin.has_change_permission(request, obj=obj, view=self)
-                def has_delete_permission(self, request, obj=None, view=None):
-                    return _admin.has_delete_permission(request, obj=obj, view=self)
-                def has_view_permission(self, request, obj=None, view=None):
-                    return _admin.has_view_permission(request, obj=obj, view=self)
+                def has_add_permission(self, request):
+                    return _admin.has_add_permission(view=self, request=request)
+                def has_change_permission(self, request, obj=None):
+                    return _admin.has_change_permission(view=self, request=request, obj=obj)
+                def has_delete_permission(self, request, obj=None):
+                    return _admin.has_delete_permission(view=self, request=request, obj=obj)
+                def has_view_permission(self, request, obj=None):
+                    return _admin.has_view_permission(view=self, request=request, obj=obj)
 
                 get_failure_add_related_objects = _admin.get_failure_add_related_objects
                 get_failure_change_related_objects = _admin.get_failure_change_related_objects
                 get_failure_delete_related_objects = _admin.get_failure_delete_related_objects
                 get_failure_view_related_objects = _admin.get_failure_view_related_objects
 
-                def get_info_no_add_permission(self, has_permission, request, view=None):
-                    return _admin.get_info_no_add_permission(has_permission, request, view=self)
-                def get_info_no_change_permission(self, has_permission, request, obj=None, view=None):
-                    return _admin.get_info_no_change_permission(has_permission, request, obj=obj, view=self)
-                def get_info_no_delete_permission(self, has_permission, request, obj=None, view=None):
-                    return _admin.get_info_no_delete_permission(has_permission, request, obj=obj, view=self)
-                def get_info_no_view_permission(self, has_permission, request, obj=None, view=None):
-                    return _admin.get_info_no_view_permission(has_permission, request, obj=obj, view=self)
+                def get_info_no_add_permission(self, has_permission, request):
+                    return _admin.get_info_no_add_permission(self, has_permission, request)
+                def get_info_no_change_permission(self, has_permission, request, obj=None):
+                    return _admin.get_info_no_change_permission(self, has_permission, request, obj=obj)
+                def get_info_no_delete_permission(self, has_permission, request, obj=None):
+                    return _admin.get_info_no_delete_permission(self, has_permission, request, obj=obj)
+                def get_info_no_view_permission(self, has_permission, request, obj=None):
+                    return _admin.get_info_no_view_permission(self, has_permission, request, obj=obj)
 
                 remove_disabled_buttons = _admin.remove_disabled_buttons
                 get_layers = _admin.get_layers
@@ -710,28 +710,28 @@ class ModelWebixAdmin(WebixPermissionsMixin):
                 url_pattern_update = 'admin_webix:' + _admin.get_url_pattern_update()
                 url_pattern_delete = 'admin_webix:' + _admin.get_url_pattern_delete()
 
-                def has_add_permission(self, request, view=None):
-                    return _admin.has_add_permission(request, view=self)
-                def has_change_permission(self, request, obj=None, view=None):
-                    return _admin.has_change_permission(request, obj=obj, view=self)
-                def has_delete_permission(self, request, obj=None, view=None):
-                    return _admin.has_delete_permission(request, obj=obj, view=self)
-                def has_view_permission(self, request, obj=None, view=None):
-                    return _admin.has_view_permission(request, obj=obj, view=self)
+                def has_add_permission(self, request):
+                    return _admin.has_add_permission(view=self, request=request)
+                def has_change_permission(self, request, obj=None):
+                    return _admin.has_change_permission(view=self, request=request, obj=obj)
+                def has_delete_permission(self, request, obj=None):
+                    return _admin.has_delete_permission(view=self, request=request, obj=obj)
+                def has_view_permission(self, request, obj=None):
+                    return _admin.has_view_permission(view=self, request=request, obj=obj)
 
                 get_failure_add_related_objects = _admin.get_failure_add_related_objects
                 get_failure_change_related_objects = _admin.get_failure_change_related_objects
                 get_failure_delete_related_objects = _admin.get_failure_delete_related_objects
                 get_failure_view_related_objects = _admin.get_failure_view_related_objects
 
-                def get_info_no_add_permission(self, has_permission, request, view=None):
-                    return _admin.get_info_no_add_permission(has_permission, request, view=self)
-                def get_info_no_change_permission(self, has_permission, request, obj=None, view=None):
-                    return _admin.get_info_no_change_permission(has_permission, request, obj=obj, view=self)
-                def get_info_no_delete_permission(self, has_permission, request, obj=None, view=None):
-                    return _admin.get_info_no_delete_permission(has_permission, request, obj=obj, view=self)
-                def get_info_no_view_permission(self, has_permission, request, obj=None, view=None):
-                    return _admin.get_info_no_view_permission(has_permission, request, obj=obj, view=self)
+                def get_info_no_add_permission(self, has_permission, request):
+                    return _admin.get_info_no_add_permission(self, has_permission, request)
+                def get_info_no_change_permission(self, has_permission, request, obj=None):
+                    return _admin.get_info_no_change_permission(self, has_permission, request, obj=obj)
+                def get_info_no_delete_permission(self, has_permission, request, obj=None):
+                    return _admin.get_info_no_delete_permission(self, has_permission, request, obj=obj)
+                def get_info_no_view_permission(self, has_permission, request, obj=None):
+                    return _admin.get_info_no_view_permission(self, has_permission, request, obj=obj)
 
                 remove_disabled_buttons = _admin.remove_disabled_buttons
                 get_layers = _admin.get_layers
@@ -837,28 +837,28 @@ class ModelWebixAdmin(WebixPermissionsMixin):
                 type_row_click = _admin.type_row_click
                 enable_actions = _admin.enable_actions
 
-                def has_add_permission(self, request, view=None):
-                    return _admin.has_add_permission(request, view=self)
-                def has_change_permission(self, request, obj=None, view=None):
-                    return _admin.has_change_permission(request, obj=obj, view=self)
-                def has_delete_permission(self, request, obj=None, view=None):
-                    return _admin.has_delete_permission(request, obj=obj, view=self)
-                def has_view_permission(self, request, obj=None, view=None):
-                    return _admin.has_view_permission(request, obj=obj, view=self)
+                def has_add_permission(self, request):
+                    return _admin.has_add_permission(view=self, request=request)
+                def has_change_permission(self, request, obj=None):
+                    return _admin.has_change_permission(view=self, request=request, obj=obj)
+                def has_delete_permission(self, request, obj=None):
+                    return _admin.has_delete_permission(view=self, request=request, obj=obj)
+                def has_view_permission(self, request, obj=None):
+                    return _admin.has_view_permission(view=self, request=request, obj=obj)
 
                 get_failure_add_related_objects = _admin.get_failure_add_related_objects
                 get_failure_change_related_objects = _admin.get_failure_change_related_objects
                 get_failure_delete_related_objects = _admin.get_failure_delete_related_objects
                 get_failure_view_related_objects = _admin.get_failure_view_related_objects
 
-                def get_info_no_add_permission(self, has_permission, request, view=None):
-                    return _admin.get_info_no_add_permission(has_permission, request, view=self)
-                def get_info_no_change_permission(self, has_permission, request, obj=None, view=None):
-                    return _admin.get_info_no_change_permission(has_permission, request, obj=obj, view=self)
-                def get_info_no_delete_permission(self, has_permission, request, obj=None, view=None):
-                    return _admin.get_info_no_delete_permission(has_permission, request, obj=obj, view=self)
-                def get_info_no_view_permission(self, has_permission, request, obj=None, view=None):
-                    return _admin.get_info_no_view_permission(has_permission, request, obj=obj, view=self)
+                def get_info_no_add_permission(self, has_permission, request):
+                    return _admin.get_info_no_add_permission(self, has_permission, request)
+                def get_info_no_change_permission(self, has_permission, request, obj=None):
+                    return _admin.get_info_no_change_permission(self, has_permission, request, obj=obj)
+                def get_info_no_delete_permission(self, has_permission, request, obj=None):
+                    return _admin.get_info_no_delete_permission(self, has_permission, request, obj=obj)
+                def get_info_no_view_permission(self, has_permission, request, obj=None):
+                    return _admin.get_info_no_view_permission(self, has_permission, request, obj=obj)
 
                 remove_disabled_buttons = _admin.remove_disabled_buttons
                 get_layers = _admin.get_layers
