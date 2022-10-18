@@ -235,7 +235,7 @@ class WebixPermissionsCheckRequestMixin:
         return []
 
 
-class WebixPermissionsBaseMixin(WebixPermissionsCheckRequestMixin, WebixPermissionsBaseMixin):
+class WebixPermissionsMixin(WebixPermissionsCheckRequestMixin, WebixPermissionsBaseMixin):
     pass
 
 class WebixUrlUtilsMixin:
