@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-09-26 09:25+0200\n"
+"POT-Creation-Date: 2022-10-11 08:43+0200\n"
 "PO-Revision-Date: 2022-08-30 17:36+0050\n"
 "Last-Translator: Stefano Menegon <menegon@mpasol.it>\n"
 "Language-Team: \n"
@@ -112,29 +112,29 @@ msgstr "Padre"
 msgid "Webix Admin Menu"
 msgstr "Menu"
 
-#: admin_webix/options.py:183 templates/django_webix/include/utils.js:209
+#: admin_webix/options.py:193 templates/django_webix/include/utils.js:209
 #: templates/django_webix/include/utils.js:216
 msgid "Yes"
 msgstr "Sì"
 
-#: admin_webix/options.py:183 templates/django_webix/include/utils.js:211
+#: admin_webix/options.py:193 templates/django_webix/include/utils.js:211
 #: templates/django_webix/include/utils.js:218
 msgid "No"
 msgstr "No"
 
-#: admin_webix/sites.py:41
+#: admin_webix/sites.py:37
 msgid "Django webix site admin"
 msgstr "Area amministrazione"
 
-#: admin_webix/sites.py:44
+#: admin_webix/sites.py:40
 msgid "Django webix administration"
 msgstr "Amministrazione"
 
-#: admin_webix/sites.py:47
+#: admin_webix/sites.py:43
 msgid "Site administration"
 msgstr "Amministrazione"
 
-#: admin_webix/sites.py:663
+#: admin_webix/sites.py:659
 #, python-format
 msgid ""
 "Please enter the correct %(username)s and password for a staff account. Note "
@@ -144,7 +144,7 @@ msgstr ""
 "staff.\n"
 "Attenzione alle lettere maiuscole e minuscole."
 
-#: admin_webix/sites.py:680
+#: admin_webix/sites.py:676
 msgid "Log in"
 msgstr "Entra"
 
@@ -338,44 +338,44 @@ msgstr "Recupera password"
 msgid "Enter your username"
 msgstr "Inserisci il tuo nome utente"
 
-#: forms/forms.py:403
+#: forms/forms.py:405
 msgid "Upload new image"
 msgstr "Carica un’immagine"
 
-#: forms/forms.py:473 forms/forms.py:588
+#: forms/forms.py:481 forms/forms.py:601
 msgid "Deleted"
 msgstr "Cancella"
 
-#: forms/forms.py:504
+#: forms/forms.py:512
 msgid "Upload file"
 msgstr "Carica un file"
 
-#: forms/forms.py:517
+#: forms/forms.py:526
 msgid "Upload folder"
 msgstr "Carica una cartella"
 
-#: forms/forms.py:522
+#: forms/forms.py:531
 msgid "Upload files"
 msgstr "Carica files"
 
-#: forms/forms.py:614
+#: forms/forms.py:627
 msgid "MultipleChoiceField is available only with PRO webix license"
 msgstr "MultipleChoiceField è disponibile solo con licenza PRO webix"
 
-#: forms/forms.py:646 forms/forms.py:670 forms/forms.py:724 forms/forms.py:755
-#: forms/forms.py:765 forms/forms.py:779 forms/forms.py:826
+#: forms/forms.py:659 forms/forms.py:683 forms/forms.py:737 forms/forms.py:768
+#: forms/forms.py:778 forms/forms.py:792 forms/forms.py:839
 msgid "Click to select"
 msgstr "Clicca per selezionare"
 
-#: forms/forms.py:865
+#: forms/forms.py:878
 msgid "Initial value {} for geo field {} is not supported"
 msgstr "Il valore iniziale {} per il campo geografico {} non è supportato"
 
-#: forms/forms.py:913
+#: forms/forms.py:927
 msgid "Edit"
 msgstr "Modifica"
 
-#: forms/forms.py:1064
+#: forms/forms.py:1078
 msgid "Type of field {} not supported"
 msgstr "Tipo di campo {} non supportato"
 
@@ -600,7 +600,7 @@ msgid "Select an action"
 msgstr "Scegli una azione"
 
 #: templates/django_webix/include/toolbar_list_actions_select.js:20
-#: views/generic/decorators.py:16 views/generic/list.py:390
+#: views/generic/decorators.py:16 views/generic/list.py:72
 msgid "Go"
 msgstr "Vai"
 
@@ -689,7 +689,7 @@ msgstr ""
 
 #: views/generic/create_update.py:327 views/generic/create_update.py:408
 #: views/generic/delete.py:42 views/generic/detail.py:21
-#: views/generic/list.py:578
+#: views/generic/list.py:585
 msgid "View permission is not allowed"
 msgstr "Non disponi del permesso di visione"
 
@@ -710,19 +710,19 @@ msgstr "Modificato %s."
 msgid "and"
 msgstr "e"
 
-#: views/generic/decorators.py:14 views/generic/list.py:388
+#: views/generic/decorators.py:14 views/generic/list.py:70
 msgid "Fill in the form"
 msgstr "Compila i campi"
 
-#: views/generic/decorators.py:15 views/generic/list.py:389
+#: views/generic/decorators.py:15 views/generic/list.py:71
 msgid "Are you sure you want to proceed with this action?"
 msgstr "Sei certo che vuoi procedere con questa azione?"
 
-#: views/generic/decorators.py:17 views/generic/list.py:391
+#: views/generic/decorators.py:17 views/generic/list.py:73
 msgid "Proceed"
 msgstr "Procedi"
 
-#: views/generic/decorators.py:18 views/generic/list.py:392
+#: views/generic/decorators.py:18 views/generic/list.py:74
 msgid "Undo"
 msgstr "Annulla"
 
@@ -758,15 +758,15 @@ msgstr ""
 "Nessun URL a cui reindirizzare. O fornire un URL o definire un metodo "
 "get_absolute_url sul modello."
 
-#: views/generic/list.py:285
+#: views/generic/list.py:332
 msgid "Paginate count is not integer"
 msgstr "Il valore di paginazione non è intero"
 
-#: views/generic/list.py:294
+#: views/generic/list.py:341
 msgid "Paginate start is not integer"
 msgstr "Il valore di partenza non è intero"
 
-#: views/generic/list.py:425
+#: views/generic/list.py:432
 msgid ""
 "Actions style is improperly configured only options are 'buttons' or "
 "'select' (select by default)."
@@ -774,7 +774,7 @@ msgstr ""
 "Lo stile delle azioni è configurato in modo errato solo le opzioni sono "
 "'buttons' o 'select' (il default è select)."
 
-#: views/generic/list.py:539
+#: views/generic/list.py:546
 msgid ""
 "Json response is available only if get_queryset() return a queryset and not "
 "a list"
@@ -782,19 +782,19 @@ msgstr ""
 "La risposta in json è disponibile solo se get_queryset() ritorna un queryset "
 "e non una lista"
 
-#: views/generic/list.py:558
+#: views/generic/list.py:565
 msgid "This action is not registered"
 msgstr "Questa azione non è registrata"
 
-#: views/generic/list.py:564
+#: views/generic/list.py:571
 msgid "Permission denied: {}"
 msgstr "Permesso negato: {}"
 
-#: views/generic/list.py:566
+#: views/generic/list.py:573
 msgid "This permission is not registered on this class"
 msgstr "Questo permesso non è registrato su questa classe"
 
-#: views/generic/list.py:637
+#: views/generic/list.py:644
 msgid "Generic TemplateListView needs to define data for datatable"
 msgstr "In un generico TemplateListView vanno definiti i dati per il datatable"
 

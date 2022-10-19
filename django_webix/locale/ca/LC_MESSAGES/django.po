@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-09-26 09:25+0200\n"
+"POT-Creation-Date: 2022-10-11 08:43+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -111,36 +111,36 @@ msgstr ""
 msgid "Webix Admin Menu"
 msgstr ""
 
-#: admin_webix/options.py:183 templates/django_webix/include/utils.js:209
+#: admin_webix/options.py:193 templates/django_webix/include/utils.js:209
 #: templates/django_webix/include/utils.js:216
 msgid "Yes"
 msgstr ""
 
-#: admin_webix/options.py:183 templates/django_webix/include/utils.js:211
+#: admin_webix/options.py:193 templates/django_webix/include/utils.js:211
 #: templates/django_webix/include/utils.js:218
 msgid "No"
 msgstr ""
 
-#: admin_webix/sites.py:41
+#: admin_webix/sites.py:37
 msgid "Django webix site admin"
 msgstr ""
 
-#: admin_webix/sites.py:44
+#: admin_webix/sites.py:40
 msgid "Django webix administration"
 msgstr ""
 
-#: admin_webix/sites.py:47
+#: admin_webix/sites.py:43
 msgid "Site administration"
 msgstr ""
 
-#: admin_webix/sites.py:663
+#: admin_webix/sites.py:659
 #, python-format
 msgid ""
 "Please enter the correct %(username)s and password for a staff account. Note "
 "that both fields may be case-sensitive."
 msgstr ""
 
-#: admin_webix/sites.py:680
+#: admin_webix/sites.py:676
 msgid "Log in"
 msgstr ""
 
@@ -323,44 +323,44 @@ msgstr ""
 msgid "Enter your username"
 msgstr ""
 
-#: forms/forms.py:403
+#: forms/forms.py:405
 msgid "Upload new image"
 msgstr ""
 
-#: forms/forms.py:473 forms/forms.py:588
+#: forms/forms.py:481 forms/forms.py:601
 msgid "Deleted"
 msgstr ""
 
-#: forms/forms.py:504
+#: forms/forms.py:512
 msgid "Upload file"
 msgstr ""
 
-#: forms/forms.py:517
+#: forms/forms.py:526
 msgid "Upload folder"
 msgstr ""
 
-#: forms/forms.py:522
+#: forms/forms.py:531
 msgid "Upload files"
 msgstr ""
 
-#: forms/forms.py:614
+#: forms/forms.py:627
 msgid "MultipleChoiceField is available only with PRO webix license"
 msgstr ""
 
-#: forms/forms.py:646 forms/forms.py:670 forms/forms.py:724 forms/forms.py:755
-#: forms/forms.py:765 forms/forms.py:779 forms/forms.py:826
+#: forms/forms.py:659 forms/forms.py:683 forms/forms.py:737 forms/forms.py:768
+#: forms/forms.py:778 forms/forms.py:792 forms/forms.py:839
 msgid "Click to select"
 msgstr ""
 
-#: forms/forms.py:865
+#: forms/forms.py:878
 msgid "Initial value {} for geo field {} is not supported"
 msgstr ""
 
-#: forms/forms.py:913
+#: forms/forms.py:927
 msgid "Edit"
 msgstr ""
 
-#: forms/forms.py:1064
+#: forms/forms.py:1078
 msgid "Type of field {} not supported"
 msgstr ""
 
@@ -585,7 +585,7 @@ msgid "Select an action"
 msgstr ""
 
 #: templates/django_webix/include/toolbar_list_actions_select.js:20
-#: views/generic/decorators.py:16 views/generic/list.py:390
+#: views/generic/decorators.py:16 views/generic/list.py:72
 msgid "Go"
 msgstr ""
 
@@ -671,7 +671,7 @@ msgstr ""
 
 #: views/generic/create_update.py:327 views/generic/create_update.py:408
 #: views/generic/delete.py:42 views/generic/detail.py:21
-#: views/generic/list.py:578
+#: views/generic/list.py:585
 msgid "View permission is not allowed"
 msgstr ""
 
@@ -692,19 +692,19 @@ msgstr ""
 msgid "and"
 msgstr ""
 
-#: views/generic/decorators.py:14 views/generic/list.py:388
+#: views/generic/decorators.py:14 views/generic/list.py:70
 msgid "Fill in the form"
 msgstr ""
 
-#: views/generic/decorators.py:15 views/generic/list.py:389
+#: views/generic/decorators.py:15 views/generic/list.py:71
 msgid "Are you sure you want to proceed with this action?"
 msgstr ""
 
-#: views/generic/decorators.py:17 views/generic/list.py:391
+#: views/generic/decorators.py:17 views/generic/list.py:73
 msgid "Proceed"
 msgstr ""
 
-#: views/generic/decorators.py:18 views/generic/list.py:392
+#: views/generic/decorators.py:18 views/generic/list.py:74
 msgid "Undo"
 msgstr ""
 
@@ -736,38 +736,38 @@ msgid ""
 "get_absolute_url method on the Model."
 msgstr ""
 
-#: views/generic/list.py:285
+#: views/generic/list.py:332
 msgid "Paginate count is not integer"
 msgstr ""
 
-#: views/generic/list.py:294
+#: views/generic/list.py:341
 msgid "Paginate start is not integer"
 msgstr ""
 
-#: views/generic/list.py:425
+#: views/generic/list.py:432
 msgid ""
 "Actions style is improperly configured only options are 'buttons' or "
 "'select' (select by default)."
 msgstr ""
 
-#: views/generic/list.py:539
+#: views/generic/list.py:546
 msgid ""
 "Json response is available only if get_queryset() return a queryset and not "
 "a list"
 msgstr ""
 
-#: views/generic/list.py:558
+#: views/generic/list.py:565
 msgid "This action is not registered"
 msgstr ""
 
-#: views/generic/list.py:564
+#: views/generic/list.py:571
 msgid "Permission denied: {}"
 msgstr ""
 
-#: views/generic/list.py:566
+#: views/generic/list.py:573
 msgid "This permission is not registered on this class"
 msgstr ""
 
-#: views/generic/list.py:637
+#: views/generic/list.py:644
 msgid "Generic TemplateListView needs to define data for datatable"
 msgstr ""
