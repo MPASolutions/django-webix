@@ -89,28 +89,52 @@ class ModelWebixAdmin(WebixPermissionsBaseMixin):
 
     # over
     def has_add_permission(self, view, request):
-        return super(view.__class__, view).has_add_permission(request)
+        if view is not None:
+            return super(view.__class__, view).has_add_permission(request)
+        else:
+            return self._has_add_permission(request)
 
     def has_change_permission(self, view, request, obj=None):
-        return super(view.__class__, view).has_change_permission(request, obj)
+        if view is not None:
+            return super(view.__class__, view).has_change_permission(request, obj)
+        else:
+            return self._has_change_permission(request, obj)
 
     def has_delete_permission(self, view, request, obj=None):
-        return super(view.__class__, view).has_delete_permission(request, obj)
+        if view is not None:
+            return super(view.__class__, view).has_delete_permission(request, obj)
+        else:
+            return self._has_delete_permission(request, obj)
 
     def has_view_permission(self, view, request, obj=None):
-        return super(view.__class__, view).has_view_permission(request, obj)
+        if view is not None:
+            return super(view.__class__, view).has_view_permission(request, obj)
+        else:
+            return self._has_view_permission(request, obj)
 
     def get_info_no_add_permission(self, view, has_permission, request):
-        return super(view.__class__, view).get_info_no_add_permission(has_permission, request)
+        if view is not None:
+           return super(view.__class__, view).get_info_no_add_permission(has_permission, request)
+        else:
+            return self._get_info_no_add_permission(has_permission, request)
 
     def get_info_no_change_permission(self, view, has_permission, request, obj=None):
-        return super(view.__class__, view).get_info_no_change_permission(has_permission, request, obj)
+        if view is not None:
+            return super(view.__class__, view).get_info_no_change_permission(has_permission, request, obj)
+        else:
+            return self._get_info_no_change_permission(has_permission, request, obj)
 
     def get_info_no_delete_permission(self, view, has_permission, request, obj=None):
-        return super(view.__class__, view).get_info_no_delete_permission(has_permission, request, obj)
+        if view is not None:
+            return super(view.__class__, view).get_info_no_delete_permission(has_permission, request, obj)
+        else:
+            return self._get_info_no_delete_permission(has_permission, request, obj)
 
     def get_info_no_view_permission(self, view, has_permission, request, obj=None):
-        return super(view.__class__, view).get_info_no_view_permission(has_permission, request, obj)
+        if view is not None:
+            return super(view.__class__, view).get_info_no_view_permission(has_permission, request, obj)
+        else:
+            return self._get_info_no_view_permission(has_permission, request, obj)
 
     def is_enable_row_click(self, request):
         return self.enable_row_click
@@ -161,17 +185,17 @@ class ModelWebixAdmin(WebixPermissionsBaseMixin):
             pattern += '.%s' % self.get_prefix()
         return pattern
 
-    def get_model_perms(self, request, view=None):
+    def get_model_perms(self, request):
         """
         Return a dict of all perms for this model. This dict has the keys
         ``add``, ``change``, ``delete``, and ``view`` mapping to the True/False
         for each of those actions.
         """
         return {
-            'add': self.has_add_permission(request, view=view),
-            'change': self.has_change_permission(request, view=view),
-            'delete': self.has_delete_permission(request, view=view),
-            'view': self.has_view_permission(request, view=view),
+            'add': self.has_add_permission(view=None, request=request),
+            'change': self.has_change_permission(view=None, request=request),
+            'delete': self.has_delete_permission(view=None, request=request),
+            'view': self.has_view_permission(view=None, request=request),
         }
 
     def has_module_permission(self, request):

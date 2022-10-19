@@ -100,13 +100,13 @@ Here there is an example of main list of parameters and functions that can be ov
 
         only_superuser = False
 
-        def has_add_permission(self, request, view=None):
+        def has_add_permission(self, view, request):
             ...
-        def has_change_permission(self, request, obj=None, view=None):
+        def has_change_permission(self, view, request, obj=None):
             ...
-        def has_delete_permission(self, request, obj=None, view=None):
+        def has_delete_permission(self, view, request, obj=None):
             ...
-        def has_view_permission(self, request, obj=None, view=None):
+        def has_view_permission(self, view, request, obj=None):
             ...
 
         def get_failure_add_related_objects(self, request):
@@ -118,21 +118,21 @@ Here there is an example of main list of parameters and functions that can be ov
         def get_failure_view_related_objects(self, request):
             return []
 
-        def get_info_no_add_permission(self, has_permission, request, view=None):
+        def get_info_no_add_permission(self, view, has_permission, request):
             ...
-        def get_info_no_change_permission(self, has_permission, request, obj=None, view=None):
+        def get_info_no_change_permission(self, view, has_permission, request, obj=None):
             ...
-        def get_info_no_delete_permission(self, has_permission, request, obj=None, view=None):
+        def get_info_no_delete_permission(self, view, has_permission, request, obj=None):
             ...
-        def get_info_no_view_permission(self, has_permission, request, obj=None, view=None):
+        def get_info_no_view_permission(self, view, has_permission, request, obj=None):
             ...
 
         def get_model_perms(self, request, view=None):
             return {
-                'add': self.has_add_permission(request, view=view),
-                'change': self.has_change_permission(request, view=view),
-                'delete': self.has_delete_permission(request, view=view),
-                'view': self.has_view_permission(request, view=view),
+                'add': self.has_add_permission(view=None, request=request),
+                'change': self.has_change_permission(view=None, request=request),
+                'delete': self.has_delete_permission(view=None, request=request),
+                'view': self.has_view_permission(view=None, request=request),
             }
 
         def has_module_permission(self, request):
@@ -300,13 +300,13 @@ Admin area works expecially with database data. There is a fully support for per
 
     only_superuser = False
 
-    def has_add_permission(self, request, view=None):
+    def has_add_permission(self, view, request):
         ...
-    def has_change_permission(self, request, obj=None, view=None):
+    def has_change_permission(self, view, request, obj=None):
         ...
-    def has_delete_permission(self, request, obj=None, view=None):
+    def has_delete_permission(self, view, request, obj=None):
         ...
-    def has_view_permission(self, request, obj=None, view=None):
+    def has_view_permission(self, view, request, obj=None):
         ...
 
     def get_failure_add_related_objects(self, request):
@@ -318,21 +318,21 @@ Admin area works expecially with database data. There is a fully support for per
     def get_failure_view_related_objects(self, request):
         return []
 
-    def get_info_no_add_permission(self, has_permission, request, view=None):
+    def get_info_no_add_permission(self, view, has_permission, request):
         ...
-    def get_info_no_change_permission(self, has_permission, request, obj=None, view=None):
+    def get_info_no_change_permission(self, view, has_permission, request, obj=None):
         ...
-    def get_info_no_delete_permission(self, has_permission, request, obj=None, view=None):
+    def get_info_no_delete_permission(self, view, has_permission, request, obj=None):
         ...
-    def get_info_no_view_permission(self, has_permission, request, obj=None, view=None):
+    def get_info_no_view_permission(self, view, has_permission, request, obj=None):
         ...
 
-    def get_model_perms(self, request, view=None):
+    def get_model_perms(self, request):
         return {
-            'add': self.has_add_permission(request, view=view),
-            'change': self.has_change_permission(request, view=view),
-            'delete': self.has_delete_permission(request, view=view),
-            'view': self.has_view_permission(request, view=view),
+            'add': self.has_add_permission(view=None, request=request),
+            'change': self.has_change_permission(view=None, request=request),
+            'delete': self.has_delete_permission(view=None, request=request),
+            'view': self.has_view_permission(view=None, request=request),
         }
 
     def has_module_permission(self, request):

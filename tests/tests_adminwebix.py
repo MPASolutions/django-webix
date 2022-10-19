@@ -113,7 +113,7 @@ class TestAdminWebixCalls(TestCase):
                           password='12345')
         User = get_user_model()
         _url = reverse('admin_webix:{}.{}.create'.format(User._meta.app_label,
-                                                       User._meta.model_name))
+                                                         User._meta.model_name))
         response = self.client.post(_url, {
             'username': 'testttt',
             'password1': 'test',
