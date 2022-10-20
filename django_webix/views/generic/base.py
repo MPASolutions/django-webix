@@ -30,9 +30,8 @@ class WebixPermissionsBaseMixin:
 
     remove_disabled_buttons = False
 
-
     def get_failure_add_blocking_objects(self, request):
-        return []# {'text': '', 'url': ''},
+        return []  # {'text': '', 'url': ''},
 
     def get_failure_change_blocking_objects(self, request, obj=None):
         return []
@@ -42,7 +41,6 @@ class WebixPermissionsBaseMixin:
 
     def get_failure_view_blocking_objects(self, request, obj=None):
         return []
-
 
     def get_failure_add_related_objects(self, request):
         if self.model is not None:
@@ -103,7 +101,6 @@ class WebixPermissionsBaseMixin:
 
     def get_remove_disabled_buttons(self, request):
         return self.remove_disabled_buttons
-
 
     def _has_add_permission(self, request):
         if not self.check_permissions:
@@ -168,8 +165,8 @@ class WebixPermissionsBaseMixin:
     def _has_view_or_change_permission(self, request, obj=None):
         if self.view_permission is not None or self.change_permission is not None:
             return self.view_permission or self.change_permission
-        return self.has_view_permission(request=request, obj=obj) or \
-               self.has_change_permission(request=request, obj=obj)
+        return self._has_view_permission(request=request, obj=obj) or \
+               self._has_change_permission(request=request, obj=obj)
 
     def _get_info_no_add_permission(self, has_permission, request):
         if not has_permission:
@@ -190,6 +187,7 @@ class WebixPermissionsBaseMixin:
         if not has_permission:
             return [_("You haven't view permission")]
         return []
+
 
 class WebixPermissionsMixin(WebixPermissionsBaseMixin):
 
