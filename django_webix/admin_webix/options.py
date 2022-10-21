@@ -533,14 +533,14 @@ class ModelWebixAdmin(ModelWebixAdminPermissionsMixin):
                 get_failure_delete_related_objects = _admin.get_failure_delete_related_objects
                 get_failure_view_related_objects = _admin.get_failure_view_related_objects
 
-                def get_info_no_add_permission(self, has_permission, view, request):
-                    return _admin.get_info_no_add_permission(view, has_permission, request)
-                def get_info_no_change_permission(self, has_permission, request, obj=None, view=None):
-                    return _admin.get_info_no_change_permission(view, has_permission, request, obj=obj)
-                def get_info_no_delete_permission(self, has_permission, request, obj=None, view=None):
-                    return _admin.get_info_no_delete_permission(view, has_permission, request, obj=obj)
-                def get_info_no_view_permission(self, has_permission, request, obj=None, view=None):
-                    return _admin.get_info_no_view_permission(view, has_permission, request, obj=obj)
+                def get_info_no_add_permission(self, has_permission, request):
+                    return _admin.get_info_no_add_permission(self, has_permission, request)
+                def get_info_no_change_permission(self, has_permission, request, obj=None):
+                    return _admin.get_info_no_change_permission(self, has_permission, request, obj=obj)
+                def get_info_no_delete_permission(self, has_permission, request, obj=None):
+                    return _admin.get_info_no_delete_permission(self, has_permission, request, obj=obj)
+                def get_info_no_view_permission(self, has_permission, request, obj=None):
+                    return _admin.get_info_no_view_permission(self, has_permission, request, obj=obj)
 
                 remove_disabled_buttons = _admin.remove_disabled_buttons
                 get_layers = _admin.get_layers
