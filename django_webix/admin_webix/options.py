@@ -14,7 +14,58 @@ from django_webix.views.generic.base import WebixPermissionsBaseMixin
 from django_webix.utils.layers import get_layers
 
 
-class ModelWebixAdmin(WebixPermissionsBaseMixin):
+class ModelWebixAdminPermissionsMixin(WebixPermissionsBaseMixin):
+
+    def has_add_permission(self, view, request):
+        if view is not None:
+            return super(view.__class__, view).has_add_permission(request)
+        else:
+            return self._has_add_permission(request)
+
+    def has_change_permission(self, view, request, obj=None):
+        if view is not None:
+            return super(view.__class__, view).has_change_permission(request, obj)
+        else:
+            return self._has_change_permission(request, obj)
+
+    def has_delete_permission(self, view, request, obj=None):
+        if view is not None:
+            return super(view.__class__, view).has_delete_permission(request, obj)
+        else:
+            return self._has_delete_permission(request, obj)
+
+    def has_view_permission(self, view, request, obj=None):
+        if view is not None:
+            return super(view.__class__, view).has_view_permission(request, obj)
+        else:
+            return self._has_view_permission(request, obj)
+
+    def get_info_no_add_permission(self, view, has_permission, request):
+        if view is not None:
+           return super(view.__class__, view).get_info_no_add_permission(has_permission, request)
+        else:
+            return self._get_info_no_add_permission(has_permission, request)
+
+    def get_info_no_change_permission(self, view, has_permission, request, obj=None):
+        if view is not None:
+            return super(view.__class__, view).get_info_no_change_permission(has_permission, request, obj)
+        else:
+            return self._get_info_no_change_permission(has_permission, request, obj)
+
+    def get_info_no_delete_permission(self, view, has_permission, request, obj=None):
+        if view is not None:
+            return super(view.__class__, view).get_info_no_delete_permission(has_permission, request, obj)
+        else:
+            return self._get_info_no_delete_permission(has_permission, request, obj)
+
+    def get_info_no_view_permission(self, view, has_permission, request, obj=None):
+        if view is not None:
+            return super(view.__class__, view).get_info_no_view_permission(has_permission, request, obj)
+        else:
+            return self._get_info_no_view_permission(has_permission, request, obj)
+
+
+class ModelWebixAdmin(ModelWebixAdminPermissionsMixin):
     # WEBIX VIEWS (for fully override)
     create_view = None
     update_view = None
@@ -88,53 +139,6 @@ class ModelWebixAdmin(WebixPermissionsBaseMixin):
     #    self.prefix = prefix
 
     # over
-    def has_add_permission(self, view, request):
-        if view is not None:
-            return super(view.__class__, view).has_add_permission(request)
-        else:
-            return self._has_add_permission(request)
-
-    def has_change_permission(self, view, request, obj=None):
-        if view is not None:
-            return super(view.__class__, view).has_change_permission(request, obj)
-        else:
-            return self._has_change_permission(request, obj)
-
-    def has_delete_permission(self, view, request, obj=None):
-        if view is not None:
-            return super(view.__class__, view).has_delete_permission(request, obj)
-        else:
-            return self._has_delete_permission(request, obj)
-
-    def has_view_permission(self, view, request, obj=None):
-        if view is not None:
-            return super(view.__class__, view).has_view_permission(request, obj)
-        else:
-            return self._has_view_permission(request, obj)
-
-    def get_info_no_add_permission(self, view, has_permission, request):
-        if view is not None:
-           return super(view.__class__, view).get_info_no_add_permission(has_permission, request)
-        else:
-            return self._get_info_no_add_permission(has_permission, request)
-
-    def get_info_no_change_permission(self, view, has_permission, request, obj=None):
-        if view is not None:
-            return super(view.__class__, view).get_info_no_change_permission(has_permission, request, obj)
-        else:
-            return self._get_info_no_change_permission(has_permission, request, obj)
-
-    def get_info_no_delete_permission(self, view, has_permission, request, obj=None):
-        if view is not None:
-            return super(view.__class__, view).get_info_no_delete_permission(has_permission, request, obj)
-        else:
-            return self._get_info_no_delete_permission(has_permission, request, obj)
-
-    def get_info_no_view_permission(self, view, has_permission, request, obj=None):
-        if view is not None:
-            return super(view.__class__, view).get_info_no_view_permission(has_permission, request, obj)
-        else:
-            return self._get_info_no_view_permission(has_permission, request, obj)
 
     def is_enable_row_click(self, request):
         return self.enable_row_click
