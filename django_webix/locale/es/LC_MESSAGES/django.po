@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-11-02 17:35+0100\n"
-"PO-Revision-Date: 2022-09-01 14:58+0050\n"
+"PO-Revision-Date: 2022-11-09 11:44+0050\n"
 "Last-Translator: Sambado Paolo CBC Spagna <>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: \n"
@@ -137,11 +137,11 @@ msgstr "Pagina de administración"
 #: admin_webix/sites.py:651
 #, python-format
 msgid ""
-"Please enter the correct %(username)s and password for a staff account. Note "
-"that both fields may be case-sensitive."
+"Please enter the correct %(username)s and password for a staff account. Note"
+" that both fields may be case-sensitive."
 msgstr ""
-"Por favor inserte correctamente el usuario %(username)s y su contraseña para "
-"los miembros del equipo. Tenga en cuenta el uso de mayúsculas y minúsculas."
+"Por favor inserte correctamente el usuario %(username)s y su contraseña para"
+" los miembros del equipo. Tenga en cuenta el uso de mayúsculas y minúsculas."
 
 #: admin_webix/sites.py:668
 msgid "Log in"
@@ -154,23 +154,20 @@ msgstr "Cambiar contraseña de usuario"
 #: admin_webix/templates/admin_webix/account/password_change.js:43
 #: admin_webix/templates/admin_webix/account/password_reset.html:31
 #: admin_webix/templates/admin_webix/password_change.html:29
-#, fuzzy
 #| msgid "Change password"
 msgid "Current password"
-msgstr "Cambiar la contraseña"
+msgstr "Contraseña actual"
 
 #: admin_webix/templates/admin_webix/account/password_change.js:52
 #: admin_webix/templates/admin_webix/account/password_reset.html:40
 #: admin_webix/templates/admin_webix/password_change.html:38
-#, fuzzy
 #| msgid "Nuova password"
 msgid "New password"
-msgstr "Cambiar la contraseña"
+msgstr "Nueva contraseña"
 
 #: admin_webix/templates/admin_webix/account/password_change.js:61
 #: admin_webix/templates/admin_webix/account/password_reset.html:49
 #: admin_webix/templates/admin_webix/password_change.html:47
-#, fuzzy
 #| msgid "Password confirmation"
 msgid "Password confirm"
 msgstr "Confirmación de contraseña"
@@ -181,7 +178,6 @@ msgstr "Confirmación de contraseña"
 #: admin_webix/templates/admin_webix/account/password_reset_form.html:34
 #: admin_webix/templates/admin_webix/account/password_reset_form.js:45
 #: admin_webix/templates/admin_webix/password_change.html:54
-#, fuzzy
 #| msgid "Conferma"
 msgid "Confirm"
 msgstr "Confirmar"
@@ -192,7 +188,6 @@ msgstr "Contraseña correctamente cambiada"
 
 #: admin_webix/templates/admin_webix/account/password_reset.html:13
 #: admin_webix/templates/admin_webix/password_change.html:13
-#, fuzzy
 #| msgid "Password change"
 msgid "User password change"
 msgstr "Cambiar contraseña"
@@ -213,10 +208,9 @@ msgid "Back"
 msgstr "Volver"
 
 #: admin_webix/templates/admin_webix/account/password_reset_confirm.html:11
-#, fuzzy
 #| msgid "Conferma password"
 msgid "Insert new password"
-msgstr "Confirmar la contraseña"
+msgstr "Escribir la nueva contraseña"
 
 #: admin_webix/templates/admin_webix/account/password_reset_confirm.html:16
 msgid ""
@@ -228,8 +222,8 @@ msgstr ""
 #: admin_webix/templates/admin_webix/account/password_reset_done.js:33
 msgid ""
 "We have sent instructions for setting the password to the email address you "
-"provided. You should receive them shortly as long as the address you entered "
-"is valid."
+"provided. You should receive them shortly as long as the address you entered"
+" is valid."
 msgstr ""
 "Le hemos enviado las instrucciones para restaurar su contraseña a la "
 "dirección de correo. En breves las recibirá."
@@ -244,10 +238,9 @@ msgstr ""
 "correctamente y revise la carpeta de spam"
 
 #: admin_webix/templates/admin_webix/account/password_reset_done.js:20
-#, fuzzy
 #| msgid "Change password"
 msgid "Reset password"
-msgstr "Cambiar la contraseña"
+msgstr "Regenerar la contraseña"
 
 #: admin_webix/templates/admin_webix/account/password_reset_email.html:2
 #: auth_webix/templates/auth_webix/password_reset/password_reset_email.html:2
@@ -343,10 +336,9 @@ msgid "Username"
 msgstr "Usuario"
 
 #: admin_webix/templates/admin_webix/login.html:71
-#, fuzzy
 #| msgid "Password reset"
 msgid "Password recovery"
-msgstr "Reiniciar contraseña"
+msgstr "Recuperar contraseña"
 
 #: auth_webix/forms.py:42
 msgid "Enter your username"
@@ -699,8 +691,8 @@ msgid ""
 "Template style is improperly configured only options are 'standard' or "
 "'tabs' (standard by default)."
 msgstr ""
-"El estilo de la plantilla está configurado incorrectamente, las opciones son "
-"'estándar' o 'pestañas' (estándar por defecto)."
+"El estilo de la plantilla está configurado incorrectamente, las opciones son"
+" 'estándar' o 'pestañas' (estándar por defecto)."
 
 #: views/generic/create_update.py:327 views/generic/create_update.py:408
 #: views/generic/delete.py:42 views/generic/detail.py:21
