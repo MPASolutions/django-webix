@@ -1,0 +1,7 @@
+from django.urls import path
+
+from django_webix_tutorial.views import TutorialListView
+
+urlpatterns = [
+    path("django-webix-tutorial/list", TutorialListView.as_view(), name='django-webix.tutorial.tutorialitem.list')
+]

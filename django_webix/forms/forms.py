@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 
 from collections import OrderedDict, defaultdict
 from json import dumps, loads
@@ -29,13 +28,7 @@ from sorl.thumbnail import get_thumbnail
 
 from django_webix.utils.layers import get_layers
 
-if django.__version__ < '3.1':
-    try:
-        from django.contrib.postgres.forms.jsonb import JSONField
-    except ImportError:
-        JSONField = forms.Field
-elif django.__version__ >= '3.1':
-    from django.forms.fields import JSONField
+from django.forms.fields import JSONField
 
 try:
     from django.contrib.postgres.forms import SimpleArrayField

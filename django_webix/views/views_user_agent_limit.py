@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 
 from django.views.generic import TemplateView
 from django_user_agents.utils import get_user_agent

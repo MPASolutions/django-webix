@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 
 from django_webix.views.generic.base import WebixTemplateView, WebixFormView
 from django_webix.views.generic.create_update import WebixCreateView, WebixUpdateView

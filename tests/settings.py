@@ -1,5 +1,3 @@
-# -*- coding: utf-8
-
 import os
 
 import django
@@ -36,8 +34,8 @@ INSTALLED_APPS = [
   #  "sorl.thumbnail",
 
     "django_webix",
-    'django_webix.admin_webix',
-    'django_webix.auth_webix',
+    'django_webix.contrib.admin',
+    'django_webix.contrib.auth',
     'feincms', # to remove in future
     #'hijack', # 2.3.0
     'django_dal',

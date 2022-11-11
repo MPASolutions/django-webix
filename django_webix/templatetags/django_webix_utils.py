@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 
 import datetime
 import re
@@ -50,7 +49,7 @@ def is_installed_djangowebixleaflet():
 
 @register.simple_tag(name='is_installed_djangowebixfilter')
 def is_installed_djangowebixfilter():
-    return apps.is_installed("webix_filter")
+    return apps.is_installed("django_webix.contrib.filter")
 
 
 @register.simple_tag(name='webix_history_enable')

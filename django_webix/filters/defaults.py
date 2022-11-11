@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 
 from django_filtersmerger import RequestFilter
 from django_webix.utils.filters import from_dict_to_qset, decode_text_filters

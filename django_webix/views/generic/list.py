@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 
 from copy import deepcopy
 from django.apps import apps
@@ -116,10 +115,10 @@ class WebixListView(WebixBaseMixin,
     fields_editable = []
 
     def is_installed_django_webix_filter(self):
-        return apps.is_installed('django_webix_filter')
+        return apps.is_installed('django_webix.contrib.filter')
 
     def _optimize_select_related(self, qs):
-        # Estrapolo le informazione per popolare `select_related`
+        # extrapolate the information to populate `select_related`
         _select_related = []
         if self.get_fields() is not None:
             for field in self.get_fields():
@@ -180,7 +179,7 @@ class WebixListView(WebixBaseMixin,
     def get_fields(self, fields=None):
         if self.fields is not None:
             _in_fields = deepcopy(self.fields)
-            # altrimenti nel loop sotto viene ridefinito l'attributo statico fields e non funzionano lazy_translations
+            # otherwise in the loop below the static fields attribute is redefined and they don't work lazy_translations
         elif fields is not None:
             _in_fields = fields
         else:

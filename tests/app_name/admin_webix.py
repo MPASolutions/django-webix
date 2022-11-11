@@ -1,4 +1,4 @@
-from django_webix import admin_webix as admin
+from django_webix.contrib import admin
 from django_webix.forms import WebixModelForm
 from tests.app_name.models import MyModel
 

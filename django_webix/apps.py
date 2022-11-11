@@ -1,12 +1,10 @@
-# -*- coding: utf-8 -*-
-
 from django.apps import AppConfig
 from django.conf import settings
 
 def check_settings():
     # check webix version
     if not hasattr(settings, 'WEBIX_VERSION'):
-        raise Exception('WEBIX_VERSION is not found in your settings (eg.6.4.1)')
+        raise Exception('WEBIX_VERSION is not found in your settings (eg.9.4.0)')
 
     # check webix license (we have to disable some form controls)
     # in accord to https://docs.webix.com/desktop__controls.html

@@ -1,0 +1,89 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-09-26 09:26+0200\n"
+"PO-Revision-Date: 2022-03-21 12:42+0050\n"
+"Last-Translator: Traduzioni CBC <>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Translated-Using: django-rosetta 0.9.8\n"
+
+#: forms.py:50 models.py:12
+msgid "Parameters"
+msgstr "Paramètres"
+
+#: forms.py:66 models.py:21
+msgid "Output"
+msgstr ""
+
+#: models.py:9 views.py:31
+msgid "Description"
+msgstr "Descriptif"
+
+#: models.py:10 views.py:25
+msgid "Command name"
+msgstr "Nom de la commande"
+
+#: models.py:13
+msgid "Insert date"
+msgstr "Insérer une date"
+
+#: models.py:14
+msgid "Last Execution"
+msgstr "Dernière exécution"
+
+#: models.py:16 templates/commands_manager/list.js:17
+#: templates/commands_manager/update.js:21
+msgid "Started"
+msgstr "a débuté"
+
+#: models.py:17 templates/commands_manager/list.js:9
+msgid "Error"
+msgstr "Erreur"
+
+#: models.py:18
+msgid "Finished"
+msgstr "Terminé"
+
+#: models.py:19
+msgid "Unknown"
+msgstr "Inconnu"
+
+#: models.py:24
+msgid "Command execution"
+msgstr "Exécution de commande"
+
+#: models.py:25
+msgid "Commands executions"
+msgstr "Exécutions de commandes"
+
+#: tasks.py:24
+msgid "Command execution id is not valid"
+msgstr "L'exécution de commande n'est pas valide"
+
+#: views.py:38
+msgid "Last ex. date"
+msgstr ""
+
+#: views.py:44
+msgid "Last ex. state"
+msgstr ""
+
+#: views.py:51
+msgid "Execute"
+msgstr ""
+
+#: views_js.py:66
+msgid "Invalid command name"
+msgstr "Nom de commande invalide"

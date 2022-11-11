@@ -1,5 +1,4 @@
 #!/usr/bin/env python
-# -*- coding: utf-8 -*-
 
 from django.core.exceptions import ImproperlyConfigured
 from django.test import TestCase
@@ -25,11 +24,11 @@ class TestUrlsCalls(TestCase):
         self.assertEqual(settings.WEBIX_VERSION, None)
 
     def test_settings_app_django_webix_admin_webix(self):# not works
-        settings.INSTALLED_APPS.remove('django_webix.admin_webix')
+        settings.INSTALLED_APPS.remove('django_webix.contrib.admin')
         apps.app_configs = OrderedDict()
         apps.apps_ready = False
         apps.clear_cache()
         apps.populate(settings.INSTALLED_APPS)
-        from django_webix.admin_webix import admin
+        from django_webix.contrib.admin import admin
         django.setup()
 

@@ -13,6 +13,37 @@ The format is based on KeepAChangelog_ and this project adheres to SemanticVersi
 [Unreleased]
 ++++++++++++
 
+[2.0.0] 2022-11-11
+++++++++++++++++++
+
+Added
+~~~~~
+* Fully integration into contrib of many extra django-webix packages
+* Password reset support
+* Better action customization: minimum rows, callback, template, intermediate form etc.
+* Better django-webix-admin list
+* Support for FK and M2M limit_choices_to on autocomplete client js side
+* Translations
+* Implemented help_text by icon into label for each field
+* Support for save list state
+* Geo base-widget
+* Admin: support multiple model registration
+* Admin: hijack support
+
+Changed
+~~~~~~~
+* many style changes
+* better file and image widget
+* Admin: many extra view functions directly on AdminClass
+
+Fixed
+~~~~~
+* Fixed annotate on list for filtering
+* Fixed counter for action execution
+* Fixed dynamic pointer for autocomplete fars into form class
+* Fixed for django-webix-filter support
+* Fixed montabs inline + forms
+
 [1.5.0] 2021-07-05
 ++++++++++++++++++
 
