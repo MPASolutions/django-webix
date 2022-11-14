@@ -33,7 +33,7 @@ class TutorialItem(Model):
         ('_self', _('Same window')),
         ('_blank', _('New tab'))
     ), default='_self')
-    area = models.ForeignKey('django_webix.contrib.tutorial.TutorialArea', verbose_name=_('Area'),
+    area = models.ForeignKey(TutorialArea, verbose_name=_('Area'),
                              blank=True, null=True, on_delete=models.CASCADE)
 
     visible_from = models.DateField(_('Visible from'), blank=True, null=True)

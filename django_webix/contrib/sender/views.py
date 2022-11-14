@@ -23,16 +23,16 @@ from telegram.ext import Dispatcher
 from django.urls import reverse
 
 from django_webix.views import WebixTemplateView, WebixListView
-from django_webix_sender.models import MessageSent, MessageRecipient, MessageUserRead
-from django_webix_sender.send_methods.telegram.persistences import DatabaseTelegramPersistence
-from django_webix_sender.utils import send_mixin
+from django_webix.contrib.sender.models import MessageSent, MessageRecipient, MessageUserRead
+from django_webix.contrib.sender.send_methods.telegram.persistences import DatabaseTelegramPersistence
+from django_webix.contrib.sender.utils import send_mixin
 
 from django.utils.html import escapejs
 from django.utils.translation import gettext_lazy as _
 from django.utils.text import format_lazy
 
 if apps.is_installed('django_webix.contrib.filter'):
-    from django_webix_filter.models import WebixFilter
+    from django_webix.contrib.filter.models import WebixFilter
 
 CONF = getattr(settings, "WEBIX_SENDER", None)
 

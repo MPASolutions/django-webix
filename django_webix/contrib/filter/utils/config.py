@@ -4,7 +4,7 @@ from django.db import models
 from django.db.models.fields.reverse_related import ForeignObjectRel
 from django.contrib.contenttypes.fields import GenericRelation, GenericForeignKey
 
-from django_webix_filter.utils.operators import operators_override, counter_operator, matches
+from django_webix.contrib.filter.utils.operators import operators_override, counter_operator, matches
 
 
 def _get_config_new(model_class):

@@ -719,7 +719,7 @@ class AdminWebixSite:
 
 class DefaultAdminWebixSite(LazyObject):
     def _setup(self):
-        AdminWebixSiteClass = import_string(apps.get_app_config('admin_webix').default_site)
+        AdminWebixSiteClass = import_string(apps.get_app_config('dwadmin').default_site)
         self._wrapped = AdminWebixSiteClass()
 
 

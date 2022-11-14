@@ -2,7 +2,7 @@
 from django.conf import settings
 from django.urls import path, re_path
 
-from django_webix_sender.views import (
+from django_webix.contrib.sender.views import (
     SenderListView, SenderGetListView, SenderSendView, SenderWindowView, SenderInvoiceManagementView,
     SenderTelegramWebhookView, SenderMessagesListView, SenderMessagesChatView, CheckAttachmentView
 )

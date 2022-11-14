@@ -3,9 +3,10 @@ from django.conf import settings
 from django.db import models
 
 from django.db.models import JSONField
+
 from django.utils.translation import gettext_lazy as _
 
-from django_webix_filter.managers import WebixFilterManager
+from django_webix.contrib.filter.managers import WebixFilterManager
 from django_webix.utils.filters import from_dict_to_qset
 
 from django_dal.models import DALModel

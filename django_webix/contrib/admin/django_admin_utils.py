@@ -2,22 +2,28 @@ from django.contrib import admin
 from django.contrib.contenttypes.models import ContentType
 from django.utils.safestring import mark_safe
 from django.utils.translation import gettext as _
-from feincms.admin import tree_editor
 
 from django_webix.contrib.admin.forms import WebixAdminMenuForm
 from django_webix.contrib.admin.models import WebixAdminMenu
 
 
 def menu_admin_webix_register(site):
+    from mptt.admin import DraggableMPTTAdmin
+
     @admin.register(WebixAdminMenu)
-    class MenuAdmin(tree_editor.TreeEditor):
+    class MenuAdmin(DraggableMPTTAdmin):
         form = WebixAdminMenuForm
         raw_id_fields = ('parent',)
         search_fields = ('label', 'url', 'model__model')
         filter_horizontal = ['groups']
         list_filter = ('enabled', 'active_all', 'model')
         list_per_page = 1000
-        list_display = ('id', 'label', 'enabled', 'active_all', 'model', 'prefix', 'get_groups_string')
+        expand_tree_by_default = True
+        mptt_level_indent = 30
+        list_display = ('tree_actions', 'indented_title', 'label', 'enabled', 'active_all', 'model', 'prefix', 'get_groups_string')
+        list_display_links = (
+            'indented_title',
+        )
         fieldsets = (
             ('Details', {
                 'fields': (

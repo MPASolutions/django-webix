@@ -2,10 +2,10 @@ import json
 from django.apps import apps
 from django.conf import settings
 from django_webix.forms import WebixModelForm
-from django_webix_filter.models import WebixFilter
-from django_webix_filter.utils.json_converter import get_JSON_for_JQB, get_JSON_from_DB
-from django_webix_filter.utils.config import get_enabled_model
-from django_webix_filter.utils.check import check_filter
+from django_webix.contrib.filter.models import WebixFilter
+from django_webix.contrib.filter.utils.json_converter import get_JSON_for_JQB, get_JSON_from_DB
+from django_webix.contrib.filter.utils.config import get_enabled_model
+from django_webix.contrib.filter.utils.check import check_filter
 
 
 class WebixFilterForm(WebixModelForm):

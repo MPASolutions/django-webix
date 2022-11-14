@@ -5,6 +5,7 @@ from django.conf import settings
 class CommandsManagerConfig(AppConfig):
     default_auto_field = "django.db.models.AutoField"
     name = "django_webix.contrib.commands_manager"
+    label = 'dwcommands_manager'
     verbose_name = _("Django Webix Commands Manager")
 
 

@@ -2,7 +2,7 @@ import time
 
 from django.core.management import BaseCommand
 
-from django_webix_sender.send_methods.skebby.tasks import check_state_history
+from django_webix.contrib.sender.send_methods.skebby.tasks import check_state_history
 
 
 class Command(BaseCommand):

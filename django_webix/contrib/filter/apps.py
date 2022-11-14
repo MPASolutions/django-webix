@@ -7,6 +7,7 @@ from django.utils.translation import gettext_lazy as _
 class FilterConfig(AppConfig):
     default_auto_field = "django.db.models.AutoField"
     name = "django_webix.contrib.filter"
+    label = 'dwfilter'
     verbose_name = _("Django Webix Filter")
 
     def ready(self):

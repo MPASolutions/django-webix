@@ -6,7 +6,7 @@ from typing import DefaultDict, Dict, Any, Tuple, Optional
 from telegram.ext import BasePersistence
 from telegram.utils.types import ConversationDict
 
-from django_webix_sender.models import TelegramPersistence
+from django_webix.contrib.sender.models import TelegramPersistence
 
 
 class ReMapKeys:

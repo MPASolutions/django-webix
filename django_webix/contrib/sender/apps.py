@@ -10,6 +10,7 @@ from django.utils.translation import gettext_lazy as _
 class SenderConfig(AppConfig):
     default_auto_field = "django.db.models.AutoField"
     name = "django_webix.contrib.sender"
+    label = 'dwsender'
     verbose_name = _("Django Webix Sender")
 
     def __init__(self, app_name, app_module):
@@ -29,7 +30,7 @@ class SenderConfig(AppConfig):
         self.set_user_cost()
 
     def set_user_cost(self):
-        from django_webix_sender.utils import my_import
+        from django_webix.contrib.sender.utils import my_import
 
         user_cost_config = getattr(self.CONF, "USER_COST", None)
         User = get_user_model()
@@ -40,7 +41,7 @@ class SenderConfig(AppConfig):
         return _get_cost
 
     def send_methods_check(self):
-        from django_webix_sender.utils import my_import
+        from django_webix.contrib.sender.utils import my_import
 
         for send_method in self.CONF['send_methods']:
             # Check common keys
@@ -171,7 +172,7 @@ class SenderConfig(AppConfig):
                 pass  # Nothing to check
 
     def initial_send_methods_check(self):
-        from django_webix_sender.utils import my_import
+        from django_webix.contrib.sender.utils import my_import
 
         # Check initial_send_methods
         for initial_send_method in self.CONF['initial_send_methods']:

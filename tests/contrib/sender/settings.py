@@ -1,6 +1,6 @@
 import django
 
-from django_webix_sender.send_methods.skebby.enums import SkebbyMessageType
+from django_webix.contrib.sender.send_methods.skebby.enums import SkebbyMessageType
 
 DEBUG = True
 USE_TZ = True

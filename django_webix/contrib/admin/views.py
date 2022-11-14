@@ -3,7 +3,7 @@ from django.contrib.auth import get_user_model
 from django.contrib.auth.views import PasswordResetConfirmView, PasswordChangeView
 
 from django_webix.contrib.admin.forms import UserForm, UserAdminUpdateForm, UserAdminCreateForm
-from django_webix.views import WebixUpdateView, WebixCreateView, WebixListView
+from django_webix.views import WebixUpdateView, WebixCreateView
 
 
 class UserUpdate(WebixUpdateView):

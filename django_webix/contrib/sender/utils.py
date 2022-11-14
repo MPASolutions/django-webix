@@ -7,7 +7,7 @@ from django.conf import settings
 from django.utils.text import format_lazy
 from django.utils.translation import gettext_lazy as _
 
-from django_webix_sender.models import MessageSent, DjangoWebixSender
+from django_webix.contrib.sender.models import MessageSent, DjangoWebixSender
 
 CONF = getattr(settings, "WEBIX_SENDER", None)
 

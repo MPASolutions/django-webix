@@ -8,6 +8,7 @@ class SimpleAdminConfig(AppConfig):
     default_auto_field = "django.db.models.AutoField"
     default_site = 'django_webix.contrib.admin.sites.AdminWebixSite'
     name = 'django_webix.contrib.admin'
+    label = 'dwadmin'
     verbose_name = _("Administration")
 
     def ready(self):

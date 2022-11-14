@@ -15,11 +15,11 @@ from django_webix.views import (
     WebixUpdateView as UpdateView,
     WebixTemplateView as TemplateView
 )
-from django_webix_filter.forms import WebixFilterForm
-from django_webix_filter.models import WebixFilter
-from django_webix_filter.utils.json_converter import get_JSON_for_JQB, get_JSON_for_DB, get_JSON_from_DB
-from django_webix_filter.utils.check import model_is_enabled, check_filter, check_config
-from django_webix_filter.utils.config import _get_config_new, get_limit_suggest
+from django_webix.contrib.filter.forms import WebixFilterForm
+from django_webix.contrib.filter.models import WebixFilter
+from django_webix.contrib.filter.utils.json_converter import get_JSON_for_JQB, get_JSON_for_DB, get_JSON_from_DB
+from django_webix.contrib.filter.utils.check import model_is_enabled, check_filter, check_config
+from django_webix.contrib.filter.utils.config import _get_config_new, get_limit_suggest
 
 from django.utils.html import escapejs
 from django.utils.translation import gettext_lazy as _

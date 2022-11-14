@@ -58,36 +58,53 @@ setup(
     author='MPA Solutions soc.coop., Enogis srl',
     author_email='info@mpasol.it',
     install_requires=[
-        'Django>=3.0',
-        'sorl-thumbnail>=12.4.1',
-        'django-extra-views>=0.11.0',
-        'django-mptt>=0.11.0',
-        'django-two-factor-auth>=1.12.1',
-        'django-user-agents>=0.4.0',
-        'python-dateutil>=2.8.1',
-        'six>=1.15.0',
-        'django-dal>=1.0.0',
-        'django-filtersmerger>=1.0.0'
+        "Django>=3.0,<4",
+        "django-extra-views>=0.11.0",
+        "six>=1.15.0",
+        "django-user-agents>=0.4.0", # limit use webix on old browsers
+        "python-dateutil>=2.8.1", # for date parsing
     ],
     extras_require={
-        "admin": ['feincms',
-                  'mptt'],
+        "addones": [
+            "sorl-thumbnail>=12.4.1",
+            "pillow",
+            "django-two-factor-auth>=1.12.1",
+            "django-filtersmerger>=1.0.0",
+            "django-modeltranslation",
+            "django-hijack",
+            #"flexport",
+            #"gdpr",
+        ],
+        "admin": [
+            "django-mptt>=0.11.0",
+            "django-dal>=1.0.0",  # for filter
+        ],
         "auth": [],
-        "commands_manager": ["celery>=4.4.0"],
-        "filter": [],
-        "sender": ["requests>=2.23.0",
-                   "celery>=4.4.0",
-                   "amqp>=2.3.2",
-                   "billiard>=3.5.0.4",
-                   "kombu>=4.2.1",
-                   "vine>=1.1.4",
-                   "phonenumbers>=8.12.13",
-                   "python-telegram-bot>=13.1"],
-        "validator": ["python-magic==0.4.27",
-                      "numpy>=1.21.6",
-                      "pandas>=1.3.5",
-                      "geopandas==0.6.3",
-                      "xlrd>=2.0.1"],
+        "commands_manager": [
+            "celery>=4.4.0",
+        ],
+        "filter": [
+            "django-dal>=1.0.0",  # for filter
+            "django-filtersmerger>=1.0.0",
+        ],
+        "sender": [
+            "django-dal>=1.0.0",  # for filter
+            "requests>=2.23.0",
+            "celery>=4.4.0",
+            "amqp>=2.3.2",
+            "billiard>=3.5.0.4",
+            "kombu>=4.2.1",
+            "vine>=1.1.4",
+            "phonenumbers>=8.12.13",
+            "python-telegram-bot>=13.1,<=13.1.5",
+        ],
+        "validator": [
+            "python-magic==0.4.27",
+            "numpy>=1.21.6",
+            "pandas>=1.3.5",
+            "geopandas==0.6.3",
+            "xlrd>=2.0.1",
+        ],
     },
     classifiers=[
         'Environment :: Web Environment',

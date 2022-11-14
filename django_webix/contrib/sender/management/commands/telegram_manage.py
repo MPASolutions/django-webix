@@ -3,7 +3,7 @@ from django.conf import settings
 from django.core.management import BaseCommand
 from django.utils.translation import gettext_lazy as _
 
-from django_webix_sender.models import TelegramPersistence
+from django_webix.contrib.sender.models import TelegramPersistence
 
 
 class Command(BaseCommand):

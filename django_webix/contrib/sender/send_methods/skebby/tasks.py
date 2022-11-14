@@ -2,13 +2,13 @@
 from celery import shared_task
 from django.conf import settings
 
-from django_webix_sender.send_methods.skebby.exceptions import SkebbyException
-from django_webix_sender.send_methods.skebby.gateway import Skebby
+from django_webix.contrib.sender.send_methods.skebby.exceptions import SkebbyException
+from django_webix.contrib.sender.send_methods.skebby.gateway import Skebby
 
 
 @shared_task
 def check_state(order_id):
-    from django_webix_sender.models import MessageSent
+    from django_webix.contrib.sender.models import MessageSent
 
     if 'django_webix.contrib.sender' not in settings.INSTALLED_APPS:
         raise Exception("Django Webix Sender is not in INSTALLED_APPS")
@@ -61,7 +61,7 @@ def check_state_history(same_sender_name=True):
     if 'django_webix.contrib.sender' not in settings.INSTALLED_APPS:
         raise Exception("Django Webix Sender is not in INSTALLED_APPS")
 
-    from django_webix_sender.models import MessageRecipient
+    from django_webix.contrib.sender.models import MessageRecipient
 
     try:
         CONFIG_SKEBBY = next(

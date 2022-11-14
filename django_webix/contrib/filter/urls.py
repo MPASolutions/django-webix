@@ -1,7 +1,8 @@
 from django.urls import path
 
-from django_webix_filter.views import (DjangoWebixFilterView, FilterConfigView, WebixFilterList, WebixFilterCreate,
-                                       WebixFilterUpdate, WebixFilterDelete, FilterSuggestExact)
+from django_webix.contrib.filter.views import (DjangoWebixFilterView, FilterConfigView, WebixFilterList,
+                                               WebixFilterCreate, WebixFilterUpdate, WebixFilterDelete,
+                                               FilterSuggestExact)
 
 urlpatterns = [
     path('<str:app_label>/<str:model_name>/', DjangoWebixFilterView.as_view(), name='django_webix.filter.filters'),

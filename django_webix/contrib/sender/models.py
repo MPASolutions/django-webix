@@ -8,8 +8,7 @@ from django.db import models
 from django.db.models import Q, F
 from django.utils.translation import gettext_lazy as _
 
-from django.contrib.postgres.fields import JSONField
-
+from django.db.models import JSONField
 try:
     from django_dal.models import DALModel as Model
 except ImportError:
@@ -196,9 +195,8 @@ if CONF is not None and \
         telegram = models.CharField(max_length=255, blank=True, null=True, verbose_name=_('Telegram'))
         note = models.TextField(blank=True, null=True, verbose_name=_('Note'))
         extra = JSONField(blank=True, null=True, verbose_name=_('Extra'))
-        typology = models.ForeignKey('django_webix.contrib.sender.CustomerTypology', blank=True, null=True,
+        typology = models.ForeignKey(CustomerTypology, blank=True, null=True,
                                      on_delete=models.CASCADE, verbose_name=_('Typology'))
-
         creation_date = models.DateTimeField(auto_now_add=True, verbose_name=_('Creation date'))
         modification_date = models.DateTimeField(auto_now=True, verbose_name=_('Modification data'))
 
@@ -254,7 +252,6 @@ if CONF is not None and \
         """
 
         typology = models.CharField(max_length=255, unique=True, verbose_name=_('Typology'))
-
         creation_date = models.DateTimeField(auto_now_add=True, verbose_name=_('Creation date'))
         modification_date = models.DateTimeField(auto_now=True, verbose_name=_('Modification data'))
 
@@ -282,9 +279,8 @@ if CONF is not None and \
         telegram = models.CharField(max_length=255, blank=True, null=True, verbose_name=_('Telegram'))
         note = models.TextField(blank=True, null=True, verbose_name=_('Note'))
         extra = JSONField(blank=True, null=True, verbose_name=_('Extra'))
-        typology = models.ForeignKey('django_webix.contrib.sender.ExternalSubjectTypology', blank=True, null=True,
+        typology = models.ForeignKey(ExternalSubjectTypology, blank=True, null=True,
                                      on_delete=models.CASCADE, verbose_name=_('Typology'))
-
         creation_date = models.DateTimeField(auto_now_add=True, verbose_name=_('Creation date'))
         modification_date = models.DateTimeField(auto_now=True, verbose_name=_('Modification data'))
 
@@ -343,7 +339,6 @@ if CONF is not None and \
         """
 
         typology = models.CharField(max_length=255, unique=True, verbose_name=_('Typology'))
-
         creation_date = models.DateTimeField(auto_now_add=True, verbose_name=_('Creation date'))
         modification_date = models.DateTimeField(auto_now=True, verbose_name=_('Modification data'))
 
@@ -354,7 +349,7 @@ if CONF is not None and \
         def __str__(self):
             return '{}'.format(self.typology)
 
-if CONF is not None and CONF['attachments']['model'] == 'django_webix.contrib.sender.MessageAttachment':
+if CONF is not None and CONF['attachments']['model'] == 'dwsender.MessageAttachment':
     class MessageAttachment(Model):
         """
         Message attachments model
@@ -362,7 +357,6 @@ if CONF is not None and CONF['attachments']['model'] == 'django_webix.contrib.se
 
         file = models.FileField(upload_to=CONF['attachments']['upload_folder'], verbose_name=_('Document'))
         insert_date = models.DateTimeField(auto_now_add=True, verbose_name=_('Insert date'))
-
         creation_date = models.DateTimeField(auto_now_add=True, verbose_name=_('Creation date'))
         modification_date = models.DateTimeField(auto_now=True, verbose_name=_('Modification data'))
 
@@ -388,7 +382,6 @@ if CONF is not None and CONF['typology_model']['enabled']:
         """
 
         typology = models.CharField(max_length=255, unique=True, verbose_name=_('Typology'))
-
         creation_date = models.DateTimeField(auto_now_add=True, verbose_name=_('Creation date'))
         modification_date = models.DateTimeField(auto_now=True, verbose_name=_('Modification data'))
 
@@ -410,8 +403,7 @@ class MessageSent(Model):
     """
 
     if CONF is not None and CONF['typology_model']['enabled']:
-        typology = models.ForeignKey(
-            'django_webix.contrib.sender.MessageTypology',
+        typology = models.ForeignKey(MessageTypology,
             blank=not CONF['typology_model']['required'],
             null=not CONF['typology_model']['required'],
             on_delete=models.CASCADE,
@@ -459,7 +451,7 @@ class MessageRecipient(Model):
     Message recipient model
     """
 
-    message_sent = models.ForeignKey('django_webix.contrib.sender.MessageSent', on_delete=models.CASCADE,
+    message_sent = models.ForeignKey(MessageSent, on_delete=models.CASCADE,
                                      verbose_name=_('Message sent'))
     content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE)
     object_id = models.PositiveIntegerField()
@@ -495,7 +487,7 @@ class MessageUserRead(Model):
     Message readed by user model
     """
 
-    message_sent = models.ForeignKey('django_webix.contrib.sender.MessageSent', on_delete=models.CASCADE,
+    message_sent = models.ForeignKey(MessageSent, on_delete=models.CASCADE,
                                      verbose_name=_('Message sent'))
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, verbose_name=_('User'))
 

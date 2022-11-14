@@ -2,8 +2,8 @@ import json
 
 import requests
 
-from django_webix_sender.send_methods.skebby.enums import SkebbyBoolean, SkebbyMessageType, SkebbyEncoding
-from django_webix_sender.send_methods.skebby.exceptions import SkebbyException
+from django_webix.contrib.sender.send_methods.skebby.enums import SkebbyBoolean, SkebbyMessageType, SkebbyEncoding
+from django_webix.contrib.sender.send_methods.skebby.exceptions import SkebbyException
 
 
 class Skebby:

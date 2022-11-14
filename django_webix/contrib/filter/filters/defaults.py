@@ -4,8 +4,8 @@ from django.db.models import Q
 
 from django_filtersmerger import RequestFilter
 from django_webix.utils.filters import from_dict_to_qset
-from django_webix_filter.models import WebixFilter
-from django_webix_filter.utils.json_converter import get_JSON_for_DB
+from django_webix.contrib.filter.models import WebixFilter
+from django_webix.contrib.filter.utils.json_converter import get_JSON_for_DB
 
 
 class DjangoAdvancedOTFWebixFilter(RequestFilter):

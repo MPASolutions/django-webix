@@ -6,9 +6,9 @@ import six
 from django.conf import settings
 from django.utils.translation import gettext_lazy as _
 
-from django_webix_sender.send_methods.skebby.enums import SkebbyBoolean
-from django_webix_sender.send_methods.skebby.exceptions import SkebbyException
-from django_webix_sender.send_methods.skebby.gateway import Skebby
+from django_webix.contrib.sender.send_methods.skebby.enums import SkebbyBoolean
+from django_webix.contrib.sender.send_methods.skebby.exceptions import SkebbyException
+from django_webix.contrib.sender.send_methods.skebby.gateway import Skebby
 
 ISO_8859_1_limited = '@èéùìò_ !"#%\\\'()*+,-./0123456789:<=>?ABCDEFGHIJKLMNOPQRSTUVWXYZÄÖÑÜabcdefghijklmnopqrstuvwxyzäöñüà'
 
@@ -23,7 +23,7 @@ def send(recipients: Dict[str, List[int]], subject: str, body: str, message_sent
     :return: MessageSent instance
     """
 
-    from django_webix_sender.models import MessageRecipient, MessageSent
+    from django_webix.contrib.sender.models import MessageRecipient, MessageSent
 
     if 'django_webix.contrib.sender' not in settings.INSTALLED_APPS:
         raise Exception("Django Webix Sender is not in INSTALLED_APPS")

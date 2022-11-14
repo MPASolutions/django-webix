@@ -3,33 +3,33 @@ from django.contrib import admin
 from django.db.models import Count, Sum, Case, When, IntegerField
 from django.utils.translation import gettext_lazy as _
 
-from django_webix_sender.models import MessageSent, MessageRecipient, MessageUserRead
+from django_webix.contrib.sender.models import MessageSent, MessageRecipient, MessageUserRead
 
 CONF = getattr(settings, "WEBIX_SENDER", None)
 
 if CONF is not None and \
     any(_recipients['model'] == 'django_webix.contrib.sender.Customer' for _recipients in CONF['recipients']):
-    from django_webix_sender.models import Customer, CustomerTypology
+    from django_webix.contrib.sender.models import Customer, CustomerTypology
 
     admin.site.register(Customer)
     admin.site.register(CustomerTypology)
 
 if CONF is not None and \
     any(_recipients['model'] == 'django_webix.contrib.sender.ExternalSubject' for _recipients in CONF['recipients']):
-    from django_webix_sender.models import ExternalSubject, ExternalSubjectTypology
+    from django_webix.contrib.sender.models import ExternalSubject, ExternalSubjectTypology
 
     admin.site.register(ExternalSubject)
     admin.site.register(ExternalSubjectTypology)
 
 if CONF is not None and \
     CONF['attachments']['model'] == 'django_webix.contrib.sender.MessageAttachment':
-    from django_webix_sender.models import MessageAttachment
+    from django_webix.contrib.sender.models import MessageAttachment
 
     admin.site.register(MessageAttachment)
 
 if CONF is not None and \
     CONF['typology_model']['enabled']:
-    from django_webix_sender.models import MessageTypology
+    from django_webix.contrib.sender.models import MessageTypology
 
     admin.site.register(MessageTypology)
 

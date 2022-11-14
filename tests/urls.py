@@ -15,15 +15,12 @@ from tests.app_name.views import (MyModelListView,
 from tests.app_name.views_urls import (CreateSuccessUrlView, CreateUrlUpdateView, CreateUrlListView, CreateNoUrlView,
                                        UpdateSuccessUrlView, UpdateUrlUpdateView, UpdateNoUrlView,
                                        DeleteSuccessUrlView, DeleteUrlListView, DeleteNoUrlView)
-from django.contrib import admin
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
 
     path('django-webix/', include('django_webix.urls')),
     path('main/', site.urls),
     path('django_webix/auth/', include('django_webix.contrib.auth.urls')),
-    # path('hijack/', include('hijack.urls', namespace='hijack')),
 
     path('mylogin', MyLoginView.as_view(), name='mylogin'),
 
@@ -38,10 +35,6 @@ urlpatterns = [
     path('mymodel/update/<int:pk>', MyModelUpdateView.as_view(), name='app_name.mymodel.update'),
     path('mymodel/update_error/<int:pk>', MyModelUpdateErrorView.as_view(), name='app_name.mymodel.update_error'),
     path('mymodel/delete/<int:pk>', MyModelDeleteView.as_view(), name='app_name.mymodel.delete'),
-
-    #    path('inlinemodel/update/<int:pk>', InlineModelUpdateView.as_view(), name='app_name.inlinemodel.update'),
-    #    path('inlinestackedmodel/delete/<int:pk>', InlineStackedModelDelete.as_view(),
-    #         name='app_name.inlinestackedmodel.delete'),
 
     path('urlsmodel/create/successurl', CreateSuccessUrlView.as_view()),
     path('urlsmodel/create/urlcreate', CreateUrlUpdateView.as_view()),

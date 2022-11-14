@@ -14,7 +14,7 @@ from django.utils.translation import gettext as _
 from django.utils.translation import get_language
 from django.views.generic import ListView
 from django.db.models.query import QuerySet
-from django_filtersmerger import FilterMerger
+
 from django_webix.forms import WebixModelForm
 from django_webix.views import WebixUpdateView
 from django_webix.views.generic.base import WebixBaseMixin, WebixPermissionsMixin, WebixUrlMixin
@@ -146,31 +146,30 @@ class WebixListView(WebixBaseMixin,
         return qs
 
     def _model_translations(self, qs):
-        if not apps.is_installed('modeltranslation'):
-            return qs
-        from modeltranslation.fields import TranslationFieldDescriptor
-        fields = [field for field in self.get_fields() or [] if field.get('field_name') is not None]
-        for field in fields:
-            field_name = field.get('field_name')
-            _model = self.model
-            _field = None
-            for name in field_name.split('__'):
-                try:
-                    _field = _model._meta.get_field(name)
-                    if isinstance(_field, ManyToManyField):  # Check if field is M2M
-                        raise FieldDoesNotExist()
-                except FieldDoesNotExist:
-                    break  # name is probably a lookup or transform such as __contains
-                if hasattr(_field, 'related_model') and _field.related_model is not None:
-                    _model = _field.related_model  # field is a relation
-                else:
-                    break  # field is not a relation, any name that follows is probably a lookup or transform
+        if apps.is_installed('modeltranslation'):
+            from modeltranslation.fields import TranslationFieldDescriptor
+            fields = [field for field in self.get_fields() or [] if field.get('field_name') is not None]
+            for field in fields:
+                field_name = field.get('field_name')
+                _model = self.model
+                _field = None
+                for name in field_name.split('__'):
+                    try:
+                        _field = _model._meta.get_field(name)
+                        if isinstance(_field, ManyToManyField):  # Check if field is M2M
+                            raise FieldDoesNotExist()
+                    except FieldDoesNotExist:
+                        break  # name is probably a lookup or transform such as __contains
+                    if hasattr(_field, 'related_model') and _field.related_model is not None:
+                        _model = _field.related_model  # field is a relation
+                    else:
+                        break  # field is not a relation, any name that follows is probably a lookup or transform
 
-            # Check if last field of last model is translated (exclude initial model)
-            if _field is not None and _model != self.model:
-                _field_attribute = getattr(_model, _field.name, None)
-                if isinstance(_field_attribute, TranslationFieldDescriptor):
-                    qs = qs.annotate(**{field_name: Coalesce('{}_{}'.format(field_name, get_language()), field_name)})
+                # Check if last field of last model is translated (exclude initial model)
+                if _field is not None and _model != self.model:
+                    _field_attribute = getattr(_model, _field.name, None)
+                    if isinstance(_field_attribute, TranslationFieldDescriptor):
+                        qs = qs.annotate(**{field_name: Coalesce('{}_{}'.format(field_name, get_language()), field_name)})
         return qs
 
     def get_adjust_row_height(self, request):
@@ -253,8 +252,10 @@ class WebixListView(WebixBaseMixin,
 
             qs = self._model_translations(qs)  # Check model translations
 
-            filter_merger = FilterMerger(request=self.request)
-            qs = filter_merger.get_queryset(self.model, initial_queryset=qs)
+            if apps.is_installed('django_filtersmerger'):
+                from django_filtersmerger import FilterMerger
+                filter_merger = FilterMerger(request=self.request)
+                qs = filter_merger.get_queryset(self.model, initial_queryset=qs)
 
             # annotate geo available
             if self.is_enable_column_webgis(self.request):

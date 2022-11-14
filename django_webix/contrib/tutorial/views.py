@@ -2,7 +2,7 @@ import datetime
 
 from django.db.models import F, Q
 from django_webix.views import WebixListView as ListView
-from django_webix_tutorial.models import TutorialItem
+from django_webix.contrib.tutorial.models import TutorialItem
 
 from django.utils.html import escapejs
 from django.utils.translation import gettext_lazy as _

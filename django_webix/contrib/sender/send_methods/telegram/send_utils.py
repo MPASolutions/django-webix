@@ -16,7 +16,7 @@ def send(recipients: Dict[str, List[int]], subject: str, body: str, message_sent
     :return: MessageSent instance
     """
 
-    from django_webix_sender.models import MessageSent, MessageRecipient
+    from django_webix.contrib.sender.models import MessageSent, MessageRecipient
 
     if 'django_webix.contrib.sender' not in settings.INSTALLED_APPS:
         raise Exception("Django Webix Sender is not in INSTALLED_APPS")

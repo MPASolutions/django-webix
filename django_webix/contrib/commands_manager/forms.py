@@ -1,5 +1,5 @@
 from django_webix.forms import WebixModelForm
-from django_webix_commands_manager.models import CommandExecution
+from django_webix.contrib.commands_manager.models import CommandExecution
 from django.utils.translation import gettext_lazy as _
 
 class CommandExecutionFormCreate(WebixModelForm):

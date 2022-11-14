@@ -1,7 +1,7 @@
 from django.conf import settings
 from django.apps import apps
 
-from django_webix_filter.utils.config import model_is_enabled, get_enable_field
+from django_webix.contrib.filter.utils.config import model_is_enabled, get_enable_field
 
 
 def get_all_fields_from_json(json):
