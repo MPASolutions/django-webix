@@ -65,7 +65,7 @@ def webix_fontawesome_css_url():
     if hasattr(settings, 'WEBIX_FONTAWESOME_CSS_URL'):
         return settings.WEBIX_FONTAWESOME_CSS_URL
     else:
-        return 'django_webix/fontawesome-5.7.2/css/all.min.css'
+        return 'django_webix/fontawesome-5.15.4/css/all.min.css'
 
 
 @register.simple_tag(name='webix_fontawesome_version')
@@ -73,7 +73,7 @@ def webix_fontawesome_version():
     if hasattr(settings, 'WEBIX_FONTAWESOME_VERSION'):
         return settings.WEBIX_FONTAWESOME_VERSION
     else:
-        return '5.7.2'
+        return '5.15.4'
 
 
 @register.filter
