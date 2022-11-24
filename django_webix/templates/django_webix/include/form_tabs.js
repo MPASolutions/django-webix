@@ -17,7 +17,7 @@
             {% if inlines|length > 0 %}
                 {
                     view: "tabbar",
-                    id: '{{ form.webix_id }}-inlines-tabbar',
+                    id: '{% if default_id_tabbar %}{{ default_id_tabbar }}{% else %}{{ form.webix_id }}-inlines-tabbar{% endif %}',
                     value: "{{ form.webix_id }}-group",
                     //optionWidth: 150,
                     multiview: true,

@@ -20,7 +20,7 @@
                     {
                         view: "tabbar",
                         id: '{{ form.webix_id }}-inlines-tabbar',
-                        value: "{{ inlines.0.get_container_id }}",
+                        value: "{% if default_id_tabbar %}{{ default_id_tabbar }}{% else %}{{ inlines.0.get_container_id }}{% endif %}",
                         //optionWidth: 150,
                         multiview: true,
                         options: [

@@ -18,7 +18,7 @@
                 {
                     view: "tabbar",
                     id: '{{ form.webix_id }}-inlines-tabbar',
-                    value: "{{ form.webix_id }}-group-1",
+                    value: "{% if default_id_tabbar %}{{ default_id_tabbar }}{% else %}{{ form.webix_id }}-group-1{% endif %}",
                     multiview: true,
                     options: [
                         {% for name in form.get_name %}

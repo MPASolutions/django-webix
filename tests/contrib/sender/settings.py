@@ -137,7 +137,7 @@ WEBIX_SENDER = {
         },
     ],
     'attachments': {
-        'model': 'django_webix.contrib.sender.MessageAttachment',
+        'model': 'dwsender.MessageAttachment',
         'upload_folder': 'sender/',
         'save_function': 'django_webix.contrib.sender.models.save_attachments'
     },
@@ -147,11 +147,11 @@ WEBIX_SENDER = {
     },
     'recipients': [
         {
-            'model': 'django_webix.contrib.sender.Customer',
+            'model': 'dwsender.Customer',
             'datatable_fields': ['user', 'name', 'sms', 'email', 'telegram']
         },
         {
-            'model': 'django_webix.contrib.sender.ExternalSubject',
+            'model': 'dwsender.ExternalSubject',
             'datatable_fields': ['user', 'name', 'sms', 'email', 'telegram'],
             'collapsed': True
         },

@@ -22,7 +22,7 @@ if CONF is not None and \
     admin.site.register(ExternalSubjectTypology)
 
 if CONF is not None and \
-    CONF['attachments']['model'] == 'django_webix.contrib.sender.MessageAttachment':
+    CONF['attachments']['model'] == 'dwsender.MessageAttachment':
     from django_webix.contrib.sender.models import MessageAttachment
 
     admin.site.register(MessageAttachment)

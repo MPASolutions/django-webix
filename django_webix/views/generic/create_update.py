@@ -35,6 +35,7 @@ class WebixCreateUpdateMixin:
     enable_button_save_gotolist = True
 
     template_style = None
+    default_id_tabbar = None
 
     def get_form_class(self):
         """Return the form class to use."""
@@ -59,6 +60,9 @@ class WebixCreateUpdateMixin:
             form_class = type(str(model.__name__ + 'Form'), (form_class,), {})
 
         return form_class
+
+    def get_default_id_tabbar(self):
+        return self.default_id_tabbar
 
     def get_template_style(self):
         _template_style = None
@@ -120,6 +124,7 @@ class WebixCreateUpdateMixin:
             # Template style
             'is_errors_on_popup': self.is_errors_on_popup(request=self.request),
             'template_style': self.get_template_style(),
+            'default_id_tabbar': self.get_default_id_tabbar(),
         }
 
     def form_save(self, form):

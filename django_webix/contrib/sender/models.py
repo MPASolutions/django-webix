@@ -9,6 +9,7 @@ from django.db.models import Q, F
 from django.utils.translation import gettext_lazy as _
 
 from django.db.models import JSONField
+
 try:
     from django_dal.models import DALModel as Model
 except ImportError:
@@ -39,7 +40,7 @@ class DjangoWebixSender(Model):
     Abstract model with basic configuration
     """
 
-    message_recipients = GenericRelation('django_webix.contrib.sender.MessageRecipient',
+    message_recipients = GenericRelation('dwsender.MessageRecipient',
                                          related_query_name='%(class)s_message_recipients')
 
     class Meta:
@@ -178,223 +179,219 @@ class DjangoWebixSender(Model):
         return NotImplementedError(_("`get_representation` not implemented!"))
 
 
-if CONF is not None and \
-    any(_recipients['model'] == 'django_webix.contrib.sender.Customer' for _recipients in CONF.get('recipients', [])):
-    class Customer(DjangoWebixSender):
-        """
-        Customer model
-        """
+class CustomerTypology(Model):
+    """
+    Customer typology model
+    """
 
-        user = models.ForeignKey(settings.AUTH_USER_MODEL, blank=True, null=True, on_delete=models.CASCADE,
-                                 verbose_name=_('User'))
-        name = models.CharField(max_length=255, blank=True, null=True, verbose_name=_('Name'))
-        vat_number = models.CharField(max_length=255, blank=True, null=True, verbose_name=_('Vat number'))
-        fiscal_code = models.CharField(max_length=32, blank=True, null=True, verbose_name=_('Fiscal code'))
-        sms = models.CharField(max_length=32, blank=True, null=True, verbose_name=_('Sms'))
-        email = models.EmailField(max_length=255, blank=True, null=True, verbose_name=_('Email'))
-        telegram = models.CharField(max_length=255, blank=True, null=True, verbose_name=_('Telegram'))
-        note = models.TextField(blank=True, null=True, verbose_name=_('Note'))
-        extra = JSONField(blank=True, null=True, verbose_name=_('Extra'))
-        typology = models.ForeignKey(CustomerTypology, blank=True, null=True,
-                                     on_delete=models.CASCADE, verbose_name=_('Typology'))
-        creation_date = models.DateTimeField(auto_now_add=True, verbose_name=_('Creation date'))
-        modification_date = models.DateTimeField(auto_now=True, verbose_name=_('Modification data'))
+    typology = models.CharField(max_length=255, unique=True, verbose_name=_('Typology'))
+    creation_date = models.DateTimeField(auto_now_add=True, verbose_name=_('Creation date'))
+    modification_date = models.DateTimeField(auto_now=True, verbose_name=_('Modification data'))
 
-        class Meta:
-            verbose_name = _('Customer')
-            verbose_name_plural = _('Customers')
+    class Meta:
+        verbose_name = _('Customer typology')
+        verbose_name_plural = _('Customer typologies')
 
-        def __str__(self):
-            return '{}'.format(self.name)
-
-        @property
-        def get_sms(self) -> str:
-            return self.sms
-
-        @property
-        def get_email(self) -> str:
-            return self.email
-
-        @property
-        def get_telegram(self) -> str:
-            return self.telegram
-
-        @staticmethod
-        def get_sms_fieldpath() -> str:
-            return "sms"
-
-        @staticmethod
-        def get_email_fieldpath() -> str:
-            return "email"
-
-        @staticmethod
-        def get_telegram_fieldpath() -> str:
-            return "telegram"
-
-        @classmethod
-        def get_filters_viewers(cls, user, *args, **kwargs) -> Q:
-            if user is None:
-                return Q(pk__isnull=True)  # Fake filter, empty queryset
-            if user.is_anonymous:
-                return Q(pk__isnull=True)  # Fake filter, empty queryset
-            if not user.is_superuser:
-                return Q(user=user)
-            return Q()  # Non filters
-
-        @classmethod
-        def get_representation(cls) -> F:
-            return F('name')
+    def __str__(self):
+        return '{}'.format(self.typology)
 
 
-    class CustomerTypology(Model):
-        """
-        Customer typology model
-        """
+class Customer(DjangoWebixSender):
+    """
+    Customer model
+    """
 
-        typology = models.CharField(max_length=255, unique=True, verbose_name=_('Typology'))
-        creation_date = models.DateTimeField(auto_now_add=True, verbose_name=_('Creation date'))
-        modification_date = models.DateTimeField(auto_now=True, verbose_name=_('Modification data'))
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, blank=True, null=True, on_delete=models.CASCADE,
+                             verbose_name=_('User'))
+    name = models.CharField(max_length=255, blank=True, null=True, verbose_name=_('Name'))
+    vat_number = models.CharField(max_length=255, blank=True, null=True, verbose_name=_('Vat number'))
+    fiscal_code = models.CharField(max_length=32, blank=True, null=True, verbose_name=_('Fiscal code'))
+    sms = models.CharField(max_length=32, blank=True, null=True, verbose_name=_('Sms'))
+    email = models.EmailField(max_length=255, blank=True, null=True, verbose_name=_('Email'))
+    telegram = models.CharField(max_length=255, blank=True, null=True, verbose_name=_('Telegram'))
+    note = models.TextField(blank=True, null=True, verbose_name=_('Note'))
+    extra = JSONField(blank=True, null=True, verbose_name=_('Extra'))
+    typology = models.ForeignKey(CustomerTypology, blank=True, null=True,
+                                 on_delete=models.CASCADE, verbose_name=_('Typology'))
+    creation_date = models.DateTimeField(auto_now_add=True, verbose_name=_('Creation date'))
+    modification_date = models.DateTimeField(auto_now=True, verbose_name=_('Modification data'))
 
-        class Meta:
-            verbose_name = _('Customer typology')
-            verbose_name_plural = _('Customer typologies')
+    class Meta:
+        verbose_name = _('Customer')
+        verbose_name_plural = _('Customers')
 
-        def __str__(self):
-            return '{}'.format(self.typology)
+    def __str__(self):
+        return '{}'.format(self.name)
 
-if CONF is not None and \
-    any(_recipients['model'] == 'django_webix.contrib.sender.ExternalSubject' for _recipients in CONF.get('recipients', [])):
-    class ExternalSubject(DjangoWebixSender):
-        """
-        External subject model
-        """
+    @property
+    def get_sms(self) -> str:
+        return self.sms
 
-        user = models.ForeignKey(settings.AUTH_USER_MODEL, blank=True, null=True, on_delete=models.CASCADE,
-                                 verbose_name=_('User'))
-        name = models.CharField(max_length=255, blank=True, null=True, verbose_name=_('Name'))
-        vat_number = models.CharField(max_length=255, blank=True, null=True, verbose_name=_('Vat number'))
-        fiscal_code = models.CharField(max_length=32, blank=True, null=True, verbose_name=_('Fiscal code'))
-        sms = models.CharField(max_length=32, blank=True, null=True, verbose_name=_('Sms'))
-        email = models.EmailField(max_length=255, blank=True, null=True, verbose_name=_('Email'))
-        telegram = models.CharField(max_length=255, blank=True, null=True, verbose_name=_('Telegram'))
-        note = models.TextField(blank=True, null=True, verbose_name=_('Note'))
-        extra = JSONField(blank=True, null=True, verbose_name=_('Extra'))
-        typology = models.ForeignKey(ExternalSubjectTypology, blank=True, null=True,
-                                     on_delete=models.CASCADE, verbose_name=_('Typology'))
-        creation_date = models.DateTimeField(auto_now_add=True, verbose_name=_('Creation date'))
-        modification_date = models.DateTimeField(auto_now=True, verbose_name=_('Modification data'))
+    @property
+    def get_email(self) -> str:
+        return self.email
 
-        class Meta:
-            verbose_name = _('External subject')
-            verbose_name_plural = _('External subjects')
+    @property
+    def get_telegram(self) -> str:
+        return self.telegram
 
-        def __str__(self):
-            if self.name:
-                return self.name
-            else:
-                return _('Not defined')
+    @staticmethod
+    def get_sms_fieldpath() -> str:
+        return "sms"
 
-        @property
-        def get_sms(self) -> str:
-            return self.sms
+    @staticmethod
+    def get_email_fieldpath() -> str:
+        return "email"
 
-        @property
-        def get_email(self) -> str:
-            return self.email
+    @staticmethod
+    def get_telegram_fieldpath() -> str:
+        return "telegram"
 
-        @property
-        def get_telegram(self) -> str:
-            return self.telegram
+    @classmethod
+    def get_filters_viewers(cls, user, *args, **kwargs) -> Q:
+        if user is None:
+            return Q(pk__isnull=True)  # Fake filter, empty queryset
+        if user.is_anonymous:
+            return Q(pk__isnull=True)  # Fake filter, empty queryset
+        if not user.is_superuser:
+            return Q(user=user)
+        return Q()  # Non filters
 
-        @staticmethod
-        def get_sms_fieldpath() -> str:
-            return "sms"
-
-        @staticmethod
-        def get_email_fieldpath() -> str:
-            return "email"
-
-        @staticmethod
-        def get_telegram_fieldpath() -> str:
-            return "telegram"
-
-        @classmethod
-        def get_filters_viewers(cls, user, *args, **kwargs) -> Q:
-            if user is None:
-                return Q(pk__isnull=True)  # Fake filter, empty queryset
-            if user.is_anonymous:
-                return Q(pk__isnull=True)  # Fake filter, empty queryset
-            if not user.is_superuser:
-                return Q(user=user)
-            return Q()  # Non filters
-
-        @classmethod
-        def get_representation(cls) -> F:
-            return F('name')
+    @classmethod
+    def get_representation(cls) -> F:
+        return F('name')
 
 
-    class ExternalSubjectTypology(Model):
-        """
-        External subject typology model
-        """
+class ExternalSubjectTypology(Model):
+    """
+    External subject typology model
+    """
 
-        typology = models.CharField(max_length=255, unique=True, verbose_name=_('Typology'))
-        creation_date = models.DateTimeField(auto_now_add=True, verbose_name=_('Creation date'))
-        modification_date = models.DateTimeField(auto_now=True, verbose_name=_('Modification data'))
+    typology = models.CharField(max_length=255, unique=True, verbose_name=_('Typology'))
+    creation_date = models.DateTimeField(auto_now_add=True, verbose_name=_('Creation date'))
+    modification_date = models.DateTimeField(auto_now=True, verbose_name=_('Modification data'))
 
-        class Meta:
-            verbose_name = _('External subject typology')
-            verbose_name_plural = _('External subject typologies')
+    class Meta:
+        verbose_name = _('External subject typology')
+        verbose_name_plural = _('External subject typologies')
 
-        def __str__(self):
-            return '{}'.format(self.typology)
-
-if CONF is not None and CONF['attachments']['model'] == 'dwsender.MessageAttachment':
-    class MessageAttachment(Model):
-        """
-        Message attachments model
-        """
-
-        file = models.FileField(upload_to=CONF['attachments']['upload_folder'], verbose_name=_('Document'))
-        insert_date = models.DateTimeField(auto_now_add=True, verbose_name=_('Insert date'))
-        creation_date = models.DateTimeField(auto_now_add=True, verbose_name=_('Creation date'))
-        modification_date = models.DateTimeField(auto_now=True, verbose_name=_('Modification data'))
-
-        class Meta:
-            verbose_name = _('Attachment')
-            verbose_name_plural = _('Attachments')
-
-        def __str__(self):
-            return '{}'.format(self.file.name)
-
-        def get_url(self):
-            return '{}'.format(self.file.url)
-
-        @staticmethod
-        def get_file_fieldpath() -> str:
-            return "file"
+    def __str__(self):
+        return '{}'.format(self.typology)
 
 
-if CONF is not None and CONF['typology_model']['enabled']:
-    class MessageTypology(Model):
-        """
-        Message typology model
-        """
+class ExternalSubject(DjangoWebixSender):
+    """
+    External subject model
+    """
 
-        typology = models.CharField(max_length=255, unique=True, verbose_name=_('Typology'))
-        creation_date = models.DateTimeField(auto_now_add=True, verbose_name=_('Creation date'))
-        modification_date = models.DateTimeField(auto_now=True, verbose_name=_('Modification data'))
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, blank=True, null=True, on_delete=models.CASCADE,
+                             verbose_name=_('User'))
+    name = models.CharField(max_length=255, blank=True, null=True, verbose_name=_('Name'))
+    vat_number = models.CharField(max_length=255, blank=True, null=True, verbose_name=_('Vat number'))
+    fiscal_code = models.CharField(max_length=32, blank=True, null=True, verbose_name=_('Fiscal code'))
+    sms = models.CharField(max_length=32, blank=True, null=True, verbose_name=_('Sms'))
+    email = models.EmailField(max_length=255, blank=True, null=True, verbose_name=_('Email'))
+    telegram = models.CharField(max_length=255, blank=True, null=True, verbose_name=_('Telegram'))
+    note = models.TextField(blank=True, null=True, verbose_name=_('Note'))
+    extra = JSONField(blank=True, null=True, verbose_name=_('Extra'))
+    typology = models.ForeignKey(ExternalSubjectTypology, blank=True, null=True,
+                                 on_delete=models.CASCADE, verbose_name=_('Typology'))
+    creation_date = models.DateTimeField(auto_now_add=True, verbose_name=_('Creation date'))
+    modification_date = models.DateTimeField(auto_now=True, verbose_name=_('Modification data'))
 
-        class Meta:
-            verbose_name = _('Message typology')
-            verbose_name_plural = _('Message typologies')
+    class Meta:
+        verbose_name = _('External subject')
+        verbose_name_plural = _('External subjects')
 
-        def __str__(self):
-            return '{}'.format(self.typology)
+    def __str__(self):
+        if self.name:
+            return self.name
+        else:
+            return _('Not defined')
 
-        @staticmethod
-        def autocomplete_search_fields():
-            return "typology__icontains",
+    @property
+    def get_sms(self) -> str:
+        return self.sms
+
+    @property
+    def get_email(self) -> str:
+        return self.email
+
+    @property
+    def get_telegram(self) -> str:
+        return self.telegram
+
+    @staticmethod
+    def get_sms_fieldpath() -> str:
+        return "sms"
+
+    @staticmethod
+    def get_email_fieldpath() -> str:
+        return "email"
+
+    @staticmethod
+    def get_telegram_fieldpath() -> str:
+        return "telegram"
+
+    @classmethod
+    def get_filters_viewers(cls, user, *args, **kwargs) -> Q:
+        if user is None:
+            return Q(pk__isnull=True)  # Fake filter, empty queryset
+        if user.is_anonymous:
+            return Q(pk__isnull=True)  # Fake filter, empty queryset
+        if not user.is_superuser:
+            return Q(user=user)
+        return Q()  # Non filters
+
+    @classmethod
+    def get_representation(cls) -> F:
+        return F('name')
+
+
+class MessageAttachment(Model):
+    """
+    Message attachments model
+    """
+
+    file = models.FileField(upload_to=CONF['attachments']['upload_folder'], verbose_name=_('Document'))
+    insert_date = models.DateTimeField(auto_now_add=True, verbose_name=_('Insert date'))
+    creation_date = models.DateTimeField(auto_now_add=True, verbose_name=_('Creation date'))
+    modification_date = models.DateTimeField(auto_now=True, verbose_name=_('Modification data'))
+
+    class Meta:
+        verbose_name = _('Attachment')
+        verbose_name_plural = _('Attachments')
+
+    def __str__(self):
+        return '{}'.format(self.file.name)
+
+    def get_url(self):
+        return '{}'.format(self.file.url)
+
+    @staticmethod
+    def get_file_fieldpath() -> str:
+        return "file"
+
+
+class MessageTypology(Model):
+    """
+    Message typology model
+    """
+
+    typology = models.CharField(max_length=255, unique=True, verbose_name=_('Typology'))
+    creation_date = models.DateTimeField(auto_now_add=True, verbose_name=_('Creation date'))
+    modification_date = models.DateTimeField(auto_now=True, verbose_name=_('Modification data'))
+
+    class Meta:
+        verbose_name = _('Message typology')
+        verbose_name_plural = _('Message typologies')
+
+    def __str__(self):
+        return '{}'.format(self.typology)
+
+    @staticmethod
+    def autocomplete_search_fields():
+        return "typology__icontains",
 
 
 class MessageSent(Model):
@@ -402,13 +399,12 @@ class MessageSent(Model):
     Message sent model
     """
 
-    if CONF is not None and CONF['typology_model']['enabled']:
-        typology = models.ForeignKey(MessageTypology,
-            blank=not CONF['typology_model']['required'],
-            null=not CONF['typology_model']['required'],
-            on_delete=models.CASCADE,
-            verbose_name=_('Typology')
-        )
+    typology = models.ForeignKey(MessageTypology,
+                                     blank=True,
+                                     null=True,
+                                     on_delete=models.CASCADE,
+                                     verbose_name=_('Typology')
+                                     )
     send_method = models.CharField(max_length=255, verbose_name=_('Send method'))
     subject = models.TextField(blank=True, null=True, verbose_name=_('Subject'))
     body = models.TextField(blank=True, null=True, verbose_name=_('Body'))
@@ -441,9 +437,7 @@ class MessageSent(Model):
         verbose_name_plural = _('Sent messages')
 
     def __str__(self):
-        if CONF is not None and CONF['typology_model']['enabled']:
-            return "[{}] {}".format(self.send_method, self.typology)
-        return "{}".format(self.send_method)
+        return "[{}] {}".format(self.send_method, self.typology)
 
 
 class MessageRecipient(Model):

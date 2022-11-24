@@ -33,7 +33,7 @@ class TestAdminWebixCalls(TestCase):
     def test_site(self):
         class TestAdminWebixSite(LazyObject):
             def _setup(self):
-                AdminWebixSiteClass = import_string(apps.get_app_config('admin_webix').default_site)
+                AdminWebixSiteClass = import_string(apps.get_app_config('dwadmin').default_site)
                 AdminWebixSiteClass.site_title = "Test"
                 AdminWebixSiteClass.index_title = "Test"
                 self._wrapped = AdminWebixSiteClass()

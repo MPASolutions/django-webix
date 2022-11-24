@@ -8,7 +8,7 @@ from django.utils.translation import gettext_lazy as _
 
 from django_webix.contrib.commands_manager.models import CommandExecution
 
-app = importlib.import_module(getattr(settings, 'CELERY_APP', getattr(settings.conf, 'DJANGO_WEBIX_COMMANDS_MANAGER_APP_CELERY'))).app
+app = importlib.import_module(getattr(settings, 'CELERY_APP', getattr(settings, 'DJANGO_WEBIX_COMMANDS_MANAGER_APP_CELERY'))).app
 
 
 def _ord(e):
