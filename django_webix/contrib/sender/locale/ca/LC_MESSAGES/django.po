@@ -1,0 +1,737 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-09-26 09:26+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: admin.py:121
+msgid "Total recipients"
+msgstr ""
+
+#: admin.py:127
+msgid "Success recipients"
+msgstr ""
+
+#: admin.py:133
+msgid "Failed recipients"
+msgstr ""
+
+#: admin.py:139
+msgid "Unknown recipients"
+msgstr ""
+
+#: admin.py:145
+msgid "Invalid recipients"
+msgstr ""
+
+#: admin.py:151
+msgid "Duplicate recipients"
+msgstr ""
+
+#: admin.py:158
+msgid "Method"
+msgstr ""
+
+#: admin.py:164
+msgid "Function"
+msgstr ""
+
+#: apps.py:21
+msgid "`WEBIX_SENDER` is not configured in your settings.py file"
+msgstr ""
+
+#: apps.py:35
+msgid "`method` is not configured in send method"
+msgstr ""
+
+#: apps.py:37
+msgid "`verbose_name` is not configured in send method"
+msgstr ""
+
+#: apps.py:39
+msgid "`show_in_list` is not configured in send method"
+msgstr ""
+
+#: apps.py:41
+msgid "`show_in_chat` is not configured in send method"
+msgstr ""
+
+#: apps.py:55 apps.py:180
+msgid "`function` is not configured in send method"
+msgstr ""
+
+#: apps.py:67
+msgid "`recipients_clean` is not configured in send method"
+msgstr ""
+
+#: apps.py:79
+msgid "`presend_check` is not configured in send method"
+msgstr ""
+
+#: apps.py:91
+msgid "`attachments_format` is not configured in send method"
+msgstr ""
+
+#: apps.py:103
+msgid "`{}` method is used {} times instead of 1"
+msgstr ""
+
+#: apps.py:111
+msgid "Email `config` is not configured in your settings.py file"
+msgstr ""
+
+#: apps.py:122
+msgid "Skebby `config` is not configured in your settings.py file"
+msgstr ""
+
+#: apps.py:129
+msgid "Telegram `config` is not configured in your settings.py file"
+msgstr ""
+
+#: apps.py:167
+msgid "`method` is not configured in initial send method"
+msgstr ""
+
+#: apps.py:187
+msgid "`recipients` is not configured in your settings"
+msgstr ""
+
+#: apps.py:189
+msgid "`recipients` must be a list"
+msgstr ""
+
+#: apps.py:193
+msgid "You have to define a `model` as string in your recipients list"
+msgstr ""
+
+#: apps.py:195
+msgid "You have to define a `datatable_fields` as list in your recipients list"
+msgstr ""
+
+#: apps.py:201
+msgid "Recipient model `{}` is not valid"
+msgstr ""
+
+#: management/commands/telegram_manage.py:37
+msgid "Telegram Webhooks successfully deleted"
+msgstr ""
+
+#: management/commands/telegram_manage.py:39
+msgid "Telegram Webhooks cannot be deleted"
+msgstr ""
+
+#: management/commands/telegram_manage.py:44
+msgid "Telegram Webhook successfully added"
+msgstr ""
+
+#: management/commands/telegram_manage.py:46
+msgid "Telegram Webhook cannot be added"
+msgstr ""
+
+#: management/commands/telegram_manage.py:50
+msgid "{} persistence elements have been deleted"
+msgstr ""
+
+#: models.py:62
+msgid "`get_sms` not implemented!"
+msgstr ""
+
+#: models.py:72
+msgid "`get_email` not implemented!"
+msgstr ""
+
+#: models.py:81
+msgid "`get_telegram` not implemented!"
+msgstr ""
+
+#: models.py:91
+msgid "`get_sms_fieldpath` not implemented!"
+msgstr ""
+
+#: models.py:101
+msgid "`get_email_fieldpath` not implemented!"
+msgstr ""
+
+#: models.py:111
+msgid "`get_telegram_fieldpath` not implemented!"
+msgstr ""
+
+#: models.py:174
+msgid "`get_filters_viewers` not implemented!"
+msgstr ""
+
+#: models.py:184
+msgid "`get_representation` not implemented!"
+msgstr ""
+
+#: models.py:195 models.py:281 models.py:446 models.py:505
+msgid "User"
+msgstr ""
+
+#: models.py:196 models.py:282
+msgid "Name"
+msgstr ""
+
+#: models.py:197 models.py:283
+msgid "Vat number"
+msgstr ""
+
+#: models.py:198 models.py:284
+msgid "Fiscal code"
+msgstr ""
+
+#: models.py:199 models.py:285
+msgid "Sms"
+msgstr ""
+
+#: models.py:200 models.py:286
+msgid "Email"
+msgstr ""
+
+#: models.py:201 models.py:287
+msgid "Telegram"
+msgstr ""
+
+#: models.py:202 models.py:288
+msgid "Note"
+msgstr ""
+
+#: models.py:203 models.py:289 models.py:432 models.py:481
+msgid "Extra"
+msgstr ""
+
+#: models.py:205 models.py:261 models.py:291 models.py:350 models.py:395
+#: models.py:423 templates/django_webix_sender/sender.js:101
+msgid "Typology"
+msgstr ""
+
+#: models.py:207 models.py:263 models.py:293 models.py:352 models.py:371
+#: models.py:397 models.py:449 models.py:487 models.py:507
+msgid "Creation date"
+msgstr ""
+
+#: models.py:208 models.py:264 models.py:294 models.py:353 models.py:372
+#: models.py:398 models.py:450 models.py:488 models.py:508
+msgid "Modification data"
+msgstr ""
+
+#: models.py:211
+msgid "Customer"
+msgstr ""
+
+#: models.py:212
+msgid "Customers"
+msgstr ""
+
+#: models.py:267
+msgid "Customer typology"
+msgstr ""
+
+#: models.py:268
+msgid "Customer typologies"
+msgstr ""
+
+#: models.py:297
+msgid "External subject"
+msgstr ""
+
+#: models.py:298
+msgid "External subjects"
+msgstr ""
+
+#: models.py:304
+msgid "Not defined"
+msgstr ""
+
+#: models.py:356
+msgid "External subject typology"
+msgstr ""
+
+#: models.py:357
+msgid "External subject typologies"
+msgstr ""
+
+#: models.py:368
+msgid "Document"
+msgstr ""
+
+#: models.py:369
+msgid "Insert date"
+msgstr ""
+
+#: models.py:375
+msgid "Attachment"
+msgstr ""
+
+#: models.py:376 models.py:437 views.py:278
+msgid "Attachments"
+msgstr ""
+
+#: models.py:401
+msgid "Message typology"
+msgstr ""
+
+#: models.py:402
+msgid "Message typologies"
+msgstr ""
+
+#: models.py:425 templates/django_webix_sender/invoices.js:15
+msgid "Send method"
+msgstr ""
+
+#: models.py:426 templates/django_webix_sender/sender.js:119 views.py:266
+msgid "Subject"
+msgstr ""
+
+#: models.py:427 views.py:272
+msgid "Body"
+msgstr ""
+
+#: models.py:429
+msgid "Sent"
+msgstr ""
+
+#: models.py:430
+msgid "Received"
+msgstr ""
+
+#: models.py:441
+msgid "Cost"
+msgstr ""
+
+#: models.py:442 templates/django_webix_sender/invoices.js:86 views.py:709
+msgid "Invoiced"
+msgstr ""
+
+#: models.py:447
+msgid "Sender"
+msgstr ""
+
+#: models.py:453
+msgid "Sent message"
+msgstr ""
+
+#: models.py:454
+msgid "Sent messages"
+msgstr ""
+
+#: models.py:468 models.py:504
+msgid "Message sent"
+msgstr ""
+
+#: models.py:472
+msgid "Recipient address"
+msgstr ""
+
+#: models.py:473
+msgid "Sent number"
+msgstr ""
+
+#: models.py:475 templates/django_webix_sender/invoices.js:68
+msgid "Success"
+msgstr ""
+
+#: models.py:476
+msgid "Failed"
+msgstr ""
+
+#: models.py:477
+msgid "Unknown"
+msgstr ""
+
+#: models.py:478
+msgid "Invalid"
+msgstr ""
+
+#: models.py:479
+msgid "Duplicate"
+msgstr ""
+
+#: models.py:482
+msgid "Extra JSON"
+msgstr ""
+
+#: models.py:491
+msgid "Recipient"
+msgstr ""
+
+#: models.py:492
+msgid "Recipients"
+msgstr ""
+
+#: models.py:511
+msgid "Readed message"
+msgstr ""
+
+#: models.py:512
+msgid "Readed messages"
+msgstr ""
+
+#: models.py:531
+msgid "Telegram Persistence"
+msgstr ""
+
+#: models.py:532
+msgid "Telegram Persistences"
+msgstr ""
+
+#: send_methods/skebby/send_utils.py:167
+msgid "Invalid characters"
+msgstr ""
+
+#: send_methods/telegram/handlers.py:14
+msgid "Hi!"
+msgstr ""
+
+#: send_methods/telegram/handlers.py:19
+msgid "Help!"
+msgstr ""
+
+#: send_methods/telegram/handlers.py:45
+msgid "Your user is not authorized to use this Bot"
+msgstr ""
+
+#: send_methods/telegram/handlers.py:53
+msgid ""
+"Hi! Send me your phone number to connect your web account!\n"
+"Type /cancel to exit"
+msgstr ""
+
+#: send_methods/telegram/handlers.py:55
+msgid "Send my phone number"
+msgstr ""
+
+#: send_methods/telegram/handlers.py:85
+msgid "Welcome {}! Now you can use this bot"
+msgstr ""
+
+#: send_methods/telegram/handlers.py:90
+msgid "Your number is not in our database, contact us to add"
+msgstr ""
+
+#: send_methods/telegram/handlers.py:101
+msgid "Okay, if you want to connect your account type /start"
+msgstr ""
+
+#: templates/django_webix_sender/chat.js:15
+#: templates/django_webix_sender/chat_messages.js:24
+msgid "Search.."
+msgstr ""
+
+#: templates/django_webix_sender/chat_messages.js:88
+msgid "Type your message"
+msgstr ""
+
+#: templates/django_webix_sender/chat_messages.js:92
+#: templates/django_webix_sender/list.js:211
+#: templates/django_webix_sender/sender.js:165
+#: templates/django_webix_sender/sender.js:328
+msgid "Send"
+msgstr ""
+
+#: templates/django_webix_sender/chat_messages.js:129
+#: templates/django_webix_sender/sender.js:251
+#: templates/django_webix_sender/sender.js:264
+msgid "Unable to send messages"
+msgstr ""
+
+#: templates/django_webix_sender/invoices.js:62
+msgid "Period"
+msgstr ""
+
+#: templates/django_webix_sender/invoices.js:63
+msgid "TOTAL"
+msgstr ""
+
+#: templates/django_webix_sender/invoices.js:74
+msgid "Unknowm status"
+msgstr ""
+
+#: templates/django_webix_sender/invoices.js:80
+msgid "Not send"
+msgstr ""
+
+#: templates/django_webix_sender/invoices.js:92
+msgid "To be invoiced"
+msgstr ""
+
+#: templates/django_webix_sender/invoices.js:98
+msgid "Price invoiced"
+msgstr ""
+
+#: templates/django_webix_sender/invoices.js:104
+msgid "Price to be invoiced"
+msgstr ""
+
+#: templates/django_webix_sender/invoices.js:112
+msgid "marks as billed"
+msgstr ""
+
+#: templates/django_webix_sender/invoices.js:160
+#: templates/django_webix_sender/sender.js:214
+msgid "Confirmation"
+msgstr ""
+
+#: templates/django_webix_sender/invoices.js:161
+msgid "Are you sure you want to mark these communications as billed?"
+msgstr ""
+
+#: templates/django_webix_sender/invoices.js:162
+#: templates/django_webix_sender/list.js:151
+#: templates/django_webix_sender/sender.js:216
+msgid "Yes"
+msgstr ""
+
+#: templates/django_webix_sender/invoices.js:163
+#: templates/django_webix_sender/list.js:152
+#: templates/django_webix_sender/sender.js:217
+msgid "No"
+msgstr ""
+
+#: templates/django_webix_sender/invoices.js:197
+#: templates/django_webix_sender/sender.js:368
+msgid "Caution!"
+msgstr ""
+
+#: templates/django_webix_sender/invoices.js:198
+msgid "There are unknown status for this communication"
+msgstr ""
+
+#: templates/django_webix_sender/list.js:39
+msgid "AND"
+msgstr ""
+
+#: templates/django_webix_sender/list.js:40
+msgid "OR"
+msgstr ""
+
+#: templates/django_webix_sender/list.js:72
+msgid "Filter the list by applying filters"
+msgstr ""
+
+#: templates/django_webix_sender/list.js:150
+msgid "All"
+msgstr ""
+
+#: templates/django_webix_sender/list.js:207
+msgid "Action"
+msgstr ""
+
+#: templates/django_webix_sender/list.js:218
+msgid "Go"
+msgstr ""
+
+#: templates/django_webix_sender/list.js:246
+#: templates/django_webix_sender/list.js:279
+msgid "selected of"
+msgstr ""
+
+#: templates/django_webix_sender/list.js:319
+msgid "Unable to load sender class"
+msgstr ""
+
+#: templates/django_webix_sender/list_messages.js:55
+#: templates/django_webix_sender/list_messages.js:63
+msgid "File mancante"
+msgstr ""
+
+#: templates/django_webix_sender/list_messages.js:56
+#: templates/django_webix_sender/list_messages.js:64
+msgid "Ok"
+msgstr ""
+
+#: templates/django_webix_sender/list_messages.js:57
+#: templates/django_webix_sender/list_messages.js:65
+msgid "File ancora non presente."
+msgstr ""
+
+#: templates/django_webix_sender/sender.js:50
+msgid "Send methods"
+msgstr ""
+
+#: templates/django_webix_sender/sender.js:135
+#: templates/django_webix_sender/sender.js:143
+msgid "characters"
+msgstr ""
+
+#: templates/django_webix_sender/sender.js:150
+msgid "Attach file"
+msgstr ""
+
+#: templates/django_webix_sender/sender.js:172
+msgid "You have to fill in all the required fields"
+msgstr ""
+
+#: templates/django_webix_sender/sender.js:206
+msgid "Valid recipients: "
+msgstr ""
+
+#: templates/django_webix_sender/sender.js:207
+msgid "Invalids recipients: "
+msgstr ""
+
+#: templates/django_webix_sender/sender.js:208
+msgid "Duplicate recipients: "
+msgstr ""
+
+#: templates/django_webix_sender/sender.js:211
+msgid "Are you sure to send this message?"
+msgstr ""
+
+#: templates/django_webix_sender/sender.js:241
+msgid "Results"
+msgstr ""
+
+#: templates/django_webix_sender/sender.js:332
+msgid "Close"
+msgstr ""
+
+#: templates/django_webix_sender/sender.js:369
+msgid "There are no recipients for this communication"
+msgstr ""
+
+#: utils.py:62 utils.py:67 utils.py:72
+msgid "Related is not subclass of `DjangoWebixSender`"
+msgstr ""
+
+#: utils.py:85 views.py:683
+msgid "Invalid send method"
+msgstr ""
+
+#: views.py:131
+msgid "Content type doesn't match"
+msgstr ""
+
+#: views.py:136
+msgid "Not valid and/or filter"
+msgstr ""
+
+#: views.py:252
+msgid "Messages"
+msgstr ""
+
+#: views.py:260
+msgid "Send method type"
+msgstr ""
+
+#: views.py:527
+msgid "Jan"
+msgstr ""
+
+#: views.py:527
+msgid "Feb"
+msgstr ""
+
+#: views.py:527
+msgid "Mar"
+msgstr ""
+
+#: views.py:527
+msgid "Apr"
+msgstr ""
+
+#: views.py:527
+msgid "May"
+msgstr ""
+
+#: views.py:527
+msgid "Jun"
+msgstr ""
+
+#: views.py:527
+msgid "Jul"
+msgstr ""
+
+#: views.py:527
+msgid "Aug"
+msgstr ""
+
+#: views.py:527
+msgid "Sep"
+msgstr ""
+
+#: views.py:527
+msgid "Oct"
+msgstr ""
+
+#: views.py:528
+msgid "Nov"
+msgstr ""
+
+#: views.py:528
+msgid "Dec"
+msgstr ""
+
+#: views.py:531
+msgid "Jan - Feb"
+msgstr ""
+
+#: views.py:531
+msgid "Mar - Apr"
+msgstr ""
+
+#: views.py:531
+msgid "May - Jun"
+msgstr ""
+
+#: views.py:531
+msgid "Jul - Aug"
+msgstr ""
+
+#: views.py:531
+msgid "Sep - Oct"
+msgstr ""
+
+#: views.py:531
+msgid "Nov - Dec"
+msgstr ""
+
+#: views.py:534
+msgid "First quarter"
+msgstr ""
+
+#: views.py:534
+msgid "Second quarter"
+msgstr ""
+
+#: views.py:534
+msgid "Third quarter"
+msgstr ""
+
+#: views.py:534
+msgid "Fourth quarter"
+msgstr ""
+
+#: views.py:537
+msgid "First semester"
+msgstr ""
+
+#: views.py:537
+msgid "Second semester"
+msgstr ""
+
+#: views.py:540
+msgid "Year"
+msgstr ""
+
+#: views.py:590 views.py:684
+msgid "Sender not specified"
+msgstr ""
+
+#: views.py:681
+msgid "Invalid period"
+msgstr ""

@@ -1,10 +1,8 @@
-# -*- coding: utf-8 -*-
 
 from django.apps import apps
 from django.core.exceptions import ImproperlyConfigured, ValidationError
 from django.core.exceptions import PermissionDenied
 from django.forms import model_to_dict
-from django.forms.fields import FileField
 from django.forms.formsets import all_valid
 from django.forms.models import _get_foreign_key, ModelForm, fields_for_model
 from django.http import HttpResponseRedirect
@@ -15,6 +13,7 @@ from django.utils.text import get_text_list
 from django.utils.translation import gettext as _
 from extra_views import UpdateWithInlinesView, CreateWithInlinesView
 from sorl.thumbnail.fields import ImageField
+from django.db.models import FileField
 
 from django_webix.forms import WebixModelForm
 from django_webix.views.generic.base import WebixBaseMixin, WebixPermissionsMixin, WebixUrlMixin
@@ -29,11 +28,14 @@ class WebixCreateUpdateMixin:
     model = None
     request = None
 
+    errors_on_popup = False
+
     enable_button_save_continue = True
     enable_button_save_addanother = True
     enable_button_save_gotolist = True
 
     template_style = None
+    default_id_tabbar = None
 
     def get_form_class(self):
         """Return the form class to use."""
@@ -59,11 +61,14 @@ class WebixCreateUpdateMixin:
 
         return form_class
 
+    def get_default_id_tabbar(self):
+        return self.default_id_tabbar
+
     def get_template_style(self):
         _template_style = None
         if self.template_style is None:
             _template_style = 'standard'
-        elif self.template_style in ['standard', 'tabs']:
+        elif self.template_style in ['standard', 'tabs', 'monotabs']:
             _template_style = self.template_style
         else:
             raise ImproperlyConfigured(_(
@@ -71,30 +76,33 @@ class WebixCreateUpdateMixin:
                 " only options are 'standard' or 'tabs' (standard by default)."))
         return _template_style
 
+    def is_errors_on_popup(self, request):
+        return self.errors_on_popup
+
     def is_enable_button_save_continue(self, request):
-        if self.success_url is not None:
+        if self.get_success_url(next_step='_continue') is None:
             return False
         return self.enable_button_save_continue
 
     def is_enable_button_save_addanother(self, request):
-        if self.success_url is not None:
+        if self.get_success_url(next_step='_addanother') is None:
             return False
         return self.enable_button_save_addanother
 
     def is_enable_button_save_gotolist(self, request):
         return self.enable_button_save_gotolist
 
-    def get_success_url(self):
+    def get_success_url(self, next_step=None):
         if self.success_url is not None:
             url = self.success_url
 
-        elif self.request.GET.get('_addanother', None) is not None and \
-            self.is_enable_button_save_addanother(request=self.request) and \
+        elif (self.request.GET.get('_addanother', None) is not None or next_step=='_addanother') and \
+            self.enable_button_save_addanother and \
             self.get_url_create() is not None:
             url = self.get_url_create()
 
-        elif self.request.GET.get('_continue', None) is not None and \
-            self.is_enable_button_save_continue(request=self.request) and \
+        elif (self.request.GET.get('_continue', None) is not None or next_step=='_continue') and \
+            self.enable_button_save_continue and \
             self.get_url_update(obj=self.object) is not None:
             url = self.get_url_update(obj=self.object)
 
@@ -103,20 +111,20 @@ class WebixCreateUpdateMixin:
             url = self.get_url_list()
 
         else:
-            raise ImproperlyConfigured(_(
-                "No URL to redirect to.  Either provide a url or define"
-                " a get_absolute_url method on the Model."))
+            url = None # default
+
         return url
 
     def get_context_data_webix_create_update(self, request, obj=None, **kwargs):
-
         return {
             # buttons for saving
             'is_enable_button_save_continue': self.is_enable_button_save_continue(request=self.request),
             'is_enable_button_save_addanother': self.is_enable_button_save_addanother(request=self.request),
             'is_enable_button_save_gotolist': self.is_enable_button_save_gotolist(request=self.request),
             # Template style
+            'is_errors_on_popup': self.is_errors_on_popup(request=self.request),
             'template_style': self.get_template_style(),
+            'default_id_tabbar': self.get_default_id_tabbar(),
         }
 
     def form_save(self, form):
@@ -148,6 +156,7 @@ class WebixCreateUpdateMixin:
             formset.save()
         return None
 
+
     def forms_valid(self, form, inlines, **kwargs):
         # pre forms valid
         self.pre_forms_valid(form=form, inlines=inlines, **kwargs)
@@ -164,6 +173,7 @@ class WebixCreateUpdateMixin:
         # post form save
         self.post_form_save(form=form, inlines=inlines, **kwargs)
         # inlines save
+        # noinspection PyNoneFunctionAssignment
         exception_response = self.inlines_save(inlines)
         if exception_response is not None:
             return exception_response
@@ -258,7 +268,12 @@ class WebixCreateView(WebixCreateUpdateMixin,
         for inline, fields in _inlines_copy_fields.items():
             if fields is None:
                 fields = []
-            full_inlines_copy_fields.update({inline: list(inline.form_class.base_fields.keys())})
+            if hasattr(inline, 'form_class') and inline.form_class is not None:
+                full_inlines_copy_fields.update({inline: list(inline.form_class.base_fields.keys())})
+            elif hasattr(inline, 'fields'):
+                full_inlines_copy_fields.update({inline: list(inline.fields)})
+            else:
+                raise Exception('Not identified fields for copying')
 
         return full_inlines_copy_fields
 
@@ -286,9 +301,12 @@ class WebixCreateView(WebixCreateUpdateMixin,
                 if inline.model._meta.pk.name in fields_to_copy:
                     fields_to_copy.remove(self.model._meta.pk.name)
                 datas = []
-                fk = _get_foreign_key(self.model, inline.model)
-                for object in inline.model._default_manager.filter(**{fk.name: object_to_copy}):
-                    datas.append(model_to_dict(object,
+                fk_name = None
+                if hasattr(inline, 'factory_kwargs') and inline.factory_kwargs.get('fk_name') is not None:
+                    fk_name = inline.factory_kwargs.get('fk_name')
+                fk = _get_foreign_key(self.model, inline.model, fk_name=fk_name)
+                for obj in inline.model._default_manager.filter(**{fk.name: object_to_copy}):
+                    datas.append(model_to_dict(obj,
                                                fields=fields_to_copy))
                 initial_inlines.update({inline: datas})
         return initial_inlines
@@ -319,9 +337,9 @@ class WebixCreateView(WebixCreateUpdateMixin,
     def get_context_data(self, **kwargs):
         context = super(WebixCreateView, self).get_context_data(**kwargs)
         context.update(self.get_context_data_webix_permissions(request=self.request))
-        context.update(self.get_context_data_webix_create_update(request=self.request))
         context.update(self.get_context_data_webix_url(request=self.request))
         context.update(self.get_context_data_webix_base(request=self.request))
+        context.update(self.get_context_data_webix_create_update(request=self.request))
         return context
 
     def pre_forms_valid(self, form=None, inlines=None, **kwargs):

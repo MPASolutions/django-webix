@@ -1,27 +1,30 @@
 # Runtime dependencies
-Django>=1.11.23
+Django>=3.0,<4
+django-extra-views>=0.11.0
 six>=1.15.0
-requests
-django-extra-views>=0.12.0
-sorl-thumbnail
-Pillow
-psycopg2-binary
-python-dateutil>=2.8.1
-django-mptt>=0.11.0
-django-two-factor-auth>=1.12.1
 django-user-agents>=0.4.0
-django-dal>=1.0.0
-django-filtersmerger>=1.0.0
+python-dateutil>=2.8.1
+sorl-thumbnail>=12.4.1
+pillow
+django-two-factor-auth>=1.12.1
+django-modeltranslation
+django-hijack
+django-mptt>=0.11.0
+celery>=4.4.0
+requests>=2.23.0
+amqp>=2.3.2
+billiard>=3.5.0.4
+kombu>=4.2.1
+vine>=1.1.4
+phonenumbers>=8.12.13
+python-telegram-bot>=13.1,<=13.1.5
+python-magic==0.4.27
+numpy>=1.21.6
+pandas>=1.3.5
+geopandas==0.6.3
+xlrd>=2.0.1
 
-# Testing
-coverage
-flake8
-tox
+# submoduli
+#django-filtersmerger>=1.0.0
+#django-dal>=1.0.0
 
-# Documentation
-Sphinx
-sphinx-rtd-theme
-
-# Other tools
-bumpversion==0.5.3
-wheel==0.29.0

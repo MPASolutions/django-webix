@@ -3,23 +3,24 @@
 {% if is_enable_actions %}
 
 var {{ view_prefix }}actions_list = [
+    {% block actions_list %}
     {% for layer in layers %}
         {id: 'gotowebgis_{{ layer.codename }}', value: "{{_("Go to map")|escapejs}} ({{layer.layername}})"},
     {% endfor %}
     {% for action_key,action in actions.items %}
-    {id: '{{ action_key }}', value: '{{action.short_description}}'}{% if not forloop.last %}, {% endif %}
+    {id: '{{ action_key }}', value: '{{action.short_description}}'},
     {% endfor %}
+    {% endblock %}
 ];
 
 {% for action_key,action in actions.items %}
     {% if action.form %}
-
-
 function _{{ action_key }}_action_execute_form(ids, all) {
+  {% block action_execute_form %}
   webix.ui({
     view: "window",
     id: "{{ action_key }}_win",
-    width: 340,
+    width: 550,
     maxHeigth: 600,
     scrool: 'y',
     position: "center",
@@ -28,7 +29,7 @@ function _{{ action_key }}_action_execute_form(ids, all) {
     resize: true,
     head: {
       view: "toolbar", cols: [
-        {view: "label", label: '{{_("Fill in the form")|escapejs}}'},
+        {view: "label", label: '{{action.modal_header|escapejs}}'},
         {view: "button", label: '{{_("Close")|escapejs}}', width: 100, align: 'right', click: "$$('{{ action_key }}_win').destructor();"}
       ]
     },
@@ -50,7 +51,7 @@ function _{{ action_key }}_action_execute_form(ids, all) {
                         view: "tootipButton",
                         type: "form",
                         align: "right",
-                        label: "{{_("Go")|escapejs}}",
+                        label: "{{action.modal_click|escapejs}}",
                         click: function () {
                             if ($$('{{ action.form.webix_id }}').validate({hidden:true, disabled:true})) {
                                 webix.extend($$('{{ action.form.webix_id }}'), webix.OverlayBox);
@@ -66,7 +67,8 @@ function _{{ action_key }}_action_execute_form(ids, all) {
                                                 '{{ action.modal_cancel }}',
                                                 $$('{{ action.form.webix_id }}').getValues(),
                                                 function() {$$('{{ action.form.webix_id }}').hideOverlay(); $$('{{ action_key }}_win').destructor()},
-                                                function() {$$('{{ action.form.webix_id }}').hideOverlay();}
+                                                function() {$$('{{ action.form.webix_id }}').hideOverlay();},
+                                                {% if action.reload_list %}true{% else %}false{% endif %}
                                         )
                             }
                         }
@@ -85,6 +87,7 @@ function _{{ action_key }}_action_execute_form(ids, all) {
         },
     }
   }).show();
+  {% endblock %}
 }
 
     {% endif %}
@@ -92,6 +95,7 @@ function _{{ action_key }}_action_execute_form(ids, all) {
 
 
 function {{ view_prefix }}actions_execute(action, ids, all) {
+    {% block action_execute %}
     {% for layer in layers %}
     if (action=='gotowebgis_{{ layer.codename }}') {
         $$("map").goToWebgisPks('{{layer.qxsname}}', '{{ pk_field_name }}', ids);
@@ -112,7 +116,11 @@ function {{ view_prefix }}actions_execute(action, ids, all) {
                 '{{ action.modal_cancel }}'
         );
         {% endif %}
-    } {% if not forloop.last %} else {% endif %} {% endfor %}
+    } {% if not forloop.last %} else {% endif %}
+
+    {% endfor %}
+
+    {% endblock %}
 
 }
 {% else %}

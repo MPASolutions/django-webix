@@ -1,19 +1,14 @@
-# -*- coding: utf-8 -*-
 
-import copy
 from collections import OrderedDict, defaultdict
 from json import dumps, loads
 
+import copy
 import django
+import os
 import six
 from django import forms
+from django.apps import apps
 from django.conf import settings
-
-try:
-    from django.contrib.gis.geos import GEOSGeometry
-except ImportError:
-    GEOSGeometry = object
-
 from django.core.exceptions import FieldDoesNotExist
 from django.core.exceptions import ImproperlyConfigured
 from django.core.serializers.json import DjangoJSONEncoder
@@ -22,21 +17,18 @@ from django.forms.forms import DeclarativeFieldsMetaclass
 from django.forms.models import ModelFormMetaclass
 from django.forms.utils import ErrorList
 from django.urls import reverse
+from django.utils import formats
 from django.utils.encoding import force_text
+from django.utils.http import urlencode
 from django.utils.text import capfirst
 from django.utils.timezone import is_naive, make_naive
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 from random import randint
 from sorl.thumbnail import get_thumbnail
-from django.utils import formats
 
-if django.__version__ < '3.1':
-    try:
-        from django.contrib.postgres.forms.jsonb import JSONField
-    except ImportError:
-        JSONField = forms.Field
-elif django.__version__ >= '3.1':
-    from django.forms.fields import JSONField
+from django_webix.utils.layers import get_layers
+
+from django.forms.fields import JSONField
 
 try:
     from django.contrib.postgres.forms import SimpleArrayField
@@ -44,19 +36,23 @@ except ImportError:
     SimpleArrayField = None
 
 try:
-    from django.contrib.gis.forms import GeometryField
+    from django.contrib.gis.geos import GEOSGeometry
+except ImportError:
+    GEOSGeometry = object
+
+try:
+    from django.contrib.gis.forms import GeometryField, PointField, LineStringField, MultiLineStringField, PolygonField, MultiPolygonField
 except ImportError:
     GeometryField = None
+    PointField = None
 
 
 class BaseWebixMixin:
     form_fix_height = None
     min_count_suggest = 100
     style = 'stacked'
-    readonly_fields = []
-    autocomplete_fields = []
-    autocomplete_fields_exclude = []
-    autocomplete_fields_urls = {}
+    label_width = 300
+    label_align = 'left'
 
     class Meta:
         localized_fields = '__all__'  # to use comma as separator in i18n
@@ -169,12 +165,17 @@ class BaseWebixMixin:
     def _add_null_choice(self, choices):
         return [option for option in choices if option['id'] not in ['', u'', None]]
 
-    def _get_url_suggest(self, app_label, model_name, to_field_name=None):
+    def _get_url_suggest(self, app_label, model_name, to_field_name=None, limit_choices_to=None):
         """ Returns the url to autocomplete model choiche field """
 
         url = "{url}?app_label={app_label}&model_name={model_name}"
         if to_field_name:
             url += "&to_field={to_field}"
+        if limit_choices_to is not None and limit_choices_to != {}:
+            from django.contrib.admin.widgets import url_params_from_lookup_dict
+            dict_limit_choices_to = url_params_from_lookup_dict(limit_choices_to)
+            url += "&query_string=" + urlencode(dict_limit_choices_to)
+
         return url.format(
             url=reverse('webix_autocomplete_lookup'),
             model_name=model_name,
@@ -182,14 +183,20 @@ class BaseWebixMixin:
             to_field=to_field_name,
         )
 
+    def get_model(self):
+        if hasattr(self.Meta, 'model'):
+            return self.Meta.model
+        else:
+            return None
+
     @property
     def webix_id(self):
         """ Returns the form id """
-
-        if hasattr(self.Meta, 'model'):
+        model = self.get_model()
+        if model is not None:
             return '{app_label}.{model_name}'.format(
-                app_label=self.Meta.model._meta.app_label,
-                model_name=self.Meta.model._meta.model_name
+                app_label=model._meta.app_label,
+                model_name=model._meta.model_name
             )
         return self.__class__.__name__
 
@@ -226,12 +233,20 @@ class BaseWebixMixin:
                 'label': label,
                 'name': self.add_prefix(name),
                 'id': self[name].auto_id,
-                'labelWidth': 200,
+                'labelWidth': self.label_width,
+                'labelAlign': self.label_align,
                 'django_type_field': str(type(field).__name__),
             }
+
             if field.required:
                 el['label'] = label = '<strong>{}</strong>'.format(label)
                 # el['required'] = True  # FIXME: problems with inlines
+
+            if hasattr(field, 'help_text') and \
+                field.help_text is not None and \
+                field.help_text!='':
+                el["tooltip"] = {"template": "{}".format(field.help_text)}
+                el["label"] = el["label"] + "&nbsp;<i style='font-size:14px;' class='webix_icon far fa-info-circle'></i>"
 
             if name in self.get_readonly_fields():
                 el.update({
@@ -286,7 +301,7 @@ class BaseWebixMixin:
                 })
                 if initial is not None:
                     if isinstance(initial, six.string_types):
-                        if settings.WEBIX_VERSION >= '7.0.0' and settings.WEBIX_VERSION < '8.0.0':
+                        if '7.0.0' <= settings.WEBIX_VERSION < '8.0.0':
                             el.update({
                                 'value': '2020-01-01 {}'.format(initial).replace('-', ',').replace(' ', ',').replace(
                                     ':', ',')
@@ -299,14 +314,14 @@ class BaseWebixMixin:
                         _value = initial()
                         if not is_naive(_value):
                             _value = make_naive(_value)
-                        if settings.WEBIX_VERSION >= '7.0.0' and settings.WEBIX_VERSION < '8.0.0':
+                        if '7.0.0' <= settings.WEBIX_VERSION < '8.0.0':
                             el.update({'value': '2020-01-01 {}'.format(_value.strftime('%H,%M'))})
                         else:
                             el.update({'value': '{}'.format(_value.strftime('%H,%M'))})
                     else:
                         if not is_naive(initial):
                             initial = make_naive(initial)
-                        if settings.WEBIX_VERSION >= '7.0.0' and settings.WEBIX_VERSION < '8.0.0':
+                        if '7.0.0' <= settings.WEBIX_VERSION < '8.0.0':
                             el.update({'value': '2020-01-01 {}'.format(initial.strftime('%H,%M'))})
                         else:
                             el.update({'value': '{}'.format(initial.strftime('%H,%M'))})
@@ -378,15 +393,16 @@ class BaseWebixMixin:
                     'view': 'uploader',
                     'autosend': False,
                     'multiple': False,
-                    'width': 100,
+                    'width': 150,
+                    'height': 50,
                     'label': _('Upload new image'),
+                    'labelAlign': self.label_align,
                     # 'on': {
                     #     'onAfterFileAdd': "image_add('" + self[name].auto_id + "');"
                     # }
                 })
                 delete_hidden = True
                 if initial:
-
                     img_small = get_thumbnail(initial, '150x100', quality=85)
                     img_big = get_thumbnail(initial, '500x400', quality=85)
                     key = randint(1, 100000)
@@ -396,42 +412,77 @@ class BaseWebixMixin:
                     delete_hidden = False
                 else:
                     _template_file = ''
+
                 elements.update({
                     '{}_block'.format(self[name].html_name): {
                         'id': 'block_' + self[name].auto_id,
+                        'label': label,
+                        'labelAlign': self.label_align,
                         'cols': [
                             {
                                 'name_label': name,
                                 'id_label': 'label_' + name,
+                                'id': 'block_label_' + self[name].auto_id,
                                 'borderless': True,
                                 'template': label,
+                                'labelAlign': self.label_align,
                                 'height': 30,
-                                'width': 200,
-                                'css': {'background-color': 'transparent !important'}
+                                'width': self.label_width,
+                                # attenzione qui non funziona il labelAlign perche non è un input ma è un template
+                                'css': {'background-color': 'transparent !important', 'text-align': self.label_align}
                             },
                             {
                                 'name_label': name,
                                 'id_label': 'preview_' + self[name].auto_id,
                                 'borderless': True,
                                 'template': _template_file,
+                                'labelAlign': self.label_align,
                                 'height': 100,
                                 'width': 170
                             },
-                            el,
                             {
-                                'id': self[name].auto_id + '_clean',
-                                'name': self.add_prefix(name) + '_clean',
-                                'view': "toggle",
-                                'type': "icon",
-                                'offIcon': 'fas fa-trash-alt',
-                                'onIcon': 'fas fa-trash-alt',
-                                'offLabel': '',
-                                'onLabel': _('Eliminato'),
-                                'width': 100,
-                                'css': "webix_danger",
-                                'hidden': delete_hidden,
-                                'click': "delete_image('block_{}', '{}_clean')".format(self[name].auto_id,
-                                                                                       self[name].auto_id),
+                                'id': self[name].auto_id + '_button_block',
+                                'width': 150,
+                                'height': 100,
+                                'rows':[
+                                    el,
+                                    {
+                                        'cols': [
+                                            {
+                                                'id': self[name].auto_id + '_download',
+                                                'view': "button",
+                                                'type': "icon",
+                                                'icon': 'fas fa-download',
+                                                'width': 75,
+                                                'height': 50,
+                                                'css': "webix_primary",
+                                                'hidden': delete_hidden,
+                                                "on": {
+                                                    "onItemClick": "(function (id, e) {{ window.open('{url}','_blank') }})".format(
+                                                        url=initial.url if initial and not isinstance(initial, six.string_types) else str(initial)
+                                                    )
+                                                }
+                                            },
+                                            {
+                                                'id': self[name].auto_id + '_clean',
+                                                'name': self.add_prefix(name) + '_clean',
+                                                'view': "toggle",
+                                                'type': "icon",
+                                                'offIcon': 'fas fa-trash-alt',
+                                                'onIcon': 'fas fa-trash-alt',
+                                                'offLabel': '',
+                                                'onLabel': _('Deleted'),
+                                                'width': 75,
+                                                'height': 50,
+                                                'css': "webix_danger",
+                                                'hidden': delete_hidden,
+                                                'click': "delete_attachment('block_{}', '{}_clean')".format(
+                                                    self[name].auto_id,
+                                                    self[name].auto_id),
+                                            },
+                                        ]
+                                    }
+                                ]
                             },
                             {
                                 'borderless': True,
@@ -449,8 +500,10 @@ class BaseWebixMixin:
                     'autosend': False,
                     'multiple': False,
                     'directory': False,
-                    'width': 100,
-                    'label': _('Upload file')
+                    'width': 150,
+                    'heigth': 40,
+                    'label': _('Upload file'),
+                    'labelAlign': self.label_align,
                 })
                 if isinstance(field.widget, forms.widgets.FileInput):
                     directory = field.widget.attrs.get('directory', False)
@@ -471,37 +524,89 @@ class BaseWebixMixin:
                             'label': _('Upload files')
                         })
 
-                _download = {}
+                delete_hidden = True
                 if initial:
-                    _download = {
-                        'name_label': name,
-                        'id_label': name,
-                        'borderless': True,
-                        'view': "tootipButton",
-                        "type": "iconButton",
-                        "css": "webix_primary",
-                        "icon": "fas fa-download",
-                        "width": 35,
-                        "on": {
-                            "onItemClick": "(function (id, e) {{ window.open('{url}','_blank') }})".format(
-                                url=initial.url if not isinstance(initial, six.string_types) else str(initial)
-                            )
-                        }
-                    }
+                    delete_hidden = False
+
                 elements.update({
                     '{}_block'.format(self[name].html_name): {
+                        'id': 'block_' + self[name].auto_id,
+                        'label': label,
+                        'labelAlign': self.label_align,
                         'cols': [
                             {
-                                'name_label': name,
-                                'id_label': name,
-                                'borderless': True,
-                                'template': label,
-                                'height': 30,
-                                'css': {'background-color': 'transparent !important'}
+                                'height': 80,
+                                'rows': [
+                                    {
+                                        'name_label': name,
+                                        'id_label': name,
+                                        'borderless': True,
+                                        'template': label,
+                                        'labelAlign': self.label_align,
+                                        'height': 40,
+                                        'css': {'background-color': 'transparent !important',
+                                                'text-align': self.label_align}
+                                    },
+                                    {
+                                        'name_label': name,
+                                        'id_label': name,
+                                        'borderless': True,
+                                        'template': '{}'.format(os.path.basename(initial.name) if initial else ''),
+                                        'height': 40,
+                                        'css': {'background-color': 'transparent !important', 'color': 'blue'}
+                                    },
+                                ]
                             },
-                            _download,
-                            el
-                        ]}})
+                            {
+                                'height': 80,
+                                'rows': [
+                                    el,
+                                    {
+                                        'height': 40,
+                                        'cols': [
+                                            {
+                                                'id': self[name].auto_id + '_download',
+                                                'name_label': name,
+                                                'id_label': name,
+                                                'borderless': True,
+                                                'view': "button",
+                                                'type': "icon",
+                                                "icon": "fas fa-download",
+                                                'css': "webix_primary",
+                                                'hidden': delete_hidden,
+                                                "width": 75,
+                                                'height': 40,
+                                                "on": {
+                                                    "onItemClick": "(function (id, e) {{ window.open('{url}','_blank') }})".format(
+                                                        url=initial.url if initial and not isinstance(
+                                                            initial, six.string_types) else str(initial)
+                                                    )
+                                                }
+                                            },
+                                            {
+                                                'id': self[name].auto_id + '_clean',
+                                                'name': self.add_prefix(name) + '_clean',
+                                                'view': "toggle",
+                                                'type': "icon",
+                                                'offIcon': 'fas fa-trash-alt',
+                                                'onIcon': 'fas fa-trash-alt',
+                                                'offLabel': '',
+                                                'onLabel': _('Deleted'),
+                                                'width': 75,
+                                                'height': 40,
+                                                'css': "webix_danger",
+                                                'hidden': delete_hidden,
+                                                'click': "delete_attachment('block_{}', '{}_clean')".format(
+                                                    self[name].auto_id,
+                                                    self[name].auto_id),
+                                            },
+                                        ]
+                                    }
+                                ]
+                            },
+                        ]
+                    }
+                })
                 _pass = True
             # FilePathFied
             elif isinstance(field, forms.FilePathField):
@@ -521,12 +626,11 @@ class BaseWebixMixin:
                             for i in initial
                         ])
                     })
-                count = field.queryset.count()
 
-                if count > self.min_count_suggest and \
-                    name not in self.autocomplete_fields and \
-                    name not in self.autocomplete_fields_exclude:
-                    self.autocomplete_fields.append(name)
+                if name not in self.autocomplete_fields and name not in self.autocomplete_fields_exclude:
+                    count = field.queryset.count()
+                    if count > self.min_count_suggest:
+                        self.autocomplete_fields.append(name)
 
                 # autocomplete url
                 if name in self.autocomplete_fields and \
@@ -535,7 +639,8 @@ class BaseWebixMixin:
                         name: self._get_url_suggest(
                             field.queryset.model._meta.app_label,
                             field.queryset.model._meta.model_name,
-                            field.to_field_name
+                            field.to_field_name,
+                            field.get_limit_choices_to()
                         )
                     })
 
@@ -581,22 +686,31 @@ class BaseWebixMixin:
                         },
                     })
                     # Default if is required and there are only one option
-                    if field.required and initial is None and len(field.queryset) == 1:
-                        el.update({'value': '{}'.format(getattr(field.queryset.first(), field.to_field_name or 'pk'))})
+                    if callable(field.choices):
+                        _choices = list(field.choices())
+                    else:
+                        _choices = list(field.choices)
+                    if field.required and initial is None and len(_choices) == 1:
+                        el.update({'value': '{}'.format(_choices[0][0])})
             # ModelChoiceField
             elif isinstance(field, forms.models.ModelChoiceField):
-                if initial is not None:
+                if initial not in [None,'']:
                     el.update({
                         'value': str(getattr(initial, field.to_field_name or 'pk'))
                         if isinstance(initial, models.Model) else
                         str(initial)
                     })
-                count = field.queryset.count()
+                    # add initial value with text for other purpose
+                    record = field.queryset.get(**{field.to_field_name or 'pk': el['value']})
+                    el['initial'] = {
+                        'id': '{}'.format(getattr(record, field.to_field_name or 'pk')),
+                        'value': '{}'.format(record)
+                    }
 
-                if count > self.min_count_suggest and \
-                    name not in self.autocomplete_fields and \
-                    name not in self.autocomplete_fields_exclude:
-                    self.autocomplete_fields.append(name)
+                if name not in self.autocomplete_fields and name not in self.autocomplete_fields_exclude:
+                    count = field.queryset.count()
+                    if count > self.min_count_suggest:
+                        self.autocomplete_fields.append(name)
 
                 # autocomplete url
                 if name in self.autocomplete_fields and \
@@ -605,7 +719,8 @@ class BaseWebixMixin:
                         name: self._get_url_suggest(
                             field.queryset.model._meta.app_label,
                             field.queryset.model._meta.model_name,
-                            field.to_field_name
+                            field.to_field_name,
+                            field.get_limit_choices_to()
                         )
                     })
 
@@ -628,24 +743,6 @@ class BaseWebixMixin:
                             'id': '{}'.format(getattr(record, field.to_field_name or 'pk')),
                             'value': '{}'.format(record)
                         }]
-
-                # regular field without autocomplete
-                elif count <= 6:
-                    choices = self._add_null_choice([{
-                        'id': '{}'.format(getattr(i, field.to_field_name or 'pk')),
-                        'value': '{}'.format(i)
-                    } for i in field.queryset])
-                    if not field.required:
-                        choices.insert(0, {'id': "", 'value': "------", '$empty': True})
-                    el.update({
-                        'options': choices,
-                        'view': 'richselect',
-                        'selectAll': True,
-                        'placeholder': _('Click to select')
-                    })
-                    # Default if is required and there are only one option
-                    if field.required and initial is None and len(field.queryset) == 1:
-                        el.update({'value': '{}'.format(getattr(field.queryset.first(), field.to_field_name or 'pk'))})
                 else:
                     choices = self._add_null_choice([{
                         'id': '{}'.format(getattr(i, field.to_field_name or 'pk')),
@@ -653,11 +750,27 @@ class BaseWebixMixin:
                     } for i in field.queryset])
                     if not field.required:
                         choices.insert(0, {'id': "", 'value': "------", '$empty': True})
-                    el.update({
-                        'view': 'combo',
-                        'placeholder': _('Click to select'),
-                        'options': choices
-                    })
+                    count = len(choices)
+
+                    # regular field without autocomplete
+                    if count <= 6:
+                        el.update({
+                            'options': choices,
+                            'view': 'richselect',
+                            'selectAll': True,
+                            'placeholder': _('Click to select')
+                        })
+                        # Default if is required and there are only one option
+                        if field.required and initial is None and count == 1:
+                            #  TODO attenzione da rivedere perche puo dare problemi su inlines
+                            el.update(
+                                {'value': '{}'.format(getattr(field.queryset.first(), field.to_field_name or 'pk'))})
+                    else:
+                        el.update({
+                            'view': 'combo',
+                            'placeholder': _('Click to select'),
+                            'options': choices,
+                        })
             # TypedChoiceField ChoiceField
             elif isinstance(field, forms.TypedChoiceField) or isinstance(field, forms.ChoiceField):
                 choices = self._add_null_choice([{
@@ -675,8 +788,12 @@ class BaseWebixMixin:
                 if initial is not None:
                     el.update({'value': initial})
                 # Default if is required and there are only one option
-                if field.required and initial is None and len(field.choices) == 1:
-                    el.update({'value': '{}'.format(field.choices[0][0])})
+                if callable(field.choices):
+                    _choices = list(field.choices())
+                else:
+                    _choices = list(field.choices)
+                if field.required and initial is None and len(_choices) == 1:
+                    el.update({'value': '{}'.format(_choices[0][0])})
             # JSONField (postgresql)
             elif connection.vendor == 'postgresql' and isinstance(field, JSONField):
                 if isinstance(field.widget, forms.widgets.Textarea):
@@ -704,6 +821,11 @@ class BaseWebixMixin:
                             })
                 elif hasattr(field, 'base_field') and isinstance(field.base_field, forms.fields.TypedChoiceField) and \
                     hasattr(field.base_field, 'choices'):
+                    if callable(field.base_field.choices):
+                        _choices = list(field.base_field.choices())
+                    else:
+                        _choices = list(field.base_field.choices)
+
                     el.update({
                         "view": "multicombo",
                         'selectAll': True,
@@ -715,7 +837,7 @@ class BaseWebixMixin:
                                 'data': self._add_null_choice([{
                                     'id': '{}'.format(k),
                                     'value': '{}'.format(v)
-                                } for k, v in field.base_field.choices])
+                                } for k, v in _choices])
                             }
                         },
                     })
@@ -736,6 +858,7 @@ class BaseWebixMixin:
             # GeoFields
             elif GeometryField is not None and isinstance(field, GeometryField):
                 el.update({
+                    'hidden': True,
                     'view': 'textarea'
                 })
                 if initial is not None:
@@ -746,6 +869,200 @@ class BaseWebixMixin:
                         el.update({'value': str(initial)})
                     else:
                         raise Exception(_('Initial value {} for geo field {} is not supported').format(initial, field))
+
+                if apps.is_installed("django_webix_leaflet"):
+                    if hasattr(self, 'instance') and \
+                        self.instance.pk is not None:
+                        object_pk = self.instance.pk
+                    else:
+                        object_pk = None
+
+                    model = self.get_model()
+                    if model is not None:
+                        if hasattr(self,'get_layers'):
+                            # nel WebixModelForm puo essere definita get_layers specifica
+                            layers = self.get_layers(name)  # name is geo field name
+                        else:
+                            # altrimenti usa get_layers generica perchè non conosce la definzione della view
+                            layers = get_layers(model, getattr(self, 'qxs_layers', None))
+                        if getattr(self.instance, name, None) is None:
+                            _mode = 'draw'
+                        else:
+                            _mode = 'edit'
+                    else:
+                        layers = []
+                        _mode = 'draw'
+
+                    # el.update({
+                    #     "on": {
+                    #         "onChange": "(function (newv, oldv) {{ geo_change('{geo_type}','{field_name}'); }})".format(
+                    #             geo_type=field.__class__.__name__,
+                    #             field_name=self[name].auto_id,
+                    #         )
+                    #     }
+                    # })
+
+                    _row_1 = [
+                        {
+                            'id': self[name].auto_id + '_layer',
+                            'name': self.add_prefix(name) + '_layer',
+                            'label': label,
+                            'labelWidth': self.label_width,
+                            'labelAlign': self.label_align,
+                            'view': "select",
+                            'options': [{'id': _layer['qxsname'], 'value': _layer['layername']} for _layer in
+                                        layers]
+                        },
+                        {
+                            'id': self[name].auto_id + '_editbtn',
+                            'name': self.add_prefix(name) + '_editbtn',
+                            'view': "button",
+                            'value': _("Edit"),
+                            'width': 70,
+                            "on": {
+                                "onItemClick": "(function (id, e) {{ $$('map').goToWebgisPk($$('{layer_selector}').getValue(),'{pk_field_name}', {object_pk}, '{mode}', '{field_name}') }})".format(
+                                    layer_selector=self[name].auto_id + '_layer',
+                                    pk_field_name=model._meta.pk.name,
+                                    object_pk="'{}'".format(object_pk) if object_pk is not None else "undefined",
+                                    mode=_mode,
+                                    field_name=self[name].auto_id,
+                                )
+                            }
+                        },
+                        # {
+                        #     "id": self[name].auto_id + '_cp',
+                        #     "name": self.add_prefix(name) + '_cp',
+                        #     'borderless': True,
+                        #     "view": "template",
+                        #     'template': '<div title="{}"><i style="cursor:pointer" class="webix_icon far fa-copy"></i></div>'.format(_('Copy wkt')),
+                        #     'width': 40,
+                        #     "on": {
+                        #         "onItemClick": "(function (id, e) {{   navigator.clipboard.writeText($$('{geo_field}').getValue()); }})".format(
+                        #             geo_field=self[name].auto_id
+                        #         )
+                        #     },
+                        # },
+                        # {
+                        #     "id": self[name].auto_id + '_rm',
+                        #     "name": self.add_prefix(name) + '_rm',
+                        #     'borderless': True,
+                        #     "view": "template",
+                        #     'template': '<div title="{}"><i style="cursor:pointer" class="webix_icon far fa-trash-alt"></i></div>'.format(_('Empty geometry')),
+                        #     'width': 40,
+                        #     "on": {
+                        #         "onItemClick": "(function (id, e) {{ $$('{geo_field}').setValue(''); }})".format(
+                        #             geo_field=self[name].auto_id
+                        #         )
+                        #     }
+                        # },
+                        el
+                    ]
+                    # _row_2 = []
+                    # if PointField is not None and isinstance(field, PointField):# point
+                    #     _row_2 = [
+                    #         {
+                    #             'width': self.label_width
+                    #         },
+                    #         {
+                    #             'id': self[name].auto_id + '_srid',
+                    #             'name': self.add_prefix(name) + '_srid',
+                    #             'label': 'SRID',
+                    #             "view": "text",
+                    #             "labelWidth": 40,
+                    #             "width": 100,
+                    #             "on": {
+                    #                 "onChange": "(function (newv, oldv) {{ update_geo_ewkt_point('{geo_field_selector}'); }})".format(
+                    #                     geo_field_selector=self[name].auto_id,
+                    #                 )
+                    #             }
+                    #         },
+                    #         {
+                    #             "id": self[name].auto_id + '_long',
+                    #             "name": self.add_prefix(name) + '_long',
+                    #             "label": "Long.",
+                    #             "view": "text",
+                    #             "labelWidth": 16,
+                    #             "width": 140,
+                    #             "on": {
+                    #                 "onChange": "(function (newv, oldv) {{ update_geo_ewkt_point('{geo_field_selector}'); }})".format(
+                    #                     geo_field_selector=self[name].auto_id,
+                    #                 )
+                    #             }
+                    #         },
+                    #         {
+                    #             "id": self[name].auto_id + '_lat',
+                    #             "name": self.add_prefix(name) + '_lat',
+                    #             "label": "Lat.",
+                    #             "view": "text",
+                    #             "labelWidth": 16,
+                    #             "width": 140,
+                    #             "on": {
+                    #                 "onChange": "(function (newv, oldv) {{ update_geo_ewkt_point('{geo_field_selector}'); }})".format(
+                    #                     geo_field_selector=self[name].auto_id,
+                    #                 )
+                    #             }
+                    #         },
+                    #     {}
+                    #     ]
+                    # elif (LineStringField is not None and isinstance(field, LineStringField)) or \
+                    #     (MultiLineStringField is not None and isinstance(field, MultiLineStringField)):
+                    #     _row_2 = [
+                    #         {
+                    #             'width': self.label_width
+                    #         },
+                    #         {
+                    #             'id': self[name].auto_id + '_elements',
+                    #             'name': self.add_prefix(name) + '_elements',
+                    #             'label': _('N.elements'),
+                    #             "view": "text",
+                    #             "labelWidth": 40,
+                    #             "width": 100
+                    #         },
+                    #         {
+                    #             'id': self[name].auto_id + '_area',
+                    #             'name': self.add_prefix(name) + '_area',
+                    #             'label': _('Area'),
+                    #             "view": "text",
+                    #             "labelWidth": 40,
+                    #             "width": 100
+                    #         },
+                    #         {
+                    #             'id': self[name].auto_id + '_perimeter',
+                    #             'name': self.add_prefix(name) + '_perimeter',
+                    #             'label': _('Perimeter'),
+                    #             "view": "text",
+                    #             "labelWidth": 40,
+                    #             "width": 100
+                    #         },
+                    #         {}
+                    #     ]
+                    # elif (PolygonField is not None and isinstance(field, PolygonField)) or \
+                    #     (MultiPolygonField is not None and isinstance(field, MultiPolygonField)):
+                    #     _row_2 = [
+                    #         {
+                    #             'width': self.label_width
+                    #         },
+                    #         {
+                    #             'id': self[name].auto_id + '_lenght',
+                    #             'name': self.add_prefix(name) + '_lenght',
+                    #             'label': _('Lenght'),
+                    #             "view": "text",
+                    #             "labelWidth": 40,
+                    #             "width": 100
+                    #         },
+                    #         {}
+                    #     ]
+                    elements.update({
+                        '{}_block'.format(self[name].html_name): {
+                            'id': 'block_' + self[name].auto_id,
+                            'rows': [
+                                {'cols': _row_1},
+                           #     {'cols': _row_2},
+                            ]
+                        }
+                    })
+
+
             # InlineForeignKey
             elif isinstance(field, forms.models.InlineForeignKeyField):
                 pass
@@ -756,12 +1073,15 @@ class BaseWebixMixin:
             # Widget RadioSelect
             if isinstance(field.widget, forms.RadioSelect):
                 _choices = field.choices if hasattr(field, 'choices') else field.widget.choices
+                if callable(_choices):
+                    _choices = _choices()
+
                 el.update({
                     "view": "radio",
                     "options": [{
                         "id": key,
                         "value": value
-                    } for key, value in _choices]
+                    } for key, value in list(_choices)]
                 })
                 if initial is not None:
                     el.update({'value': initial})
@@ -811,7 +1131,7 @@ class BaseWebixMixin:
 
                 _field_header = {}
 
-                if field_name.endswith('-DELETE'):
+                if field_name.endswith('-DELETE') or field_name.endswith('-DELETE-icon') :
                     _field_header = {'header': '', 'width': 28}
                 else:
                     if 'width' in f:
@@ -824,9 +1144,10 @@ class BaseWebixMixin:
                         f['header'] = [f['header']]
                     _field_header.update({'header': f['header']})
                 elif 'label' in f:
-                    _field_header.update({'header': force_text(f['label']).capitalize()})
+                    _field_header.update({'header': force_text(f['label'])})
 
                 if _field_header is not None:
+                    _field_header.update({'id': 'id_header_{}'.format(field_name)})
                     fields_header.update({field_name: _field_header})
 
         return fields_header
@@ -868,7 +1189,14 @@ class BaseWebixForm(forms.BaseForm, BaseWebixMixin):
                  initial=None, error_class=ErrorList, label_suffix=None,
                  empty_permitted=False, field_order=None, use_required_attribute=None,
                  renderer=None, request=None, inline_id=None,
-                 has_add_permission=None, has_change_permission=None, has_delete_permission=None):
+                 has_add_permission=None, has_change_permission=None, has_delete_permission=None, **kwparams):
+
+        # Set default parameter
+        self.readonly_fields = []
+        self.autocomplete_fields = []
+        self.autocomplete_fields_exclude = []
+        self.autocomplete_fields_urls = {}
+
         # Set request
         self.request = request
         self.has_add_permission = has_add_permission
@@ -887,6 +1215,14 @@ class BaseWebixForm(forms.BaseForm, BaseWebixMixin):
 
         super(BaseWebixForm, self).__init__(data, files, auto_id, prefix, initial, error_class, label_suffix,
                                             empty_permitted, field_order, use_required_attribute, renderer)
+
+        if not hasattr(self, 'fields_orig'):
+            self.fields_orig = copy.deepcopy(self.fields)
+        for field in self.fields:
+            if hasattr(self.fields[field], 'queryset') and \
+                hasattr(self.fields_orig[field].queryset.model.objects,'get_filter'):
+                self.fields[field].queryset = self.fields_orig[field].queryset.filter(
+                    self.fields_orig[field].queryset.model.objects.get_filter())
 
         # Set localization fields
         if settings.USE_L10N is True:
@@ -910,6 +1246,13 @@ class BaseWebixModelForm(forms.BaseModelForm, BaseWebixMixin):
                  empty_permitted=False, instance=None, use_required_attribute=None,
                  renderer=None, request=None, inline_id=None,
                  has_add_permission=None, has_change_permission=None, has_delete_permission=None):
+
+        # Set default
+        self.readonly_fields = []
+        self.autocomplete_fields = []
+        self.autocomplete_fields_exclude = []
+        self.autocomplete_fields_urls = {}
+
         # Set request
         self.request = request
         self.has_add_permission = has_add_permission
@@ -933,6 +1276,14 @@ class BaseWebixModelForm(forms.BaseModelForm, BaseWebixMixin):
             super(BaseWebixModelForm, self).__init__(data, files, auto_id, prefix, initial, error_class, label_suffix,
                                                      empty_permitted, instance, use_required_attribute)
 
+        if not hasattr(self, 'fields_orig'):
+            self.fields_orig = copy.deepcopy(self.fields)
+        for field in self.fields:
+            if hasattr(self.fields[field], 'queryset') and \
+                hasattr(self.fields_orig[field].queryset.model.objects,'get_filter'):
+                self.fields[field].queryset = self.fields_orig[field].queryset.filter(
+                    self.fields_orig[field].queryset.model.objects.get_filter())
+
         # Set localization fields
         if settings.USE_L10N is True:
             for field in self.fields:
@@ -948,7 +1299,8 @@ class BaseWebixModelForm(forms.BaseModelForm, BaseWebixMixin):
         return cleaned_data
 
     def get_name(self):
-        return capfirst(self.Meta.model._meta.verbose_name)
+        model = self.get_model()
+        return capfirst(model._meta.verbose_name)
 
 
 class WebixForm(six.with_metaclass(DeclarativeFieldsMetaclass, BaseWebixForm)):

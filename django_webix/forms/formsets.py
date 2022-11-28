@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 
 from django.core.exceptions import ValidationError
 from django.forms import BaseInlineFormSet
@@ -7,7 +6,7 @@ from django.forms.formsets import TOTAL_FORM_COUNT, INITIAL_FORM_COUNT, MIN_NUM_
 from django.forms.widgets import HiddenInput
 from django.utils.functional import cached_property
 from django.utils.text import capfirst
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 from extra_views import InlineFormSetFactory
 
 from django_webix.forms import WebixForm, WebixModelForm
@@ -35,9 +34,11 @@ class BaseWebixInlineFormSet(BaseInlineFormSet):
     def __init__(self, **kwargs):
         self.request = kwargs.pop('request', None)
         self.container_id = kwargs.pop('container_id', None)
+        self.auto_position = kwargs.pop('auto_position', True)
         self.has_add_permission = kwargs.pop('has_add_permission', None)
         self.has_change_permission = kwargs.pop('has_change_permission', None)
         self.has_delete_permission = kwargs.pop('has_delete_permission', None)
+        self.name = kwargs.pop('name', None)
         super(BaseWebixInlineFormSet, self).__init__(**kwargs)
 
     def get_form_kwargs(self, index):
@@ -70,7 +71,9 @@ class BaseWebixInlineFormSet(BaseInlineFormSet):
         return rules_new
 
     def get_name(self):
-        if self.model is not None:
+        if self.name is not None:
+            return self.name
+        elif self.model is not None:
             return capfirst(self.model._meta.verbose_name_plural)
         return ""  # pragma: no cover
 
@@ -98,10 +101,10 @@ class BaseWebixInlineFormSet(BaseInlineFormSet):
         return '{}-group'.format(self.prefix)
 
     def get_container_id(self):
-        return self.container_id
-
-    def get_default_container_id(self):
-        return self.webix_id() + '-container'
+        if self.container_id is not None:
+            return self.container_id
+        else:
+            return self.webix_id() + '-container' # default
 
 
 class WebixInlineFormSet(InlineFormSetFactory):
@@ -129,11 +132,12 @@ class WebixInlineFormSet(InlineFormSetFactory):
             {'template_name': self.template_name}
         )
 
-        # Set queryset
-        if hasattr(self, 'get_queryset') and callable(self.get_queryset):
-            self.formset_kwargs['queryset'] = self.get_queryset()
-        else:
-            self.formset_kwargs['queryset'] = self.inline_model.objects.all()
+        if instance is not None and instance.pk is not None:
+            # Set queryset
+            if hasattr(self, 'get_queryset') and callable(self.get_queryset):
+                self.formset_kwargs['queryset'] = self.get_queryset()
+            else:
+                self.formset_kwargs['queryset'] = self.inline_model.objects.all()
 
     def get_formset_kwargs(self):
         _formset_kwargs = super(WebixInlineFormSet, self).get_formset_kwargs()
@@ -143,20 +147,31 @@ class WebixInlineFormSet(InlineFormSetFactory):
             'has_change_permission': self.has_change_permission(),
             'request': self.request,
             'container_id': getattr(self, 'container_id', None),
-            'initial': self.initial
+            'auto_position': getattr(self, 'auto_position', True),
+            'initial': self.initial,
+            'name': getattr(self, 'name', None)
         })
         return _formset_kwargs
 
     def get_factory_kwargs(self):
+
         _factory_kwargs = super(WebixInlineFormSet, self).get_factory_kwargs()
         if self.has_add_permission():
             extra_forms = _factory_kwargs.get('extra', 3)
+            min_num_forms = _factory_kwargs.get('min_num', 0)
         else:
             extra_forms = 0
+            min_num_forms = 0
         # FIX for initial data values (list of dict and not instances)
         _factory_kwargs.update({
-            'extra': extra_forms
+            'extra': extra_forms,
+            'min_num': min_num_forms,
         })
+        # FIX for CUSTOM factory_kwargs !
+        if len(self.initial) > _factory_kwargs['extra'] + _factory_kwargs['min_num']:
+            _factory_kwargs.update({
+                'extra': len(self.initial) - _factory_kwargs['min_num']
+            })
         return _factory_kwargs
 
     def has_add_permission(self):

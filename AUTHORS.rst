@@ -1,13 +1,16 @@
 Credits
 =======
 
-This package was developed by MPA Solutions
+This package was developed by MPA Solutions soc.coop. and Enogis srl
 
 Development Lead
 ----------------
 
-* Alessandro Regolini <regolini@mpasol.it> 
+* Alessandro Regolini <alessandro@regolini.it>
 * Alessio Bazzanella <bazzanella@mpasol.it>
+* Leonardo Perathoner <bazzanella@mpasol.it>
+* Kristjan Gjika <gjika@mpasol.it>
+* Luca Coviello <coviello@enogis.it>
 
 Contributors
 ------------

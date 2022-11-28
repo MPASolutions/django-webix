@@ -14,10 +14,16 @@
         {% endif %}
     {% endblock %}
 
-    {% if failure_delete_related_objects %}
-        {% block failure_related_objects %}
-            {% include "django_webix/include/list_failure_related_objects.js" with failure_related_objects=failure_delete_related_objects %}
+    {% if failure_delete_blocking_objects %}
+        {% block failure_blocking_objects %}
+            {% include "django_webix/include/list_failure_blocking_objects.js"  with failure_blocking_objects=failure_delete_blocking_objects %}
         {% endblock %}
+    {% else %}
+        {% if failure_delete_related_objects %}
+            {% block failure_related_objects %}
+                {% include "django_webix/include/list_failure_related_objects.js" with failure_related_objects=failure_delete_related_objects %}
+            {% endblock %}
+        {% endif %}
     {% endif %}
 
     {% if has_delete_permission %}

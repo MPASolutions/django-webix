@@ -1,0 +1,159 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-09-26 09:26+0200\n"
+"PO-Revision-Date: 2022-03-09 14:49+0050\n"
+"Last-Translator: Sambado Paolo CBC Spagna <>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Translated-Using: django-rosetta 0.9.8\n"
+
+#: migrations/0006_auto_20201015_1218.py:17 models.py:13
+#: templates/django_validator/form_import_validation.js:21
+msgid "Attachment"
+msgstr "Archivo adjunto"
+
+#: templates/django_validator/form_import_validation.js:21
+msgid "errors"
+msgstr "errores"
+
+#: templates/django_validator/form_import_validation.js:21
+msgid "error"
+msgstr "error"
+
+#: templates/django_validator/form_import_validation.js:22
+msgid "and"
+msgstr "y"
+
+#: templates/django_validator/form_import_validation.js:37
+msgid "sheet"
+msgstr "hoja"
+
+#: templates/django_validator/form_import_validation.js:52
+msgid "Errors"
+msgstr "Errores"
+
+#: templates/django_validator/form_import_validation.js:75
+#: templates/django_validator/form_import_validation.js:138
+msgid "row"
+msgstr "fila"
+
+#: templates/django_validator/form_import_validation.js:83
+#: templates/django_validator/form_import_validation.js:146
+msgid "Global controls"
+msgstr "Controles general"
+
+#: templates/django_validator/form_import_validation.js:85
+#: templates/django_validator/form_import_validation.js:87
+#: templates/django_validator/form_import_validation.js:148
+#: templates/django_validator/form_import_validation.js:150
+msgid "Column"
+msgstr "Columna"
+
+#: templates/django_validator/form_import_validation.js:115
+msgid "Warnings"
+msgstr "Advertencias"
+
+#: templates/django_validator/form_import_validation.js:179
+msgid "Close and correct"
+msgstr "Cerrar y corregir"
+
+#: templates/django_validator/form_import_validation.js:195
+msgid "Continue with warnings"
+msgstr "Continuar con la advertencias"
+
+#: utils.py:36
+msgid "No file uploaded"
+msgstr "Ningún archivo cargado"
+
+#: utils.py:37
+msgid ""
+"Text file not recognizable as delimiter-separated values with separator ' {} "
+"' (Exception:{})"
+msgstr "Archivo de texto no reconocido como csv ' {} ' (Excepción:{})"
+
+#: utils.py:38
+msgid "Could not find file '{}' (or read from buffer)"
+msgstr "No se ha encontrado archivo '{}' (leer desde el buffer)"
+
+#: utils.py:39
+msgid "File format '{}' not recognized, supported formats: {}"
+msgstr "Formato de archivo  '{}' no reconocido, formatos compatibles: {}"
+
+#: utils.py:40
+msgid "File type '{}' not supported"
+msgstr "Tipo de archivo '{}' no compatible"
+
+#: utils.py:41
+msgid "There is no sheet"
+msgstr "No hay hoja"
+
+#: utils.py:42
+msgid "There is no data in the sheet {}"
+msgstr "No hay datos en la hoja {}"
+
+#: utils.py:43
+msgid "There are columns with no name"
+msgstr "Hay columnas sin nombre"
+
+#: utils.py:44
+msgid "There are columns with no name: {}"
+msgstr "Hay columnas sin nombre: {}"
+
+#: utils.py:45
+msgid "There are not enough columns: there are {} columns, {} needed"
+msgstr "No hay suficientes columnas: Hay {} columnas, {} necesarias"
+
+#: utils.py:46
+msgid "Column headers ({}^ row) are incorrect"
+msgstr "Los encabezados de columna ({} ^ fila) son incorrectos"
+
+#: utils.py:47
+msgid "There is no column '{}'"
+msgstr "No hay columna '{}'"
+
+#: utils.py:48
+msgid "The name of the {}^ column ({}) must be ' {} ' (instead of '{}')"
+msgstr "El nombre de {}^ columna ({}) debe ser ' {} ' (en lugar de '{}')"
+
+#: utils.py:49
+msgid "A uniqueness rule has been violated in the fields {}"
+msgstr "Se ha violado una regla de unicidad en los campos {}"
+
+#: utils.py:50
+msgid ""
+"The zip file is supported only if the following files are contained .shp, ."
+"dbf, .prj, .shx"
+msgstr ""
+"El archivo zip es compatible sólo si contiene los siguientes archivos .shp, ."
+"dbf, .prj, .shx"
+
+#: utils.py:130 utils.py:140 utils.py:150 utils.py:165
+msgid "This operation can only be done before validating"
+msgstr "Esta operación solo se puede hacer antes de validar"
+
+#: utils.py:552
+msgid "Validate save mode are ROW | FULL"
+msgstr "Los sistemas de validación son ROW | FULL"
+
+#: validators.py:22
+#, python-format
+msgid "%(value)s is not a boolean value"
+msgstr "%(value)s no es un valor booleano"
+
+#: validators.py:28
+#, python-format
+msgid "Ensure this value is strictly greater than %(limit_value)s."
+msgstr ""
+"Asegúrese de que este valor sea estrictamente mayor que   %(limit_value)s."

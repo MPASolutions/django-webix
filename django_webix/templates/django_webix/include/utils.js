@@ -2,6 +2,46 @@
 
 {% get_request_filter_params %}
 
+String.prototype.toTitle = function () {
+    return this.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
+};
+
+webix.editors.datetime = webix.extend( {
+	focus	:function(){},
+	popupType:"datetime",
+	setValue:function(value){
+		this._is_string = this.config.stringResult || (value && typeof value == "string");
+		webix.editors.popup.setValue.call(this, value);
+	},
+	getValue:function(){
+		return this.getInputNode().getValue(this._is_string?webix.i18n.parseFormatStr:"")||"";
+	},
+	popupInit:function(popup){
+		popup.getChildViews()[0].attachEvent("onDateSelect", function(value){
+			callEvent("onEditEnd",[value]);
+		});
+	}
+}, webix.editors.popup);
+
+webix.editors.$popup.datetime = {
+    height: 250,
+    width: 250,
+    padding: 0,
+    view: "popup",
+    body: {
+        view: "calendar", timepicker: true, icons: true, borderless: true
+    },
+}
+
+webix.ui.datafilter.serverDateRangeFilter = webix.extend({
+  getValue:function(t){
+    var e=this.getInputNode(t);
+    e.config.stringResult=true;
+    //console.log(e.getValue());
+    return e.getValue()
+  }
+}, webix.ui.datafilter.serverDateRangeFilter)
+
 {# filters #}
 
 if (webixAppliedFilters == undefined) {
@@ -101,12 +141,14 @@ webix.attachEvent("onBeforeAjax", function (mode, url, data, xhr, headers) {
 {# Italian locale settings for pivot #}
 
 webix.i18n.locales['it-IT'].pivot = {
+    avg: 'media',
     apply: "Applica",
     cancel: "Annulla",
     columns: "Colonne",
-    count: "Somma",
+    count: "conteggio",
     fields: "Campi",
     filters: "Filtri",
+    groupBy: "Raggruppa per",
     max: "max",
     min: "min",
     operationNotDefined: "Operazione non definita",
@@ -115,11 +157,13 @@ webix.i18n.locales['it-IT'].pivot = {
     select: "selezione",
     sum: "somma",
     text: "testo",
+    total: "Totale",
     values: "Valori",
     windowTitle: "Configurazione",
     windowMessage: "[Trascinare i campi di sinistra nella sezione desiderata]",
-    total: "Totale"
 };
+
+webix.i18n.locales['it-IT'].fullDateFormat = "%d/%m/%Y %H:%i:%s"
 
 {# values casts #}
 
@@ -304,7 +348,9 @@ function load_js(lnk, hide, area, method, data, headers, dataType, abortAllPendi
             if (typeof fail === 'function') {
                 return fail(xhr, textStatus);
             } else {
-                webix.alert('{{_("Server error")|escapejs}}')
+                    if (textStatus!='abort') {
+                        webix.alert('{{_("Server error")|escapejs}}')
+                    }
             }
         }).always(function (data, textStatus, errorThrown) {
             if (typeof always === 'function') {
@@ -360,7 +406,9 @@ function load_js(lnk, hide, area, method, data, headers, dataType, abortAllPendi
                         $$('{{ webix_overlay_container_id }}').hideOverlay();
                     else if ($$(area) !== undefined && $$(area) !== null && $$(area).hideOverlay !== undefined)
                         $$(area).hideOverlay();
-                    webix.alert('{{_("Server error")|escapejs}}')
+                    if (textStatus!='abort') {
+                        webix.alert('{{_("Server error")|escapejs}}')
+                    }
                 }
             }).always(function (data, textStatus, errorThrown) {
                 if (typeof always === 'function') {
@@ -419,24 +467,59 @@ function webix_post(path, params) {
 }
 {# autocomplete #}
 
-function set_autocomplete_reload(selector, QS) {
+function set_autocomplete_reload(selector, QS, finally_function) {
     var a = $$(selector);
     var d = a.getList();
     if(a.config.view === 'multicombo' || a.config.view === 'multiselect'){
-        d.define('dataFeed', QS);
+        if(d.config.dataFeed == undefined) {
+            d.define('dataFeed', QS);
+        }else{
+            d.config.dataFeed = QS
+        }
         d.clearAll();
     } else {
         var b = $$(a.config.suggest);
         var c = b.getBody();
-        c.define('dataFeed', QS);
-        c.clearAll()
+        if(c.config.dataFeed == undefined) {
+            c.define('dataFeed', QS);
+        }else{
+            c.config.dataFeed = QS
+        }
+        c.clearAll();
         c.refresh();
     }
-    d.load(QS + '&filter[value]=');
+    if (finally_function==undefined){
+        finally_function=function(){}
+    }
+    d.load(QS + '&filter[value]=').finally(finally_function);
     d.refresh();
 }
 
-function set_autocomplete_value(selector, QS, value) {
+function set_autocomplete_value(selector, QS, value, finally_function) {
+    var a = $$(selector);
+    var d = a.getList();
+    if(a.config.view === 'multicombo' || a.config.view === 'multiselect'){
+        if(d.config.dataFeed == undefined) {
+            d.define('dataFeed', QS);
+        }else{
+            d.config.dataFeed = QS
+        }
+        d.clearAll();
+    }else {
+        var b = $$(a.config.suggest);
+        var c = b.getBody();
+        if(c.config.dataFeed == undefined) {
+            c.define('dataFeed', QS);
+        }else{
+            c.config.dataFeed = QS
+        }
+        c.refresh();
+    }
+    d.load(QS + '&filter[value]=' + value).finally(finally_function);
+    d.refresh();
+}
+
+function set_autocomplete(selector, QS, finally_function) {
     var a = $$(selector);
     var d = a.getList();
     if(a.config.view === 'multicombo' || a.config.view === 'multiselect'){
@@ -445,33 +528,21 @@ function set_autocomplete_value(selector, QS, value) {
     }else {
         var b = $$(a.config.suggest);
         var c = b.getBody();
-        c.define('dataFeed', QS);
+        if(c.config.dataFeed == undefined) {
+            c.define('dataFeed', QS);
+        }else{
+            c.config.dataFeed = QS
+        }
         c.refresh();
     }
-    d.load(QS + '&filter[value]=' + value);
+    d.load(QS + '&filter[value]=').finally(finally_function);
     d.refresh();
 }
 
-function set_autocomplete(selector, QS) {
-    var a = $$(selector);
-    var d = a.getList();
-    if(a.config.view === 'multicombo' || a.config.view === 'multiselect'){
-        d.define('dataFeed', QS);
-        d.clearAll();
-    }else {
-        var b = $$(a.config.suggest);
-        var c = b.getBody();
-        c.define('dataFeed', QS);
-        c.refresh();
-    }
-    d.load(QS + '&filter[value]=');
-    d.refresh();
-}
-
-function set_autocomplete_empty(selector, QS) {
+function set_autocomplete_empty(selector, QS, finally_function) {
     a = $$(selector);
     d = a.getList();
-    d.load(QS + '&filter[value]=');
+    d.load(QS + '&filter[value]=').finally(finally_function);
 }
 
 {# webix extensions #}
@@ -530,4 +601,42 @@ function sortFloat(a, b) {
     a = parseFloat(a.data6);
     b = parseFloat(b.data6);
     return a > b ? 1 : (a < b ? -1 : 0);
+}
+
+function floateditor(obj, common, value, config) {
+    var anno = config.id.replace('menu_','');
+    var lock = obj[config.id+'_lock'];
+    if (lock!=true) {
+        var floaticon = "<div title='{{_("Click and change")|escapejs}}'> " + value + "&nbsp;&nbsp;&nbsp;<span style='float:right;margin-top:3px;text-align:right;' class='webix_icon far fa-edit'></span></div>";
+    } else {
+        var floaticon = "<div title='{{_("Locked data")|escapejs}}'> " + value + "</div>";
+    }
+    return floaticon;
+}
+
+function filter_icontains(item, value) {
+    if (item.value.toString().toLowerCase().indexOf(value.toLowerCase()) >= 0)
+        return true;
+    return false;
+}
+
+function update_geo_ewkt_point(geo_field_selector){
+    //'SRID=32632;POINT (663156.5901635507 5099188.654177771)'
+    if ( ($$(selector + '_long')!='') && ($$(selector + '_lat')!='') && ($$(selector + '_srid')!='') ) {
+        $$(selector).setValue('SRID='+$$(selector + '_srid').getValue()+';POINT ('+$$(selector + '_long').getValue()+' '+$$(selector + '_lat').getValue()+')');
+    }
+}
+
+function geo_change(geo_type, field_name){
+    /*
+    str = 'Content(cap)(cap2)(cap3)'
+    str.match(/(\(.*?\))/g)
+    var i = $(this).attr("id").match(/(?:-\d+)?(-\d+-)/);
+    //'SRID=32632;POINT (663156.5901635507 5099188.654177771)'
+    var str = $$(geo_field_selector).getValue()
+    let pattern = /SRID=(?P<srid>-?\d+);POINT \((?P<longitude>-?\d+\.\d+) (?P<latitude>-?\d+\.\d+)\)/g
+    str.match(pattern);
+    let arr = patter.exec( str );
+  return arr[1];
+     */
 }

@@ -8,6 +8,9 @@
  * @returns {boolean}
  */
 function isNotEmpty(field_name, value) {
+    if (value === undefined){
+        throw new Error('ERROR: {field name:'+field_name+' value:'+value+'}');
+    }
     $$("id_" + field_name).define("tooltip", '{{_("Required field")|escapejs}}');
     return value != null && value !== '';
 }
@@ -20,6 +23,9 @@ function isNotEmpty(field_name, value) {
  * @returns {*}
  */
 function isEmail(field_name, value) {
+    if (value === undefined){
+        throw new Error('ERROR: {field name:'+field_name+' value:'+value+'}');
+    }
     $$("id_" + field_name).define("tooltip", '{{_("Invalid email")|escapejs}}');
     var re = /^([\w-]+(?:\.[\w-]+)*)@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$/i;
     if (value == null || value === '')
@@ -34,6 +40,9 @@ function isEmail(field_name, value) {
  * @returns {*}
  */
 function isInt(value) {
+    if (value === undefined){
+        throw new Error('ERROR: {field name:'+field_name+' value:'+value+'}');
+    }
     if (value == undefined) {
         return true;
     }
@@ -53,7 +62,9 @@ function isInt(value) {
  * @returns {boolean}
  */
 function isInteger(field_name, value, max, min) {
-    // TODO
+    if (value === undefined){
+        throw new Error('ERROR: {field name:'+field_name+' value:'+value+'}');
+    }
     if (value !== '') {
         if (isInt(value) === false) {
             $$("id_" + field_name).define("tooltip", '{{_("Not integer field")|escapejs}}');
@@ -81,7 +92,10 @@ function isInteger(field_name, value, max, min) {
  * @returns {boolean}
  */
 function isNumber(field_name, value, max, min) {
-//        if (val.match(/^\d+\.\d+$/) || val.match(/^\d+\,\d+$/) || val.match(/^-{0,1}\d+$/)){
+    if (value === undefined){
+        throw new Error('ERROR: {field name:'+field_name+' value:'+value+'}');
+    }
+
     if (!$.isNumeric(value)) {
         value = value.replace(',', '.');
     }
@@ -118,6 +132,9 @@ function isNumber(field_name, value, max, min) {
  * @returns {boolean}
  */
 function isString(field_name, value, max, min) {
+    if (value === undefined){
+        throw new Error('ERROR: {field name:'+field_name+' value:'+value+'}');
+    }
     if (value !== null) {
         if (value.length < min) {
             $$("id_" + field_name).define("tooltip", '{{_("String shorter than ")|escapejs}}' + min);

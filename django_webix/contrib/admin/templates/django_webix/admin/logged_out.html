@@ -1,0 +1,83 @@
+{% load thumbnail static django_webix_utils i18n %}<!DOCTYPE HTML>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>
+        {{ title }}
+    </title>
+
+    {% block webix_header %}
+        {% include "django_webix/static_meta.html" %}
+    {% endblock %}
+
+    <style>
+        #login_container {
+            display: table;
+            margin: 30px auto;
+        }
+    </style>
+    {% block extrahead %}{% endblock %}
+
+    {% comment %}
+    {% block sentry %}
+    {% load sentry %}
+    {% sentry_js %}
+    {% endblock %}
+    {% endcomment %}
+
+</head>
+<body style="width:100%;height:100%;margin:0px;padding:0px;">
+<div id="login_container"></div>
+<script type="text/javascript" charset="utf-8">
+    webix.ready(function () {
+        webix.ui({
+            container: "login_container",
+            rows: [
+                {
+                    height: 30,
+                },
+                {
+                    id: 'id_login_header',
+                    view: "template",
+                    template: "{{site_title}}",
+                    type: "header"
+                },
+                {
+                    id: "login_form",
+                    view: "form",
+                    type: "form",
+                    scroll: false,
+                    width: 400,
+                    elements: [
+                         {
+                            margin: 5, cols: [{
+                                view: "button",
+                                id: 'id_login_button',
+                                label: "{% trans 'Log in again' %}",
+                                click: function () {
+                                    if ($$('login_form').validate()) {
+                                        webix.send(".", $$('login_form').getValues());
+                                    }
+                                }
+                            }
+                            ]
+                        }
+                    ]
+                }]
+
+        });
+        $$('login_form').setValues({csrfmiddlewaretoken: "{{ csrf_token }}"});
+    });
+</script>
+
+{{ error_message }}
+<link rel="stylesheet" type="text/css" href="https://www.mpasolutions.it/cookies/mpasolutions.css">
+<link href="https://fonts.googleapis.com/css?family=Roboto+Slab|Quicksand:400,500" rel="stylesheet">
+<script type="text/javascript" src="https://www.mpasolutions.it/cookies/jquery.min.js"></script>
+<script type="text/javascript" src="https://www.mpasolutions.it/cookies/jquery.ihavecookies.js"></script>
+<script type="text/javascript" src="https://www.mpasolutions.it/cookies/config.js"></script>
+
+</body>
+</html>
+

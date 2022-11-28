@@ -42,11 +42,28 @@ The full documentation is at https://django-webix.readthedocs.io.
 Quickstart
 ----------
 
+Create a new virtualenv:
+
+.. code-block:: bash
+
+    $ python -m venv django-webix
+    $ source django-webix/bin/activate
+
+
 Install Django Webix:
 
 .. code-block:: bash
 
     $ pip install django-webix
+
+Extra packages for Django Webix:
+
+.. code-block:: bash
+
+    $ pip install django-webix-sender
+    $ pip install django-dal
+    $ pip install django-filtersmerger
+    $ pip install django-webix-filter
 
 Add ``django-webix`` to your ``INSTALLED_APPS``
 
@@ -110,6 +127,18 @@ Does the code actually work?
     $ source <YOURVIRTUALENV>/bin/activate
     $ (myenv) $ pip install tox
     $ (myenv) $ tox
+
+
+Sponsors
+--------
+
+.. image:: https://mpasolutions.it/img/logo.png
+    :target: https://mpasolutions.it
+    :alt: MPA Solutions
+
+.. image:: https://www.enogis.it/wp-content/uploads/2020/09/enogis_flat_logo.png
+    :target: https://enogis.it
+    :alt: Enogis
 
 
 Contributors

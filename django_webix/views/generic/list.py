@@ -1,18 +1,24 @@
-# -*- coding: utf-8 -*-
 
+from copy import deepcopy
 from django.apps import apps
+from django.contrib.auth.decorators import login_required
 from django.core.exceptions import FieldDoesNotExist
 from django.core.exceptions import PermissionDenied, ImproperlyConfigured
 from django.db.models import F, ManyToManyField, Case, When, Value, BooleanField
+from django.db.models.functions import Coalesce
 from django.http import JsonResponse, Http404
 from django.template import Template, Context
 from django.template.loader import get_template
-from django.utils.translation import ugettext as _
+from django.utils.decorators import method_decorator
+from django.utils.translation import gettext as _
+from django.utils.translation import get_language
 from django.views.generic import ListView
+from django.db.models.query import QuerySet
 
-from django_filtersmerger import FilterMerger
+from django_webix.forms import WebixModelForm
+from django_webix.views import WebixUpdateView
 from django_webix.views.generic.base import WebixBaseMixin, WebixPermissionsMixin, WebixUrlMixin
-from django_webix.views.generic.utils import get_model_geo_field_names
+from django_webix.utils.layers import get_model_geo_field_names
 
 try:
     from django.contrib.gis.geos import GEOSGeometry
@@ -24,6 +30,54 @@ try:
 except ImportError:
     MultiPolygon = object
 
+def get_action_dict(request, action):
+    return {
+        'func': action,
+        'action_key': action.action_key,
+        'response_type': action.response_type,
+        'allowed_permissions': action.allowed_permissions,
+        'short_description': action.short_description,
+        'modal_header': action.modal_header,
+        'modal_title': action.modal_title,
+        'modal_click': action.modal_click,
+        'modal_ok': action.modal_ok,
+        'modal_cancel': action.modal_cancel,
+        'form': getattr(action, 'form')(request=request) if hasattr(action,
+                                                                    'form') and action.form is not None else None,
+        'reload_list': getattr(action, 'reload_list', True),
+    }
+
+def get_actions_flexport(request, model):
+    _actions = []
+    # add flexport actions
+    if apps.is_installed('flexport') and model is not None:
+        from django.contrib.contenttypes.models import ContentType
+        from flexport.views import create_extraction
+        from flexport.models import Export
+
+        model_ct = ContentType.objects.get(model=model._meta.model_name,
+                                           app_label=model._meta.app_label)
+        flexport_actions = {}
+
+        def action_builder(export_instance):
+            _action = lambda listview, request, qs: create_extraction(request, export_instance.id, qs)
+            _action.__name__ = 'flexport_action_%s' % export_instance.id  # verificare se è corretto
+            _action.response_type = 'blank'
+            _action.short_description = export_instance.action_name
+            _action.action_key = 'flexport_{}'.format(export_instance.id)
+            _action.allowed_permissions = []
+            _action.modal_header = _('Fill in the form')
+            _action.modal_title = _("Are you sure you want to proceed with this action?")
+            _action.modal_click = _("Go")
+            _action.modal_ok = _("Proceed")
+            _action.modal_cancel = _("Undo")
+            _action.reload_list = False
+            return _action
+
+        for export_instance in Export.objects.filter(model=model_ct, active=True):
+            if export_instance.is_enabled(request):
+                _actions.append(action_builder(export_instance))
+    return _actions
 
 class WebixListView(WebixBaseMixin,
                     WebixPermissionsMixin,
@@ -38,6 +92,7 @@ class WebixListView(WebixBaseMixin,
     order_by = None
 
     actions = []  # [multiple_delete_action]
+    adjust_row_height = False
 
     # paging
     enable_json_loading = False
@@ -57,13 +112,13 @@ class WebixListView(WebixBaseMixin,
     type_row_click = 'single'  # or 'double'
     enable_actions = True
 
-    def is_installed_django_webix_filter(self):
-        return apps.is_installed('django_webix_filter')
+    fields_editable = []
 
-    # ##################################
+    def is_installed_django_webix_filter(self):
+        return apps.is_installed('django_webix.contrib.filter')
 
     def _optimize_select_related(self, qs):
-        # Estrapolo le informazione per popolare `select_related`
+        # extrapolate the information to populate `select_related`
         _select_related = []
         if self.get_fields() is not None:
             for field in self.get_fields():
@@ -90,12 +145,54 @@ class WebixListView(WebixBaseMixin,
             qs = qs.select_related(*_select_related)
         return qs
 
-    def get_fields(self):
-        if self.fields is None:
+    def _model_translations(self, qs):
+        if apps.is_installed('modeltranslation'):
+            from modeltranslation.fields import TranslationFieldDescriptor
+            fields = [field for field in self.get_fields() or [] if field.get('field_name') is not None]
+            for field in fields:
+                field_name = field.get('field_name')
+                _model = self.model
+                _field = None
+                for name in field_name.split('__'):
+                    try:
+                        _field = _model._meta.get_field(name)
+                        if isinstance(_field, ManyToManyField):  # Check if field is M2M
+                            raise FieldDoesNotExist()
+                    except FieldDoesNotExist:
+                        break  # name is probably a lookup or transform such as __contains
+                    if hasattr(_field, 'related_model') and _field.related_model is not None:
+                        _model = _field.related_model  # field is a relation
+                    else:
+                        break  # field is not a relation, any name that follows is probably a lookup or transform
+
+                # Check if last field of last model is translated (exclude initial model)
+                if _field is not None and _model != self.model:
+                    _field_attribute = getattr(_model, _field.name, None)
+                    if isinstance(_field_attribute, TranslationFieldDescriptor):
+                        qs = qs.annotate(**{field_name: Coalesce('{}_{}'.format(field_name, get_language()), field_name)})
+        return qs
+
+    def get_adjust_row_height(self, request):
+        return self.adjust_row_height
+
+    def get_fields(self, fields=None):
+        if self.fields is not None:
+            _in_fields = deepcopy(self.fields)
+            # otherwise in the loop below the static fields attribute is redefined and they don't work lazy_translations
+        elif fields is not None:
+            _in_fields = fields
+        else:
+            _in_fields = None
+
+        if _in_fields is None:
             return None
         else:
             _fields = []
-            for _field in self.fields:
+            if self.enable_json_loading:
+                server_filter = False
+            else:
+                server_filter = None
+            for _field in _in_fields:
                 datalist_column = _field['datalist_column']
                 if type(datalist_column) == dict:
                     if 'template_string' in datalist_column:
@@ -109,7 +206,13 @@ class WebixListView(WebixBaseMixin,
                     template = Template(datalist_column)
                     context = Context({})
                 _field['datalist_column'] = template.render(context)
+                # check server into datalist_column if is json loading
+                if self.enable_json_loading:
+                    if 'server' in _field['datalist_column']:
+                        server_filter = True
                 _fields.append(_field)
+            if server_filter == False:
+                raise Exception('Must be at least one server filter')
             return _fields
 
     def get_annotations_geoavailable(self, geo_field_names):
@@ -123,10 +226,21 @@ class WebixListView(WebixBaseMixin,
         return annotations
 
     def get_initial_queryset(self):
-        # TODO: questo causa errori quando si fa l'ordering su campi annotati, possibile soluzione:
-        # return self.model._default_manager.all()
-        # da discutere di farla
-        return super(WebixListView, self).get_queryset()
+        if self.queryset is not None:
+            queryset = self.queryset
+            if isinstance(queryset, QuerySet):
+                queryset = queryset.all()
+        elif self.model is not None:
+            queryset = self.model._default_manager.all()
+        else:
+            raise ImproperlyConfigured(
+                "%(cls)s is missing a QuerySet. Define "
+                "%(cls)s.model, %(cls)s.queryset, or override "
+                "%(cls)s.get_queryset()." % {
+                    'cls': self.__class__.__name__
+                }
+            )
+        return queryset
 
     def get_queryset(self, initial_queryset=None):
         # bypass improperly configured for custom queryset without model
@@ -136,8 +250,12 @@ class WebixListView(WebixBaseMixin,
             else:
                 qs = self.get_initial_queryset()
 
-            filter_merger = FilterMerger(request=self.request)
-            qs = filter_merger.get_queryset(self.model, initial_queryset=qs)
+            qs = self._model_translations(qs)  # Check model translations
+
+            if apps.is_installed('django_filtersmerger'):
+                from django_filtersmerger import FilterMerger
+                filter_merger = FilterMerger(request=self.request)
+                qs = filter_merger.get_queryset(self.model, initial_queryset=qs)
 
             # annotate geo available
             if self.is_enable_column_webgis(self.request):
@@ -180,7 +298,7 @@ class WebixListView(WebixBaseMixin,
         return is_footer
 
     def get_footer(self):
-        if self.is_enable_footer():
+        if self.is_enable_footer() and self.model is not None:
             qs = self.get_queryset()
             aggregation_dict = {}
             for field in self.get_fields():
@@ -222,7 +340,7 @@ class WebixListView(WebixBaseMixin,
         except ValueError:
             raise Exception(_('Paginate start is not integer'))
 
-    def paginate_queryset(self, queryset):
+    def paginate_queryset(self, queryset, page_size): # page_size not used
         paginate_count = self.get_paginate_count()
         paginate_start = self.get_paginate_start()
         return queryset[paginate_start: paginate_start + paginate_count]
@@ -249,7 +367,7 @@ class WebixListView(WebixBaseMixin,
             qs = self.filters_objects_datatable(qs)
             # pagination (applied only for json request)
             # if self.is_json_request:
-            #    qs = self.paginate_queryset(qs)
+            #    qs = self.paginate_queryset(qs, None)
             # build output
             if qs is not None:
                 if type(qs) == list:
@@ -269,7 +387,7 @@ class WebixListView(WebixBaseMixin,
                 for item in qs:
                     if item.get('id') not in ids:
                         qs.remove(item)
-            else:
+            elif self.model is not None:
                 auto_field_name = self.model._meta.get_field(self.get_pk_field()).name
                 qs = qs.filter(**{auto_field_name + '__in': ids})
         return qs
@@ -280,53 +398,21 @@ class WebixListView(WebixBaseMixin,
         return 'id'
 
     ########### TEMPLATE BUILDER ###########
+
     def _get_action_dict(self, action):
-        return {
-            'func': action,
-            'action_key': action.action_key,
-            'response_type': action.response_type,
-            'allowed_permissions': action.allowed_permissions,
-            'short_description': action.short_description,
-            'modal_title': action.modal_title,
-            'modal_ok': action.modal_ok,
-            'modal_cancel': action.modal_cancel,
-            'form': getattr(action,'form',None),
-        }
+        return get_action_dict(self.request, action)
 
     def _get_actions_flexport(self):
-        _actions = []
-        # add flexport actions
-        if apps.is_installed('flexport'):
-            from django.contrib.contenttypes.models import ContentType
-            from flexport.views import create_extraction
-            from flexport.models import Export
-
-            model_ct = ContentType.objects.get(model=self.model._meta.model_name, app_label=self.model._meta.app_label)
-            flexport_actions = {}
-
-            def action_builder(export_instance):
-                _action = lambda listview, request, qs: create_extraction(request, export_instance.id, qs)
-                _action.__name__ = 'flexport_action_%s' % export_instance.id  # verificare se è corretto
-                _action.response_type = 'blank'
-                _action.short_description = export_instance.action_name
-                _action.action_key = 'flexport_{}'.format(export_instance.id)
-                _action.allowed_permissions = []
-                _action.modal_title = _("Are you sure you want to proceed with this action?")
-                _action.modal_ok = _("Proceed")
-                _action.modal_cancel = _("Undo")
-                return _action
-
-            for export_instance in Export.objects.filter(model=model_ct, active=True):
-                if export_instance.is_enabled(self.request):
-                    _actions.append(action_builder(export_instance))
-        return _actions
+        return get_actions_flexport(self.request, self.model)
 
     def get_actions(self):
         '''
-        Return list ov actions to be executed on listview
+        Return list of actions to be executed on listview
         :return:
         '''
-        _actions = self.actions
+        # _actions = self.actions
+        # tentativo di fix delle azioni sbagliate
+        _actions = deepcopy(self.actions)
         _actions += self._get_actions_flexport()
 
         _dict_actions = {}
@@ -369,7 +455,7 @@ class WebixListView(WebixBaseMixin,
         if self.title is not None:
             return self.title
         if self.model is not None:
-            return self.model._meta.verbose_name
+            return self.model._meta.verbose_name_plural
         return None
 
     ########### RESPONSE BUILDER ###########
@@ -388,6 +474,47 @@ class WebixListView(WebixBaseMixin,
         else:
             return False
 
+    @property
+    def is_update_request(self):
+        if 'update' in self.request.GET or 'update' in self.request.POST:
+            return True
+        else:
+            return False
+
+    def is_editable(self):
+        return len(self.fields_editable) > 0
+
+    def get_update_form_class(self):
+        _list_view = self
+        class UpdateForm(WebixModelForm):
+            class Meta:
+                localized_fields = ('__all__')
+                model = _list_view.model
+                fields = _list_view.get_fields_editable()
+        return UpdateForm
+
+
+    def get_update_view(self, request, *args, **kwargs):
+        kwargs.update({'pk':request.GET.get('id',request.POST.get('id'))})
+
+        _list_view = self
+        # TODO: is login is required depends if list has login required
+        @method_decorator(login_required, name='dispatch')
+        class ListUpdateView(WebixUpdateView):
+            success_url ='' #for exception bypass
+            http_method_names = ['post'] # only update directly without render
+            model = _list_view.model
+            def get_form_class(self):
+                return _list_view.get_update_form_class()
+            def response_valid(self, success_url=None, **kwargs):
+                return JsonResponse({'status': True})
+            def response_invalid(self, success_url=None, **kwargs):
+                return JsonResponse({'status': False})
+        return ListUpdateView.as_view()(request, *args, **kwargs)
+
+    def get_fields_editable(self):
+        return self.fields_editable
+
     def get_request_action(self):
         action_name = self.request.POST.get('action', self.request.GET.get('action', None))
         return self.get_actions().get(action_name)['func']
@@ -403,7 +530,7 @@ class WebixListView(WebixBaseMixin,
         _data = []
         total_count = 0
         if self.model:
-            qs = self.get_queryset()
+            qs = self.get_queryset(initial_queryset=self.get_initial_queryset())
             # filters application (like IDS selections)
             qs = self.filters_objects_datatable(qs)
             # apply ordering
@@ -411,7 +538,7 @@ class WebixListView(WebixBaseMixin,
             # total count
             total_count = qs.count()
             # apply pagination
-            qs_paginate = self.paginate_queryset(qs)
+            qs_paginate = self.paginate_queryset(qs, None)
             # build output
             if qs_paginate is not None:
                 if type(qs_paginate) == list:
@@ -454,14 +581,14 @@ class WebixListView(WebixBaseMixin,
             return action_function(self, request, qs)
 
     def dispatch(self, *args, **kwargs):
-
         if not self.has_view_permission(request=self.request):
             raise PermissionDenied(_('View permission is not allowed'))
-
         if self.is_action_request:  # added for action response
             return self.action_response(self.request, *args, **kwargs)
         elif self.is_json_request:  # added for json response with paging
             return self.json_response(self.request, *args, **kwargs)
+        elif self.is_update_request:  # added for row list update
+            return self.get_update_view(self.request, *args, **kwargs)
         else:  # standard response with js webix template structure
             return super(WebixListView, self).dispatch(*args, **kwargs)
 
@@ -480,6 +607,8 @@ class WebixListView(WebixBaseMixin,
             'is_enable_footer': self.is_enable_footer(),
             'get_pk_field': self.get_pk_field(),
             'objects_datatable': self.get_objects_datatable(),
+            'is_editable': self.is_editable(),
+            'fields_editable': self.get_fields_editable(),
             'is_enable_column_webgis': self.is_enable_column_webgis(self.request),
             'is_enable_column_copy': self.is_enable_column_copy(self.request),
             'is_enable_column_delete': self.is_enable_column_delete(self.request),
@@ -488,6 +617,7 @@ class WebixListView(WebixBaseMixin,
             'is_enable_actions': self.is_enable_actions(self.request),
             'actions_style': self.get_actions_style(),
             'title': self.get_title(),
+            'adjust_row_height': self.get_adjust_row_height(self.request),
             # paging
             'is_json_loading': self.enable_json_loading,
             'paginate_count_default': self.paginate_count_default,

@@ -18,8 +18,8 @@ if ((typeof {{ view_prefix }}actions_list != 'undefined') && (typeof {{ view_pre
             view: "tootipButton",
             id: "action_button",
             value: "{%  trans "Go" %}",
-            inputWidth: 60,
-            width: 60,
+            inputWidth: 70,
+            width: 70,
             on: {
                 onItemClick: function () {
                     var action_name = $$("action_combo").getValue();

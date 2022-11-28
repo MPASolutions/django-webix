@@ -105,7 +105,7 @@ function findValueByPrefix(object, prefix) {
 }
 
 
-function delete_image(webix_id_block, webix_id_button) {
+function delete_attachment(webix_id_block, webix_id_button) {
     // ho messo un timeout perche il click avviene prima del change del toogle...
     setTimeout(function () {
         if ($$(webix_id_button) != undefined && $$(webix_id_block) != undefined) {
@@ -120,6 +120,4 @@ function delete_image(webix_id_block, webix_id_button) {
 
 
 function image_add(uploader_id) {
-    //console.log('ci siamo');
-    //console.log(uploader_id)
 }

@@ -7,15 +7,16 @@ $$("{{ webix_container_id }}").addView({
     margin: 5,
     cols: [
         {% block button_delete %}
-            {% if not remove_disabled_buttons %}
                 {% if object.pk  and url_delete and url_delete != '' %}
                     {
                         id: '{{ form.webix_id }}_delete',
                         view: "tootipButton",
                         type: "danger",
+                        css: "webix_danger",
                         align: "left",
                         label: "{{_("Delete")|escapejs}}",
                         {% if not has_delete_permission %}
+                            {% if remove_disabled_buttons %} hidden: true, {% endif %}
                             disabled: true,
                             tooltip: "{{ info_no_delete_permission|join:", "|escapejs }}",
                         {% endif %}
@@ -25,92 +26,83 @@ $$("{{ webix_container_id }}").addView({
                         }
                     },
                 {% endif %}
-            {% endif %}
         {% endblock %}
         {% block extra_buttons_left %}{% endblock %}
         {$template: "Spacer"},
         {% block extra_buttons_right %}{% endblock %}
         {% block button_save %}
-            {% if not remove_disabled_buttons or remove_disabled_buttons and not object.pk and not has_add_permission or remove_disabled_buttons and object.pk and not has_change_permission %}
-                {% if is_enable_button_save_continue %}
+                // is_enable_button_save_continue
+                {% if is_enable_button_save_continue %} // true
                     {
                         id: '{{ form.webix_id }}_save_continue',
                         view: "tootipButton",
                         type: "form",
+                        css:"webix_secondary",
                         align: "right",
                         label: "{{_("Save and continue")|escapejs}}",
-                        {% if not has_change_permission %}
-                            disabled: true,
-                        {% elif not object.pk and not has_add_permission %}
-                            disabled: true,
-                        {% elif object.pk and not has_change_permission %}
-                            disabled: true,
-                        {% endif %}
+                        width: 190,
                         {% if not object.pk and not has_add_permission %}
+                            {% if remove_disabled_buttons %} hidden: true, {% endif %}
+                            disabled: true,
                             tooltip: "{{ info_no_add_permission|join:", "|escapejs}}",
-                        {% endif %}
-                        {% if object.pk and not has_change_permission %}
+                        {% elif object.pk and not has_change_permission %}
+                            {% if remove_disabled_buttons %} hidden: true, {% endif %}
+                            disabled: true,
                             tooltip: "{{ info_no_change_permission|join:", "|escapejs}}",
                         {% endif %}
-                        width: 190,
                         click: function () {
                               {% include "django_webix/include/toolbar_form_save.js" with extra_params_button='_continue=true' %}
                         }
                     },
                 {% endif %}
-                {% if is_enable_button_save_addanother %}
+                // is_enable_button_save_addanother
+                {% if is_enable_button_save_addanother %} // true
                     {
                         id: '{{ form.webix_id }}_save_addanother',
                         view: "tootipButton",
                         type: "form",
+                        css:"webix_secondary",
                         align: "right",
                         label: "{{_("Save and add another")|escapejs}}",
-                        {% if not has_add_permission %}
-                            disabled: true,
-                        {% elif not object.pk and not has_add_permission %}
-                            disabled: true,
-                        {% elif object.pk and not has_change_permission %}
-                            disabled: true,
-                        {% endif %}
+                        width: 260,
                         {% if not object.pk and not has_add_permission %}
+                            {% if remove_disabled_buttons %} hidden: true, {% endif %}
+                            disabled: true,
                             tooltip: "{{ info_no_add_permission|join:", "|escapejs}}",
-                        {% endif %}
-                        {% if object.pk and not has_change_permission %}
+                        {% elif object.pk and not has_change_permission %}
+                            {% if remove_disabled_buttons %} hidden: true, {% endif %}
+                            disabled: true,
                             tooltip: "{{ info_no_change_permission|join:", "|escapejs}}",
                         {% endif %}
-                        width: 160,
                         click: function () {
                               {% include "django_webix/include/toolbar_form_save.js" with extra_params_button='_addanother=true' %}
                         }
                     },
                 {% endif %}
-                {% if is_enable_button_save_gotolist %}
+                // is_enable_button_save_gotolist
+                {% if is_enable_button_save_gotolist %} // true
                     {
                         id: '{{ form.webix_id }}_save',
                         view: "tootipButton",
                         type: "form",
+                        css:"webix_primary",
                         align: "right",
                         label: "{{_("Save")|escapejs}}",
-                        {% if not has_view_permission %}
-                            disabled: true,
-                        {% elif not object.pk and not has_add_permission %}
-                            disabled: true,
-                        {% elif object.pk and not has_change_permission %}
-                            disabled: true,
-                        {% endif %}
+                        width: 120,
                         {% if not object.pk and not has_add_permission %}
+                            {% if remove_disabled_buttons %} hidden: true, {% endif %}
+                            disabled: true,
                             tooltip: "{{ info_no_add_permission|join:", "|escapejs }}",
-                        {% endif %}
-                        {% if object.pk and not has_change_permission %}
+                        {% elif object.pk and not has_change_permission %}
+                            {% if remove_disabled_buttons %} hidden: true, {% endif %}
+                            disabled: true,
                             tooltip: "{{ info_no_change_permission|join:", "|escapejs }}",
                         {% endif %}
-                        width: 120,
                         click: function () {
                               {% include "django_webix/include/toolbar_form_save.js" with extra_params_button='_gotolist=true' %}
                         }
                     }
                 {% endif %}
-            {% endif %}
         {% endblock %}
     ]
 });

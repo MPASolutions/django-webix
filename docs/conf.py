@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 #
 # complexity documentation build configuration file, created by
 # sphinx-quickstart on Tue Jul  9 22:26:36 2013.
@@ -49,7 +48,7 @@ master_doc = 'index'
 
 # General information about the project.
 project = u'Django Webix'
-copyright = u'2018, MPA Solutions'
+copyright = u'2022, MPA Solutions soc. coop., Enogis srl'
 
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the
@@ -195,7 +194,7 @@ latex_elements = {
 # (source start file, target name, title, author, documentclass [howto/manual]).
 latex_documents = [
     ('index', 'django-webix.tex', u'Django Webix Documentation',
-     u'MPA Solutions', 'manual'),
+     u'MPA Solutions soc coop, Enogis srl', 'manual'),
 ]
 
 # The name of an image file (relative to this directory) to place at the top of
@@ -225,7 +224,7 @@ latex_documents = [
 # (source start file, name, description, authors, manual section).
 man_pages = [
     ('index', 'django-webix', u'Django Webix Documentation',
-     [u'MPA Solutions'], 1)
+     [u'MPA Solutions soc coop, Enogis srl'], 1)
 ]
 
 # If true, show URL addresses after external links.
@@ -239,7 +238,7 @@ man_pages = [
 #  dir menu entry, description, category)
 texinfo_documents = [
     ('index', 'django-webix', u'Django Webix Documentation',
-     u'MPA Solutions', 'django-webix', 'Webix library Django integration.',
+     u'MPA Solutions soc coop, Enogis srl', 'django-webix', 'Webix library Django integration.',
      'Miscellaneous'),
 ]
 

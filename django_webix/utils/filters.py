@@ -1,16 +1,14 @@
-# -*- coding: utf-8 -*-
-
-import json
 import datetime
+import json
+
 import django
 from dateutil.parser import parse
-from django.db import models
-from django.db.models import Q
-from django.db.models.fields.reverse_related import ForeignObjectRel
-from django.contrib.contenttypes.fields import GenericRelation, GenericForeignKey
-from django.utils.translation import ugettext as _
-from django.core.exceptions import FieldDoesNotExist
 from dateutil.relativedelta import relativedelta
+from django.contrib.contenttypes.fields import GenericRelation
+from django.core.exceptions import FieldDoesNotExist
+from django.db import models
+from django.db.models import Q, DateTimeField
+from django.db.models.fields.reverse_related import ForeignObjectRel
 
 try:
     import psycopg2
@@ -73,7 +71,7 @@ def from_dict_to_qset(data, model):
                             _curr_model = _curr_field.related_model
                         elif issubclass(type(_curr_field), models.ManyToManyField):
                             _curr_model = _curr_field.remote_field.get_related_field().model
-                        elif issubclass(type(_curr_field), GenericRelation):
+                        elif issubclass(type(_curr_field), django.contrib.contenttypes.fields.GenericRelation):
                             _curr_model = _curr_field.related_model
                         else:
                             pass  # there are no others field
@@ -91,7 +89,8 @@ def from_dict_to_qset(data, model):
                         qset_to_applicate = Q(**{base_path + '__gte': parse(val.get('start'))})
                     if val is not None and val.get('end') is not None:
                         data_end = parse(val.get('end'))
-                        if datetime.datetime.combine(data_end.date(),datetime.datetime.min.time())==data_end:
+                        if isinstance(_curr_field, DateTimeField) and \
+                            datetime.datetime.combine(data_end.date(), datetime.datetime.min.time()) == data_end:
                             data_end += relativedelta(days=1)
                         qset_to_applicate &= Q(**{base_path + '__lte': data_end})
                 elif data_qset.get('path').endswith("__exact_in"):

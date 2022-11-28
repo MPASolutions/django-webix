@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 
 from django.apps import apps
 from django.conf import settings
@@ -8,8 +7,10 @@ from django.utils.translation import gettext as _
 from django.views.generic import TemplateView
 from django.views.generic.edit import BaseFormView
 
+from django_webix.utils.layers import get_layers
 
-class WebixPermissionsMixin:
+
+class WebixPermissionsBaseMixin:
     model = None
     request = None
     check_permissions = True
@@ -28,24 +29,44 @@ class WebixPermissionsMixin:
 
     remove_disabled_buttons = False
 
-    def get_failure_add_missing_objects(self, request):
-        return [
-            # {
-            #     'text': '',
-            #     'url': '',
-            # },
-        ]
+    def get_failure_add_blocking_objects(self, request):
+        return []  # {'text': '', 'url': ''},
+
+    def get_failure_change_blocking_objects(self, request, obj=None):
+        return []
+
+    def get_failure_delete_blocking_objects(self, request, obj=None):
+        return []
+
+    def get_failure_view_blocking_objects(self, request, obj=None):
+        return []
 
     def get_failure_add_related_objects(self, request):
+        if self.model is not None:
+            model_related_objects = getattr(self.model, 'get_failure_add_related_objects', None)
+            if model_related_objects is not None:
+                return model_related_objects(request=request)
         return []
 
     def get_failure_change_related_objects(self, request, obj=None):
+        if self.model is not None:
+            model_related_objects = getattr(self.model, 'get_failure_change_related_objects', None)
+            if model_related_objects is not None:
+                return model_related_objects(request=request, obj=obj)
         return []
 
     def get_failure_delete_related_objects(self, request, obj=None):
+        if self.model is not None:
+            model_related_objects = getattr(self.model, 'get_failure_delete_related_objects', None)
+            if model_related_objects is not None:
+                return model_related_objects(request=request, obj=obj)
         return []
 
     def get_failure_view_related_objects(self, request, obj=None):
+        if self.model is not None:
+            model_related_objects = getattr(self.model, 'get_failure_view_related_objects', None)
+            if model_related_objects is not None:
+                return model_related_objects(request=request, obj=obj)
         return []
 
     def has_add_django_user_permission(self, user):
@@ -68,68 +89,6 @@ class WebixPermissionsMixin:
             return user.has_perm('{}.view_{}'.format(self.model._meta.app_label, self.model._meta.model_name))
         return False
 
-    def has_add_permission(self, request):
-        if not self.check_permissions:
-            return True
-        if self.add_permission is not None:
-            return self.add_permission
-        if len(self.get_failure_add_related_objects(request)) > 0:
-            return False
-        return self.has_add_django_user_permission(user=request.user)
-
-    def has_change_permission(self, request, obj=None):
-        if not self.check_permissions:
-            return True
-        if self.change_permission is not None:
-            return self.change_permission
-        if len(self.get_failure_change_related_objects(request, obj=obj)) > 0:
-            return False
-        return self.has_change_django_user_permission(user=request.user)
-
-    def has_delete_permission(self, request, obj=None):
-        if not self.check_permissions:
-            return True
-        if self.delete_permission is not None:
-            return self.delete_permission
-        if len(self.get_failure_delete_related_objects(request, obj=obj)) > 0:
-            return False
-        return self.has_delete_django_user_permission(user=request.user)
-
-    def has_view_permission(self, request, obj=None):
-        if not self.check_permissions:
-            return True
-        if self.view_permission is not None:
-            return self.view_permission
-        if len(self.get_failure_view_related_objects(request, obj=obj)) > 0:
-            return False
-        return self.has_view_django_user_permission(user=request.user)
-
-    def get_info_no_add_permission(self, has_permission, request):
-        if not has_permission:
-            return [_("You haven't add permission")]
-        return []
-
-    def get_info_no_change_permission(self, has_permission, request, obj=None):
-        if not has_permission:
-            return [_("You haven't change permission")]
-        return []
-
-    def get_info_no_delete_permission(self, has_permission, request, obj=None):
-        if not has_permission:
-            return [_("You haven't delete permission")]
-        return []
-
-    def get_info_no_view_permission(self, has_permission, request, obj=None):
-        if not has_permission:
-            return [_("You haven't view permission")]
-        return []
-
-    def has_view_or_change_permission(self, request, obj=None):
-        if self.view_permission is not None or self.change_permission is not None:
-            return self.view_permission or self.change_permission
-        return self.has_view_permission(request=request, obj=obj) or \
-               self.has_change_permission(request=request, obj=obj)
-
     def has_module_permission(self, request):
         if not self.check_permissions:
             return True
@@ -139,6 +98,125 @@ class WebixPermissionsMixin:
             return request.user.has_module_perms(self.model._meta.app_label)
         return False
 
+    def get_remove_disabled_buttons(self, request):
+        return self.remove_disabled_buttons
+
+    def _has_add_permission(self, request):
+        if not self.check_permissions:
+            return True
+        elif self.add_permission is not None:
+            return self.add_permission
+        elif len(self.get_failure_add_related_objects(request)) > 0:
+            return False
+        elif not self.has_add_django_user_permission(user=request.user):
+            return False
+        elif self.model is not None:
+            has_permission = getattr(self.model, 'has_add_permission', None)
+            if has_permission is not None:
+                return has_permission(request=request)
+        return True
+
+    def _has_change_permission(self, request, obj=None):
+        if not self.check_permissions:
+            return True
+        elif self.change_permission is not None:
+            return self.change_permission
+        elif len(self.get_failure_change_related_objects(request, obj=obj)) > 0:
+            return False
+        elif not self.has_change_django_user_permission(user=request.user):
+            return False
+        elif self.model is not None:
+            has_permission = getattr(self.model, 'has_change_permission', None)
+            if has_permission is not None:
+                return has_permission(request=request, obj=obj)
+        return True
+
+    def _has_delete_permission(self, request, obj=None):
+        if not self.check_permissions:
+            return True
+        elif self.delete_permission is not None:
+            return self.delete_permission
+        elif len(self.get_failure_delete_related_objects(request, obj=obj)) > 0:
+            return False
+        elif not self.has_delete_django_user_permission(user=request.user):
+            return False
+        elif self.model is not None:
+            has_permission = getattr(self.model, 'has_delete_permission', None)
+            if has_permission is not None:
+                return has_permission(request=request, obj=obj)
+        return True
+
+    def _has_view_permission(self, request, obj=None):
+        if not self.check_permissions:
+            return True
+        elif self.view_permission is not None:
+            return self.view_permission
+        elif len(self.get_failure_view_related_objects(request, obj=obj)) > 0:
+            return False
+        elif not self.has_view_django_user_permission(user=request.user):
+            return False
+        elif self.model is not None:
+            has_permission = getattr(self.model, 'has_view_permission', None)
+            if has_permission is not None:
+                return has_permission(request=request, obj=obj)
+        return True
+
+    def _has_view_or_change_permission(self, request, obj=None):
+        if self.view_permission is not None or self.change_permission is not None:
+            return self.view_permission or self.change_permission
+        return self._has_view_permission(request=request, obj=obj) or \
+               self._has_change_permission(request=request, obj=obj)
+
+    def _get_info_no_add_permission(self, has_permission, request):
+        if not has_permission:
+            return [_("You haven't add permission")]
+        return []
+
+    def _get_info_no_change_permission(self, has_permission, request, obj=None,):
+        if not has_permission:
+            return [_("You haven't change permission")]
+        return []
+
+    def _get_info_no_delete_permission(self, has_permission, request, obj=None):
+        if not has_permission:
+            return [_("You haven't delete permission")]
+        return []
+
+    def _get_info_no_view_permission(self, has_permission, request, obj=None):
+        if not has_permission:
+            return [_("You haven't view permission")]
+        return []
+
+
+class WebixPermissionsMixin(WebixPermissionsBaseMixin):
+
+    def has_view_or_change_permission(self, request, obj=None):
+        return self._has_view_or_change_permission(request, obj)
+
+    def has_add_permission(self, request):
+        return self._has_add_permission(request)
+
+    def has_change_permission(self, request, obj=None):
+        return self._has_change_permission(request, obj)
+
+    def has_delete_permission(self, request, obj=None):
+        return self._has_delete_permission(request, obj)
+
+    def has_view_permission(self, request, obj=None):
+        return self._has_view_permission(request, obj)
+
+    def get_info_no_add_permission(self, has_permission, request):
+        return self._get_info_no_add_permission(has_permission, request)
+
+    def get_info_no_change_permission(self, has_permission, request, obj=None):
+        return self._get_info_no_change_permission(has_permission, request, obj)
+
+    def get_info_no_delete_permission(self, has_permission, request, obj=None):
+        return self._get_info_no_delete_permission(has_permission, request, obj)
+
+    def get_info_no_view_permission(self, has_permission, request, obj=None):
+        return self._get_info_no_view_permission(has_permission, request, obj)
+
     def get_context_data_webix_permissions(self, request, obj=None, **kwargs):
         _has_view_permission = self.has_view_permission(request=self.request, obj=obj)
         _has_add_permission = self.has_add_permission(request=self.request)
@@ -146,7 +224,7 @@ class WebixPermissionsMixin:
         _has_delete_permission = self.has_delete_permission(request=self.request, obj=obj)
         return {
             # Buttons
-            'remove_disabled_buttons': self.remove_disabled_buttons,
+            'remove_disabled_buttons': self.get_remove_disabled_buttons(request=self.request),
             # Permissions
             'has_view_permission': _has_view_permission,
             'has_add_permission': _has_add_permission,
@@ -175,7 +253,7 @@ class WebixPermissionsMixin:
             'failure_delete_related_objects': self.get_failure_delete_related_objects(request=self.request,
                                                                                       obj=obj),
             # filure add missing_objects
-            'failure_add_missing_objects': self.get_failure_add_missing_objects(request=self.request),
+            'failure_add_blocking_objects': self.get_failure_add_blocking_objects(request=self.request),
         }
 
 
@@ -219,6 +297,8 @@ class WebixUrlMixin(WebixUrlUtilsMixin):
     url_pattern_update = None
     url_pattern_delete = None
 
+    url_using_namespace = False
+
     def get_url_pattern_list(self):
         if self.url_pattern_list is not None:
             return self.url_pattern_list
@@ -245,7 +325,13 @@ class WebixUrlMixin(WebixUrlUtilsMixin):
 
     def get_model_name(self):
         if self.model is not None:
-            return '{}.{}'.format(self.model._meta.app_label, self.model._meta.model_name)
+            if self.url_using_namespace==True:
+                _separator = ':'
+            else:
+                _separator = '.'
+            return '{}{}{}'.format(self.model._meta.app_label,
+                                   _separator,
+                                   self.model._meta.model_name)
         return None
 
     def get_url_list(self):
@@ -259,7 +345,9 @@ class WebixUrlMixin(WebixUrlUtilsMixin):
         return None
 
     def get_url_create(self):
+
         if self.model is not None:
+            # noinspection PyNoneFunctionAssignment
             create_kwargs = self.get_url_create_kwargs()
             if create_kwargs is not None:
                 _url_pattern_name = self._check_url(self.get_url_pattern_create(),
@@ -344,17 +432,8 @@ class WebixBaseMixin:
     def get_layers(self):
         layers = []
 
-        if apps.is_installed("qxs") and apps.is_installed("django_webix_leaflet") and getattr(self, 'model',
-                                                                                              None) is not None:
-            from qxs import qxsreg  # FIXME: add to requirements?
-
-            for model_layer in list(filter(lambda x: x.model == self.model, qxsreg.get_models())):
-                layers.append({
-                    'codename': model_layer.get_qxs_codename(),
-                    'layername': model_layer.get_title(),
-                    'qxsname': model_layer.get_qxs_name(),
-                    'geofieldname': model_layer.geo_field_name
-                })
+        if getattr(self, 'model', None) is not None:
+            layers = get_layers(getattr(self, 'model', None), getattr(self, 'qxs_layers', None))
 
         return layers
 
@@ -376,6 +455,11 @@ class WebixFormView(WebixTemplateView, WebixUrlUtilsMixin, BaseFormView):
     template_name = 'django_webix/generic/form.js'
 
     url_pattern_send = None
+
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs.update({'request': self.request})
+        return kwargs
 
     def get_url_pattern_send(self):
         if self.url_pattern_send is not None:

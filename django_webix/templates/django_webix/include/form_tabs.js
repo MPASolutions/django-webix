@@ -1,21 +1,12 @@
 {% load django_webix_utils %}
 
 {# Errors #}
-{% block webix_form_errors %}
-    {% if form.errors %}
-        webix.message({type: "error", expire: 10000, text: "{{ form.errors|safe|escapejs }}"});
-    {% endif %}
-{% endblock %}
-
-{% block webix_inline_errors %}
-    {% for inline in inlines %}
-        {% for field in inline %}
-            {% if field.errors %}
-                webix.message({type: "error", expire: 10000, text: "{{ field.errors|safe|escapejs }}"});
-            {% endif %}
-        {% endfor %}
-    {% endfor %}
-{% endblock %}
+{% include "django_webix/include/form_errors_server.js" %}
+{% if is_errors_on_popup %}
+    {% include "django_webix/include/form_errors_popup.js" %}
+{% else %}
+    {% include "django_webix/include/form_errors_message.js" %}
+{% endif %}
 
 {# Form #}
 {% block webix_form %}
@@ -26,7 +17,7 @@
             {% if inlines|length > 0 %}
                 {
                     view: "tabbar",
-                    id: '{{ form.webix_id }}-inlines-tabbar',
+                    id: '{% if default_id_tabbar %}{{ default_id_tabbar }}{% else %}{{ form.webix_id }}-inlines-tabbar{% endif %}',
                     value: "{{ form.webix_id }}-group",
                     //optionWidth: 150,
                     multiview: true,
@@ -36,9 +27,9 @@
                             value: "{{ form.get_name }}"
                         },
                         {% for inline in inlines %}
-                            {% if not inline.get_container_id %}
+                            {% if inline.auto_position %}
                                 {
-                                    id: '{{ inline.get_default_container_id }}',
+                                    id: '{{ inline.get_container_id }}',
                                     value: "<div style='position: relative'>{{ inline.get_name|escapejs }} <span class='webix_badge' style='background-color:#888 !important; margin-top: -2px; margin-right: 5px;'><strong>" + {{ inline.initial_form_count }} + "</strong></span></div>"
                                 },
                             {% endif %}
@@ -59,9 +50,9 @@
                         },
                     {% endblock %}
                     {% for inline in inlines %}
-                        {% if not inline.get_container_id %}
+                        {% if inline.auto_position %}
                             {
-                                id: '{{ inline.get_default_container_id }}',
+                                id: '{{ inline.get_container_id }}',
                                 rows: []
                             },
                         {% endif %}
@@ -72,14 +63,11 @@
         on: {
             onAfterValidation: function (result, value) {
                 if (!result) {
-                    var text = "";
-                    for (var key in value) {
-                        text += "<li>" + key + "</li>"
-                    }
-                    webix.message({
-                        type: "error",
-                        text: "Devi compilare tutti i campi richiesti prima di poter salvare questo form!<br><br>Errore nei seguenti campi:<br>" + text
-                    });
+                    errors = [];
+                    for (var item in value) {
+                        errors.push({"label":item.toTitle(), "error":"{{_("Empty or incorrect value")|escapejs}}"});
+                    };
+                    show_errors(errors);
                 }
             }
         },

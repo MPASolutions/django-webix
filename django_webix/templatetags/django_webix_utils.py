@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 
 import datetime
 import re
@@ -10,13 +9,8 @@ from django.conf import settings
 from django.template import TemplateSyntaxError
 from django.utils.timezone import is_naive, make_naive
 
-try:
-    from django.template.base import TokenType
-except ImportError:
-    # Django < 2.1
-    from django.template.base import TOKEN_BLOCK
-else:
-    TOKEN_BLOCK = TokenType.BLOCK
+from django.template.base import TokenType
+TOKEN_BLOCK = TokenType.BLOCK
 
 from django.template.defaulttags import (CommentNode, IfNode, LoadNode,
                                          find_library, load_from_library)
@@ -38,6 +32,10 @@ def get_value_from_dict(dict_data, key):
 def webix_version():
     return settings.WEBIX_VERSION
 
+@register.simple_tag(name='webix_debug')
+def webix_debug():
+    return getattr(settings, 'DEBUG_WEBIX') if hasattr(settings, 'DEBUG_WEBIX') else False
+
 
 @register.simple_tag(name='webix_license')
 def webix_license():
@@ -51,7 +49,7 @@ def is_installed_djangowebixleaflet():
 
 @register.simple_tag(name='is_installed_djangowebixfilter')
 def is_installed_djangowebixfilter():
-    return apps.is_installed("webix_filter")
+    return apps.is_installed("django_webix.contrib.filter")
 
 
 @register.simple_tag(name='webix_history_enable')
@@ -67,7 +65,7 @@ def webix_fontawesome_css_url():
     if hasattr(settings, 'WEBIX_FONTAWESOME_CSS_URL'):
         return settings.WEBIX_FONTAWESOME_CSS_URL
     else:
-        return 'django_webix/fontawesome-5.7.2/css/all.min.css'
+        return 'django_webix/fontawesome-5.15.4/css/all.min.css'
 
 
 @register.simple_tag(name='webix_fontawesome_version')
@@ -75,7 +73,7 @@ def webix_fontawesome_version():
     if hasattr(settings, 'WEBIX_FONTAWESOME_VERSION'):
         return settings.WEBIX_FONTAWESOME_VERSION
     else:
-        return '5.7.2'
+        return '5.15.4'
 
 
 @register.filter
@@ -105,9 +103,7 @@ def format_list_value(value):
 @register.filter
 def getattr(obj, args):
     """ Try to get an attribute from an object.
-
     Example: {% if block|getattr:"editable,True" %}
-
     Beware that the default is always a string, if you want this
     to return False, pass an empty second argument:
     {% if block|getattr:"editable," %}
@@ -170,15 +166,15 @@ def friendly_load(parser, token):
     load the comments template tag library to enable comments even if the
     comments framework is not installed.
     For example::
-        {% load friendly_loader %}
-        {% friendly_load comments webdesign %}
-        {% if_has_tag render_comment_list %}
-            {% render_comment_list for obj %}
-        {% else %}
-            {% if_has_tag lorem %}
-                {% lorem %}
-            {% endif_has_tag %}
-        {% endif_has_tag %}
+    {% load friendly_loader %}
+    {% friendly_load comments webdesign %}
+    {% if_has_tag render_comment_list %}
+    {% render_comment_list for obj %}
+    {% else %}
+    {% if_has_tag lorem %}
+    {% lorem %}
+    {% endif_has_tag %}
+    {% endif_has_tag %}
     """
     bits = token.contents.split()
     if len(bits) >= 4 and bits[-2] == "from":
@@ -209,16 +205,16 @@ def do_if_has_tag(parser, token, negate=False):
     tags.
     This means that the following is essentially the same as a
     ``{% comment %}`` tag::
-      {% if_has_tag non_existing_tag %}
-          {% non_existing_tag %}
-      {% endif_has_tag %}
+    {% if_has_tag non_existing_tag %}
+    {% non_existing_tag %}
+    {% endif_has_tag %}
     Another example is checking a built-in tag. This will always render the
     current year and never FAIL::
-      {% if_has_tag now %}
-          {% now "Y" %}
-      {% else %}
-          FAIL
-      {% endif_has_tag %}
+    {% if_has_tag now %}
+    {% now "Y" %}
+    {% else %}
+    FAIL
+    {% endif_has_tag %}
     """
     bits = list(token.split_contents())
     if len(bits) < 2:
@@ -252,18 +248,18 @@ def do_if_has_tag(parser, token, negate=False):
 def if_has_tag(parser, token):
     """
     Do something if all given tags are loaded::
-       {% load friendly_loader %}
-       {% friendly_load webdesign %}
-       {% if_has_tag lorem %}
-            {% lorem %}
-       {% else %}
-            Non dummy content goes here!
-       {% endif_has_tag %}
+    {% load friendly_loader %}
+    {% friendly_load webdesign %}
+    {% if_has_tag lorem %}
+    {% lorem %}
+    {% else %}
+    Non dummy content goes here!
+    {% endif_has_tag %}
     When given multiple arguments each and every tag in the list has to be
     available. This means that the following will render nothing::
-       {% if_has_tag now nonexisting_tag %}
-           {% now "Y" %}
-       {% endif_has_tag %}
+    {% if_has_tag now nonexisting_tag %}
+    {% now "Y" %}
+    % endif_has_tag %}
     """
     return do_if_has_tag(parser, token)
 
@@ -272,18 +268,18 @@ def if_has_tag(parser, token):
 def ifnot_has_tag(parser, token):
     """
     Do something unless any given tag is loaded::
-       {% load friendly_loader %}
-       {% friendly_load comments %}
-       {% ifnot_has_tag render_comment_list %}
-            Comment support has been disabled.
-       {% else %}
-            {% render_comment_list for obj %}
-       {% endifnot_has_tag %}
+    {% load friendly_loader %}
+    {% friendly_load comments %}
+    {% ifnot_has_tag render_comment_list %}
+    Comment support has been disabled.
+    {% else %}
+    {% render_comment_list for obj %}
+    {% endifnot_has_tag %}
     In the case of multiple arguments, the condition will trigger if any tag in
     the list is unavailable. This means that the following will still render
     the current year::
-       {% ifnot_has_tag now nonexisting_tag %}
-           {% now "Y" %}
-       {% endifnot_has_tag %}
+    {% ifnot_has_tag now nonexisting_tag %}
+    {% now "Y" %}
+    {% endifnot_has_tag %}
     """
     return do_if_has_tag(parser, token, True)
