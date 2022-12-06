@@ -9,7 +9,7 @@ __all__ = [
 
 
 def autodiscover():
-    autodiscover_modules('admin_webix', register_to=site)
+    autodiscover_modules('dwadmin', register_to=site)
 
 
 default_app_config = 'django_webix.contrib.admin.apps.AdminConfig'

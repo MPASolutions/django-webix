@@ -351,13 +351,13 @@ class WebixFilterCreate(WebixFilterMixin, CreateView):
         if self.is_popup():
             if self.request.GET.get('model', None):
                 app_label, module_name = self.request.GET.get('model', None).split('.')
-                return self.wrap_url_popup(reverse('django_webix.filter.webixfilter.list_model', kwargs={
+                return self.wrap_url_popup(reverse('dwfilter.webixfilter.list_model', kwargs={
                     'app_label': app_label,
                     'model_name': module_name
                 }))
             if self.object is not None:
                 app_label, module_name = self.object.model.split('.')
-                return self.wrap_url_popup(reverse('django_webix.filter.webixfilter.list_model', kwargs={
+                return self.wrap_url_popup(reverse('dwfilter.webixfilter.list_model', kwargs={
                     'app_label': app_label,
                     'model_name': module_name
                 }))
@@ -425,7 +425,7 @@ class WebixFilterUpdate(WebixFilterMixin, UpdateView):
     def get_url_list(self):
         if self.is_popup() and self.object is not None:
             app_label, module_name = self.object.model.split('.')
-            return self.wrap_url_popup(reverse('django_webix.filter.webixfilter.list_model', kwargs={
+            return self.wrap_url_popup(reverse('dwfilter.webixfilter.list_model', kwargs={
                 'app_label': app_label,
                 'model_name': module_name
             }))

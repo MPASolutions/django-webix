@@ -7,7 +7,7 @@ from django_webix.contrib.admin.forms import WebixAdminMenuForm
 from django_webix.contrib.admin.models import WebixAdminMenu
 
 
-def menu_admin_webix_register(site):
+def menu_dwadmin_register(site):
     from mptt.admin import DraggableMPTTAdmin
 
     @admin.register(WebixAdminMenu)

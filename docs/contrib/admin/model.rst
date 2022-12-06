@@ -4,15 +4,15 @@ Admin Model
 Example
 -------
 
-Create the files (e.g. <app_name>/admin_webix.py).
+Create the files (e.g. <app_name>/dwadmin.py).
 The main idea is that many properties and functions that are on views are moved (with some other patameters) directly
 on admin class.
 Here there is an example of main list of parameters and functions that can be override.
 
 .. code-block:: python
 
-    from <project_name>.admin_webix import site
-    from django_webix import admin_webix as admin
+    from <project_name>.dwadmin import site
+    from django_webix.contrib.admin import dwadmin as admin
 
     @admin.register(ModelName, site=site)
     class CustomModelWebixAdmin(admin.ModelWebixAdmin):

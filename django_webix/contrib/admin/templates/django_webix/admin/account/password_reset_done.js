@@ -1,4 +1,4 @@
-{% extends 'admin_webix/base_site.html' %}
+{% extends 'django_webix/admin/base_site.html' %}
 
 {% load static %}
 {% if is_app_installed %}

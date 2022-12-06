@@ -1,4 +1,4 @@
-{% extends 'admin_webix/base_no_auth.html' %}
+{% extends 'django_webix/admin/base_no_auth.html' %}
 
 {% block webix_ready %}
     webix.storage.local.clear();
@@ -70,7 +70,7 @@
                         margin: 30,
                         value: "{{ _("Password recovery")|escapejs }}",
                         click: function() {
-                            location.href = "{% url "admin_webix:password_reset" %}"
+                            location.href = "{% url "dwadmin:password_reset" %}"
                         }
                     },
                 ]

@@ -111,7 +111,7 @@
                                     $.ajax({
                                         type: "POST",
                                         enctype: 'multipart/form-data',
-                                        url: "{% url 'django_webix.sender.send' %}",
+                                        url: "{% url 'dwsender.send' %}",
                                         data: data,
                                         processData: false,
                                         contentType: false,
@@ -119,7 +119,7 @@
                                         timeout: 600000,
                                         success: function (data) {
                                             $$('{{ webix_container_id }}').hideOverlay();
-                                            load_js("{% url 'django_webix.sender.messages_chat' section='messages' %}?contenttype={{ contenttype }}&recipient={{ recipient.pk }}&send_method={{ send_method }}");
+                                            load_js("{% url 'dwsender.messages_chat' section='messages' %}?contenttype={{ contenttype }}&recipient={{ recipient.pk }}&send_method={{ send_method }}");
                                         },
                                         error: function () {
                                             $$('{{ webix_container_id }}').hideOverlay();

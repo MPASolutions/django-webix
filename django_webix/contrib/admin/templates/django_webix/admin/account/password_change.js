@@ -73,7 +73,7 @@ $$("{{ webix_container_id }}").addView({
                                             $$('{{ webix_container_id }}').showOverlay("<img src='{% static 'django_webix/loading.gif' %}'>");
                                             console.log($$('password_change_form').getValues());
                                             $.ajax({
-                                                url: "{% url 'admin_webix:password_change' %}",
+                                                url: "{% url 'dwadmin:password_change' %}",
                                                 dataType: "script",
                                                 type: "POST",
                                                 data: $$('password_change_form').getValues(),
@@ -83,7 +83,7 @@ $$("{{ webix_container_id }}").addView({
                                                 error: function (jqXHR, textStatus, errorThrown) {
                                                 }
                                             });
-                                            //webix.send("{% url 'admin_webix:password_change' %}", $$('password_change_form').getValues());
+                                            //webix.send("{% url 'dwadmin:password_change' %}", $$('password_change_form').getValues());
                                         }
                                     }
                                 }

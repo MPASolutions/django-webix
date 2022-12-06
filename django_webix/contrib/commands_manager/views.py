@@ -9,8 +9,12 @@ from django.utils.html import escapejs
 from django.utils.translation import gettext_lazy as _
 from django.utils.text import format_lazy
 
+class CommandExecutionMixin:
+    def get_model_name(self):
+        return 'dwcommands_manager.commandexecution'
+
 @method_decorator(login_required, name='dispatch')
-class CommandExecutionListView(WebixListView):
+class CommandExecutionListView(CommandExecutionMixin, WebixListView):
     model = CommandExecution
     enable_json_loading = True
     template_name = 'django_webix/commands_manager/list.js'
@@ -88,19 +92,19 @@ class CommandExecutionListView(WebixListView):
 
 
 @method_decorator(login_required, name='dispatch')
-class CommandExecutionUpdateView(WebixUpdateView):
+class CommandExecutionUpdateView(CommandExecutionMixin, WebixUpdateView):
     model = CommandExecution
     form_class = CommandExecutionFormUpdate
     template_name = 'django_webix/commands_manager/update.js'
 
 
 @method_decorator(login_required, name='dispatch')
-class CommandExecutionCreateView(WebixCreateView):
+class CommandExecutionCreateView(CommandExecutionMixin, WebixCreateView):
     model = CommandExecution
     form_class = CommandExecutionFormCreate
     template_name = 'django_webix/commands_manager/create.js'
 
 
 @method_decorator(login_required, name='dispatch')
-class CommandExecutionDeleteView(WebixDeleteView):
+class CommandExecutionDeleteView(CommandExecutionMixin, WebixDeleteView):
     model = CommandExecution

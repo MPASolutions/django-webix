@@ -4,7 +4,7 @@ Admin Site
 Example
 -------
 
-If you need to override base site class create the files (e.g. <project_name>/admin_webix.py) a
+If you need to override base site class create the files (e.g. <project_name>/dwadmin.py) a
 Here an example:
 
 .. code-block:: python
@@ -17,7 +17,7 @@ Here an example:
 
     class CustomSiteAdminWebixSite(LazyObject):
         def _setup(self):
-            AdminWebixSiteClass = import_string(apps.get_app_config('admin_webix').default_site)
+            AdminWebixSiteClass = import_string(apps.get_app_config('dwadmin').default_site)
 
             AdminWebixSiteClass.site_url = '/'
 
@@ -39,7 +39,7 @@ Here an example:
             AdminWebixSiteClass.index_template = None
             AdminWebixSiteClass.login_template = None
             AdminWebixSiteClass.logout_template = None
-            AdminWebixSiteClass.dashboard_template = 'admin_webix/dashboard.js'
+            AdminWebixSiteClass.dashboard_template = 'dwadmin/dashboard.js'
             AdminWebixSiteClass.password_change_template = None
             AdminWebixSiteClass.password_change_done_template = None
 

@@ -15,7 +15,7 @@ $$('main_toolbar_navigation').addView({
     click: function () {
         $.ajax(
             {
-                url: "{% url "django_webix.commands_manager.commandexecution.execute" pk=object.id %}",
+                url: "{% url "dwcommands_manager.commandexecution.execute" pk=object.id %}",
                 method: 'GET',
                 success: function (risposta) {
                     webix.message({type: "success", text: "{{_("Started")|escapejs}}"});

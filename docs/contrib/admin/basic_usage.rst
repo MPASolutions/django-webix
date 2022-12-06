@@ -16,19 +16,19 @@ Use base admin site.
 
 .. code-block:: python
 
-    from django_webix import admin_webix as admin
+    from django_webix import dwadmin as admin
 
 Admin Webix Model registration
 ------------------------------
 
-Create the files (e.g. <app_name>/admin_webix.py)
+Create the files (e.g. <app_name>/dwadmin.py)
 - prefix could be used for multiple model registration
 Here an example:
 
 .. code-block:: python
 
     from <app_name>.models import ModelName
-    from django_webix import admin_webix as admin
+    from django_webix import dwadmin as admin
 
     @admin.register(Conferente, prefix=prefix)
     class ConferenteAdmin(admin.ModelWebixAdmin):

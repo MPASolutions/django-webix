@@ -193,7 +193,7 @@ function DjangoWebixSender() {
                     $.ajax({
                         type: "POST",
                         enctype: 'multipart/form-data',
-                        url: "{% url 'django_webix.sender.send' %}",
+                        url: "{% url 'dwsender.send' %}",
                         data: data,
                         processData: false,
                         contentType: false,
@@ -222,7 +222,7 @@ function DjangoWebixSender() {
                                         $.ajax({
                                             type: "POST",
                                             enctype: 'multipart/form-data',
-                                            url: "{% url 'django_webix.sender.send' %}",
+                                            url: "{% url 'dwsender.send' %}",
                                             data: data,
                                             processData: false,
                                             contentType: false,

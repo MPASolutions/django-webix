@@ -8,7 +8,7 @@ from django.utils.functional import LazyObject
 from django.utils.module_loading import import_string
 from django_webix.contrib.admin.models import WebixAdminMenu
 
-from django_webix.contrib.admin.admin_webix import UserAdmin, GroupAdmin
+from django_webix.contrib.admin.dwadmin import UserAdmin, GroupAdmin
 
 from django_webix.contrib.admin.decorators import register
 from django_webix.contrib import admin
@@ -44,7 +44,7 @@ class TestAdminWebixCalls(TestCase):
     def test_modeladmin_list(self):
         self.client.login(username='testuser1',
                           password='12345')
-        _url = reverse('django_webix.admin:app_name.mymodel.list')
+        _url = reverse('dwadmin:app_name.mymodel.list')
         response = self.client.get(_url)
         self.assertEqual(response.status_code, 200)
 
@@ -52,7 +52,7 @@ class TestAdminWebixCalls(TestCase):
         self.client.login(username='testuser1',
                           password='12345')
         User = get_user_model()
-        _url = reverse('django_webix.admin:{}.{}.list'.format(User._meta.app_label,
+        _url = reverse('dwadmin:{}.{}.list'.format(User._meta.app_label,
                                                        User._meta.model_name))
         response = self.client.get(_url)
         self.assertEqual(response.status_code, 200)
@@ -61,7 +61,7 @@ class TestAdminWebixCalls(TestCase):
         self.client.login(username='testuser1',
                           password='12345')
         User = get_user_model()
-        _url = reverse('django_webix.admin:{}.{}.update'.format(User._meta.app_label,
+        _url = reverse('dwadmin:{}.{}.update'.format(User._meta.app_label,
                                                        User._meta.model_name), kwargs={'pk':self.group1.pk})
         response = self.client.get(_url)
         self.assertEqual(response.status_code, 200)
@@ -70,7 +70,7 @@ class TestAdminWebixCalls(TestCase):
         self.client.login(username='testuser1',
                           password='12345')
         User = get_user_model()
-        _url = reverse('django_webix.admin:{}.{}.list'.format(User._meta.app_label,
+        _url = reverse('dwadmin:{}.{}.list'.format(User._meta.app_label,
                                                        User._meta.model_name))
         response = self.client.post(_url+'?json=true', {
             'QXSPRESETFILTER': '',
@@ -110,7 +110,7 @@ class TestAdminWebixCalls(TestCase):
         self.client.login(username='testuser1',
                           password='12345')
         User = get_user_model()
-        _url = reverse('django_webix.admin:{}.{}.create'.format(User._meta.app_label,
+        _url = reverse('dwadmin:{}.{}.create'.format(User._meta.app_label,
                                                          User._meta.model_name))
         response = self.client.post(_url, {
             'username': 'testttt',
@@ -123,7 +123,7 @@ class TestAdminWebixCalls(TestCase):
         self.client.login(username='testuser1',
                           password='12345')
         User = get_user_model()
-        _url = reverse('django_webix.admin:{}.{}.create'.format(User._meta.app_label,
+        _url = reverse('dwadmin:{}.{}.create'.format(User._meta.app_label,
                                                        User._meta.model_name))
         response = self.client.post(_url, {
             'username': 'testttt1',
@@ -137,7 +137,7 @@ class TestAdminWebixCalls(TestCase):
                           password='12345')
         User = get_user_model()
 
-        _url = reverse('django_webix.admin:{}.{}.update'.format(User._meta.app_label,
+        _url = reverse('dwadmin:{}.{}.update'.format(User._meta.app_label,
                                                          User._meta.model_name), kwargs={'pk':self.user1.pk})
         response = self.client.post(_url, {
             'password1': '12345',
@@ -148,7 +148,7 @@ class TestAdminWebixCalls(TestCase):
     def test_user_modeladmin_passwordchange(self):
         self.client.login(username='testuser1',
                           password='12345')
-        _url = reverse('django_webix.admin:password_change', kwargs={'pk':self.user1.pk})
+        _url = reverse('dwadmin:password_change', kwargs={'pk':self.user1.pk})
         response = self.client.post(_url, {
             'password1': '12345',
             'password2': '12345',

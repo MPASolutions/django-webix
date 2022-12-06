@@ -27,7 +27,7 @@ $$("{{ webix_container_id }}").addView({
                     ],
                     on: {
                         onChange: function (newv, oldv) {
-                            var url = "{% url 'django_webix.sender.invoices' %}";
+                            var url = "{% url 'dwsender.invoices' %}";
                             url += (url.indexOf('?') >= 0 ? '&' : '?') + $.param({'send_method': newv});
                             load_js(url);
                         }
@@ -172,12 +172,12 @@ var marks_invoiced = function (datatable, id) {
                 {% endif %}
                 if (result) {
                     // TODO: segnare come fatturati
-                    webix.ajax().post("{% url 'django_webix.sender.invoices' %}", data, {
+                    webix.ajax().post("{% url 'dwsender.invoices' %}", data, {
                         error: function (text, data, XmlHttpRequest) {
                             alert("error");
                         },
                         success: function (text, data, XmlHttpRequest) {
-                            var url = "{% url 'django_webix.sender.invoices' %}";
+                            var url = "{% url 'dwsender.invoices' %}";
                             var send_method = $$('send_method').getValue();
                             var params = {};
                             if (send_method !== '') {

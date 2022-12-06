@@ -22,7 +22,7 @@
             value: "Home",
             icon: "fas fa-home",
             loading_type: 'redirect',
-            url: '{% url 'admin_webix:index' %}'
+            url: '{% url 'dwadmin:index' %}'
         },
         {# START EXTRA MENU PREVIUS #}
         {% block extra_menu_previus %}
@@ -41,21 +41,21 @@
                     value: "{{ _("Profile")|escapejs }}",
                     icon: "fas fa-user-edit",
                     loading_type: 'js_script',
-                    url: "{% url 'admin_webix:account_update' user.pk %}"
+                    url: "{% url 'dwadmin:account_update' user.pk %}"
                 },
                 {
                     id: 'menu_profile_change_password',
                     value: "{{ _("Password change")|escapejs }}",
                     icon: "fas fa-key",
                     loading_type: 'js_script',
-                    url: "{% url 'admin_webix:password_change' %}"
+                    url: "{% url 'dwadmin:password_change' %}"
                 },
                 {
                     id: 'menu_profile_reset_password',
                     value: "{{ _("Password reset")|escapejs }}",
                     icon: "fas fa-mail-bulk",
                     loading_type: 'js_script',
-                    url: "{% url 'admin_webix:password_reset' %}"
+                    url: "{% url 'dwadmin:password_reset' %}"
                 },
                 {% if 'two_factor'|is_app_installed %}
                 {
@@ -63,7 +63,7 @@
                     value: "{{ _("2 factor authentication")|escapejs }}",
                     icon: "fas fa-shield-alt",
                     loading_type: 'js_script',
-                    url: "{% url 'admin_webix:two_factor_profile' %}"
+                    url: "{% url 'dwadmin:two_factor_profile' %}"
                 }
                 {% endif %}
             ]

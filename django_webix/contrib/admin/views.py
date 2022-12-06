@@ -12,7 +12,7 @@ class UserUpdate(WebixUpdateView):
     enable_button_save_continue = False
     enable_button_save_addanother = False
     success_url = '.'
-    url_pattern_update = 'django_webix.admin:account_update'
+    url_pattern_update = 'dwadmin:account_update'
 
 
 class UserAdminCreate(WebixCreateView):
@@ -20,16 +20,16 @@ class UserAdminCreate(WebixCreateView):
     form_class = UserAdminCreateForm
 
     def get_url_pattern_update(self):
-        return 'django_webix.admin:' + super().get_url_pattern_update()
+        return 'dwadmin:' + super().get_url_pattern_update()
 
     def get_url_pattern_list(self):
-        return 'django_webix.admin:' + super().get_url_pattern_list()
+        return 'dwadmin:' + super().get_url_pattern_list()
 
     def get_url_pattern_delete(self):
-        return 'django_webix.admin:' + super().get_url_pattern_delete()
+        return 'dwadmin:' + super().get_url_pattern_delete()
 
     def get_url_pattern_create(self):
-        return 'django_webix.admin:' + super().get_url_pattern_create()
+        return 'dwadmin:' + super().get_url_pattern_create()
 
 
 class UserAdminUpdate(WebixUpdateView):
@@ -38,16 +38,16 @@ class UserAdminUpdate(WebixUpdateView):
     template_name = 'django_webix/admin/account/admin_user_update.js'
 
     def get_url_pattern_update(self):
-        return 'django_webix.admin:' + super().get_url_pattern_update()
+        return 'dwadmin:' + super().get_url_pattern_update()
 
     def get_url_pattern_list(self):
-        return 'django_webix.admin:' + super().get_url_pattern_list()
+        return 'dwadmin:' + super().get_url_pattern_list()
 
     def get_url_pattern_delete(self):
-        return 'django_webix.admin:' + super().get_url_pattern_delete()
+        return 'dwadmin:' + super().get_url_pattern_delete()
 
     def get_url_pattern_create(self):
-        return 'django_webix.admin:' + super().get_url_pattern_create()
+        return 'dwadmin:' + super().get_url_pattern_create()
 
 
 class PasswordResetConfirmViewCustom(PasswordResetConfirmView):

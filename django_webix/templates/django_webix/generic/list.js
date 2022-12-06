@@ -81,7 +81,7 @@ $$("{{ webix_container_id }}").addView({
             width: 180,
             icon: "far fa-filter",
             click: function (id, event) { // (lnk, hide, area, method, data)
-                load_js('{% url 'django_webix.filter.webixfilter.list_model' app_label=app_label model_name=module_name %}?_popup', undefined, undefined, undefined, undefined, undefined, undefined, abortAllPending = true);
+                load_js('{% url 'dwfilter.webixfilter.list_model' app_label=app_label model_name=module_name %}?_popup', undefined, undefined, undefined, undefined, undefined, undefined, abortAllPending = true);
             }
         },
         {% endif %}

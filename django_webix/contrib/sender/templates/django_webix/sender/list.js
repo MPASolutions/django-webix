@@ -56,7 +56,7 @@ $$("{{webix_container_id}}").addView({
                                                     }
                                                     pks = pks.join("&");
 
-                                                    var url = '{% url 'django_webix.sender.getlist' %}?';
+                                                    var url = '{% url 'dwsender.getlist' %}?';
                                                     url += 'contentype={{ datatable.model }}&';
                                                     url += pks + '&';
                                                     url += 'and_or_filter=' + switchValue;
@@ -98,7 +98,7 @@ $$("{{webix_container_id}}").addView({
                                                     }
                                                     pks = pks.join("&");
 
-                                                    var url = '{% url 'django_webix.sender.getlist' %}?';
+                                                    var url = '{% url 'dwsender.getlist' %}?';
                                                     url += 'contentype={{ datatable.model }}&';
                                                     url += pks + '&';
                                                     url += 'and_or_filter=' + switchValue;
@@ -300,14 +300,14 @@ var getDatatablesItems = function () {
     $$('{{ datatable.model }}').attachEvent("onAfterUnSelect", getDatatablesItems);
     {% if not use_dynamic_filters or datatable.filters|length == 0 %}
         var dt = $$("{{ datatable.model }}");
-        dt.load("{% url 'django_webix.sender.getlist' %}?contentype={{ datatable.model }}");
+        dt.load("{% url 'dwsender.getlist' %}?contentype={{ datatable.model }}");
     {% endif %}
 {% endfor %}
 
 // Include window class
 var django_webix_sender = undefined;
 $.ajax({
-    url: "{% url 'django_webix.sender.sender_window' %}",
+    url: "{% url 'dwsender.sender_window' %}",
     dataType: "script",
     success: function () {
         django_webix_sender = new DjangoWebixSender();

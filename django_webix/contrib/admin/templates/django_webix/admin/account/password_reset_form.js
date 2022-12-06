@@ -45,7 +45,7 @@ $$("{{ webix_container_id }}").addView({
                                     label: '"{{ _("Confirm")|escapejs }}',
                                     click: function () {
                                         if ($$('{{ form.webix_id }}').validate()) {
-                                            webix.send("{% url 'admin_webix:password_reset' %}", $$('{{ form.webix_id }}').getValues());
+                                            webix.send("{% url 'dwadmin:password_reset' %}", $$('{{ form.webix_id }}').getValues());
                                         }
                                     }
                                 }

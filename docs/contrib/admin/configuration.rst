@@ -33,9 +33,9 @@ Register the views url (e.g. <project_name>/urls.py)
 
     from django.conf.urls import url
 
-    from <somewhere> import admin_webix
+    from <somewhere> import dwadmin
 
     urlpatterns = [
-      path('admin_webix/', admin_webix.site.urls), # or another path :-)
+      path('admin_webix/', dwadmin.site.urls), # or another path :-)
     ]
 

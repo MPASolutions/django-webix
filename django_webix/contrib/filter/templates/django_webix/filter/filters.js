@@ -13,8 +13,8 @@ $$("{{ webix_container_id }}").addView({
                     view: "jquery-querybuilder",
                     id: "querybuilder",
                     modelStart: "myapp.book",
-                    filtersUrl: "{% url 'django_webix.filter.filter_config' app_label='app_label' model_name='model_name' %}",
-                    suggestUrl: "{% url 'django_webix.filter.suggest_exact' field='field' %}",
+                    filtersUrl: "{% url 'dwfilter.filter_config' app_label='app_label' model_name='model_name' %}",
+                    suggestUrl: "{% url 'dwfilter.suggest_exact' field='field' %}",
                     limit_suggest: {{ limit_suggest }},
                     autocomplete_always: "{{ autocomplete_always }}",
                     icons: {

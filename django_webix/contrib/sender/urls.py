@@ -10,20 +10,20 @@ from django_webix.contrib.sender.views import (
 CONF = getattr(settings, "WEBIX_SENDER", None)
 
 urlpatterns = [
-    path('list', SenderListView.as_view(), name="django_webix.sender.list"),
-    path('getlist', SenderGetListView.as_view(), name="django_webix.sender.getlist"),
-    path('send', SenderSendView.as_view(), name="django_webix.sender.send"),
-    path('sender-window', SenderWindowView.as_view(), name='django_webix.sender.sender_window'),
-    path('invoices', SenderInvoiceManagementView.as_view(), name='django_webix.sender.invoices'),
-    path('messages_list', SenderMessagesListView.as_view(), name='django_webix.sender.messages_list'),
-    path('attachment_check', CheckAttachmentView.as_view(), name='django_webix.sender.attachment_check'),
+    path('list', SenderListView.as_view(), name="dwsender.list"),
+    path('getlist', SenderGetListView.as_view(), name="dwsender.getlist"),
+    path('send', SenderSendView.as_view(), name="dwsender.send"),
+    path('sender-window', SenderWindowView.as_view(), name='dwsender.sender_window'),
+    path('invoices', SenderInvoiceManagementView.as_view(), name='dwsender.invoices'),
+    path('messages_list', SenderMessagesListView.as_view(), name='dwsender.messages_list'),
+    path('attachment_check', CheckAttachmentView.as_view(), name='dwsender.attachment_check'),
     re_path('^messages_chat/(?P<section>users|messages)$', SenderMessagesChatView.as_view(),
-            name='django_webix.sender.messages_chat'),
+            name='dwsender.messages_chat'),
 ]
 
 if CONF is not None and CONF['typology_model']['enabled']:
     urlpatterns.append(
-        path('messages_list/typology/<str:title>/<str:pk>', SenderMessagesListView.as_view(), name='django_webix.sender.messages_list.typology'),
+        path('messages_list/typology/<str:title>/<str:pk>', SenderMessagesListView.as_view(), name='dwsender.messages_list.typology'),
     )
 
 # Telegram

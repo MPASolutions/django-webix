@@ -43,11 +43,11 @@ class WebixAdminMenu(MPTTModel):
         if self.model:
             if self.prefix not in ['', None]:
                 return reverse(
-                    'django_webix.admin:{app_label}.{model_name}.list.{prefix}'.format(app_label=self.model.app_label,
+                    'dwadmin:{app_label}.{model_name}.list.{prefix}'.format(app_label=self.model.app_label,
                                                                                        model_name=self.model.model,
                                                                                        prefix=self.prefix))
             else:
-                return reverse('django_webix.admin:{app_label}.{model_name}.list'.format(app_label=self.model.app_label,
+                return reverse('dwadmin:{app_label}.{model_name}.list'.format(app_label=self.model.app_label,
                                                                                          model_name=self.model.model))
         if self.url:
             return self.url

@@ -38,7 +38,7 @@
                               on: {
                                   onItemClick: function(id, e, node) {
                                       var item = this.getItem(id);
-                                      load_js("{% url 'django_webix.sender.messages_chat' section='messages' %}?contenttype=" + item.contenttype + "&recipient=" + item.pk + "&send_method=" + item.send_method);
+                                      load_js("{% url 'dwsender.messages_chat' section='messages' %}?contenttype=" + item.contenttype + "&recipient=" + item.pk + "&send_method=" + item.send_method);
                                   }
                               },
                               data: [
@@ -64,6 +64,6 @@
     });
 
     {% if recipients|length == 1 and not can_send %}
-        load_js("{% url 'django_webix.sender.messages_chat' section='messages' %}?contenttype={{ recipients.0.contenttype }}&recipient={{ recipients.0.id }}&send_method={{ recipients.0.send_method }}");
+        load_js("{% url 'dwsender.messages_chat' section='messages' %}?contenttype={{ recipients.0.contenttype }}&recipient={{ recipients.0.id }}&send_method={{ recipients.0.send_method }}");
     {% endif %}
 {% endblock %}

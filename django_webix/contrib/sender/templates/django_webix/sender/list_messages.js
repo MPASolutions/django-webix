@@ -5,7 +5,7 @@
     {% get_media_prefix as media_prefix %}
 
     function download_attachment(pk, pdf_view) {
-      webix.ajax().get("{% url 'django_webix.sender.attachment_check' %}" + '?pk_attachment=' + pk, {
+      webix.ajax().get("{% url 'dwsender.attachment_check' %}" + '?pk_attachment=' + pk, {
         success: function (text, data, XmlHttpRequest) {
           var result = data.json();
           if ('exist' in result && result.exist) {

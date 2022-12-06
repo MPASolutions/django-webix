@@ -56,7 +56,7 @@
       id:'admin_webix',
       rows:[
         {% block dashboard_header %}
-            {% include "admin_webix/include/header.js" %},
+            {% include "django_webix/admin/include/header.js" %},
         {% endblock %}
         {
         id:"content",
@@ -67,7 +67,7 @@
                 id: 'content_left',
                 rows: [
                     {% block dashborad_menu %}
-                        {% include "admin_webix/include/menu.js" %},
+                        {% include "django_webix/admin/include/menu.js" %},
                     {% endblock %}
                 ]
             },

@@ -95,7 +95,7 @@ function synk_parameters(id_field, val){
 function load_parameters(){
     $.ajax(
         {
-            'url': "{% url "django_webix.commands_manager.commandexecution.parameters" command_name='000' %}".replace('000', $$("id_command_name").getValue()),
+            'url': "{% url "dwcommands_manager.commandexecution.parameters" command_name='000' %}".replace('000', $$("id_command_name").getValue()),
             'method': 'GET',
             'success': function(msg){
                 create_form_parameters(msg['parameters'])

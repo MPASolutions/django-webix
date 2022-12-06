@@ -437,10 +437,10 @@ class ModelWebixAdmin(ModelWebixAdminPermissionsMixin):
                         return '{}_{}_'.format(self.model._meta.app_label,
                                                self.model._meta.model_name)
 
-                url_pattern_list = 'django_webix.admin:' + _admin.get_url_pattern_list()
-                url_pattern_create = 'django_webix.admin:' + _admin.get_url_pattern_create()
-                url_pattern_update = 'django_webix.admin:' + _admin.get_url_pattern_update()
-                url_pattern_delete = 'django_webix.admin:' + _admin.get_url_pattern_delete()
+                url_pattern_list = 'dwadmin:' + _admin.get_url_pattern_list()
+                url_pattern_create = 'dwadmin:' + _admin.get_url_pattern_create()
+                url_pattern_update = 'dwadmin:' + _admin.get_url_pattern_update()
+                url_pattern_delete = 'dwadmin:' + _admin.get_url_pattern_delete()
 
                 model = _admin.model
 
@@ -581,10 +581,10 @@ class ModelWebixAdmin(ModelWebixAdminPermissionsMixin):
                         return '{}_{}_'.format(self.model._meta.app_label,
                                                self.model._meta.model_name)
 
-                url_pattern_list = 'django_webix.admin:' + _admin.get_url_pattern_list()
-                url_pattern_create = 'django_webix.admin:' + _admin.get_url_pattern_create()
-                url_pattern_update = 'django_webix.admin:' + _admin.get_url_pattern_update()
-                url_pattern_delete = 'django_webix.admin:' + _admin.get_url_pattern_delete()
+                url_pattern_list = 'dwadmin:' + _admin.get_url_pattern_list()
+                url_pattern_create = 'dwadmin:' + _admin.get_url_pattern_create()
+                url_pattern_update = 'dwadmin:' + _admin.get_url_pattern_update()
+                url_pattern_delete = 'dwadmin:' + _admin.get_url_pattern_delete()
 
                 errors_on_popup = _admin.errors_on_popup
 
@@ -730,10 +730,10 @@ class ModelWebixAdmin(ModelWebixAdminPermissionsMixin):
                         return '{}_{}_'.format(self.model._meta.app_label,
                                                self.model._meta.model_name)
 
-                url_pattern_list = 'django_webix.admin:' + _admin.get_url_pattern_list()
-                url_pattern_create = 'django_webix.admin:' + _admin.get_url_pattern_create()
-                url_pattern_update = 'django_webix.admin:' + _admin.get_url_pattern_update()
-                url_pattern_delete = 'django_webix.admin:' + _admin.get_url_pattern_delete()
+                url_pattern_list = 'dwadmin:' + _admin.get_url_pattern_list()
+                url_pattern_create = 'dwadmin:' + _admin.get_url_pattern_create()
+                url_pattern_update = 'dwadmin:' + _admin.get_url_pattern_update()
+                url_pattern_delete = 'dwadmin:' + _admin.get_url_pattern_delete()
 
                 def has_add_permission(self, request):
                     return _admin.has_add_permission(view=self, request=request)
@@ -835,10 +835,10 @@ class ModelWebixAdmin(ModelWebixAdminPermissionsMixin):
                         return '{}_{}_'.format(self.model._meta.app_label,
                                                self.model._meta.model_name)
 
-                url_pattern_list = 'django_webix.admin:' + _admin.get_url_pattern_list()
-                url_pattern_create = 'django_webix.admin:' + _admin.get_url_pattern_create()
-                url_pattern_update = 'django_webix.admin:' + _admin.get_url_pattern_update()
-                url_pattern_delete = 'django_webix.admin:' + _admin.get_url_pattern_delete()
+                url_pattern_list = 'dwadmin:' + _admin.get_url_pattern_list()
+                url_pattern_create = 'dwadmin:' + _admin.get_url_pattern_create()
+                url_pattern_update = 'dwadmin:' + _admin.get_url_pattern_update()
+                url_pattern_delete = 'dwadmin:' + _admin.get_url_pattern_delete()
 
                 adjust_row_height = False
 

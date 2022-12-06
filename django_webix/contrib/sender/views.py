@@ -279,7 +279,7 @@ class SenderMessagesListView(WebixListView):
         ]
         return super().get_fields(fields = _fields)
 
-    url_pattern_list = 'django_webix.sender.messages_list'
+    url_pattern_list = 'dwsender.messages_list'
     add_permission = False
     change_permission = False
     delete_permission = False
@@ -290,9 +290,9 @@ class SenderMessagesListView(WebixListView):
 
     def get_url_list(self):
         if self.kwargs.get("pk") is not None:
-            return reverse("django_webix.sender.messages_list.typology", kwargs={"title": self.kwargs.get("title"), "pk": self.kwargs.get("pk")})
+            return reverse("dwsender.messages_list.typology", kwargs={"title": self.kwargs.get("title"), "pk": self.kwargs.get("pk")})
         else:
-            return reverse("django_webix.sender.messages_list")
+            return reverse("dwsender.messages_list")
 
     def get_initial_queryset(self):
         qs = super().get_initial_queryset()

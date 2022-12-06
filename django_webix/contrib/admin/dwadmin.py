@@ -154,8 +154,8 @@ class UserAdmin(admin.ModelWebixAdmin):
         from django_webix.views import WebixUpdateView
 
         class WebixAdminUpdateView(WebixUpdateView):
-            url_pattern_update = 'django_webix.admin:password_change'
-            url_pattern_list = 'django_webix.admin:users.user.list'
+            url_pattern_update = 'dwadmin:password_change'
+            url_pattern_list = 'dwadmin:users.user.list'
             form_class = AdminPasswordChangeForm
             model = _admin.model
             inlines = _admin.inlines

@@ -15,7 +15,7 @@
         {
             align: "left",
             type:"clean",
-            template: "<h3 style='margin:4px;'><a style='color:#fff;text-decoration:none;' href='{% url 'admin_webix:index' %}'>{{ title }}</a></h3>",
+            template: "<h3 style='margin:4px;'><a style='color:#fff;text-decoration:none;' href='{% url 'dwadmin:index' %}'>{{ title }}</a></h3>",
         },
         {$template: "Spacer"},
         {% endblock %}
@@ -49,7 +49,7 @@
         {
             view: "icon", align: "right", icon: "fas fa-sign-out-alt", on: {
                 onItemClick: function (id, e) {
-                    document.location.href = '{% url 'admin_webix:logout' %}';
+                    document.location.href = '{% url 'dwadmin:logout' %}';
                 }
             }
         },
