@@ -2,8 +2,13 @@
 import types
 
 from django.contrib.admin.utils import NestedObjects
-from django.utils.encoding import force_text
+
 from django.utils.text import capfirst
+
+try:
+    from django.utils.encoding import force_text as force_str
+except ImportError:
+    from django.utils.encoding import force_str
 
 # geo_field_classes = {
 #     "POINT": models.PointField,
@@ -74,7 +79,7 @@ def walk_items(item_list):
 def tree_formatter(item_list):
     output = []
     for item, children in walk_items(item_list):
-        _data = {"value": '{}: {}'.format(capfirst(item._meta.verbose_name), force_text(item))}
+        _data = {"value": '{}: {}'.format(capfirst(item._meta.verbose_name), force_str(item))}
         _sub_data = None
         if children:
             _data.update({"data": tree_formatter(children), "open": True})

@@ -3,7 +3,7 @@ from django.contrib.gis.geos import GEOSGeometry, MultiPolygon
 from django.core.validators import BaseValidator
 from django.utils.translation import gettext as _
 from django.utils.text import slugify
-from django.utils.encoding import force_text
+from django.utils.encoding import force_str
 
 
 def validate_truefalse(value):
@@ -39,7 +39,7 @@ class SlugifyChoiceField(forms.ChoiceField):
         "Returns a Unicode object."
         if value in self.empty_values:
             return ''
-        return slugify(force_text(value))
+        return slugify(force_str(value))
 
 class AutoMultiPolygonField(forms.MultiPolygonField):
 

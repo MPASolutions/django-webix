@@ -12,15 +12,16 @@ from django.db import models, connection
 from django.db.models import Q, QuerySet
 from django.db.models.constants import LOOKUP_SEP
 from django.http import HttpResponse
-from django.utils.encoding import smart_text
+from django.utils.encoding import smart_str
 from django.views import View
 from django.views.decorators.cache import never_cache
+from django.utils.decorators import method_decorator
 
 AUTOCOMPLETE_SEARCH_FIELDS = getattr(settings, "WEBIX_AUTOCOMPLETE_SEARCH_FIELDS", {})
 
 
 def get_label(f):
-    return f.related_label() if getattr(f, "related_label", None) else smart_text(f)
+    return f.related_label() if getattr(f, "related_label", None) else smart_str(f)
 
 
 def ajax_response(data):
@@ -53,7 +54,7 @@ class RelatedLookup(View):
                 filters = {}
                 for item in item2.split(":"):  # AND
                     k, v = item.split("=")
-                    VALUE = smart_text(v)
+                    VALUE = smart_str(v)
                     if VALUE == 'TRUE':
                         VALUE = True
                     elif VALUE == 'FALSE':
@@ -61,7 +62,7 @@ class RelatedLookup(View):
                     elif 'None' in VALUE:
                         VALUE = False
                     if k != "_to_field":
-                        filters[smart_text(k)] = prepare_lookup_value(smart_text(k), VALUE)
+                        filters[smart_str(k)] = prepare_lookup_value(smart_str(k), VALUE)
                 qset |= Q(**filters)
         try:
             qs = qs.filter(qset)
@@ -107,7 +108,7 @@ class AutocompleteWebixLookup(RelatedLookup):
 
         if search_fields:
             for word in term.split():
-                search = [models.Q(**{smart_text(item): smart_text(word)}) for item in search_fields]
+                search = [models.Q(**{smart_str(item): smart_str(word)}) for item in search_fields]
                 search_qs = QuerySet(model)
                 search_qs.query.select_related = qs.query.select_related
                 search_qs = search_qs.filter(reduce(operator.or_, search))
@@ -180,7 +181,7 @@ class AutocompleteWebixLookup(RelatedLookup):
             "value": get_label(f)
         } for f in self.get_queryset()[:_AUTOCOMPLETE_LIMIT]]
 
-    @never_cache
+    @method_decorator(never_cache)
     def get(self, request, *args, **kwargs):
         self.check_user_permission()
         self.GET = self.request.GET

@@ -7,7 +7,6 @@ from django.conf import settings
 from django.core.exceptions import ImproperlyConfigured
 from django.core.exceptions import PermissionDenied
 from django.http import HttpResponseRedirect
-from django.utils.encoding import force_text
 from django.utils.translation import gettext as _
 from django.views.generic import DeleteView
 
@@ -15,6 +14,10 @@ from django_webix.views.generic.base import WebixBaseMixin, WebixPermissionsMixi
 from django_webix.views.generic.signals import django_webix_view_pre_delete, django_webix_view_post_delete
 from django_webix.views.generic.utils import tree_formatter, NestedObjectsWithLimit
 
+try:
+    from django.utils.encoding import force_text as force_str
+except ImportError:
+    from django.utils.encoding import force_str
 
 class WebixDeleteView(WebixBaseMixin, WebixPermissionsMixin, WebixUrlMixin, DeleteView):
     logs_enable = True
@@ -111,7 +114,7 @@ class WebixDeleteView(WebixBaseMixin, WebixPermissionsMixin, WebixUrlMixin, Dele
                 user_id=request.user.id,
                 content_type_id=ContentType.objects.get_for_model(self.object).pk,
                 object_id=self.object.pk,
-                object_repr=force_text(self.object),
+                object_repr=force_str(self.object),
                 action_flag=DELETION
             )
 

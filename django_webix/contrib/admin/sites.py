@@ -18,6 +18,7 @@ from django.views.decorators.csrf import csrf_protect
 from django_webix.contrib.admin import ModelWebixAdmin
 from functools import update_wrapper
 from weakref import WeakSet
+from django.utils.decorators import method_decorator
 
 all_sites = WeakSet()
 
@@ -459,7 +460,7 @@ class AdminWebixSite:
             'user_list_url': self._get_user_model_list_url(),
         }
 
-    @never_cache
+    @method_decorator(never_cache)
     def dashboard(self, request, extra_context=None):
         from django.views.generic import TemplateView
         defaults = {
@@ -600,7 +601,7 @@ class AdminWebixSite:
         else:
             return None
 
-    @never_cache
+    @method_decorator(never_cache)
     def logout(self, request, extra_context=None):
         """
         Log out the user for the given HttpRequest.
@@ -622,7 +623,7 @@ class AdminWebixSite:
         LogoutView.template_name = self.logout_template or 'django_webix/admin/logged_out.html'
         return LogoutView.as_view(**defaults)(request)
 
-    @never_cache
+    @method_decorator(never_cache)
     def login(self, request, extra_context=None):
         """
         Display the login form for the given HttpRequest.
@@ -685,7 +686,7 @@ class AdminWebixSite:
     def extra_index_context(self, request):
         return {}
 
-    @never_cache
+    @method_decorator(never_cache)
     def index(self, request, extra_context=None):  # TODO da terminare la parte del template in modo carino circa
         """
         Display the main admin index page, which lists all of the installed
@@ -722,6 +723,8 @@ class DefaultAdminWebixSite(LazyObject):
         AdminWebixSiteClass = import_string(apps.get_app_config('dwadmin').default_site)
         self._wrapped = AdminWebixSiteClass()
 
+    def __repr__(self):
+        return repr(self._wrapped)
 
 # This global object represents the default admin site, for the common case.
 # You can provide your own AdminWebixSite using the (Simple)AdminConfig.default_site

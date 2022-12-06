@@ -18,7 +18,7 @@ from django.forms.models import ModelFormMetaclass
 from django.forms.utils import ErrorList
 from django.urls import reverse
 from django.utils import formats
-from django.utils.encoding import force_text
+
 from django.utils.http import urlencode
 from django.utils.text import capfirst
 from django.utils.timezone import is_naive, make_naive
@@ -29,6 +29,13 @@ from sorl.thumbnail import get_thumbnail
 from django_webix.utils.layers import get_layers
 
 from django.forms.fields import JSONField
+
+
+try:
+    from django.utils.encoding import force_text as force_str
+except ImportError:
+    from django.utils.encoding import force_str
+
 
 try:
     from django.contrib.postgres.forms import SimpleArrayField
@@ -227,7 +234,7 @@ class BaseWebixMixin:
         elements = OrderedDict()
         for name, field in self.fields.items():
             _pass = False
-            label = force_text(field.label).capitalize()
+            label = force_str(field.label).capitalize()
             el = {
                 'view': 'text',
                 'label': label,
@@ -1144,7 +1151,7 @@ class BaseWebixMixin:
                         f['header'] = [f['header']]
                     _field_header.update({'header': f['header']})
                 elif 'label' in f:
-                    _field_header.update({'header': force_text(f['label'])})
+                    _field_header.update({'header': force_str(f['label'])})
 
                 if _field_header is not None:
                     _field_header.update({'id': 'id_header_{}'.format(field_name)})

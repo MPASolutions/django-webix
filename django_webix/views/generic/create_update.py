@@ -8,7 +8,6 @@ from django.forms.models import _get_foreign_key, ModelForm, fields_for_model
 from django.http import HttpResponseRedirect
 from django.http import QueryDict
 from django.shortcuts import get_object_or_404
-from django.utils.encoding import force_text
 from django.utils.text import get_text_list
 from django.utils.translation import gettext as _
 from extra_views import UpdateWithInlinesView, CreateWithInlinesView
@@ -21,6 +20,10 @@ from django_webix.views.generic.signals import (django_webix_view_pre_save,
                                                 django_webix_view_pre_inline_save,
                                                 django_webix_view_post_save)
 
+try:
+    from django.utils.encoding import force_text as force_str
+except ImportError:
+    from django.utils.encoding import force_str
 
 class WebixCreateUpdateMixin:
     logs_enable = True
@@ -381,7 +384,7 @@ class WebixCreateView(WebixCreateUpdateMixin,
                 user_id=self.request.user.pk,
                 content_type_id=ContentType.objects.get_for_model(self.object).pk,
                 object_id=self.object.pk,
-                object_repr=force_text(self.object),
+                object_repr=force_str(self.object),
                 action_flag=ADDITION
             )
 
@@ -466,7 +469,7 @@ class WebixUpdateView(WebixCreateUpdateMixin, WebixBaseMixin, WebixPermissionsMi
                 user_id=self.request.user.pk,
                 content_type_id=ContentType.objects.get_for_model(self.object).pk,
                 object_id=self.object.pk,
-                object_repr=force_text(self.object),
+                object_repr=force_str(self.object),
                 action_flag=CHANGE,
                 change_message=_('Changed %s.') % get_text_list(form.changed_data, _('and'))
             )

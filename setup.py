@@ -99,10 +99,10 @@ setup(
             "python-telegram-bot>=13.1,<=13.1.5",
         ],
         "validator": [
-            "python-magic==0.4.27",
+            "python-magic==0.4.27", # ==0.4.27
             "numpy>=1.21.6",
             "pandas>=1.3.5",
-            "geopandas==0.6.3",
+            "geopandas", # 0.6
             "xlrd>=2.0.1",
         ],
     },
