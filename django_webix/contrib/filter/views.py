@@ -7,6 +7,7 @@ from django.urls import reverse
 from django.views import View
 from django.db.models import Case, When, Value, CharField
 from django.contrib.contenttypes.fields import GenericRelation, GenericForeignKey
+from django.utils.encoding import force_str
 
 from django_webix.views import (
     WebixListView as ListView,
@@ -274,11 +275,16 @@ class WebixFilterList(WebixFilterMixin, ListView):
             )
         return context
 
+#    def get_objects_datatable(self):
+#        qs = super().get_objects_datatable()
+#        raise Exception(str(qs.query))
+
     def get_initial_queryset(self):
         qs = super().get_initial_queryset()
+
         qs = qs.annotate(
             visibility_display=Case(
-                *[When(visibility=k, then=Value(v)) for k, v in self.model._meta.get_field('visibility').choices],
+                *[When(visibility=k, then=Value(force_str(v))) for k, v in self.model._meta.get_field('visibility').choices],
                 default=Value(''),
                 output_field=CharField()
             )
@@ -314,25 +320,45 @@ class WebixFilterList(WebixFilterMixin, ListView):
             {
                 'field_name': 'title',
                 'datalist_column': format_lazy(
-                    '''{{id: "title", header: ["{}", {{content: "textFilter"}}], adjust: "all", fillspace: true}} ''',
+                    '''{{
+                    id: "title",
+                    header: ["{}", {{content: "textFilter"}}],
+                    adjust: "all",
+                    fillspace: true
+                    }} ''',
                     escapejs(_("Title")))
             },
             {
                 'field_name': 'description',
                 'datalist_column': format_lazy(
-                    '''{{id: "description", header: ["{}", {{content: "textFilter"}}], adjust: "all", fillspace: true}} ''',
+                    '''{{
+                    id: "description",
+                    header: ["{}", {{content: "textFilter"}}],
+                    adjust: "all",
+                    fillspace: true
+                    }} ''',
                     escapejs(_("Description")))
             },
             {
                 'field_name': 'model',
                 'datalist_column': format_lazy(
-                    '''{{id: "model", header: ["{}", {{content: "textFilter"}}], adjust: "all", fillspace: true}} ''',
+                    '''{{
+                    id: "model",
+                    header: ["{}", {{content: "textFilter"}}],
+                    adjust: "all",
+                    fillspace: true
+                    }} ''',
                     escapejs(_("Model")))
             },
             {
                 'field_name': 'visibility_display',
                 'datalist_column': format_lazy(
-                    '''{{id: "visibility_display", header: ["{}", {{content: "textFilter"}}], adjust: "all", fillspace: true}} ''',
+                    '''{{
+                    id: "visibility_display",
+                    header: ["{}", {{content: "textFilter"}}],
+                    adjust: "all",
+                    fillspace: true
+                    }} ''',
                     escapejs(_("Visibility")))
             }
         ]

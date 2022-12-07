@@ -365,6 +365,7 @@ class WebixListView(WebixBaseMixin,
             qs = self.get_queryset()
             # filters application (like IDS selections)
             qs = self.filters_objects_datatable(qs)
+            #raise Exception(qs)
             # pagination (applied only for json request)
             # if self.is_json_request:
             #    qs = self.paginate_queryset(qs, None)

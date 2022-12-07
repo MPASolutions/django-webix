@@ -517,6 +517,13 @@ class ModelWebixAdmin(ModelWebixAdminPermissionsMixin):
                 enable_button_save_addanother = _admin.enable_button_save_addanother_create if _admin.enable_button_save_addanother_create is not None else _admin.enable_button_save_addanother
                 enable_button_save_gotolist = _admin.enable_button_save_gotolist_create if _admin.enable_button_save_gotolist_create is not None else _admin.enable_button_save_gotolist
 
+                add_permission = _admin.add_permission
+                change_permission = _admin.delete_permission
+                delete_permission = _admin.delete_permission
+                view_permission = _admin.view_permission
+                view_or_change_permission = _admin.view_or_change_permission
+                module_permission = _admin.module_permission
+
                 def has_add_permission(self, request):
                     return _admin.has_add_permission(view=self, request=request)
                 def has_change_permission(self, request, obj=None):
@@ -663,6 +670,13 @@ class ModelWebixAdmin(ModelWebixAdminPermissionsMixin):
                 enable_button_save_addanother = _admin.enable_button_save_addanother_update if _admin.enable_button_save_addanother_update is not None else _admin.enable_button_save_addanother
                 enable_button_save_gotolist = _admin.enable_button_save_gotolist_update if _admin.enable_button_save_gotolist_update is not None else _admin.enable_button_save_gotolist
 
+                add_permission = _admin.add_permission
+                change_permission = _admin.delete_permission
+                delete_permission = _admin.delete_permission
+                view_permission = _admin.view_permission
+                view_or_change_permission = _admin.view_or_change_permission
+                module_permission = _admin.module_permission
+
                 def has_add_permission(self, request):
                     return _admin.has_add_permission(view=self, request=request)
                 def has_change_permission(self, request, obj=None):
@@ -734,6 +748,13 @@ class ModelWebixAdmin(ModelWebixAdminPermissionsMixin):
                 url_pattern_create = 'dwadmin:' + _admin.get_url_pattern_create()
                 url_pattern_update = 'dwadmin:' + _admin.get_url_pattern_update()
                 url_pattern_delete = 'dwadmin:' + _admin.get_url_pattern_delete()
+
+                add_permission = _admin.add_permission
+                change_permission = _admin.delete_permission
+                delete_permission = _admin.delete_permission
+                view_permission = _admin.view_permission
+                view_or_change_permission = _admin.view_or_change_permission
+                module_permission = _admin.module_permission
 
                 def has_add_permission(self, request):
                     return _admin.has_add_permission(view=self, request=request)
@@ -861,6 +882,13 @@ class ModelWebixAdmin(ModelWebixAdminPermissionsMixin):
                 is_enable_row_click = _admin.is_enable_row_click
                 type_row_click = _admin.type_row_click
                 enable_actions = _admin.enable_actions
+
+                add_permission = _admin.add_permission
+                change_permission = _admin.delete_permission
+                delete_permission = _admin.delete_permission
+                view_permission = _admin.view_permission
+                view_or_change_permission = _admin.view_or_change_permission
+                module_permission = _admin.module_permission
 
                 def has_add_permission(self, request):
                     return _admin.has_add_permission(view=self, request=request)
