@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-09-26 09:26+0200\n"
+"POT-Creation-Date: 2022-12-07 12:10+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,62 +18,85 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: models.py:13 models.py:25 views.py:37
-msgid "Nome"
+#: django_webix/contrib/tutorial/apps.py:8
+msgid "Django Webix Tutorial"
 msgstr ""
 
-#: models.py:16
-msgid "Area tutorial"
+#: django_webix/contrib/tutorial/models.py:12
+#: django_webix/contrib/tutorial/models.py:24
+#: django_webix/contrib/tutorial/views.py:45
+msgid "Name"
 msgstr ""
 
-#: models.py:17
-msgid "Aree tutorial"
+#: django_webix/contrib/tutorial/models.py:15
+msgid "Tutorial area"
 msgstr ""
 
-#: models.py:26 views.py:43
-msgid "Descrizione"
+#: django_webix/contrib/tutorial/models.py:16
+msgid "Tutorial areas"
 msgstr ""
 
-#: models.py:28
-msgid "Tipologia tutorial"
+#: django_webix/contrib/tutorial/models.py:25
+#: django_webix/contrib/tutorial/views.py:55
+msgid "Description"
 msgstr ""
 
-#: models.py:29
+#: django_webix/contrib/tutorial/models.py:27
+msgid "Tutorial type"
+msgstr ""
+
+#: django_webix/contrib/tutorial/models.py:28
 msgid "PDF"
 msgstr ""
 
-#: models.py:30
+#: django_webix/contrib/tutorial/models.py:29
 msgid "Video"
 msgstr ""
 
-#: models.py:32
-msgid "Tipologia di apertura del file"
+#: django_webix/contrib/tutorial/models.py:31
+msgid "Type of opening file"
 msgstr ""
 
-#: models.py:33
-msgid "Modale con iframe"
+#: django_webix/contrib/tutorial/models.py:32
+msgid "Modal with iframe"
 msgstr ""
 
-#: models.py:34
-msgid "Stessa finestra"
+#: django_webix/contrib/tutorial/models.py:33
+msgid "Same window"
 msgstr ""
 
-#: models.py:35
-msgid "Nuovo tab"
+#: django_webix/contrib/tutorial/models.py:34
+msgid "New tab"
 msgstr ""
 
-#: models.py:37
+#: django_webix/contrib/tutorial/models.py:36
 msgid "Area"
 msgstr ""
 
-#: models.py:40
-msgid "Visibile dal"
+#: django_webix/contrib/tutorial/models.py:39
+msgid "Visible from"
 msgstr ""
 
-#: models.py:44
-msgid "Elemento tutorial"
+#: django_webix/contrib/tutorial/models.py:40
+msgid "Visible to"
 msgstr ""
 
-#: models.py:45
-msgid "Elementi tutorial"
+#: django_webix/contrib/tutorial/models.py:43
+msgid "Tutorial item"
+msgstr ""
+
+#: django_webix/contrib/tutorial/models.py:44
+msgid "Tutorial items"
+msgstr ""
+
+#: django_webix/contrib/tutorial/templates/django_webix/tutorial/list.js:25
+msgid "Video tutorial"
+msgstr ""
+
+#: django_webix/contrib/tutorial/templates/django_webix/tutorial/list.js:53
+msgid "PDF tutorial"
+msgstr ""
+
+#: django_webix/contrib/tutorial/views.py:14
+msgid "Video instructions and manuals"
 msgstr ""

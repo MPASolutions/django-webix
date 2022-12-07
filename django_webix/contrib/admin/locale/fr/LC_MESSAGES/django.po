@@ -1,0 +1,377 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-12-07 12:10+0100\n"
+"PO-Revision-Date: 2022-03-21 12:39+0050\n"
+"Last-Translator: Traduzioni CBC <>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Translated-Using: django-rosetta 0.9.8\n"
+
+#: django_webix/contrib/admin/apps.py:27
+msgid "Administration"
+msgstr "Administration"
+
+#: django_webix/contrib/admin/django_admin_utils.py:43
+#: django_webix/contrib/admin/forms.py:158
+msgid "Groups"
+msgstr "Groupes"
+
+#: django_webix/contrib/admin/dwadmin.py:33
+#: django_webix/contrib/admin/templates/django_webix/admin/include/menu.js:36
+msgid "User"
+msgstr "Utilisateur"
+
+#: django_webix/contrib/admin/dwadmin.py:44
+msgid "Email"
+msgstr ""
+
+#: django_webix/contrib/admin/dwadmin.py:55
+msgid "Name"
+msgstr ""
+
+#: django_webix/contrib/admin/dwadmin.py:66
+#, fuzzy
+#| msgid "Username"
+msgid "Surname"
+msgstr "Nom d'utilisateur"
+
+#: django_webix/contrib/admin/dwadmin.py:79
+msgid "Staff"
+msgstr ""
+
+#: django_webix/contrib/admin/dwadmin.py:92
+msgid "Superuser"
+msgstr ""
+
+#: django_webix/contrib/admin/dwadmin.py:105
+#, fuzzy
+#| msgid "Active for all"
+msgid "Active"
+msgstr "Actif pour tous"
+
+#: django_webix/contrib/admin/dwadmin.py:116
+#, fuzzy
+#| msgid "Groups"
+msgid "Group"
+msgstr "Groupes"
+
+#: django_webix/contrib/admin/forms.py:24
+#: django_webix/contrib/admin/forms.py:127
+#: django_webix/contrib/admin/forms.py:134
+msgid "Available permissions"
+msgstr "Autorisations disponibles"
+
+#: django_webix/contrib/admin/forms.py:25
+#: django_webix/contrib/admin/forms.py:128
+#: django_webix/contrib/admin/forms.py:135
+msgid "Selected"
+msgstr "sélectionnés "
+
+#: django_webix/contrib/admin/forms.py:51
+#: django_webix/contrib/admin/forms.py:231
+msgid "The two password fields didn’t match."
+msgstr "Les deux champs de mots de passe ne correspondent pas"
+
+#: django_webix/contrib/admin/forms.py:54
+#: django_webix/contrib/admin/forms.py:235
+#: django_webix/contrib/admin/templates/django_webix/admin/login.html:47
+msgid "Password"
+msgstr "Mot de passe"
+
+#: django_webix/contrib/admin/forms.py:60
+msgid "Password confirmation"
+msgstr "Confirmation mot de passe"
+
+#: django_webix/contrib/admin/forms.py:63
+#: django_webix/contrib/admin/forms.py:244
+msgid "Enter the same password as before, for verification."
+msgstr "Entrer le même mot de passe que précédemment, pour vérification"
+
+#: django_webix/contrib/admin/forms.py:155
+msgid "Private data"
+msgstr "Données privées"
+
+#: django_webix/contrib/admin/forms.py:156
+msgid "Private informations"
+msgstr "Informations privées"
+
+#: django_webix/contrib/admin/forms.py:157
+msgid "Permissions"
+msgstr "Autorisations"
+
+#: django_webix/contrib/admin/forms.py:177
+msgid "Change password"
+msgstr "Changer mot de passe"
+
+#: django_webix/contrib/admin/forms.py:241
+msgid "Password (again)"
+msgstr "Mot de passe (à nouveau)"
+
+#: django_webix/contrib/admin/models.py:14
+msgid "Node name"
+msgstr "Nom du module"
+
+#: django_webix/contrib/admin/models.py:15
+msgid "Icon"
+msgstr "Icône"
+
+#: django_webix/contrib/admin/models.py:16
+msgid "Web link"
+msgstr "lien internet"
+
+#: django_webix/contrib/admin/models.py:17
+msgid "Enabled"
+msgstr "Non autorisé"
+
+#: django_webix/contrib/admin/models.py:18
+msgid "Active for all"
+msgstr "Actif pour tous"
+
+#: django_webix/contrib/admin/models.py:19
+msgid "Model"
+msgstr "Modèle"
+
+#: django_webix/contrib/admin/models.py:20
+msgid "Enabled groups"
+msgstr "Groupes autorisés"
+
+#: django_webix/contrib/admin/models.py:21
+msgid "Prefix"
+msgstr "Préfixe"
+
+#: django_webix/contrib/admin/models.py:23
+msgid "Parent"
+msgstr "Parent"
+
+#: django_webix/contrib/admin/models.py:30
+#: django_webix/contrib/admin/models.py:31
+msgid "Webix Admin Menu"
+msgstr "Menu Admin Webix"
+
+#: django_webix/contrib/admin/options.py:253
+msgid "Yes"
+msgstr "Oui"
+
+#: django_webix/contrib/admin/options.py:253
+msgid "No"
+msgstr "Non"
+
+#: django_webix/contrib/admin/sites.py:36
+msgid "Django webix site admin"
+msgstr "Admin site webix Django"
+
+#: django_webix/contrib/admin/sites.py:39
+msgid "Django webix administration"
+msgstr "Administration Django Webix"
+
+#: django_webix/contrib/admin/sites.py:42
+msgid "Site administration"
+msgstr "Administration du site"
+
+#: django_webix/contrib/admin/sites.py:650
+#, python-format
+msgid ""
+"Please enter the correct %(username)s and password for a staff account. Note "
+"that both fields may be case-sensitive."
+msgstr ""
+"Merci de saisir le bon %(username)s et mot de passe pour un compte. Les 2 "
+"champs peuvent être sensible à la casse"
+
+#: django_webix/contrib/admin/sites.py:667
+msgid "Log in"
+msgstr "Connectez-vous"
+
+#: django_webix/contrib/admin/templates/django_webix/admin/account/password_change.js:15
+msgid "Cambio password utente"
+msgstr "Changer le mot de passe utilisateur"
+
+#: django_webix/contrib/admin/templates/django_webix/admin/account/password_change.js:43
+#: django_webix/contrib/admin/templates/django_webix/admin/account/password_reset.html:31
+#: django_webix/contrib/admin/templates/django_webix/admin/password_change.html:29
+#, fuzzy
+#| msgid "Change password"
+msgid "Current password"
+msgstr "Changer mot de passe"
+
+#: django_webix/contrib/admin/templates/django_webix/admin/account/password_change.js:52
+#: django_webix/contrib/admin/templates/django_webix/admin/account/password_reset.html:40
+#: django_webix/contrib/admin/templates/django_webix/admin/password_change.html:38
+#, fuzzy
+#| msgid "Nuova password"
+msgid "New password"
+msgstr "Nouveau mot de passe"
+
+#: django_webix/contrib/admin/templates/django_webix/admin/account/password_change.js:61
+#: django_webix/contrib/admin/templates/django_webix/admin/account/password_reset.html:49
+#: django_webix/contrib/admin/templates/django_webix/admin/password_change.html:47
+#, fuzzy
+#| msgid "Password confirmation"
+msgid "Password confirm"
+msgstr "Confirmation mot de passe"
+
+#: django_webix/contrib/admin/templates/django_webix/admin/account/password_change.js:70
+#: django_webix/contrib/admin/templates/django_webix/admin/account/password_reset.html:56
+#: django_webix/contrib/admin/templates/django_webix/admin/account/password_reset_confirm.html:35
+#: django_webix/contrib/admin/templates/django_webix/admin/account/password_reset_form.html:34
+#: django_webix/contrib/admin/templates/django_webix/admin/account/password_reset_form.js:45
+#: django_webix/contrib/admin/templates/django_webix/admin/password_change.html:54
+#, fuzzy
+#| msgid "Conferma"
+msgid "Confirm"
+msgstr "Confirmer"
+
+#: django_webix/contrib/admin/templates/django_webix/admin/account/password_change_done.js:15
+msgid "Password cambiata correttamente"
+msgstr "Mot de passe correctement"
+
+#: django_webix/contrib/admin/templates/django_webix/admin/account/password_reset.html:13
+#: django_webix/contrib/admin/templates/django_webix/admin/password_change.html:13
+#, fuzzy
+#| msgid "Password change"
+msgid "User password change"
+msgstr "Changement de mot de passe"
+
+#: django_webix/contrib/admin/templates/django_webix/admin/account/password_reset_complete.html:17
+msgid "Your password has been set. You can log-in"
+msgstr ""
+
+#: django_webix/contrib/admin/templates/django_webix/admin/account/password_reset_complete.html:32
+#: django_webix/contrib/admin/templates/django_webix/admin/login.html:54
+msgid "Login"
+msgstr ""
+
+#: django_webix/contrib/admin/templates/django_webix/admin/account/password_reset_complete.html:42
+msgid "Back"
+msgstr "Retour"
+
+#: django_webix/contrib/admin/templates/django_webix/admin/account/password_reset_confirm.html:11
+#, fuzzy
+#| msgid "Conferma password"
+msgid "Insert new password"
+msgstr "Confirmer le mot de passe"
+
+#: django_webix/contrib/admin/templates/django_webix/admin/account/password_reset_confirm.html:16
+msgid ""
+"Enter the new password twice, to verify that you have written it correctly"
+msgstr ""
+
+#: django_webix/contrib/admin/templates/django_webix/admin/account/password_reset_done.html:15
+#: django_webix/contrib/admin/templates/django_webix/admin/account/password_reset_done.js:33
+msgid ""
+"We have sent instructions for setting the password to the email address you "
+"provided. You should receive them shortly as long as the address you entered "
+"is valid."
+msgstr ""
+
+#: django_webix/contrib/admin/templates/django_webix/admin/account/password_reset_done.html:23
+#: django_webix/contrib/admin/templates/django_webix/admin/account/password_reset_done.js:40
+msgid ""
+"If you do not receive an email, make sure you have entered the address you "
+"registered with, and check your spam folder"
+msgstr ""
+
+#: django_webix/contrib/admin/templates/django_webix/admin/account/password_reset_done.js:20
+#, fuzzy
+#| msgid "Change password"
+msgid "Reset password"
+msgstr "Changer mot de passe"
+
+#: django_webix/contrib/admin/templates/django_webix/admin/account/password_reset_email.html:2
+#, python-format
+msgid ""
+"You're receiving this email because you requested a password reset for your "
+"user account at %(site_name)s."
+msgstr ""
+"Vous recevez the message suite à une demande de mise à jour de mot de passe "
+"de votre compte utilisateur %(site_name)s."
+
+#: django_webix/contrib/admin/templates/django_webix/admin/account/password_reset_email.html:4
+msgid "Please go to the following page and choose a new password:"
+msgstr "Merci d'aller à la page suivante et choisir un nouveau mot de passe"
+
+#: django_webix/contrib/admin/templates/django_webix/admin/account/password_reset_email.html:8
+msgid "Your username, in case you’ve forgotten:"
+msgstr "Votre nom d'utilisateur, au cas où vous l'auriez oublié"
+
+#: django_webix/contrib/admin/templates/django_webix/admin/account/password_reset_email.html:10
+msgid "Thanks for using our site!"
+msgstr "Merci d'utiliser notre site !"
+
+#: django_webix/contrib/admin/templates/django_webix/admin/account/password_reset_email.html:12
+#, python-format
+msgid "The %(site_name)s team"
+msgstr "L'équipe %(site_name)s "
+
+#: django_webix/contrib/admin/templates/django_webix/admin/account/password_reset_form.html:16
+#: django_webix/contrib/admin/templates/django_webix/admin/account/password_reset_form.js:26
+msgid ""
+"Forgot password? Enter your email address below, and we will send you "
+"instructions to set up a new one"
+msgstr ""
+
+#: django_webix/contrib/admin/templates/django_webix/admin/account/password_reset_form.js:12
+#: django_webix/contrib/admin/templates/django_webix/admin/include/menu.js:55
+msgid "Password reset"
+msgstr "Réinitialisation de mot de passe "
+
+#: django_webix/contrib/admin/templates/django_webix/admin/account/two_factor.js:12
+msgid "Account security"
+msgstr ""
+
+#: django_webix/contrib/admin/templates/django_webix/admin/account/two_factor.js:26
+msgid "Under construction"
+msgstr ""
+
+#: django_webix/contrib/admin/templates/django_webix/admin/base_site.html:100
+msgid "DATA"
+msgstr "DONNEES"
+
+#: django_webix/contrib/admin/templates/django_webix/admin/base_site.html:101
+msgid "WEBGIS"
+msgstr "WEBGIS"
+
+#: django_webix/contrib/admin/templates/django_webix/admin/include/menu.js:41
+msgid "Profile"
+msgstr "Profil"
+
+#: django_webix/contrib/admin/templates/django_webix/admin/include/menu.js:48
+msgid "Password change"
+msgstr "Changement de mot de passe"
+
+#: django_webix/contrib/admin/templates/django_webix/admin/include/menu.js:63
+msgid "2 factor authentication"
+msgstr "Authentification à 2 facteurs"
+
+#: django_webix/contrib/admin/templates/django_webix/admin/include/menu.js:79
+msgid "Manage users"
+msgstr "Gérer les utilisateurs"
+
+#: django_webix/contrib/admin/templates/django_webix/admin/include/menu.js:84
+msgid "Users"
+msgstr "Utilisateurs"
+
+#: django_webix/contrib/admin/templates/django_webix/admin/logged_out.html:58
+msgid "Log in again"
+msgstr "Connectez-vous à nouveau"
+
+#: django_webix/contrib/admin/templates/django_webix/admin/login.html:38
+msgid "Username"
+msgstr "Nom d'utilisateur"
+
+#: django_webix/contrib/admin/templates/django_webix/admin/login.html:71
+#, fuzzy
+#| msgid "Password reset"
+msgid "Password recovery"
+msgstr "Réinitialisation de mot de passe "

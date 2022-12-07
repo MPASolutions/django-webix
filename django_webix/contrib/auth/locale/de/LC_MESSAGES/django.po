@@ -1,0 +1,116 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-12-07 12:10+0100\n"
+"PO-Revision-Date: 2022-07-19 15:50+0050\n"
+"Last-Translator: Stefano Menegon <menegon@mpasol.it>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Translated-Using: django-rosetta 0.9.8\n"
+
+#: django_webix/contrib/auth/apps.py:8
+#, fuzzy
+#| msgid "Django webix administration"
+msgid "Django Webix Authentication and Authorization"
+msgstr "Django webix Verwaltung"
+
+#: django_webix/contrib/auth/forms.py:12
+msgid "Username"
+msgstr "Benutzer"
+
+#: django_webix/contrib/auth/forms.py:40
+msgid "Enter your username"
+msgstr "Geben Sie Ihren Benutzernamen ein"
+
+#: django_webix/contrib/auth/templates/django_webix/auth/password_reset/password_reset_complete.js:26
+msgid "Your password has been set. You can log-in"
+msgstr ""
+
+#: django_webix/contrib/auth/templates/django_webix/auth/password_reset/password_reset_complete.js:38
+msgid "Login"
+msgstr ""
+
+#: django_webix/contrib/auth/templates/django_webix/auth/password_reset/password_reset_confirm.js:36
+msgid ""
+"Enter the new password twice, to verify that you have written it correctly"
+msgstr ""
+
+#: django_webix/contrib/auth/templates/django_webix/auth/password_reset/password_reset_confirm.js:55
+#, fuzzy
+#| msgid "Change password"
+msgid "Change my password"
+msgstr "Passwort  ändern"
+
+#: django_webix/contrib/auth/templates/django_webix/auth/password_reset/password_reset_confirm.js:69
+msgid ""
+"The link you used is invalid, try to request a new email to reset your "
+"password."
+msgstr ""
+
+#: django_webix/contrib/auth/templates/django_webix/auth/password_reset/password_reset_confirm.js:84
+#: django_webix/contrib/auth/templates/django_webix/auth/password_reset/password_reset_done.js:49
+#: django_webix/contrib/auth/templates/django_webix/auth/password_reset/password_reset_form.js:72
+msgid "Go back to the home page"
+msgstr ""
+
+#: django_webix/contrib/auth/templates/django_webix/auth/password_reset/password_reset_done.js:26
+msgid ""
+"We have sent instructions for setting the password to the email address you "
+"provided. You should receive them shortly as long as the address you entered "
+"is valid."
+msgstr ""
+
+#: django_webix/contrib/auth/templates/django_webix/auth/password_reset/password_reset_done.js:35
+msgid ""
+"If you do not receive an email, make sure you have entered the address you "
+"registered with, and check your spam folder"
+msgstr ""
+
+#: django_webix/contrib/auth/templates/django_webix/auth/password_reset/password_reset_email.html:2
+#, python-format
+msgid ""
+"You're receiving this email because you requested a password reset for your "
+"user account at %(site_name)s."
+msgstr ""
+"Sie bekommen diese E-mail nach der Anfrage eines neuen Passworts für den "
+"Account auf %(site_name)s."
+
+#: django_webix/contrib/auth/templates/django_webix/auth/password_reset/password_reset_email.html:4
+msgid "Please go to the following page and choose a new password:"
+msgstr "Gehen Sie auf die folgende Seite und wählen Sie ein neues Passwort:"
+
+#: django_webix/contrib/auth/templates/django_webix/auth/password_reset/password_reset_email.html:8
+msgid "Your username, in case you’ve forgotten:"
+msgstr "Dein Nutzername, falls Sie diesen vergessen haben"
+
+#: django_webix/contrib/auth/templates/django_webix/auth/password_reset/password_reset_email.html:10
+msgid "Thanks for using our site!"
+msgstr "Danke für Ihren Besuch auf unsere Seite!"
+
+#: django_webix/contrib/auth/templates/django_webix/auth/password_reset/password_reset_email.html:12
+#, python-format
+msgid "The %(site_name)s team"
+msgstr "Das %(site_name)s Team"
+
+#: django_webix/contrib/auth/templates/django_webix/auth/password_reset/password_reset_form.js:35
+msgid ""
+"Forgot password? Enter your email address below, and we will send you "
+"instructions to set up a new one"
+msgstr ""
+
+#: django_webix/contrib/auth/templates/django_webix/auth/password_reset/password_reset_form.js:54
+#, fuzzy
+#| msgid "Change password"
+msgid "Reset my password"
+msgstr "Passwort  ändern"

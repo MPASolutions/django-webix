@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-09-26 09:26+0200\n"
+"POT-Creation-Date: 2022-12-07 12:10+0100\n"
 "PO-Revision-Date: 2022-07-13 13:17+0050\n"
 "Last-Translator: Stefano Menegon <menegon@mpasol.it>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -19,71 +19,82 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Translated-Using: django-rosetta 0.9.8\n"
 
-#: forms.py:50 models.py:12
+#: django_webix/contrib/commands_manager/apps.py:9
+msgid "Django Webix Commands Manager"
+msgstr ""
+
+#: django_webix/contrib/commands_manager/forms.py:50
+#: django_webix/contrib/commands_manager/models.py:11
 msgid "Parameters"
 msgstr "Parametri"
 
-#: forms.py:66 models.py:21
+#: django_webix/contrib/commands_manager/forms.py:65
+#: django_webix/contrib/commands_manager/models.py:20
 msgid "Output"
 msgstr "Output"
 
-#: models.py:9 views.py:31
+#: django_webix/contrib/commands_manager/models.py:8
+#: django_webix/contrib/commands_manager/views.py:49
 msgid "Description"
 msgstr "Descrizione"
 
-#: models.py:10 views.py:25
+#: django_webix/contrib/commands_manager/models.py:9
+#: django_webix/contrib/commands_manager/views.py:36
 msgid "Command name"
 msgstr "Nome command"
 
-#: models.py:13
+#: django_webix/contrib/commands_manager/models.py:12
 msgid "Insert date"
 msgstr "Data inserimento"
 
-#: models.py:14
+#: django_webix/contrib/commands_manager/models.py:13
 msgid "Last Execution"
 msgstr "Ultima esecuzione"
 
-#: models.py:16 templates/commands_manager/list.js:17
-#: templates/commands_manager/update.js:21
+#: django_webix/contrib/commands_manager/models.py:15
+#: django_webix/contrib/commands_manager/templates/django_webix/commands_manager/list.js:17
+#: django_webix/contrib/commands_manager/templates/django_webix/commands_manager/update.js:21
 msgid "Started"
 msgstr "Iniziato"
 
-#: models.py:17 templates/commands_manager/list.js:9
+#: django_webix/contrib/commands_manager/models.py:16
+#: django_webix/contrib/commands_manager/templates/django_webix/commands_manager/list.js:9
 msgid "Error"
 msgstr "Errore"
 
-#: models.py:18
+#: django_webix/contrib/commands_manager/models.py:17
 msgid "Finished"
 msgstr "Finito"
 
-#: models.py:19
+#: django_webix/contrib/commands_manager/models.py:18
 msgid "Unknown"
 msgstr "Scronosciuto"
 
-#: models.py:24
+#: django_webix/contrib/commands_manager/models.py:23
 msgid "Command execution"
 msgstr "Esecuzione comando"
 
-#: models.py:25
+#: django_webix/contrib/commands_manager/models.py:24
 msgid "Commands executions"
 msgstr "Esecuzioni comandi"
 
-#: tasks.py:24
+#: django_webix/contrib/commands_manager/tasks.py:24
 msgid "Command execution id is not valid"
 msgstr "ID Esecuzione comando non valido"
 
-#: views.py:38
-msgid "Last ex. date"
-msgstr "Ultima esecuzione"
-
-#: views.py:44
-msgid "Last ex. state"
-msgstr "Ultimo stato"
-
-#: views.py:51
+#: django_webix/contrib/commands_manager/templates/django_webix/commands_manager/update.js:13
+#: django_webix/contrib/commands_manager/views.py:88
 msgid "Execute"
 msgstr "Esegui"
 
-#: views_js.py:66
+#: django_webix/contrib/commands_manager/views.py:63
+msgid "Last ex. date"
+msgstr "Ultima esecuzione"
+
+#: django_webix/contrib/commands_manager/views.py:76
+msgid "Last ex. state"
+msgstr "Ultimo stato"
+
+#: django_webix/contrib/commands_manager/views_js.py:66
 msgid "Invalid command name"
 msgstr "Nome invalido command"

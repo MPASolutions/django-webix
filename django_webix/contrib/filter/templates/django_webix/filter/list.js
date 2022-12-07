@@ -99,12 +99,14 @@
             $$('map').setWmsFilterParams($$('map').activeLayer);
         }
         else{
-            // lista
+            {# the toString is needed so it do not send an array but a comma separated string #}
             {% if list_view_prefix %}
                 var model = '{{ list_view_prefix }}'.split('_').slice(0, 2).join('.');
-            {% with param='DjangoAdvancedWebixFilter'|request_filter_param %}{% if param %}
-            setWebixFilter(model, '{{ param }}', ids.toString());  {# the toString is needed so it doesn't send an array but a comma separated string #}
-            {% endif %}{% endwith %}
+                {% with param='DjangoAdvancedWebixFilter'|request_filter_param %}
+                    {% if param %}
+                        setWebixFilter(model, "{{ param }}", ids.toString());
+                    {% endif %}
+                {% endwith %}
             {{ list_view_prefix }}apply_filters();
             {% endif %}
         }
@@ -240,9 +242,11 @@
                     width: 150,
                     click: function () {
                         {{ list_view_prefix }}deactivate_otf_filter();
-                        {% with param='DjangoAdvancedOTFWebixFilter'|request_filter_param %}{% if param %}
-                        setWebixFilter(model, '{{ param }}', null);
-                        {% endif %}{% endwith %}
+                        {% with param='DjangoAdvancedOTFWebixFilter'|request_filter_param %}
+                            {% if param %}
+                              setWebixFilter(model, '{{ param }}', null);
+                            {% endif %}
+                        {% endwith %}
                         {{ list_view_prefix }}apply_filters();
                         this.disable();
                     }

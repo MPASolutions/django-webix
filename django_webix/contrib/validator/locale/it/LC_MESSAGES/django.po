@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-09-26 09:26+0200\n"
+"POT-Creation-Date: 2022-12-07 12:10+0100\n"
 "PO-Revision-Date: 2022-03-22 14:47+0050\n"
 "Last-Translator: Traduzioni CBC <>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -19,65 +19,69 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Translated-Using: django-rosetta 0.9.8\n"
 
-#: migrations/0006_auto_20201015_1218.py:17 models.py:13
-#: templates/django_validator/form_import_validation.js:21
+#: django_webix/contrib/validator/apps.py:8
+msgid "Django Webix Validator"
+msgstr ""
+
+#: django_webix/contrib/validator/models.py:13
+#: django_webix/contrib/validator/templates/django_webix/validator/form_import_validation.js:21
 msgid "Attachment"
 msgstr "Allegato"
 
-#: templates/django_validator/form_import_validation.js:21
+#: django_webix/contrib/validator/templates/django_webix/validator/form_import_validation.js:21
 msgid "errors"
 msgstr "errori"
 
-#: templates/django_validator/form_import_validation.js:21
+#: django_webix/contrib/validator/templates/django_webix/validator/form_import_validation.js:21
 msgid "error"
 msgstr "errore"
 
-#: templates/django_validator/form_import_validation.js:22
+#: django_webix/contrib/validator/templates/django_webix/validator/form_import_validation.js:22
 msgid "and"
 msgstr "e"
 
-#: templates/django_validator/form_import_validation.js:37
+#: django_webix/contrib/validator/templates/django_webix/validator/form_import_validation.js:37
 msgid "sheet"
 msgstr "foglio"
 
-#: templates/django_validator/form_import_validation.js:52
+#: django_webix/contrib/validator/templates/django_webix/validator/form_import_validation.js:52
 msgid "Errors"
 msgstr "Errori"
 
-#: templates/django_validator/form_import_validation.js:75
-#: templates/django_validator/form_import_validation.js:138
+#: django_webix/contrib/validator/templates/django_webix/validator/form_import_validation.js:75
+#: django_webix/contrib/validator/templates/django_webix/validator/form_import_validation.js:138
 msgid "row"
 msgstr "riga"
 
-#: templates/django_validator/form_import_validation.js:83
-#: templates/django_validator/form_import_validation.js:146
+#: django_webix/contrib/validator/templates/django_webix/validator/form_import_validation.js:83
+#: django_webix/contrib/validator/templates/django_webix/validator/form_import_validation.js:146
 msgid "Global controls"
 msgstr "Controlli globali"
 
-#: templates/django_validator/form_import_validation.js:85
-#: templates/django_validator/form_import_validation.js:87
-#: templates/django_validator/form_import_validation.js:148
-#: templates/django_validator/form_import_validation.js:150
+#: django_webix/contrib/validator/templates/django_webix/validator/form_import_validation.js:85
+#: django_webix/contrib/validator/templates/django_webix/validator/form_import_validation.js:87
+#: django_webix/contrib/validator/templates/django_webix/validator/form_import_validation.js:148
+#: django_webix/contrib/validator/templates/django_webix/validator/form_import_validation.js:150
 msgid "Column"
 msgstr "Colonna"
 
-#: templates/django_validator/form_import_validation.js:115
+#: django_webix/contrib/validator/templates/django_webix/validator/form_import_validation.js:115
 msgid "Warnings"
 msgstr "Avvisi"
 
-#: templates/django_validator/form_import_validation.js:179
+#: django_webix/contrib/validator/templates/django_webix/validator/form_import_validation.js:179
 msgid "Close and correct"
 msgstr "Chiudi e correggi"
 
-#: templates/django_validator/form_import_validation.js:195
+#: django_webix/contrib/validator/templates/django_webix/validator/form_import_validation.js:194
 msgid "Continue with warnings"
 msgstr "Continua con gli avvisi"
 
-#: utils.py:36
+#: django_webix/contrib/validator/utils.py:35
 msgid "No file uploaded"
 msgstr "Nessun file caricato"
 
-#: utils.py:37
+#: django_webix/contrib/validator/utils.py:36
 msgid ""
 "Text file not recognizable as delimiter-separated values with separator ' {} "
 "' (Exception:{})"
@@ -85,56 +89,56 @@ msgstr ""
 "File di testo non riconoscibile come delimiter-separated values con "
 "separatore ' {} ' (Exception:{})"
 
-#: utils.py:38
+#: django_webix/contrib/validator/utils.py:37
 msgid "Could not find file '{}' (or read from buffer)"
 msgstr "Impossibile trovare il file '{}' (o leggere da buffer)"
 
-#: utils.py:39
+#: django_webix/contrib/validator/utils.py:38
 msgid "File format '{}' not recognized, supported formats: {}"
 msgstr "Formato del file '{}' non riconosciuto, formati supportati: {}"
 
-#: utils.py:40
+#: django_webix/contrib/validator/utils.py:39
 msgid "File type '{}' not supported"
 msgstr "Tipo di file '{}' non supportato"
 
-#: utils.py:41
+#: django_webix/contrib/validator/utils.py:40
 msgid "There is no sheet"
 msgstr "Non è presente alcun foglio"
 
-#: utils.py:42
+#: django_webix/contrib/validator/utils.py:41
 msgid "There is no data in the sheet {}"
 msgstr "Non è presente alcun dato nel foglio {}"
 
-#: utils.py:43
+#: django_webix/contrib/validator/utils.py:42
 msgid "There are columns with no name"
 msgstr "Sono presenti colonne senza nome"
 
-#: utils.py:44
+#: django_webix/contrib/validator/utils.py:43
 msgid "There are columns with no name: {}"
 msgstr "Sono presenti colonne senza nome: {}"
 
-#: utils.py:45
+#: django_webix/contrib/validator/utils.py:44
 msgid "There are not enough columns: there are {} columns, {} needed"
 msgstr ""
 "Non sono presenti sufficienti colonne: presenti {} colonne, {} necessarie"
 
-#: utils.py:46
+#: django_webix/contrib/validator/utils.py:45
 msgid "Column headers ({}^ row) are incorrect"
 msgstr "Le intestazioni delle colonne ({}^ riga) non sono corrette"
 
-#: utils.py:47
+#: django_webix/contrib/validator/utils.py:46
 msgid "There is no column '{}'"
 msgstr "Non è presente la colonna '{}'"
 
-#: utils.py:48
+#: django_webix/contrib/validator/utils.py:47
 msgid "The name of the {}^ column ({}) must be ' {} ' (instead of '{}')"
 msgstr "Il nome della {}^ colonna ({}) deve essere '{}' (anzichè '{}')"
 
-#: utils.py:49
+#: django_webix/contrib/validator/utils.py:48
 msgid "A uniqueness rule has been violated in the fields {}"
 msgstr "È stata violata una regola di unicità sui campi {}"
 
-#: utils.py:50
+#: django_webix/contrib/validator/utils.py:49
 msgid ""
 "The zip file is supported only if the following files are contained .shp, ."
 "dbf, .prj, .shx"
@@ -142,20 +146,23 @@ msgstr ""
 "Lo zip file è supportato solo se sono contenuti i seguenti file .shp, .dbf, ."
 "prj, .shx"
 
-#: utils.py:130 utils.py:140 utils.py:150 utils.py:165
+#: django_webix/contrib/validator/utils.py:129
+#: django_webix/contrib/validator/utils.py:139
+#: django_webix/contrib/validator/utils.py:149
+#: django_webix/contrib/validator/utils.py:164
 msgid "This operation can only be done before validating"
 msgstr "Questa operazione può essere eseguita solo prima di validare"
 
-#: utils.py:552
+#: django_webix/contrib/validator/utils.py:549
 msgid "Validate save mode are ROW | FULL"
 msgstr "Le modalità di validazione sono RIGA | COMPLETO"
 
-#: validators.py:22
+#: django_webix/contrib/validator/validators.py:20
 #, python-format
 msgid "%(value)s is not a boolean value"
 msgstr "%(value)s non è un valore booleano"
 
-#: validators.py:28
+#: django_webix/contrib/validator/validators.py:26
 #, python-format
 msgid "Ensure this value is strictly greater than %(limit_value)s."
 msgstr ""

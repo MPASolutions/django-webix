@@ -1,0 +1,152 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-12-07 12:10+0100\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: django_webix/contrib/filter/apps.py:11
+msgid "Django Webix Filter"
+msgstr ""
+
+#: django_webix/contrib/filter/models.py:16
+msgid "Insert date"
+msgstr ""
+
+#: django_webix/contrib/filter/models.py:17
+msgid "Update date"
+msgstr ""
+
+#: django_webix/contrib/filter/models.py:18
+#: django_webix/contrib/filter/views.py:329
+msgid "Title"
+msgstr ""
+
+#: django_webix/contrib/filter/models.py:19
+#: django_webix/contrib/filter/views.py:340
+msgid "Description"
+msgstr ""
+
+#: django_webix/contrib/filter/models.py:20
+#: django_webix/contrib/filter/views.py:351
+msgid "Model"
+msgstr ""
+
+#: django_webix/contrib/filter/models.py:21
+msgid "Filter"
+msgstr ""
+
+#: django_webix/contrib/filter/models.py:23
+msgid "Insert user"
+msgstr ""
+
+#: django_webix/contrib/filter/models.py:25
+msgid "Visiblity"
+msgstr ""
+
+#: django_webix/contrib/filter/models.py:26
+msgid "Public"
+msgstr ""
+
+#: django_webix/contrib/filter/models.py:27
+msgid "Private"
+msgstr ""
+
+#: django_webix/contrib/filter/models.py:28
+msgid "Restricted"
+msgstr ""
+
+#: django_webix/contrib/filter/models.py:30
+msgid "Assignees groups"
+msgstr ""
+
+#: django_webix/contrib/filter/models.py:31
+msgid "Shared edit group"
+msgstr ""
+
+#: django_webix/contrib/filter/models.py:36
+msgid "Webix Filter"
+msgstr ""
+
+#: django_webix/contrib/filter/models.py:37
+msgid "Webix Filters"
+msgstr ""
+
+#: django_webix/contrib/filter/templates/django_webix/filter/create_update.js:31
+msgid "Filter error"
+msgstr ""
+
+#: django_webix/contrib/filter/templates/django_webix/filter/create_update.js:32
+msgid ""
+"There is a filter error, caused by a garment or model that is now non-"
+"existent or not correctly configured."
+msgstr ""
+
+#: django_webix/contrib/filter/templates/django_webix/filter/create_update.js:33
+msgid "Unable to load filter, contact administrators to correct it"
+msgstr ""
+
+#: django_webix/contrib/filter/templates/django_webix/filter/create_update.js:104
+#: django_webix/contrib/filter/templates/django_webix/filter/create_update.js:120
+#: django_webix/contrib/filter/templates/django_webix/filter/create_update.js:136
+#: django_webix/contrib/filter/templates/django_webix/filter/create_update.js:205
+msgid "You need to insert a filter before saving"
+msgstr ""
+
+#: django_webix/contrib/filter/templates/django_webix/filter/create_update.js:148
+msgid "Applica filtro temporaneo"
+msgstr ""
+
+#: django_webix/contrib/filter/templates/django_webix/filter/list.js:29
+msgid "Advanced filters"
+msgstr ""
+
+#: django_webix/contrib/filter/templates/django_webix/filter/list.js:46
+msgid "Close"
+msgstr ""
+
+#: django_webix/contrib/filter/templates/django_webix/filter/list.js:83
+msgid "Create new filter"
+msgstr ""
+
+#: django_webix/contrib/filter/templates/django_webix/filter/list.js:151
+msgid "Configuration error"
+msgstr ""
+
+#: django_webix/contrib/filter/templates/django_webix/filter/list.js:152
+msgid ""
+"ATTENTION: there is a filter application configuration error. Contact "
+"administrators."
+msgstr ""
+
+#: django_webix/contrib/filter/templates/django_webix/filter/list.js:175
+#: django_webix/contrib/filter/templates/django_webix/filter/list.js:218
+msgid "Change temporary filter"
+msgstr ""
+
+#: django_webix/contrib/filter/templates/django_webix/filter/list.js:187
+#: django_webix/contrib/filter/templates/django_webix/filter/list.js:231
+msgid "Invalid filter"
+msgstr ""
+
+#: django_webix/contrib/filter/templates/django_webix/filter/list.js:196
+#: django_webix/contrib/filter/templates/django_webix/filter/list.js:240
+msgid "Disable temporary filter"
+msgstr ""
+
+#: django_webix/contrib/filter/views.py:362
+msgid "Visibility"
+msgstr ""

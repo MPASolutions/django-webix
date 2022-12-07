@@ -1,0 +1,175 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-12-07 12:10+0100\n"
+"PO-Revision-Date: 2022-08-30 17:36+0050\n"
+"Last-Translator: Stefano Menegon <menegon@mpasol.it>\n"
+"Language-Team: \n"
+"Language: it\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 2.1.1\n"
+"X-Translated-Using: django-rosetta 0.9.8\n"
+
+#: django_webix/contrib/filter/apps.py:11
+#, fuzzy
+#| msgid "Django webix site admin"
+msgid "Django Webix Filter"
+msgstr "Area amministrazione"
+
+#: django_webix/contrib/filter/models.py:16
+msgid "Insert date"
+msgstr ""
+
+#: django_webix/contrib/filter/models.py:17
+#, fuzzy
+#| msgid "Private data"
+msgid "Update date"
+msgstr "Dati privati"
+
+#: django_webix/contrib/filter/models.py:18
+#: django_webix/contrib/filter/views.py:329
+msgid "Title"
+msgstr ""
+
+#: django_webix/contrib/filter/models.py:19
+#: django_webix/contrib/filter/views.py:340
+msgid "Description"
+msgstr "Descrizione"
+
+#: django_webix/contrib/filter/models.py:20
+#: django_webix/contrib/filter/views.py:351
+msgid "Model"
+msgstr "Modello"
+
+#: django_webix/contrib/filter/models.py:21
+msgid "Filter"
+msgstr "Filtra"
+
+#: django_webix/contrib/filter/models.py:23
+#, fuzzy
+#| msgid "Manage users"
+msgid "Insert user"
+msgstr "Gestione utenti"
+
+#: django_webix/contrib/filter/models.py:25
+msgid "Visiblity"
+msgstr ""
+
+#: django_webix/contrib/filter/models.py:26
+msgid "Public"
+msgstr ""
+
+#: django_webix/contrib/filter/models.py:27
+#, fuzzy
+#| msgid "Private data"
+msgid "Private"
+msgstr "Dati privati"
+
+#: django_webix/contrib/filter/models.py:28
+msgid "Restricted"
+msgstr ""
+
+#: django_webix/contrib/filter/models.py:30
+#, fuzzy
+#| msgid "Enabled groups"
+msgid "Assignees groups"
+msgstr "Gruppi abilitati"
+
+#: django_webix/contrib/filter/models.py:31
+msgid "Shared edit group"
+msgstr ""
+
+#: django_webix/contrib/filter/models.py:36
+#, fuzzy
+#| msgid "Filter"
+msgid "Webix Filter"
+msgstr "Filtra"
+
+#: django_webix/contrib/filter/models.py:37
+#, fuzzy
+#| msgid "Filter"
+msgid "Webix Filters"
+msgstr "Filtra"
+
+#: django_webix/contrib/filter/templates/django_webix/filter/create_update.js:31
+#, fuzzy
+#| msgid "Server error"
+msgid "Filter error"
+msgstr "Errore sul server"
+
+#: django_webix/contrib/filter/templates/django_webix/filter/create_update.js:32
+msgid ""
+"There is a filter error, caused by a garment or model that is now non-"
+"existent or not correctly configured."
+msgstr ""
+
+#: django_webix/contrib/filter/templates/django_webix/filter/create_update.js:33
+msgid "Unable to load filter, contact administrators to correct it"
+msgstr ""
+
+#: django_webix/contrib/filter/templates/django_webix/filter/create_update.js:104
+#: django_webix/contrib/filter/templates/django_webix/filter/create_update.js:120
+#: django_webix/contrib/filter/templates/django_webix/filter/create_update.js:136
+#: django_webix/contrib/filter/templates/django_webix/filter/create_update.js:205
+msgid "You need to insert a filter before saving"
+msgstr ""
+
+#: django_webix/contrib/filter/templates/django_webix/filter/create_update.js:148
+msgid "Applica filtro temporaneo"
+msgstr ""
+
+#: django_webix/contrib/filter/templates/django_webix/filter/list.js:29
+#, fuzzy
+#| msgid "Advanced filter"
+msgid "Advanced filters"
+msgstr "Filtro avanzato"
+
+#: django_webix/contrib/filter/templates/django_webix/filter/list.js:46
+msgid "Close"
+msgstr "Chiudi"
+
+#: django_webix/contrib/filter/templates/django_webix/filter/list.js:83
+#, fuzzy
+#| msgid "Advanced filter"
+msgid "Create new filter"
+msgstr "Filtro avanzato"
+
+#: django_webix/contrib/filter/templates/django_webix/filter/list.js:151
+msgid "Configuration error"
+msgstr ""
+
+#: django_webix/contrib/filter/templates/django_webix/filter/list.js:152
+msgid ""
+"ATTENTION: there is a filter application configuration error. Contact "
+"administrators."
+msgstr ""
+
+#: django_webix/contrib/filter/templates/django_webix/filter/list.js:175
+#: django_webix/contrib/filter/templates/django_webix/filter/list.js:218
+msgid "Change temporary filter"
+msgstr ""
+
+#: django_webix/contrib/filter/templates/django_webix/filter/list.js:187
+#: django_webix/contrib/filter/templates/django_webix/filter/list.js:231
+#, fuzzy
+#| msgid "Invalid email"
+msgid "Invalid filter"
+msgstr "Email non valida"
+
+#: django_webix/contrib/filter/templates/django_webix/filter/list.js:196
+#: django_webix/contrib/filter/templates/django_webix/filter/list.js:240
+msgid "Disable temporary filter"
+msgstr ""
+
+#: django_webix/contrib/filter/views.py:362
+msgid "Visibility"
+msgstr ""
