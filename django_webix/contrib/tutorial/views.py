@@ -63,9 +63,9 @@ class TutorialListView(ListView):
                 }'''
             },
             {
-                'field_name': 'tipology',
+                'field_name': 'tutorial_type',
                 'datalist_column': '''{
-                    id: "tipology",
+                    id: "tutorial_type",
                     hidden: true,
                     headermenu: false
                 }'''
@@ -86,7 +86,7 @@ class TutorialListView(ListView):
         queryset = super(TutorialListView, self).get_queryset(initial_queryset=initial_queryset)
 
         # Icon
-        queryset = queryset.annotate(icon=F('tipology'))
+        queryset = queryset.annotate(icon=F('tutorial_type'))
 
         # validiy filter
         queryset = queryset.filter(

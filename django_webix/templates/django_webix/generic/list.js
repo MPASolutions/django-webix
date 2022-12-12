@@ -475,7 +475,7 @@ if (
                     if (id.column == 'cmd_cp') {
                         {% block cmd_cp_click %}
                             {% if has_add_permission and is_enable_column_copy %}
-                                load_js('{{ url_create }}?pk_copy=' + el.id, undefined, undefined, undefined, undefined, undefined, undefined, abortAllPending=true);
+                                load_js('{{ url_create }}{% if '?' in url_create %}&{% else %}?{% endif %}pk_copy=' + el.id, undefined, undefined, undefined, undefined, undefined, undefined, abortAllPending=true);
                             {% endif %}
                         {% endblock %}
                     } else if (id.column == 'cmd_rm') {
