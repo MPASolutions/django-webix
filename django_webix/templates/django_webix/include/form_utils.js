@@ -47,26 +47,28 @@ function add_rule(field_id) {
     if ($$(field_id)==undefined){
         console.log('Config field error',field_id);
     }
-    $$(field_id).attachEvent("onChange", function () {
-        var prefix = /^id_(.*)-\d+-.*$/.exec(this.config.id)[1];
+    if ($$(field_id)!=undefined) {
+        $$(field_id).attachEvent("onChange", function () {
+            var prefix = /^id_(.*)-\d+-.*$/.exec(this.config.id)[1];
 
-        // add all rules that start with prefix-__prefix__- and replace __prefix__ with inline number
-        var rules = findValueByPrefix(_prefix_rules, prefix + "-__prefix__-");
-        for (var rule in rules) {
-            var regex = /^.*-(\d+)-.*$/;
-            var match = regex.exec(this.config.id);
-            var new_key = rule.replace('__prefix__', match[1]);
+            // add all rules that start with prefix-__prefix__- and replace __prefix__ with inline number
+            var rules = findValueByPrefix(_prefix_rules, prefix + "-__prefix__-");
+            for (var rule in rules) {
+                var regex = /^.*-(\d+)-.*$/;
+                var match = regex.exec(this.config.id);
+                var new_key = rule.replace('__prefix__', match[1]);
 
-            // this.getValue() === "2" because is already checked
-            if (this.config.id.match("-DELETE$") && this.getValue() === "2" && new_key in $$("{{ form.webix_id }}").config.rules) {
-                // Rimuovo le regole
-                delete $$("{{ form.webix_id }}").config.rules[new_key]
-            } else {
-                // Aggiungo le regole
-                $$("{{ form.webix_id }}").config.rules[new_key] = rules[rule];
+                // this.getValue() === "2" because is already checked
+                if (this.config.id.match("-DELETE$") && this.getValue() === "2" && new_key in $$("{{ form.webix_id }}").config.rules) {
+                    // Rimuovo le regole
+                    delete $$("{{ form.webix_id }}").config.rules[new_key]
+                } else {
+                    // Aggiungo le regole
+                    $$("{{ form.webix_id }}").config.rules[new_key] = rules[rule];
+                }
             }
-        }
-    })
+        })
+    }
 }
 
 
@@ -76,15 +78,17 @@ function add_rule(field_id) {
  * @param prefix inline prefix to add delete click event to delete an inline
  */
 function delete_trigger(prefix) {
-    $$(prefix + "-DELETE-icon").attachEvent("onItemClick", function () {
-        if ($$("id_" + prefix + "-DELETE").getValue() === "") {
-            webix.html.addCss($$(prefix + "-inline").getNode(), "deleted-inline");
-            $$("id_" + prefix + "-DELETE").setValue("2");
-        } else {
-            webix.html.removeCss($$(prefix + "-inline").getNode(), "deleted-inline");
-            $$("id_" + prefix + "-DELETE").setValue("");
-        }
-    });
+    if ($$(prefix + "-DELETE-icon")!=undefined) {
+        $$(prefix + "-DELETE-icon").attachEvent("onItemClick", function () {
+            if ($$("id_" + prefix + "-DELETE").getValue() === "") {
+                webix.html.addCss($$(prefix + "-inline").getNode(), "deleted-inline");
+                $$("id_" + prefix + "-DELETE").setValue("2");
+            } else {
+                webix.html.removeCss($$(prefix + "-inline").getNode(), "deleted-inline");
+                $$("id_" + prefix + "-DELETE").setValue("");
+            }
+        });
+    }
 }
 
 
