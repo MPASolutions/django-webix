@@ -83,10 +83,10 @@
   if (el.target === '_self' || el.target === '_blank') {
     window.open(el.url, el.target);
   } else if (el.target === 'iframe') {
-    if (el.tipologia === 'pdf') {
+    if (el.tutorial_type === 'pdf') {
       popup_pdf(el.url);
     }
-    else if (el.tipologia === 'video') {
+    else if (el.tutorial_type === 'video') {
       popup_video(el.url);
     }
   }
