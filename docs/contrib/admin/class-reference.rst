@@ -3,27 +3,27 @@ Class Reference
 
 Admin Config
 ------------
-.. autoclass:: django_webix.admin_webix.apps.SimpleAdminWebixConfig
+.. autoclass:: django_webix.contrib.admin.apps.SimpleAdminWebixConfig
     :members:
-.. autoclass:: django_webix.admin_webix.apps.AdminWebixConfig
+.. autoclass:: django_webix.contrib.admin.apps.AdminWebixConfig
     :members:
 
 Admin Decorators
 ----------------
-.. autofunction:: django_webix.admin_webix.decorators.register
+.. autofunction:: django_webix.contrib.admin.decorators.register
 
 Admin Options
 -------------
-.. autoclass:: django_webix.admin_webix.options.ModelWebixAdmin
+.. autoclass:: django_webix.contrib.admin.options.ModelWebixAdmin
     :members:
 
 Admin Sites
 -----------
-.. autoclass:: django_webix.admin_webix.sites.AlreadyRegistered
+.. autoclass:: django_webix.contrib.admin.sites.AlreadyRegistered
     :members:
-.. autoclass:: django_webix.admin_webix.sites.NotRegistered
+.. autoclass:: django_webix.contrib.admin.sites.NotRegistered
     :members:
-.. autoclass:: django_webix.admin_webix.sites.AdminWebixSite
+.. autoclass:: django_webix.contrib.admin.sites.AdminWebixSite
     :members:
-.. autoclass:: django_webix.admin_webix.sites.DefaultAdminWebixSite
+.. autoclass:: django_webix.contrib.admin.sites.DefaultAdminWebixSite
     :members:
