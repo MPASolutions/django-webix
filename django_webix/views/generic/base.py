@@ -366,7 +366,7 @@ class WebixUrlMixin(WebixUrlUtilsMixin):
         if self.model is not None:
             _url_pattern_name = self._check_url(self.get_url_pattern_update(), {'pk': 0})
             if _url_pattern_name is not None:
-                if obj is not None:
+                if obj is not None and obj.pk is not None:
                     _pk = obj.pk
                 else:
                     _pk = 0
@@ -377,7 +377,7 @@ class WebixUrlMixin(WebixUrlUtilsMixin):
         if self.model is not None:
             _url_pattern_name = self._check_url(self.get_url_pattern_delete(), {'pk': 0})
             if _url_pattern_name is not None:
-                if obj is not None:
+                if obj is not None and obj.pk is not None:
                     _pk = obj.pk
                 else:
                     _pk = 0
