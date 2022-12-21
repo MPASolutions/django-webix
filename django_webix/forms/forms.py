@@ -18,7 +18,7 @@ from django.forms.models import ModelFormMetaclass
 from django.forms.utils import ErrorList
 from django.urls import reverse
 from django.utils import formats
-
+from django.utils.datastructures import MultiValueDict
 from django.utils.http import urlencode
 from django.utils.text import capfirst
 from django.utils.timezone import is_naive, make_naive
@@ -74,7 +74,9 @@ class BaseWebixMixin:
                     name not in readonly_fields:
                     if isinstance(field, forms.models.ModelMultipleChoiceField):
                         temp_list = []
-                        if type(data[key]) != list:
+                        if isinstance(data, MultiValueDict):
+                            temp_list = data.getlist(key)
+                        elif type(data[key]) != list:
                             for val in data[key].split(','):
                                 if val != '':
                                     temp_list.append(val)
