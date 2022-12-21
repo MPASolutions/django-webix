@@ -74,7 +74,8 @@ class BaseWebixMixin:
                     name not in readonly_fields:
                     if isinstance(field, forms.models.ModelMultipleChoiceField):
                         temp_list = []
-                        if isinstance(data, MultiValueDict):
+                        # it must be "type" and not "isinstance" because QueryDict is inherited from MultiValueDict
+                        if type(data) == MultiValueDict:
                             temp_list = data.getlist(key)
                         elif type(data[key]) != list:
                             for val in data[key].split(','):
