@@ -2,7 +2,7 @@ import re
 
 from django import template
 from django.template import Library, TemplateSyntaxError
-
+from django.apps import apps
 from django.template.base import TokenType
 
 from django.template.defaulttags import (CommentNode,
@@ -70,6 +70,14 @@ class SetVarNode(template.Node):
         context[self.var_name] = self.new_val
         return ''
 
+
+@register.simple_tag(takes_context=True)
+def header_webgis(context):
+    if apps.is_installed("django_webix_leaflet"):
+        from django_webix_leaflet.templatetags.utils_leaflet import header_leaflet
+        return header_leaflet(context)
+    else:
+        return ''
 
 @register.tag
 def setvar(parser, token):

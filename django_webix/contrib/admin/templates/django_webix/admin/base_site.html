@@ -17,9 +17,7 @@
             <script type="text/javascript">
                 var ForceScriptNameUrl = "{{settings.FORCE_SCRIPT_NAME_URL}}";
             </script>
-            {% if_has_tag header_leaflet %}
-                {% header_leaflet %}
-            {% endif_has_tag %}
+            {% header_webgis %}
         {% endif %}
     {% endblock %}
 
@@ -30,7 +28,6 @@
   {% endblock %}
 
   {% block extra_header %}{% endblock %}
-
 </head>
 <body style="width:100%;height:100%;margin:0px;padding:0px;">
 <script type="text/javascript" charset="utf-8">
