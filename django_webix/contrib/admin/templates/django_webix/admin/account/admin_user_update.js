@@ -3,7 +3,7 @@
 {% block extrajs_post %}
 
 function reset(){
-    load_js('{% url "dwadmin:admin_webix_password_change_admin" object.pk %}', undefined, undefined, undefined,
+    load_js('{% url "dwadmin:users.user.update_password" object.pk %}', undefined, undefined, undefined,
       undefined,undefined, undefined, abortAllPending=true);
 }
 {% endblock %}

@@ -14,6 +14,25 @@ from django_webix.views.generic.actions import multiple_delete_action
 
 
 class UserAdmin(admin.ModelWebixAdmin):
+    def has_add_permission(self, view, request):
+        if request.user.is_superuser:
+            return super().has_add_permission(view, request)
+        return False
+
+    def has_change_permission(self, view, request, obj=None):
+        if request.user.is_superuser:
+            return super().has_change_permission(view, request, obj)
+        return False
+
+    def has_delete_permission(self, view, request, obj=None):
+        if request.user.is_superuser:
+            return super().has_delete_permission(view, request, obj)
+        return False
+
+    def has_view_permission(self, view, request, obj=None):
+        if request.user.is_superuser:
+            return super().has_view_permission(view, request, obj)
+        return False
 
     def get_queryset(self, view=None, request=None):
         qs = super().get_queryset(request)
@@ -144,7 +163,7 @@ class UserAdmin(admin.ModelWebixAdmin):
                    path(
                        '<int:pk>/password/admin',
                        self.user_change_password().as_view(),
-                       name='password_change',
+                       name='users.user.update_password',
                    ),
                ] + super().get_urls()
 
@@ -154,7 +173,7 @@ class UserAdmin(admin.ModelWebixAdmin):
         from django_webix.views import WebixUpdateView
 
         class WebixAdminUpdateView(WebixUpdateView):
-            url_pattern_update = 'dwadmin:password_change'
+            url_pattern_update = 'dwadmin:users.user.update_password'
             url_pattern_list = 'dwadmin:users.user.list'
             form_class = AdminPasswordChangeForm
             model = _admin.model
