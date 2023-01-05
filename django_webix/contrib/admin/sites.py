@@ -689,7 +689,7 @@ class AdminWebixSite:
         return {}
 
     @method_decorator(never_cache)
-    def index(self, request, extra_context=None):  # TODO da terminare la parte del template in modo carino circa
+    def index(self, request, extra_context=None):
         """
         Display the main admin index page, which lists all of the installed
         apps that have been registered in this site.
