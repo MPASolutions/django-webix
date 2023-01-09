@@ -11,7 +11,9 @@ function isNotEmpty(field_name, value) {
     if (value === undefined){
         throw new Error('ERROR: {field name:'+field_name+' value:'+value+'}');
     }
-    $$("id_" + field_name).define("tooltip", '{{_("Required field")|escapejs}}');
+    if ($$("id_" + field_name)!=undefined) {
+        $$("id_" + field_name).define("tooltip", '{{_("Required field")|escapejs}}');
+    }
     return value != null && value !== '';
 }
 

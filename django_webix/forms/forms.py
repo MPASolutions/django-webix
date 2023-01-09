@@ -1185,7 +1185,7 @@ class BaseWebixMixin:
     def get_fieldsets(self, **kwargs):
         """ Returns a dict with all the fields """
 
-        if 'fs' in kwargs:
+        if 'fs' in kwargs and kwargs['fs'] is not None:
             fs = kwargs['fs']
         else:
             fs = self.get_elements
