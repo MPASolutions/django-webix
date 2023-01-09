@@ -490,6 +490,10 @@ class ModelWebixAdmin(ModelWebixAdminPermissionsMixin):
                     def get_form_kwargs(self):
                         return _admin.get_form_kwargs(view=self)
 
+                if hasattr(_admin, 'forms_valid'):
+                    def forms_valid(self, form, inlines, **kwargs):
+                        return _admin.forms_valid(view=self, form=form, inlines=inlines, **kwargs)
+
                 if hasattr(_admin, 'pre_forms_valid'):
                     def pre_forms_valid(self, form, inlines, **kwargs):
                         return _admin.pre_forms_valid(view=self, form=form, inlines=inlines, **kwargs)
@@ -642,6 +646,10 @@ class ModelWebixAdmin(ModelWebixAdminPermissionsMixin):
                 if hasattr(_admin, 'get_form_kwargs'):
                     def get_form_kwargs(self):
                         return _admin.get_form_kwargs(view=self)
+
+                if hasattr(_admin, 'forms_valid'):
+                    def forms_valid(self, form, inlines, **kwargs):
+                        return _admin.forms_valid(view=self, form=form, inlines=inlines, **kwargs)
 
                 if hasattr(_admin, 'pre_forms_valid'):
                     def pre_forms_valid(self, form, inlines, **kwargs):
