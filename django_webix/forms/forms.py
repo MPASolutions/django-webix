@@ -811,7 +811,10 @@ class BaseWebixMixin:
                         'view': 'textarea'
                     })
                 if initial is not None:
-                    el.update({'value': dumps(initial)})
+                    _value = initial
+                    if callable(initial):
+                        _value = initial()
+                    el.update({'value': dumps(_value)})
             # SimpleArrayField (postgresql)
             elif connection.vendor == 'postgresql' and \
                 SimpleArrayField is not None and \
