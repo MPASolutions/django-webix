@@ -317,6 +317,7 @@ class ModelWebixAdmin(ModelWebixAdminPermissionsMixin):
                     'datalist_column': '''{{id: "{field_name}",
                 header: ["{header_title}", {{content: "{filter}" {extra_filter_options}}}],
                 {width_adapt},
+                adjustBatch: {adjust_batch},
                 sort: "{sort_option}",
                 {format_type}
                 serverFilterType: "{filter_type}",
@@ -329,6 +330,7 @@ class ModelWebixAdmin(ModelWebixAdminPermissionsMixin):
                         format_type=' format: ' + format_type + ', ' if format_type is not None else '',
                         extra_filter_options=extra_filter_options,
                         width_adapt=width_adapt,
+                        adjust_batch=self.paginate_count_default,
                         sort_option=sort_option,
                         filter_type=filter_type,
                         column_template=column_template,
