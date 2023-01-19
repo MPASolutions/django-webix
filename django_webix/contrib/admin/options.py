@@ -524,7 +524,7 @@ class ModelWebixAdmin(ModelWebixAdminPermissionsMixin):
                 enable_button_save_gotolist = _admin.enable_button_save_gotolist_create if _admin.enable_button_save_gotolist_create is not None else _admin.enable_button_save_gotolist
 
                 add_permission = _admin.add_permission
-                change_permission = _admin.delete_permission
+                change_permission = _admin.change_permission
                 delete_permission = _admin.delete_permission
                 view_permission = _admin.view_permission
                 view_or_change_permission = _admin.view_or_change_permission
@@ -681,7 +681,7 @@ class ModelWebixAdmin(ModelWebixAdminPermissionsMixin):
                 enable_button_save_gotolist = _admin.enable_button_save_gotolist_update if _admin.enable_button_save_gotolist_update is not None else _admin.enable_button_save_gotolist
 
                 add_permission = _admin.add_permission
-                change_permission = _admin.delete_permission
+                change_permission = _admin.change_permission
                 delete_permission = _admin.delete_permission
                 view_permission = _admin.view_permission
                 view_or_change_permission = _admin.view_or_change_permission
@@ -760,7 +760,7 @@ class ModelWebixAdmin(ModelWebixAdminPermissionsMixin):
                 url_pattern_delete = 'dwadmin:' + _admin.get_url_pattern_delete()
 
                 add_permission = _admin.add_permission
-                change_permission = _admin.delete_permission
+                change_permission = _admin.change_permission
                 delete_permission = _admin.delete_permission
                 view_permission = _admin.view_permission
                 view_or_change_permission = _admin.view_or_change_permission
@@ -894,7 +894,7 @@ class ModelWebixAdmin(ModelWebixAdminPermissionsMixin):
                 enable_actions = _admin.enable_actions
 
                 add_permission = _admin.add_permission
-                change_permission = _admin.delete_permission
+                change_permission = _admin.change_permission
                 delete_permission = _admin.delete_permission
                 view_permission = _admin.view_permission
                 view_or_change_permission = _admin.view_or_change_permission
