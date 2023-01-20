@@ -1,7 +1,6 @@
-
 import json
 
-from django.http import JsonResponse
+from django.http import JsonResponse, QueryDict
 from django.utils.translation import gettext_lazy as _
 
 
@@ -37,9 +36,10 @@ def action_config(
             if form is not None:
                 if request.method == 'POST':
                     try:
-                        params = json.loads(request.POST.get('params', '{}'))
+                        params = QueryDict(mutable=True)
+                        params.update(json.loads(request.POST.get('params', '{}')))
                     except json.JSONDecodeError:
-                        params = {}
+                        params = QueryDict()
                     _form = form(params, request.FILES, request=request)
                     if _form.is_valid():
                         # log execute action
