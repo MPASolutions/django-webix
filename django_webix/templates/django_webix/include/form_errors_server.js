@@ -5,7 +5,7 @@ var errors = [];
     {% endfor %}
     {% for field in form %}
         {% for error in field.errors %}
-            errors.push({"label":"{{ field.label_tag|safe|escapejs }}", "error":"{{ error|safe|escapejs }}"});
+            errors.push({"label":"{{ field.label|safe|escapejs }}", "error":"{{ error|safe|escapejs }}"});
         {% endfor %}
     {% endfor %}
 {% endblock %}
@@ -18,7 +18,7 @@ var errors = [];
                 {% endfor %}
                 {% for field in form %}
                     {% for error in field.errors %}
-                        errors.push({"label":"{{ field.label_tag|safe|escapejs }}", "error":"{{ error|safe|escapejs }}"});
+                        errors.push({"label":"{{ field.label|safe|escapejs }}", "error":"{{ error|safe|escapejs }}"});
                     {% endfor %}
                {% endfor %}
             {% endwith %}

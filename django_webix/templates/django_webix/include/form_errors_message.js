@@ -1,5 +1,5 @@
 function show_errors(errors) {
-    li_text_errors = '';
+    var li_text_errors = '';
     errors.forEach(function (item, index) {
         if (item.label!=null) {
             li_text_errors += "<li><b>" + item.label + "</b>: " + item.error + "</li>"

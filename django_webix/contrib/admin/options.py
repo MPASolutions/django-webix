@@ -599,8 +599,6 @@ class ModelWebixAdmin(ModelWebixAdminPermissionsMixin):
                 url_pattern_update = 'dwadmin:' + _admin.get_url_pattern_update()
                 url_pattern_delete = 'dwadmin:' + _admin.get_url_pattern_delete()
 
-                errors_on_popup = _admin.errors_on_popup
-
                 model = _admin.model
 
                 def get_form_class(self):
@@ -881,6 +879,8 @@ class ModelWebixAdmin(ModelWebixAdminPermissionsMixin):
                 if hasattr(_admin, 'get_actions'):
                     def get_actions(self):
                         return _admin.get_actions(view=self)
+
+                errors_on_popup = _admin.errors_on_popup
 
                 enable_json_loading = _admin.enable_json_loading
                 paginate_count_default = _admin.paginate_count_default

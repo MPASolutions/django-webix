@@ -18,6 +18,41 @@ def action_config(
     reload_list=True,
     maximum_count=None,
     ):  # TODO: permission check before execution
+    """
+    Decorator to configure action on list
+
+    :param action_key: action code name
+    :param response_type: type of http response, options: 'json', 'script', 'blank'
+    :param allowed_permissions: list of permission required to execute the action
+    :param short_description: description to show on list toolbar
+    :param modal_header: title of the modal header
+    :param modal_title: description of the modal to display
+    :param modal_click: text of form button confirm
+    :param modal_ok: text of confirmation button
+    :param modal_cancel: text to discard changes
+    :param form: (optional) form to show before execute the action
+    :param reload_list: indicates whether to reload the list after executing the action
+    :param maximum_count: (optional) maximim number of selected elements
+    :return:
+        - response_type: json
+        JsonResponse with 'status', 'message', 'message_on_popup', 'message_type' keys
+            status: (bool) indicates if status is successfull
+            message: text to display
+            message_on_popup: (bool) show message as webix alert or message
+            message_type: type of webix alert or message
+
+        e.g.: JsonResponse({'status': True, 'message': 'my message', 'message_on_popup': True, 'message_type': 'info'})
+
+        - response_type: script
+        HttpResponse with javascript content
+
+        e.g.: HttpResponseRedirect(reverse('my-url'))
+
+        - response_type: blank
+        HttpResponse with any type of content
+
+        e.g.: HttpResponse(content_type='application/octet-stream')
+    """
 
     if allowed_permissions is None:
         allowed_permissions = []
@@ -58,7 +93,9 @@ def action_config(
                     else:
                         return JsonResponse({
                             'status': False,
-                            'errors': [', '.join(['{}: {}'.format(k, v) for k, v in _form.errors.items()])]
+                            'errors': [{"label": None, "error": error} for error in _form.non_field_errors()] +
+                                      [{"label": field.label, "error": error}
+                                       for field in _form for error in field.errors]
                         }, status=400)
             else:
                 # log execute action
