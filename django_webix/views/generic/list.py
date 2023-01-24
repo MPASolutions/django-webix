@@ -30,6 +30,7 @@ try:
 except ImportError:
     MultiPolygon = object
 
+
 def get_action_dict(request, action):
     return {
         'func': action,
@@ -46,6 +47,7 @@ def get_action_dict(request, action):
                                                                     'form') and action.form is not None else None,
         'reload_list': getattr(action, 'reload_list', True),
     }
+
 
 def get_actions_flexport(request, model):
     _actions = []
@@ -79,6 +81,7 @@ def get_actions_flexport(request, model):
                 _actions.append(action_builder(export_instance))
     return _actions
 
+
 class WebixListView(WebixBaseMixin,
                     WebixPermissionsMixin,
                     WebixUrlMixin,
@@ -93,6 +96,8 @@ class WebixListView(WebixBaseMixin,
 
     actions = []  # [multiple_delete_action]
     adjust_row_height = False
+
+    errors_on_popup = False
 
     # paging
     enable_json_loading = False
@@ -113,6 +118,9 @@ class WebixListView(WebixBaseMixin,
     enable_actions = True
 
     fields_editable = []
+
+    def is_errors_on_popup(self, request):
+        return self.errors_on_popup
 
     def is_installed_django_webix_filter(self):
         return apps.is_installed('django_webix.contrib.filter')
@@ -619,6 +627,7 @@ class WebixListView(WebixBaseMixin,
             'actions_style': self.get_actions_style(),
             'title': self.get_title(),
             'adjust_row_height': self.get_adjust_row_height(self.request),
+            'is_errors_on_popup': self.is_errors_on_popup(self.request),
             # paging
             'is_json_loading': self.enable_json_loading,
             'paginate_count_default': self.paginate_count_default,

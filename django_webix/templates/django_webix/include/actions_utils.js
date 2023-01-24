@@ -1,5 +1,12 @@
 {% load django_webix_utils static i18n %}
 
+var errors = [];
+{% if is_errors_on_popup %}
+    {% include "django_webix/include/form_errors_popup.js" %}
+{% else %}
+    {% include "django_webix/include/form_errors_message.js" %}
+{% endif %}
+
 function _{{ view_prefix }}datatable_count() {
     if ($$('{{ view_prefix }}select_all_checkbox').getValue() == 0) {
         view_count_selected = 0;
@@ -51,17 +58,22 @@ function _{{ view_prefix }}action_execute(action, ids, all, response_type, short
                         error: function (jqXHR, textStatus, errorThrown) {
                             // if 400 then is form invalid
                             if (jqXHR.status == 400) {
-                                responseJson = jQuery.parseJSON(jqXHR.responseText);
-                                $.each(responseJson.errors, function (index, error) {
-                                    webix.message({type: "error", expire: 10000, text: error});
-                                })
-
+                                var responseJson = jQuery.parseJSON(jqXHR.responseText);
+                                show_errors(responseJson.errors);
                             } else {
-                                webix.message({
-                                    text: "{{_("Action is not executable")|escapejs}}",
-                                    type: "error",
-                                    expire: 10000
-                                });
+                                {% if is_errors_on_popup %}
+                                    webix.alert({
+                                        title: "{{ _("Oops! Something went wrong...")|escapejs }}",
+                                        text: "{{ _("Action is not executable")|escapejs }}",
+                                        type:"alert-error"
+                                    });
+                                {% else %}
+                                    webix.message({
+                                        text: "{{ _("Action is not executable")|escapejs }}",
+                                        type: "error",
+                                        expire: 10000
+                                    });
+                                {% endif %}
                             }
                             if (callback_error) {
                                 callback_error();
@@ -69,18 +81,32 @@ function _{{ view_prefix }}action_execute(action, ids, all, response_type, short
                             $$('{{ view_prefix }}datatable').hideOverlay();
                         },
                         success: function (data) { // TODO gestire response
-                            if (response_type == 'json') {
-                                if (data.status == true) {
-                                    if (data.message != undefined) {
-                                        message = data.message;
-                                    } else {
-                                        message = "{{_("Action successful")|escapejs}}";
-                                    }
-                                    webix.message({
+                            if (response_type === 'json') {
+                                var title = "";
+                                var message = "";
+                                var message_on_popup = data.message_on_popup || false;
+                                var message_type = data.message_type;
+
+                                if (data.status === true) title = "{{_("Action successful")|escapejs}}";
+                                else title = "{{_("Oops! Something went wrong...")|escapejs}}"
+
+                                if (data.message !== undefined) message = data.message;
+
+                                if (message_on_popup) {
+                                    webix.alert({
+                                        title: title,
                                         text: message,
-                                        type: "info",
+                                        type: message_type
+                                    });
+                                } else {
+                                    webix.message({
+                                        text: message || title,
+                                        type: message_type || "info",
                                         expire: 10000
                                     });
+                                }
+
+                                if (data.status === true) {
                                     if (data.redirect_url != null) {
                                         load_js(data.redirect_url, undefined, undefined, undefined, undefined, undefined, undefined, abortAllPending = true);
                                     }
@@ -99,17 +125,14 @@ function _{{ view_prefix }}action_execute(action, ids, all, response_type, short
                                         window['{{ view_prefix }}' + action + '_callback_success']();
                                     } catch (error) { // only for custom purpose
                                     }
-
                                 } else {
-                                    webix.message({
-                                        text: "{{_("Something gone wrong")|escapejs}}",
-                                        type: "error",
-                                        expire: 10000
-                                    });
+                                    if (callback_error) {
+                                        callback_error();
+                                    }
                                 }
                             }
                             $$('{{ view_prefix }}datatable').hideOverlay();
-                        },
+                        }
                     });
                 } else if (response_type == 'blank') {
                     var form = document.createElement("form");
