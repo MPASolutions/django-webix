@@ -6,6 +6,7 @@ var {{ view_prefix }}actions_list = [
     {% block actions_list %}
     {% for layer in layers %}
         {id: 'gotowebgis_{{ layer.codename }}', value: "{{_("Go to map")|escapejs}} ({{layer.layername}})"},
+        {id: 'filtertowebgis_{{ layer.codename }}', value: "{{_("Filter in map")|escapejs}} ({{layer.layername}})"},
     {% endfor %}
     {% for action_key,action in actions.items %}
     {id: '{{ action_key }}', value: '{{action.short_description}}'},
@@ -98,7 +99,9 @@ function {{ view_prefix }}actions_execute(action, ids, all) {
     {% block action_execute %}
     {% for layer in layers %}
     if (action=='gotowebgis_{{ layer.codename }}') {
-        $$("map").goToWebgisPks('{{layer.qxsname}}', '{{ pk_field_name }}', ids);
+        $$("map").goToWebgisPks('{{layer.qxsname}}', '{{ pk_field_name }}', ids, 'selectMode');
+    } else if (action=='filtertowebgis_{{ layer.codename }}') {
+        $$("map").goToWebgisPks('{{layer.qxsname}}', '{{ pk_field_name }}', ids, 'filterMode');
     }
     {% endfor %}
     {% for action_key, action in actions.items %} if (action=='{{ action_key }}') {
