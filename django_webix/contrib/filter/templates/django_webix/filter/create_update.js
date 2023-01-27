@@ -145,7 +145,7 @@ $$('main_toolbar_form').addView({
     view: "tootipButton",
     type: "danger",
     align: "left",
-    label: "{{_("Applica filtro temporaneo")|escapejs}}",
+    label: "{{_("Apply temporary filter")|escapejs}}",
     width: 200,
     click: function () {
         var query = $$('querybuilder');
