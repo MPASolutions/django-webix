@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-12-07 12:10+0100\n"
+"POT-Creation-Date: 2023-01-27 08:25+0100\n"
 "PO-Revision-Date: 2022-03-21 12:42+0050\n"
 "Last-Translator: Traduzioni CBC <>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -19,82 +19,78 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 "X-Translated-Using: django-rosetta 0.9.8\n"
 
-#: django_webix/contrib/commands_manager/apps.py:9
+#: contrib/commands_manager/apps.py:9
 msgid "Django Webix Commands Manager"
 msgstr ""
 
-#: django_webix/contrib/commands_manager/forms.py:50
-#: django_webix/contrib/commands_manager/models.py:11
+#: contrib/commands_manager/forms.py:50 contrib/commands_manager/models.py:11
 msgid "Parameters"
 msgstr "Paramètres"
 
-#: django_webix/contrib/commands_manager/forms.py:65
-#: django_webix/contrib/commands_manager/models.py:20
+#: contrib/commands_manager/forms.py:65 contrib/commands_manager/models.py:20
 msgid "Output"
 msgstr ""
 
-#: django_webix/contrib/commands_manager/models.py:8
-#: django_webix/contrib/commands_manager/views.py:49
+#: contrib/commands_manager/models.py:8 contrib/commands_manager/views.py:49
 msgid "Description"
 msgstr "Descriptif"
 
-#: django_webix/contrib/commands_manager/models.py:9
-#: django_webix/contrib/commands_manager/views.py:36
+#: contrib/commands_manager/models.py:9 contrib/commands_manager/views.py:36
 msgid "Command name"
 msgstr "Nom de la commande"
 
-#: django_webix/contrib/commands_manager/models.py:12
+#: contrib/commands_manager/models.py:12
 msgid "Insert date"
 msgstr "Insérer une date"
 
-#: django_webix/contrib/commands_manager/models.py:13
+#: contrib/commands_manager/models.py:13
 msgid "Last Execution"
 msgstr "Dernière exécution"
 
-#: django_webix/contrib/commands_manager/models.py:15
-#: django_webix/contrib/commands_manager/templates/django_webix/commands_manager/list.js:17
-#: django_webix/contrib/commands_manager/templates/django_webix/commands_manager/update.js:21
+#: contrib/commands_manager/models.py:15
+#: contrib/commands_manager/templates/django_webix/commands_manager/list.js:17
+#: contrib/commands_manager/templates/django_webix/commands_manager/update.js:21
 msgid "Started"
 msgstr "a débuté"
 
-#: django_webix/contrib/commands_manager/models.py:16
-#: django_webix/contrib/commands_manager/templates/django_webix/commands_manager/list.js:9
+#: contrib/commands_manager/models.py:16
+#: contrib/commands_manager/templates/django_webix/commands_manager/list.js:9
 msgid "Error"
 msgstr "Erreur"
 
-#: django_webix/contrib/commands_manager/models.py:17
+#: contrib/commands_manager/models.py:17
 msgid "Finished"
 msgstr "Terminé"
 
-#: django_webix/contrib/commands_manager/models.py:18
+#: contrib/commands_manager/models.py:18
 msgid "Unknown"
 msgstr "Inconnu"
 
-#: django_webix/contrib/commands_manager/models.py:23
+#: contrib/commands_manager/models.py:23
 msgid "Command execution"
 msgstr "Exécution de commande"
 
-#: django_webix/contrib/commands_manager/models.py:24
+#: contrib/commands_manager/models.py:24
 msgid "Commands executions"
 msgstr "Exécutions de commandes"
 
-#: django_webix/contrib/commands_manager/tasks.py:24
+#: contrib/commands_manager/tasks.py:24
 msgid "Command execution id is not valid"
 msgstr "L'exécution de commande n'est pas valide"
 
-#: django_webix/contrib/commands_manager/templates/django_webix/commands_manager/update.js:13
-#: django_webix/contrib/commands_manager/views.py:88
+#: contrib/commands_manager/templates/django_webix/commands_manager/update.js:13
+#: contrib/commands_manager/views.py:88
 msgid "Execute"
 msgstr ""
 
-#: django_webix/contrib/commands_manager/views.py:63
+#: contrib/commands_manager/views.py:63
 msgid "Last ex. date"
 msgstr ""
 
-#: django_webix/contrib/commands_manager/views.py:76
+#: contrib/commands_manager/views.py:76
 msgid "Last ex. state"
 msgstr ""
 
-#: django_webix/contrib/commands_manager/views_js.py:66
+#: contrib/commands_manager/views_js.py:66
 msgid "Invalid command name"
 msgstr "Nom de commande invalide"

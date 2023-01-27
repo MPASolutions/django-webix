@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-12-07 12:10+0100\n"
+"POT-Creation-Date: 2023-01-27 08:25+0100\n"
 "PO-Revision-Date: 2020-05-26 09:37+0050\n"
 "Last-Translator: b'Stefano Menegon <menegon@mpasol.it>'\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -19,69 +19,69 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 "X-Translated-Using: django-rosetta 0.9.4\n"
 
-#: django_webix/contrib/validator/apps.py:8
+#: contrib/validator/apps.py:8
 msgid "Django Webix Validator"
 msgstr ""
 
-#: django_webix/contrib/validator/models.py:13
-#: django_webix/contrib/validator/templates/django_webix/validator/form_import_validation.js:21
+#: contrib/validator/models.py:13
+#: contrib/validator/templates/django_webix/validator/form_import_validation.js:21
 msgid "Attachment"
 msgstr "Pièce jointe"
 
-#: django_webix/contrib/validator/templates/django_webix/validator/form_import_validation.js:21
+#: contrib/validator/templates/django_webix/validator/form_import_validation.js:21
 msgid "errors"
 msgstr "erreurs"
 
-#: django_webix/contrib/validator/templates/django_webix/validator/form_import_validation.js:21
+#: contrib/validator/templates/django_webix/validator/form_import_validation.js:21
 msgid "error"
 msgstr "erreur"
 
-#: django_webix/contrib/validator/templates/django_webix/validator/form_import_validation.js:22
+#: contrib/validator/templates/django_webix/validator/form_import_validation.js:22
 msgid "and"
 msgstr "et"
 
-#: django_webix/contrib/validator/templates/django_webix/validator/form_import_validation.js:37
+#: contrib/validator/templates/django_webix/validator/form_import_validation.js:37
 msgid "sheet"
 msgstr "feuille"
 
-#: django_webix/contrib/validator/templates/django_webix/validator/form_import_validation.js:52
+#: contrib/validator/templates/django_webix/validator/form_import_validation.js:52
 msgid "Errors"
 msgstr "Erreurs"
 
-#: django_webix/contrib/validator/templates/django_webix/validator/form_import_validation.js:75
-#: django_webix/contrib/validator/templates/django_webix/validator/form_import_validation.js:138
+#: contrib/validator/templates/django_webix/validator/form_import_validation.js:75
+#: contrib/validator/templates/django_webix/validator/form_import_validation.js:138
 msgid "row"
 msgstr "série"
 
-#: django_webix/contrib/validator/templates/django_webix/validator/form_import_validation.js:83
-#: django_webix/contrib/validator/templates/django_webix/validator/form_import_validation.js:146
+#: contrib/validator/templates/django_webix/validator/form_import_validation.js:83
+#: contrib/validator/templates/django_webix/validator/form_import_validation.js:146
 msgid "Global controls"
 msgstr "Contrôles globaux"
 
-#: django_webix/contrib/validator/templates/django_webix/validator/form_import_validation.js:85
-#: django_webix/contrib/validator/templates/django_webix/validator/form_import_validation.js:87
-#: django_webix/contrib/validator/templates/django_webix/validator/form_import_validation.js:148
-#: django_webix/contrib/validator/templates/django_webix/validator/form_import_validation.js:150
+#: contrib/validator/templates/django_webix/validator/form_import_validation.js:85
+#: contrib/validator/templates/django_webix/validator/form_import_validation.js:87
+#: contrib/validator/templates/django_webix/validator/form_import_validation.js:148
+#: contrib/validator/templates/django_webix/validator/form_import_validation.js:150
 msgid "Column"
 msgstr "Colonne"
 
-#: django_webix/contrib/validator/templates/django_webix/validator/form_import_validation.js:115
+#: contrib/validator/templates/django_webix/validator/form_import_validation.js:115
 msgid "Warnings"
 msgstr "Avertissements"
 
-#: django_webix/contrib/validator/templates/django_webix/validator/form_import_validation.js:179
+#: contrib/validator/templates/django_webix/validator/form_import_validation.js:179
 msgid "Close and correct"
 msgstr "Fermer et corriger"
 
-#: django_webix/contrib/validator/templates/django_webix/validator/form_import_validation.js:194
+#: contrib/validator/templates/django_webix/validator/form_import_validation.js:194
 msgid "Continue with warnings"
 msgstr "Continuer avec les avertissements"
 
-#: django_webix/contrib/validator/utils.py:35
+#: contrib/validator/utils.py:35
 msgid "No file uploaded"
 msgstr "Aucun fichier chargé"
 
-#: django_webix/contrib/validator/utils.py:36
+#: contrib/validator/utils.py:36
 msgid ""
 "Text file not recognizable as delimiter-separated values with separator ' {} "
 "' (Exception:{})"
@@ -89,56 +89,56 @@ msgstr ""
 "Fichier de texte non reconnu en tant que texte délimité par le séparateur "
 "'{}'"
 
-#: django_webix/contrib/validator/utils.py:37
+#: contrib/validator/utils.py:37
 msgid "Could not find file '{}' (or read from buffer)"
 msgstr "Impossible de trouver le fichier '{}'"
 
-#: django_webix/contrib/validator/utils.py:38
+#: contrib/validator/utils.py:38
 msgid "File format '{}' not recognized, supported formats: {}"
 msgstr "Format du fichier '{}' non reconnu, formats compatible: {}"
 
-#: django_webix/contrib/validator/utils.py:39
+#: contrib/validator/utils.py:39
 msgid "File type '{}' not supported"
 msgstr "Type de fichier '{}' non compatible"
 
-#: django_webix/contrib/validator/utils.py:40
+#: contrib/validator/utils.py:40
 msgid "There is no sheet"
 msgstr "Pas de feuille"
 
-#: django_webix/contrib/validator/utils.py:41
+#: contrib/validator/utils.py:41
 msgid "There is no data in the sheet {}"
 msgstr "Pas de donnée dans la feuille {}"
 
-#: django_webix/contrib/validator/utils.py:42
+#: contrib/validator/utils.py:42
 msgid "There are columns with no name"
 msgstr "Il y a des colonnes sans en tête"
 
-#: django_webix/contrib/validator/utils.py:43
+#: contrib/validator/utils.py:43
 msgid "There are columns with no name: {}"
 msgstr "Il y a des colonnes sans en tête : {}"
 
-#: django_webix/contrib/validator/utils.py:44
+#: contrib/validator/utils.py:44
 msgid "There are not enough columns: there are {} columns, {} needed"
 msgstr ""
 "Il n'y a pas assez de colonnes : il y a {} colonnes, il y a besoin de {}"
 
-#: django_webix/contrib/validator/utils.py:45
+#: contrib/validator/utils.py:45
 msgid "Column headers ({}^ row) are incorrect"
 msgstr "Les entêtes des colonnes ({}^ligne) sont incorrects"
 
-#: django_webix/contrib/validator/utils.py:46
+#: contrib/validator/utils.py:46
 msgid "There is no column '{}'"
 msgstr "Il n'y a pas de colonne '{}'"
 
-#: django_webix/contrib/validator/utils.py:47
+#: contrib/validator/utils.py:47
 msgid "The name of the {}^ column ({}) must be ' {} ' (instead of '{}')"
 msgstr "Le nom de la colonne {}^ ({}) doit être ' {} ' (et pas '{}')"
 
-#: django_webix/contrib/validator/utils.py:48
+#: contrib/validator/utils.py:48
 msgid "A uniqueness rule has been violated in the fields {}"
 msgstr "La règle de l'unicité a été violée dans les champs {}"
 
-#: django_webix/contrib/validator/utils.py:49
+#: contrib/validator/utils.py:49
 msgid ""
 "The zip file is supported only if the following files are contained .shp, ."
 "dbf, .prj, .shx"
@@ -146,23 +146,21 @@ msgstr ""
 "Le fichier zip est valable seulement si les fichier suivants y sont "
 "contenus .shp, .dbf, .prj, .shx"
 
-#: django_webix/contrib/validator/utils.py:129
-#: django_webix/contrib/validator/utils.py:139
-#: django_webix/contrib/validator/utils.py:149
-#: django_webix/contrib/validator/utils.py:164
+#: contrib/validator/utils.py:129 contrib/validator/utils.py:139
+#: contrib/validator/utils.py:149 contrib/validator/utils.py:164
 msgid "This operation can only be done before validating"
 msgstr "Cette opération peut être effectuée seulement avant validation"
 
-#: django_webix/contrib/validator/utils.py:549
+#: contrib/validator/utils.py:549
 msgid "Validate save mode are ROW | FULL"
 msgstr "La Validation du mode d'enregistrement sont ROW | FULL"
 
-#: django_webix/contrib/validator/validators.py:20
+#: contrib/validator/validators.py:20
 #, python-format
 msgid "%(value)s is not a boolean value"
 msgstr "%(value)s n'est pas une valeur booléenne"
 
-#: django_webix/contrib/validator/validators.py:26
+#: contrib/validator/validators.py:26
 #, python-format
 msgid "Ensure this value is strictly greater than %(limit_value)s."
 msgstr ""
