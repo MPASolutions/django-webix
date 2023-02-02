@@ -85,10 +85,10 @@
 <body>
 <div class="wrapper">
     <div class="box">
-        <h1>Attenzione!</h1>
-        <p>Il tuo browser è obsoleto e non più supportato.</p>
-        <p>Esistono delle alternative valide e gratuite.</p>
-        <p>Puoi usare ad esempio <a href="https://www.google.com/intl/it_it/chrome/">Chrome <i style="cursor:pointer;font-size:48px;width:48px;" class="webix_icon fab fa-chrome"></i></a></p>
+        <h1>{{_("Attention!")|escapejs}}</h1>
+        <p>{{_("Your browser is outdated and no longer supported.")|escapejs}}</p>
+        <p>{{_("There are valid and free alternatives.")|escapejs}}</p>
+        <p>{{_("You can use for example")|escapejs}} <a href="https://www.google.com/intl/it_it/chrome/">Chrome <i style="cursor:pointer;font-size:48px;width:48px;" class="webix_icon fab fa-chrome"></i></a></p>
     </div>
 </div>
 <p style="text-align:center;font-size:12px;">{{ family }} {{ major_version }} < {{ major_version_minimum }}</p>

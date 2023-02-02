@@ -51,7 +51,7 @@ function _{{ view_prefix }}action_execute(action, ids, all, response_type, short
                     }
 
                     $.ajax({
-                        url: "{{ url_list }}",
+                        url: "{{ url_list|safe }}",
                         type: "POST",
                         dataType: response_type,
                         data: _params,
@@ -137,7 +137,7 @@ function _{{ view_prefix }}action_execute(action, ids, all, response_type, short
                 } else if (response_type == 'blank') {
                     var form = document.createElement("form");
                     form.setAttribute("method", "post");
-                    form.setAttribute("action", "{{ url_list }}");
+                    form.setAttribute("action", "{{ url_list|safe }}");
                     form.setAttribute("target", "view");
 
                     var _fields = [

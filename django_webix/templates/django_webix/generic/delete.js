@@ -70,13 +70,13 @@
                                     text: "{{_("Warning! All linked objects will also be deleted.")|escapejs}}",
                                     type: "confirm-alert"
                                 }).then(function(result){
-                                    load_js("{{ url_delete }}", undefined, undefined, 'POST', undefined, undefined, undefined, abortAllPending=true);
+                                    load_js("{{ url_delete|safe }}", undefined, undefined, 'POST', undefined, undefined, undefined, abortAllPending=true);
                                 })
                             } else {
-                                load_js("{{ url_delete }}", undefined, undefined, 'POST', undefined, undefined, undefined, abortAllPending=true);
+                                load_js("{{ url_delete|safe }}", undefined, undefined, 'POST', undefined, undefined, undefined, abortAllPending=true);
                             }
                         {% else %}
-                            load_js("{{ url_delete }}", undefined, undefined, 'POST', undefined, undefined, undefined, abortAllPending=true);
+                            load_js("{{ url_delete|safe }}", undefined, undefined, 'POST', undefined, undefined, undefined, abortAllPending=true);
                         {% endif %}
                     }
                 }
