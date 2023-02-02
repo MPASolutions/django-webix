@@ -52,7 +52,7 @@ $$("{{ webix_container_id }}").addView({
                 setWebixFilter('{{ model|getattr:'_meta'|getattr:'app_label'}}.{{ model|getattr:'_meta'|getattr:'model_name'}}', '{{ param }}', null);
                 {% endif %}{% endfor %}
                 {% endif %}
-                load_js('{{ url_list }}', undefined, undefined, undefined, undefined, undefined, undefined, abortAllPending = true);
+                load_js('{{ url_list|safe }}', undefined, undefined, undefined, undefined, undefined, undefined, abortAllPending = true);
             }
         },
         {
@@ -69,7 +69,7 @@ $$("{{ webix_container_id }}").addView({
                 setWebixFilter('{{ model|getattr:'_meta'|getattr:'app_label'}}.{{ model|getattr:'_meta'|getattr:'model_name'}}', '{{ param }}', null);
                 {% endif %}{% endfor %}
                 {% endif %}
-                load_js('{{ url_list }}', undefined, undefined, undefined, undefined, undefined, undefined, abortAllPending = true);
+                load_js('{{ url_list|safe }}', undefined, undefined, undefined, undefined, undefined, undefined, abortAllPending = true);
             }
         },
         {% if is_installed_django_webix_filter %}
@@ -282,7 +282,7 @@ if (
             pager: "datatable_paging_{{ model_name }}",
             url: {
                 $proxy: true,
-                source: "{{ url_list }}{% if '?' in url_list %}&{% else %}?{% endif %}json",
+                source: "{{ url_list|safe }}{% if '?' in url_list %}&{% else %}?{% endif %}json",
                 load: function (view, params) {
                         {% if model %}
                         var _params = webixAppliedFilters['{{ model|getattr:'_meta'|getattr:'app_label'}}.{{ model|getattr:'_meta'|getattr:'model_name'}}'];
@@ -410,7 +410,7 @@ if (
                     {% block datatable_onitemdoubleclick %}
                     {% if is_enable_row_click and type_row_click == 'double' %}
                     {% if is_editable %}if (id.column != 'cmd_edit'){{% endif %}
-                    load_js('{{ url_update }}'.replace('0', el.id), undefined, undefined, undefined, undefined, undefined, undefined, abortAllPending=true);
+                    load_js('{{ url_update|safe }}'.replace('0', el.id), undefined, undefined, undefined, undefined, undefined, undefined, abortAllPending=true);
                     {% if is_editable %} } {{% endif %}
                     {% endif %}
                     {% endblock %}
@@ -441,7 +441,7 @@ if (
                             // TODO: send to server for validation
                             _params = el;
                             this.editStop();
-                            load_js('{{ url_list }}{% if '?' in url_list %}&{% else %}?{% endif %}update', undefined, undefined, 'POST', _params, undefined, 'json', abortAllPending=true);
+                            load_js('{{ url_list|safe }}{% if '?' in url_list %}&{% else %}?{% endif %}update', undefined, undefined, 'POST', _params, undefined, 'json', abortAllPending=true);
                         }
                         // enable edit mode
                         if (({{ view_prefix }}edit_mode_id == undefined)||({{ view_prefix }}edit_mode_id != id.row)){
@@ -475,13 +475,13 @@ if (
                     if (id.column == 'cmd_cp') {
                         {% block cmd_cp_click %}
                             {% if has_add_permission and is_enable_column_copy %}
-                                load_js('{{ url_create }}{% if '?' in url_create %}&{% else %}?{% endif %}pk_copy=' + el.id, undefined, undefined, undefined, undefined, undefined, undefined, abortAllPending=true);
+                                load_js('{{ url_create|safe }}{% if '?' in url_create %}&{% else %}?{% endif %}pk_copy=' + el.id, undefined, undefined, undefined, undefined, undefined, undefined, abortAllPending=true);
                             {% endif %}
                         {% endblock %}
                     } else if (id.column == 'cmd_rm') {
                         {% block cmd_rm_click %}
                             {% if has_delete_permission and is_enable_column_delete %}
-                                load_js('{{ url_delete }}'.replace('0', el.id), undefined, undefined, undefined, undefined, undefined, undefined, abortAllPending=true);
+                                load_js('{{ url_delete|safe }}'.replace('0', el.id), undefined, undefined, undefined, undefined, undefined, undefined, abortAllPending=true);
                             {% endif %}
                         {% endblock %}
                     } else if (id.column!='checkbox_action') {
@@ -490,7 +490,7 @@ if (
                                 {% if is_editable %}if (id.column != 'cmd_edit'){{% endif %}
                                     {% if type_row_click == 'single' %}
                                     {% block update_url_call %}
-                                    load_js('{{ url_update }}'.replace('0', el.id), undefined, undefined, undefined, undefined, undefined, undefined, abortAllPending=true);
+                                    load_js('{{ url_update|safe }}'.replace('0', el.id), undefined, undefined, undefined, undefined, undefined, undefined, abortAllPending=true);
                                     {% endblock %}
                                     {% else %}
                                     webix.message({type: "success", text: "{{_("Double click to edit the element")|escapejs}}"});
