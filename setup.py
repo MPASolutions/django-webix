@@ -58,7 +58,7 @@ setup(
     author='MPA Solutions soc.coop., Enogis srl',
     author_email='info@mpasol.it',
     install_requires=[
-        "Django>=3.0,<4",
+        "Django>=4",
         "django-extra-views>=0.11.0",
         "six>=1.15.0",
         "django-user-agents>=0.4.0", # limit use webix on old browsers
