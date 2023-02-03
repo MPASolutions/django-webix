@@ -335,7 +335,7 @@ class SenderMessagesListView(WebixListView):
         )
 
         # Filter message typology
-        if self.kwargs.get("pk") is not None:
+        if self.kwargs is not None and self.kwargs.get("pk") is not None:
             types = self.kwargs.get("pk").split('-')
             qs = qs.filter(message_sent__typology_id__in=types)
             if self.kwargs.get("title") is not None:
