@@ -1,5 +1,5 @@
 # Runtime dependencies
-Django>=3.0
+Django>=4.0
 django-extra-views>=0.11.0
 six>=1.15.0
 django-user-agents>=0.4.0
