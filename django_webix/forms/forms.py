@@ -638,7 +638,7 @@ class BaseWebixMixin:
                     })
 
                 if name not in self.autocomplete_fields and name not in self.autocomplete_fields_exclude:
-                    count = field.queryset.count()
+                    count = field.queryset.only(field.queryset.model._meta.pk.name).count()
                     if count > self.min_count_suggest:
                         self.autocomplete_fields.append(name)
 
@@ -718,7 +718,7 @@ class BaseWebixMixin:
                     }
 
                 if name not in self.autocomplete_fields and name not in self.autocomplete_fields_exclude:
-                    count = field.queryset.count()
+                    count = field.queryset.only(field.queryset.model._meta.pk.name).count()
                     if count > self.min_count_suggest:
                         self.autocomplete_fields.append(name)
 

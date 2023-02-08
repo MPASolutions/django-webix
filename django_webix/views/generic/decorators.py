@@ -62,7 +62,7 @@ def action_config(
 
     def decorator(func):
         def wrapper(self, request, qs):
-            if maximum_count is not None and qs.count() > maximum_count:
+            if maximum_count is not None and qs.only(qs.model._meta.pk.name).count() > maximum_count:
                 return JsonResponse({
                     'status': False,
                     'errors': [_('You can perform this action on a maximum of {} raws').format(maximum_count)]

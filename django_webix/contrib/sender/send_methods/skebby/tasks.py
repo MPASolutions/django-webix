@@ -134,5 +134,5 @@ def check_state_history(same_sender_name=True):
         'remaining': MessageRecipient.objects.filter(
             message_sent__send_method='skebby.django_webix_sender.send_methods.skebby.send',
             status='unknown'
-        ).count()
+        ).only(MessageRecipient._meta.pk.name).count()
     }
