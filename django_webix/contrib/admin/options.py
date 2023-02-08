@@ -880,6 +880,10 @@ class ModelWebixAdmin(ModelWebixAdminPermissionsMixin):
                     def get_actions(self):
                         return _admin.get_actions(view=self)
 
+                if hasattr(_admin, 'get_choices_filters'):
+                    def get_choices_filters(self):
+                        return _admin.get_choices_filters(view=self)
+
                 errors_on_popup = _admin.errors_on_popup
 
                 enable_json_loading = _admin.enable_json_loading
