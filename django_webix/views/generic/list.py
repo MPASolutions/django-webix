@@ -545,7 +545,7 @@ class WebixListView(WebixBaseMixin,
             # apply ordering
             qs = self.apply_ordering(qs)
             # total count
-            total_count = qs.count()
+            total_count = qs.only(self.get_pk_field()).count()
             # apply pagination
             qs_paginate = self.paginate_queryset(qs, None)
             # build output
