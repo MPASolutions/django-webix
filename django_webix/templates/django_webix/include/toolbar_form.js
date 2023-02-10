@@ -69,10 +69,12 @@ $$("{{ webix_container_id }}").addView({
                             {% if remove_disabled_buttons %} hidden: true, {% endif %}
                             disabled: true,
                             tooltip: "{{ info_no_add_permission|join:", "|escapejs}}",
-                        {% elif object.pk and not has_change_permission %}
-                            {% if remove_disabled_buttons %} hidden: true, {% endif %}
-                            disabled: true,
-                            tooltip: "{{ info_no_change_permission|join:", "|escapejs}}",
+                        {% elif object.pk %}
+                            {% if not has_change_permission or not has_add_permission %}
+                                {% if remove_disabled_buttons %} hidden: true, {% endif %}
+                                disabled: true,
+                                tooltip: "{{ info_no_change_permission|join:", "|escapejs}}",
+                            {% endif %}
                         {% endif %}
                         click: function () {
                               {% include "django_webix/include/toolbar_form_save.js" with extra_params_button='_addanother=true' %}
