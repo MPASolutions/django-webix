@@ -77,7 +77,7 @@ def check_state_history(same_sender_name=True):
 
         # Recupero tutti i destinatari con stato unknown
         recipients = MessageRecipient.objects.filter(
-            message_sent__send_method='skebby.django_webix_sender.send_methods.skebby.send',
+            message_sent__send_method='skebby.django_webix.contrib.sender.send_methods.skebby.send',
             status='unknown'
         ).values_list('recipient_address', flat=True).order_by().distinct()
 
@@ -85,7 +85,7 @@ def check_state_history(same_sender_name=True):
         for recipient in recipients:
             # Recupero il messaggio più vecchio di questo destinatario
             date_from = MessageRecipient.objects.filter(
-                message_sent__send_method='skebby.django_webix_sender.send_methods.skebby.send',
+                message_sent__send_method='skebby.django_webix.contrib.sender.send_methods.skebby.send',
                 status='unknown',
                 recipient_address=recipient
             ).values_list('creation_date', flat=True).order_by('creation_date').first()
@@ -102,7 +102,7 @@ def check_state_history(same_sender_name=True):
 
                 # Estraggo la comunicazione con lo stesso order_id
                 message_recipient = MessageRecipient.objects.filter(
-                    message_sent__send_method='skebby.django_webix_sender.send_methods.skebby.send',
+                    message_sent__send_method='skebby.django_webix.contrib.sender.send_methods.skebby.send',
                     message_sent__extra__order_id=communication['order_id'],
                     status='unknown',
                     recipient_address=recipient,
@@ -132,7 +132,7 @@ def check_state_history(same_sender_name=True):
 
     return {
         'remaining': MessageRecipient.objects.filter(
-            message_sent__send_method='skebby.django_webix_sender.send_methods.skebby.send',
+            message_sent__send_method='skebby.django_webix.contrib.sender.send_methods.skebby.send',
             status='unknown'
         ).only(MessageRecipient._meta.pk.name).count()
     }
