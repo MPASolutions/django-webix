@@ -105,9 +105,9 @@ function DjangoWebixSender() {
                     view: "suggest",
                     keyPressTimeout: 400,
                     body: {
-                        dataFeed: "{% url 'webix_autocomplete_lookup' %}?app_label=django_webix.contrib.sender&model_name=messagetypology"
+                        dataFeed: "{% url 'webix_autocomplete_lookup' %}?app_label=dwsender&model_name=messagetypology"
                     },
-                    url: "{% url 'webix_autocomplete_lookup' %}?app_label=django_webix.contrib.sender&model_name=messagetypology&filter[value]="
+                    url: "{% url 'webix_autocomplete_lookup' %}?app_label=dwsender&model_name=messagetypology&filter[value]="
                 }
             });
         {% endif %}
