@@ -13,8 +13,8 @@ class WebixPasswordResetView(auth_views.PasswordResetView, WebixFormView):
     email_template_name = 'django_webix/auth/password_reset/password_reset_email.html'
     subject_template_name = 'django_webix/auth/password_reset/password_reset_subject.txt'
     form_class = WebixPasswordResetForm
-    success_url = reverse_lazy('dwauth:password_reset.done')
-    url_pattern_send = "dwauth:password_reset.base"
+    success_url = reverse_lazy('dwauth.password_reset.done')
+    url_pattern_send = "dwauth.password_reset.form"
 
 
 class WebixPasswordResetDoneView(auth_views.PasswordResetDoneView, WebixTemplateView):
@@ -23,11 +23,11 @@ class WebixPasswordResetDoneView(auth_views.PasswordResetDoneView, WebixTemplate
 
 class WebixPasswordResetConfirmView(auth_views.PasswordResetConfirmView, WebixFormView):
     form_class = WebixSetPasswordForm
-    success_url = reverse_lazy('dwauth:password_reset.complete')
+    success_url = reverse_lazy('dwauth.password_reset.complete')
     template_name = 'django_webix/auth/password_reset/password_reset_confirm.js'
 
     def get_url_send(self):
-        return reverse("dwauth:password_reset.confirm", kwargs={
+        return reverse("dwauth.password_reset.confirm", kwargs={
             "uidb64": self.kwargs.get('uidb64'),
             'token': self.kwargs.get('token'),
         })
