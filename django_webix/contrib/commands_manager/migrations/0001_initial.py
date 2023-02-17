@@ -16,11 +16,11 @@ class Migration(migrations.Migration):
             fields=[
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('description', models.CharField(max_length=64, verbose_name='Description')),
-                ('command_name', models.CharField(choices=[], max_length=64, verbose_name='Command name')),
+                ('command_name', models.CharField(choices=[(i, i) for i in settings.COMMANDS_MANAGER_ENABLED], max_length=64, verbose_name='Command name')),
                 ('parameters', models.JSONField(blank=True, null=True, verbose_name='Parameters')),
                 ('insert_date', models.DateTimeField(auto_now_add=True, verbose_name='Insert date')),
                 ('last_execution_date', models.DateTimeField(blank=True, null=True, verbose_name='Last Execution')),
-                ('last_execution_state', models.CharField(choices=[(i, i) for i in settings.COMMANDS_MANAGER_ENABLED], default='unknown', max_length=32)),
+                ('last_execution_state', models.CharField(choices=[('started', 'Started'), ('error', 'Error'), ('finished', 'Finished'), ('unknown', 'Unknown')], default='unknown', max_length=32)),
                 ('output', models.TextField(blank=True, null=True, verbose_name='Output')),
             ],
             options={
