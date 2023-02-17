@@ -20,7 +20,7 @@ class Migration(migrations.Migration):
                 ('parameters', models.JSONField(blank=True, null=True, verbose_name='Parameters')),
                 ('insert_date', models.DateTimeField(auto_now_add=True, verbose_name='Insert date')),
                 ('last_execution_date', models.DateTimeField(blank=True, null=True, verbose_name='Last Execution')),
-                ('last_execution_state', models.CharField(choices=[('started', 'Started'), ('error', 'Error'), ('finished', 'Finished'), ('unknown', 'Unknown')], default='unknown', max_length=32)),
+                ('last_execution_state', models.CharField(choices=[(i, i) for i in settings.COMMANDS_MANAGER_ENABLED], default='unknown', max_length=32)),
                 ('output', models.TextField(blank=True, null=True, verbose_name='Output')),
             ],
             options={
