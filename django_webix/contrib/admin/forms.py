@@ -35,9 +35,11 @@ class UserForm(WebixModelForm):
     class Meta:
         localized_fields = '__all__'
         model = get_user_model()
-        fields = [i.name for i in get_user_model()._meta.fields if i.editable and
-                  all(x not in i.attname for x in
-                      ['password', 'is_staff', 'is_active', 'is_superuser', 'date_joined', 'data'])]
+        fields = [
+            i.name for i in get_user_model()._meta.fields
+            if i.editable and
+               i.attname not in ['password', 'is_staff', 'is_active', 'is_superuser', 'date_joined', 'data']
+        ]
 
     @property
     def get_elements(self):

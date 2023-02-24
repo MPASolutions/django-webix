@@ -376,7 +376,7 @@ class AdminWebixSite:
 
             # ################################################ user update ############################################
 
-            path('account/update/<int:pk>/', views.UserUpdate.as_view(), name='account_update'),
+            path('account/update/', views.UserUpdate.as_view(), name='account_update'),
 
             # ############################################ Reset password by email ####################################
             # nessuna di queste view deve essere sotto wrap perche si deve poter accedere anche non essendo loggati

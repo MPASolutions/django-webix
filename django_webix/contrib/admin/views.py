@@ -1,6 +1,8 @@
 from django.apps import apps
 from django.contrib.auth import get_user_model
 from django.contrib.auth.views import PasswordResetConfirmView, PasswordChangeView
+from django.http import Http404
+from django.utils.translation import gettext as _
 
 from django_webix.contrib.admin.forms import UserForm, UserAdminUpdateForm, UserAdminCreateForm
 from django_webix.views import WebixUpdateView, WebixCreateView
@@ -13,6 +15,25 @@ class UserUpdate(WebixUpdateView):
     enable_button_save_addanother = False
     success_url = '.'
     url_pattern_update = 'dwadmin:account_update'
+
+    def get_object(self, queryset=None):
+        if getattr(self, 'object', None) is not None:
+            return self.object
+
+        if queryset is None:
+            queryset = self.get_queryset()
+
+        queryset = queryset.filter(pk=self.request.user.pk)
+
+        try:
+            # Get the single item from the filtered queryset
+            obj = queryset.get()
+        except queryset.model.DoesNotExist:
+            raise Http404(
+                _("No %(verbose_name)s found matching the query")
+                % {"verbose_name": queryset.model._meta.verbose_name}
+            )
+        return obj
 
 
 class UserAdminCreate(WebixCreateView):
