@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-01-27 08:25+0100\n"
+"POT-Creation-Date: 2023-02-24 08:51+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -217,6 +217,10 @@ msgstr ""
 msgid "User password change"
 msgstr ""
 
+#: contrib/admin/templates/django_webix/admin/account/password_reset_complete.html:11
+msgid "password reset complete"
+msgstr ""
+
 #: contrib/admin/templates/django_webix/admin/account/password_reset_complete.html:17
 msgid "Your password has been set. You can log-in"
 msgstr ""
@@ -237,6 +241,10 @@ msgstr ""
 #: contrib/admin/templates/django_webix/admin/account/password_reset_confirm.html:16
 msgid ""
 "Enter the new password twice, to verify that you have written it correctly"
+msgstr ""
+
+#: contrib/admin/templates/django_webix/admin/account/password_reset_done.html:10
+msgid "password reset sent"
 msgstr ""
 
 #: contrib/admin/templates/django_webix/admin/account/password_reset_done.html:15
@@ -280,6 +288,10 @@ msgstr ""
 #: contrib/admin/templates/django_webix/admin/account/password_reset_email.html:12
 #, python-format
 msgid "The %(site_name)s team"
+msgstr ""
+
+#: contrib/admin/templates/django_webix/admin/account/password_reset_form.html:11
+msgid "reset password"
 msgstr ""
 
 #: contrib/admin/templates/django_webix/admin/account/password_reset_form.html:16

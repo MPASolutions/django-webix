@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-01-27 08:25+0100\n"
+"POT-Creation-Date: 2023-02-24 08:51+0100\n"
 "PO-Revision-Date: 2022-03-21 12:39+0050\n"
 "Last-Translator: Traduzioni CBC <>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -236,6 +236,12 @@ msgstr "Mot de passe correctement"
 msgid "User password change"
 msgstr "Changement de mot de passe"
 
+#: contrib/admin/templates/django_webix/admin/account/password_reset_complete.html:11
+#, fuzzy
+#| msgid "Password reset"
+msgid "password reset complete"
+msgstr "Réinitialisation de mot de passe "
+
 #: contrib/admin/templates/django_webix/admin/account/password_reset_complete.html:17
 msgid "Your password has been set. You can log-in"
 msgstr ""
@@ -259,6 +265,12 @@ msgstr "Confirmer le mot de passe"
 msgid ""
 "Enter the new password twice, to verify that you have written it correctly"
 msgstr ""
+
+#: contrib/admin/templates/django_webix/admin/account/password_reset_done.html:10
+#, fuzzy
+#| msgid "Password reset"
+msgid "password reset sent"
+msgstr "Réinitialisation de mot de passe "
 
 #: contrib/admin/templates/django_webix/admin/account/password_reset_done.html:15
 #: contrib/admin/templates/django_webix/admin/account/password_reset_done.js:33
@@ -306,6 +318,12 @@ msgstr "Merci d'utiliser notre site !"
 #, python-format
 msgid "The %(site_name)s team"
 msgstr "L'équipe %(site_name)s "
+
+#: contrib/admin/templates/django_webix/admin/account/password_reset_form.html:11
+#, fuzzy
+#| msgid "Change password"
+msgid "reset password"
+msgstr "Changer mot de passe"
 
 #: contrib/admin/templates/django_webix/admin/account/password_reset_form.html:16
 #: contrib/admin/templates/django_webix/admin/account/password_reset_form.js:26

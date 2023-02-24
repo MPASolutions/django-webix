@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-01-27 08:58+0100\n"
-"PO-Revision-Date: 2023-01-27 08:51+0100\n"
+"POT-Creation-Date: 2023-02-24 09:10+0100\n"
+"PO-Revision-Date: 2023-02-24 08:59+0100\n"
 "Last-Translator: Stefano Menegon <menegon@mpasol.it>\n"
 "Language-Team: \n"
 "Language: it\n"
@@ -34,7 +34,7 @@ msgstr "Utente"
 
 #: contrib/admin/dwadmin.py:63
 msgid "Email"
-msgstr ""
+msgstr "Email"
 
 #: contrib/admin/dwadmin.py:74
 msgid "Name"
@@ -46,11 +46,11 @@ msgstr "Soprannome"
 
 #: contrib/admin/dwadmin.py:98
 msgid "Staff"
-msgstr ""
+msgstr "Staff"
 
 #: contrib/admin/dwadmin.py:111
 msgid "Superuser"
-msgstr ""
+msgstr "Superuser"
 
 #: contrib/admin/dwadmin.py:124
 msgid "Active"
@@ -221,6 +221,10 @@ msgstr "Password cambiata correttamente"
 msgid "User password change"
 msgstr "Cambia password"
 
+#: contrib/admin/templates/django_webix/admin/account/password_reset_complete.html:11
+msgid "password reset complete"
+msgstr "Reset password completato"
+
 #: contrib/admin/templates/django_webix/admin/account/password_reset_complete.html:17
 msgid "Your password has been set. You can log-in"
 msgstr "La tua password è stata impostata. Ora puoi effettuare il login"
@@ -244,6 +248,10 @@ msgid ""
 msgstr ""
 "Immettere due volte la nuova password, per verificare di averla scritta "
 "correttamente"
+
+#: contrib/admin/templates/django_webix/admin/account/password_reset_done.html:10
+msgid "password reset sent"
+msgstr "Reset password inviato"
 
 #: contrib/admin/templates/django_webix/admin/account/password_reset_done.html:15
 #: contrib/admin/templates/django_webix/admin/account/password_reset_done.js:33
@@ -294,6 +302,10 @@ msgstr "Grazie per l'uso del nostro sito"
 #, python-format
 msgid "The %(site_name)s team"
 msgstr "Il team del sito %(site_name)s"
+
+#: contrib/admin/templates/django_webix/admin/account/password_reset_form.html:11
+msgid "reset password"
+msgstr "Reset password"
 
 #: contrib/admin/templates/django_webix/admin/account/password_reset_form.html:16
 #: contrib/admin/templates/django_webix/admin/account/password_reset_form.js:26

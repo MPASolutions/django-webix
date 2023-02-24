@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-01-27 08:25+0100\n"
+"POT-Creation-Date: 2023-02-24 08:51+0100\n"
 "PO-Revision-Date: 2022-03-21 12:39+0050\n"
 "Last-Translator: Traduzioni CBC <>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -124,7 +124,13 @@ msgstr "Filtrer"
 msgid "Double click to edit the element"
 msgstr "Double cliquer pour modifier l'élément"
 
-#: templates/django_webix/include/actions_list.js:33
+#: templates/django_webix/include/actions_list.js:9
+#, fuzzy
+#| msgid "Filter"
+msgid "Filter in map"
+msgstr "Filtrer"
+
+#: templates/django_webix/include/actions_list.js:34
 #: templates/django_webix/include/form_errors_popup.js:16
 #: templates/django_webix/include/utils.js:275
 msgid "Close"
@@ -244,7 +250,7 @@ msgstr "Sauvegarder et continuer"
 msgid "Save and add another"
 msgstr "Sauvegarder et ajouter un autre"
 
-#: templates/django_webix/include/toolbar_form.js:90
+#: templates/django_webix/include/toolbar_form.js:92
 msgid "Save"
 msgstr "Sauvegarder"
 
@@ -350,6 +356,22 @@ msgstr "L'utilisateur ne s'est pas authentifié "
 #: templates/django_webix/redirect_to_login.js:5
 msgid "You are no longer authenticated, please login again."
 msgstr "Vous n'êtes plus authentifié, veuillez vous connecter à nouveau."
+
+#: templates/django_webix/user_agent_limit.html:88
+msgid "Attention!"
+msgstr ""
+
+#: templates/django_webix/user_agent_limit.html:89
+msgid "Your browser is outdated and no longer supported."
+msgstr ""
+
+#: templates/django_webix/user_agent_limit.html:90
+msgid "There are valid and free alternatives."
+msgstr ""
+
+#: templates/django_webix/user_agent_limit.html:91
+msgid "You can use for example"
+msgstr ""
 
 #: views/generic/actions.py:25
 #, python-brace-format
