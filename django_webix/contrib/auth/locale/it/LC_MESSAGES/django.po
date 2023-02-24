@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-01-27 08:25+0100\n"
-"PO-Revision-Date: 2023-01-27 08:55+0100\n"
+"POT-Creation-Date: 2023-02-24 09:10+0100\n"
+"PO-Revision-Date: 2023-02-24 09:00+0100\n"
 "Last-Translator: Stefano Menegon <menegon@mpasol.it>\n"
 "Language-Team: \n"
 "Language: it\n"
@@ -20,10 +20,8 @@ msgstr ""
 "X-Translated-Using: django-rosetta 0.9.8\n"
 
 #: contrib/auth/apps.py:8
-#, fuzzy
-#| msgid "Django webix administration"
 msgid "Django Webix Authentication and Authorization"
-msgstr "Amministrazione"
+msgstr "Autenticazione e autorizazzioni"
 
 #: contrib/auth/forms.py:12
 msgid "Username"
@@ -49,8 +47,6 @@ msgstr ""
 "correttamente"
 
 #: contrib/auth/templates/django_webix/auth/password_reset/password_reset_confirm.js:55
-#, fuzzy
-#| msgid "Change password"
 msgid "Change my password"
 msgstr "Cambia password"
 
@@ -71,8 +67,8 @@ msgstr "Torna alla homepage"
 #: contrib/auth/templates/django_webix/auth/password_reset/password_reset_done.js:26
 msgid ""
 "We have sent instructions for setting the password to the email address you "
-"provided. You should receive them shortly as long as the address you entered"
-" is valid."
+"provided. You should receive them shortly as long as the address you entered "
+"is valid."
 msgstr ""
 "Abbiamo inviato le istruzioni per impostare la password all'indirizzo email "
 "che hai fornito. Dovresti riceverli a breve purché l'indirizzo che hai "
@@ -121,7 +117,5 @@ msgstr ""
 "invieremo le istruzioni per impostarne uno nuovo"
 
 #: contrib/auth/templates/django_webix/auth/password_reset/password_reset_form.js:54
-#, fuzzy
-#| msgid "Reset password"
 msgid "Reset my password"
 msgstr "Reset password"

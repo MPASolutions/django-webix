@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-01-27 09:20+0100\n"
-"PO-Revision-Date: 2023-01-27 09:14+0100\n"
+"PO-Revision-Date: 2023-02-24 09:08+0100\n"
 "Last-Translator: Stefano Menegon <menegon@mpasol.it>\n"
 "Language-Team: \n"
 "Language: it\n"
@@ -21,7 +21,7 @@ msgstr ""
 
 #: contrib/filter/apps.py:11
 msgid "Django Webix Filter"
-msgstr ""
+msgstr "Filtri"
 
 #: contrib/filter/models.py:16
 msgid "Insert date"
@@ -77,11 +77,11 @@ msgstr "Gruppo di modifica condiviso"
 
 #: contrib/filter/models.py:36
 msgid "Webix Filter"
-msgstr ""
+msgstr "Filtro"
 
 #: contrib/filter/models.py:37
 msgid "Webix Filters"
-msgstr ""
+msgstr "Filtri"
 
 #: contrib/filter/templates/django_webix/filter/create_update.js:31
 msgid "Filter error"
@@ -98,7 +98,8 @@ msgstr ""
 #: contrib/filter/templates/django_webix/filter/create_update.js:33
 msgid "Unable to load filter, contact administrators to correct it"
 msgstr ""
-"Impossibile caricare il filtro, contattare gli amministratori per correggerlo"
+"Impossibile caricare il filtro, contattare gli amministratori per "
+"correggerlo"
 
 #: contrib/filter/templates/django_webix/filter/create_update.js:104
 #: contrib/filter/templates/django_webix/filter/create_update.js:120

@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-01-27 08:25+0100\n"
-"PO-Revision-Date: 2023-01-27 09:34+0100\n"
+"PO-Revision-Date: 2023-02-24 09:09+0100\n"
 "Last-Translator: Stefano Menegon <menegon@mpasol.it>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: \n"
@@ -21,7 +21,7 @@ msgstr ""
 
 #: contrib/tutorial/apps.py:8
 msgid "Django Webix Tutorial"
-msgstr ""
+msgstr "Tutorial"
 
 #: contrib/tutorial/models.py:12 contrib/tutorial/models.py:24
 #: contrib/tutorial/views.py:45
@@ -46,11 +46,11 @@ msgstr "Tipo di tutorial"
 
 #: contrib/tutorial/models.py:28
 msgid "PDF"
-msgstr ""
+msgstr "PDF"
 
 #: contrib/tutorial/models.py:29
 msgid "Video"
-msgstr ""
+msgstr "Video"
 
 #: contrib/tutorial/models.py:31
 msgid "Type of opening file"
@@ -90,11 +90,11 @@ msgstr "Elementi del tutorial"
 
 #: contrib/tutorial/templates/django_webix/tutorial/list.js:25
 msgid "Video tutorial"
-msgstr ""
+msgstr "Video tutorial"
 
 #: contrib/tutorial/templates/django_webix/tutorial/list.js:53
 msgid "PDF tutorial"
-msgstr ""
+msgstr "PDF tutorial"
 
 #: contrib/tutorial/views.py:14
 msgid "Video instructions and manuals"

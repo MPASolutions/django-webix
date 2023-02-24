@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-01-27 08:25+0100\n"
-"PO-Revision-Date: 2022-07-13 13:17+0050\n"
+"PO-Revision-Date: 2023-02-24 09:00+0100\n"
 "Last-Translator: Stefano Menegon <menegon@mpasol.it>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: \n"
@@ -21,7 +21,7 @@ msgstr ""
 
 #: contrib/commands_manager/apps.py:9
 msgid "Django Webix Commands Manager"
-msgstr ""
+msgstr "Commands Manager"
 
 #: contrib/commands_manager/forms.py:50 contrib/commands_manager/models.py:11
 msgid "Parameters"

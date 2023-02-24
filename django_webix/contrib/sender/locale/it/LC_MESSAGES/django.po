@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-01-27 08:25+0100\n"
-"PO-Revision-Date: 2022-07-13 13:46+0050\n"
+"PO-Revision-Date: 2023-02-24 09:08+0100\n"
 "Last-Translator: Stefano Menegon <menegon@mpasol.it>\n"
 "Language-Team: \n"
 "Language: it\n"
@@ -53,7 +53,7 @@ msgstr "Funzione"
 
 #: contrib/sender/apps.py:14
 msgid "Django Webix Sender"
-msgstr ""
+msgstr "Comunicazioni"
 
 #: contrib/sender/apps.py:23
 msgid "`WEBIX_SENDER` is not configured in your settings.py file"
@@ -124,7 +124,8 @@ msgid "You have to define a `model` as string in your recipients list"
 msgstr "Devi definire un modello come stringa nel tuo recipiente"
 
 #: contrib/sender/apps.py:209
-msgid "You have to define a `datatable_fields` as list in your recipients list"
+msgid ""
+"You have to define a `datatable_fields` as list in your recipients list"
 msgstr ""
 "Devi definire un \"datartable_fields' come lista nella lista dei recipienti"
 
@@ -783,8 +784,8 @@ msgstr "Periodo non valido"
 #~ "Warning! if there are messages with an unknown status, the data is not "
 #~ "updated"
 #~ msgstr ""
-#~ "Attenzione! Se ci sono messaggi con uno stato sconosciuto, i dati non "
-#~ "sono aggiornati"
+#~ "Attenzione! Se ci sono messaggi con uno stato sconosciuto, i dati non sono "
+#~ "aggiornati"
 
 #~ msgid "The messages have been sent"
 #~ msgstr "I messaggi sono stati inviati"
