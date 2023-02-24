@@ -41,7 +41,7 @@
                     value: "{{ _("Profile")|escapejs }}",
                     icon: "fas fa-user-edit",
                     loading_type: 'js_script',
-                    url: "{% url 'dwadmin:account_update' user.pk %}"
+                    url: "{% url 'dwadmin:account_update' %}"
                 },
                 {
                     id: 'menu_profile_change_password',
