@@ -38,17 +38,12 @@ class WebixAdminMenu(MPTTModel):
         else:
             raise Exception('Label or model needed')
 
-    @property
-    def get_url(self):
+    def get_url(self, urls_namespace):
         if self.model:
             if self.prefix not in ['', None]:
-                return reverse(
-                    'dwadmin:{app_label}.{model_name}.list.{prefix}'.format(app_label=self.model.app_label,
-                                                                                       model_name=self.model.model,
-                                                                                       prefix=self.prefix))
+                return reverse(f'{urls_namespace}:{self.model.app_label}.{self.model.model}.list.{self.prefix}')
             else:
-                return reverse('dwadmin:{app_label}.{model_name}.list'.format(app_label=self.model.app_label,
-                                                                                         model_name=self.model.model))
+                return reverse(f'{urls_namespace}:{self.model.app_label}.{self.model.model}.list')
         if self.url:
             return self.url
         return ''

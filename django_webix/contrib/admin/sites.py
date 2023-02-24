@@ -43,6 +43,8 @@ class AdminWebixSite:
 
     site_url = '/'
 
+    urls_namespace = 'dwadmin'
+
     login_form = None
 
     label_width = None
@@ -217,12 +219,12 @@ class AdminWebixSite:
             if perms.get('change') or perms.get('view'):
                 model_dict['view_only'] = not perms.get('change')
                 try:
-                    model_dict['admin_url'] = reverse('dwadmin:%s.%s.list' % info, current_app=self.name)
+                    model_dict['admin_url'] = reverse(f'{self.urls_namespace}:%s.%s.list' % info, current_app=self.name)
                 except NoReverseMatch:
                     pass
             if perms.get('add'):
                 try:
-                    model_dict['add_url'] = reverse('dwadmin:%s.%s.add' % info, current_app=self.name)
+                    model_dict['add_url'] = reverse(f'{self.urls_namespace}:%s.%s.add' % info, current_app=self.name)
                 except NoReverseMatch:
                     pass
 
@@ -295,7 +297,7 @@ class AdminWebixSite:
                     if item.get_url is None:
                         URL = ""
                     else:
-                        URL = item.get_url
+                        URL = item.get_url(urls_namespace=self.urls_namespace)
                     menu_item["url"] = URL
                     menu_item["loading_type"] = "js_script"
                     enable = True
@@ -326,15 +328,15 @@ class AdminWebixSite:
 
         def inner(request, *args, **kwargs):
             if not self.has_permission(request):
-                if request.path == reverse('dwadmin:logout', current_app=self.name):
-                    index_path = reverse('dwadmin:index', current_app=self.name)
+                if request.path == reverse(f'{self.urls_namespace}:logout', current_app=self.name):
+                    index_path = reverse(f'{self.urls_namespace}:index', current_app=self.name)
                     return HttpResponseRedirect(index_path)
                 # Inner import to prevent django.contrib.admin (app) from
                 # importing django.contrib.auth.models.User (unrelated model).
                 from django.contrib.auth.views import redirect_to_login
                 return redirect_to_login(
                     request.get_full_path(),
-                    reverse('dwadmin:login', current_app=self.name)
+                    reverse(f'{self.urls_namespace}:login', current_app=self.name)
                 )
             return view(request, *args, **kwargs)
 
@@ -362,7 +364,7 @@ class AdminWebixSite:
             return update_wrapper(wrapper, view)
 
         # Admin-site-wide views.
-        urlpatterns = [  # prefix = dwadmin:XXXX
+        urlpatterns = [  # prefix = f'{self.urls_namespace}:XXXX
 
             path('', wrap(self.index), name='index'),
             path('login/', self.login, name='login'),
@@ -383,12 +385,12 @@ class AdminWebixSite:
             # path('reset/<uidb64>/<token>/', self.password_reset_confirm, name='password_reset_confirm'),
             # path('reset/<uidb64>/<token>/', PasswordResetConfirmView.as_view(
             #     form_class=forms.WebixSetPasswordForm,
-            #     success_url=reverse_lazy('dwadmin:password_reset_complete'),
+            #     success_url=reverse_lazy(f'{self.urls_namespace}:password_reset_complete'),
             #     template_name='django_webix/admin/account/password_reset_confirm.html'
             # ), name='password_reset_confirm'),
             path('reset/<uidb64>/<token>/', views.PasswordResetConfirmViewCustom.as_view(
                 form_class=forms.WebixSetPasswordForm,
-                success_url=reverse_lazy('dwadmin:password_reset_complete'),
+                success_url=reverse_lazy(f'{self.urls_namespace}:password_reset_complete'),
                 template_name='django_webix/admin/account/password_reset_confirm.html'
             ), name='password_reset_confirm'),
 
@@ -428,12 +430,12 @@ class AdminWebixSite:
 
     @property
     def urls(self):
-        return self.get_urls(), 'dwadmin', self.name
+        return self.get_urls(), self.urls_namespace, self.name
 
     def _get_user_model_list_url(self):
         UserModel = get_user_model()
         if UserModel is not None:
-            return 'dwadmin:' + UserModel._meta.app_label + '.' + UserModel._meta.model_name + '.list'
+            return f'{self.urls_namespace}:' + UserModel._meta.app_label + '.' + UserModel._meta.model_name + '.list'
         else:
             return None
 
@@ -481,7 +483,7 @@ class AdminWebixSite:
         #        else:
         #            from django.contrib.admin.forms import AdminPasswordChangeForm
         from django_webix.contrib.admin.views import PasswordChangeViewCustom
-        url = reverse('dwadmin:password_change_done', current_app=self.name)
+        url = reverse(f'{self.urls_namespace}:password_change_done', current_app=self.name)
         defaults = {
             #            'form_class': AdminPasswordChangeForm,
             'success_url': url,
@@ -523,7 +525,7 @@ class AdminWebixSite:
         extra_context['domain'] = domain
         extra_context['site_name'] = site_name
 
-        template = 'django_webix/admin/admin/account/password_reset_form.js'
+        template = 'django_webix/admin/account/password_reset_form.js'
         if not self.has_permission(request):
             template = 'django_webix/admin/account/password_reset_form.html'
 
@@ -531,7 +533,7 @@ class AdminWebixSite:
             'template_name': template,
             'email_template_name': 'django_webix/admin/account/password_reset_email.html',
             'form_class': forms.WebixPasswordResetForm,
-            'success_url': reverse_lazy('dwadmin:password_reset_done'),
+            'success_url': reverse_lazy(f'{self.urls_namespace}:password_reset_done'),
             'extra_context': {**self.each_context(request), **(extra_context or {})},
         }
 
@@ -566,14 +568,14 @@ class AdminWebixSite:
     #     defaults = {
     #         'template_name': 'django_webix/admin/account/password_reset_confirm.js',
     #         'form_class': forms.WebixSetPasswordForm,
-    #         'success_url': reverse_lazy('dwadmin:password_reset_complete'),
+    #         'success_url': reverse_lazy(f'{self.urls_namespace}:password_reset_complete'),
     #         # 'extra_context': {**self.each_context(request)},
     #     }
     #     # raise Exception(extra_context, defaults)
     #     # request.current_app = self.name
     #     return PasswordResetConfirmView.as_view(
     #         form_class=forms.WebixSetPasswordForm,
-    #         success_url=reverse_lazy('dwadmin:password_reset_complete'),
+    #         success_url=reverse_lazy(f'{self.urls_namespace}:password_reset_complete'),
     #         template_name='django_webix/admin/account/password_reset_confirm.js'
     #     )(request)
 
@@ -632,7 +634,7 @@ class AdminWebixSite:
         """
         if request.method == 'GET' and request.user.is_authenticated and self.has_permission(request):
             # Already logged-in, redirect to admin index
-            index_path = reverse('dwadmin:index', current_app=self.name)
+            index_path = reverse(f'{self.urls_namespace}:index', current_app=self.name)
             return HttpResponseRedirect(index_path)
 
         from django.contrib.auth.views import LoginView
@@ -674,7 +676,7 @@ class AdminWebixSite:
 
         if (REDIRECT_FIELD_NAME not in request.GET and
             REDIRECT_FIELD_NAME not in request.POST):
-            context[REDIRECT_FIELD_NAME] = reverse('dwadmin:index', current_app=self.name)
+            context[REDIRECT_FIELD_NAME] = reverse(f'{self.urls_namespace}:index', current_app=self.name)
         context.update(extra_context or {})
 
         defaults = {
