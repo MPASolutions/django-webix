@@ -540,8 +540,8 @@ function set_autocomplete(selector, QS, finally_function) {
 }
 
 function set_autocomplete_empty(selector, QS, finally_function) {
-    a = $$(selector);
-    d = a.getList();
+    var a = $$(selector);
+    var d = a.getList();
     d.load(QS + '&filter[value]=').finally(finally_function);
 }
 

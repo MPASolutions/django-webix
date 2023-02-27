@@ -203,8 +203,12 @@ if (
             editable:true,
             editaction: "custom",
             {% endif %}
+            {% block right_split %}
             rightSplit:2,
+            {% endblock %}
+            {% block left_split %}
             leftSplit:1,
+            {% endblock %}
             columns: [
                 {
                     id: "checkbox_action",
