@@ -90,9 +90,9 @@
         $$('querybuilder').set_rules(JSON.parse(load_json));
     }
 
-    if ($$('django_webix_filter.webixfilter_save') != undefined) {
-        var save_click = $$('django_webix_filter.webixfilter_save').config.click
-        $$('django_webix_filter.webixfilter_save').config.click = function () {
+    if ($$('{{ form.webix_id }}_save') != undefined) {
+        var save_click = $$('{{ form.webix_id }}_save').config.click
+        $$('{{ form.webix_id }}_save').config.click = function () {
             var query = $$('querybuilder');
             if (query !== undefined) {
                 var json_rules = $$('querybuilder').get_rules();
@@ -106,9 +106,9 @@
         }
     }
 
-    if ($$('django_webix_filter.webixfilter_save_continue') != undefined) {
-        var save_continue_click = $$('django_webix_filter.webixfilter_save_continue').config.click
-        $$('django_webix_filter.webixfilter_save_continue').config.click = function () {
+    if ($$('{{ form.webix_id }}_save_continue') != undefined) {
+        var save_continue_click = $$('{{ form.webix_id }}_save_continue').config.click
+        $$('{{ form.webix_id }}_save_continue').config.click = function () {
             var query = $$('querybuilder');
             if (query !== undefined) {
                 var json_rules = $$('querybuilder').get_rules();
@@ -122,9 +122,9 @@
         }
     }
 
-    if ($$('django_webix_filter.webixfilter_save_addanother') != undefined) {
-        var save_addother_click = $$('django_webix_filter.webixfilter_save_addanother').config.click
-        $$('django_webix_filter.webixfilter_save_addanother').config.click = function () {
+    if ($$('{{ form.webix_id }}_save_addanother') != undefined) {
+        var save_addother_click = $$('{{ form.webix_id }}_save_addanother').config.click
+        $$('{{ form.webix_id }}_save_addanother').config.click = function () {
             var query = $$('querybuilder');
             if (query !== undefined) {
                 var json_rules = $$('querybuilder').get_rules();
@@ -206,5 +206,9 @@ $$('main_toolbar_form').addView({
         }
     }
 }, $$('main_toolbar_form').getChildViews().length - 1)
+
+if($$("{{ view_prefix }}filter_status") != undefined){
+    $$("{{ view_prefix }}filter_status").hide();
+}
 {% endif %}
 {% endblock %}

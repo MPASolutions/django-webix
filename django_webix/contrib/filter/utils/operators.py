@@ -1,5 +1,6 @@
 import django
 from django.contrib.postgres import fields
+from django.utils.translation import gettext_lazy as _
 from django.db import models
 
 
@@ -145,15 +146,14 @@ matches = {
         "operators": ["isnull", 'exact', 'has_key', 'has_keys', 'has_any_keys', 'kesy']
     },
     fields.ArrayField: {
-        "operators": ['exact', 'contains', 'contained_by', 'isnull'],
+        "operators": ['exact', 'contains', 'contained_by', 'isnull', 'overlap'],
         # ['exact', 'iexact', 'gt', 'gte', 'lt', 'lte', 'in', 'contains', 'icontains', 'isnull', 'contained_by', 'len']
     }
 }
 
-
 matches[models.JSONField] = {
-        "operators": ["isnull", 'exact', 'has_key', 'has_keys', 'has_any_keys']
-    }
+    "operators": ["isnull", 'exact', 'has_key', 'has_keys', 'has_any_keys']
+}
 
 
 counter_operator = {
@@ -161,7 +161,8 @@ counter_operator = {
 }
 
 operators_override = {
-    'exact': {'label': '=='}, 'iexact': {}, 'gt': {'label': '>'}, 'gte': {'label': '>='}, 'lt': {'label': '<'}, 'lte': {'label': '<='}, 'contains': {}, 'icontains': {},
+    'exact': {'label': '=='}, 'iexact': {}, 'gt': {'label': '>'}, 'gte': {'label': '>='}, 'lt': {'label': '<'},
+    'lte': {'label': '<='}, 'contains': {}, 'icontains': {},
     'year': {}, 'month': {}, 'day': {}, 'week_day': {}, 'week': {}, 'hour': {}, 'minute': {}, 'second': {},
 
     'range': {'nb_inputs': 2},
@@ -174,4 +175,5 @@ operators_override = {
     'has_keys': {'multiple': True},
     'has_any_keys': {'multiple': True},
     'keys': {'multiple': True},
+    'overlap': {'multiple': True, 'label': _('Overlap')},
 }

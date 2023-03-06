@@ -598,10 +598,12 @@ webix.ui.jQueryQuerybuilder = webix.protoUI({
                                         }
                                     },
                                     onFocus: function(current_view, prev_view){
-                                        var suggest = $$(this.config.suggest)
-                                        suggest.show(this.getInputNode());
-                                        var l = suggest.getList();
-                                        l.load(suggest.config.body.dataFeed);
+                                        if(this.config.suggest != undefined && this.config.suggest != null) {
+                                            var suggest = $$(this.config.suggest)
+                                            suggest.show(this.getInputNode());
+                                            var l = suggest.getList();
+                                            l.load(l.config.dataFeed);
+                                        }
                                     }
                                 }
                             }
@@ -622,8 +624,8 @@ webix.ui.jQueryQuerybuilder = webix.protoUI({
                                     webix_field.regex = new RegExp('\^\\d+\(\\.\\d+\)\?\$');
                                 }
                             }
-
-                            if(operator_selected === 'in'){
+                            
+                            if(rule.operator.multiple === true){
                                 webix_field.suggest = {
                                     // selectAll: true,
                                     dynamic: true,
@@ -1067,10 +1069,12 @@ webix.ui.jQueryQuerybuilder = webix.protoUI({
                                         }
                                     },
                                     onFocus: function(current_view, prev_view){
-                                        var suggest = $$(this.config.suggest)
-                                        suggest.show(this.getInputNode());
-                                        var l = suggest.getList();
-                                        l.load(suggest.config.body.dataFeed);
+                                        if(this.config.suggest != undefined && this.config.suggest != null) {
+                                            var suggest = $$(this.config.suggest)
+                                            suggest.show(this.getInputNode());
+                                            var l = suggest.getList();
+                                            l.load(l.config.dataFeed);
+                                        }
                                     }
                                 }
                             }
@@ -1091,7 +1095,7 @@ webix.ui.jQueryQuerybuilder = webix.protoUI({
                                 }
                             }
 
-                            if(operator_selected === 'in'){
+                            if(rule.operator.multiple === true){
                                 webix_field.suggest = {
                                     // selectAll: true,
                                     dynamic: true,
@@ -1102,20 +1106,6 @@ webix.ui.jQueryQuerybuilder = webix.protoUI({
                                 };
                                 webix_field.separator = ";";
                                 container_input.webix_multicombo(webix_field);
-
-
-                                // webix_input = $$('value_' + ruleInput.attr("name"));
-                                // webix_input.getPopup().getList().clearAll();
-                                // // webix_input.getPopup().getList().parse([{'id': '11111', 'value': '1111'}]);
-                                // webix.ajax().get(query.suggestUrl.replace('field', rule.filter.id)).then(function (data) {
-                                //     var sugg = data.json();
-                                //     var suggestion = [];
-                                //     sugg['suggests'].forEach(function (a, index, array) {
-                                //         suggestion.push({'id': a, 'value':a});
-                                //     })
-                                //     webix_input.getPopup().getList().parse(suggestion);
-                                //     webix_input.refresh();
-                                // });
                             } else {
                                 if (rule.operator.type == 'exact') {
                                     // utilizzo il data feed
