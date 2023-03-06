@@ -142,7 +142,7 @@ WEBIX_SENDER = {
         'save_function': 'django_webix.contrib.sender.models.save_attachments'
     },
     'typology_model': {
-        'enabled': True,
+        #'enabled': True,
         'required': False
     },
     'recipients': [

@@ -1,8 +1,6 @@
-
 import json
-from decimal import Decimal
-
 import telegram
+from decimal import Decimal
 from django.apps import apps
 from django.conf import settings
 from django.contrib.auth import get_user_model
@@ -13,23 +11,22 @@ from django.db.models import Q, Sum, F, DecimalField, Case, When, IntegerField, 
 from django.db.models.functions import StrIndex, Substr, Concat, Cast
 from django.http import JsonResponse, Http404, HttpResponseForbidden
 from django.shortcuts import get_object_or_404
+from django.urls import reverse
 from django.utils import timezone
 from django.utils import translation
 from django.utils.decorators import method_decorator
+from django.utils.html import escapejs
+from django.utils.text import format_lazy
+from django.utils.translation import gettext_lazy as _
 from django.views.decorators.csrf import csrf_exempt
 from django.views.generic import View
 from telegram import Update
 from telegram.ext import Dispatcher
-from django.urls import reverse
 
-from django_webix.views import WebixTemplateView, WebixListView
-from django_webix.contrib.sender.models import MessageSent, MessageRecipient, MessageUserRead
+from django_webix.contrib.sender.models import (MessageSent, MessageRecipient, MessageUserRead, MessageRecipient)
 from django_webix.contrib.sender.send_methods.telegram.persistences import DatabaseTelegramPersistence
-from django_webix.contrib.sender.utils import send_mixin
-
-from django.utils.html import escapejs
-from django.utils.translation import gettext_lazy as _
-from django.utils.text import format_lazy
+from django_webix.contrib.sender.utils import send_mixin, my_import
+from django_webix.views import WebixTemplateView, WebixListView
 
 if apps.is_installed('django_webix.contrib.filter'):
     from django_webix.contrib.filter.models import WebixFilter
@@ -37,6 +34,32 @@ if apps.is_installed('django_webix.contrib.filter'):
 CONF = getattr(settings, "WEBIX_SENDER", None)
 
 User = get_user_model()
+
+
+@method_decorator(login_required, name='dispatch')
+class GetMessageUnreadView(WebixTemplateView):
+    """
+    Get first message unread
+    """
+    template_name = 'django_webix/sender/include/popup_message_read_required.js'
+    http_method_names = ['get', 'post']
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        get_messages_read_required = my_import(CONF['read_required'])
+        context['message_unread'] = get_messages_read_required(self.request).first()
+        return context
+
+    def post(self, request, *args, **kwargs):
+        get_messages_read_required = my_import(CONF['read_required'])
+        messages = get_messages_read_required(self.request)
+        message = messages.filter(id=request.POST.get('message_read_id', -1)).first()
+        if message:
+            MessageUserRead.objects.create(
+                user=self.request.user,
+                message_sent=message.message_sent
+            )
+        return super().get(request, *args, **kwargs)
 
 
 @method_decorator(login_required, name='dispatch')
@@ -277,7 +300,7 @@ class SenderMessagesListView(WebixListView):
                     escapejs(_("Attachments")))
             },
         ]
-        return super().get_fields(fields = _fields)
+        return super().get_fields(fields=_fields)
 
     url_pattern_list = 'dwsender.messages_list'
     add_permission = False
@@ -287,10 +310,15 @@ class SenderMessagesListView(WebixListView):
     enable_column_copy = False
     enable_row_click = False
     enable_json_loading = True
+    remove_disabled_buttons = True
 
     def get_url_list(self):
-        if self.kwargs.get("pk") is not None:
-            return reverse("dwsender.messages_list.typology", kwargs={"title": self.kwargs.get("title"), "pk": self.kwargs.get("pk")})
+        if self.kwargs.get("typologiesgroup_pk") is not None:
+            return reverse("dwsender.messages_list.typologiesgroup",
+                           kwargs={"typologiesgroup_pk": self.kwargs.get("typologiesgroup_pk")})
+        elif self.kwargs.get("typology_pk") is not None:
+                return reverse("dwsender.messages_list.typology",
+                               kwargs={"typology_pk": self.kwargs.get("typology_pk")})
         else:
             return reverse("dwsender.messages_list")
 
@@ -301,8 +329,6 @@ class SenderMessagesListView(WebixListView):
         qs = qs.filter(message_sent__status='sent')
 
         # Limit filter by user
-        if self.request.user.is_anonymous:
-            qs = qs.none()
         qset = Q()
 
         for recipient_config in CONF['recipients']:
@@ -335,11 +361,12 @@ class SenderMessagesListView(WebixListView):
         )
 
         # Filter message typology
-        if self.kwargs is not None and self.kwargs.get("pk") is not None:
-            types = self.kwargs.get("pk").split('-')
-            qs = qs.filter(message_sent__typology_id__in=types)
-            if self.kwargs.get("title") is not None:
-                self.title = self.kwargs.get("title")
+        if self.kwargs is not None and self.kwargs.get("typology_pk") is not None:
+            qs = qs.filter(message_sent__typology_id=self.kwargs.get("typology_pk"))
+
+        # Filter message typologiesgroup
+        if self.kwargs is not None and self.kwargs.get("typologiesgroup_pk") is not None:
+            qs = qs.filter(message_sent__typology__messagetypologiesgroup__id=self.kwargs.get("typologiesgroup_pk"))
 
         # Annotate attachments
         app_label, model = CONF['attachments']['model'].lower().split(".")
@@ -347,7 +374,8 @@ class SenderMessagesListView(WebixListView):
         qs = qs.annotate(
             attachments=StringAgg(
                 # 'message_sent__attachments__{}'.format(model_class.get_file_fieldpath()),
-                Cast('message_sent__attachments__pk', CharField()),  # provo a passare solo la PK che il resto lo fa la prossima view
+                Cast('message_sent__attachments__pk', CharField()),
+                # provo a passare solo la PK che il resto lo fa la prossima view
                 delimiter='|',
                 distinct=True,
                 output_field=CharField()
@@ -377,7 +405,8 @@ class CheckAttachmentView(View):
                     if file_field.name.split('.')[-1] == 'pdf' and getattr(settings, "WEBIX_LICENSE", None) == 'PRO' and \
                         (not 'pdf_preview' in CONF['attachments'] or CONF['attachments']['pdf_preview']):
                         is_pdf = True
-                    return JsonResponse({'exist': True, 'path': file_field.name, 'is_pdf': is_pdf, 'name':file_field.name.split('/')[-1].split('.')[0] }, safe=False)
+                    return JsonResponse({'exist': True, 'path': file_field.name, 'is_pdf': is_pdf,
+                                         'name': file_field.name.split('/')[-1].split('.')[0]}, safe=False)
 
         return JsonResponse({'exist': False}, safe=False)
 

@@ -27,11 +27,10 @@ if CONF is not None and \
 
     admin.site.register(MessageAttachment)
 
-if CONF is not None and \
-    CONF['typology_model']['enabled']:
-    from django_webix.contrib.sender.models import MessageTypology
-
-    admin.site.register(MessageTypology)
+#if CONF is not None and \
+#    CONF['typology_model']['enabled']:
+from django_webix.contrib.sender.models import MessageTypology
+admin.site.register(MessageTypology)
 
 
 class MessageRecipientInline(admin.TabularInline):
@@ -75,8 +74,8 @@ class MessageSentAdmin(admin.ModelAdmin):
         'send_method', 'subject', 'body', 'status', 'cost', 'invoiced', 'user', 'sender', 'extra', 'attachments',
         'creation_date', 'modification_date'
     ]
-    if CONF is not None and CONF['typology_model']['enabled']:
-        _fields.append('typology')
+    #if CONF is not None and CONF['typology_model']['enabled']:
+    _fields.append('typology')
 
     inlines = [MessageRecipientInline, MessageUserReadInline]
     list_display = (
