@@ -378,9 +378,10 @@ class MessageTypology(Model):
     Message typology model
     """
 
-    typology = models.CharField(max_length=255, unique=True, verbose_name=_('Typology'))
-    creation_date = models.DateTimeField(auto_now_add=True, verbose_name=_('Creation date'))
-    modification_date = models.DateTimeField(auto_now=True, verbose_name=_('Modification data'))
+    typology = models.CharField(_('Typology'), max_length=255, unique=True)
+    creation_date = models.DateTimeField(_('Creation date'), auto_now_add=True)
+    modification_date = models.DateTimeField(_('Modification data'), auto_now=True)
+    read_required = models.BooleanField(_('Read required'), blank=True, null=False, default=False)
 
     class Meta:
         verbose_name = _('Message typology')
@@ -394,6 +395,29 @@ class MessageTypology(Model):
         return "typology__icontains",
 
 
+class MessageTypologiesGroup(Model):
+    """
+    Message typologies group model
+    """
+
+    group_typologies = models.CharField(_('Group typologies'), max_length=255, unique=True)
+    icon = models.CharField(_('Icon'), max_length=255, help_text='ex. "fas fa-inbox-in"')
+    message_typologies = models.ManyToManyField(MessageTypology, verbose_name=_('Message typologies'))
+    creation_date = models.DateTimeField(_('Creation date'), auto_now_add=True)
+    modification_date = models.DateTimeField(_('Modification data'), auto_now=True)
+
+    class Meta:
+        verbose_name = _('Message typologies group')
+        verbose_name_plural = _('Message typologies groups')
+
+    def __str__(self):
+        return '{}'.format(self.group_typologies)
+
+    @staticmethod
+    def autocomplete_search_fields():
+        return "group_typologies__icontains",
+
+
 class MessageSent(Model):
     """
     Message sent model
@@ -402,7 +426,7 @@ class MessageSent(Model):
     typology = models.ForeignKey(MessageTypology,
                                      blank=True,
                                      null=True,
-                                     on_delete=models.CASCADE,
+                                     on_delete=models.SET_NULL,
                                      verbose_name=_('Typology')
                                      )
     send_method = models.CharField(max_length=255, verbose_name=_('Send method'))

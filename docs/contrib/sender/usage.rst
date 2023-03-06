@@ -129,7 +129,7 @@ Create the models (e.g. <app_name>/models.py)
             'save_function': 'django_webix.contrib.sender.models.save_attachments'
         },
         'typology_model': {
-            'enabled': True,
+            #'enabled': True,
             'required': False
         },
         'recipients': [
