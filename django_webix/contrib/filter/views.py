@@ -5,8 +5,9 @@ from django.db.models.fields.reverse_related import ForeignObjectRel
 from django.http import JsonResponse
 from django.urls import reverse
 from django.views import View
-from django.db.models import Case, When, Value, CharField
+from django.db.models import Case, When, Value, CharField, Func, F
 from django.contrib.contenttypes.fields import GenericRelation, GenericForeignKey
+from django.contrib.postgres.fields import ArrayField
 from django.utils.encoding import force_str
 
 from django_webix.views import (
@@ -25,6 +26,7 @@ from django_webix.contrib.filter.utils.config import _get_config_new, get_limit_
 from django.utils.html import escapejs
 from django.utils.translation import gettext_lazy as _
 from django.utils.text import format_lazy
+
 
 class DjangoWebixFilterView(TemplateView):
     template_name = "django_webix/filter/filters.js"
@@ -164,29 +166,44 @@ class FilterSuggestExact(View):
 
         if len(names) == 3:
             try:
-                suggest = []
                 model_class = apps.get_model(app_label=names[0], model_name=names[1])
                 qs = model_class.objects.all()
+                field_name = names[2]
 
-                if filter_value is not None and filter_value != '':
-                    qs = qs.filter(**{names[2] + '__icontains': filter_value})
+                if isinstance(model_class._meta.get_field(field_name), ArrayField):
+                    qs = qs.annotate(
+                        dw_filter_unpacked_field=Func(F(field_name), function='unnest')
+                    )
+                    field_name = 'dw_filter_unpacked_field'
+                    suggest = [{field_name: str(x[field_name])} for x in qs.values(field_name).distinct()]
+
+                    if filter_value is not None and filter_value != '':
+                        suggest = list(filter(lambda x: filter_value in x[field_name], suggest))
+
+                    if limit is not None and limit.isnumeric():
+                        limit = int(limit)
+                        suggest = list(suggest[:limit])
+
+                else:
+                    if filter_value is not None and filter_value != '':
+                        qs = qs.filter(**{field_name + '__icontains': filter_value})
+
+                    if display_field is not None and display_field != '':
+                        qs = qs.values(field_name, display_field)
+                    else:
+                        qs = qs.values(field_name)
+
+                    qs = qs.distinct()
+                    if limit is not None and limit.isnumeric():
+                        limit = int(limit)
+                        suggest = list(qs[:limit])
+                    else:
+                        suggest = list(qs)
 
                 if display_field is not None and display_field != '':
-                    qs = qs.values(names[2], display_field)
+                    suggest = [{'id': x[field_name], 'value': x[display_field]} for x in suggest]
                 else:
-                    qs = qs.values(names[2])
-
-                qs = qs.distinct()
-                if limit is not None and limit.isnumeric():
-                    limit = int(limit)
-                    suggest = list(qs[:limit])
-                else:
-                    suggest = list(qs)
-
-                if display_field is not None and display_field != '':
-                    suggest = [{'id': x[names[2]], 'value': x[display_field]} for x in suggest]
-                else:
-                    suggest = [{'id': x[names[2]], 'value': x[names[2]]} for x in suggest]
+                    suggest = [{'id': x[field_name], 'value': x[field_name]} for x in suggest]
 
                 return JsonResponse(suggest, safe=False)
             except:
@@ -275,9 +292,9 @@ class WebixFilterList(WebixFilterMixin, ListView):
             )
         return context
 
-#    def get_objects_datatable(self):
-#        qs = super().get_objects_datatable()
-#        raise Exception(str(qs.query))
+    # def get_objects_datatable(self):
+    #     qs = super().get_objects_datatable()
+    #     raise Exception(str(qs.query))
 
     def get_initial_queryset(self):
         qs = super().get_initial_queryset()
@@ -315,7 +332,7 @@ class WebixFilterList(WebixFilterMixin, ListView):
 
         return _url_create
 
-    def get_fields(self):
+    def get_fields(self, fields=None):
         _fields = [
             {
                 'field_name': 'title',
@@ -488,6 +505,16 @@ class WebixFilterUpdate(WebixFilterMixin, UpdateView):
 
 class WebixFilterDelete(WebixFilterMixin, DeleteView):
     model = WebixFilter
+
+    def get_url_list(self):
+        if self.is_popup() and self.object is not None:
+            app_label, module_name = self.object.model.split('.')
+            return self.wrap_url_popup(reverse('dwfilter.webixfilter.list_model', kwargs={
+                'app_label': app_label,
+                'model_name': module_name
+            }))
+        else:
+            return super().get_url_list()
 
     def get_failure_delete_related_objects(self, request, obj=None):
         INSTANCES = []

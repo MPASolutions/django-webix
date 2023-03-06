@@ -25,7 +25,24 @@
                 resize: true,
                 position: "center",
                 head: {
-                    view: "toolbar", cols: [
+                    view: "toolbar",
+                    cols: [
+                        {
+                            id: "{{ view_prefix }}filter_status",
+                            view: "switch",
+                            onLabel: "{{_("No")|escapejs}}",
+                            offLabel: "{{_("Yes")|escapejs}}",
+                            labelWidth: 120,
+                            value: 0,
+                            width: 180,
+                            label: "{{_("Show active only")|escapejs}}",
+                            on:{
+                                onChange: function(newValue, oldValue, config){
+                                    $$('{{ view_prefix }}datatable').filterByAll();
+                                    $('input[name="{{ view_prefix }}master_checkbox"]').hide();
+                                }
+                            }
+                        },
                         {view: "label", label: "<b>{{_("Advanced filters")|escapejs}}</b>", type: "header", css: {'text-align': 'center'}},
                         {% block toolbar %}
                         {
@@ -258,4 +275,27 @@
             }
         {% endif %}
     }
+
+
+    {% if is_popup %}
+    $$('{{ view_prefix }}datatable').registerFilter(
+        $$("{{ view_prefix }}filter_status"),
+        {
+            columnId: "checkbox_action"
+        },
+        {
+            getValue:function(view){
+              return view.getValue();
+            },
+            setValue:function(view, value){
+              view.setValue(value)
+            }
+        }
+    );
+    $('input[name="{{ view_prefix }}master_checkbox"]').hide();
+    if($$("{{ view_prefix }}filter_status") != undefined){
+        $$("{{ view_prefix }}filter_status").show();
+    }
+    {% endif %}
+
 {% endblock %}

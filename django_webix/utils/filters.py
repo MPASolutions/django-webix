@@ -77,7 +77,7 @@ def from_dict_to_qset(data, model):
                             pass  # there are no others field
 
                 # its an array so put in into array
-                if ArrayField and isinstance(_curr_field, ArrayField):
+                if ArrayField and isinstance(_curr_field, ArrayField) and not isinstance(data_qset['val'], list):
                     data_qset['val'] = [data_qset.get('val')]
 
                 if data_qset.get('path').endswith("__range"):
