@@ -439,10 +439,10 @@ class ModelWebixAdmin(ModelWebixAdminPermissionsMixin):
                         return '{}_{}_'.format(self.model._meta.app_label,
                                                self.model._meta.model_name)
 
-                url_pattern_list = 'dwadmin:' + _admin.get_url_pattern_list()
-                url_pattern_create = 'dwadmin:' + _admin.get_url_pattern_create()
-                url_pattern_update = 'dwadmin:' + _admin.get_url_pattern_update()
-                url_pattern_delete = 'dwadmin:' + _admin.get_url_pattern_delete()
+                url_pattern_list = '{}:{}'.format(self.admin_site.urls_namespace, _admin.get_url_pattern_list())
+                url_pattern_create = '{}:{}'.format(self.admin_site.urls_namespace, _admin.get_url_pattern_create())
+                url_pattern_update = '{}:{}'.format(self.admin_site.urls_namespace, _admin.get_url_pattern_update())
+                url_pattern_delete = '{}:{}'.format(self.admin_site.urls_namespace, _admin.get_url_pattern_delete())
 
                 model = _admin.model
 
@@ -594,10 +594,10 @@ class ModelWebixAdmin(ModelWebixAdminPermissionsMixin):
                         return '{}_{}_'.format(self.model._meta.app_label,
                                                self.model._meta.model_name)
 
-                url_pattern_list = 'dwadmin:' + _admin.get_url_pattern_list()
-                url_pattern_create = 'dwadmin:' + _admin.get_url_pattern_create()
-                url_pattern_update = 'dwadmin:' + _admin.get_url_pattern_update()
-                url_pattern_delete = 'dwadmin:' + _admin.get_url_pattern_delete()
+                url_pattern_list = '{}:{}'.format(self.admin_site.urls_namespace, _admin.get_url_pattern_list())
+                url_pattern_create = '{}:{}'.format(self.admin_site.urls_namespace, _admin.get_url_pattern_create())
+                url_pattern_update = '{}:{}'.format(self.admin_site.urls_namespace, _admin.get_url_pattern_update())
+                url_pattern_delete = '{}:{}'.format(self.admin_site.urls_namespace, _admin.get_url_pattern_delete())
 
                 model = _admin.model
 
@@ -752,10 +752,10 @@ class ModelWebixAdmin(ModelWebixAdminPermissionsMixin):
                         return '{}_{}_'.format(self.model._meta.app_label,
                                                self.model._meta.model_name)
 
-                url_pattern_list = 'dwadmin:' + _admin.get_url_pattern_list()
-                url_pattern_create = 'dwadmin:' + _admin.get_url_pattern_create()
-                url_pattern_update = 'dwadmin:' + _admin.get_url_pattern_update()
-                url_pattern_delete = 'dwadmin:' + _admin.get_url_pattern_delete()
+                url_pattern_list =   '{}:{}'.format(self.admin_site.urls_namespace, _admin.get_url_pattern_list())
+                url_pattern_create = '{}:{}'.format(self.admin_site.urls_namespace, _admin.get_url_pattern_create())
+                url_pattern_update = '{}:{}'.format(self.admin_site.urls_namespace, _admin.get_url_pattern_update())
+                url_pattern_delete = '{}:{}'.format(self.admin_site.urls_namespace, _admin.get_url_pattern_delete())
 
                 add_permission = _admin.add_permission
                 change_permission = _admin.change_permission
@@ -864,10 +864,10 @@ class ModelWebixAdmin(ModelWebixAdminPermissionsMixin):
                         return '{}_{}_'.format(self.model._meta.app_label,
                                                self.model._meta.model_name)
 
-                url_pattern_list = 'dwadmin:' + _admin.get_url_pattern_list()
-                url_pattern_create = 'dwadmin:' + _admin.get_url_pattern_create()
-                url_pattern_update = 'dwadmin:' + _admin.get_url_pattern_update()
-                url_pattern_delete = 'dwadmin:' + _admin.get_url_pattern_delete()
+                url_pattern_list =   '{}:{}'.format(self.admin_site.urls_namespace, _admin.get_url_pattern_list())
+                url_pattern_create = '{}:{}'.format(self.admin_site.urls_namespace, _admin.get_url_pattern_create())
+                url_pattern_update = '{}:{}'.format(self.admin_site.urls_namespace, _admin.get_url_pattern_update())
+                url_pattern_delete = '{}:{}'.format(self.admin_site.urls_namespace, _admin.get_url_pattern_delete())
 
                 adjust_row_height = False
 
