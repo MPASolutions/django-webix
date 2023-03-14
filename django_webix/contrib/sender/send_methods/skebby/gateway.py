@@ -417,7 +417,7 @@ class Skebby:
                 obj = json.loads(response)
                 return obj
 
-        def send_parametric_sms(self, message_type: SkebbyMessageType, message, recipient, sender="",
+        def send_parametric_sms(self, message_type: SkebbyMessageType, message, recipients, sender="",
                                 scheduled_delivery_time=None, scheduled_delivery_timezone=None, order_id=None,
                                 return_credits=SkebbyBoolean.FALSE, return_remaining=SkebbyBoolean.FALSE,
                                 allow_invalid_recipients=SkebbyBoolean.FALSE, encoding=SkebbyEncoding.GSM,
@@ -453,15 +453,13 @@ class Skebby:
             Aliases can be used only with high-quality message types.
             """
 
-            if recipient is None:
-                recipient = {}
-            if not isinstance(recipient, dict):
-                recipient = {"0": recipient}
+            if recipients is None:
+                recipients = {}
 
             payload = {
                 "message_type": message_type.name,
                 "message": message,
-                "recipient": recipient,
+                "recipients": recipients,
             }
 
             if sender is not None: payload["sender"] = sender
