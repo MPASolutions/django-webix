@@ -23,7 +23,9 @@ from django.views.generic import View
 from telegram import Update
 from telegram.ext import Dispatcher
 
-from django_webix.contrib.sender.models import (MessageSent, MessageRecipient, MessageUserRead, MessageRecipient)
+from django_webix.contrib.sender.models import (
+    MessageSent, MessageRecipient, MessageUserRead, MessageRecipient, MessageTypologiesGroup, MessageTypology
+)
 from django_webix.contrib.sender.send_methods.telegram.persistences import DatabaseTelegramPersistence
 from django_webix.contrib.sender.utils import send_mixin, my_import
 from django_webix.views import WebixTemplateView, WebixListView
@@ -321,6 +323,17 @@ class SenderMessagesListView(WebixListView):
                                kwargs={"typology_pk": self.kwargs.get("typology_pk")})
         else:
             return reverse("dwsender.messages_list")
+
+    def get_title(self):
+        if self.kwargs.get("typologiesgroup_pk") is not None:
+            message_typ_group = MessageTypologiesGroup.objects.filter(pk=self.kwargs.get("typologiesgroup_pk")).first()
+            if message_typ_group is not None:
+                return message_typ_group.group_typologies
+        elif self.kwargs.get("typology_pk") is not None:
+            message_typ = MessageTypology.objects.filter(pk=self.kwargs.get("typology_pk")).first()
+            if message_typ is not None:
+                return message_typ.typology
+        return super().get_title()
 
     def get_initial_queryset(self):
         qs = super().get_initial_queryset()
