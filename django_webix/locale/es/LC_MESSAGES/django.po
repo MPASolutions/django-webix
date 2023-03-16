@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-02-24 08:51+0100\n"
+"POT-Creation-Date: 2023-03-16 08:47+0100\n"
 "PO-Revision-Date: 2022-11-09 11:44+0050\n"
 "Last-Translator: Sambado Paolo CBC Spagna <>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -98,31 +98,31 @@ msgstr "Eliminar filtro Geográfico"
 msgid "Advanced filter"
 msgstr "Filtro avanzado"
 
-#: templates/django_webix/generic/list.js:157
-#: templates/django_webix/generic/list.js:244
+#: templates/django_webix/generic/list.js:158
+#: templates/django_webix/generic/list.js:249
 #: templates/django_webix/include/actions_list.js:8
 #: templates/django_webix/include/toolbar_navigation.js:47
 msgid "Go to map"
 msgstr "Mostrar en el mapa"
 
-#: templates/django_webix/generic/list.js:159
+#: templates/django_webix/generic/list.js:160
 #: templates/django_webix/include/toolbar_navigation.js:43
 msgid "Geometry does not exist"
 msgstr "La geometría no existe"
 
-#: templates/django_webix/generic/list.js:257
+#: templates/django_webix/generic/list.js:262
 msgid "Remove filters"
 msgstr "Quitar filtros"
 
-#: templates/django_webix/generic/list.js:258
+#: templates/django_webix/generic/list.js:263
 msgid "Apply filters"
 msgstr "Aplica los filtros aplicados"
 
-#: templates/django_webix/generic/list.js:258
+#: templates/django_webix/generic/list.js:263
 msgid "Filter"
 msgstr "Filtrar"
 
-#: templates/django_webix/generic/list.js:496
+#: templates/django_webix/generic/list.js:501
 msgid "Double click to edit the element"
 msgstr "Doble clic para editar el elemento"
 

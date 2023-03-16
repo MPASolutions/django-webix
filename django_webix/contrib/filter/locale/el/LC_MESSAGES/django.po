@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-01-27 09:10+0100\n"
+"POT-Creation-Date: 2023-03-16 08:47+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -30,15 +30,15 @@ msgstr ""
 msgid "Update date"
 msgstr ""
 
-#: contrib/filter/models.py:18 contrib/filter/views.py:329
+#: contrib/filter/models.py:18 contrib/filter/views.py:346
 msgid "Title"
 msgstr ""
 
-#: contrib/filter/models.py:19 contrib/filter/views.py:340
+#: contrib/filter/models.py:19 contrib/filter/views.py:357
 msgid "Description"
 msgstr ""
 
-#: contrib/filter/models.py:20 contrib/filter/views.py:351
+#: contrib/filter/models.py:20 contrib/filter/views.py:368
 msgid "Model"
 msgstr ""
 
@@ -107,43 +107,59 @@ msgstr ""
 msgid "Apply temporary filter"
 msgstr ""
 
-#: contrib/filter/templates/django_webix/filter/list.js:29
-msgid "Advanced filters"
+#: contrib/filter/templates/django_webix/filter/list.js:33
+msgid "No"
+msgstr ""
+
+#: contrib/filter/templates/django_webix/filter/list.js:34
+msgid "Yes"
+msgstr ""
+
+#: contrib/filter/templates/django_webix/filter/list.js:38
+msgid "Show active only"
 msgstr ""
 
 #: contrib/filter/templates/django_webix/filter/list.js:46
+msgid "Advanced filters"
+msgstr ""
+
+#: contrib/filter/templates/django_webix/filter/list.js:63
 msgid "Close"
 msgstr ""
 
-#: contrib/filter/templates/django_webix/filter/list.js:83
+#: contrib/filter/templates/django_webix/filter/list.js:100
 msgid "Create new filter"
 msgstr ""
 
-#: contrib/filter/templates/django_webix/filter/list.js:152
+#: contrib/filter/templates/django_webix/filter/list.js:169
 msgid "Configuration error"
 msgstr ""
 
-#: contrib/filter/templates/django_webix/filter/list.js:153
+#: contrib/filter/templates/django_webix/filter/list.js:170
 msgid ""
 "ATTENTION: there is a filter application configuration error. Contact "
 "administrators."
 msgstr ""
 
-#: contrib/filter/templates/django_webix/filter/list.js:176
-#: contrib/filter/templates/django_webix/filter/list.js:219
+#: contrib/filter/templates/django_webix/filter/list.js:193
+#: contrib/filter/templates/django_webix/filter/list.js:236
 msgid "Change temporary filter"
 msgstr ""
 
-#: contrib/filter/templates/django_webix/filter/list.js:188
-#: contrib/filter/templates/django_webix/filter/list.js:232
+#: contrib/filter/templates/django_webix/filter/list.js:205
+#: contrib/filter/templates/django_webix/filter/list.js:249
 msgid "Invalid filter"
 msgstr ""
 
-#: contrib/filter/templates/django_webix/filter/list.js:197
-#: contrib/filter/templates/django_webix/filter/list.js:241
+#: contrib/filter/templates/django_webix/filter/list.js:214
+#: contrib/filter/templates/django_webix/filter/list.js:258
 msgid "Disable temporary filter"
 msgstr ""
 
-#: contrib/filter/views.py:362
+#: contrib/filter/utils/operators.py:178
+msgid "Overlap"
+msgstr ""
+
+#: contrib/filter/views.py:379
 msgid "Visibility"
 msgstr ""
