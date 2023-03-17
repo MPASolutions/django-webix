@@ -61,7 +61,10 @@
                 if (!result) {
                     errors = [];
                     for (var item in value) {
-                        errors.push({"label":item.toTitle(), "error":"{{_("Empty or incorrect value")|escapejs}}"});
+                        errors.push({
+                            "label": $$('{{ form.webix_id }}').elements[item].config.label,
+                            "error": "{{ _("Empty or incorrect value")|escapejs }}"
+                        });
                     };
                     show_errors(errors);
                 }
