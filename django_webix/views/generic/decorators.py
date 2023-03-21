@@ -1,7 +1,10 @@
 import json
 
+from django.apps import apps
 from django.http import JsonResponse, QueryDict
 from django.utils.translation import gettext_lazy as _
+
+from django_webix.views import WebixTemplateView
 
 
 def action_config(
@@ -17,7 +20,8 @@ def action_config(
     form=None,
     reload_list=True,
     maximum_count=None,
-    ):  # TODO: permission check before execution
+    template_view=None
+):  # TODO: permission check before execution
     """
     Decorator to configure action on list
 
@@ -60,6 +64,9 @@ def action_config(
     if response_type not in ['json', 'script', 'blank']:
         raise Exception('No valid response_type [json,script,blank]')
 
+    if template_view is not None and not issubclass(template_view, WebixTemplateView):
+        raise Exception("No valid template_view class, it must be subclass of WebixTemplateView")
+
     def decorator(func):
         def wrapper(self, request, qs):
             if maximum_count is not None and qs.only(qs.model._meta.pk.name).count() > maximum_count:
@@ -68,47 +75,66 @@ def action_config(
                     'errors': [_('You can perform this action on a maximum of {} raws').format(maximum_count)]
                 }, status=400)
 
-            if form is not None:
-                if request.method == 'POST':
-                    try:
-                        params = QueryDict(mutable=True)
-                        params.update(json.loads(request.POST.get('params', '{}')))
-                    except json.JSONDecodeError:
-                        params = QueryDict()
-                    _form = form(params, request.FILES, request=request)
-                    if _form.is_valid():
-                        # log execute action
+            if template_view is not None and request.method == 'POST' and request.POST.get('template_view'):
+                request.method = 'GET'  # convert request from POST to GET
+
+                def get_context_data_webix_base(self, request, **kwargs):
+                   context = super(template_view, self).get_context_data_webix_base(request, **kwargs)
+                   context['action_key'] = action_key
+                   context['webix_container_id'] = f'{action_key}_win_body'
+                   return context
+
+                template_view.get_context_data_webix_base = get_context_data_webix_base
+
+                return template_view.as_view()(request, queryset=qs, action_key=action_key)
+            elif form is not None and request.method == 'POST':
+                try:
+                    params = QueryDict(mutable=True)
+                    params.update(json.loads(request.POST.get('params', '{}')))
+                except json.JSONDecodeError:
+                    params = QueryDict()
+
+                _form = form(params, request.FILES, request=request)
+                if _form.is_valid():
+                    anonymous = request.user.is_anonymous() if callable(request.user.is_anonymous) else \
+                        request.user.is_anonymous
+                    if not anonymous and apps.is_installed('django.contrib.admin'):
                         from django.contrib.admin.models import LogEntry, CHANGE
                         from django.contrib.contenttypes.models import ContentType
                         LogEntry.objects.log_action(
                             user_id=request.user.pk,
                             content_type_id=ContentType.objects.get_for_model(qs.model).pk,
-                            object_id=None, # on a QS
-                            object_repr=','.join([str(i) for i in qs.values_list('id',flat=True)]),
+                            object_id=None,  # on a QS
+                            object_repr=','.join([str(i) for i in qs.values_list('id', flat=True)]),
                             action_flag=CHANGE,
-                            change_message=_('Action success: {} data:{}').format(wrapper.short_description,
-                                                                               _form.cleaned_data)
+                            change_message=_('Action success: {} data:{}').format(
+                                wrapper.short_description,
+                                _form.cleaned_data
                             )
-                        return func(self, request, qs, _form)
-                    else:
-                        return JsonResponse({
-                            'status': False,
-                            'errors': [{"label": None, "error": error} for error in _form.non_field_errors()] +
-                                      [{"label": field.label, "error": error}
-                                       for field in _form for error in field.errors]
-                        }, status=400)
+                        )
+
+                    return func(self, request, qs, _form)
+                else:
+                    return JsonResponse({
+                        'status': False,
+                        'errors': [{"label": None, "error": error} for error in _form.non_field_errors()] +
+                                  [{"label": field.label, "error": error}
+                                   for field in _form for error in field.errors]
+                    }, status=400)
             else:
-                # log execute action
-                from django.contrib.admin.models import LogEntry, CHANGE
-                from django.contrib.contenttypes.models import ContentType
-                LogEntry.objects.log_action(
-                    user_id=request.user.pk,
-                    content_type_id=ContentType.objects.get_for_model(qs.model).pk,
-                    object_id=None,  # on a QS
-                    object_repr=','.join([str(i) for i in qs.values_list('id', flat=True)]),
-                    action_flag=CHANGE,
-                    change_message=_('Action success: {}').format(wrapper.short_description)
-                )
+                anonymous = request.user.is_anonymous() if callable(request.user.is_anonymous) else \
+                    request.user.is_anonymous
+                if not anonymous and apps.is_installed('django.contrib.admin'):
+                    from django.contrib.admin.models import LogEntry, CHANGE
+                    from django.contrib.contenttypes.models import ContentType
+                    LogEntry.objects.log_action(
+                        user_id=request.user.pk,
+                        content_type_id=ContentType.objects.get_for_model(qs.model).pk,
+                        object_id=None,  # on a QS
+                        object_repr=','.join([str(i) for i in qs.values_list('id', flat=True)]),
+                        action_flag=CHANGE,
+                        change_message=_('Action success: {}').format(wrapper.short_description)
+                    )
 
             return func(self, request, qs)
 
@@ -124,6 +150,7 @@ def action_config(
         setattr(wrapper, 'form', form)
         setattr(wrapper, 'reload_list', reload_list)
         setattr(wrapper, 'maximum_count', maximum_count)
+        setattr(wrapper, 'template_view', template_view)
 
         return wrapper
 

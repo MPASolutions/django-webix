@@ -61,6 +61,10 @@ class WebixDeleteView(WebixBaseMixin, WebixPermissionsMixin, WebixUrlMixin, Dele
         context.update({
             'related_objects': json.dumps(tree_formatter(collector.nested())),
         })
+        context['related_summary'] = [{
+            'model_name': str(k._meta.verbose_name_plural),
+            'count': len(collector.data[k])
+        } for k in collector.data.keys()]
 
         return context
 

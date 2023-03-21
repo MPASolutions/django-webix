@@ -32,6 +32,10 @@ except ImportError:
 
 
 def get_action_dict(request, action):
+    form = action.form(request=request) if hasattr(action, 'form') and action.form is not None else None
+    template_view = action.template_view if hasattr(action, 'template_view') and \
+                                            action.template_view is not None else None
+
     return {
         'func': action,
         'action_key': action.action_key,
@@ -43,9 +47,9 @@ def get_action_dict(request, action):
         'modal_click': action.modal_click,
         'modal_ok': action.modal_ok,
         'modal_cancel': action.modal_cancel,
-        'form': getattr(action, 'form')(request=request) if hasattr(action,
-                                                                    'form') and action.form is not None else None,
+        'form': form,
         'reload_list': getattr(action, 'reload_list', True),
+        'template_view': template_view
     }
 
 
@@ -501,7 +505,6 @@ class WebixListView(WebixBaseMixin,
                 model = _list_view.model
                 fields = _list_view.get_fields_editable()
         return UpdateForm
-
 
     def get_update_view(self, request, *args, **kwargs):
         kwargs.update({'pk':request.GET.get('id',request.POST.get('id'))})
