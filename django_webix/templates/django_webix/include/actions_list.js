@@ -92,6 +92,103 @@ function _{{ action_key }}_action_execute_form(ids, all) {
 }
 
     {% endif %}
+
+    {% if action.template_view %}
+      function _{{ action_key }}_action_execute_template_view(ids, all) {
+          var templateViewWindow = webix.ui({
+              view: "window",
+              id: "{{ action_key }}_win",
+              width: 550,
+              maxHeigth: 600,
+              scrool: 'y',
+              position: "center",
+              modal: true,
+              move: true,
+              resize: true,
+              head: {
+                  view: "toolbar", cols: [
+                      {view: "label", label: '{{ action.short_description|escapejs }}'},
+                  ]
+              },
+              body: {
+                  rows: [
+                      {
+                          id: "{{ action_key }}_win_body",
+                          rows: []
+                      },
+                      {
+                          view: "toolbar",
+                          id: "{{ action_key }}_footer",
+                          cols: [
+                              {
+                                  view: "button",
+                                  id: "{{ action_key }}_modal_cancel",
+                                  label: '{{ action.modal_cancel }}',
+                                  width: 100,
+                                  align: 'right',
+                                  click: function () {
+                                      $$('{{ action_key }}_win').destructor();
+                                  }
+                              },
+                              {},
+                              {
+                                  view: "button",
+                                  id: "{{ action_key }}_modal_ok",
+                                  label: '{{ action.modal_ok }}',
+                                  width: 100,
+                                  align: 'right',
+                                  click: function () {
+                                      $$('{{ action_key }}_win').destructor();
+                                      {% if action.form %}
+                                        _{{ action_key }}_action_execute_form(ids, all);
+                                      {% else %}
+                                          _{{ view_prefix }}action_execute(
+                                              '{{ action_key }}',
+                                              ids,
+                                              all,
+                                              '{{ action.response_type }}',
+                                              '{{ action.short_description }}',
+                                              '{{ action.modal_title }}',
+                                              '{{ action.modal_ok }}',
+                                              '{{ action.modal_cancel }}'
+                                          );
+                                      {% endif %}
+                                  }
+                              }
+                          ]
+                      }
+                  ]
+              }
+          })
+
+          $$('{{ view_prefix }}datatable').showOverlay("<img src='{% static 'django_webix/loading.gif' %}'>");
+          var _params = $.extend({}, webixAppliedFilters['{{ model|getattr:'_meta'|getattr:'app_label'}}.{{ model|getattr:'_meta'|getattr:'model_name'}}']);
+          _params['action'] = '{{ action_key }}';
+          _params['csrfmiddlewaretoken'] = getCookie('csrftoken');
+          _params['template_view'] = true;
+          if (all === false) {
+              _params['ids'] = ids.join(',');
+          }
+          $.ajax({
+              url: "{{ url_list|safe }}",
+              type: "POST",
+              dataType: 'script',
+              data: _params,
+              error: function (jqXHR, textStatus, errorThrown) {
+                  webix.message({
+                      text: "{{ _("Action is not executable")|escapejs }}",
+                      type: "error",
+                      expire: 10000
+                  });
+                  $$('{{ view_prefix }}datatable').hideOverlay();
+              },
+              success: function (data) {
+                  $$('{{ view_prefix }}datatable').hideOverlay();
+                  templateViewWindow.show();
+              }
+          });
+      }
+    {% endif %}
 {% endfor %}
 
 
@@ -105,10 +202,12 @@ function {{ view_prefix }}actions_execute(action, ids, all) {
     }
     {% endfor %}
     {% for action_key, action in actions.items %} if (action=='{{ action_key }}') {
-        {% if action.form %}
-        _{{ action_key }}_action_execute_form(ids,all);
+        {% if action.template_view %}
+            _{{ action_key }}_action_execute_template_view(ids,all);
+        {% elif action.form %}
+            _{{ action_key }}_action_execute_form(ids,all);
         {% else %}
-        _{{ view_prefix }}action_execute(
+            _{{ view_prefix }}action_execute(
                 '{{ action_key }}',
                 ids,
                 all,
@@ -117,7 +216,7 @@ function {{ view_prefix }}actions_execute(action, ids, all) {
                 '{{ action.modal_title }}',
                 '{{ action.modal_ok }}',
                 '{{ action.modal_cancel }}'
-        );
+            );
         {% endif %}
     } {% if not forloop.last %} else {% endif %}
 

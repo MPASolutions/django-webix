@@ -1,22 +1,51 @@
-
-import os
 import io
-import sys
+import json
+import os
 import zipfile
-import mimetypes
 from wsgiref.util import FileWrapper
+
 from django.db import models
 from django.http import JsonResponse, HttpResponse
 from django.utils.translation import gettext_lazy as _
 
+from django_webix.views import WebixTemplateView
 from django_webix.views.generic.decorators import action_config
+from django_webix.views.generic.utils import NestedObjectsWithLimit, tree_formatter
+
+
+class DeleteRelatedObjectsView(WebixTemplateView):
+    template_name = 'django_webix/include/action_deleterelatedobjects.js'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        queryset = kwargs.get('queryset')
+
+        # Check failure delete related objects
+        failure_delete_related_objects = []
+        model_related_objects = getattr(queryset.model, 'get_failure_delete_related_objects', None)
+        if model_related_objects is not None:
+            for item in queryset:
+                failure_delete_related_objects += model_related_objects(request=self.request, obj=item)
+        context['failure_delete_related_objects'] = failure_delete_related_objects
+
+        # Collect related objects
+        collector = NestedObjectsWithLimit(using='default')
+        collector.collect(queryset)
+        context['related_objects'] = json.dumps(tree_formatter(collector.nested()))
+        context['related_summary'] = [{
+            'model_name': str(k._meta.verbose_name_plural),
+            'count': len(collector.data[k])
+        } for k in collector.data.keys()]
+
+        return context
 
 
 @action_config(action_key='delete',
                response_type='json',
                short_description=_('Delete'),
                allowed_permissions=['delete'],
-               reload_list=True)
+               reload_list=True,
+               template_view=DeleteRelatedObjectsView)
 def multiple_delete_action(self, request, qs):
     _count_delete_instances = int(qs.only(qs.model._meta.pk.name).count())
     qs.delete()

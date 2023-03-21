@@ -1,4 +1,3 @@
-
 from django.apps import apps
 from django.core.exceptions import ImproperlyConfigured, ValidationError
 from django.core.exceptions import PermissionDenied
