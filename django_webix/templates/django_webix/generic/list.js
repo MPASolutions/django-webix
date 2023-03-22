@@ -23,6 +23,7 @@ $$("{{ webix_container_id }}").addView({
     id: '{{ view_prefix }}main_toolbar_navigation',
     view: "toolbar",
     margin: 5,
+    //autoheight:true, // to remove!!!
     cols: [
         {
             id: '{{ view_prefix }}filter',
@@ -260,7 +261,8 @@ if (
                     {% if is_json_loading %}
                     header: [
                         { text: '<div class="webix_view webix_control webix_el_button webix_secondary"><div title="{{_("Remove filters") }}" class="webix_el_box"><button id="button_filter_datatable" type="button" class="webix_button webix_img_btn" style="line-height:24px;" onclick="{{ view_prefix }}remove_filters(\'{{ model_name }}\');"><span class="webix_icon fas fa-undo"></span></button></div></div>', colspan: 2},
-                        { text: '<div class="webix_view webix_control webix_el_button webix_secondary"><div title="{{_("Apply filters") }}" class="webix_el_box"><button id="button_filter_datatable" type="button" class="webix_button webix_img_btn" style="line-height:24px;" onclick="{{ view_prefix }}apply_filters(\'{{ model_name }}\');">{{_("Filter") }}</button></div></div>', colspan: 2}
+                        { text: '<div class="webix_view webix_control webix_el_button webix_secondary"><div title="{{_("Apply filters") }}" class="webix_el_box"><button id="button_filter_datatable" type="button" class="webix_button webix_img_btn" style="line-height:24px;" onclick="{{ view_prefix }}apply_filters(\'{{ model_name }}\');">{{_("Filter") }}</button></div></div>', colspan: 2},
+                        {% if header_rows > 2 %}{ text:"", rowspan: {{header_rows|add:-2}} , colspan: 2}{% endif %}
                     ],
                     {% else %}
                     header: "",
@@ -415,7 +417,7 @@ if (
                     {% block datatable_onitemdoubleclick %}
                     {% if is_enable_row_click and type_row_click == 'double' %}
                     {% if is_editable %}if (id.column != 'cmd_edit'){{% endif %}
-                    load_js('{{ url_update|safe }}'.replace('0', el.id), undefined, undefined, undefined, undefined, undefined, undefined, abortAllPending=true);
+                    load_js('{{ url_update|safe }}'.replace('0', el.{{column_id}}), undefined, undefined, undefined, undefined, undefined, undefined, abortAllPending=true);
                     {% if is_editable %} } {{% endif %}
                     {% endif %}
                     {% endblock %}
@@ -425,15 +427,6 @@ if (
                         {{ view_prefix }}save_state();
                     }
                 },
-                // onAfterEditStop: function(state, editor, ignoreUpdate){
-                //    //if(state.value != state.old){
-                //        webix.message("Cell value was changed")
-                //    //}
-                // },
-
-                // PB: 1. cick fuori da lista disabilita edit
-                // PB: 2. sarebbeda togliere selezione verde sulla riga
-
                 onItemClick: function (id, e, trg) {
                     var el = $$('{{ view_prefix }}datatable').getSelectedItem();
                     {% block datatable_onitemclick %}
@@ -472,7 +465,7 @@ if (
                     {% for layer in layers %}
                     if ((id.column == 'cmd_gotomap_{{layer.codename}}')) {
                         if (String(el.{{ layer.geofieldname }}_available).toLowerCase() == "true") {
-                            $$("map").goToWebgisPk('{{layer.qxsname}}', '{{ pk_field_name }}', el.id);
+                            $$("map").goToWebgisPk('{{layer.qxsname}}', '{{ pk_field_name }}', el.{{column_id}});
                         }
                     } else
                     {% endfor %}
@@ -480,13 +473,13 @@ if (
                     if (id.column == 'cmd_cp') {
                         {% block cmd_cp_click %}
                             {% if has_add_permission and is_enable_column_copy %}
-                                load_js('{{ url_create|safe }}{% if '?' in url_create %}&{% else %}?{% endif %}pk_copy=' + el.id, undefined, undefined, undefined, undefined, undefined, undefined, abortAllPending=true);
+                                load_js('{{ url_create|safe }}{% if '?' in url_create %}&{% else %}?{% endif %}pk_copy=' + el.{{column_id}}, undefined, undefined, undefined, undefined, undefined, undefined, abortAllPending=true);
                             {% endif %}
                         {% endblock %}
                     } else if (id.column == 'cmd_rm') {
                         {% block cmd_rm_click %}
                             {% if has_delete_permission and is_enable_column_delete %}
-                                load_js('{{ url_delete|safe }}'.replace('0', el.id), undefined, undefined, undefined, undefined, undefined, undefined, abortAllPending=true);
+                                load_js('{{ url_delete|safe }}'.replace('0', el.{{column_id}}), undefined, undefined, undefined, undefined, undefined, undefined, abortAllPending=true);
                             {% endif %}
                         {% endblock %}
                     } else if (id.column!='checkbox_action') {
@@ -495,7 +488,7 @@ if (
                                 {% if is_editable %}if (id.column != 'cmd_edit'){{% endif %}
                                     {% if type_row_click == 'single' %}
                                     {% block update_url_call %}
-                                    load_js('{{ url_update|safe }}'.replace('0', el.id), undefined, undefined, undefined, undefined, undefined, undefined, abortAllPending=true);
+                                    load_js('{{ url_update|safe }}'.replace('0', el.{{column_id}}), undefined, undefined, undefined, undefined, undefined, undefined, abortAllPending=true);
                                     {% endblock %}
                                     {% else %}
                                     webix.message({type: "success", text: "{{_("Double click to edit the element")|escapejs}}"});

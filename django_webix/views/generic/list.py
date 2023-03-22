@@ -98,8 +98,11 @@ class WebixListView(WebixBaseMixin,
     fields = None  # ex. [{'field_name':'XXX','datalist_column':'YYY',}]
     order_by = None
 
+    # list operations / actions
+    column_id = None
     actions = []  # [multiple_delete_action]
     adjust_row_height = False
+    header_rows = 2
 
     errors_on_popup = False
 
@@ -128,6 +131,9 @@ class WebixListView(WebixBaseMixin,
 
     def is_installed_django_webix_filter(self):
         return apps.is_installed('django_webix.contrib.filter')
+
+    def get_header_rows(self, request):
+        return self.header_rows
 
     def _optimize_select_related(self, qs):
         # extrapolate the information to populate `select_related`
@@ -183,6 +189,9 @@ class WebixListView(WebixBaseMixin,
                     if isinstance(_field_attribute, TranslationFieldDescriptor):
                         qs = qs.annotate(**{field_name: Coalesce('{}_{}'.format(field_name, get_language()), field_name)})
         return qs
+
+    def get_column_id(self, request):
+        return self.column_id or 'id'
 
     def get_adjust_row_height(self, request):
         return self.adjust_row_height
@@ -621,6 +630,7 @@ class WebixListView(WebixBaseMixin,
             'objects_datatable': self.get_objects_datatable(),
             'is_editable': self.is_editable(),
             'fields_editable': self.get_fields_editable(),
+            'column_id': self.get_column_id(self.request),
             'is_enable_column_webgis': self.is_enable_column_webgis(self.request),
             'is_enable_column_copy': self.is_enable_column_copy(self.request),
             'is_enable_column_delete': self.is_enable_column_delete(self.request),
@@ -629,6 +639,7 @@ class WebixListView(WebixBaseMixin,
             'is_enable_actions': self.is_enable_actions(self.request),
             'actions_style': self.get_actions_style(),
             'title': self.get_title(),
+            'header_rows': self.get_header_rows(self.request),
             'adjust_row_height': self.get_adjust_row_height(self.request),
             'is_errors_on_popup': self.is_errors_on_popup(self.request),
             # paging

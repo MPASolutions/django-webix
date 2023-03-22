@@ -627,6 +627,15 @@ function update_geo_ewkt_point(geo_field_selector){
     }
 }
 
+function i18nNumberFormat(decimalSize) {
+    return webix.Number.numToStr({
+        groupDelimiter: webix.i18n.groupDelimiter,
+        groupSize: webix.i18n.groupSize,
+        decimalDelimiter: webix.i18n.decimalDelimiter,
+        decimalSize: decimalSize
+    })
+}
+
 function geo_change(geo_type, field_name){
     /*
     str = 'Content(cap)(cap2)(cap3)'

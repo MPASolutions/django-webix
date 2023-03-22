@@ -1,4 +1,3 @@
-
 from django.db.models import Case, When, Value, CharField
 
 
