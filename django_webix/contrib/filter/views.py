@@ -292,10 +292,6 @@ class WebixFilterList(WebixFilterMixin, ListView):
             )
         return context
 
-    # def get_objects_datatable(self):
-    #     qs = super().get_objects_datatable()
-    #     raise Exception(str(qs.query))
-
     def get_initial_queryset(self):
         qs = super().get_initial_queryset()
 
