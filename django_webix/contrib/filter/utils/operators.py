@@ -1,7 +1,7 @@
 import django
 from django.contrib.postgres import fields
 from django.utils.translation import gettext_lazy as _
-from django.db import models
+from django.contrib.gis.db import models
 
 
 matches = {
@@ -148,8 +148,32 @@ matches = {
     fields.ArrayField: {
         "operators": ['exact', 'contains', 'contained_by', 'isnull', 'overlap'],
         # ['exact', 'iexact', 'gt', 'gte', 'lt', 'lte', 'in', 'contains', 'icontains', 'isnull', 'contained_by', 'len']
-    }
+    },
+
+    # GEO FIELDS
+    models.PolygonField: {
+        "operators": ['contained', 'isnull'],
+    },
+    models.MultiPolygonField: {
+        "operators": ['contained', 'isnull'],
+    },
+    models.LineStringField: {
+        "operators": ['contained', 'isnull'],
+    },
+    models.MultiLineStringField: {
+        "operators": ['contained', 'isnull'],
+    },
+    models.PointField: {
+        "operators": ['contained', 'isnull'],
+    },
+    models.MultiPointField: {
+        "operators": ['contained', 'isnull'],
+    },
+    models.GeometryCollectionField: {
+        "operators": ['contained', 'isnull'],
+    },
 }
+
 
 matches[models.JSONField] = {
     "operators": ["isnull", 'exact', 'has_key', 'has_keys', 'has_any_keys']
@@ -176,4 +200,6 @@ operators_override = {
     'has_any_keys': {'multiple': True},
     'keys': {'multiple': True},
     'overlap': {'multiple': True, 'label': _('Overlap')},
+
+    'contained': {'label': _('Contained by'), 'pick_geometry': True},
 }

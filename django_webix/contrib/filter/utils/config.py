@@ -9,8 +9,6 @@ from django_webix.contrib.filter.utils.operators import operators_override, coun
 
 def _get_config_new(model_class):
     fields = []
-    app_label = str(model_class._meta.app_label),
-    model_name = model_class._meta.model_name
     prefix_id = '{app_label}.{model_name}.'.format(
         app_label=model_class._meta.app_label,
         model_name=model_class._meta.model_name
@@ -20,7 +18,6 @@ def _get_config_new(model_class):
         # da escludere questi campi
         if issubclass(type(field), GenericForeignKey):
             continue
-        fields_to_insert = {}
         if issubclass(type(field), models.ForeignKey):
             model = field.remote_field.get_related_field().model
             model_name = "{app_label}.{model_name}".format(
@@ -87,18 +84,22 @@ def _get_config_new(model_class):
                 "type": field.get_internal_type(),
                 "operators": list(field.get_lookups().keys()),
             }
-            if hasattr(field, "base_field") and \
-                hasattr(field.base_field, 'choices') and \
-                field.base_field.choices is not None and \
-                len(field.base_field.choices) > 0:
+            if (
+                hasattr(field, "base_field") and
+                hasattr(field.base_field, 'choices') and
+                field.base_field.choices is not None and
+                len(field.base_field.choices) > 0
+            ):
                 fields_to_insert.update({
                     'input': 'select',
                     "operators": ["exact", "isnull"],
                     "values": [{x[0]: x[1]} for x in field.base_field.choices]
                 })
-            if hasattr(field, 'choices') and \
-                field.choices is not None and \
-                len(field.choices) > 0:
+            if (
+                hasattr(field, 'choices') and
+                field.choices is not None and
+                len(field.choices) > 0
+            ):
                 fields_to_insert.update({
                     'input': 'select',
                     "operators": ["exact", "isnull"],
@@ -128,7 +129,7 @@ def _get_config_new(model_class):
 
         fields.append(fields_to_insert)
 
-    operators = list(set([operator for field in fields for operator in field["operators"]]))
+    # operators = list(set([operator for field in fields for operator in field["operators"]]))
     op_final = []
 
     for k, v in operators_override.items():
@@ -137,7 +138,8 @@ def _get_config_new(model_class):
             'label': v.get('label', k),
             'nb_inputs': v.get('nb_inputs', 1),
             'multiple': v.get('multiple', False),
-            'values': v.get('values', None)
+            'values': v.get('values', None),
+            'pick_geometry': v.get('pick_geometry', False),
         }
         op_final.append(item)
 
@@ -155,7 +157,7 @@ def _get_config_new(model_class):
 def get_enabled_model(initial=False):
     result = []
     for key, value in settings.DJANGO_WEBIX_FILTER["models"].items():
-        if initial is True and isinstance(value, dict) and 'initial' in value and value['initial'] == False:
+        if initial is True and isinstance(value, dict) and 'initial' in value and value['initial'] is False:
             continue  # Non enabled to initial filter
         app_label, model_name = key.split(".")
         try:
@@ -185,7 +187,6 @@ def get_enable_field(model):
     campi_inclusi = modello.get('fields', None)
     campi_esclusi = modello.get('exclude', None)
     result = []
-    pre_result = []
     if campi_inclusi is not None and campi_esclusi is not None:
         pre_result = field_def
     elif campi_inclusi is not None:
@@ -220,4 +221,3 @@ def get_limit_suggest():
         return settings.DJANGO_WEBIX_FILTER['AUTOCOMPLETE_LIMITS']
     # dafualt
     return 30
-
