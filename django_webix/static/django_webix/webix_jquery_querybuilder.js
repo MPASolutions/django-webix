@@ -13,6 +13,7 @@ webix.ui.jQueryQuerybuilder = webix.protoUI({
         display_empty_filter: true,
         select_placeholder: '------',
         lang_code: 'en',
+        webgis_enable: false,
         icons: {
             add_group: "glyphicon glyphicon-plus-sign",
             add_rule: "glyphicon glyphicon-plus",
@@ -132,7 +133,14 @@ webix.ui.jQueryQuerybuilder = webix.protoUI({
 
         var operators = [];
         json['operators'].forEach(function (a, index, array) {
-            var oper = {type: a.name, nb_inputs: a.nb_inputs, multiple: a.multiple, label: a.label, apply_to: ["string", "number", "datetime", "boolean"]}
+            var oper = {
+              type: a.name,
+              nb_inputs: a.nb_inputs,
+              multiple: a.multiple,
+              label: a.label,
+              pick_geometry: a.pick_geometry,
+              apply_to: ["string", "number", "datetime", "boolean"]
+            }
             if ('values' in a){
                 oper['values'] = a.values
             }
@@ -150,6 +158,8 @@ webix.ui.jQueryQuerybuilder = webix.protoUI({
         this.queryBuilder.modelStart = this.config.modelStart;
         this.queryBuilder.suggestUrl = this.config.suggestUrl;
         this.queryBuilder.limit_suggest = this.config.limit_suggest;
+        this.queryBuilder.webgis_enable = this.config.webgis_enable;
+
         this.callEvent("onAfterRender", []);
         this._setEvents();
         this.queryBuilder.model.root.drop();
@@ -607,7 +617,7 @@ webix.ui.jQueryQuerybuilder = webix.protoUI({
                                     }
                                 }
                             }
-                            var operator_selected = rule.operator.type
+                            var operator_selected = rule.operator.type;
                             if (type == 'integer') {
                                 if (operator_selected === 'in') {
                                     // non reve piu
@@ -624,7 +634,7 @@ webix.ui.jQueryQuerybuilder = webix.protoUI({
                                     webix_field.regex = new RegExp('\^\\d+\(\\.\\d+\)\?\$');
                                 }
                             }
-                            
+
                             if(rule.operator.multiple === true){
                                 webix_field.suggest = {
                                     // selectAll: true,
@@ -636,19 +646,41 @@ webix.ui.jQueryQuerybuilder = webix.protoUI({
                                 };
                                 webix_field.separator = ";";
                                 container.webix_multicombo(webix_field);
-
-                                // webix_input = $$('value_' + ruleInput.attr("name"));
-                                // webix_input.getPopup().getList().clearAll();
-                                // set_autocomplete_reload('value_' + ruleInput.attr("name"), query.suggestUrl.replace('field', rule.filter.id)) // + '?app_label=anagrafica&')
-                                // webix.ajax().get(query.suggestUrl.replace('field', rule.filter.id)).then(function (data) {
-                                //     var sugg = data.json();
-                                //     var suggestion = [];
-                                //     sugg['suggests'].forEach(function (a, index, array) {
-                                //         suggestion.push({'id': a, 'value':a});
-                                //     })
-                                //     webix_input.getPopup().getList().parse(suggestion);
-                                //     webix_input.refresh();
-                                // });
+                            } else if(rule.operator.pick_geometry === true){
+                                webix_field.disabled = query.webgis_enable;
+                                webix_field.width = 300;
+                                if (query.webgis_enable) {
+                                    var layers = $$('map').getLayersFromModel(rule.filter.model);
+                                    var options_geo = [];
+                                    layers.forEach(function (l, i) {
+                                        if($$('map').overlayLayers[l.id].filters.spatial.length > 0){
+                                            options_geo.push(l);
+                                        }
+                                    });
+                                    var label_combo = 'Scegliere un layer WebGIS filtrato:';
+                                    if (options_geo.length == 0) {
+                                        label_combo = 'Nessn layer filtrato nel WebGIS';
+                                    }
+                                    container.webix_combo({
+                                        id: 'value_' + ruleInput.attr("name") + '_geo_pick',
+                                        view: 'combo',
+                                        options: options_geo,
+                                        width: 300,
+                                        value: null,
+                                        label: label_combo,
+                                        labelPosition: 'top',
+                                        on: {
+                                            onChange: function (newv, oldv) {
+                                                if (newv != null && newv !== '') {
+                                                    var filter = $$('map').overlayLayers[newv].filters.spatial[0];
+                                                    var id_input = this.config.id.replace('_geo_pick', '');
+                                                    $$(id_input).setValue(filter);
+                                                }
+                                            }
+                                        }
+                                    });
+                                }
+                                container.webix_text(webix_field);
                             } else {
                                 if (rule.operator.type == 'exact') {
                                     // utilizzo il data feed
@@ -975,6 +1007,10 @@ webix.ui.jQueryQuerybuilder = webix.protoUI({
                     var type = rule.filter.webix_type;
                     var webix_input = $$('value_' + ruleInput.attr("name"));
                     webix_input.destructor();
+                    var webix_input_geo_pick = $$('value_' + ruleInput.attr("name") + '_geo_pick');
+                    if(webix_input_geo_pick != undefined){
+                        webix_input_geo_pick.destructor();
+                    }
                     var operator = rule.operator.type;
                     if(rule.operator.values != undefined){
                         var options_ = [];
@@ -1106,6 +1142,41 @@ webix.ui.jQueryQuerybuilder = webix.protoUI({
                                 };
                                 webix_field.separator = ";";
                                 container_input.webix_multicombo(webix_field);
+                            } else if(rule.operator.pick_geometry === true){
+                                webix_field.disabled = query.webgis_enable;
+                                webix_field.width = 300;
+                                if (query.webgis_enable) {
+                                    var layers = $$('map').getLayersFromModel(rule.filter.model);
+                                    var options_geo = [];
+                                    layers.forEach(function (l, i) {
+                                        if($$('map').overlayLayers[l.id].filters.spatial.length > 0){
+                                            options_geo.push(l);
+                                        }
+                                    });
+                                    var label_combo = 'Scegliere un layer WebGIS filtrato:';
+                                    if (options_geo.length == 0) {
+                                        label_combo = 'Nessn layer filtrato nel WebGIS';
+                                    }
+                                    container_input.webix_combo({
+                                        id: 'value_' + ruleInput.attr("name") + '_geo_pick',
+                                        view: 'combo',
+                                        options: options_geo,
+                                        width: 300,
+                                        value: null,
+                                        label: label_combo,
+                                        labelPosition: 'top',
+                                        on: {
+                                            onChange: function (newv, oldv) {
+                                                if (newv != null && newv !== '') {
+                                                    var filter = $$('map').overlayLayers[newv].filters.spatial[0];
+                                                    var id_input = this.config.id.replace('_geo_pick', '');
+                                                    $$(id_input).setValue(filter);
+                                                }
+                                            }
+                                        }
+                                    });
+                                }
+                                container_input.webix_text(webix_field);
                             } else {
                                 if (rule.operator.type == 'exact') {
                                     // utilizzo il data feed

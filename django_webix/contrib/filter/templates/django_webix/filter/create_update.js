@@ -45,6 +45,7 @@
             filtersUrl: "{% url 'dwfilter.filter_config' app_label='app_label' model_name='model_name' %}",
             suggestUrl: "{% url 'dwfilter.suggest_exact' field='field' %}",
             limit_suggest: {{ limit_suggest }},
+            webgis_enable: $$('map') != undefined,
             icons: {
                 add_group: "fas fa-plus-circle",
                 add_rule: "fas fa-plus",
@@ -73,6 +74,7 @@
             filtersUrl: "{% url 'dwfilter.filter_config' app_label='app_label' model_name='model_name' %}",
             suggestUrl: "{% url 'dwfilter.suggest_exact' field='field' %}",
             limit_suggest: {{ limit_suggest }},
+            webgis_enable: $$('map') != undefined,
             icons: {
                 add_group: "fas fa-plus-circle",
                 add_rule: "fas fa-plus",

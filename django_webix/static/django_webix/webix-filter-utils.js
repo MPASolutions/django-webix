@@ -22,7 +22,6 @@ if (window.jQuery){
 				var views = [];
 				this.each(function() {
 					var view;
-					var id;
 
 					// if target a webix component - return it
 					var id = get_id(this) || get_id(this.firstChild);
