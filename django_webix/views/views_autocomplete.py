@@ -107,12 +107,15 @@ class AutocompleteWebixLookup(RelatedLookup):
                 search_fields = ()
 
         if search_fields:
+            search = models.Q()
             for word in term.split():
-                search = [models.Q(**{smart_str(item): smart_str(word)}) for item in search_fields]
-                search_qs = QuerySet(model)
-                search_qs.query.select_related = qs.query.select_related
-                search_qs = search_qs.filter(reduce(operator.or_, search))
-                qs &= search_qs
+                term_query = models.Q()
+                for search_field in search_fields:
+                    term_query |= models.Q(
+                        **{smart_str(search_field): smart_str(word)}
+                    )
+                search &= term_query
+            qs = qs.filter(search)
         else:
             qs = model.objects.none()
         return qs
