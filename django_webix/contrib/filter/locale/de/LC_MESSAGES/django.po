@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-03-16 08:47+0100\n"
+"POT-Creation-Date: 2023-03-24 15:44+0100\n"
 "PO-Revision-Date: 2022-07-19 15:50+0050\n"
 "Last-Translator: Stefano Menegon <menegon@mpasol.it>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -35,15 +35,15 @@ msgstr ""
 msgid "Update date"
 msgstr "Private data"
 
-#: contrib/filter/models.py:18 contrib/filter/views.py:346
+#: contrib/filter/models.py:18 contrib/filter/views.py:342
 msgid "Title"
 msgstr ""
 
-#: contrib/filter/models.py:19 contrib/filter/views.py:357
+#: contrib/filter/models.py:19 contrib/filter/views.py:353
 msgid "Description"
 msgstr "Beschreibung"
 
-#: contrib/filter/models.py:20 contrib/filter/views.py:368
+#: contrib/filter/models.py:20 contrib/filter/views.py:364
 msgid "Model"
 msgstr "Modell"
 
@@ -113,14 +113,14 @@ msgstr ""
 msgid "Unable to load filter, contact administrators to correct it"
 msgstr ""
 
-#: contrib/filter/templates/django_webix/filter/create_update.js:104
-#: contrib/filter/templates/django_webix/filter/create_update.js:120
-#: contrib/filter/templates/django_webix/filter/create_update.js:136
-#: contrib/filter/templates/django_webix/filter/create_update.js:205
+#: contrib/filter/templates/django_webix/filter/create_update.js:106
+#: contrib/filter/templates/django_webix/filter/create_update.js:122
+#: contrib/filter/templates/django_webix/filter/create_update.js:138
+#: contrib/filter/templates/django_webix/filter/create_update.js:207
 msgid "You need to insert a filter before saving"
 msgstr ""
 
-#: contrib/filter/templates/django_webix/filter/create_update.js:148
+#: contrib/filter/templates/django_webix/filter/create_update.js:150
 msgid "Apply temporary filter"
 msgstr ""
 
@@ -179,10 +179,14 @@ msgstr "Ungültige E-mail"
 msgid "Disable temporary filter"
 msgstr ""
 
-#: contrib/filter/utils/operators.py:178
+#: contrib/filter/utils/operators.py:202
 msgid "Overlap"
 msgstr ""
 
-#: contrib/filter/views.py:379
+#: contrib/filter/utils/operators.py:204
+msgid "Contained by"
+msgstr ""
+
+#: contrib/filter/views.py:375
 msgid "Visibility"
 msgstr ""
