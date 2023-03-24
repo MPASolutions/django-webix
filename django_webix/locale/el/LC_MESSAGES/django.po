@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-03-16 08:47+0100\n"
+"POT-Creation-Date: 2023-03-24 15:44+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -64,18 +64,24 @@ msgid "ManagementForm data is missing or has been tampered with"
 msgstr ""
 
 #: templates/django_webix/generic/delete.js:32
+#: templates/django_webix/include/action_deleterelatedobjects.js:8
 msgid "The following objects will be deleted"
 msgstr ""
 
-#: templates/django_webix/generic/delete.js:63
+#: templates/django_webix/generic/delete.js:56
+#: templates/django_webix/include/action_deleterelatedobjects.js:23
+msgid "Details"
+msgstr ""
+
+#: templates/django_webix/generic/delete.js:86
 msgid "Confirm cancellation"
 msgstr ""
 
-#: templates/django_webix/generic/delete.js:69
+#: templates/django_webix/generic/delete.js:92
 msgid "Delete confirmation"
 msgstr ""
 
-#: templates/django_webix/generic/delete.js:70
+#: templates/django_webix/generic/delete.js:93
 msgid "Warning! All linked objects will also be deleted."
 msgstr ""
 
@@ -83,43 +89,43 @@ msgstr ""
 msgid "Send"
 msgstr ""
 
-#: templates/django_webix/generic/list.js:44
+#: templates/django_webix/generic/list.js:45
 msgid "Extra filters removal"
 msgstr ""
 
-#: templates/django_webix/generic/list.js:61
+#: templates/django_webix/generic/list.js:62
 msgid "Geographic filter removal"
 msgstr ""
 
-#: templates/django_webix/generic/list.js:79
+#: templates/django_webix/generic/list.js:80
 msgid "Advanced filter"
 msgstr ""
 
-#: templates/django_webix/generic/list.js:158
-#: templates/django_webix/generic/list.js:249
+#: templates/django_webix/generic/list.js:159
+#: templates/django_webix/generic/list.js:250
 #: templates/django_webix/include/actions_list.js:8
 #: templates/django_webix/include/toolbar_navigation.js:47
 msgid "Go to map"
 msgstr ""
 
-#: templates/django_webix/generic/list.js:160
+#: templates/django_webix/generic/list.js:161
 #: templates/django_webix/include/toolbar_navigation.js:43
 msgid "Geometry does not exist"
 msgstr ""
 
-#: templates/django_webix/generic/list.js:262
+#: templates/django_webix/generic/list.js:263
 msgid "Remove filters"
 msgstr ""
 
-#: templates/django_webix/generic/list.js:263
+#: templates/django_webix/generic/list.js:264
 msgid "Apply filters"
 msgstr ""
 
-#: templates/django_webix/generic/list.js:263
+#: templates/django_webix/generic/list.js:264
 msgid "Filter"
 msgstr ""
 
-#: templates/django_webix/generic/list.js:501
+#: templates/django_webix/generic/list.js:494
 msgid "Double click to edit the element"
 msgstr ""
 
@@ -131,6 +137,12 @@ msgstr ""
 #: templates/django_webix/include/form_errors_popup.js:16
 #: templates/django_webix/include/utils.js:275
 msgid "Close"
+msgstr ""
+
+#: templates/django_webix/include/actions_list.js:179
+#: templates/django_webix/include/actions_utils.js:67
+#: templates/django_webix/include/actions_utils.js:72
+msgid "Action is not executable"
 msgstr ""
 
 #: templates/django_webix/include/actions_utils.js:40
@@ -148,11 +160,6 @@ msgstr ""
 #: templates/django_webix/include/form_errors_message.js:13
 #: templates/django_webix/include/form_errors_popup.js:13
 msgid "Oops! Something went wrong..."
-msgstr ""
-
-#: templates/django_webix/include/actions_utils.js:67
-#: templates/django_webix/include/actions_utils.js:72
-msgid "Action is not executable"
 msgstr ""
 
 #: templates/django_webix/include/actions_utils.js:90
@@ -174,9 +181,9 @@ msgstr ""
 msgid "Error in the following fields:"
 msgstr ""
 
-#: templates/django_webix/include/form_monotabs.js:64
-#: templates/django_webix/include/form_standard.js:59
-#: templates/django_webix/include/form_tabs.js:68
+#: templates/django_webix/include/form_monotabs.js:66
+#: templates/django_webix/include/form_standard.js:61
+#: templates/django_webix/include/form_tabs.js:70
 msgid "Empty or incorrect value"
 msgstr ""
 
@@ -231,7 +238,7 @@ msgid "Description"
 msgstr ""
 
 #: templates/django_webix/include/toolbar_form.js:17
-#: views/generic/actions.py:17
+#: views/generic/actions.py:45
 msgid "Delete"
 msgstr ""
 
@@ -283,7 +290,7 @@ msgid "Select an action"
 msgstr ""
 
 #: templates/django_webix/include/toolbar_list_actions_select.js:20
-#: views/generic/decorators.py:14 views/generic/list.py:73
+#: views/generic/decorators.py:17 views/generic/list.py:77
 msgid "Go"
 msgstr ""
 
@@ -366,12 +373,12 @@ msgstr ""
 msgid "You can use for example"
 msgstr ""
 
-#: views/generic/actions.py:25
+#: views/generic/actions.py:54
 #, python-brace-format
 msgid "{count_delete_instances} elements have been deleted"
 msgstr ""
 
-#: views/generic/actions.py:33
+#: views/generic/actions.py:62
 msgid "Download all attachments"
 msgstr ""
 
@@ -391,60 +398,60 @@ msgstr ""
 msgid "You haven't view permission"
 msgstr ""
 
-#: views/generic/create_update.py:78
+#: views/generic/create_update.py:77
 msgid ""
 "Template style is improperly configured only options are 'standard' or "
 "'tabs' (standard by default)."
 msgstr ""
 
-#: views/generic/create_update.py:334 views/generic/create_update.py:415
+#: views/generic/create_update.py:333 views/generic/create_update.py:414
 #: views/generic/delete.py:44 views/generic/detail.py:20
-#: views/generic/list.py:594
+#: views/generic/list.py:606
 msgid "View permission is not allowed"
 msgstr ""
 
-#: views/generic/create_update.py:337
+#: views/generic/create_update.py:336
 msgid "Add permission is not allowed"
 msgstr ""
 
-#: views/generic/create_update.py:418
+#: views/generic/create_update.py:417
 msgid "Change permission is not allowed"
 msgstr ""
 
-#: views/generic/create_update.py:474
+#: views/generic/create_update.py:473
 #, python-format
 msgid "Changed %s."
 msgstr ""
 
-#: views/generic/create_update.py:474
+#: views/generic/create_update.py:473
 msgid "and"
 msgstr ""
 
-#: views/generic/decorators.py:12 views/generic/list.py:71
+#: views/generic/decorators.py:15 views/generic/list.py:75
 msgid "Fill in the form"
 msgstr ""
 
-#: views/generic/decorators.py:13 views/generic/list.py:72
+#: views/generic/decorators.py:16 views/generic/list.py:76
 msgid "Are you sure you want to proceed with this action?"
 msgstr ""
 
-#: views/generic/decorators.py:15 views/generic/list.py:74
+#: views/generic/decorators.py:18 views/generic/list.py:78
 msgid "Proceed"
 msgstr ""
 
-#: views/generic/decorators.py:16 views/generic/list.py:75
+#: views/generic/decorators.py:19 views/generic/list.py:79
 msgid "Undo"
 msgstr ""
 
-#: views/generic/decorators.py:68
+#: views/generic/decorators.py:75
 msgid "You can perform this action on a maximum of {} raws"
 msgstr ""
 
-#: views/generic/decorators.py:89
+#: views/generic/decorators.py:110
 msgid "Action success: {} data:{}"
 msgstr ""
 
-#: views/generic/decorators.py:110
+#: views/generic/decorators.py:136
 msgid "Action success: {}"
 msgstr ""
 
@@ -452,50 +459,50 @@ msgstr ""
 msgid "Delete permission is not allowed"
 msgstr ""
 
-#: views/generic/delete.py:74
+#: views/generic/delete.py:78
 msgid ""
 "No URL to redirect to.  Either provide a url or define a get_absolute_url "
 "method on the Model."
 msgstr ""
 
-#: views/generic/delete.py:85
+#: views/generic/delete.py:89
 msgid ""
 "No URL to failure redirect to.  Either provide a url or define a "
 "get_absolute_url method on the Model."
 msgstr ""
 
-#: views/generic/list.py:340
+#: views/generic/list.py:353
 msgid "Paginate count is not integer"
 msgstr ""
 
-#: views/generic/list.py:349
+#: views/generic/list.py:362
 msgid "Paginate start is not integer"
 msgstr ""
 
-#: views/generic/list.py:441
+#: views/generic/list.py:454
 msgid ""
 "Actions style is improperly configured only options are 'buttons' or "
 "'select' (select by default)."
 msgstr ""
 
-#: views/generic/list.py:555
+#: views/generic/list.py:567
 msgid ""
 "Json response is available only if get_queryset() return a queryset and not "
 "a list"
 msgstr ""
 
-#: views/generic/list.py:574
+#: views/generic/list.py:586
 msgid "This action is not registered"
 msgstr ""
 
-#: views/generic/list.py:580
+#: views/generic/list.py:592
 msgid "Permission denied: {}"
 msgstr ""
 
-#: views/generic/list.py:582
+#: views/generic/list.py:594
 msgid "This permission is not registered on this class"
 msgstr ""
 
-#: views/generic/list.py:654
+#: views/generic/list.py:668
 msgid "Generic TemplateListView needs to define data for datatable"
 msgstr ""

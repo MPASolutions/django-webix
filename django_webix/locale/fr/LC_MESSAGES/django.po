@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-03-16 08:47+0100\n"
+"POT-Creation-Date: 2023-03-24 15:44+0100\n"
 "PO-Revision-Date: 2022-03-21 12:39+0050\n"
 "Last-Translator: Traduzioni CBC <>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -65,18 +65,26 @@ msgid "ManagementForm data is missing or has been tampered with"
 msgstr "La donnée ManagementForm est manquante ou a été altérée par"
 
 #: templates/django_webix/generic/delete.js:32
+#: templates/django_webix/include/action_deleterelatedobjects.js:8
 msgid "The following objects will be deleted"
 msgstr "Les éléments suivants seront supprimés"
 
-#: templates/django_webix/generic/delete.js:63
+#: templates/django_webix/generic/delete.js:56
+#: templates/django_webix/include/action_deleterelatedobjects.js:23
+#, fuzzy
+#| msgid "Detail"
+msgid "Details"
+msgstr "Détail"
+
+#: templates/django_webix/generic/delete.js:86
 msgid "Confirm cancellation"
 msgstr "Confirmer la suppression"
 
-#: templates/django_webix/generic/delete.js:69
+#: templates/django_webix/generic/delete.js:92
 msgid "Delete confirmation"
 msgstr "Supprimer la confirmation"
 
-#: templates/django_webix/generic/delete.js:70
+#: templates/django_webix/generic/delete.js:93
 msgid "Warning! All linked objects will also be deleted."
 msgstr "Attention ! Tous les éléments liés seront également effacés."
 
@@ -84,43 +92,43 @@ msgstr "Attention ! Tous les éléments liés seront également effacés."
 msgid "Send"
 msgstr "Envoyer"
 
-#: templates/django_webix/generic/list.js:44
+#: templates/django_webix/generic/list.js:45
 msgid "Extra filters removal"
 msgstr "Élimination des filtres supplémentaires"
 
-#: templates/django_webix/generic/list.js:61
+#: templates/django_webix/generic/list.js:62
 msgid "Geographic filter removal"
 msgstr "Élimination des filtres géographiques"
 
-#: templates/django_webix/generic/list.js:79
+#: templates/django_webix/generic/list.js:80
 msgid "Advanced filter"
 msgstr "Filtre avancé"
 
-#: templates/django_webix/generic/list.js:158
-#: templates/django_webix/generic/list.js:249
+#: templates/django_webix/generic/list.js:159
+#: templates/django_webix/generic/list.js:250
 #: templates/django_webix/include/actions_list.js:8
 #: templates/django_webix/include/toolbar_navigation.js:47
 msgid "Go to map"
 msgstr "Aller sur la carte"
 
-#: templates/django_webix/generic/list.js:160
+#: templates/django_webix/generic/list.js:161
 #: templates/django_webix/include/toolbar_navigation.js:43
 msgid "Geometry does not exist"
 msgstr ""
 
-#: templates/django_webix/generic/list.js:262
+#: templates/django_webix/generic/list.js:263
 msgid "Remove filters"
 msgstr "Supprimer les filtres"
 
-#: templates/django_webix/generic/list.js:263
+#: templates/django_webix/generic/list.js:264
 msgid "Apply filters"
 msgstr "Appliquer des filtres"
 
-#: templates/django_webix/generic/list.js:263
+#: templates/django_webix/generic/list.js:264
 msgid "Filter"
 msgstr "Filtrer"
 
-#: templates/django_webix/generic/list.js:501
+#: templates/django_webix/generic/list.js:494
 msgid "Double click to edit the element"
 msgstr "Double cliquer pour modifier l'élément"
 
@@ -135,6 +143,12 @@ msgstr "Filtrer"
 #: templates/django_webix/include/utils.js:275
 msgid "Close"
 msgstr "Fermer"
+
+#: templates/django_webix/include/actions_list.js:179
+#: templates/django_webix/include/actions_utils.js:67
+#: templates/django_webix/include/actions_utils.js:72
+msgid "Action is not executable"
+msgstr "Cette action ne peut pas être exécutée"
 
 #: templates/django_webix/include/actions_utils.js:40
 #: templates/django_webix/include/toolbar_list.js:23
@@ -154,11 +168,6 @@ msgstr "sélectionnés"
 #| msgid "Something gone wrong"
 msgid "Oops! Something went wrong..."
 msgstr "Erreur"
-
-#: templates/django_webix/include/actions_utils.js:67
-#: templates/django_webix/include/actions_utils.js:72
-msgid "Action is not executable"
-msgstr "Cette action ne peut pas être exécutée"
 
 #: templates/django_webix/include/actions_utils.js:90
 msgid "Action successful"
@@ -181,9 +190,9 @@ msgstr "Ajouter"
 msgid "Error in the following fields:"
 msgstr "Il y a une erreur dans les champ suivants"
 
-#: templates/django_webix/include/form_monotabs.js:64
-#: templates/django_webix/include/form_standard.js:59
-#: templates/django_webix/include/form_tabs.js:68
+#: templates/django_webix/include/form_monotabs.js:66
+#: templates/django_webix/include/form_standard.js:61
+#: templates/django_webix/include/form_tabs.js:70
 msgid "Empty or incorrect value"
 msgstr ""
 
@@ -238,7 +247,7 @@ msgid "Description"
 msgstr "Description"
 
 #: templates/django_webix/include/toolbar_form.js:17
-#: views/generic/actions.py:17
+#: views/generic/actions.py:45
 msgid "Delete"
 msgstr "Effacer"
 
@@ -290,7 +299,7 @@ msgid "Select an action"
 msgstr "Sélectionner une action"
 
 #: templates/django_webix/include/toolbar_list_actions_select.js:20
-#: views/generic/decorators.py:14 views/generic/list.py:73
+#: views/generic/decorators.py:17 views/generic/list.py:77
 msgid "Go"
 msgstr "Entrer"
 
@@ -373,12 +382,12 @@ msgstr ""
 msgid "You can use for example"
 msgstr ""
 
-#: views/generic/actions.py:25
+#: views/generic/actions.py:54
 #, python-brace-format
 msgid "{count_delete_instances} elements have been deleted"
 msgstr "{count_delete_instances} éléments ont été supprimés"
 
-#: views/generic/actions.py:33
+#: views/generic/actions.py:62
 msgid "Download all attachments"
 msgstr "Télécharger les pièces jointes"
 
@@ -398,7 +407,7 @@ msgstr "Vous n'avez pas supprimé la licence"
 msgid "You haven't view permission"
 msgstr "Vous n'avez pas l'autorisation de visualisation"
 
-#: views/generic/create_update.py:78
+#: views/generic/create_update.py:77
 msgid ""
 "Template style is improperly configured only options are 'standard' or "
 "'tabs' (standard by default)."
@@ -406,56 +415,56 @@ msgstr ""
 "Le style du modèle n'est pas configuré correctement. Les seules options sont "
 "'standard' ou 'tabs' (standard par défaut)."
 
-#: views/generic/create_update.py:334 views/generic/create_update.py:415
+#: views/generic/create_update.py:333 views/generic/create_update.py:414
 #: views/generic/delete.py:44 views/generic/detail.py:20
-#: views/generic/list.py:594
+#: views/generic/list.py:606
 msgid "View permission is not allowed"
 msgstr "La visualisation de la licence n'est pas autorisée"
 
-#: views/generic/create_update.py:337
+#: views/generic/create_update.py:336
 msgid "Add permission is not allowed"
 msgstr "Ajouter une licence n'est pas autorisé"
 
-#: views/generic/create_update.py:418
+#: views/generic/create_update.py:417
 msgid "Change permission is not allowed"
 msgstr "La modification de licence n'est pas autorisée"
 
-#: views/generic/create_update.py:474
+#: views/generic/create_update.py:473
 #, python-format
 msgid "Changed %s."
 msgstr "%s modifié."
 
-#: views/generic/create_update.py:474
+#: views/generic/create_update.py:473
 msgid "and"
 msgstr "et"
 
-#: views/generic/decorators.py:12 views/generic/list.py:71
+#: views/generic/decorators.py:15 views/generic/list.py:75
 msgid "Fill in the form"
 msgstr "Remplir le formulaire"
 
-#: views/generic/decorators.py:13 views/generic/list.py:72
+#: views/generic/decorators.py:16 views/generic/list.py:76
 msgid "Are you sure you want to proceed with this action?"
 msgstr "Etes-vous sûr de vouloir continuer avec cette action ?"
 
-#: views/generic/decorators.py:15 views/generic/list.py:74
+#: views/generic/decorators.py:18 views/generic/list.py:78
 msgid "Proceed"
 msgstr "Continuer"
 
-#: views/generic/decorators.py:16 views/generic/list.py:75
+#: views/generic/decorators.py:19 views/generic/list.py:79
 msgid "Undo"
 msgstr "Annuler"
 
-#: views/generic/decorators.py:68
+#: views/generic/decorators.py:75
 msgid "You can perform this action on a maximum of {} raws"
 msgstr ""
 
-#: views/generic/decorators.py:89
+#: views/generic/decorators.py:110
 #, fuzzy
 #| msgid "Action successful"
 msgid "Action success: {} data:{}"
 msgstr "Action réussie"
 
-#: views/generic/decorators.py:110
+#: views/generic/decorators.py:136
 #, fuzzy
 #| msgid "Action successful"
 msgid "Action success: {}"
@@ -465,7 +474,7 @@ msgstr "Action réussie"
 msgid "Delete permission is not allowed"
 msgstr "La suppression de la licence n'est pas autorisée"
 
-#: views/generic/delete.py:74
+#: views/generic/delete.py:78
 msgid ""
 "No URL to redirect to.  Either provide a url or define a get_absolute_url "
 "method on the Model."
@@ -473,7 +482,7 @@ msgstr ""
 "Pas de URL sur laquelle se rediriger. Fournir une URL ou définir une méthode "
 "get_absolute_url sur le modèle"
 
-#: views/generic/delete.py:85
+#: views/generic/delete.py:89
 msgid ""
 "No URL to failure redirect to.  Either provide a url or define a "
 "get_absolute_url method on the Model."
@@ -482,15 +491,15 @@ msgstr ""
 "une adresse URL, soit vous définissez  une méthode get_absolute_url sur le "
 "Model"
 
-#: views/generic/list.py:340
+#: views/generic/list.py:353
 msgid "Paginate count is not integer"
 msgstr "Le nombre de page n'est pas un nombre entier"
 
-#: views/generic/list.py:349
+#: views/generic/list.py:362
 msgid "Paginate start is not integer"
 msgstr "La 1ère page  n'est pas une nombre entier"
 
-#: views/generic/list.py:441
+#: views/generic/list.py:454
 msgid ""
 "Actions style is improperly configured only options are 'buttons' or "
 "'select' (select by default)."
@@ -498,7 +507,7 @@ msgstr ""
 "Le style des actions n'est pas configuré correctement. Les seules options "
 "valides sont 'Boutons' ou 'Sélectionner' (selectionner par défaut)."
 
-#: views/generic/list.py:555
+#: views/generic/list.py:567
 msgid ""
 "Json response is available only if get_queryset() return a queryset and not "
 "a list"
@@ -506,19 +515,19 @@ msgstr ""
 "La réponse Json est valide seulement si get_queryset() retourne une requête "
 "et non une liste. "
 
-#: views/generic/list.py:574
+#: views/generic/list.py:586
 msgid "This action is not registered"
 msgstr "Cette action n'est pas enregistrée"
 
-#: views/generic/list.py:580
+#: views/generic/list.py:592
 msgid "Permission denied: {}"
 msgstr "Autorisation refusée : {}"
 
-#: views/generic/list.py:582
+#: views/generic/list.py:594
 msgid "This permission is not registered on this class"
 msgstr "Cette autorisation n'est pas enregistrée dans cette catégorie"
 
-#: views/generic/list.py:654
+#: views/generic/list.py:668
 msgid "Generic TemplateListView needs to define data for datatable"
 msgstr ""
 "Generic TemplateListView doit définir des valeurs pour la base de données"

@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-03-16 08:47+0100\n"
-"PO-Revision-Date: 2023-03-16 09:01+0100\n"
+"POT-Creation-Date: 2023-03-24 15:44+0100\n"
+"PO-Revision-Date: 2023-03-24 15:43+0100\n"
 "Last-Translator: Stefano Menegon <menegon@mpasol.it>\n"
 "Language-Team: \n"
 "Language: it\n"
@@ -124,8 +124,7 @@ msgid "You have to define a `model` as string in your recipients list"
 msgstr "Devi definire un modello come stringa nel tuo recipiente"
 
 #: contrib/sender/apps.py:209
-msgid ""
-"You have to define a `datatable_fields` as list in your recipients list"
+msgid "You have to define a `datatable_fields` as list in your recipients list"
 msgstr ""
 "Devi definire un \"datartable_fields' come lista nella lista dei recipienti"
 
@@ -142,10 +141,8 @@ msgid "Typology"
 msgstr "Tipologia"
 
 #: contrib/sender/dwadmin.py:42 contrib/sender/models.py:403
-#, fuzzy
-#| msgid "Customer typologies"
 msgid "Group typologies"
-msgstr "Tipologia clienti"
+msgstr "Gruppo di tipologie"
 
 #: contrib/sender/management/commands/telegram_manage.py:35
 msgid "Telegram Webhooks successfully deleted"
@@ -323,16 +320,12 @@ msgid "Icon"
 msgstr "Icona"
 
 #: contrib/sender/models.py:410
-#, fuzzy
-#| msgid "Message typologies"
 msgid "Message typologies group"
-msgstr "Tipologie messaggi"
+msgstr "Messaggio di un gruppo di tipologie"
 
 #: contrib/sender/models.py:411
-#, fuzzy
-#| msgid "Message typologies"
 msgid "Message typologies groups"
-msgstr "Tipologie messaggi"
+msgstr "Messaggio di gruppi di tipologie"
 
 #: contrib/sender/models.py:432
 #: contrib/sender/templates/django_webix/sender/invoices.js:15
@@ -831,8 +824,8 @@ msgstr "Periodo non valido"
 #~ "Warning! if there are messages with an unknown status, the data is not "
 #~ "updated"
 #~ msgstr ""
-#~ "Attenzione! Se ci sono messaggi con uno stato sconosciuto, i dati non sono "
-#~ "aggiornati"
+#~ "Attenzione! Se ci sono messaggi con uno stato sconosciuto, i dati non "
+#~ "sono aggiornati"
 
 #~ msgid "The messages have been sent"
 #~ msgstr "I messaggi sono stati inviati"
