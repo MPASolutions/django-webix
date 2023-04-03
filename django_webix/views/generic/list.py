@@ -32,9 +32,10 @@ except ImportError:
 
 
 def get_action_dict(request, action):
+    # needed for set var with NOne as value
     form = action.form(request=request) if hasattr(action, 'form') and action.form is not None else None
-    template_view = action.template_view if hasattr(action, 'template_view') and \
-                                            action.template_view is not None else None
+    template_view = action.template_view if hasattr(action, 'template_view') and action.template_view is not None else None
+    form_view = action.form_view if hasattr(action, 'form_view') and action.form_view is not None else None
 
     return {
         'func': action,
@@ -49,7 +50,10 @@ def get_action_dict(request, action):
         'modal_cancel': action.modal_cancel,
         'form': form,
         'reload_list': getattr(action, 'reload_list', True),
-        'template_view': template_view
+        'template_view': template_view,
+        'dynamic': action.dynamic,
+        'form_view_template': action.form_view_template,
+        'form_view': form_view
     }
 
 

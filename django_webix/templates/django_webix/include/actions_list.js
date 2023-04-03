@@ -15,6 +15,37 @@ var {{ view_prefix }}actions_list = [
 ];
 
 {% for action_key,action in actions.items %}
+{% if action.dynamic %}
+      function _{{ action_key }}_action_execute_dynamic(ids, all) {
+          $$('{{ view_prefix }}datatable').showOverlay("<img src='{% static 'django_webix/loading.gif' %}'>");
+          var _params = $.extend({}, webixAppliedFilters['{{ model|getattr:'_meta'|getattr:'app_label'}}.{{ model|getattr:'_meta'|getattr:'model_name'}}']);
+          _params['action'] = '{{ action_key }}';
+          _params['csrfmiddlewaretoken'] = getCookie('csrftoken');
+          _params['dynamic'] = true;
+          _params['all'] = all;
+          if (all === false) {
+              _params['ids'] = ids.join(',');
+          }
+          $.ajax({
+              url: "{{ url_list|safe }}",
+              type: "POST",
+              dataType: 'script', // directly execute
+              data: _params,
+              error: function (jqXHR, textStatus, errorThrown) {
+                  webix.message({
+                      text: "{{ _("Action is not executable")|escapejs }}",
+                      type: "error",
+                      expire: 10000
+                  });
+                  $$('{{ view_prefix }}datatable').hideOverlay();
+              },
+              success: function (data) {
+                  $$('{{ view_prefix }}datatable').hideOverlay();
+
+              }
+          });
+      }
+{% else %}
     {% if action.form %}
 function _{{ action_key }}_action_execute_form(ids, all) {
   {% block action_execute_form %}
@@ -90,7 +121,6 @@ function _{{ action_key }}_action_execute_form(ids, all) {
   }).show();
   {% endblock %}
 }
-
     {% endif %}
 
     {% if action.template_view %}
@@ -189,6 +219,7 @@ function _{{ action_key }}_action_execute_form(ids, all) {
           });
       }
     {% endif %}
+{% endif %}
 {% endfor %}
 
 
@@ -202,7 +233,9 @@ function {{ view_prefix }}actions_execute(action, ids, all) {
     }
     {% endfor %}
     {% for action_key, action in actions.items %} if (action=='{{ action_key }}') {
-        {% if action.template_view %}
+        {% if action.dynamic %}
+            _{{ action_key }}_action_execute_dynamic(ids,all);
+        {% elif action.template_view %}
             _{{ action_key }}_action_execute_template_view(ids,all);
         {% elif action.form %}
             _{{ action_key }}_action_execute_form(ids,all);
@@ -215,7 +248,11 @@ function {{ view_prefix }}actions_execute(action, ids, all) {
                 '{{ action.short_description }}',
                 '{{ action.modal_title }}',
                 '{{ action.modal_ok }}',
-                '{{ action.modal_cancel }}'
+                '{{ action.modal_cancel }}',
+                null,
+                null,
+                null,
+                {% if action.reload_list %}true{% else %}false{% endif %}
             );
         {% endif %}
     } {% if not forloop.last %} else {% endif %}

@@ -31,7 +31,7 @@ function _{{ view_prefix }}action_execute(action, ids, all, response_type, short
     modal_title (required) = text to show in modal choices execution
     modal_ok (not required)
     modal_cancel (not required)
-    params (not required) = paramters to post in action method
+    params (not required) = parameters to post in action method
     */
     webix.confirm({
         title: short_description,
