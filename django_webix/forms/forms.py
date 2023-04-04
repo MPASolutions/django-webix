@@ -1258,7 +1258,7 @@ class BaseWebixModelForm(forms.BaseModelForm, BaseWebixMixin):
                  initial=None, error_class=ErrorList, label_suffix=None,
                  empty_permitted=False, instance=None, use_required_attribute=None,
                  renderer=None, request=None, inline_id=None,
-                 has_add_permission=None, has_change_permission=None, has_delete_permission=None):
+                 has_add_permission=None, has_change_permission=None, has_delete_permission=None, **kwargs):
 
         # Set default
         self.readonly_fields = []
