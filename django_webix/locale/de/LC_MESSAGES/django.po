@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-03-24 15:44+0100\n"
+"POT-Creation-Date: 2023-04-04 10:16+0200\n"
 "PO-Revision-Date: 2022-07-19 15:50+0050\n"
 "Last-Translator: Stefano Menegon <menegon@mpasol.it>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -132,19 +132,21 @@ msgstr "Filter"
 msgid "Double click to edit the element"
 msgstr "Doppelklicken um das Element zu ändern"
 
+#: templates/django_webix/include/action_dynamic.js:17
+#: templates/django_webix/include/actions_list.js:65
+#: templates/django_webix/include/form_errors_popup.js:16
+#: templates/django_webix/include/utils.js:275
+msgid "Close"
+msgstr "Schließen"
+
 #: templates/django_webix/include/actions_list.js:9
 #, fuzzy
 #| msgid "Filter"
 msgid "Filter in map"
 msgstr "Filter"
 
-#: templates/django_webix/include/actions_list.js:34
-#: templates/django_webix/include/form_errors_popup.js:16
-#: templates/django_webix/include/utils.js:275
-msgid "Close"
-msgstr "Schließen"
-
-#: templates/django_webix/include/actions_list.js:179
+#: templates/django_webix/include/actions_list.js:36
+#: templates/django_webix/include/actions_list.js:209
 #: templates/django_webix/include/actions_utils.js:67
 #: templates/django_webix/include/actions_utils.js:72
 msgid "Action is not executable"
@@ -295,7 +297,7 @@ msgid "Select an action"
 msgstr "Aktion auswählen"
 
 #: templates/django_webix/include/toolbar_list_actions_select.js:20
-#: views/generic/decorators.py:17 views/generic/list.py:77
+#: views/generic/decorators.py:25 views/generic/list.py:81
 msgid "Go"
 msgstr "Ausführen"
 
@@ -413,7 +415,7 @@ msgstr ""
 
 #: views/generic/create_update.py:333 views/generic/create_update.py:414
 #: views/generic/delete.py:44 views/generic/detail.py:20
-#: views/generic/list.py:606
+#: views/generic/list.py:613
 msgid "View permission is not allowed"
 msgstr "Ansichtsberechtigung nicht erlaubt"
 
@@ -434,31 +436,31 @@ msgstr "Geändert  %s."
 msgid "and"
 msgstr "und"
 
-#: views/generic/decorators.py:15 views/generic/list.py:75
+#: views/generic/decorators.py:23 views/generic/list.py:79
 msgid "Fill in the form"
 msgstr "Form ausfüllen"
 
-#: views/generic/decorators.py:16 views/generic/list.py:76
+#: views/generic/decorators.py:24 views/generic/list.py:80
 msgid "Are you sure you want to proceed with this action?"
 msgstr "Möchten Sie mit dieser Aktion fortfahren?"
 
-#: views/generic/decorators.py:18 views/generic/list.py:78
+#: views/generic/decorators.py:26 views/generic/list.py:82
 msgid "Proceed"
 msgstr "Fortfahren"
 
-#: views/generic/decorators.py:19 views/generic/list.py:79
+#: views/generic/decorators.py:27 views/generic/list.py:83
 msgid "Undo"
 msgstr "Lösen"
 
-#: views/generic/decorators.py:75
+#: views/generic/decorators.py:94
 msgid "You can perform this action on a maximum of {} raws"
 msgstr "Sie können diese Aktion für maximal {} Zeilen durchführen"
 
-#: views/generic/decorators.py:110
+#: views/generic/decorators.py:161
 msgid "Action success: {} data:{}"
 msgstr "Action success: {} data:{}"
 
-#: views/generic/decorators.py:136
+#: views/generic/decorators.py:187
 msgid "Action success: {}"
 msgstr "Action success: {}"
 
@@ -480,39 +482,39 @@ msgid ""
 "get_absolute_url method on the Model."
 msgstr ""
 
-#: views/generic/list.py:353
+#: views/generic/list.py:360
 msgid "Paginate count is not integer"
 msgstr ""
 
-#: views/generic/list.py:362
+#: views/generic/list.py:369
 msgid "Paginate start is not integer"
 msgstr ""
 
-#: views/generic/list.py:454
+#: views/generic/list.py:461
 msgid ""
 "Actions style is improperly configured only options are 'buttons' or "
 "'select' (select by default)."
 msgstr ""
 
-#: views/generic/list.py:567
+#: views/generic/list.py:574
 msgid ""
 "Json response is available only if get_queryset() return a queryset and not "
 "a list"
 msgstr ""
 
-#: views/generic/list.py:586
+#: views/generic/list.py:593
 msgid "This action is not registered"
 msgstr "Diese aktion ist nicht registriert"
 
-#: views/generic/list.py:592
+#: views/generic/list.py:599
 msgid "Permission denied: {}"
 msgstr "Berechtigung verweigert: {}"
 
-#: views/generic/list.py:594
+#: views/generic/list.py:601
 msgid "This permission is not registered on this class"
 msgstr "Diese Berechtigung ist nicht auf dieser Klasse registriert"
 
-#: views/generic/list.py:668
+#: views/generic/list.py:675
 msgid "Generic TemplateListView needs to define data for datatable"
 msgstr ""
 
