@@ -82,6 +82,9 @@ def get_actions_flexport(request, model):
             _action.modal_ok = _("Proceed")
             _action.modal_cancel = _("Undo")
             _action.reload_list = False
+            _action.dynamic = False
+            _action.form_view_template = None
+            _action.form_view = None
             return _action
 
         for export_instance in Export.objects.filter(model=model_ct, active=True):
