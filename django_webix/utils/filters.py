@@ -80,7 +80,8 @@ def from_dict_to_qset(data, model):
                 if ArrayField and isinstance(_curr_field, ArrayField) and not isinstance(data_qset['val'], list):
                     data_qset['val'] = [data_qset.get('val')]
 
-                if data_qset.get('path').endswith("__range"):
+                # 2 type of value for operator range, from WebixList is a dict and from AdvanceFilter is a list
+                if data_qset.get('path').endswith("__range") and isinstance(data_qset.get('val'), dict):
                     # {"start":null,"end":null}
                     val = data_qset.get('val')
                     base_path = data_qset.get('path').replace('__range', '')
