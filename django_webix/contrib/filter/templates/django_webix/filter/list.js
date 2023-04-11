@@ -32,9 +32,9 @@
                             view: "switch",
                             onLabel: "{{_("No")|escapejs}}",
                             offLabel: "{{_("Yes")|escapejs}}",
-                            labelWidth: 120,
+                            labelWidth: 140,
                             value: 0,
-                            width: 180,
+                            width: 210,
                             label: "{{_("Show active only")|escapejs}}",
                             on:{
                                 onChange: function(newValue, oldValue, config){
