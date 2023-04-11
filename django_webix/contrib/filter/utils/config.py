@@ -2,6 +2,7 @@ from django.apps import apps
 from django.conf import settings
 from django.db import models
 from django.db.models.fields.reverse_related import ForeignObjectRel
+from django.contrib.postgres.fields import ArrayField
 from django.contrib.contenttypes.fields import GenericRelation, GenericForeignKey
 
 from django_webix.contrib.filter.utils.operators import operators_override, counter_operator, matches
@@ -90,11 +91,18 @@ def _get_config_new(model_class):
                 field.base_field.choices is not None and
                 len(field.base_field.choices) > 0
             ):
+
                 fields_to_insert.update({
-                    'input': 'select',
+                    # 'input': 'select',
                     "operators": ["exact", "isnull"],
                     "values": [{x[0]: x[1]} for x in field.base_field.choices]
                 })
+
+                if not isinstance(field, ArrayField):
+                    fields_to_insert.update({
+                        'input': 'select'
+                    })
+
             if (
                 hasattr(field, 'choices') and
                 field.choices is not None and

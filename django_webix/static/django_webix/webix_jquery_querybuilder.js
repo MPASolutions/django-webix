@@ -39,7 +39,6 @@ webix.ui.jQueryQuerybuilder = webix.protoUI({
         return webix.ui.template.prototype.$getSize.call(this, x, y+ 30);
     },
     $setSize: function(x, y){
-        // console.log('sono sel setsize');
         if (this.queryBuilder !== undefined && this.queryBuilder !== null) {
             var elements = this.queryBuilder.$el.children();
             // x = elements.outerWidth(true)
@@ -52,7 +51,6 @@ webix.ui.jQueryQuerybuilder = webix.protoUI({
         }
     },
     render: function () {
-        // console.log('sono nel render vediamo quante volte viene chiamato')
         this.callEvent("onBeforeRender", []);
         var queryBuilderOptions = {
             // Options
@@ -169,9 +167,7 @@ webix.ui.jQueryQuerybuilder = webix.protoUI({
         this.queryBuilder.on('afterInit.queryBuilder', function (e, rule) {});
 
         this.queryBuilder.on('afterAddGroup.queryBuilder', function(e, group) {
-            // Change Actions
             // console.log('afterAddGroup');
-            // console.log(group.$el.find(".group-actions"),group.$el,group);
             var container = group.$el.find(".group-actions");
             var addRuleButton = group.$el.find("button[data-add='rule']");
             var addGroupButton = group.$el.find("button[data-add='group']");
@@ -310,7 +306,6 @@ webix.ui.jQueryQuerybuilder = webix.protoUI({
             });
             $$("button_" + rule.id).getInputNode().setAttribute("data-delete", "rule");
             var view_id = this.parentNode.getAttribute('view_id');
-            // console.log(this, view_id)
             if(view_id !== '' && view_id !== undefined && view_id !== null){
                 var view_id_parent = $(this.parentNode).parent()[0].getAttribute('view_id');
                 if(view_id_parent !== '' && view_id_parent !== undefined && view_id_parent !== null) {
@@ -321,7 +316,6 @@ webix.ui.jQueryQuerybuilder = webix.protoUI({
         });
 
         this.queryBuilder.on('afterCreateRuleFilters.queryBuilder', function (e, rule) {
-            // Invocato quando si crea un filtro (primo campo)
             // console.log('afterCreateRuleFilters')
             var container = rule.$el.find(".rule-filter-container");
             var filterSelect = rule.$el.find("select[name='" + rule.id + "_filter']");
@@ -354,17 +348,7 @@ webix.ui.jQueryQuerybuilder = webix.protoUI({
                 css: {"float": "left"},
                 rule_id: rule.id,
                 on: {
-                    // onEnter: function (ev) {
-                    //     console.log('test on enter');
-                    // },
-                    // onBlur: function(prev_view){
-                    //     console.log('test onBlur');
-                    //     return webix.html.preventEvent(prev_view);
-                    // },
                     onChange: function (newv, oldv) {
-                        // console.log('onchange di webix di rule', this);
-                        // console.log('new bvalue', newv)
-                        // console.log('old value', oldv);
                         var rule_id = this.config.rule_id;
                         var my_id = this.config.id;
                         var posfix = '';
@@ -387,13 +371,11 @@ webix.ui.jQueryQuerybuilder = webix.protoUI({
                                         //delete dell'elemento
                                         rule.$el.find("select[name='" + selectors[i].name + "']").remove()
                                         $$("filter_" + rule_id + "__" + names[1]).destructor()
-                                        // console.log($$("filter_" + rule_id + "__" + names[1]))
                                     }
                                 } else {
                                     //delete dell'elemento
                                     rule.$el.find("select[name='" + selectors[i].name + "']").remove()
                                     $$("filter_" + rule_id).destructor()
-                                    // console.log($$("filter_" + rule_id))
                                 }
                             }
                             //cambio il mio id e il name dell'oggetto jqb
@@ -403,17 +385,12 @@ webix.ui.jQueryQuerybuilder = webix.protoUI({
                             if (webix.ui.views[old_id] != undefined) {
                                 delete webix.ui.views[old_id];
                             }
-                            // console.log(rule)
                             var my_rule_select = rule.$el.find("select[name^='" + rule_id + "_filter" + posfix + "']");
-                            // console.log(my_rule_select)
                             my_rule_select[0].name = my_rule_select[0].name.split('__')[0];
                         }
                         // da cambiare di nuovo tutti gli id superiori al mio .... come li prendo ?
                         // var selector = selectors[0]
                         // NB: non servirà più il posfix che tanto non ci sarà più
-
-
-                        // TODO da decommentaere
                         selectors = rule.$el.find("select[name='" + rule_id + "_filter']")
                         selectors.val(newv || "-1");
                         selectors.trigger("change");
@@ -549,7 +526,6 @@ webix.ui.jQueryQuerybuilder = webix.protoUI({
                                 format: webix.Date.dateToStr("%Y-%m-%d"),
                                 on: {
                                     onChange: function (newv, oldv) {
-                                        // console.log(newv)
                                         var format_giorno_js = webix.Date.dateToStr("%Y-%m-%d");
                                         ruleInput.val(format_giorno_js(newv));
                                         ruleInput.trigger("change");
@@ -566,7 +542,6 @@ webix.ui.jQueryQuerybuilder = webix.protoUI({
                                 on: {
                                     onChange: function (newv, oldv) {
                                         var format_ora_js = webix.Date.dateToStr("%H:%i:%s")
-                                        // console.log(newv)
                                         ruleInput.val(format_ora_js(newv));
                                         ruleInput.trigger("change");
                                     }
@@ -609,10 +584,12 @@ webix.ui.jQueryQuerybuilder = webix.protoUI({
                                     },
                                     onFocus: function(current_view, prev_view){
                                         if(this.config.suggest != undefined && this.config.suggest != null) {
-                                            var suggest = $$(this.config.suggest)
-                                            suggest.show(this.getInputNode());
+                                            var suggest = $$(this.config.suggest);
                                             var l = suggest.getList();
-                                            l.load(l.config.dataFeed);
+                                            if(l.config.dataFeed != undefined && l.config.dataFeed != null) {
+                                                suggest.show(this.getInputNode());
+                                                l.load(l.config.dataFeed);
+                                            }
                                         }
                                     }
                                 }
@@ -634,16 +611,29 @@ webix.ui.jQueryQuerybuilder = webix.protoUI({
                                     webix_field.regex = new RegExp('\^\\d+\(\\.\\d+\)\?\$');
                                 }
                             }
-
-                            if(rule.operator.multiple === true){
-                                webix_field.suggest = {
-                                    // selectAll: true,
-                                    dynamic: true,
-                                    body: {
-                                        data: [],
-                                        dataFeed: query.suggestUrl.replace('field', rule.filter.id) + '?limit=' + query.limit_suggest
+                            var rule_values = null;
+                            if(rule.filter.values != undefined && rule.filter.values.length > 0) {
+                                rule_values = [];
+                                rule.filter.values.forEach(function (l, i) {
+                                    for (var k in l) {
+                                        rule_values.push({id: k, value: l[k]})
                                     }
-                                };
+                                })
+                            }
+                            if(rule.operator.multiple === true){
+                                var suggest_multi;
+                                if(rule_values != null){
+                                    suggest_multi = rule_values;
+                                } else {
+                                    suggest_multi = {
+                                        dynamic: true,
+                                        body: {
+                                            data: [],
+                                            dataFeed: query.suggestUrl.replace('field', rule.filter.id) + '?limit=' + query.limit_suggest
+                                        }
+                                    };
+                                }
+                                webix_field.suggest = suggest_multi;
                                 webix_field.separator = ";";
                                 container.webix_multicombo(webix_field);
                             } else if(rule.operator.pick_geometry === true){
@@ -681,6 +671,9 @@ webix.ui.jQueryQuerybuilder = webix.protoUI({
                                     });
                                 }
                                 container.webix_text(webix_field);
+                            } else if(rule_values != null){
+                                webix_field.options = rule_values;
+                                container.webix_combo(webix_field);
                             } else {
                                 if (rule.operator.type == 'exact') {
                                     // utilizzo il data feed
@@ -696,25 +689,7 @@ webix.ui.jQueryQuerybuilder = webix.protoUI({
                                 }
                                 container.webix_text(webix_field);
                             }
-
                             $('[view_id=value_' + ruleInput.attr("name") + ']').css("z-index", "1100");
-
-                            // if (rule.operator.type == 'exact') {
-                            //     console.log('set autocompleate')
-                            //
-                            //     var webix_id = 'value_' + ruleInput.attr("name")
-                            //     console.log(webix_id)
-                            //     set_autocomplete_reload(webix_id, query.suggestUrl.replace('field', rule.filter.id) + '?limit=20') // + '?app_label=anagrafica&')
-                            //
-                            //     //aggiungere il suggest
-                            //     // webix.ajax().get(query.suggestUrl.replace('field', rule.filter.id) + '?limit=20').then(function (data) {
-                            //     //     var sugg = data.json();
-                            //     //     if ('suggests' in sugg && rule.operator.type == 'exact') {
-                            //     //         $$('value_' + ruleInput.attr("name")).define({suggest: sugg['suggests']})
-                            //     //         $$('value_' + ruleInput.attr("name")).refresh()
-                            //     //     }
-                            //     // });
-                            // }
                         }
                     }
                 });
@@ -741,11 +716,9 @@ webix.ui.jQueryQuerybuilder = webix.protoUI({
             var obj = rule.__;
             var next_number = 1;
             var extra = $$(this).extra_rules;
-            // console.log(extra)
 
             var value_webix = $$("filter_" + rule.id).getValue();
             var value_jqb = container.find("select[name='" + rule.id + "_filter']").val();
-            // console.log(value_webix, value_jqb);
             var cambiato = false;
             if(value_webix != value_jqb && value_jqb !== undefined){
                 $$("filter_" + rule.id).setValue(value_jqb);
@@ -764,7 +737,6 @@ webix.ui.jQueryQuerybuilder = webix.protoUI({
                         next_number = parseInt(parts[1]) + 1
                     }
                 }
-                // console.log('carica i dati per la FK');
                 webix.ajax().get(url).then(function (data) {
                     var json = data.json();
                     var availableTypes = ["string", "integer", "double", "date", "time", "datetime", "boolean"]
@@ -895,13 +867,11 @@ webix.ui.jQueryQuerybuilder = webix.protoUI({
                                                 //delete dell'elemento
                                                 rule.$el.find("select[name='" + selectors[i].name + "']").remove()
                                                 $$("filter_" + rule_id + "__" + names[1]).destructor()
-                                                // console.log($$("filter_" + rule_id + "__" + names[1]))
                                             }
                                         } else {
                                             //delete dell'elemento
                                             rule.$el.find("select[name='" + selectors[i].name + "']").remove()
                                             $$("filter_" + rule_id).destructor()
-                                            // console.log($$("filter_" + rule_id))
                                         }
                                     }
                                     //cambio il mio id e il name dell'oggetto jqb
@@ -911,16 +881,13 @@ webix.ui.jQueryQuerybuilder = webix.protoUI({
                                     if (webix.ui.views[old_id] != undefined) {
                                         delete webix.ui.views[old_id];
                                     }
-                                    // console.log(rule)
                                     var my_rule_select = rule.$el.find("select[name^='" + rule_id + "_filter" + posfix + "']");
-                                    // console.log(my_rule_select)
                                     my_rule_select[0].name = my_rule_select[0].name.split('__')[0];
                                 }
                                 // da cambiare di nuovo tutti gli id superiori al mio .... come li prendo ?
                                 // var selector = selectors[0]
                                 // NB: non servirà più il posfix che tanto non ci sarà più
                                 selectors = rule.$el.find("select[name='" + rule_id + "_filter']")
-                                // console.log(selectors)
                                 selectors.val(newv || "-1")
                                 selectors.trigger("change");
                             }
@@ -934,7 +901,6 @@ webix.ui.jQueryQuerybuilder = webix.protoUI({
                     // rule.id
                     var my_index = 0
                     var rules = query.$el.find("div[id*='_rule_']");
-                    // console.log(rules)
                     // trovo che indice sono, l'unico modo e un ciclo su tutti
                     for(var i=0; i < rules.length; i++){
                         if(rules[i].id === rule.id){
@@ -952,7 +918,6 @@ webix.ui.jQueryQuerybuilder = webix.protoUI({
                         }
                         else{
                             $$("filter_" + rule.id).setValue(next_hop);
-                            // console.log('set del filter')
                         }
                         $$("operator_" + rule.id).setValue(extra[my_index]['operator']);
 
@@ -970,7 +935,6 @@ webix.ui.jQueryQuerybuilder = webix.protoUI({
                                 if(Array.isArray(extra[my_index]['value'])){
                                     $$('value_' + ruleInputs.attr('name')).setValue(extra[my_index]['value'].join(obj.filter.value_separator));
                                 }else {
-                                    // console.log('set del valore ', extra[my_index]['value'], ruleInputs);
                                     $$('value_' + ruleInputs.attr('name')).setValue(extra[my_index]['value']);
                                 }
                             }
@@ -1004,6 +968,7 @@ webix.ui.jQueryQuerybuilder = webix.protoUI({
             if(ruleInputs.length > 0){
                 ruleInputs.each(function () {
                     var ruleInput = $(this);
+                    ruleInput.val('');
                     var type = rule.filter.webix_type;
                     var webix_input = $$('value_' + ruleInput.attr("name"));
                     webix_input.destructor();
@@ -1106,10 +1071,12 @@ webix.ui.jQueryQuerybuilder = webix.protoUI({
                                     },
                                     onFocus: function(current_view, prev_view){
                                         if(this.config.suggest != undefined && this.config.suggest != null) {
-                                            var suggest = $$(this.config.suggest)
-                                            suggest.show(this.getInputNode());
+                                            var suggest = $$(this.config.suggest);
                                             var l = suggest.getList();
-                                            l.load(l.config.dataFeed);
+                                            if(l.config.dataFeed != undefined && l.config.dataFeed != null) {
+                                                suggest.show(this.getInputNode());
+                                                l.load(l.config.dataFeed);
+                                            }
                                         }
                                     }
                                 }
@@ -1130,16 +1097,35 @@ webix.ui.jQueryQuerybuilder = webix.protoUI({
                                     webix_field.regex = new RegExp('\^\\d+\(\\.\\d+\)\?\$');
                                 }
                             }
-
-                            if(rule.operator.multiple === true){
-                                webix_field.suggest = {
-                                    // selectAll: true,
-                                    dynamic: true,
-                                    body: {
-                                        data: [],
-                                        dataFeed: query.suggestUrl.replace('field', rule.filter.id) + '?limit=' + query.limit_suggest
+                            var rule_values = null;
+                            if(rule.filter.values != undefined && rule.filter.values.length > 0) {
+                                rule_values = [];
+                                rule.filter.values.forEach(function (l, i) {
+                                    for (var k in l) {
+                                        rule_values.push({id: k, value: l[k]})
                                     }
-                                };
+                                })
+                            }
+                            if(rule.operator.multiple === true){
+                                var suggest_multi;
+                                if(rule.filter.values != undefined && rule.filter.values.length > 0){
+                                    var options_multi = [];
+                                    rule.filter.values.forEach(function (l, i) {
+                                        for (var k in l) {
+                                            options_multi.push({id: k, value: l[k]})
+                                        }
+                                    })
+                                    suggest_multi = options_multi;
+                                } else {
+                                    suggest_multi = {
+                                        dynamic: true,
+                                        body: {
+                                            data: [],
+                                            dataFeed: query.suggestUrl.replace('field', rule.filter.id) + '?limit=' + query.limit_suggest
+                                        }
+                                    };
+                                }
+                                webix_field.suggest = suggest_multi;
                                 webix_field.separator = ";";
                                 container_input.webix_multicombo(webix_field);
                             } else if(rule.operator.pick_geometry === true){
@@ -1177,6 +1163,9 @@ webix.ui.jQueryQuerybuilder = webix.protoUI({
                                     });
                                 }
                                 container_input.webix_text(webix_field);
+                            } else if(rule_values != null){
+                                webix_field.options = rule_values;
+                                container_input.webix_combo(webix_field);
                             } else {
                                 if (rule.operator.type == 'exact') {
                                     // utilizzo il data feed
@@ -1202,19 +1191,7 @@ webix.ui.jQueryQuerybuilder = webix.protoUI({
                         // da inserire
 
                         if (type != 'date' && type != 'time') {
-                            // if (rule.operator.type == 'exact') {
-                            //     //aggiungere il suggest
-                            //     webix.ajax().get(query.suggestUrl.replace('field', rule.filter.id) + '?limit=20').then(function (data) {
-                            //         var sugg = data.json();
-                            //         if ('suggests' in sugg && rule.operator.type == 'exact') {
-                            //             webix_input.define({suggest: sugg['suggests']});
-                            //             webix_input.refresh();
-                            //         }
-                            //     })
-                            // }
                             if (rule.operator.type == 'in') {
-                                // aggiusto il placeholder
-                                // webix_input.define({placeholder: '--;--;--'});
                                 webix_input.refresh();
                             } else {
                                 webix_input.define({placeholder: ''});
@@ -1227,7 +1204,6 @@ webix.ui.jQueryQuerybuilder = webix.protoUI({
         });
         this.queryBuilder.on('afterUpdateRuleValue.queryBuilder', function (e, rule, prev){
             // console.log('afterUpdateRuleValue');
-            // console.log(prev);
             var container = rule.$el.find(".rule-value-container");
             var ruleInputs = rule.$el.find("input[name^='" + rule.id + "_value']");
             var ruleInputsSelect = rule.$el.find("select[name^='" + rule.id + "_value']");
@@ -1335,14 +1311,12 @@ function tree_visit(tree, rules, index, filters) {
             var filtro = filters.find(function (el) {
                 return el.id == oggetto.id
             });
-            // console.log($(rules[index]).find("select[name*='" + rules[index].id + "_filter']"))
             var rule_selections = $(rules[index]).find("select[name*='" + rules[index].id + "_filter']")
             var id_composed = '';
             if(rule_selections.length > 1){
                 //significa che ho più di una selection cioè dei passaggi con FK
                 //devo prendere i nomi e metterli in concatenazione
                 rule_selections.each(function () {
-                    // console.log($(this).val());
                     var name_split = $(this).val().split('.')
                     if(id_composed === '') {
                         id_composed = id_composed + name_split[name_split.length - 1];
