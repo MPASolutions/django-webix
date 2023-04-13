@@ -262,7 +262,7 @@ class AdminWebixSite:
         from django_webix.contrib.admin.models import WebixAdminMenu
         queryset = WebixAdminMenu.objects.all()
         if user.is_superuser:
-            out = queryset.values_list('id', flat=True)
+            out = queryset.values_list('pk', flat=True)
         else:
             out = []
             for el in queryset.filter(enabled=True).filter(Q(active_all=True) | Q(groups__in=user.groups.all())):
