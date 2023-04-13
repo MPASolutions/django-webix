@@ -156,7 +156,7 @@ def action_config(
                             user_id=request.user.pk,
                             content_type_id=ContentType.objects.get_for_model(qs.model).pk,
                             object_id=None,  # on a QS
-                            object_repr=','.join([str(i) for i in qs.values_list('id', flat=True)]),
+                            object_repr=','.join([str(i) for i in qs.values_list('pk', flat=True)]),
                             action_flag=CHANGE,
                             change_message=_('Action success: {} data:{}').format(
                                 wrapper.short_description,
@@ -182,7 +182,7 @@ def action_config(
                         user_id=request.user.pk,
                         content_type_id=ContentType.objects.get_for_model(qs.model).pk,
                         object_id=None,  # on a QS
-                        object_repr=','.join([str(i) for i in qs.values_list('id', flat=True)]),
+                        object_repr=','.join([str(i) for i in qs.values_list('pk', flat=True)]),
                         action_flag=CHANGE,
                         change_message=_('Action success: {}').format(wrapper.short_description)
                     )
