@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-04-04 10:16+0200\n"
+"POT-Creation-Date: 2023-04-17 17:45+0200\n"
 "PO-Revision-Date: 2023-03-24 15:45+0100\n"
 "Last-Translator: Stefano Menegon <menegon@mpasol.it>\n"
 "Language-Team: \n"
@@ -402,7 +402,7 @@ msgstr "Non hai il permesso di cancellare"
 msgid "You haven't view permission"
 msgstr "Non hai il permesso di vedere"
 
-#: views/generic/create_update.py:77
+#: views/generic/create_update.py:79
 msgid ""
 "Template style is improperly configured only options are 'standard' or "
 "'tabs' (standard by default)."
@@ -410,26 +410,26 @@ msgstr ""
 "Lo stile del modello è configurato in modo errato, le sole opzioni "
 "disponibili sono 'standard' o 'tabs' (standard di default)."
 
-#: views/generic/create_update.py:333 views/generic/create_update.py:414
+#: views/generic/create_update.py:335 views/generic/create_update.py:419
 #: views/generic/delete.py:44 views/generic/detail.py:20
 #: views/generic/list.py:613
 msgid "View permission is not allowed"
 msgstr "Non disponi del permesso di visione"
 
-#: views/generic/create_update.py:336
+#: views/generic/create_update.py:338
 msgid "Add permission is not allowed"
 msgstr "Non disponi del permesso di aggiunta"
 
-#: views/generic/create_update.py:417
+#: views/generic/create_update.py:422
 msgid "Change permission is not allowed"
 msgstr "Non disponi del permesso di modifica"
 
-#: views/generic/create_update.py:473
+#: views/generic/create_update.py:481
 #, python-format
 msgid "Changed %s."
 msgstr "Modificato %s."
 
-#: views/generic/create_update.py:473
+#: views/generic/create_update.py:481
 msgid "and"
 msgstr "e"
 

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-04-04 10:16+0200\n"
+"POT-Creation-Date: 2023-04-17 17:45+0200\n"
 "PO-Revision-Date: 2022-11-09 11:44+0050\n"
 "Last-Translator: Sambado Paolo CBC Spagna <>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -407,7 +407,7 @@ msgstr "No has eliminado el permiso"
 msgid "You haven't view permission"
 msgstr "No tienes permiso para ver esta información"
 
-#: views/generic/create_update.py:77
+#: views/generic/create_update.py:79
 msgid ""
 "Template style is improperly configured only options are 'standard' or "
 "'tabs' (standard by default)."
@@ -415,26 +415,26 @@ msgstr ""
 "El estilo de la plantilla está configurado incorrectamente, las opciones son "
 "'estándar' o 'pestañas' (estándar por defecto)."
 
-#: views/generic/create_update.py:333 views/generic/create_update.py:414
+#: views/generic/create_update.py:335 views/generic/create_update.py:419
 #: views/generic/delete.py:44 views/generic/detail.py:20
 #: views/generic/list.py:613
 msgid "View permission is not allowed"
 msgstr "Ver permiso no está permitido"
 
-#: views/generic/create_update.py:336
+#: views/generic/create_update.py:338
 msgid "Add permission is not allowed"
 msgstr "Añadir permiso no está permitido"
 
-#: views/generic/create_update.py:417
+#: views/generic/create_update.py:422
 msgid "Change permission is not allowed"
 msgstr "Cambiar permiso no está permitido"
 
-#: views/generic/create_update.py:473
+#: views/generic/create_update.py:481
 #, python-format
 msgid "Changed %s."
 msgstr "Cambiar %s."
 
-#: views/generic/create_update.py:473
+#: views/generic/create_update.py:481
 msgid "and"
 msgstr "y"
 
