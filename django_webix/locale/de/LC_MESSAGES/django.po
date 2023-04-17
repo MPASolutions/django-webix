@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-04-04 10:16+0200\n"
+"POT-Creation-Date: 2023-04-17 17:45+0200\n"
 "PO-Revision-Date: 2022-07-19 15:50+0050\n"
 "Last-Translator: Stefano Menegon <menegon@mpasol.it>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -405,7 +405,7 @@ msgstr "Sie haben keine Berechtigung geändert"
 msgid "You haven't view permission"
 msgstr "You haben keine Ansichtsberechtigung"
 
-#: views/generic/create_update.py:77
+#: views/generic/create_update.py:79
 msgid ""
 "Template style is improperly configured only options are 'standard' or "
 "'tabs' (standard by default)."
@@ -413,26 +413,26 @@ msgstr ""
 "Formatvorlage falsch eingestellt, einzige Optionen sind \"standard\" oder "
 "\"tabs\" (standard by default)"
 
-#: views/generic/create_update.py:333 views/generic/create_update.py:414
+#: views/generic/create_update.py:335 views/generic/create_update.py:419
 #: views/generic/delete.py:44 views/generic/detail.py:20
 #: views/generic/list.py:613
 msgid "View permission is not allowed"
 msgstr "Ansichtsberechtigung nicht erlaubt"
 
-#: views/generic/create_update.py:336
+#: views/generic/create_update.py:338
 msgid "Add permission is not allowed"
 msgstr "Add permission nicht erlaubt"
 
-#: views/generic/create_update.py:417
+#: views/generic/create_update.py:422
 msgid "Change permission is not allowed"
 msgstr "Änderungsberechtigung nicht erlaubt"
 
-#: views/generic/create_update.py:473
+#: views/generic/create_update.py:481
 #, python-format
 msgid "Changed %s."
 msgstr "Geändert  %s."
 
-#: views/generic/create_update.py:473
+#: views/generic/create_update.py:481
 msgid "and"
 msgstr "und"
 
