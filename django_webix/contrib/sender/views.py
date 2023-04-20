@@ -280,25 +280,78 @@ class SenderMessagesListView(WebixListView):
             {
                 'field_name': 'send_method_type',
                 'datalist_column': format_lazy(
-                    '''{{id: "send_method_type", serverFilterType: "exact", header: ["{}", {{content: "serverSelectFilter", options: send_method_type_options}}], adjust: "all", fillspace: true}}''',
+                    '''{{
+                        id: "send_method_type",
+                        serverFilterType: "exact",
+                        header: ["{}", {{content: "serverSelectFilter", options: send_method_type_options}}],
+                        adjust: "all",
+                        fillspace: true
+                    }}''',
                     escapejs(_("Send method type")))
+            },
+            {
+                'field_name': 'creation_date',
+                'datalist_column': format_lazy(
+                    '''{{
+                        id: "creation_date",
+                        serverFilterType: "range",
+                        header: ["{}", {{content: "serverDateRangeFilter"}}],
+                        adjust: "all",
+                        fillspace: true,
+                        sort: "server",
+                        format: webix.i18n.fullDateFormatStr,
+                        template: function(obj) {{if (obj.creation_date === null) {{return ""}} else {{return this.format(new Date(obj.creation_date)) }} }},
+                    }}''',
+                    escapejs(_("Sent date"))
+                )
+            },
+            {
+                'field_name': 'message_sent__typology__typology',
+                'datalist_column': format_lazy(
+                    '''{{
+                        id: "message_sent__typology__typology",
+                        serverFilterType: "icontains",
+                        header: ["{}", {{content: "serverSelectFilter", options: message_sent__typology__typology_options}}],
+                        adjust: "all",
+                        fillspace: true
+                    }}''',
+                    escapejs(_("Typology")))
             },
             {
                 'field_name': 'message_sent__subject',
                 'datalist_column': format_lazy(
-                    '''{{id: "message_sent__subject", serverFilterType: "icontains", header: ["{}", {{content: "textFilter"}}], adjust: "all", fillspace: true}}''',
+                    '''{{
+                        id: "message_sent__subject",
+                        serverFilterType: "icontains",
+                        header: ["{}", {{content: "serverFilter"}}],
+                        adjust: "all",
+                        fillspace: true
+                    }}''',
                     escapejs(_("Subject")))
             },
             {
                 'field_name': 'message_sent__body',
                 'datalist_column': format_lazy(
-                    '''{{id: "message_sent__body", serverFilterType: "icontains", header: ["{}", {{content: "textFilter"}}], adjust: "all", fillspace: true}}''',
+                    '''{{
+                        id: "message_sent__body",
+                        serverFilterType: "icontains",
+                        header: ["{}", {{content: "serverFilter"}}],
+                        adjust: "all",
+                        fillspace: true
+                    }}''',
                     escapejs(_("Body")))
             },
             {
                 'field_name': 'attachments',
                 'datalist_column': format_lazy(
-                    '''{{id: "attachments", header: ["{}"], width: 70, minWidth: 70, sort: 'string', template: attachmentsTemplate}}''',
+                    '''{{
+                        id: "attachments",
+                        header: ["{}"],
+                        width: 70,
+                        minWidth: 70,
+                        sort: 'server',
+                        template: attachmentsTemplate
+                    }}''',
                     escapejs(_("Attachments")))
             },
         ]
