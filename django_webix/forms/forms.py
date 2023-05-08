@@ -711,11 +711,12 @@ class BaseWebixMixin:
                         str(initial)
                     })
                     # add initial value with text for other purpose
-                    record = field.queryset.get(**{field.to_field_name or 'pk': el['value']})
-                    el['initial'] = {
-                        'id': '{}'.format(getattr(record, field.to_field_name or 'pk')),
-                        'value': '{}'.format(record)
-                    }
+                    record = field.queryset.filter(**{field.to_field_name or 'pk': el['value']}).first()
+                    if record is not None:
+                        el['initial'] = {
+                            'id': '{}'.format(getattr(record, field.to_field_name or 'pk')),
+                            'value': '{}'.format(record)
+                        }
 
                 if name not in self.autocomplete_fields and name not in self.autocomplete_fields_exclude:
                     count = field.queryset.only(field.queryset.model._meta.pk.name).count()
