@@ -477,7 +477,7 @@ class ImportValidator:
 
                         if core_file != '' and all_files:
                             df_rows = geopandas.read_file(core_file)
-                            self.srid = df_rows.crs['init'].split(':')[1]
+                            self.srid = df_rows.crs.to_epsg()
                             str_csv = df_rows.to_csv(index=False)
                             str_csv = str_csv.replace('.0,', ',')
                             self.df_rows = pd.read_csv(io.StringIO(str_csv), dtype='object')
