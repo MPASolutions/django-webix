@@ -98,10 +98,10 @@ def action_config(
                 request.method = 'GET'  # convert request from POST to GET
 
                 def get_context_data_webix_base(self, request, **kwargs):
-                   context = super(template_view, self).get_context_data_webix_base(request, **kwargs)
-                   context['action_key'] = action_key
-                   context['webix_container_id'] = f'{action_key}_win_body'
-                   return context
+                    context = super(template_view, self).get_context_data_webix_base(request, **kwargs)
+                    context['action_key'] = action_key
+                    context['webix_container_id'] = f'{action_key}_win_body'
+                    return context
 
                 template_view.get_context_data_webix_base = get_context_data_webix_base
 
@@ -111,24 +111,24 @@ def action_config(
                 request.method = 'GET'  # convert request from POST to GET
 
                 def get_context_data_webix_base(self, request, **kwargs):
-                   context = super(form_view, self).get_context_data_webix_base(request, **kwargs)
-                   context.update({
-                       'ids': request.POST.get('ids'),
-                       'all': request.POST.get('all'),
-                       'action_key': action_key,
-                       'response_type': response_type,
-                       'short_description': short_description,
-                       'modal_header': modal_header,
-                       'modal_title': modal_title,
-                       'modal_click': modal_click,
-                       'modal_ok': modal_ok,
-                       'modal_cancel': modal_cancel,
-                       'reload_list': reload_list
-                      # 'form': form # form is passed by view by default with all data filled-in
-                   })
-                   context['webix_container_id'] = f'{action_key}_win'
+                    context = super(form_view, self).get_context_data_webix_base(request, **kwargs)
+                    context.update({
+                        'ids': request.POST.get('ids'),
+                        'all': request.POST.get('all'),
+                        'action_key': action_key,
+                        'response_type': response_type,
+                        'short_description': short_description,
+                        'modal_header': modal_header,
+                        'modal_title': modal_title,
+                        'modal_click': modal_click,
+                        'modal_ok': modal_ok,
+                        'modal_cancel': modal_cancel,
+                        'reload_list': reload_list
+                        # 'form': form # form is passed by view by default with all data filled-in
+                    })
+                    context['webix_container_id'] = f'{action_key}_win'
 
-                   return context
+                    return context
 
                 form_view.get_context_data_webix_base = get_context_data_webix_base
 

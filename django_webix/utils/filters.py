@@ -134,6 +134,7 @@ def combo_with_icontains_filter(combo_widget):
 
     options_data = combo_widget['options']
     combo_widget.update({
+        'view':'combo',
         'options': {
             'filter': 'filter_icontains',
             'body': {
