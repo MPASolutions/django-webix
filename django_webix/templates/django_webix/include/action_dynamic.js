@@ -1,4 +1,6 @@
 {% load static %}
+
+{% block webix_content %}
 webix.ui({
     view: "window",
     id: "{{ webix_container_id }}",
@@ -44,10 +46,10 @@ webix.ui({
                             if ($$('{{ form.webix_id }}').validate({hidden: true, disabled: true})) {
                                 webix.extend($$('{{ form.webix_id }}'), webix.OverlayBox);
                                 $$('{{ form.webix_id }}').showOverlay("<img src='{% static 'django_webix/loading.gif' %}'>");
-                                _{{ view_prefix }}action_execute(
+                                _{{ parent_view.get_view_prefix }}action_execute(
                                     '{{ action_key }}',
-                                    ids,
-                                    all,
+                                    '{{ ids|default_if_none:'' }}'.split(','),
+                                    {{ all }},
                                     '{{ response_type }}',
                                     '{{ short_description }}',
                                     '{{ modal_title }}',
@@ -80,3 +82,7 @@ webix.ui({
         },
     }
 }).show();
+
+{% block extrajs_post %}{% endblock %}
+
+{% endblock %}
