@@ -48,7 +48,8 @@ def get_messages_read_required(request, queryset=None):
             if send_method.get('read_required', False):
                 send_methods_read_required.append(send_method['function'])
         queryset = queryset.filter(Q(message_sent__send_method__in=send_methods_read_required) | \
-                                   Q(message_sent__typology__read_required=True))
+                                   Q(message_sent__typology__read_required=True) | \
+                                   Q(message_sent__read_required=True) )
 
         # get only not read messages
         queryset = queryset.exclude(message_sent__messageuserread__user_id=Value(request.user.pk))
