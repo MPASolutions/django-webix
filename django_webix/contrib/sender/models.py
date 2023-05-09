@@ -443,6 +443,7 @@ class MessageSent(Model):
         db_constraint=False,
         verbose_name=_('Attachments')
     )
+    read_required = models.BooleanField(_('Read required'), blank=True, null=False, default=False)
 
     # Invoice
     cost = models.DecimalField(max_digits=6, decimal_places=4, default=Decimal('0.0000'), verbose_name=_('Cost'))
