@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-04-17 17:45+0200\n"
+"POT-Creation-Date: 2023-05-09 17:23+0200\n"
 "PO-Revision-Date: 2022-03-21 12:39+0050\n"
 "Last-Translator: Traduzioni CBC <>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -132,7 +132,7 @@ msgstr "Filtrer"
 msgid "Double click to edit the element"
 msgstr "Double cliquer pour modifier l'élément"
 
-#: templates/django_webix/include/action_dynamic.js:17
+#: templates/django_webix/include/action_dynamic.js:19
 #: templates/django_webix/include/actions_list.js:65
 #: templates/django_webix/include/form_errors_popup.js:16
 #: templates/django_webix/include/utils.js:275

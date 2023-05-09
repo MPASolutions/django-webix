@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-04-20 13:46+0200\n"
+"POT-Creation-Date: 2023-05-09 17:23+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -198,16 +198,16 @@ msgstr ""
 #: contrib/sender/models.py:188 contrib/sender/models.py:216
 #: contrib/sender/models.py:271 contrib/sender/models.py:299
 #: contrib/sender/models.py:358 contrib/sender/models.py:382
-#: contrib/sender/models.py:406 contrib/sender/models.py:456
-#: contrib/sender/models.py:492 contrib/sender/models.py:512
+#: contrib/sender/models.py:406 contrib/sender/models.py:457
+#: contrib/sender/models.py:493 contrib/sender/models.py:513
 msgid "Creation date"
 msgstr ""
 
 #: contrib/sender/models.py:189 contrib/sender/models.py:217
 #: contrib/sender/models.py:272 contrib/sender/models.py:300
 #: contrib/sender/models.py:359 contrib/sender/models.py:383
-#: contrib/sender/models.py:407 contrib/sender/models.py:457
-#: contrib/sender/models.py:493 contrib/sender/models.py:513
+#: contrib/sender/models.py:407 contrib/sender/models.py:458
+#: contrib/sender/models.py:494 contrib/sender/models.py:514
 msgid "Modification data"
 msgstr ""
 
@@ -220,7 +220,7 @@ msgid "Customer typologies"
 msgstr ""
 
 #: contrib/sender/models.py:205 contrib/sender/models.py:288
-#: contrib/sender/models.py:453 contrib/sender/models.py:510
+#: contrib/sender/models.py:454 contrib/sender/models.py:511
 msgid "User"
 msgstr ""
 
@@ -253,7 +253,7 @@ msgid "Note"
 msgstr ""
 
 #: contrib/sender/models.py:213 contrib/sender/models.py:296
-#: contrib/sender/models.py:439 contrib/sender/models.py:486
+#: contrib/sender/models.py:439 contrib/sender/models.py:487
 msgid "Extra"
 msgstr ""
 
@@ -302,7 +302,7 @@ msgstr ""
 msgid "Attachments"
 msgstr ""
 
-#: contrib/sender/models.py:384
+#: contrib/sender/models.py:384 contrib/sender/models.py:446
 msgid "Read required"
 msgstr ""
 
@@ -349,86 +349,86 @@ msgstr ""
 msgid "Received"
 msgstr ""
 
-#: contrib/sender/models.py:448
+#: contrib/sender/models.py:449
 msgid "Cost"
 msgstr ""
 
-#: contrib/sender/models.py:449
+#: contrib/sender/models.py:450
 #: contrib/sender/templates/django_webix/sender/invoices.js:86
 #: contrib/sender/views.py:803
 msgid "Invoiced"
 msgstr ""
 
-#: contrib/sender/models.py:454
+#: contrib/sender/models.py:455
 msgid "Sender"
 msgstr ""
 
-#: contrib/sender/models.py:460
+#: contrib/sender/models.py:461
 msgid "Sent message"
 msgstr ""
 
-#: contrib/sender/models.py:461
+#: contrib/sender/models.py:462
 msgid "Sent messages"
 msgstr ""
 
-#: contrib/sender/models.py:473 contrib/sender/models.py:509
+#: contrib/sender/models.py:474 contrib/sender/models.py:510
 msgid "Message sent"
 msgstr ""
 
-#: contrib/sender/models.py:477
+#: contrib/sender/models.py:478
 msgid "Recipient address"
 msgstr ""
 
-#: contrib/sender/models.py:478
+#: contrib/sender/models.py:479
 msgid "Sent number"
 msgstr ""
 
-#: contrib/sender/models.py:480
+#: contrib/sender/models.py:481
 #: contrib/sender/templates/django_webix/sender/invoices.js:68
 msgid "Success"
 msgstr ""
 
-#: contrib/sender/models.py:481
+#: contrib/sender/models.py:482
 msgid "Failed"
 msgstr ""
 
-#: contrib/sender/models.py:482
+#: contrib/sender/models.py:483
 msgid "Unknown"
 msgstr ""
 
-#: contrib/sender/models.py:483
+#: contrib/sender/models.py:484
 msgid "Invalid"
 msgstr ""
 
-#: contrib/sender/models.py:484
+#: contrib/sender/models.py:485
 msgid "Duplicate"
 msgstr ""
 
-#: contrib/sender/models.py:487
+#: contrib/sender/models.py:488
 msgid "Extra JSON"
 msgstr ""
 
-#: contrib/sender/models.py:496
+#: contrib/sender/models.py:497
 msgid "Recipient"
 msgstr ""
 
-#: contrib/sender/models.py:497
+#: contrib/sender/models.py:498
 msgid "Recipients"
 msgstr ""
 
-#: contrib/sender/models.py:516
+#: contrib/sender/models.py:517
 msgid "Readed message"
 msgstr ""
 
-#: contrib/sender/models.py:517
+#: contrib/sender/models.py:518
 msgid "Readed messages"
 msgstr ""
 
-#: contrib/sender/models.py:536
+#: contrib/sender/models.py:537
 msgid "Telegram Persistence"
 msgstr ""
 
-#: contrib/sender/models.py:537
+#: contrib/sender/models.py:538
 msgid "Telegram Persistences"
 msgstr ""
 
@@ -665,12 +665,12 @@ msgstr ""
 msgid "There are no recipients for this communication"
 msgstr ""
 
-#: contrib/sender/utils.py:104 contrib/sender/utils.py:109
-#: contrib/sender/utils.py:114
+#: contrib/sender/utils.py:105 contrib/sender/utils.py:110
+#: contrib/sender/utils.py:115
 msgid "Related is not subclass of `DjangoWebixSender`"
 msgstr ""
 
-#: contrib/sender/utils.py:127 contrib/sender/views.py:777
+#: contrib/sender/utils.py:128 contrib/sender/views.py:777
 msgid "Invalid send method"
 msgstr ""
 

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-04-17 17:45+0200\n"
+"POT-Creation-Date: 2023-05-09 17:23+0200\n"
 "PO-Revision-Date: 2023-03-24 15:45+0100\n"
 "Last-Translator: Stefano Menegon <menegon@mpasol.it>\n"
 "Language-Team: \n"
@@ -130,7 +130,7 @@ msgstr "Filtra"
 msgid "Double click to edit the element"
 msgstr "Doppio click per editare l'elemento"
 
-#: templates/django_webix/include/action_dynamic.js:17
+#: templates/django_webix/include/action_dynamic.js:19
 #: templates/django_webix/include/actions_list.js:65
 #: templates/django_webix/include/form_errors_popup.js:16
 #: templates/django_webix/include/utils.js:275
