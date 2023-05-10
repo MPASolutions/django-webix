@@ -672,7 +672,10 @@ class BaseWebixMixin:
                     if 'value' in el:
                         _vals = el['value'].split(",")
                     for _val in [i for i in _vals if i != ''.strip()]:
-                        record = field.queryset.get(**{field.to_field_name or 'pk': _val})
+                        try:
+                            record = field.queryset.get(**{field.to_field_name or 'pk': _val})
+                        except field.queryset.model.DoesNotExist as e:
+                            raise ValueError(str(e))
                         el['options']['body']['data'].append({
                             'id': '{}'.format(getattr(record, field.to_field_name or 'pk')),
                             'value': '{}'.format(record)
@@ -748,7 +751,10 @@ class BaseWebixMixin:
                         }
                     })
                     if 'value' in el and el['value'] != '':  # and int(el['value']) > 0:
-                        record = field.queryset.get(**{field.to_field_name or 'pk': el['value']})
+                        try:
+                            record = field.queryset.get(**{field.to_field_name or 'pk': el['value']})
+                        except field.queryset.model.DoesNotExist as e:
+                            raise ValueError(str(e))
                         el['suggest']['body']['data'] = [{
                             'id': '{}'.format(getattr(record, field.to_field_name or 'pk')),
                             'value': '{}'.format(record)
