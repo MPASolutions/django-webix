@@ -87,6 +87,12 @@ function _{{ view_prefix }}action_execute(action, ids, all, response_type, short
                                 var message_on_popup = data.message_on_popup || false;
                                 var message_type = data.message_type;
 
+                                if ((message_type==undefined)&&(data.status!=undefined)){
+                                    if (data.status === false) {
+                                        message_type = 'alert-error';
+                                    }
+                                }
+
                                 if (data.status === true) title = "{{_("Action successful")|escapejs}}";
                                 else title = "{{_("Oops! Something went wrong...")|escapejs}}"
 
