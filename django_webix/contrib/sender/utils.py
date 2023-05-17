@@ -19,40 +19,38 @@ def get_messages_read_required(request, queryset=None):
     :param queryset: initial MessageRecipient queryset
     :return: queryset
     """
-    if request.user.is_superuser:
-        queryset = MessageRecipient.objects.none()
-    else:
-        if queryset is None:
-            queryset = MessageRecipient.objects.all()
 
-        # Only sent messages
-        queryset = queryset.filter(message_sent__status='sent')
+    if queryset is None:
+        queryset = MessageRecipient.objects.all()
 
-        # Limit filter by user
-        qset = Q()
-        for recipient_config in CONF['recipients']:
-            app_label, model = recipient_config['model'].lower().split(".")
-            model_class = apps.get_model(app_label=app_label, model_name=model)
-            recipient_queryset = model_class.objects.all()
-            recipient_queryset = recipient_queryset.select_related(*model_class.get_select_related())
-            recipient_queryset = recipient_queryset.prefetch_related(*model_class.get_prefetch_related())
-            recipient_queryset = recipient_queryset.filter(
-                model_class.get_filters_viewers(request.user, request=request)
-            )
-            qset |= Q(**{"{}_message_recipients__in".format(model): recipient_queryset})
-        queryset = queryset.filter(qset)
+    # Only sent messages
+    queryset = queryset.filter(message_sent__status='sent')
 
-        # filter for read required
-        send_methods_read_required = []
-        for send_method in CONF['send_methods']:
-            if send_method.get('read_required', False):
-                send_methods_read_required.append(send_method['function'])
-        queryset = queryset.filter(Q(message_sent__send_method__in=send_methods_read_required) | \
-                                   Q(message_sent__typology__read_required=True) | \
-                                   Q(message_sent__read_required=True) )
+    # Limit filter by user
+    qset = Q()
+    for recipient_config in CONF['recipients']:
+        app_label, model = recipient_config['model'].lower().split(".")
+        model_class = apps.get_model(app_label=app_label, model_name=model)
+        recipient_queryset = model_class.objects.all()
+        recipient_queryset = recipient_queryset.select_related(*model_class.get_select_related())
+        recipient_queryset = recipient_queryset.prefetch_related(*model_class.get_prefetch_related())
+        recipient_queryset = recipient_queryset.filter(
+            model_class.get_filters_viewers(request.user, request=request)
+        )
+        qset |= Q(**{"{}_message_recipients__in".format(model): recipient_queryset})
+    queryset = queryset.filter(qset)
 
-        # get only not read messages
-        queryset = queryset.exclude(message_sent__messageuserread__user_id=Value(request.user.pk))
+    # filter for read required
+    send_methods_read_required = []
+    for send_method in CONF['send_methods']:
+        if send_method.get('read_required', False):
+            send_methods_read_required.append(send_method['function'])
+    queryset = queryset.filter(Q(message_sent__send_method__in=send_methods_read_required) | \
+                               Q(message_sent__typology__read_required=True) | \
+                               Q(message_sent__read_required=True) )
+
+    # get only not read messages
+    queryset = queryset.exclude(message_sent__messageuserread__user_id=Value(request.user.pk))
     return queryset.distinct().order_by('-creation_date')
 
 
