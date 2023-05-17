@@ -139,6 +139,12 @@ class WebixListView(WebixBaseMixin,
     def is_installed_django_webix_filter(self):
         return apps.is_installed('django_webix.contrib.filter')
 
+    def is_enabled_django_webix_filter(self):
+        if self.is_installed_django_webix_filter() and self.model is not None:
+            from django_webix.contrib.filter.utils.config import model_is_enabled
+            return model_is_enabled(self.model)
+        return False
+
     def get_header_rows(self, request):
         return self.header_rows
 
@@ -656,6 +662,7 @@ class WebixListView(WebixBaseMixin,
             'paginate_start_key': self.paginate_start_key,
             # extra filters
             'is_installed_django_webix_filter': self.is_installed_django_webix_filter(),
+            'is_enabled_django_webix_filter': self.is_enabled_django_webix_filter(),
         })
         return context
 
