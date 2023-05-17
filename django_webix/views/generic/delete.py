@@ -1,4 +1,3 @@
-
 import copy
 import json
 
@@ -102,8 +101,10 @@ class WebixDeleteView(WebixBaseMixin, WebixPermissionsMixin, WebixUrlMixin, Dele
     def response_invalid(self, failure_url=None, **kwargs):
         return HttpResponseRedirect(failure_url)
 
-    def delete(self, request, *args, **kwargs):
+    def form_valid(self, form):
+        return self.delete(request=self.request)
 
+    def delete(self, request, *args, **kwargs):
         self.object = self.get_object()
         self.copied_object = copy.deepcopy(self.object)
 
@@ -126,7 +127,6 @@ class WebixDeleteView(WebixBaseMixin, WebixPermissionsMixin, WebixUrlMixin, Dele
 
         success_url = self.get_success_url()
         self.object.delete()
-
         self.post_delete_valid()
 
         return self.response_valid(success_url=success_url)
