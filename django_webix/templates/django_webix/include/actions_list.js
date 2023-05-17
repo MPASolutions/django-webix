@@ -79,7 +79,7 @@ function _{{ action_key }}_action_execute_form(ids, all) {
                 cols: [
                     {$template: "Spacer"},
                     {
-                        id: '{{ form.webix_id }}_set',
+                        id: '{{ action.form.webix_id }}_set',
                         view: "tootipButton",
                         type: "form",
                         align: "right",
