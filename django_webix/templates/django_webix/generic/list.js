@@ -73,7 +73,7 @@ $$("{{ webix_container_id }}").addView({
                 load_js('{{ url_list|safe }}', undefined, undefined, undefined, undefined, undefined, undefined, abortAllPending = true);
             }
         },
-        {% if is_installed_django_webix_filter %}
+        {% if is_installed_django_webix_filter and is_enabled_django_webix_filter %}
         {
             id: '{{ view_prefix }}_filter_advanced',
             view: "button",
