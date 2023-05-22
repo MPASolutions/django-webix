@@ -18,6 +18,7 @@ function {{ view_prefix }}get_filters_qsets() {
                     val = val.split(' ').join('');
                     val = val.split(';')
                     $.each(val, function (index, filter_txt) {
+                        filter_txt = filter_txt.replace(',','.')
                         if (isNumberCheck(filter_txt)) {
                             qsets.push({'path': el.id, 'val': filter_txt});
                         } else if ((filter_txt.substring(0, 2) == '>=') && (isNumberCheck(filter_txt.substring(2)))) {
