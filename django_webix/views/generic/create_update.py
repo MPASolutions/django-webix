@@ -391,7 +391,10 @@ class WebixCreateView(WebixCreateUpdateMixin,
 
     def validate_unique_together(self, form=None, inlines=None, exclude=None, **kwargs):
         validate_unique_args = {"exclude": exclude}
-        if 'include_meta_constraints' in inspect.getfullargspec(self.object.validate_unique).args:
+        if self.object is not None and \
+                hasattr(self.object, 'validate_unique') and \
+                callable(self.object.validate_unique) and \
+                'include_meta_constraints' in inspect.getfullargspec(self.object.validate_unique).args:
             validate_unique_args['include_meta_constraints'] = True
         # self.object.validate_unique(**validate_unique_args)
         if form is not None:
@@ -432,7 +435,11 @@ class WebixUpdateView(WebixCreateUpdateMixin, WebixBaseMixin, WebixPermissionsMi
 
     def validate_unique_together(self, form=None, inlines=None, exclude=None, **kwargs):
         validate_unique_args = {"exclude": exclude}
-        if 'include_meta_constraints' in inspect.getfullargspec(self.object.validate_unique).args:
+
+        if self.object is not None and \
+                hasattr(self.object, 'validate_unique') and \
+                callable(self.object.validate_unique) and \
+                'include_meta_constraints' in inspect.getfullargspec(self.object.validate_unique).args:
             validate_unique_args['include_meta_constraints'] = True
         self.object.validate_unique(**validate_unique_args)
         if form is not None:
