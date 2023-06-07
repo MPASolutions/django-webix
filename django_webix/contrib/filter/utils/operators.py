@@ -152,25 +152,25 @@ matches = {
 
     # GEO FIELDS
     models.PolygonField: {
-        "operators": ['contained', 'isnull'],
+        "operators": ['within', 'isnull'],
     },
     models.MultiPolygonField: {
-        "operators": ['contained', 'isnull'],
+        "operators": ['within', 'isnull'],
     },
     models.LineStringField: {
-        "operators": ['contained', 'isnull'],
+        "operators": ['within', 'isnull'],
     },
     models.MultiLineStringField: {
-        "operators": ['contained', 'isnull'],
+        "operators": ['within', 'isnull'],
     },
     models.PointField: {
-        "operators": ['contained', 'isnull'],
+        "operators": ['within', 'isnull'],
     },
     models.MultiPointField: {
-        "operators": ['contained', 'isnull'],
+        "operators": ['within', 'isnull'],
     },
     models.GeometryCollectionField: {
-        "operators": ['contained', 'isnull'],
+        "operators": ['within', 'isnull'],
     },
 }
 
@@ -201,5 +201,5 @@ operators_override = {
     'keys': {'multiple': True},
     'overlap': {'multiple': True, 'label': _('Overlap')},
 
-    'contained': {'label': _('Contained by'), 'pick_geometry': True},
+    'within': {'label': _('Contained by'), 'pick_geometry': True},
 }
