@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-02-24 17:39+0100\n"
-"PO-Revision-Date: 2023-03-16 08:57+0100\n"
+"PO-Revision-Date: 2023-05-25 10:53+0200\n"
 "Last-Translator: Stefano Menegon <menegon@mpasol.it>\n"
 "Language-Team: \n"
 "Language: it\n"
@@ -42,7 +42,7 @@ msgstr "Nome"
 
 #: contrib/admin/dwadmin.py:85
 msgid "Surname"
-msgstr "Soprannome"
+msgstr "Cognome"
 
 #: contrib/admin/dwadmin.py:98
 msgid "Staff"
@@ -68,7 +68,7 @@ msgstr "Permessi disponibili"
 #: contrib/admin/forms.py:25 contrib/admin/forms.py:130
 #: contrib/admin/forms.py:137
 msgid "Selected"
-msgstr "elementi selezionati"
+msgstr "Elementi selezionati"
 
 #: contrib/admin/forms.py:53 contrib/admin/forms.py:233
 msgid "The two password fields didn’t match."
@@ -165,7 +165,7 @@ msgstr "Amministrazione"
 
 #: contrib/admin/sites.py:42
 msgid "Site administration"
-msgstr "Amministrazione"
+msgstr "Amministrazione sito"
 
 #: contrib/admin/sites.py:654
 #, python-format
@@ -260,7 +260,7 @@ msgid ""
 " is valid."
 msgstr ""
 "Abbiamo inviato le istruzioni per impostare la password all'indirizzo email "
-"che hai fornito. Dovresti riceverli a breve purché l'indirizzo che hai "
+"che hai fornito. Dovresti riceverle a breve, purché l'indirizzo che hai "
 "inserito sia valido."
 
 #: contrib/admin/templates/django_webix/admin/account/password_reset_done.html:23
@@ -346,7 +346,7 @@ msgstr "Cambia password"
 
 #: contrib/admin/templates/django_webix/admin/include/menu.js:63
 msgid "2 factor authentication"
-msgstr "Autenticazione 2 fattori"
+msgstr "Autenticazione a 2 fattori"
 
 #: contrib/admin/templates/django_webix/admin/include/menu.js:79
 msgid "Manage users"

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-05-09 17:23+0200\n"
+"POT-Creation-Date: 2023-05-31 22:12+0200\n"
 "PO-Revision-Date: 2022-03-21 15:33+0050\n"
 "Last-Translator: Traduzioni CBC <>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -684,12 +684,12 @@ msgstr "Résultats"
 msgid "There are no recipients for this communication"
 msgstr "Il n'y a pas de destinataires pour cette communication"
 
-#: contrib/sender/utils.py:105 contrib/sender/utils.py:110
-#: contrib/sender/utils.py:115
+#: contrib/sender/utils.py:103 contrib/sender/utils.py:108
+#: contrib/sender/utils.py:113
 msgid "Related is not subclass of `DjangoWebixSender`"
 msgstr "Associé n'est pas une sous-classe de  `DjangoWebixSender`"
 
-#: contrib/sender/utils.py:128 contrib/sender/views.py:777
+#: contrib/sender/utils.py:126 contrib/sender/views.py:777
 msgid "Invalid send method"
 msgstr "Méthode d'envoi invalide"
 
