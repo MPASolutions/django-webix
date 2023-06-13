@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-05-09 17:23+0200\n"
+"POT-Creation-Date: 2023-05-31 22:12+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -42,20 +42,20 @@ msgstr ""
 msgid "MultipleChoiceField is available only with PRO webix license"
 msgstr ""
 
-#: forms/forms.py:662 forms/forms.py:686 forms/forms.py:740 forms/forms.py:771
-#: forms/forms.py:781 forms/forms.py:795 forms/forms.py:845
+#: forms/forms.py:662 forms/forms.py:689 forms/forms.py:743 forms/forms.py:777
+#: forms/forms.py:787 forms/forms.py:801 forms/forms.py:851
 msgid "Click to select"
 msgstr ""
 
-#: forms/forms.py:884
+#: forms/forms.py:890
 msgid "Initial value {} for geo field {} is not supported"
 msgstr ""
 
-#: forms/forms.py:933
+#: forms/forms.py:939
 msgid "Edit"
 msgstr ""
 
-#: forms/forms.py:1084
+#: forms/forms.py:1090
 msgid "Type of field {} not supported"
 msgstr ""
 
@@ -158,13 +158,13 @@ msgid "selected"
 msgstr ""
 
 #: templates/django_webix/include/actions_utils.js:66
-#: templates/django_webix/include/actions_utils.js:91
+#: templates/django_webix/include/actions_utils.js:97
 #: templates/django_webix/include/form_errors_message.js:13
 #: templates/django_webix/include/form_errors_popup.js:13
 msgid "Oops! Something went wrong..."
 msgstr ""
 
-#: templates/django_webix/include/actions_utils.js:90
+#: templates/django_webix/include/actions_utils.js:96
 msgid "Action successful"
 msgstr ""
 
@@ -406,9 +406,9 @@ msgid ""
 "'tabs' (standard by default)."
 msgstr ""
 
-#: views/generic/create_update.py:335 views/generic/create_update.py:419
-#: views/generic/delete.py:44 views/generic/detail.py:20
-#: views/generic/list.py:613
+#: views/generic/create_update.py:335 views/generic/create_update.py:422
+#: views/generic/delete.py:43 views/generic/detail.py:20
+#: views/generic/list.py:619
 msgid "View permission is not allowed"
 msgstr ""
 
@@ -416,16 +416,16 @@ msgstr ""
 msgid "Add permission is not allowed"
 msgstr ""
 
-#: views/generic/create_update.py:422
+#: views/generic/create_update.py:425
 msgid "Change permission is not allowed"
 msgstr ""
 
-#: views/generic/create_update.py:481
+#: views/generic/create_update.py:488
 #, python-format
 msgid "Changed %s."
 msgstr ""
 
-#: views/generic/create_update.py:481
+#: views/generic/create_update.py:488
 msgid "and"
 msgstr ""
 
@@ -457,54 +457,54 @@ msgstr ""
 msgid "Action success: {}"
 msgstr ""
 
-#: views/generic/delete.py:47
+#: views/generic/delete.py:46
 msgid "Delete permission is not allowed"
 msgstr ""
 
-#: views/generic/delete.py:78
+#: views/generic/delete.py:77
 msgid ""
 "No URL to redirect to.  Either provide a url or define a get_absolute_url "
 "method on the Model."
 msgstr ""
 
-#: views/generic/delete.py:89
+#: views/generic/delete.py:88
 msgid ""
 "No URL to failure redirect to.  Either provide a url or define a "
 "get_absolute_url method on the Model."
 msgstr ""
 
-#: views/generic/list.py:360
+#: views/generic/list.py:366
 msgid "Paginate count is not integer"
 msgstr ""
 
-#: views/generic/list.py:369
+#: views/generic/list.py:375
 msgid "Paginate start is not integer"
 msgstr ""
 
-#: views/generic/list.py:461
+#: views/generic/list.py:467
 msgid ""
 "Actions style is improperly configured only options are 'buttons' or "
 "'select' (select by default)."
 msgstr ""
 
-#: views/generic/list.py:574
+#: views/generic/list.py:580
 msgid ""
 "Json response is available only if get_queryset() return a queryset and not "
 "a list"
 msgstr ""
 
-#: views/generic/list.py:593
+#: views/generic/list.py:599
 msgid "This action is not registered"
 msgstr ""
 
-#: views/generic/list.py:599
+#: views/generic/list.py:605
 msgid "Permission denied: {}"
 msgstr ""
 
-#: views/generic/list.py:601
+#: views/generic/list.py:607
 msgid "This permission is not registered on this class"
 msgstr ""
 
-#: views/generic/list.py:675
+#: views/generic/list.py:682
 msgid "Generic TemplateListView needs to define data for datatable"
 msgstr ""
