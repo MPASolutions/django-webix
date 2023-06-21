@@ -29,10 +29,19 @@ if (form_validate('{{ form.webix_id }}')) {
         });
     });
 
+    {% if has_warning_clean %}
+    if (webix.storage.local.get("{{ form.webix_id }}_warnings_accepted")==null) {
+        form_data.append('warnings_enabled', 'true');
+    } else {
+        webix.storage.local.remove("{{ form.webix_id }}_warnings_accepted");
+    }
+    {% endif %}
+
     {% block post_form_data %}{% endblock %}
-    if ($$('{{ form.webix_id }}-inlines-tabbar')!=undefined) {
+    if ($$('{{ form.webix_id }}-inlines-tabbar')!=null) {
         var active_tab = $$('{{ form.webix_id }}-inlines-tabbar').getValue() + '';
     }
+
     $.ajax({
         {% if not object.pk and url_create and url_create != '' %}
             url: "{{ url_create|safe }}{% if extra_params_button %}{% if not '?' in url_create %}?{% else %}&{% endif %}{{ extra_params_button }}{% endif %}",

@@ -51,10 +51,12 @@
                                 {
                                     cols: [
                                         {
+                                            id: "{{ form.webix_id }}_send",
                                             view: "button",
                                             value: "{{ _("Change my password")|escapejs }}",
                                             type: "form",
                                             click: function () {
+                                                webix.storage.local.put("last_button_click", '{{ form.webix_id }}_send');
                                                 {% include "django_webix/include/toolbar_form_save.js"%}
                                             }
                                         }

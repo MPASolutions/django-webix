@@ -162,6 +162,7 @@ webix.i18n.locales['it-IT'].pivot = {
     windowTitle: "Configurazione",
     windowMessage: "[Trascinare i campi di sinistra nella sezione desiderata]",
 };
+webix.i18n.locales['it-IT'].calendar['done']= "Fatto"
 
 webix.i18n.locales['it-IT'].fullDateFormat = "%d/%m/%Y %H:%i:%s"
 
