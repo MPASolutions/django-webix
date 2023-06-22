@@ -51,6 +51,7 @@ $$("{{ webix_container_id }}").addView({
                             tooltip: "{{ info_no_change_permission|join:", "|escapejs}}",
                         {% endif %}
                         click: function () {
+                              webix.storage.local.put("last_button_click", '{{ form.webix_id }}_save_continue');
                               {% include "django_webix/include/toolbar_form_save.js" with extra_params_button='_continue=true' %}
                         }
                     },
@@ -77,6 +78,7 @@ $$("{{ webix_container_id }}").addView({
                             {% endif %}
                         {% endif %}
                         click: function () {
+                              webix.storage.local.put("last_button_click", '{{ form.webix_id }}_save_addanother');
                               {% include "django_webix/include/toolbar_form_save.js" with extra_params_button='_addanother=true' %}
                         }
                     },
@@ -101,6 +103,7 @@ $$("{{ webix_container_id }}").addView({
                             tooltip: "{{ info_no_change_permission|join:", "|escapejs }}",
                         {% endif %}
                         click: function () {
+                            webix.storage.local.put("last_button_click", '{{ form.webix_id }}_save');
                               {% include "django_webix/include/toolbar_form_save.js" with extra_params_button='_gotolist=true' %}
                         }
                     }
