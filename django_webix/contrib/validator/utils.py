@@ -36,6 +36,7 @@ ERR_MSG = {
     'PARSE_ERR': _('Text file not recognizable as delimiter-separated values with separator \' {} \' (Exception:{})'),
     'WRONG_FILE': _('Could not find file \'{}\' (or read from buffer)'),
     'WRONG_EXT': _('File format \'{}\' not recognized, supported formats: {}'),
+    'WRONG_CONTENT_UNDETERMINED': _('Internal file format content was not recognized'),
     'WRONG_TYPE': _('File type \'{}\' not supported'),
     'NOFOGLI': _('There is no sheet'),
     'NODATA': _('There is no data in the sheet {}'),
@@ -441,7 +442,10 @@ class ImportValidator:
                 # read with dtype='object' to allow mixed dtype columns, prevent pandas to autocast (eg int with NaN to float)
                 if ext in ['xls', 'xlsx'] and \
                     (self.check_mimetype is False or (mimetype in MIME['xls'] or mimetype in MIME['xlsx'])):
-                    self.df_rows = pd.read_excel(self.filepath_or_buffer, dtype='object', **self.kw_pandas_read)
+                    try:
+                        self.df_rows = pd.read_excel(self.filepath_or_buffer, dtype='object', **self.kw_pandas_read)
+                    except ValueError as e:
+                        self.file_err.append(ERR_MSG['WRONG_CONTENT_UNDETERMINED'])
                 elif ext in ['csv', 'txt'] and \
                     (self.check_mimetype is False or (mimetype in MIME['csv'] or mimetype in MIME['txt'])):
                     try:
