@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-01-27 08:25+0100\n"
+"POT-Creation-Date: 2023-07-03 11:40+0200\n"
 "PO-Revision-Date: 2023-02-24 09:09+0100\n"
 "Last-Translator: Stefano Menegon <menegon@mpasol.it>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -83,8 +83,8 @@ msgstr "Nessun file caricato"
 
 #: contrib/validator/utils.py:36
 msgid ""
-"Text file not recognizable as delimiter-separated values with separator ' {}"
-" ' (Exception:{})"
+"Text file not recognizable as delimiter-separated values with separator ' {} "
+"' (Exception:{})"
 msgstr ""
 "File di testo non riconoscibile come delimiter-separated values con "
 "separatore ' {} ' (Exception:{})"
@@ -98,60 +98,64 @@ msgid "File format '{}' not recognized, supported formats: {}"
 msgstr "Formato del file '{}' non riconosciuto, formati supportati: {}"
 
 #: contrib/validator/utils.py:39
+msgid "Internal file format content was not recognized"
+msgstr ""
+
+#: contrib/validator/utils.py:40
 msgid "File type '{}' not supported"
 msgstr "Tipo di file '{}' non supportato"
 
-#: contrib/validator/utils.py:40
+#: contrib/validator/utils.py:41
 msgid "There is no sheet"
 msgstr "Non è presente alcun foglio"
 
-#: contrib/validator/utils.py:41
+#: contrib/validator/utils.py:42
 msgid "There is no data in the sheet {}"
 msgstr "Non è presente alcun dato nel foglio {}"
 
-#: contrib/validator/utils.py:42
+#: contrib/validator/utils.py:43
 msgid "There are columns with no name"
 msgstr "Sono presenti colonne senza nome"
 
-#: contrib/validator/utils.py:43
+#: contrib/validator/utils.py:44
 msgid "There are columns with no name: {}"
 msgstr "Sono presenti colonne senza nome: {}"
 
-#: contrib/validator/utils.py:44
+#: contrib/validator/utils.py:45
 msgid "There are not enough columns: there are {} columns, {} needed"
 msgstr ""
 "Non sono presenti sufficienti colonne: presenti {} colonne, {} necessarie"
 
-#: contrib/validator/utils.py:45
+#: contrib/validator/utils.py:46
 msgid "Column headers ({}^ row) are incorrect"
 msgstr "Le intestazioni delle colonne ({}^ riga) non sono corrette"
 
-#: contrib/validator/utils.py:46
+#: contrib/validator/utils.py:47
 msgid "There is no column '{}'"
 msgstr "Non è presente la colonna '{}'"
 
-#: contrib/validator/utils.py:47
+#: contrib/validator/utils.py:48
 msgid "The name of the {}^ column ({}) must be ' {} ' (instead of '{}')"
 msgstr "Il nome della {}^ colonna ({}) deve essere '{}' (anzichè '{}')"
 
-#: contrib/validator/utils.py:48
+#: contrib/validator/utils.py:49
 msgid "A uniqueness rule has been violated in the fields {}"
 msgstr "È stata violata una regola di unicità sui campi {}"
 
-#: contrib/validator/utils.py:49
+#: contrib/validator/utils.py:50
 msgid ""
-"The zip file is supported only if the following files are contained .shp, "
-".dbf, .prj, .shx"
+"The zip file is supported only if the following files are contained .shp, ."
+"dbf, .prj, .shx"
 msgstr ""
-"Lo zip file è supportato solo se sono contenuti i seguenti file .shp, .dbf, "
-".prj, .shx"
+"Lo zip file è supportato solo se sono contenuti i seguenti file .shp, .dbf, ."
+"prj, .shx"
 
-#: contrib/validator/utils.py:129 contrib/validator/utils.py:139
-#: contrib/validator/utils.py:149 contrib/validator/utils.py:164
+#: contrib/validator/utils.py:130 contrib/validator/utils.py:140
+#: contrib/validator/utils.py:150 contrib/validator/utils.py:165
 msgid "This operation can only be done before validating"
 msgstr "Questa operazione può essere eseguita solo prima di validare"
 
-#: contrib/validator/utils.py:549
+#: contrib/validator/utils.py:553
 msgid "Validate save mode are ROW | FULL"
 msgstr "Le modalità di validazione sono RIGA | COMPLETO"
 

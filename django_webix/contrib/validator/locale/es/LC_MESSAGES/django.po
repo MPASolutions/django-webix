@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-01-27 08:25+0100\n"
+"POT-Creation-Date: 2023-07-03 11:40+0200\n"
 "PO-Revision-Date: 2022-03-09 14:49+0050\n"
 "Last-Translator: Sambado Paolo CBC Spagna <>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -96,46 +96,50 @@ msgid "File format '{}' not recognized, supported formats: {}"
 msgstr "Formato de archivo  '{}' no reconocido, formatos compatibles: {}"
 
 #: contrib/validator/utils.py:39
+msgid "Internal file format content was not recognized"
+msgstr ""
+
+#: contrib/validator/utils.py:40
 msgid "File type '{}' not supported"
 msgstr "Tipo de archivo '{}' no compatible"
 
-#: contrib/validator/utils.py:40
+#: contrib/validator/utils.py:41
 msgid "There is no sheet"
 msgstr "No hay hoja"
 
-#: contrib/validator/utils.py:41
+#: contrib/validator/utils.py:42
 msgid "There is no data in the sheet {}"
 msgstr "No hay datos en la hoja {}"
 
-#: contrib/validator/utils.py:42
+#: contrib/validator/utils.py:43
 msgid "There are columns with no name"
 msgstr "Hay columnas sin nombre"
 
-#: contrib/validator/utils.py:43
+#: contrib/validator/utils.py:44
 msgid "There are columns with no name: {}"
 msgstr "Hay columnas sin nombre: {}"
 
-#: contrib/validator/utils.py:44
+#: contrib/validator/utils.py:45
 msgid "There are not enough columns: there are {} columns, {} needed"
 msgstr "No hay suficientes columnas: Hay {} columnas, {} necesarias"
 
-#: contrib/validator/utils.py:45
+#: contrib/validator/utils.py:46
 msgid "Column headers ({}^ row) are incorrect"
 msgstr "Los encabezados de columna ({} ^ fila) son incorrectos"
 
-#: contrib/validator/utils.py:46
+#: contrib/validator/utils.py:47
 msgid "There is no column '{}'"
 msgstr "No hay columna '{}'"
 
-#: contrib/validator/utils.py:47
+#: contrib/validator/utils.py:48
 msgid "The name of the {}^ column ({}) must be ' {} ' (instead of '{}')"
 msgstr "El nombre de {}^ columna ({}) debe ser ' {} ' (en lugar de '{}')"
 
-#: contrib/validator/utils.py:48
+#: contrib/validator/utils.py:49
 msgid "A uniqueness rule has been violated in the fields {}"
 msgstr "Se ha violado una regla de unicidad en los campos {}"
 
-#: contrib/validator/utils.py:49
+#: contrib/validator/utils.py:50
 msgid ""
 "The zip file is supported only if the following files are contained .shp, ."
 "dbf, .prj, .shx"
@@ -143,12 +147,12 @@ msgstr ""
 "El archivo zip es compatible sólo si contiene los siguientes archivos .shp, ."
 "dbf, .prj, .shx"
 
-#: contrib/validator/utils.py:129 contrib/validator/utils.py:139
-#: contrib/validator/utils.py:149 contrib/validator/utils.py:164
+#: contrib/validator/utils.py:130 contrib/validator/utils.py:140
+#: contrib/validator/utils.py:150 contrib/validator/utils.py:165
 msgid "This operation can only be done before validating"
 msgstr "Esta operación solo se puede hacer antes de validar"
 
-#: contrib/validator/utils.py:549
+#: contrib/validator/utils.py:553
 msgid "Validate save mode are ROW | FULL"
 msgstr "Los sistemas de validación son ROW | FULL"
 

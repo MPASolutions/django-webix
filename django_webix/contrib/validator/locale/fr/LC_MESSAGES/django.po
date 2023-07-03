@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-01-27 08:25+0100\n"
+"POT-Creation-Date: 2023-07-03 11:40+0200\n"
 "PO-Revision-Date: 2020-05-26 09:37+0050\n"
 "Last-Translator: b'Stefano Menegon <menegon@mpasol.it>'\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -98,47 +98,51 @@ msgid "File format '{}' not recognized, supported formats: {}"
 msgstr "Format du fichier '{}' non reconnu, formats compatible: {}"
 
 #: contrib/validator/utils.py:39
+msgid "Internal file format content was not recognized"
+msgstr ""
+
+#: contrib/validator/utils.py:40
 msgid "File type '{}' not supported"
 msgstr "Type de fichier '{}' non compatible"
 
-#: contrib/validator/utils.py:40
+#: contrib/validator/utils.py:41
 msgid "There is no sheet"
 msgstr "Pas de feuille"
 
-#: contrib/validator/utils.py:41
+#: contrib/validator/utils.py:42
 msgid "There is no data in the sheet {}"
 msgstr "Pas de donnée dans la feuille {}"
 
-#: contrib/validator/utils.py:42
+#: contrib/validator/utils.py:43
 msgid "There are columns with no name"
 msgstr "Il y a des colonnes sans en tête"
 
-#: contrib/validator/utils.py:43
+#: contrib/validator/utils.py:44
 msgid "There are columns with no name: {}"
 msgstr "Il y a des colonnes sans en tête : {}"
 
-#: contrib/validator/utils.py:44
+#: contrib/validator/utils.py:45
 msgid "There are not enough columns: there are {} columns, {} needed"
 msgstr ""
 "Il n'y a pas assez de colonnes : il y a {} colonnes, il y a besoin de {}"
 
-#: contrib/validator/utils.py:45
+#: contrib/validator/utils.py:46
 msgid "Column headers ({}^ row) are incorrect"
 msgstr "Les entêtes des colonnes ({}^ligne) sont incorrects"
 
-#: contrib/validator/utils.py:46
+#: contrib/validator/utils.py:47
 msgid "There is no column '{}'"
 msgstr "Il n'y a pas de colonne '{}'"
 
-#: contrib/validator/utils.py:47
+#: contrib/validator/utils.py:48
 msgid "The name of the {}^ column ({}) must be ' {} ' (instead of '{}')"
 msgstr "Le nom de la colonne {}^ ({}) doit être ' {} ' (et pas '{}')"
 
-#: contrib/validator/utils.py:48
+#: contrib/validator/utils.py:49
 msgid "A uniqueness rule has been violated in the fields {}"
 msgstr "La règle de l'unicité a été violée dans les champs {}"
 
-#: contrib/validator/utils.py:49
+#: contrib/validator/utils.py:50
 msgid ""
 "The zip file is supported only if the following files are contained .shp, ."
 "dbf, .prj, .shx"
@@ -146,12 +150,12 @@ msgstr ""
 "Le fichier zip est valable seulement si les fichier suivants y sont "
 "contenus .shp, .dbf, .prj, .shx"
 
-#: contrib/validator/utils.py:129 contrib/validator/utils.py:139
-#: contrib/validator/utils.py:149 contrib/validator/utils.py:164
+#: contrib/validator/utils.py:130 contrib/validator/utils.py:140
+#: contrib/validator/utils.py:150 contrib/validator/utils.py:165
 msgid "This operation can only be done before validating"
 msgstr "Cette opération peut être effectuée seulement avant validation"
 
-#: contrib/validator/utils.py:549
+#: contrib/validator/utils.py:553
 msgid "Validate save mode are ROW | FULL"
 msgstr "La Validation du mode d'enregistrement sont ROW | FULL"
 

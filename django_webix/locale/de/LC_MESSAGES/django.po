@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-05-31 22:12+0200\n"
+"POT-Creation-Date: 2023-07-03 11:40+0200\n"
 "PO-Revision-Date: 2022-07-19 15:50+0050\n"
 "Last-Translator: Stefano Menegon <menegon@mpasol.it>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -135,7 +135,8 @@ msgstr "Doppelklicken um das Element zu ändern"
 #: templates/django_webix/include/action_dynamic.js:19
 #: templates/django_webix/include/actions_list.js:65
 #: templates/django_webix/include/form_errors_popup.js:16
-#: templates/django_webix/include/utils.js:275
+#: templates/django_webix/include/form_warnings.js:23
+#: templates/django_webix/include/utils.js:276
 msgid "Close"
 msgstr "Schließen"
 
@@ -228,6 +229,21 @@ msgstr "String kürzer als"
 msgid "String longer than "
 msgstr "String länger als"
 
+#: templates/django_webix/include/form_warnings.js:20
+#, fuzzy
+#| msgid "Oops! Something went wrong..."
+msgid "Oops! Some warnings here..."
+msgstr "Etwas is schief gegangen"
+
+#: templates/django_webix/include/form_warnings.js:52
+#: views/generic/decorators.py:27 views/generic/list.py:83
+msgid "Undo"
+msgstr "Lösen"
+
+#: templates/django_webix/include/form_warnings.js:63
+msgid "Continue anyway"
+msgstr ""
+
 #: templates/django_webix/include/list_failure_blocking_objects.js:6
 msgid "Missing data to add item"
 msgstr "Daten fehlen um ein Element hinzufügen"
@@ -253,11 +269,11 @@ msgstr "Löschen"
 msgid "Save and continue"
 msgstr "Speichern und fortfahren"
 
-#: templates/django_webix/include/toolbar_form.js:66
+#: templates/django_webix/include/toolbar_form.js:67
 msgid "Save and add another"
 msgstr "Speichern und ein weiteres hinzufügen"
 
-#: templates/django_webix/include/toolbar_form.js:92
+#: templates/django_webix/include/toolbar_form.js:94
 msgid "Save"
 msgstr "Speichern"
 
@@ -271,7 +287,7 @@ msgstr "Wählen Sie alle"
 
 #: templates/django_webix/include/toolbar_list.js:29
 #: templates/django_webix/include/toolbar_list.js:35
-#: templates/django_webix/include/utils.js:576
+#: templates/django_webix/include/utils.js:577
 msgid "All"
 msgstr "Alle"
 
@@ -309,50 +325,50 @@ msgstr "Zurück"
 msgid "Back to list"
 msgstr "Zurück zur Liste"
 
-#: templates/django_webix/include/utils.js:209
-#: templates/django_webix/include/utils.js:216
+#: templates/django_webix/include/utils.js:210
+#: templates/django_webix/include/utils.js:217
 msgid "Yes"
 msgstr "Ja"
 
-#: templates/django_webix/include/utils.js:211
-#: templates/django_webix/include/utils.js:218
+#: templates/django_webix/include/utils.js:212
+#: templates/django_webix/include/utils.js:219
 msgid "No"
 msgstr "Nein"
 
-#: templates/django_webix/include/utils.js:230
+#: templates/django_webix/include/utils.js:231
 msgid "Default"
 msgstr "Default"
 
-#: templates/django_webix/include/utils.js:237
+#: templates/django_webix/include/utils.js:238
 msgid "Show on map"
 msgstr "Auf der Karte zeigen "
 
-#: templates/django_webix/include/utils.js:243
+#: templates/django_webix/include/utils.js:244
 msgid "Duplicate element"
 msgstr "Element verdoppeln"
 
-#: templates/django_webix/include/utils.js:247
+#: templates/django_webix/include/utils.js:248
 msgid "Remove element"
 msgstr "Element löschen"
 
-#: templates/django_webix/include/utils.js:251
+#: templates/django_webix/include/utils.js:252
 msgid "Detail"
 msgstr "Detail"
 
-#: templates/django_webix/include/utils.js:272
+#: templates/django_webix/include/utils.js:273
 msgid "Image"
 msgstr "Bild"
 
-#: templates/django_webix/include/utils.js:352
-#: templates/django_webix/include/utils.js:410
+#: templates/django_webix/include/utils.js:353
+#: templates/django_webix/include/utils.js:411
 msgid "Server error"
 msgstr "Server fehler"
 
-#: templates/django_webix/include/utils.js:610
+#: templates/django_webix/include/utils.js:611
 msgid "Click and change"
 msgstr "Klicken und ändern"
 
-#: templates/django_webix/include/utils.js:612
+#: templates/django_webix/include/utils.js:613
 msgid "Locked data"
 msgstr "Gesperrte Daten"
 
@@ -405,7 +421,7 @@ msgstr "Sie haben keine Berechtigung geändert"
 msgid "You haven't view permission"
 msgstr "You haben keine Ansichtsberechtigung"
 
-#: views/generic/create_update.py:79
+#: views/generic/create_update.py:94
 msgid ""
 "Template style is improperly configured only options are 'standard' or "
 "'tabs' (standard by default)."
@@ -413,26 +429,26 @@ msgstr ""
 "Formatvorlage falsch eingestellt, einzige Optionen sind \"standard\" oder "
 "\"tabs\" (standard by default)"
 
-#: views/generic/create_update.py:335 views/generic/create_update.py:422
+#: views/generic/create_update.py:362 views/generic/create_update.py:449
 #: views/generic/delete.py:43 views/generic/detail.py:20
 #: views/generic/list.py:619
 msgid "View permission is not allowed"
 msgstr "Ansichtsberechtigung nicht erlaubt"
 
-#: views/generic/create_update.py:338
+#: views/generic/create_update.py:365
 msgid "Add permission is not allowed"
 msgstr "Add permission nicht erlaubt"
 
-#: views/generic/create_update.py:425
+#: views/generic/create_update.py:452
 msgid "Change permission is not allowed"
 msgstr "Änderungsberechtigung nicht erlaubt"
 
-#: views/generic/create_update.py:488
+#: views/generic/create_update.py:515
 #, python-format
 msgid "Changed %s."
 msgstr "Geändert  %s."
 
-#: views/generic/create_update.py:488
+#: views/generic/create_update.py:515
 msgid "and"
 msgstr "und"
 
@@ -447,10 +463,6 @@ msgstr "Möchten Sie mit dieser Aktion fortfahren?"
 #: views/generic/decorators.py:26 views/generic/list.py:82
 msgid "Proceed"
 msgstr "Fortfahren"
-
-#: views/generic/decorators.py:27 views/generic/list.py:83
-msgid "Undo"
-msgstr "Lösen"
 
 #: views/generic/decorators.py:94
 msgid "You can perform this action on a maximum of {} raws"
