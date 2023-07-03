@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-01-27 08:25+0100\n"
+"POT-Creation-Date: 2023-07-03 11:40+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -95,57 +95,61 @@ msgid "File format '{}' not recognized, supported formats: {}"
 msgstr ""
 
 #: contrib/validator/utils.py:39
-msgid "File type '{}' not supported"
+msgid "Internal file format content was not recognized"
 msgstr ""
 
 #: contrib/validator/utils.py:40
-msgid "There is no sheet"
+msgid "File type '{}' not supported"
 msgstr ""
 
 #: contrib/validator/utils.py:41
-msgid "There is no data in the sheet {}"
+msgid "There is no sheet"
 msgstr ""
 
 #: contrib/validator/utils.py:42
-msgid "There are columns with no name"
+msgid "There is no data in the sheet {}"
 msgstr ""
 
 #: contrib/validator/utils.py:43
-msgid "There are columns with no name: {}"
+msgid "There are columns with no name"
 msgstr ""
 
 #: contrib/validator/utils.py:44
-msgid "There are not enough columns: there are {} columns, {} needed"
+msgid "There are columns with no name: {}"
 msgstr ""
 
 #: contrib/validator/utils.py:45
-msgid "Column headers ({}^ row) are incorrect"
+msgid "There are not enough columns: there are {} columns, {} needed"
 msgstr ""
 
 #: contrib/validator/utils.py:46
-msgid "There is no column '{}'"
+msgid "Column headers ({}^ row) are incorrect"
 msgstr ""
 
 #: contrib/validator/utils.py:47
-msgid "The name of the {}^ column ({}) must be ' {} ' (instead of '{}')"
+msgid "There is no column '{}'"
 msgstr ""
 
 #: contrib/validator/utils.py:48
-msgid "A uniqueness rule has been violated in the fields {}"
+msgid "The name of the {}^ column ({}) must be ' {} ' (instead of '{}')"
 msgstr ""
 
 #: contrib/validator/utils.py:49
+msgid "A uniqueness rule has been violated in the fields {}"
+msgstr ""
+
+#: contrib/validator/utils.py:50
 msgid ""
 "The zip file is supported only if the following files are contained .shp, ."
 "dbf, .prj, .shx"
 msgstr ""
 
-#: contrib/validator/utils.py:129 contrib/validator/utils.py:139
-#: contrib/validator/utils.py:149 contrib/validator/utils.py:164
+#: contrib/validator/utils.py:130 contrib/validator/utils.py:140
+#: contrib/validator/utils.py:150 contrib/validator/utils.py:165
 msgid "This operation can only be done before validating"
 msgstr ""
 
-#: contrib/validator/utils.py:549
+#: contrib/validator/utils.py:553
 msgid "Validate save mode are ROW | FULL"
 msgstr ""
 

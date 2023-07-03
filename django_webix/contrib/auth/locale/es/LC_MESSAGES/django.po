@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-01-27 08:25+0100\n"
+"POT-Creation-Date: 2023-07-03 11:40+0200\n"
 "PO-Revision-Date: 2022-11-09 11:44+0050\n"
 "Last-Translator: Sambado Paolo CBC Spagna <>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -48,21 +48,21 @@ msgid ""
 msgstr ""
 "Introduzca la nueva contraseña dos veces para verificar que es la deseada"
 
-#: contrib/auth/templates/django_webix/auth/password_reset/password_reset_confirm.js:55
+#: contrib/auth/templates/django_webix/auth/password_reset/password_reset_confirm.js:56
 #, fuzzy
 #| msgid "Change password"
 msgid "Change my password"
 msgstr "Cambiar la contraseña"
 
-#: contrib/auth/templates/django_webix/auth/password_reset/password_reset_confirm.js:69
+#: contrib/auth/templates/django_webix/auth/password_reset/password_reset_confirm.js:71
 msgid ""
 "The link you used is invalid, try to request a new email to reset your "
 "password."
 msgstr ""
 
-#: contrib/auth/templates/django_webix/auth/password_reset/password_reset_confirm.js:84
+#: contrib/auth/templates/django_webix/auth/password_reset/password_reset_confirm.js:86
 #: contrib/auth/templates/django_webix/auth/password_reset/password_reset_done.js:49
-#: contrib/auth/templates/django_webix/auth/password_reset/password_reset_form.js:72
+#: contrib/auth/templates/django_webix/auth/password_reset/password_reset_form.js:74
 msgid "Go back to the home page"
 msgstr ""
 
@@ -117,7 +117,7 @@ msgstr ""
 "¿Ha olvidado su contraseña? Introduzca su dirección de correo electrónico y "
 "le enviaremos las instrucciones para restaurar la contraseña"
 
-#: contrib/auth/templates/django_webix/auth/password_reset/password_reset_form.js:54
+#: contrib/auth/templates/django_webix/auth/password_reset/password_reset_form.js:55
 #, fuzzy
 #| msgid "Reset password"
 msgid "Reset my password"
