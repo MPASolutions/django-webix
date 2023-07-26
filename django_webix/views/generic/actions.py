@@ -36,7 +36,6 @@ class DeleteRelatedObjectsView(WebixTemplateView):
             'model_name': str(k._meta.verbose_name_plural),
             'count': len(collector.data[k])
         } for k in collector.data.keys()]
-
         return context
 
 

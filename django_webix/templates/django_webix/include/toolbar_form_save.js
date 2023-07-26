@@ -41,7 +41,7 @@ if (form_validate('{{ form.webix_id }}')) {
     if ($$('{{ form.webix_id }}-inlines-tabbar')!=null) {
         var active_tab = $$('{{ form.webix_id }}-inlines-tabbar').getValue() + '';
     }
-
+    $.xhrPoolAbortAll();
     $.ajax({
         {% if not object.pk and url_create and url_create != '' %}
             url: "{{ url_create|safe }}{% if extra_params_button %}{% if not '?' in url_create %}?{% else %}&{% endif %}{{ extra_params_button }}{% endif %}",

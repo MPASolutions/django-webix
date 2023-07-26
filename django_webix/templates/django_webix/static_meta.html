@@ -13,7 +13,8 @@
 {% if webix_debug %}
 <script type="text/javascript" src="{% static 'webix/webix.js' %}?ver={{ webix_ver }}"></script>
 <script type="text/javascript">
-    webix.debug = true;
+    //webix.debug = true;
+    webix.debug({events: true});
 </script>
 {% else %}
 <script type="text/javascript" src="{% static 'webix/webix.min.js' %}?ver={{ webix_ver }}"></script>

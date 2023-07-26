@@ -61,7 +61,6 @@ function DjangoWebixSender() {
             ],
             on: {
                 onChange(newVal, oldVal) {
-                    //console.log(newVal)
                     set_rules(newVal);
                     {% if 'skebby' in send_method_types or 'email' in send_method_types or 'storage' in send_method_types or 'telegram' in send_method_types %}
                         if ($$("django-webix-sender-form-send_methods").getValue().split(',').filter(
