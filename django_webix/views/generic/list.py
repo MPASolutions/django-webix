@@ -131,7 +131,7 @@ class WebixListView(WebixBaseMixin,
     type_row_click = 'single'  # or 'double'
     enable_actions = True
 
-    fields_editable = []
+    fields_editable = [] # es. ['utilizzo__denominazione']
 
     def is_errors_on_popup(self, request):
         return self.errors_on_popup
@@ -310,15 +310,31 @@ class WebixListView(WebixBaseMixin,
         if fields is not None:
             for field in fields:
                 if field.get('datalist_column') is not None:
-                    if ('serverSelectFilter' in field.get('datalist_column') or
+                    field_name = field.get('field_name')
+                    _fields_choices[field_name] = [
+                        {'id': 'null', 'value': '---'},
+                    ] # detaul add null/'' option
+                    if 'boolean' in str(field.get('field_type','')).lower():
+                        _fields_choices[field_name] += [
+                            {'id': 'true', 'value': _('Yes')},
+                            {'id': 'false', 'value': _('No')},
+                        ]
+
+                    elif ('serverSelectFilter' in field.get('datalist_column') or
                        'serverRichSelectFilter' in field.get('datalist_column') or
                        'serverMultiSelectFilter' in field.get('datalist_column') or
                        'serverMultiComboFilter' in field.get('datalist_column')):
-                        field_name = field.get('field_name')
-                        # TODO: there are no null option
-                        _fields_choices[field_name] = [str(i) for i in
-                            self.get_queryset().filter(**{field_name + '__isnull': False}).values_list(field_name,
-                                                                                                   flat=True).distinct().order_by()]
+                        if field.get('field_pk') is None:
+                            _fields_choices[field_name] += [str(i) for i in
+                                                             self.get_queryset().filter(**{field_name + '__isnull': False})\
+                                                             .values_list(field_name, flat=True).distinct().order_by()]
+                        else:
+                            _fields_choices[field_name] += [{
+                                'id': key,
+                                'value': value,
+                            } for key,value in self.get_queryset().filter(
+                                          **{field_name + '__isnull': False}) \
+                                          .values_list(field.get('field_pk'), field_name).distinct().order_by()]
 
         return _fields_choices
 
@@ -387,6 +403,8 @@ class WebixListView(WebixBaseMixin,
                 if field.get('field_name') is not None and \
                     (field.get('queryset_exclude') is None or field.get('queryset_exclude') != True):
                     values.append(field['field_name'])
+                    if field.get('field_pk') is not None:
+                        qs = qs.annotate(**{field['field_name']: F(field['field_pk']) })
         if self.is_enable_column_webgis(self.request):
             for field_name in get_model_geo_field_names(self.model):
                 values += [f'{field_name}_available']
@@ -525,17 +543,24 @@ class WebixListView(WebixBaseMixin,
             class Meta:
                 localized_fields = ('__all__')
                 model = _list_view.model
-                fields = _list_view.get_fields_editable()
+                fields = [i.split('__')[0] for i in _list_view.get_fields_editable()]
         return UpdateForm
 
     def get_update_view(self, request, *args, **kwargs):
-        kwargs.update({'pk':request.GET.get('id',request.POST.get('id'))})
-
+        kwargs.update({'pk': request.GET.get('pk', request.POST.get('pk'))})
         _list_view = self
         # TODO: is login is required depends if list has login required
         @method_decorator(login_required, name='dispatch')
         class ListUpdateView(WebixUpdateView):
-            success_url ='' #for exception bypass
+
+            has_view_permission = _list_view.has_view_permission
+            has_add_permission = _list_view.has_add_permission
+            has_change_permission = _list_view.has_change_permission
+            has_delete_permission = _list_view.has_delete_permission
+            def get_queryset(self):
+                return _list_view.get_queryset() # this use list initial queryset
+
+            success_url ='' # for bypass the template exception
             http_method_names = ['post'] # only update directly without render
             model = _list_view.model
             def get_form_class(self):

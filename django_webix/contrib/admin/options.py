@@ -1,7 +1,6 @@
 from django.apps import apps
 from django.core.exceptions import FieldDoesNotExist
-from django.db.models import AutoField, ForeignKey
-from django.db.models.fields import BooleanField, DateField, DateTimeField
+from django.db import models
 from django.urls import path
 from django.utils.text import capfirst
 from django.utils.translation import gettext as _
@@ -110,10 +109,11 @@ class ModelWebixAdmin(ModelWebixAdminPermissionsMixin):
     # LIST SETTINGS
     ordering = None
     actions = []
-    list_display = []
+    list_display = [] # for choice with custom key [...('utilizzo__id', 'utilizzo__denominazione')...]
     list_display_header = {}  # NEW OVERRIDE HEADER MODALITY
     extra_header = {}  # TO BE REMOVED IN FUTURE
-    list_editable = []
+    list_editable = [] # ex. ['utilizzo__denominazione']
+    list_editable_mode = 'field' # field ; row
 
     enable_json_loading = True  # changed from the past
     paginate_count_default = 100
@@ -135,8 +135,6 @@ class ModelWebixAdmin(ModelWebixAdminPermissionsMixin):
     # prefix = None
     # def __init__(self, prefix=None):
     #    self.prefix = prefix
-
-    # over
 
     def is_enable_row_click(self, request):
         return self.enable_row_click
@@ -228,6 +226,11 @@ class ModelWebixAdmin(ModelWebixAdminPermissionsMixin):
             if field_name in self.list_display_header:
                 _fields.append(self.list_display_header[field_name])  # NEW OVERRIDE HEADER MODALITY
             else:
+                if type(field_name) in [list, set, tuple]:
+                    field_pk = field_name[0]
+                    field_name = field_name[1]
+                else:
+                    field_pk = None
                 model_field = self.get_field_traverse(field_name)
                 filter_type = 'icontains'
                 format_type = None
@@ -246,20 +249,20 @@ class ModelWebixAdmin(ModelWebixAdminPermissionsMixin):
                     # if boolean then custom choices
                     header_title = capfirst(model_field.verbose_name)
 
-                if type(model_field) == BooleanField:
-                    editor= 'editor:"select",collection: {}_options '.format(field_name)
+                if type(model_field) == models.BooleanField:
+                    editor = 'editor:"select",collection: {}_options '.format(field_name)
                     filter_type = ''
                     filter_option = 'serverSelectFilter' if self.enable_json_loading else 'selectFilter'
                     extra_filter_options = ", options:[{id: 'True', value: '" + _('Yes') + "'}, {id: 'False', value: '" + _("No") + "'}] "
                     column_template = ' template:custom_checkbox_yesnonone, '
-                elif type(model_field) == DateTimeField:
-                    editor= 'editor:"datetime", ' # our custom editor
+                elif type(model_field) == models.DateTimeField:
+                    editor = 'editor:"datetime", '
                     filter_type = 'range'
                     filter_option = 'serverDateRangeFilter' if self.enable_json_loading else 'dateRangeFilter'
                     format_type = 'webix.i18n.fullDateFormatStr'
                     column_template = ' template: function(obj){{if (obj.{field_name}===null) {{return ""}} else {{return this.format(new Date(obj.{field_name})) }} }},'.format(
                         field_name=field_name)
-                elif type(model_field) == DateField:
+                elif type(model_field) == models.DateField:
                     #width_adapt = 'width:"85"'
                     editor = 'editor:"date", '
                     filter_type = 'range'
@@ -271,11 +274,11 @@ class ModelWebixAdmin(ModelWebixAdminPermissionsMixin):
                     except FieldDoesNotExist:
                         pass
                     else:
-                        if type(_first_field) == ForeignKey:
+                        if type(_first_field) == models.ForeignKey:
                             filter_type = 'iexact'
-                            editor = 'editor:"select",collection: {}_options '.format(field_name)
+                            editor = 'editor:"select", collection:{}_options '.format(field_name)
                             filter_option = 'serverRichSelectFilter' if self.enable_json_loading else 'selectFilter'
-                            extra_filter_options = ", options: {}_options ".format(field_name)
+                            extra_filter_options = ", options:{}_options ".format(field_name)
                 # if choices... the same of FK
                 else:
                     editor = 'editor:"text", '
@@ -289,6 +292,12 @@ class ModelWebixAdmin(ModelWebixAdminPermissionsMixin):
                             filter_type = 'iexact'
                             filter_option = 'serverRichSelectFilter' if self.enable_json_loading else 'selectFilter'
                             extra_filter_options = ", options: {}_options ".format(field_name)
+
+                if issubclass(type(model_field),models.FloatField) or \
+                    issubclass(type(model_field), models.DecimalField) or \
+                    issubclass(type(model_field), models.IntegerField):
+                    extra_header = " css:{'text-align':'right'}"
+                    filter_type = 'numbercompare'
 
                 if field_name in self.extra_header:  # TO BE REMOVED IN FUTURE
                     conf_header = self.extra_header.get(field_name, {})
@@ -312,10 +321,12 @@ class ModelWebixAdmin(ModelWebixAdminPermissionsMixin):
                         footer = conf_header.get('footer', None)
                 if field_name not in self.list_editable:
                     editor = ''
+
                 field_list = {
+                    'field_type': type(model_field),
                     'field_name': field_name,
                     'datalist_column': '''{{id: "{field_name}",
-                header: ["{header_title}", {{content: "{filter}" {extra_filter_options}}}],
+                header: [{{text:{header_icon}+"{header_title}"}}, {{content: "{filter}" {extra_filter_options}}}],
                 {width_adapt},
                 adjustBatch: {adjust_batch},
                 sort: "{sort_option}",
@@ -325,6 +336,7 @@ class ModelWebixAdmin(ModelWebixAdminPermissionsMixin):
                 {editor}
                 {extra_header} }}'''.format(
                         field_name=field_name,
+                        header_icon='editheadericon' if editor!='' else '""',
                         header_title=header_title,
                         filter=filter_option,
                         format_type=' format: ' + format_type + ', ' if format_type is not None else '',
@@ -338,6 +350,8 @@ class ModelWebixAdmin(ModelWebixAdminPermissionsMixin):
                         extra_header=extra_header
                     )
                 }
+                if field_pk is not None:
+                    field_list.update({'field_pk': field_pk})
                 if footer is not None:
                     field_list.update({'footer': footer})
                 if click_action is not None:
@@ -369,7 +383,7 @@ class ModelWebixAdmin(ModelWebixAdminPermissionsMixin):
     def get_form_fields(self):
         _fields = []
         for _field in (self.model._meta.fields + self.model._meta.many_to_many):
-            if type(_field) != AutoField and \
+            if type(_field) != models.AutoField and \
                 (self.exclude is None or _field.name not in self.exclude) and \
                 _field.editable is True:
                 if self.fields is not None and len(self.fields) > 0:
@@ -439,10 +453,10 @@ class ModelWebixAdmin(ModelWebixAdminPermissionsMixin):
                         return '{}_{}_'.format(self.model._meta.app_label,
                                                self.model._meta.model_name)
 
-                url_pattern_list = '{}:{}'.format(self.admin_site.urls_namespace, _admin.get_url_pattern_list())
-                url_pattern_create = '{}:{}'.format(self.admin_site.urls_namespace, _admin.get_url_pattern_create())
-                url_pattern_update = '{}:{}'.format(self.admin_site.urls_namespace, _admin.get_url_pattern_update())
-                url_pattern_delete = '{}:{}'.format(self.admin_site.urls_namespace, _admin.get_url_pattern_delete())
+                url_pattern_list = '{}:{}'.format(_admin.admin_site.urls_namespace, _admin.get_url_pattern_list())
+                url_pattern_create = '{}:{}'.format(_admin.admin_site.urls_namespace, _admin.get_url_pattern_create())
+                url_pattern_update = '{}:{}'.format(_admin.admin_site.urls_namespace, _admin.get_url_pattern_update())
+                url_pattern_delete = '{}:{}'.format(_admin.admin_site.urls_namespace, _admin.get_url_pattern_delete())
 
                 model = _admin.model
 
@@ -594,10 +608,10 @@ class ModelWebixAdmin(ModelWebixAdminPermissionsMixin):
                         return '{}_{}_'.format(self.model._meta.app_label,
                                                self.model._meta.model_name)
 
-                url_pattern_list = '{}:{}'.format(self.admin_site.urls_namespace, _admin.get_url_pattern_list())
-                url_pattern_create = '{}:{}'.format(self.admin_site.urls_namespace, _admin.get_url_pattern_create())
-                url_pattern_update = '{}:{}'.format(self.admin_site.urls_namespace, _admin.get_url_pattern_update())
-                url_pattern_delete = '{}:{}'.format(self.admin_site.urls_namespace, _admin.get_url_pattern_delete())
+                url_pattern_list = '{}:{}'.format(_admin.admin_site.urls_namespace, _admin.get_url_pattern_list())
+                url_pattern_create = '{}:{}'.format(_admin.admin_site.urls_namespace, _admin.get_url_pattern_create())
+                url_pattern_update = '{}:{}'.format(_admin.admin_site.urls_namespace, _admin.get_url_pattern_update())
+                url_pattern_delete = '{}:{}'.format(_admin.admin_site.urls_namespace, _admin.get_url_pattern_delete())
 
                 model = _admin.model
 
@@ -752,10 +766,10 @@ class ModelWebixAdmin(ModelWebixAdminPermissionsMixin):
                         return '{}_{}_'.format(self.model._meta.app_label,
                                                self.model._meta.model_name)
 
-                url_pattern_list =   '{}:{}'.format(self.admin_site.urls_namespace, _admin.get_url_pattern_list())
-                url_pattern_create = '{}:{}'.format(self.admin_site.urls_namespace, _admin.get_url_pattern_create())
-                url_pattern_update = '{}:{}'.format(self.admin_site.urls_namespace, _admin.get_url_pattern_update())
-                url_pattern_delete = '{}:{}'.format(self.admin_site.urls_namespace, _admin.get_url_pattern_delete())
+                url_pattern_list =   '{}:{}'.format(_admin.admin_site.urls_namespace, _admin.get_url_pattern_list())
+                url_pattern_create = '{}:{}'.format(_admin.admin_site.urls_namespace, _admin.get_url_pattern_create())
+                url_pattern_update = '{}:{}'.format(_admin.admin_site.urls_namespace, _admin.get_url_pattern_update())
+                url_pattern_delete = '{}:{}'.format(_admin.admin_site.urls_namespace, _admin.get_url_pattern_delete())
 
                 add_permission = _admin.add_permission
                 change_permission = _admin.change_permission
@@ -864,10 +878,10 @@ class ModelWebixAdmin(ModelWebixAdminPermissionsMixin):
                         return '{}_{}_'.format(self.model._meta.app_label,
                                                self.model._meta.model_name)
 
-                url_pattern_list =   '{}:{}'.format(self.admin_site.urls_namespace, _admin.get_url_pattern_list())
-                url_pattern_create = '{}:{}'.format(self.admin_site.urls_namespace, _admin.get_url_pattern_create())
-                url_pattern_update = '{}:{}'.format(self.admin_site.urls_namespace, _admin.get_url_pattern_update())
-                url_pattern_delete = '{}:{}'.format(self.admin_site.urls_namespace, _admin.get_url_pattern_delete())
+                url_pattern_list =   '{}:{}'.format(_admin.admin_site.urls_namespace, _admin.get_url_pattern_list())
+                url_pattern_create = '{}:{}'.format(_admin.admin_site.urls_namespace, _admin.get_url_pattern_create())
+                url_pattern_update = '{}:{}'.format(_admin.admin_site.urls_namespace, _admin.get_url_pattern_update())
+                url_pattern_delete = '{}:{}'.format(_admin.admin_site.urls_namespace, _admin.get_url_pattern_delete())
 
                 adjust_row_height = False
 

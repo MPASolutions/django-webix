@@ -72,6 +72,10 @@ class WebixDeleteView(WebixBaseMixin, WebixPermissionsMixin, WebixUrlMixin, Dele
             url = self.success_url
         elif self.get_url_list() is not None:
             url = self.get_url_list()
+            if '?' in url:
+                url += '&full_state'
+            else:
+                url += '?full_state'
         else:
             raise ImproperlyConfigured(_(
                 "No URL to redirect to.  Either provide a url or define"

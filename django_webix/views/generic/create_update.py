@@ -128,7 +128,10 @@ class WebixCreateUpdateMixin:
         elif self.get_url_list() is not None and \
             self.is_enable_button_save_gotolist(request=self.request):  # default
             url = self.get_url_list()
-
+            if '?' in url:
+                url += '&full_state'
+            else:
+                url += '?full_state'
         else:
             url = None # default
 

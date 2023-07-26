@@ -24,7 +24,7 @@ $$("{{ webix_container_id }}").addView({
                 label: "{{_("Back to list")|escapejs}}",
                 autowidth: true,
                 click: function () {
-                    load_js("{{ url_list|safe }}", undefined, undefined, undefined, undefined, undefined, undefined, abortAllPending=true);
+                    load_js("{{ url_list|safe }}{% if not '?' in url_list %}?{% else %}&{% endif %}full_state", undefined, undefined, undefined, undefined, undefined, undefined, abortAllPending=true);
                 }
             },
         {% endif %}

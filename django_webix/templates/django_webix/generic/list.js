@@ -90,8 +90,6 @@ $$("{{ webix_container_id }}").addView({
     ]
 });
 
-var {{ view_prefix }}datatable_disable_savestate = true;
-
 {% if is_json_loading %}
 
 {% if model %}
@@ -142,7 +140,9 @@ if (
         {% endblock %}
 
         {% if is_editable %}
-        var {{ view_prefix }}edit_mode_id = undefined;
+        var {{ view_prefix }}row_edit = undefined;
+        var {{ view_prefix }}row_edit_data_before = undefined;
+        var {{ view_prefix }}fields_editable = {{fields_editable|safe}};
         {% endif %}
 
         {% if is_json_loading %}
@@ -164,21 +164,27 @@ if (
         {% endif %}
 
         {%  if is_json_loading %}
+        var {{ view_prefix }}initial_page = 0;
+        //if TODO set initial page
+        if ( {{ view_prefix }}get_state()!=undefined) {
+            {{ view_prefix }}initial_page = {{ view_prefix }}get_state()['page'];
+        }
+
         $$("{{ webix_container_id }}").addView({
             template: "{common.first()} {common.prev()} {common.pages()} {common.next()} {common.last()}",
-            id: "datatable_paging_{{ model_name }}", // the container to place the pager controls into
+            id: "{{ view_prefix }}datatable_pager", // the container to place the pager controls into
             view: "pager",
             group: 5, // buttons for next amd back
             // must to be the same of url request because managed from interface
             size: {{ paginate_count_default }},
-            page: 0,
+            page: {{ view_prefix }}initial_page,
             on: {
                 onBeforePageChange: function (new_page, old_page) {
                     if ($('input[name="{{ view_prefix }}master_checkbox"]').prop("checked") == true) {
                         $('input[name="{{ view_prefix }}master_checkbox"]').click();
                         {{ view_prefix }}update_counter();
                     }
-                }
+                },
             }
         })
         {% endif %}
@@ -195,7 +201,7 @@ if (
             {% if adjust_row_height %}
             fixedRowHeight: false,
             {% endif %}
-            //sort:"multi", // not works
+            //sort:"multi", {# TODO: to be implemented #}
             select: "row",
             resizeColumn: true,
             {% block datatable_headermenu %}
@@ -226,6 +232,7 @@ if (
                     maxWidth: 40,
                     css: 'locked_column'
                 },
+                {% comment %}
                 {% if is_editable %}
                 {
                     id: "cmd_edit",
@@ -237,6 +244,7 @@ if (
                     css: 'locked_column'
                 },
                 {% endif %}
+                {% endcomment %}
                 {% block datatable_columns %}
                 {% for field in fields %}
                 {{ field.datalist_column|safe }},
@@ -286,7 +294,7 @@ if (
             ],
             {%  if is_json_loading %}
             datafetch: {{ paginate_count_default }},
-            pager: "datatable_paging_{{ model_name }}",
+            pager: "{{ view_prefix }}datatable_pager",
             url: {
                 $proxy: true,
                 source: "{{ url_list|safe }}{% if '?' in url_list %}&{% else %}?{% endif %}json",
@@ -369,6 +377,7 @@ if (
                 onCheck: function (row, column, state) {
                     {{ view_prefix }}update_counter();
                 },
+
                 {% if is_json_loading %}
                 onBeforeFilter: function (id) {
                     if ({{ view_prefix }}_first_load==true) return false;
@@ -397,63 +406,79 @@ if (
                     this.showOverlay("<img src='{% static 'django_webix/loading.gif' %}'>");
                 },
                 onAfterLoad: function () {
+
                     {% if not is_json_loading %}
                     $$('{{ view_prefix }}datatable').view_count = {{ view_prefix }}objects_list.length;
                     $$('{{ view_prefix }}datatable').view_count_total = {{ view_prefix }}objects_list.length;
                     {% else %}
                     $$('{{ view_prefix }}filter').setValue('0');
-                    if ({{ view_prefix }}datatable_disable_savestate==false) {
-                        {{ view_prefix }}save_state();
-                    }
-                    {% endif %}
                     {% if adjust_row_height %}
-                    this.adjustRowHeight(); // for multirows
+                        this.adjustRowHeight(); // for multirows
+                    {% endif %}
                     {% endif %}
 
+
+                    if ({{ view_prefix }}_first_load==false) {
+                        if (( {{ view_prefix }}get_state()!=undefined)  && ({{ view_prefix }}get_state()['page'] != {{ view_prefix }}get_state_ui()['page'] )) {
+                            {{ view_prefix }}restore_state_page(); {# set page: another call to server #}
+                        } else {
+                            {{ view_prefix }}restore_scroll_position();
+                            function sleep (time) {
+                              return new Promise((resolve) => setTimeout(resolve, time));
+                            } {#  enable ui customization only after second #}
+                            sleep(100).then(() => {
+                                {{ view_prefix }}enable_datatable_custom_ui();
+
+                            });
+                        }
+                    }
                     this.hideOverlay();
+
                 },
                 onItemDblClick: function (id, e, trg) {
                     var el = $$('{{ view_prefix }}datatable').getSelectedItem();
                     {% block datatable_onitemdoubleclick %}
                     {% if is_enable_row_click and type_row_click == 'double' %}
-                    {% if is_editable %}if (id.column != 'cmd_edit'){{% endif %}
+
+                    {% if is_editable %}if (!{{ view_prefix }}fields_editable.includes(id.column)){ {% endif %}
                     load_js('{{ url_update|safe }}'.replace('0', el.{{column_id}}), undefined, undefined, undefined, undefined, undefined, undefined, abortAllPending=true);
-                    {% if is_editable %} } {{% endif %}
+                    {% if is_editable %} }
+                    {% endif %}
+
                     {% endif %}
                     {% endblock %}
                 },
-                onColumnResize: function (id,newWidth,oldWidth,user_action) {
-                    if ({{ view_prefix }}datatable_disable_savestate==false) {
-                        {{ view_prefix }}save_state();
+                {% if is_editable %}
+                onAfterEditStop: function(values, editor, ignoreUpdate) {
+                    var el = this.getItem(editor.row);
+                    _params = {'pk': el.id}
+                    {{ view_prefix }}fields_editable.forEach(function (field_name) {
+                        _params[field_name.split('__')[0]] = el[field_name];
+                    })
+                    function always_save(msg){
+                        if (msg.status==true){
+                            return true
+                        } else {
+                            update = {};
+                            update[editor['column']]=values.old;
+                            $$('{{ view_prefix }}datatable').updateItem(editor.row, update);
+                            return false
+                        }
                     }
+                    load_js('{{ url_list|safe }}{% if '?' in url_list %}&{% else %}?{% endif %}update', undefined, undefined, 'POST', _params, undefined, 'json', false, undefined, undefined, always_save, undefined, undefined, false);
                 },
+                {% endif %}
                 onItemClick: function (id, e, trg) {
                     var el = $$('{{ view_prefix }}datatable').getSelectedItem();
-                    {% block datatable_onitemclick %}
-                    {% if is_editable %}
-                    if (id.column == 'cmd_edit') {
 
-                        to_close = {{ view_prefix }}edit_mode_id == id.row;
-                        // send to server
-                        if ({{ view_prefix }}edit_mode_id != undefined){
-                            // TODO: send to server for validation
-                            _params = el;
-                            this.editStop();
-                            load_js('{{ url_list|safe }}{% if '?' in url_list %}&{% else %}?{% endif %}update', undefined, undefined, 'POST', _params, undefined, 'json', abortAllPending=true);
-                        }
-                        // enable edit mode
-                        if (({{ view_prefix }}edit_mode_id == undefined)||({{ view_prefix }}edit_mode_id != id.row)){
-                            {{ view_prefix }}edit_mode_id = id.row;
-                            this.editRow(id);
-                        }
-                        // close edit mode
-                        if (to_close){
-                            //this.undo();
-                            this.editStop();
-                            {{ view_prefix }}edit_mode_id = undefined;
-                        }
+                    {% block datatable_onitemclick %}
+
+                    {% if is_editable %}
+                    if ({{ view_prefix }}fields_editable.includes(id.column)) {
+                        this.editCell(id.row,id.column,false,true);
                     }
                     {% endif %}
+
                     {% for field in fields %}
                     {% if field.click_action %}
                     if ((id.column == '{{ field.field_name }}') || (id.column == '{{ field.column_name }}')) {
@@ -470,6 +495,7 @@ if (
                     } else
                     {% endfor %}
                     {% endif %}
+
                     if (id.column == 'cmd_cp') {
                         {% block cmd_cp_click %}
                             {% if has_add_permission and is_enable_column_copy %}
@@ -485,7 +511,7 @@ if (
                     } else if (id.column!='checkbox_action') {
                         {% block update_click %}
                             {% if is_enable_row_click %}
-                                {% if is_editable %}if (id.column != 'cmd_edit'){{% endif %}
+                                {% if is_editable %}if (!{{ view_prefix }}fields_editable.includes(id.column)){{% endif %}
                                     {% if type_row_click == 'single' %}
                                     {% block update_url_call %}
                                     load_js('{{ url_update|safe }}'.replace('0', el.{{column_id}}), undefined, undefined, undefined, undefined, undefined, undefined, abortAllPending=true);
@@ -499,6 +525,7 @@ if (
                     }
                     {% endblock %}
                 },
+
                 {% endblock %}
             },
             {% block extra_datatable_options %}{% endblock %}
@@ -531,21 +558,47 @@ if (
         {% endblock %}
 
         {%  if is_json_loading %}
+
+        {# save for other purpose #}
         var {{ view_prefix }}initial_state = {{ view_prefix }}get_state_ui();
-        // lock all data loading until here
-        if ({{ view_prefix }}get_state()) {
-           {{ view_prefix }}restore_state_grid();
-        }
+        {# on init set page=0 and scroll=0;0 if not caming from form/detail #}
+        {% if 'full_state' not in request.GET %}
+        {{ view_prefix }}set_preload_state();
+        {% endif %}
 
         {% block pre_json_load %}
         {% endblock %}
 
         setTimeout(function() {
-            {{ view_prefix }}_first_load = false;
-            {{ view_prefix }}apply_filters();
-            {{ view_prefix }}datatable_disable_savestate = false; // dopo mettere nel after load
+           {{ view_prefix }}restore_state_grid();
+           {{ view_prefix }}_first_load = false;
+           {{ view_prefix }}apply_filters(); // must always get first page
         },100) // build grid browser timing
         {% endif %}
+
+        function {{ view_prefix }}enable_datatable_custom_ui() {
+            {# init and remove pager and scroll #}
+            {{ view_prefix }}save_state(area='init');
+            {# attach save state #}
+            $$("{{ view_prefix }}datatable").attachEvent("onAfterScroll", function(id){
+              {{ view_prefix }}save_state(area='scroll');
+              });
+            $$("{{ view_prefix }}datatable").attachEvent("onAfterSort", function(id){
+                {{ view_prefix }}save_state(area='sort');
+              });
+            $$("{{ view_prefix }}datatable").attachEvent("onColumnResize", function(id){
+              {{ view_prefix }}save_state(area='resize');
+              });
+            $$("{{ view_prefix }}datatable").attachEvent("onAfterColumnHide", function(id){
+              {{ view_prefix }}save_state(area='hide');
+              });
+            $$("{{ view_prefix }}datatable").attachEvent("onAfterColumnShow", function(id){
+              {{ view_prefix }}save_state(area='show');
+              });
+            $$("{{ view_prefix }}datatable_pager").attachEvent("onAfterPageChange", function(id){
+              {{ view_prefix }}save_state(area='pager');
+              });
+        }
 
     {% endif %}
 

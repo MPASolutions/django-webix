@@ -37,7 +37,6 @@ webix.ui.datafilter.serverDateRangeFilter = webix.extend({
   getValue:function(t){
     var e=this.getInputNode(t);
     e.config.stringResult=true;
-    //console.log(e.getValue());
     return e.getValue()
   }
 }, webix.ui.datafilter.serverDateRangeFilter)
@@ -308,7 +307,7 @@ function preloadImage(url) {
  * @param always function to call in any case
  * @param ajaxExtra extra dict to merge with ajax params
  */
-function load_js(lnk, hide, area, method, data, headers, dataType, abortAllPending, done, fail, always, ajaxExtra, enableHistory) {
+function load_js(lnk, hide, area, method, data, headers, dataType, abortAllPending, done, fail, always, ajaxExtra, enableHistory, overlay) {
     asyncRequest = typeof asyncRequest !== 'undefined' ? asyncRequest : true;
     method = typeof method !== 'undefined' ? method : 'GET';
     data = typeof data !== 'undefined' ? data : {};
@@ -316,6 +315,7 @@ function load_js(lnk, hide, area, method, data, headers, dataType, abortAllPendi
     hide = typeof hide !== 'undefined' ? hide : false;
     ajaxExtra = typeof ajaxExtra !== 'undefined' ? ajaxExtra : {};
     enableHistory = typeof enableHistory !== 'undefined' ? enableHistory : true;
+    overlay = typeof overlay !== 'undefined' ? overlay : true;
 
     if (abortAllPending == true) {
         $.xhrPoolAbortAll();
@@ -331,7 +331,9 @@ function load_js(lnk, hide, area, method, data, headers, dataType, abortAllPendi
     }
 
     if (dataType == 'json') {
-        $$(area).showOverlay("<img src='{% static 'django_webix/loading.gif' %}'>");
+        if (overlay === true) {
+            $$(area).showOverlay("<img src='{% static 'django_webix/loading.gif' %}'>");
+        }
         $.ajax($.extend({
             url: lnk,
             dataType: "json",
@@ -341,8 +343,10 @@ function load_js(lnk, hide, area, method, data, headers, dataType, abortAllPendi
             if (typeof done === 'function') {
                 return done(msg);
             } else {
-                webix.ui.resize();
-                $$(area).hideOverlay();
+                if (overlay === true) {
+                    webix.ui.resize();
+                    $$(area).hideOverlay();
+                }
                 return msg;
             }
         }).fail(function (xhr, textStatus) {
@@ -650,3 +654,4 @@ function geo_change(geo_type, field_name){
   return arr[1];
      */
 }
+var editheadericon = "<span title='{{_("Editable column")|escapejs}}' style='float:right;margin-top:7px;text-align:right;cursor:help' class='webix_icon fas fa-pencil-alt'></span>"
