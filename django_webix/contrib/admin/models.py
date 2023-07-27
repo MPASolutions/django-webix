@@ -8,7 +8,7 @@ from django_dal.models import DALMPTTModel as MPTTModel
 from django_dal.mptt_managers import DALTreeManager
 
 
-class WebixAdminMenu(MPTTModel):
+class WebixAdminMenuAbstract(MPTTModel):
     objects = DALTreeManager()
 
     label = models.CharField(verbose_name=_('Node name'), max_length=255, blank=True, null=True)
@@ -23,12 +23,10 @@ class WebixAdminMenu(MPTTModel):
     parent = TreeForeignKey('self', on_delete=models.CASCADE, verbose_name=_('Parent'), null=True, blank=True,
                             related_name='children')
 
-    # class MPTTMeta:
-    #     order_insertion_by = ['name']
-
     class Meta:
         verbose_name = _('Webix Admin Menu')
         verbose_name_plural = _('Webix Admin Menu')
+        abstract = True
 
     def __str__(self):
         if self.label:
@@ -47,3 +45,10 @@ class WebixAdminMenu(MPTTModel):
         if self.url:
             return self.url
         return ''
+
+class WebixAdminMenu(WebixAdminMenuAbstract):
+
+    class Meta:
+        verbose_name = _('Webix Admin Menu')
+        verbose_name_plural = _('Webix Admin Menu')
+
