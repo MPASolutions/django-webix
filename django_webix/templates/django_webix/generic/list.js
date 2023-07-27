@@ -415,8 +415,6 @@ if (
                     {% if adjust_row_height %}
                         this.adjustRowHeight(); // for multirows
                     {% endif %}
-                    {% endif %}
-
 
                     if ({{ view_prefix }}_first_load==false) {
                         if (( {{ view_prefix }}get_state()!=undefined)  && ({{ view_prefix }}get_state()['page'] != {{ view_prefix }}get_state_ui()['page'] )) {
@@ -432,6 +430,7 @@ if (
                             });
                         }
                     }
+                    {% endif %}
                     this.hideOverlay();
 
                 },
