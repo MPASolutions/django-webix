@@ -72,7 +72,9 @@ $$("{{ webix_container_id }}").addView({
                                         if ($$('password_change_form').validate()) {
                                             $$('{{ webix_container_id }}').showOverlay("<img src='{% static 'django_webix/loading.gif' %}'>");
                                             $.ajax({
-                                                url: "{% url 'dwadmin:password_change' %}",
+                                                {% with pattern_password_change=urls_namespace|add:':password_change' %}
+                                                url: "{% url pattern_password_change %}",
+                                                {% endwith %}
                                                 dataType: "script",
                                                 type: "POST",
                                                 data: $$('password_change_form').getValues(),
