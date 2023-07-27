@@ -462,6 +462,7 @@ class AdminWebixSite:
             'webix_menu_type': self.webix_menu_type,
             'webix_menu_width': self.webix_menu_width,
             'user_list_url': self._get_user_model_list_url(),
+            'urls_namespace': self.urls_namespace,
         }
 
     @method_decorator(never_cache)

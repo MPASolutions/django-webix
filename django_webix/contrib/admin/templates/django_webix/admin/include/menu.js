@@ -22,7 +22,9 @@
             value: "Home",
             icon: "fas fa-home",
             loading_type: 'redirect',
-            url: '{% url 'dwadmin:index' %}'
+            {% with pattern_index=urls_namespace|add:':index' %}
+            url: '{% url pattern_index %}'
+            {% endwith %}
         },
         {# START EXTRA MENU PREVIUS #}
         {% block extra_menu_previus %}
@@ -41,21 +43,27 @@
                     value: "{{ _("Profile")|escapejs }}",
                     icon: "fas fa-user-edit",
                     loading_type: 'js_script',
-                    url: "{% url 'dwadmin:account_update' %}"
+                    {% with pattern_account_update=urls_namespace|add:':account_update' %}
+                    url: "{% url pattern_account_update %}"
+                    {% endwith %}
                 },
                 {
                     id: 'menu_profile_change_password',
                     value: "{{ _("Password change")|escapejs }}",
                     icon: "fas fa-key",
                     loading_type: 'js_script',
-                    url: "{% url 'dwadmin:password_change' %}"
+                    {% with pattern_password_change=urls_namespace|add:':password_change' %}
+                    url: "{% url pattern_password_change %}"
+                    {% endwith %}
                 },
                 {
                     id: 'menu_profile_reset_password',
                     value: "{{ _("Password reset")|escapejs }}",
                     icon: "fas fa-mail-bulk",
                     loading_type: 'js_script',
-                    url: "{% url 'dwadmin:password_reset' %}"
+                    {% with pattern_password_reset=urls_namespace|add:':password_reset' %}
+                    url: "{% url pattern_password_reset %}"
+                    {% endwith %}
                 },
                 {% if 'two_factor'|is_app_installed %}
                 {
@@ -63,7 +71,9 @@
                     value: "{{ _("2 factor authentication")|escapejs }}",
                     icon: "fas fa-shield-alt",
                     loading_type: 'js_script',
-                    url: "{% url 'dwadmin:two_factor_profile' %}"
+                    {% with pattern_two_factor_profile=urls_namespace|add:':two_factor_profile' %}
+                    url: "{% url pattern_two_factor_profile %}"
+                    {% endwith %}
                 }
                 {% endif %}
             ]

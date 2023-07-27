@@ -70,7 +70,9 @@
                         margin: 30,
                         value: "{{ _("Password recovery")|escapejs }}",
                         click: function() {
-                            location.href = "{% url "dwadmin:password_reset" %}"
+                            {% with pattern_password_reset=urls_namespace|add:':password_reset' %}
+                            location.href = "{% url pattern_password_reset %}"
+                            {% endwith %}
                         }
                     },
                 ]

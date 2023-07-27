@@ -15,7 +15,9 @@
         {
             align: "left",
             type:"clean",
-            template: "<h3 style='margin:4px;'><a style='color:#fff;text-decoration:none;' href='{% url 'dwadmin:index' %}'>{{ title }}</a></h3>",
+            {% with pattern_index=urls_namespace|add:':index' %}
+            template: "<h3 style='margin:4px;'><a style='color:#fff;text-decoration:none;' href='{% url pattern_index %}'>{{ title }}</a></h3>",
+            {% endwith %}
         },
         {$template: "Spacer"},
         {% endblock %}
@@ -49,7 +51,9 @@
         {
             view: "icon", align: "right", icon: "fas fa-sign-out-alt", on: {
                 onItemClick: function (id, e) {
-                    document.location.href = '{% url 'dwadmin:logout' %}';
+                    {% with pattern_logout=urls_namespace|add:':logout' %}
+                    document.location.href = '{% url pattern_logout %}';
+                    {% endwith %}
                 }
             }
         },

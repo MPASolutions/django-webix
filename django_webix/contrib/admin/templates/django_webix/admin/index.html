@@ -5,7 +5,9 @@
     {% if history_url %}
         load_js('{{history_url}}');
     {% else %}
-        load_js('{% url 'dwadmin:dashboard' %}');
+        {% with pattern_dashboard=urls_namespace|add:':dashboard' %}
+        load_js('{% url pattern_dashboard %}');
+        {% endwith %}
     {% endif %}
 
 {% endblock %}

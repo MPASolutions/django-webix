@@ -3,7 +3,9 @@
 {% block extrajs_post %}
 
 function reset(){
-    load_js('{% url "dwadmin:users.user.update_password" object.pk %}', undefined, undefined, undefined,
+    {% with pattern_update_password=urls_namespace|add:':users.user.update_password' %}
+    load_js('{% url pattern_update_password object.pk %}', undefined, undefined, undefined,
       undefined,undefined, undefined, abortAllPending=true);
+    {% endwith %}
 }
 {% endblock %}
