@@ -65,6 +65,10 @@ class AdminWebixSite:
         self.name = name
         all_sites.add(self)
 
+    def model_admin_menu(self):
+        from django_webix.contrib.admin.models import WebixAdminMenu
+        return WebixAdminMenu
+
     def get_label_width(self):
         return self.label_width
 
@@ -259,8 +263,7 @@ class AdminWebixSite:
         return app_list
 
     def available_menu_items(self, user):
-        from django_webix.contrib.admin.models import WebixAdminMenu
-        queryset = WebixAdminMenu.objects.all()
+        queryset = self.model_admin_menu().objects.all()
         if user.is_superuser:
             out = queryset.values_list('pk', flat=True)
         else:
@@ -274,7 +277,6 @@ class AdminWebixSite:
         return out
 
     def get_tree(self, items, available_items):
-        from django_webix.contrib.admin.models import WebixAdminMenu
         out = []
         new_level = True
         for item in items:
@@ -284,7 +286,7 @@ class AdminWebixSite:
                     "value": "{}".format(item),
                     "icon": item.icon if item.icon not in ['', None] else "fas fa-archive",
                 }
-                soons = WebixAdminMenu.objects.filter(parent=item, id__in=available_items).order_by('tree_id', 'lft')
+                soons = self.model_admin_menu().objects.filter(parent=item, id__in=available_items).order_by('tree_id', 'lft')
                 children = self.get_tree(soons, available_items)
 
                 if children != []:
@@ -308,12 +310,11 @@ class AdminWebixSite:
         return out
 
     def get_menu_list(self, request):
-        from django_webix.contrib.admin.models import WebixAdminMenu
-        if request.user.is_anonymous:
+        if self.model_admin_menu() is None or request.user.is_anonymous:
             return {}
         available = self.available_menu_items(request.user)
 
-        return self.get_tree(WebixAdminMenu.objects.filter(level=0, id__in=available).order_by('tree_id', 'lft'),
+        return self.get_tree(self.model_admin_menu().objects.filter(level=0, id__in=available).order_by('tree_id', 'lft'),
                              available)
 
     def admin_view(self, view, cacheable=False):
