@@ -60,6 +60,7 @@ class BaseWebixMixin:
     style = 'stacked'
     label_width = 300
     label_align = 'left'
+    help_text_template = "&nbsp;<i style='font-size:14px;' class='webix_icon far fa-info-circle'></i>"
 
     class Meta:
         localized_fields = '__all__'  # to use comma as separator in i18n
@@ -254,9 +255,9 @@ class BaseWebixMixin:
 
             if hasattr(field, 'help_text') and \
                 field.help_text is not None and \
-                field.help_text!='':
+                field.help_text != '':
                 el["tooltip"] = {"template": "{}".format(field.help_text)}
-                el["label"] = el["label"] + "&nbsp;<i style='font-size:14px;' class='webix_icon far fa-info-circle'></i>"
+                el["label"] = el["label"] + self.help_text_template
 
             if name in self.get_readonly_fields():
                 el.update({
@@ -1168,6 +1169,9 @@ class BaseWebixMixin:
                 if _field_header is not None:
                     _field_header.update({'id': 'id_header_{}'.format(field_name)})
                     fields_header.update({field_name: _field_header})
+
+                if _field_header is not None and _field_header['header'].endswith(self.help_text_template):
+                    _field_header['header'] = _field_header['header'].removesuffix(self.help_text_template)
 
         return fields_header
 
