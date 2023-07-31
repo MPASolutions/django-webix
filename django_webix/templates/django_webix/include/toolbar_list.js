@@ -2,42 +2,44 @@
 
 {# counter #}
 function {{ view_prefix }}update_counter() {
+    $$('{{ view_prefix }}select_all_button').hide();
+    $$('{{ view_prefix }}unselect_all_button').hide();
+
     view_count = $$('{{ view_prefix }}datatable').view_count;
     view_count_total = $$('{{ view_prefix }}datatable').view_count_total;
     ids = [];
     $$("{{ view_prefix }}datatable").eachRow(function (id) {
         if ((this.getItem(id) != undefined) && (this.getItem(id).checkbox_action)) {
-            ids.push(id)
+            ids.push(id);
         }
     });
-    if (ids.length!=view_count){
-        $('input[name="{{ view_prefix }}master_checkbox"]').prop("checked",false) ;
+    if (ids.length != view_count) {
+        $('input[name="{{ view_prefix }}master_checkbox"]').prop("checked", false);
         $$('{{ view_prefix }}select_all_checkbox').setValue(0);
     } else {
-        $('input[name="{{ view_prefix }}master_checkbox"]').prop("checked",true) ;
+        $('input[name="{{ view_prefix }}master_checkbox"]').prop("checked", true);
         {% if not is_json_loading %}
-        $$('{{ view_prefix }}select_all_checkbox').setValue(1);
+            $$('{{ view_prefix }}select_all_checkbox').setValue(1);
         {% endif %}
     }
     if (ids.length > 0) {
-        txt = ids.length + ' {{_("of")|escapejs}} ' + view_count_total + ' {{_("elements")|escapejs}}';
+        txt = ids.length + ' {{ _("of")|escapejs }} ' + view_count_total + ' {{ _("elements")|escapejs }}';
         {% if is_json_loading %}
-        if (ids.length ==view_count) {
-            if ($$('{{ view_prefix }}select_all_checkbox').getValue() == 0) {
-                txt += '<div style="width:110px;float:right;height:100%;" class="webix_view webix_control webix_el_button webix_secondary"><div title="{{_("Select all")|escapejs}}" class="webix_el_box"><button type="button" class="webix_button webix_img_btn" style="line-height:24px;" onclick="$$(\'{{ view_prefix }}select_all_checkbox\').setValue(1);{{ view_prefix }}update_counter()"> {{_("Select all")|escapejs}} </button></div></div>';
-            } else {
-                txt = '{{_("All")|escapejs}} ' + view_count_total + ' {{_("elements selected")|escapejs}}';
-                txt += '<div style="width:110px;float:right;height:100%;" class="webix_view webix_control webix_el_button webix_secondary"><div title="{{_("Cancel selection")|escapejs}}" class="webix_el_box"><button type="button" class="webix_button webix_img_btn" style="line-height:24px;" onclick="$$(\'{{ view_prefix }}select_all_checkbox\').setValue(0);$(\'input[name={{ view_prefix }}master_checkbox]\').prop(\'checked\',false);{{ view_prefix }}master_checkbox_click();{{ view_prefix }}update_counter()"> {{_("Cancel selection")|escapejs}} </button></div></div>';
+            if (ids.length ==view_count) {
+                if ($$('{{ view_prefix }}select_all_checkbox').getValue() == 0) {
+                    $$('{{ view_prefix }}select_all_button').show();
+                } else {
+                    txt = '{{ _("All")|escapejs }} ' + view_count_total + ' {{ _("elements selected")|escapejs }}';
+                    $$('{{ view_prefix }}unselect_all_button').show();
+                }
             }
-        }
         {% else %}
-        if ($('input[name="{{ view_prefix }}master_checkbox"]').prop("checked") == true) {
-            txt = '{{_("All")|escapejs}} ' + view_count_total + ' {{_("elements selected")|escapejs}}';
-        }
-
+            if ($('input[name="{{ view_prefix }}master_checkbox"]').prop("checked") == true) {
+                txt = '{{ _("All")|escapejs }} ' + view_count_total + ' {{ _("elements selected")|escapejs }}';
+            }
         {% endif %}
-    } else if (view_count_total!=undefined) {
-        txt = view_count_total + ' {{_("elements")|escapejs}}';
+    } else if (view_count_total != undefined) {
+        txt = view_count_total + ' {{ _("elements")|escapejs }}';
     } else {
         txt = '';
     }
@@ -49,20 +51,20 @@ function {{ view_prefix }}update_counter() {
 function {{ view_prefix }}get_items_page_datatable() {
     ids = [];
     {% if is_json_loading %}
-    per_page = {{ paginate_count_default }};
-    page_number = $$("{{ view_prefix }}datatable").getPage();
-    count_from = page_number * per_page;
-    count_to = (page_number + 1) * per_page - 1;
-    counter = 0;
-    $$("{{ view_prefix }}datatable").eachRow(function (id) {
-        if (counter >= count_from && counter <= count_to) {
-            ids.push(id)
-        }
-        counter += 1;
-    });
+        per_page = {{ paginate_count_default }};
+        page_number = $$("{{ view_prefix }}datatable").getPage();
+        count_from = page_number * per_page;
+        count_to = (page_number + 1) * per_page - 1;
+        counter = 0;
+        $$("{{ view_prefix }}datatable").eachRow(function (id) {
+            if (counter >= count_from && counter <= count_to) {
+                ids.push(id);
+            }
+            counter += 1;
+        });
     {% else %}
-    $$("{{ view_prefix }}datatable").eachRow(function (id) {
-        ids.push(id)
+        $$("{{ view_prefix }}datatable").eachRow(function (id) {
+            ids.push(id);
         })
     {% endif %}
     return ids;
@@ -130,7 +132,31 @@ $$("{{ webix_container_id }}").addView({
     id: "{{ webix_container_id }}_toolbar",
     height: 65,
     cols: {{ view_prefix }}toolbar_actions.concat([
-        {id: '{{ view_prefix }}stats_list', view: 'label', label: '', width: 340},
+        {id: '{{ view_prefix }}stats_list', view: 'label', label: '', width: 230},
+        {
+            id: '{{ view_prefix }}select_all_button',
+            view: 'button',
+            value: '{{ _("Select all")|escapejs }}',
+            width: 120,
+            hidden: true,
+            click: function (id, event) {
+                $$('{{ view_prefix }}select_all_checkbox').setValue(1);
+                {{ view_prefix }}update_counter();
+            }
+        },
+        {
+            id: '{{ view_prefix }}unselect_all_button',
+            view: 'button',
+            value: '{{ _("Cancel selection")|escapejs }}',
+            width: 120,
+            hidden: true,
+            click: function (id, event) {
+                $$('{{ view_prefix }}select_all_checkbox').setValue(0);
+                $('input[name={{ view_prefix }}master_checkbox]').prop('checked', false);
+                {{ view_prefix }}master_checkbox_click();
+                {{ view_prefix }}update_counter();
+            }
+        },
         {id: '{{ view_prefix }}select_all_checkbox', view: 'checkbox', value: 0, hidden:true},
 
         {% block toolbar_middle %}
