@@ -1170,7 +1170,7 @@ class BaseWebixMixin:
                     _field_header.update({'id': 'id_header_{}'.format(field_name)})
                     fields_header.update({field_name: _field_header})
 
-                if _field_header is not None and _field_header['header'].endswith(self.help_text_template):
+                if _field_header is not None and type(_field_header['header'])==str and _field_header['header'].endswith(self.help_text_template):
                     _field_header['header'] = _field_header['header'].removesuffix(self.help_text_template)
 
         return fields_header
