@@ -2,7 +2,9 @@ var {{ view_prefix }}datatable_disable_savestate = true;
 
 function {{ view_prefix }}save_state(area) {
     _state = {{ view_prefix }}get_state_ui();
-    webix.storage.local.put('{{ view_prefix }}datatable_state', _state);
+    if (_state!=undefined) {
+        webix.storage.local.put('{{ view_prefix }}datatable_state', _state);
+    }
 }
 
 function {{ view_prefix }}set_preload_state() {
@@ -50,10 +52,14 @@ function {{ view_prefix }}restore_scroll_position() {
 
 function {{ view_prefix }}get_state_ui() {
     selector_grid = '{{ view_prefix }}datatable';
-    return {
-        'grid': $$(selector_grid).getState(),
-        'page': $$(selector_grid).getPage(),
-    };
+    if ($$(selector_grid)!=undefined) {
+        return {
+            'grid': $$(selector_grid).getState(),
+            'page': $$(selector_grid).getPage(),
+        }
+    } else {
+        return undefined
+    }
  }
 
 function {{ view_prefix }}get_state() {
