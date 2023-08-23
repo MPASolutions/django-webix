@@ -7,9 +7,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-05-31 22:12+0200\n"
-"PO-Revision-Date: 2023-03-24 15:43+0100\n"
-"Last-Translator: Stefano Menegon <menegon@mpasol.it>\n"
+"POT-Creation-Date: 2023-08-23 15:08+0200\n"
+"PO-Revision-Date: 2023-08-23 15:06+0200\n"
+"Last-Translator: Stefano Menegon <dallago@mpasol.it>\n"
 "Language-Team: \n"
 "Language: it\n"
 "MIME-Version: 1.0\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Poedit 2.4.2\n"
-"X-Translated-Using: django-rosetta 0.9.8\n"
+"X-Translated-Using: django-rosetta 0.9.9\n"
 
 #: contrib/sender/admin.py:118
 msgid "Total recipients"
@@ -136,7 +136,7 @@ msgstr "Il modello dei destinatari `{}` non è valido"
 #: contrib/sender/models.py:215 contrib/sender/models.py:270
 #: contrib/sender/models.py:298 contrib/sender/models.py:381
 #: contrib/sender/models.py:430
-#: contrib/sender/templates/django_webix/sender/sender.js:101
+#: contrib/sender/templates/django_webix/sender/sender.js:100
 #: contrib/sender/views.py:318
 msgid "Typology"
 msgstr "Tipologia"
@@ -334,7 +334,7 @@ msgid "Send method"
 msgstr "Metodo di invio"
 
 #: contrib/sender/models.py:433
-#: contrib/sender/templates/django_webix/sender/sender.js:119
+#: contrib/sender/templates/django_webix/sender/sender.js:118
 #: contrib/sender/views.py:330
 msgid "Subject"
 msgstr "Oggetto"
@@ -487,14 +487,14 @@ msgstr "Scrivi il tuo messaggio"
 
 #: contrib/sender/templates/django_webix/sender/chat_messages.js:92
 #: contrib/sender/templates/django_webix/sender/list.js:211
-#: contrib/sender/templates/django_webix/sender/sender.js:165
-#: contrib/sender/templates/django_webix/sender/sender.js:328
+#: contrib/sender/templates/django_webix/sender/sender.js:164
+#: contrib/sender/templates/django_webix/sender/sender.js:327
 msgid "Send"
 msgstr "Invia"
 
 #: contrib/sender/templates/django_webix/sender/chat_messages.js:129
-#: contrib/sender/templates/django_webix/sender/sender.js:251
-#: contrib/sender/templates/django_webix/sender/sender.js:264
+#: contrib/sender/templates/django_webix/sender/sender.js:250
+#: contrib/sender/templates/django_webix/sender/sender.js:263
 msgid "Unable to send messages"
 msgstr "Impossibile inviare i messaggi"
 
@@ -503,7 +503,7 @@ msgid "Hi, there are messages to read..."
 msgstr "Ciao, ci sono messaggi da leggere..."
 
 #: contrib/sender/templates/django_webix/sender/include/popup_message_read_required.js:23
-#: contrib/sender/templates/django_webix/sender/sender.js:332
+#: contrib/sender/templates/django_webix/sender/sender.js:331
 msgid "Close"
 msgstr "Chiudi"
 
@@ -555,7 +555,7 @@ msgid "marks as billed"
 msgstr "segna come fatturato"
 
 #: contrib/sender/templates/django_webix/sender/invoices.js:160
-#: contrib/sender/templates/django_webix/sender/sender.js:214
+#: contrib/sender/templates/django_webix/sender/sender.js:213
 msgid "Confirmation"
 msgstr "Conferma"
 
@@ -565,18 +565,18 @@ msgstr "Sei sicuro di volere segnare questi messaggi come fatturati?"
 
 #: contrib/sender/templates/django_webix/sender/invoices.js:162
 #: contrib/sender/templates/django_webix/sender/list.js:151
-#: contrib/sender/templates/django_webix/sender/sender.js:216
+#: contrib/sender/templates/django_webix/sender/sender.js:215
 msgid "Yes"
 msgstr "Sì"
 
 #: contrib/sender/templates/django_webix/sender/invoices.js:163
 #: contrib/sender/templates/django_webix/sender/list.js:152
-#: contrib/sender/templates/django_webix/sender/sender.js:217
+#: contrib/sender/templates/django_webix/sender/sender.js:216
 msgid "No"
 msgstr "No"
 
 #: contrib/sender/templates/django_webix/sender/invoices.js:197
-#: contrib/sender/templates/django_webix/sender/sender.js:368
+#: contrib/sender/templates/django_webix/sender/sender.js:367
 msgid "Caution!"
 msgstr "Attenzione!"
 
@@ -636,40 +636,40 @@ msgstr "File ancora presente."
 msgid "Send methods"
 msgstr "Metodi di invio"
 
-#: contrib/sender/templates/django_webix/sender/sender.js:135
-#: contrib/sender/templates/django_webix/sender/sender.js:143
+#: contrib/sender/templates/django_webix/sender/sender.js:134
+#: contrib/sender/templates/django_webix/sender/sender.js:142
 msgid "characters"
 msgstr "caratteri"
 
-#: contrib/sender/templates/django_webix/sender/sender.js:150
+#: contrib/sender/templates/django_webix/sender/sender.js:149
 msgid "Attach file"
 msgstr "Allega file"
 
-#: contrib/sender/templates/django_webix/sender/sender.js:172
+#: contrib/sender/templates/django_webix/sender/sender.js:171
 msgid "You have to fill in all the required fields"
 msgstr "Devi compilare tutti i campi richiesti"
 
-#: contrib/sender/templates/django_webix/sender/sender.js:206
+#: contrib/sender/templates/django_webix/sender/sender.js:205
 msgid "Valid recipients: "
 msgstr "Destinatari validi: "
 
-#: contrib/sender/templates/django_webix/sender/sender.js:207
+#: contrib/sender/templates/django_webix/sender/sender.js:206
 msgid "Invalids recipients: "
 msgstr "Destinatari non validi: "
 
-#: contrib/sender/templates/django_webix/sender/sender.js:208
+#: contrib/sender/templates/django_webix/sender/sender.js:207
 msgid "Duplicate recipients: "
 msgstr "Destinatari duplicati: "
 
-#: contrib/sender/templates/django_webix/sender/sender.js:211
+#: contrib/sender/templates/django_webix/sender/sender.js:210
 msgid "Are you sure to send this message?"
 msgstr "Sei sicuro di voler inviare questo messaggio?"
 
-#: contrib/sender/templates/django_webix/sender/sender.js:241
+#: contrib/sender/templates/django_webix/sender/sender.js:240
 msgid "Results"
 msgstr "Risultati"
 
-#: contrib/sender/templates/django_webix/sender/sender.js:369
+#: contrib/sender/templates/django_webix/sender/sender.js:368
 msgid "There are no recipients for this communication"
 msgstr "Non ci sono destinatari per questa comunicazione"
 
@@ -699,10 +699,8 @@ msgid "Send method type"
 msgstr "Metodo di invio"
 
 #: contrib/sender/views.py:305
-#, fuzzy
-#| msgid "Insert date"
 msgid "Sent date"
-msgstr "Data inserimento"
+msgstr "Data invio"
 
 #: contrib/sender/views.py:621
 msgid "Jan"

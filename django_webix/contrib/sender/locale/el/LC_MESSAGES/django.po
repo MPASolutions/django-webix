@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-05-31 22:12+0200\n"
+"POT-Creation-Date: 2023-08-14 10:27+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -134,7 +134,7 @@ msgstr ""
 #: contrib/sender/models.py:215 contrib/sender/models.py:270
 #: contrib/sender/models.py:298 contrib/sender/models.py:381
 #: contrib/sender/models.py:430
-#: contrib/sender/templates/django_webix/sender/sender.js:101
+#: contrib/sender/templates/django_webix/sender/sender.js:100
 #: contrib/sender/views.py:318
 msgid "Typology"
 msgstr ""
@@ -332,7 +332,7 @@ msgid "Send method"
 msgstr ""
 
 #: contrib/sender/models.py:433
-#: contrib/sender/templates/django_webix/sender/sender.js:119
+#: contrib/sender/templates/django_webix/sender/sender.js:118
 #: contrib/sender/views.py:330
 msgid "Subject"
 msgstr ""
@@ -481,14 +481,14 @@ msgstr ""
 
 #: contrib/sender/templates/django_webix/sender/chat_messages.js:92
 #: contrib/sender/templates/django_webix/sender/list.js:211
-#: contrib/sender/templates/django_webix/sender/sender.js:165
-#: contrib/sender/templates/django_webix/sender/sender.js:328
+#: contrib/sender/templates/django_webix/sender/sender.js:164
+#: contrib/sender/templates/django_webix/sender/sender.js:327
 msgid "Send"
 msgstr ""
 
 #: contrib/sender/templates/django_webix/sender/chat_messages.js:129
-#: contrib/sender/templates/django_webix/sender/sender.js:251
-#: contrib/sender/templates/django_webix/sender/sender.js:264
+#: contrib/sender/templates/django_webix/sender/sender.js:250
+#: contrib/sender/templates/django_webix/sender/sender.js:263
 msgid "Unable to send messages"
 msgstr ""
 
@@ -497,7 +497,7 @@ msgid "Hi, there are messages to read..."
 msgstr ""
 
 #: contrib/sender/templates/django_webix/sender/include/popup_message_read_required.js:23
-#: contrib/sender/templates/django_webix/sender/sender.js:332
+#: contrib/sender/templates/django_webix/sender/sender.js:331
 msgid "Close"
 msgstr ""
 
@@ -547,7 +547,7 @@ msgid "marks as billed"
 msgstr ""
 
 #: contrib/sender/templates/django_webix/sender/invoices.js:160
-#: contrib/sender/templates/django_webix/sender/sender.js:214
+#: contrib/sender/templates/django_webix/sender/sender.js:213
 msgid "Confirmation"
 msgstr ""
 
@@ -557,18 +557,18 @@ msgstr ""
 
 #: contrib/sender/templates/django_webix/sender/invoices.js:162
 #: contrib/sender/templates/django_webix/sender/list.js:151
-#: contrib/sender/templates/django_webix/sender/sender.js:216
+#: contrib/sender/templates/django_webix/sender/sender.js:215
 msgid "Yes"
 msgstr ""
 
 #: contrib/sender/templates/django_webix/sender/invoices.js:163
 #: contrib/sender/templates/django_webix/sender/list.js:152
-#: contrib/sender/templates/django_webix/sender/sender.js:217
+#: contrib/sender/templates/django_webix/sender/sender.js:216
 msgid "No"
 msgstr ""
 
 #: contrib/sender/templates/django_webix/sender/invoices.js:197
-#: contrib/sender/templates/django_webix/sender/sender.js:368
+#: contrib/sender/templates/django_webix/sender/sender.js:367
 msgid "Caution!"
 msgstr ""
 
@@ -628,40 +628,40 @@ msgstr ""
 msgid "Send methods"
 msgstr ""
 
-#: contrib/sender/templates/django_webix/sender/sender.js:135
-#: contrib/sender/templates/django_webix/sender/sender.js:143
+#: contrib/sender/templates/django_webix/sender/sender.js:134
+#: contrib/sender/templates/django_webix/sender/sender.js:142
 msgid "characters"
 msgstr ""
 
-#: contrib/sender/templates/django_webix/sender/sender.js:150
+#: contrib/sender/templates/django_webix/sender/sender.js:149
 msgid "Attach file"
 msgstr ""
 
-#: contrib/sender/templates/django_webix/sender/sender.js:172
+#: contrib/sender/templates/django_webix/sender/sender.js:171
 msgid "You have to fill in all the required fields"
 msgstr ""
 
-#: contrib/sender/templates/django_webix/sender/sender.js:206
+#: contrib/sender/templates/django_webix/sender/sender.js:205
 msgid "Valid recipients: "
 msgstr ""
 
-#: contrib/sender/templates/django_webix/sender/sender.js:207
+#: contrib/sender/templates/django_webix/sender/sender.js:206
 msgid "Invalids recipients: "
 msgstr ""
 
-#: contrib/sender/templates/django_webix/sender/sender.js:208
+#: contrib/sender/templates/django_webix/sender/sender.js:207
 msgid "Duplicate recipients: "
 msgstr ""
 
-#: contrib/sender/templates/django_webix/sender/sender.js:211
+#: contrib/sender/templates/django_webix/sender/sender.js:210
 msgid "Are you sure to send this message?"
 msgstr ""
 
-#: contrib/sender/templates/django_webix/sender/sender.js:241
+#: contrib/sender/templates/django_webix/sender/sender.js:240
 msgid "Results"
 msgstr ""
 
-#: contrib/sender/templates/django_webix/sender/sender.js:369
+#: contrib/sender/templates/django_webix/sender/sender.js:368
 msgid "There are no recipients for this communication"
 msgstr ""
 

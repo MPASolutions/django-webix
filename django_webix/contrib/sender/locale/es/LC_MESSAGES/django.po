@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-05-31 22:12+0200\n"
+"POT-Creation-Date: 2023-08-14 10:27+0200\n"
 "PO-Revision-Date: 2022-09-01 11:36+0050\n"
 "Last-Translator: Sambado Paolo CBC Spagna <>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -137,7 +137,7 @@ msgstr "El modelo de destinatarios `{}`no es válido"
 #: contrib/sender/models.py:215 contrib/sender/models.py:270
 #: contrib/sender/models.py:298 contrib/sender/models.py:381
 #: contrib/sender/models.py:430
-#: contrib/sender/templates/django_webix/sender/sender.js:101
+#: contrib/sender/templates/django_webix/sender/sender.js:100
 #: contrib/sender/views.py:318
 msgid "Typology"
 msgstr "Tipología"
@@ -341,7 +341,7 @@ msgid "Send method"
 msgstr "Método de envio"
 
 #: contrib/sender/models.py:433
-#: contrib/sender/templates/django_webix/sender/sender.js:119
+#: contrib/sender/templates/django_webix/sender/sender.js:118
 #: contrib/sender/views.py:330
 msgid "Subject"
 msgstr "Asunto"
@@ -492,14 +492,14 @@ msgstr "Escribir mensaje"
 
 #: contrib/sender/templates/django_webix/sender/chat_messages.js:92
 #: contrib/sender/templates/django_webix/sender/list.js:211
-#: contrib/sender/templates/django_webix/sender/sender.js:165
-#: contrib/sender/templates/django_webix/sender/sender.js:328
+#: contrib/sender/templates/django_webix/sender/sender.js:164
+#: contrib/sender/templates/django_webix/sender/sender.js:327
 msgid "Send"
 msgstr "Enviar"
 
 #: contrib/sender/templates/django_webix/sender/chat_messages.js:129
-#: contrib/sender/templates/django_webix/sender/sender.js:251
-#: contrib/sender/templates/django_webix/sender/sender.js:264
+#: contrib/sender/templates/django_webix/sender/sender.js:250
+#: contrib/sender/templates/django_webix/sender/sender.js:263
 msgid "Unable to send messages"
 msgstr "Imposible enviar mensajes"
 
@@ -508,7 +508,7 @@ msgid "Hi, there are messages to read..."
 msgstr ""
 
 #: contrib/sender/templates/django_webix/sender/include/popup_message_read_required.js:23
-#: contrib/sender/templates/django_webix/sender/sender.js:332
+#: contrib/sender/templates/django_webix/sender/sender.js:331
 msgid "Close"
 msgstr "Cerrar"
 
@@ -558,7 +558,7 @@ msgid "marks as billed"
 msgstr "Marcar como facturado"
 
 #: contrib/sender/templates/django_webix/sender/invoices.js:160
-#: contrib/sender/templates/django_webix/sender/sender.js:214
+#: contrib/sender/templates/django_webix/sender/sender.js:213
 msgid "Confirmation"
 msgstr "Confirmación"
 
@@ -568,18 +568,18 @@ msgstr "¿Estás seguro de querer marcar estas comunicaciones como facturadas?"
 
 #: contrib/sender/templates/django_webix/sender/invoices.js:162
 #: contrib/sender/templates/django_webix/sender/list.js:151
-#: contrib/sender/templates/django_webix/sender/sender.js:216
+#: contrib/sender/templates/django_webix/sender/sender.js:215
 msgid "Yes"
 msgstr "Sí"
 
 #: contrib/sender/templates/django_webix/sender/invoices.js:163
 #: contrib/sender/templates/django_webix/sender/list.js:152
-#: contrib/sender/templates/django_webix/sender/sender.js:217
+#: contrib/sender/templates/django_webix/sender/sender.js:216
 msgid "No"
 msgstr "No"
 
 #: contrib/sender/templates/django_webix/sender/invoices.js:197
-#: contrib/sender/templates/django_webix/sender/sender.js:368
+#: contrib/sender/templates/django_webix/sender/sender.js:367
 msgid "Caution!"
 msgstr "¡Atención!"
 
@@ -639,40 +639,40 @@ msgstr "Fichero aún no presente"
 msgid "Send methods"
 msgstr "Enviar métodos"
 
-#: contrib/sender/templates/django_webix/sender/sender.js:135
-#: contrib/sender/templates/django_webix/sender/sender.js:143
+#: contrib/sender/templates/django_webix/sender/sender.js:134
+#: contrib/sender/templates/django_webix/sender/sender.js:142
 msgid "characters"
 msgstr "caracteres"
 
-#: contrib/sender/templates/django_webix/sender/sender.js:150
+#: contrib/sender/templates/django_webix/sender/sender.js:149
 msgid "Attach file"
 msgstr "Adjuntar fichero"
 
-#: contrib/sender/templates/django_webix/sender/sender.js:172
+#: contrib/sender/templates/django_webix/sender/sender.js:171
 msgid "You have to fill in all the required fields"
 msgstr "Es necesario rellenar todos los campos obligatorios"
 
-#: contrib/sender/templates/django_webix/sender/sender.js:206
+#: contrib/sender/templates/django_webix/sender/sender.js:205
 msgid "Valid recipients: "
 msgstr "Destinatarios válidos:"
 
-#: contrib/sender/templates/django_webix/sender/sender.js:207
+#: contrib/sender/templates/django_webix/sender/sender.js:206
 msgid "Invalids recipients: "
 msgstr "Destinatarios inválidos:"
 
-#: contrib/sender/templates/django_webix/sender/sender.js:208
+#: contrib/sender/templates/django_webix/sender/sender.js:207
 msgid "Duplicate recipients: "
 msgstr "Destinatarios duplicados:"
 
-#: contrib/sender/templates/django_webix/sender/sender.js:211
+#: contrib/sender/templates/django_webix/sender/sender.js:210
 msgid "Are you sure to send this message?"
 msgstr "¿Estás seguro de querer enviar el mensaje?"
 
-#: contrib/sender/templates/django_webix/sender/sender.js:241
+#: contrib/sender/templates/django_webix/sender/sender.js:240
 msgid "Results"
 msgstr "Resultados"
 
-#: contrib/sender/templates/django_webix/sender/sender.js:369
+#: contrib/sender/templates/django_webix/sender/sender.js:368
 msgid "There are no recipients for this communication"
 msgstr "No hay destinatarios en esta comunicación"
 

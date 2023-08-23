@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-02-24 17:39+0100\n"
+"POT-Creation-Date: 2023-08-23 14:25+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -27,7 +27,7 @@ msgid "Groups"
 msgstr ""
 
 #: contrib/admin/dwadmin.py:52
-#: contrib/admin/templates/django_webix/admin/include/menu.js:36
+#: contrib/admin/templates/django_webix/admin/include/menu.js:38
 msgid "User"
 msgstr ""
 
@@ -142,15 +142,16 @@ msgstr ""
 msgid "Parent"
 msgstr ""
 
-#: contrib/admin/models.py:30 contrib/admin/models.py:31
+#: contrib/admin/models.py:27 contrib/admin/models.py:28
+#: contrib/admin/models.py:52 contrib/admin/models.py:53
 msgid "Webix Admin Menu"
 msgstr ""
 
-#: contrib/admin/options.py:253
+#: contrib/admin/options.py:270
 msgid "Yes"
 msgstr ""
 
-#: contrib/admin/options.py:253
+#: contrib/admin/options.py:270
 msgid "No"
 msgstr ""
 
@@ -166,14 +167,14 @@ msgstr ""
 msgid "Site administration"
 msgstr ""
 
-#: contrib/admin/sites.py:654
+#: contrib/admin/sites.py:656
 #, python-format
 msgid ""
 "Please enter the correct %(username)s and password for a staff account. Note "
 "that both fields may be case-sensitive."
 msgstr ""
 
-#: contrib/admin/sites.py:671
+#: contrib/admin/sites.py:673
 msgid "Log in"
 msgstr ""
 
@@ -302,7 +303,7 @@ msgid ""
 msgstr ""
 
 #: contrib/admin/templates/django_webix/admin/account/password_reset_form.js:12
-#: contrib/admin/templates/django_webix/admin/include/menu.js:55
+#: contrib/admin/templates/django_webix/admin/include/menu.js:61
 msgid "Password reset"
 msgstr ""
 
@@ -314,31 +315,31 @@ msgstr ""
 msgid "Under construction"
 msgstr ""
 
-#: contrib/admin/templates/django_webix/admin/base_site.html:97
+#: contrib/admin/templates/django_webix/admin/base_site.html:121
 msgid "DATA"
 msgstr ""
 
-#: contrib/admin/templates/django_webix/admin/base_site.html:98
+#: contrib/admin/templates/django_webix/admin/base_site.html:122
 msgid "WEBGIS"
 msgstr ""
 
-#: contrib/admin/templates/django_webix/admin/include/menu.js:41
+#: contrib/admin/templates/django_webix/admin/include/menu.js:43
 msgid "Profile"
 msgstr ""
 
-#: contrib/admin/templates/django_webix/admin/include/menu.js:48
+#: contrib/admin/templates/django_webix/admin/include/menu.js:52
 msgid "Password change"
 msgstr ""
 
-#: contrib/admin/templates/django_webix/admin/include/menu.js:63
+#: contrib/admin/templates/django_webix/admin/include/menu.js:71
 msgid "2 factor authentication"
 msgstr ""
 
-#: contrib/admin/templates/django_webix/admin/include/menu.js:79
+#: contrib/admin/templates/django_webix/admin/include/menu.js:89
 msgid "Manage users"
 msgstr ""
 
-#: contrib/admin/templates/django_webix/admin/include/menu.js:84
+#: contrib/admin/templates/django_webix/admin/include/menu.js:94
 msgid "Users"
 msgstr ""
 

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-02-24 17:39+0100\n"
+"POT-Creation-Date: 2023-08-23 14:25+0200\n"
 "PO-Revision-Date: 2022-07-19 15:50+0050\n"
 "Last-Translator: Stefano Menegon <menegon@mpasol.it>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -28,7 +28,7 @@ msgid "Groups"
 msgstr "Gruppen"
 
 #: contrib/admin/dwadmin.py:52
-#: contrib/admin/templates/django_webix/admin/include/menu.js:36
+#: contrib/admin/templates/django_webix/admin/include/menu.js:38
 msgid "User"
 msgstr "Benutzer"
 
@@ -149,15 +149,16 @@ msgstr "Prefix"
 msgid "Parent"
 msgstr "Parent"
 
-#: contrib/admin/models.py:30 contrib/admin/models.py:31
+#: contrib/admin/models.py:27 contrib/admin/models.py:28
+#: contrib/admin/models.py:52 contrib/admin/models.py:53
 msgid "Webix Admin Menu"
 msgstr "Webix Admin Menu"
 
-#: contrib/admin/options.py:253
+#: contrib/admin/options.py:270
 msgid "Yes"
 msgstr "Ja"
 
-#: contrib/admin/options.py:253
+#: contrib/admin/options.py:270
 msgid "No"
 msgstr "Nein"
 
@@ -173,7 +174,7 @@ msgstr "Django webix Verwaltung"
 msgid "Site administration"
 msgstr "Site Verwaltung"
 
-#: contrib/admin/sites.py:654
+#: contrib/admin/sites.py:656
 #, python-format
 msgid ""
 "Please enter the correct %(username)s and password for a staff account. Note "
@@ -182,7 +183,7 @@ msgstr ""
 "Bitte geben Sie den korrekten %(username)s und Passwort für einen Staff-"
 "Nutzer. Achten Sie darauf dass beide Felder könnten case-sensitive sein."
 
-#: contrib/admin/sites.py:671
+#: contrib/admin/sites.py:673
 msgid "Log in"
 msgstr "Einloggen"
 
@@ -333,7 +334,7 @@ msgid ""
 msgstr ""
 
 #: contrib/admin/templates/django_webix/admin/account/password_reset_form.js:12
-#: contrib/admin/templates/django_webix/admin/include/menu.js:55
+#: contrib/admin/templates/django_webix/admin/include/menu.js:61
 msgid "Password reset"
 msgstr "Passwort zurücksetzen"
 
@@ -345,31 +346,31 @@ msgstr ""
 msgid "Under construction"
 msgstr ""
 
-#: contrib/admin/templates/django_webix/admin/base_site.html:97
+#: contrib/admin/templates/django_webix/admin/base_site.html:121
 msgid "DATA"
 msgstr "DATA"
 
-#: contrib/admin/templates/django_webix/admin/base_site.html:98
+#: contrib/admin/templates/django_webix/admin/base_site.html:122
 msgid "WEBGIS"
 msgstr "WEBGIS"
 
-#: contrib/admin/templates/django_webix/admin/include/menu.js:41
+#: contrib/admin/templates/django_webix/admin/include/menu.js:43
 msgid "Profile"
 msgstr "Profil"
 
-#: contrib/admin/templates/django_webix/admin/include/menu.js:48
+#: contrib/admin/templates/django_webix/admin/include/menu.js:52
 msgid "Password change"
 msgstr "Passwort ändern"
 
-#: contrib/admin/templates/django_webix/admin/include/menu.js:63
+#: contrib/admin/templates/django_webix/admin/include/menu.js:71
 msgid "2 factor authentication"
 msgstr "2-Faktor-Authentifizierung"
 
-#: contrib/admin/templates/django_webix/admin/include/menu.js:79
+#: contrib/admin/templates/django_webix/admin/include/menu.js:89
 msgid "Manage users"
 msgstr "Verwalten von Benutzern"
 
-#: contrib/admin/templates/django_webix/admin/include/menu.js:84
+#: contrib/admin/templates/django_webix/admin/include/menu.js:94
 msgid "Users"
 msgstr "Benutzer"
 
