@@ -72,10 +72,10 @@ class MessageUserReadInline(admin.TabularInline):
 class MessageSentAdmin(admin.ModelAdmin):
     _fields = [
         'send_method', 'subject', 'body', 'status', 'cost', 'invoiced', 'user', 'sender', 'extra', 'attachments',
-        'creation_date', 'modification_date'
+        'creation_date', 'modification_date', 'typology'
     ]
     #if CONF is not None and CONF['typology_model']['enabled']:
-    _fields.append('typology')
+    #_fields.append('typology')
 
     inlines = [MessageRecipientInline, MessageUserReadInline]
     list_display = (
