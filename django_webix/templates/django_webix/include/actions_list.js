@@ -4,10 +4,12 @@
 
 var {{ view_prefix }}actions_list = [
     {% block actions_list %}
+    {% if not request.user_agent.is_mobile %}
     {% for layer in layers %}
         {id: 'gotowebgis_{{ layer.codename }}', value: "{{_("Go to map")|escapejs}} ({{layer.layername}})"},
         {id: 'filtertowebgis_{{ layer.codename }}', value: "{{_("Filter in map")|escapejs}} ({{layer.layername}})"},
     {% endfor %}
+    {% endif %}
     {% for action_key,action in actions.items %}
     {id: '{{ action_key }}', value: '{{action.short_description}}'},
     {% endfor %}

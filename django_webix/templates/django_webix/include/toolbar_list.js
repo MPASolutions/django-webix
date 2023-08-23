@@ -130,7 +130,7 @@ $$("{{ webix_container_id }}").addView({
     view: "toolbar",
     margin: 5,
     id: "{{ webix_container_id }}_toolbar",
-    height: 65,
+    {% if request.user_agent.is_mobile %}height:40,{% else %}height:65,{% endif %}
     cols: {{ view_prefix }}toolbar_actions.concat([
         {id: '{{ view_prefix }}stats_list', view: 'label', label: '', width: 230},
         {
@@ -173,12 +173,12 @@ $$("{{ webix_container_id }}").addView({
             view: "tootipButton",
             type: "form",
             align: "right",
-            label: '{{_("Add new")|escapejs}}',
+            label: '{% if request.user_agent.is_mobile %}<div title="{{_("Add new")|escapejs}}"><i style="cursor:pointer" class="webix_icon far fa-plus"></i></div>{% else %}{{_("Add new")|escapejs}}{% endif %}',
             {% if not has_add_permission %}
             disabled: true,
             tooltip: '{{ info_no_add_permission|join:", " }}',
             {% endif %}
-            width: 150,
+            width: {% if request.user_agent.is_mobile %}40{% else %}150{% endif %},
             click: function () {
                 load_js('{{ url_create|safe }}', undefined, undefined, undefined, undefined, undefined, undefined, abortAllPending=true);
             }

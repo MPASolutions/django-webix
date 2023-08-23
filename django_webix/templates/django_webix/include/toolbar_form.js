@@ -14,13 +14,13 @@ $$("{{ webix_container_id }}").addView({
                         type: "danger",
                         css: "webix_danger",
                         align: "left",
-                        label: "{{_("Delete")|escapejs}}",
+                        label: '{% if request.user_agent.is_mobile %}<div title="{{_("Delete")|escapejs}}"><i style="cursor:pointer" class="webix_icon far fa-trash"></i></div>{% else %}{{_("Delete")|escapejs}}{% endif %}',
                         {% if not has_delete_permission %}
                             {% if remove_disabled_buttons %} hidden: true, {% endif %}
                             disabled: true,
                             tooltip: "{{ info_no_delete_permission|join:", "|escapejs }}",
                         {% endif %}
-                        width: 120,
+                        width: {% if request.user_agent.is_mobile %}40{% else %}120{% endif %},
                         click: function () {
                             load_js("{{ url_delete|safe }}", undefined, undefined, undefined, undefined, undefined, undefined, abortAllPending=true);
                         }
@@ -39,8 +39,8 @@ $$("{{ webix_container_id }}").addView({
                         type: "form",
                         css:"webix_secondary",
                         align: "right",
-                        label: "{{_("Save and continue")|escapejs}}",
-                        width: 190,
+                        label: '{% if request.user_agent.is_mobile %}<div title="{{_("Save and continue")|escapejs}}"><i style="cursor:pointer" class="webix_icon fal fa-file-download"></i><i style="cursor:pointer" class="webix_icon fal fa-redo-alt"></i></div>{% else %}{{_("Save and continue")|escapejs}}{% endif %}',
+                        width: {% if request.user_agent.is_mobile %}60{% else %}190{% endif %},
                         {% if not object.pk and not has_add_permission %}
                             {% if remove_disabled_buttons %} hidden: true, {% endif %}
                             disabled: true,
@@ -64,8 +64,8 @@ $$("{{ webix_container_id }}").addView({
                         type: "form",
                         css:"webix_secondary",
                         align: "right",
-                        label: "{{_("Save and add another")|escapejs}}",
-                        width: 260,
+                        label: '{% if request.user_agent.is_mobile %}<div title="{{_("Save and add another")|escapejs}}"><i style="cursor:pointer" class="webix_icon fal fa-file-download"></i><i style="cursor:pointer" class="webix_icon fas fa-plus"></i></div>{% else %}{{_("Save and add another")|escapejs}}{% endif %}',
+                        width: {% if request.user_agent.is_mobile %}60{% else %}260{% endif %},
                         {% if not object.pk and not has_add_permission %}
                             {% if remove_disabled_buttons %} hidden: true, {% endif %}
                             disabled: true,
@@ -91,8 +91,8 @@ $$("{{ webix_container_id }}").addView({
                         type: "form",
                         css:"webix_primary",
                         align: "right",
-                        label: "{{_("Save")|escapejs}}",
-                        width: 120,
+                        label: '{% if request.user_agent.is_mobile %}<div title="{{_("Save")|escapejs}}"><i style="cursor:pointer" class="webix_icon far fa-file-download"></i><i style="cursor:pointer" class="webix_icon far fa-list"></i></div>{% else %}{{_("Save")|escapejs}}{% endif %}',
+                        width: {% if request.user_agent.is_mobile %}60{% else %}120{% endif %},
                         {% if not object.pk and not has_add_permission %}
                             {% if remove_disabled_buttons %} hidden: true, {% endif %}
                             disabled: true,

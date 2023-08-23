@@ -7,6 +7,7 @@
     {% endblock %}
 
     {% block toolbar_navigation %}
+
         {% include "django_webix/include/toolbar_navigation.js" %}
     {% endblock %}
 

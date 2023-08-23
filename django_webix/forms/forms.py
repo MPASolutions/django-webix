@@ -1,4 +1,3 @@
-
 from collections import OrderedDict, defaultdict
 from json import dumps, loads
 
@@ -55,15 +54,22 @@ except ImportError:
 
 
 class BaseWebixMixin:
+
     form_fix_height = None
     min_count_suggest = 100
     style = 'stacked'
     label_width = 300
+    label_width_mobile = 120
     label_align = 'left'
     help_text_template = "&nbsp;<i style='font-size:14px;' class='webix_icon far fa-info-circle'></i>"
 
     class Meta:
         localized_fields = '__all__'  # to use comma as separator in i18n
+
+    def get_label_width(self):
+        if self.request is not None and self.request.user_agent.is_mobile:
+            return self.label_width_mobile
+        return self.label_width
 
     def get_fields_data_with_prefix(self, data=None):
         readonly_fields = self.get_readonly_fields()
@@ -244,7 +250,7 @@ class BaseWebixMixin:
                 'label': label,
                 'name': self.add_prefix(name),
                 'id': self[name].auto_id,
-                'labelWidth': self.label_width,
+                'labelWidth': self.get_label_width(),
                 'labelAlign': self.label_align,
                 'django_type_field': str(type(field).__name__),
             }
@@ -438,7 +444,7 @@ class BaseWebixMixin:
                                 'template': label,
                                 'labelAlign': self.label_align,
                                 'height': 30,
-                                'width': self.label_width,
+                                'width': self.get_label_width(),
                                 # attenzione qui non funziona il labelAlign perche non è un input ma è un template
                                 'css': {'background-color': 'transparent !important', 'text-align': self.label_align}
                             },
@@ -927,7 +933,7 @@ class BaseWebixMixin:
                             'id': self[name].auto_id + '_layer',
                             'name': self.add_prefix(name) + '_layer',
                             'label': label,
-                            'labelWidth': self.label_width,
+                            'labelWidth': self.get_label_width(),
                             'labelAlign': self.label_align,
                             'view': "select",
                             'options': [{'id': _layer['qxsname'], 'value': _layer['layername']} for _layer in
@@ -981,7 +987,7 @@ class BaseWebixMixin:
                     # if PointField is not None and isinstance(field, PointField):# point
                     #     _row_2 = [
                     #         {
-                    #             'width': self.label_width
+                    #             'width': self.get_label_width()
                     #         },
                     #         {
                     #             'id': self[name].auto_id + '_srid',
@@ -1028,7 +1034,7 @@ class BaseWebixMixin:
                     #     (MultiLineStringField is not None and isinstance(field, MultiLineStringField)):
                     #     _row_2 = [
                     #         {
-                    #             'width': self.label_width
+                    #             'width': self.get_label_width()
                     #         },
                     #         {
                     #             'id': self[name].auto_id + '_elements',
@@ -1060,7 +1066,7 @@ class BaseWebixMixin:
                     #     (MultiPolygonField is not None and isinstance(field, MultiPolygonField)):
                     #     _row_2 = [
                     #         {
-                    #             'width': self.label_width
+                    #             'width': self.get_label_width()
                     #         },
                     #         {
                     #             'id': self[name].auto_id + '_lenght',

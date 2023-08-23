@@ -232,19 +232,6 @@ if (
                     maxWidth: 40,
                     css: 'locked_column'
                 },
-                {% comment %}
-                {% if is_editable %}
-                {
-                    id: "cmd_edit",
-                    header: "",
-                    headermenu: false,
-                    width: 40,
-                    tooltip: false,
-                    template: '<div><i style="cursor:pointer" class="webix_icon fas fa-edit"></i></div>',
-                    css: 'locked_column'
-                },
-                {% endif %}
-                {% endcomment %}
                 {% block datatable_columns %}
                 {% for field in fields %}
                 {{ field.datalist_column|safe }},
