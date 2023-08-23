@@ -5,6 +5,7 @@ $$("{{ webix_container_id }}").addView({
     id: 'main_toolbar_form',
     view: "toolbar",
     margin: 5,
+    height: 32,
     cols: [
         {% block button_delete %}
                 {% if object.pk  and url_delete and url_delete != '' %}

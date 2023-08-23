@@ -147,7 +147,11 @@
         },
         ]
       });
+
+    {% if is_webgis_enable %}
     $$('main_content_right').disableOption('webgis_leaflet');
+    {% endif %}
+
     webix.extend($$('{{webix_container_id}}'), webix.OverlayBox);
 
       {% block content %}
