@@ -98,6 +98,10 @@ class ModelWebixAdmin(ModelWebixAdminPermissionsMixin):
     form_create = None
     form_update = None
 
+    form_mobile = None
+    form_create_mobile = None
+    form_update_mobile = None
+
     template_form_style = None
 
     label_width = None
@@ -110,6 +114,7 @@ class ModelWebixAdmin(ModelWebixAdminPermissionsMixin):
     ordering = None
     actions = []
     list_display = [] # for choice with custom key [...('utilizzo__id', 'utilizzo__denominazione')...]
+    list_display_mobile = []
     list_display_header = {}  # NEW OVERRIDE HEADER MODALITY
     extra_header = {}  # TO BE REMOVED IN FUTURE
     list_editable = [] # ex. ['utilizzo__denominazione']
@@ -248,7 +253,7 @@ class ModelWebixAdmin(ModelWebixAdminPermissionsMixin):
                 column_template = ''
                 editor = ''
                 extra_header = ''
-                width_adapt = 'fillspace:true' if j == 0 else 'adjust:"all"'
+                width_adapt = 'fillspace:true, minWidth:150' if j == 0 else 'adjust:"all"'
                 sort_option = 'server' if self.enable_json_loading else 'string'
                 click_action = None
                 footer = None
@@ -369,10 +374,14 @@ class ModelWebixAdmin(ModelWebixAdminPermissionsMixin):
         return _fields
 
     def get_list_display(self, request=None):
-        if type(self.list_display[0]) == str:
-            return self.create_list_display(self.list_display, request=request)
+        if request is not None and request.user_agent.is_mobile and len(self.list_display_mobile)>0:
+            _list_display = self.list_display_mobile
         else:
-            return self.list_display
+            _list_display = self.list_display
+        if type(_list_display[0]) == str:
+            return self.create_list_display(_list_display, request=request)
+        else:
+            return _list_display
 
     def __init__(self, model, admin_site):
         self.model = model
@@ -404,13 +413,23 @@ class ModelWebixAdmin(ModelWebixAdminPermissionsMixin):
 
     def get_form_class(self, view=None):
         from django_webix.views import WebixCreateView, WebixUpdateView
+        _is_mobile = view is not None and view.request is not None and view.request.user_agent.is_mobile
         _admin = self
         if self.form:
-            return self.form
+            if _is_mobile and self.form_mobile is not None:
+                return self.form_mobile
+            else:
+                return self.form
         elif issubclass(type(view), WebixCreateView) and self.form_create is not None:
-            return self.form_create
+            if _is_mobile and self.form_create_mobile is not None:
+                return self.form_create_mobile
+            else:
+                return self.form_create
         elif issubclass(type(view), WebixUpdateView) and self.form_update is not None:
-            return self.form_update
+            if _is_mobile and self.form_update_mobile is not None:
+                return self.form_update_mobile
+            else:
+                return self.form_update
         else:
             from django_webix.forms import WebixModelForm
 

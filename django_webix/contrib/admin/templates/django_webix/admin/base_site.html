@@ -26,6 +26,30 @@
   {% endblock %}
 
   {% block extra_header %}{% endblock %}
+<style type="text/css">
+    .webix_c_scroll_bar_y{
+        background: #d2e3ef;
+        width:16px;
+    }
+    .webix_c_scroll_bar_x{
+        background: #d2e3ef;
+        height:16px;
+    }
+    .webix_c_scroll_y{
+        width:16px;
+    }
+    .webix_c_scroll_x{
+        height:16px;
+    }
+    .webix_c_scroll_y div, .webix_c_scroll_y:hover div{
+        background: #666666;
+        width:10px; margin:0px 2px;
+    }
+    .webix_c_scroll_x div, .webix_c_scroll_x:hover div{
+        background: #666666;
+        height:10px; margin:2px 0px;
+    }
+</style>
 </head>
 <body style="width:100%;height:100%;margin:0px;padding:0px;">
 <script type="text/javascript" charset="utf-8">
@@ -45,7 +69,9 @@
   webix.ready(function(){
 
 
-    webix.CustomScroll.init();
+    if (webix.CustomScroll.init())
+        webix.CustomScroll.trackBar = true;
+
     webix.ui.fullScreen();
     webix.ui({
       id:'admin_webix',
@@ -137,6 +163,17 @@
     {% endif %}
 
     {% block extra_content %}{% endblock %}
+
+    {% block mobile %}
+        {% if request.user_agent.is_mobile %}
+            $$("main_menu").hide();
+            $$("id_title").hide();
+            $$("id_title_user").hide();
+            $$('main_content_right').define('optionWidth', 70);
+            $$('main_content_right').refresh();
+        {% endif %}
+    {% endblock %}
+
   });
   {% endblock %}
 
@@ -144,5 +181,7 @@
 
 {% block cookies %}
 {% endblock %}
+
+
 </body>
 </html>

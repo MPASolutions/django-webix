@@ -7,12 +7,21 @@
             view: "icon",
             icon: "fas fa-bars",
             click: function(){
+                {% if request.user_agent.is_mobile %}
+                if ($$("main_menu").isVisible()){
+                    $$("main_menu").hide();
+                } else {
+                    $$("main_menu").show();
+                }
+                {% else %}
                 $$("main_menu").toggle();
+                {% endif %}
             }
         },
         {% endif %}
         {% block header_left %}
         {
+            id:'id_title',
             align: "left",
             type:"clean",
             {% with pattern_index=urls_namespace|add:':index' %}
@@ -23,6 +32,7 @@
         {% endblock %}
         {% block header_right %}
         {
+            id: "id_title_user",
             align: "right",
             type:"clean",
             template: "<span style='color:#fff;font-size: 1.17em;float:right;padding-top:5px;'>{{ user }}</span>",
