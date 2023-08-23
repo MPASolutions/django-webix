@@ -136,6 +136,15 @@ class ModelWebixAdmin(ModelWebixAdminPermissionsMixin):
     # def __init__(self, prefix=None):
     #    self.prefix = prefix
 
+    def is_enable_button_save_continue(self, view, request):
+        return super(view.__class__, view).is_enable_button_save_continue(request)
+
+    def is_enable_button_save_addanother(self, view, request):
+        return super(view.__class__, view).is_enable_button_save_addanother(request)
+
+    def is_enable_button_save_gotolist(self, view, request):
+        return super(view.__class__, view).is_enable_button_save_gotolist(request)
+
     def is_enable_row_click(self, request):
         return self.enable_row_click
 
@@ -460,6 +469,15 @@ class ModelWebixAdmin(ModelWebixAdminPermissionsMixin):
 
                 model = _admin.model
 
+                def is_enable_button_save_continue(self, request):
+                    return _admin.is_enable_button_save_continue(view=self, request=request)
+
+                def is_enable_button_save_addanother(self, request):
+                    return _admin.is_enable_button_save_addanother(view=self, request=request)
+
+                def is_enable_button_save_gotolist(self, request):
+                    return _admin.is_enable_button_save_gotolist(view=self, request=request)
+
                 def get_form_class(self):
                     return _admin.get_form_class(view=self)
 
@@ -620,6 +638,15 @@ class ModelWebixAdmin(ModelWebixAdminPermissionsMixin):
 
                 template_style = _admin.get_template_form_style()
                 inlines = _admin.inlines
+
+                def is_enable_button_save_continue(self, request):
+                    return _admin.is_enable_button_save_continue(view=self, request=request)
+
+                def is_enable_button_save_addanother(self, request):
+                    return _admin.is_enable_button_save_addanother(view=self, request=request)
+
+                def is_enable_button_save_gotolist(self, request):
+                    return _admin.is_enable_button_save_gotolist(view=self, request=request)
 
                 if hasattr(_admin, 'response_valid'):
                     def response_valid(self, view=None, success_url=None, **kwargs):
