@@ -51,6 +51,7 @@ class AdminWebixSite:
 
     webix_container_id = 'content_right'
     webix_menu_type = 'menu'  # ['menu', 'sidebar']
+
     webix_menu_width = 180
 
     index_template = None

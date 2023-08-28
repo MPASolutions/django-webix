@@ -122,6 +122,7 @@
             if (loading_type == 'redirect') {
                 loading(url);
             } else if (loading_type == 'js_script') {
+                $$('id_toggle_menu').callEvent('onItemClick',[]);
                 load_js(url);
             }
         }

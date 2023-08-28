@@ -4,18 +4,23 @@
     cols:[
         {% if webix_menu_type == 'sidebar' %}
         {
+            id:"id_toggle_menu",
             view: "icon",
             icon: "fas fa-bars",
-            click: function(){
+            on: {
+                onItemClick: function (id, e) {
                 {% if request.user_agent.is_mobile %}
                 if ($$("main_menu").isVisible()){
                     $$("main_menu").hide();
+                    $$("content_right_vertical").show();
                 } else {
                     $$("main_menu").show();
+                    $$("content_right_vertical").hide();
                 }
                 {% else %}
                 $$("main_menu").toggle();
                 {% endif %}
+            }
             }
         },
         {% endif %}
