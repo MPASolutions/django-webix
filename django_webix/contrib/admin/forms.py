@@ -375,7 +375,7 @@ if apps.is_installed("two_factor"):
 
     # ############################################## Reset password by email ##############################################
     PasswordResetForm.__bases__ = (WebixForm,)
-    WebixPasswordResetForm = type(str('WebixPasswordResetForm'), (PasswordResetForm,), {'label_width': 100})
+    WebixPasswordResetForm = type(str('WebixPasswordResetForm'), (PasswordResetForm,), {'label_width': 60})
 else:
     AuthenticationForm.__bases__ = (WebixForm,)
     WebixAuthenticationAuthForm = type(str('WebixAuthenticationAuthForm'), (AuthenticationForm,),
@@ -411,4 +411,4 @@ else:
 
     # ############################################## Reset password by email ##############################################
     PasswordResetForm.__bases__ = (WebixForm,)
-    WebixPasswordResetForm = type(str('WebixPasswordResetForm'), (PasswordResetForm,), {'label_width': 100})
+    WebixPasswordResetForm = type(str('WebixPasswordResetForm'), (PasswordResetForm,), {'label_width': 60})

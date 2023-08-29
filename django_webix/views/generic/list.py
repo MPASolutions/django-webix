@@ -477,7 +477,10 @@ class WebixListView(WebixBaseMixin,
     def get_actions_style(self):
         _actions_style = None
         if self.actions_style is None:
-            _actions_style = 'select'
+            if self.request and self.request.user_agent.is_mobile:
+                _actions_style = 'buttons'
+            else:
+                _actions_style = 'select'
         elif self.actions_style in ['buttons', 'select']:
             _actions_style = self.actions_style
         else:

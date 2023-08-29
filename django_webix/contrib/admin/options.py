@@ -1034,8 +1034,9 @@ class ModelWebixAdmin(ModelWebixAdminPermissionsMixin):
                 # full mode
                 @property
                 def fields(self):
-                    if len(_admin.list_display) > 0:
-                        return _admin.get_list_display(request=self.request)
+                    _fields = _admin.get_list_display(request=self.request)
+                    if len(_fields) > 0:
+                        return _fields
                     else:
                         return None
 

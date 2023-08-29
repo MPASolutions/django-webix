@@ -42,11 +42,9 @@ $$("{{ webix_container_id }}").addView({
         {
             id: '{{ view_prefix }}_filter_extra',
             view: "button",
-            label: "{{_("Extra filters removal")|escapejs}}",
-            type: "icon",
-            width: 200,
+            label: '{% if request.user_agent.is_mobile %}<div title="{{_("Extra filters removal")|escapejs}}"><i style="cursor:pointer" class="webix_icon far fa-trash-alt"></i><i style="cursor:pointer" class="webix_icon far fa-filter"></i></div>{% else %}{{_("Extra filters removal")|escapejs}}{% endif %}',
+            width: {% if request.user_agent.is_mobile %}60{% else %}200{% endif %},
             hidden: true,
-            icon: "far fa-trash-alt",
             click: function (id, event) {
                 {% if model %}
                 {% for key, param in extra_filter_params.items %}{% if param %}

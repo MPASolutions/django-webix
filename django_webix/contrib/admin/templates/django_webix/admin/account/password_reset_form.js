@@ -32,7 +32,7 @@ $$("{{ webix_container_id }}").addView({
                 {
                     view: "form",
                     id: "{{ form.webix_id }}",
-                    minWidth: 500,
+                    minWidth: 300,
                     borderless: true,
                     elements: [
                         {{ form.as_webix|safe }},
@@ -42,7 +42,7 @@ $$("{{ webix_container_id }}").addView({
                                 {
                                     view: "button",
                                     id: 'id_button_reset_password',
-                                    label: '"{{ _("Confirm")|escapejs }}',
+                                    label: '{{ _("Confirm")|escapejs }}',
                                     click: function () {
                                         if ($$('{{ form.webix_id }}').validate()) {
                                             {% with pattern_password_reset=urls_namespace|add:':password_reset' %}

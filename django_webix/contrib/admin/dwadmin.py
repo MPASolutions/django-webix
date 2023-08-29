@@ -39,8 +39,11 @@ class UserAdmin(admin.ModelWebixAdmin):
         qs = qs.annotate(userid=F('id'))
         return qs
 
-    list_display = [
-        {
+    list_display = ['username', 'email', 'first_name', 'last_name', 'is_staff', 'is_superuser', 'is_active',
+                    'groups__name']
+    list_display_mobile = ['first_name', 'last_name', 'is_active', 'is_superuser']
+    list_display_header = {
+        'username': {
             'field_name': 'username',
             'datalist_column': format_lazy('''{{
                 id: "username",
@@ -51,7 +54,7 @@ class UserAdmin(admin.ModelWebixAdmin):
             }}''',
             escapejs(_("User")))
         },
-        {
+        'email': {
             'field_name': 'email',
             'datalist_column': format_lazy('''{{
                 id: "email",
@@ -62,7 +65,7 @@ class UserAdmin(admin.ModelWebixAdmin):
             }}''',
             escapejs(_("Email")))
         },
-        {
+        'first_name': {
             'field_name': 'first_name',
             'datalist_column': format_lazy('''{{
                 id: "first_name",
@@ -73,7 +76,7 @@ class UserAdmin(admin.ModelWebixAdmin):
             }}''',
             escapejs(_("Name")))
         },
-        {
+        'last_name': {
             'field_name': 'last_name',
             'datalist_column': format_lazy('''{{
                 id: "last_name",
@@ -84,7 +87,7 @@ class UserAdmin(admin.ModelWebixAdmin):
             }}''',
             escapejs(_("Surname")))
         },
-        {
+        'is_staff': {
             'field_name': 'is_staff',
             'datalist_column': format_lazy('''{{
                 id: "is_staff",
@@ -97,7 +100,7 @@ class UserAdmin(admin.ModelWebixAdmin):
             }}''',
             escapejs(_("Staff")))
         },
-        {
+        'is_superuser': {
             'field_name': 'is_superuser',
             'datalist_column': format_lazy('''{{
                 id: "is_superuser",
@@ -110,7 +113,7 @@ class UserAdmin(admin.ModelWebixAdmin):
             }}''',
             escapejs(_("Superuser")))
         },
-        {
+        'is_active': {
             'field_name': 'is_active',
             'datalist_column': format_lazy('''{{
                 id: "is_active",
@@ -123,7 +126,7 @@ class UserAdmin(admin.ModelWebixAdmin):
             }}''',
             escapejs(_("Active")))
         },
-        {
+        'groups__name': {
             'field_name': 'groups__name',
             'datalist_column': format_lazy('''{{
                 id: "groups__name",
@@ -134,9 +137,10 @@ class UserAdmin(admin.ModelWebixAdmin):
             }}''',
             escapejs(_("Group")))
         },
-    ]
+    }
 
     def get_list_display(self, request=None):
+        _list_display = super().get_list_display(request=request)
         if apps.is_installed("hijack") and request.user.is_superuser:
             hijack_column = {
                 'field_name': 'userid',
@@ -148,15 +152,16 @@ class UserAdmin(admin.ModelWebixAdmin):
                     template: 'Hijack'
                 }'''
             }
-            return self.list_display + [hijack_column]
+            return _list_display + [hijack_column]
         else:
-            return self.list_display
+            return _list_display
 
     enable_json_loading = True
     only_superuser = True
     create_view = UserAdminCreate
     update_view = UserAdminUpdate
     actions = [multiple_delete_action]
+    actions_style = 'buttons'
 
     def get_urls(self):
         return [
