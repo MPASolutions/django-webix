@@ -615,6 +615,7 @@ class ModelWebixAdmin(ModelWebixAdminPermissionsMixin):
 
                 def get_context_data(self, **kwargs):
                     context = super().get_context_data(**kwargs)
+                    context['urls_namespace'] = _admin.admin_site.urls_namespace
                     context.update(_admin.get_extra_context(view=self, request=self.request))
                     return context
 
@@ -780,6 +781,7 @@ class ModelWebixAdmin(ModelWebixAdminPermissionsMixin):
 
                 def get_context_data(self, **kwargs):
                     context = super().get_context_data(**kwargs)
+                    context['urls_namespace'] = _admin.admin_site.urls_namespace
                     context.update(_admin.get_extra_context(view=self,
                                                             request=self.request
                                                             ))
@@ -893,6 +895,7 @@ class ModelWebixAdmin(ModelWebixAdminPermissionsMixin):
 
                 def get_context_data(self, **kwargs):
                     context = super().get_context_data(**kwargs)
+                    context['urls_namespace'] = _admin.admin_site.urls_namespace
                     context.update(_admin.get_extra_context(view=self,
                                                             request=self.request))
                     return context
@@ -1023,6 +1026,7 @@ class ModelWebixAdmin(ModelWebixAdminPermissionsMixin):
 
                 def get_context_data(self, **kwargs):
                     context = super().get_context_data(**kwargs)
+                    context['urls_namespace'] = _admin.admin_site.urls_namespace
                     context.update(_admin.get_extra_context(view=self,
                                                             request=self.request))
                     return context
