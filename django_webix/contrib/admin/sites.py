@@ -472,7 +472,6 @@ class AdminWebixSite:
         from django.views.generic import TemplateView
         defaults = {
             'extra_context': {**self.each_context(request), **(extra_context or {})},
-            'urls_namespace': self.urls_namespace,
         }
         if self.dashboard_template is not None:
             defaults['template_name'] = self.dashboard_template
@@ -493,7 +492,6 @@ class AdminWebixSite:
             'success_url': url,
             'extra_context': {**self.each_context(request), **(extra_context or {})},
             'template_name': self.password_change_template or 'django_webix/admin/account/password_change.js',
-            'urls_namespace': self.urls_namespace,
         }
 
         request.current_app = self.name
@@ -507,7 +505,6 @@ class AdminWebixSite:
         defaults = {
             'extra_context': {**self.each_context(request), **(extra_context or {})},
             'template_name': self.password_change_template or 'django_webix/admin/account/password_change_done.js',
-            'urls_namespace': self.urls_namespace,
         }
         request.current_app = self.name
         return PasswordChangeDoneView.as_view(**defaults)(request)
@@ -529,6 +526,7 @@ class AdminWebixSite:
             extra_context = {}
         extra_context['domain'] = domain
         extra_context['site_name'] = site_name
+        extra_context['urls_namespace'] = self.urls_namespace
 
         template = 'django_webix/admin/account/password_reset_form.js'
         if not self.has_permission(request):
@@ -540,10 +538,10 @@ class AdminWebixSite:
             'form_class': forms.WebixPasswordResetForm,
             'success_url': reverse_lazy(f'{self.urls_namespace}:password_reset_done'),
             'extra_context': {**self.each_context(request), **(extra_context or {})},
-            'urls_namespace': self.urls_namespace,
         }
 
         request.current_app = self.name
+        PasswordResetView.extra_email_context = {**self.each_context(request), **(extra_context or {})}
         return PasswordResetView.as_view(**defaults)(request)
 
     def password_reset_done(self, request, extra_context=None):
