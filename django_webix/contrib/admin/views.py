@@ -36,41 +36,6 @@ class UserUpdate(WebixUpdateView):
         return obj
 
 
-class UserAdminCreate(WebixCreateView):
-    model = get_user_model()
-    form_class = UserAdminCreateForm
-
-    def get_url_pattern_update(self):
-        return 'dwadmin:' + super().get_url_pattern_update()
-
-    def get_url_pattern_list(self):
-        return 'dwadmin:' + super().get_url_pattern_list()
-
-    def get_url_pattern_delete(self):
-        return 'dwadmin:' + super().get_url_pattern_delete()
-
-    def get_url_pattern_create(self):
-        return 'dwadmin:' + super().get_url_pattern_create()
-
-
-class UserAdminUpdate(WebixUpdateView):
-    model = get_user_model()
-    form_class = UserAdminUpdateForm
-    template_name = 'django_webix/admin/account/admin_user_update.js'
-
-    def get_url_pattern_update(self):
-        return 'dwadmin:' + super().get_url_pattern_update()
-
-    def get_url_pattern_list(self):
-        return 'dwadmin:' + super().get_url_pattern_list()
-
-    def get_url_pattern_delete(self):
-        return 'dwadmin:' + super().get_url_pattern_delete()
-
-    def get_url_pattern_create(self):
-        return 'dwadmin:' + super().get_url_pattern_create()
-
-
 class PasswordResetConfirmViewCustom(PasswordResetConfirmView):
 
     def form_valid(self, form):
