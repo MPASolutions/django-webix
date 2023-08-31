@@ -9,7 +9,7 @@ from django.utils.translation import gettext_lazy as _
 
 from django_webix.contrib import admin
 from django_webix.contrib.admin.forms import GroupAdminForm, AdminPasswordChangeForm
-from django_webix.contrib.admin.views import UserAdminCreate, UserAdminUpdate
+from django_webix.contrib.admin.forms import UserAdminUpdateForm, UserAdminCreateForm
 from django_webix.views.generic.actions import multiple_delete_action
 
 
@@ -158,8 +158,10 @@ class UserAdmin(admin.ModelWebixAdmin):
 
     enable_json_loading = True
     only_superuser = True
-    create_view = UserAdminCreate
-    update_view = UserAdminUpdate
+    form_create = UserAdminCreateForm
+    form_update = UserAdminUpdateForm
+    change_form_template = 'django_webix/admin/account/admin_user_update.js'
+
     actions = [multiple_delete_action]
     actions_style = 'buttons'
 
