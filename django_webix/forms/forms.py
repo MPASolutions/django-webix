@@ -433,8 +433,7 @@ class BaseWebixMixin:
                 elements.update({
                     '{}_block'.format(self[name].html_name): {
                         'id': 'block_' + self[name].auto_id,
-                        'label': label,
-                        'labelAlign': self.label_align,
+                        'label': label,  # used for tabular inline header
                         'cols': [
                             {
                                 'name_label': name,
@@ -442,7 +441,7 @@ class BaseWebixMixin:
                                 'id': 'block_label_' + self[name].auto_id,
                                 'borderless': True,
                                 'template': label,
-                                'labelAlign': self.label_align,
+                                'labelVisibility': {'tabular': False},
                                 'height': 30,
                                 'width': self.get_label_width(),
                                 # attenzione qui non funziona il labelAlign perche non è un input ma è un template
@@ -453,7 +452,6 @@ class BaseWebixMixin:
                                 'id_label': 'preview_' + self[name].auto_id,
                                 'borderless': True,
                                 'template': _template_file,
-                                'labelAlign': self.label_align,
                                 'height': 100,
                                 'width': 170
                             },
@@ -520,7 +518,6 @@ class BaseWebixMixin:
                     'width': 150,
                     'heigth': 40,
                     'label': _('Upload file'),
-                    'labelAlign': self.label_align,
                 })
                 if isinstance(field.widget, forms.widgets.FileInput):
                     directory = field.widget.attrs.get('directory', False)
@@ -548,19 +545,20 @@ class BaseWebixMixin:
                 elements.update({
                     '{}_block'.format(self[name].html_name): {
                         'id': 'block_' + self[name].auto_id,
-                        'label': label,
-                        'labelAlign': self.label_align,
+                        'label': label,  # used for tabular inline header
                         'cols': [
                             {
                                 'height': 80,
+                                'width': self.get_label_width(),
                                 'rows': [
                                     {
                                         'name_label': name,
                                         'id_label': name,
                                         'borderless': True,
                                         'template': label,
-                                        'labelAlign': self.label_align,
+                                        'labelVisibility': {'tabular': False},
                                         'height': 40,
+                                        # attenzione qui non funziona il labelAlign perche non è un input ma è un template
                                         'css': {'background-color': 'transparent !important',
                                                 'text-align': self.label_align}
                                     },
@@ -570,7 +568,9 @@ class BaseWebixMixin:
                                         'borderless': True,
                                         'template': '{}'.format(os.path.basename(initial.name) if initial else ''),
                                         'height': 40,
-                                        'css': {'background-color': 'transparent !important', 'color': 'blue'}
+                                        # attenzione qui non funziona il labelAlign perche non è un input ma è un template
+                                        'css': {'background-color': 'transparent !important', 'color': 'blue',
+                                                'text-align': self.label_align}
                                     },
                                 ]
                             },
@@ -620,6 +620,11 @@ class BaseWebixMixin:
                                         ]
                                     }
                                 ]
+                            },
+                            {
+                                'borderless': True,
+                                'template': '',
+                                'height': 30
                             },
                         ]
                     }
@@ -935,6 +940,7 @@ class BaseWebixMixin:
                             'label': label,
                             'labelWidth': self.get_label_width(),
                             'labelAlign': self.label_align,
+                            'labelVisibility': {'tabular': False},
                             'view': "select",
                             'options': [{'id': _layer['qxsname'], 'value': _layer['layername']} for _layer in
                                         layers]
@@ -1081,6 +1087,7 @@ class BaseWebixMixin:
                     elements.update({
                         '{}_block'.format(self[name].html_name): {
                             'id': 'block_' + self[name].auto_id,
+                            'label': label,  # used for tabular inline header
                             'rows': [
                                 {'cols': _row_1},
                            #     {'cols': _row_2},
@@ -1172,12 +1179,17 @@ class BaseWebixMixin:
                 elif 'label' in f:
                     _field_header.update({'header': force_str(f['label'])})
 
+                if (
+                    _field_header is not None
+                    and 'header' in _field_header
+                    and isinstance(_field_header['header'], str)
+                    and _field_header['header'].endswith(self.help_text_template)
+                ):
+                    _field_header['header'] = _field_header['header'].removesuffix(self.help_text_template)
+
                 if _field_header is not None:
                     _field_header.update({'id': 'id_header_{}'.format(field_name)})
                     fields_header.update({field_name: _field_header})
-
-                if _field_header is not None and type(_field_header['header'])==str and _field_header['header'].endswith(self.help_text_template):
-                    _field_header['header'] = _field_header['header'].removesuffix(self.help_text_template)
 
         return fields_header
 
@@ -1201,6 +1213,27 @@ class BaseWebixMixin:
     def get_fieldsets(self, **kwargs):
         """ Returns a dict with all the fields """
 
+        def _hide_elements(el, visibility_key):
+            if 'cols' in el:
+                for col in el['cols']:
+                    _hide_elements(col, visibility_key)
+            elif 'rows' in el:
+                for row in el['rows']:
+                    _hide_elements(row, visibility_key)
+            else:
+                if 'labelVisibility' in el and not el['labelVisibility'].get(visibility_key, True):
+                    if 'label' in el:
+                        el['label'] = ''
+                        el['labelWidth'] = 0
+                    elif 'template' in el:
+                        # foto and file block use bare template as label
+                        el['template'] = ''
+                        el['width'] = 0
+                    else:
+                        raise Exception(
+                            'Django-webix form block labelVisibility configured in element without label or template to hide'
+                        )
+
         if 'fs' in kwargs and kwargs['fs'] is not None:
             fs = kwargs['fs']
         else:
@@ -1209,6 +1242,9 @@ class BaseWebixMixin:
             for field in fs:
                 fs[field]['label'] = ''
                 fs[field]['labelWidth'] = 0
+                if field.endswith('_block'):
+                    _hide_elements(fs[field], self.style)
+
         return fs.values()
 
 
