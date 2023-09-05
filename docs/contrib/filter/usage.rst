@@ -29,11 +29,11 @@ Add ``django-webix-filter`` URLconf to your project ``urls.py`` file
 
 .. code-block:: python
 
-    from django.conf.urls import url, include
+    from django.urls import path, include
 
     urlpatterns = [
         # ...
-        url(r'^django-webix-filter/', include('django_webix_filter.urls')),
+        path('django-webix-filter/', include('django_webix_filter.urls')),
         # ...
     ]
 

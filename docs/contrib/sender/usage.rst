@@ -29,11 +29,11 @@ Add ``django-webix-sender`` URLconf to your project ``urls.py`` file
 
 .. code-block:: python
 
-    from django.conf.urls import url, include
+    from django.urls import path, include
 
     urlpatterns = [
         # ...
-        url(r'^django-webix-sender/', include('django_webix.contrib.sender.urls')),
+        path('django-webix-sender/', include('django_webix.contrib.sender.urls')),
         # ...
     ]
 

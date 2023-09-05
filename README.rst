@@ -79,11 +79,11 @@ Add ``django-webix`` URLconf to your project ``urls.py`` file
 
 .. code-block:: python
 
-    from django.conf.urls import url, include
+    from django.urls import path, include
 
     urlpatterns = [
         # ...
-        url(r'^django-webix/', include('django_webix.urls')),
+        path('django-webix/', include('django_webix.urls')),
         # ...
     ]
 

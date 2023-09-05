@@ -31,7 +31,7 @@ Register the views url (e.g. <project_name>/urls.py)
 
 .. code-block:: python
 
-    from django.conf.urls import url
+    from django.urls import path
 
     from <somewhere> import dwadmin
 
