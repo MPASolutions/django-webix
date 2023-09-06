@@ -68,6 +68,7 @@
   {% block full_content %}
   webix.ready(function(){
 
+    {% include "django_webix/include/locale.js" %}
 
     if (webix.CustomScroll.init())
         webix.CustomScroll.trackBar = true;
