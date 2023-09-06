@@ -333,7 +333,7 @@ class ModelWebixAdmin(ModelWebixAdminPermissionsMixin):
                         extra_filter_options = conf_header.get('extra_filter_options', '')
                     if 'footer' in conf_header:
                         footer = conf_header.get('footer', None)
-                if field_name not in self.list_editable:
+                if field_name not in self.get_list_editable(request=request):
                     editor = ''
 
                 field_list = {
@@ -372,6 +372,9 @@ class ModelWebixAdmin(ModelWebixAdminPermissionsMixin):
                     field_list['click_action'] = click_action
                 _fields.append(field_list)
         return _fields
+
+    def get_list_editable(self, request=None):
+        return self.list_editable
 
     def get_list_display(self, request=None):
         if request is not None and request.user_agent.is_mobile and len(self.list_display_mobile)>0:
@@ -1030,6 +1033,9 @@ class ModelWebixAdmin(ModelWebixAdminPermissionsMixin):
                     context.update(_admin.get_extra_context(view=self,
                                                             request=self.request))
                     return context
+
+                def get_fields_editable(self):
+                    return _admin.get_list_editable(request=self.request)
 
                 @property
                 def fields_editable(self):
