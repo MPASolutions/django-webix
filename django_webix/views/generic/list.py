@@ -575,7 +575,7 @@ class WebixListView(WebixBaseMixin,
         return ListUpdateView.as_view()(request, *args, **kwargs)
 
     def get_fields_editable(self):
-        if self.has_change_permission(self, self.request, obj=None):
+        if self.has_change_permission(self.request, obj=None):
             return self.fields_editable
         else:
             return []
