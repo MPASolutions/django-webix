@@ -538,7 +538,7 @@ class WebixListView(WebixBaseMixin,
             return False
 
     def is_editable(self):
-        return len(self.fields_editable) > 0
+        return len(self.get_fields_editable()) > 0
 
     def get_update_form_class(self):
         _list_view = self
@@ -575,7 +575,10 @@ class WebixListView(WebixBaseMixin,
         return ListUpdateView.as_view()(request, *args, **kwargs)
 
     def get_fields_editable(self):
-        return self.fields_editable
+        if self.has_change_permission(self, self.request, obj=None):
+            return self.fields_editable
+        else:
+            return []
 
     def get_request_action(self):
         action_name = self.request.POST.get('action', self.request.GET.get('action', None))
