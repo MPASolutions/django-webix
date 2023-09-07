@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-08-23 14:25+0200\n"
+"POT-Creation-Date: 2023-09-07 14:08+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -26,36 +26,36 @@ msgstr ""
 msgid "Groups"
 msgstr ""
 
-#: contrib/admin/dwadmin.py:52
+#: contrib/admin/dwadmin.py:55
 #: contrib/admin/templates/django_webix/admin/include/menu.js:38
 msgid "User"
 msgstr ""
 
-#: contrib/admin/dwadmin.py:63
+#: contrib/admin/dwadmin.py:66
 msgid "Email"
 msgstr ""
 
-#: contrib/admin/dwadmin.py:74
+#: contrib/admin/dwadmin.py:77
 msgid "Name"
 msgstr ""
 
-#: contrib/admin/dwadmin.py:85
+#: contrib/admin/dwadmin.py:88
 msgid "Surname"
 msgstr ""
 
-#: contrib/admin/dwadmin.py:98
+#: contrib/admin/dwadmin.py:101
 msgid "Staff"
 msgstr ""
 
-#: contrib/admin/dwadmin.py:111
+#: contrib/admin/dwadmin.py:114
 msgid "Superuser"
 msgstr ""
 
-#: contrib/admin/dwadmin.py:124
+#: contrib/admin/dwadmin.py:127
 msgid "Active"
 msgstr ""
 
-#: contrib/admin/dwadmin.py:135
+#: contrib/admin/dwadmin.py:138
 msgid "Group"
 msgstr ""
 
@@ -91,7 +91,7 @@ msgid "Private data"
 msgstr ""
 
 #: contrib/admin/forms.py:158
-msgid "Private informations"
+msgid "Personal informations"
 msgstr ""
 
 #: contrib/admin/forms.py:159
@@ -167,14 +167,14 @@ msgstr ""
 msgid "Site administration"
 msgstr ""
 
-#: contrib/admin/sites.py:656
+#: contrib/admin/sites.py:658
 #, python-format
 msgid ""
 "Please enter the correct %(username)s and password for a staff account. Note "
 "that both fields may be case-sensitive."
 msgstr ""
 
-#: contrib/admin/sites.py:673
+#: contrib/admin/sites.py:675
 msgid "Log in"
 msgstr ""
 
@@ -315,11 +315,11 @@ msgstr ""
 msgid "Under construction"
 msgstr ""
 
-#: contrib/admin/templates/django_webix/admin/base_site.html:121
+#: contrib/admin/templates/django_webix/admin/base_site.html:122
 msgid "DATA"
 msgstr ""
 
-#: contrib/admin/templates/django_webix/admin/base_site.html:122
+#: contrib/admin/templates/django_webix/admin/base_site.html:123
 msgid "WEBGIS"
 msgstr ""
 
