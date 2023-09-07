@@ -155,7 +155,7 @@ class UserAdminUpdateForm(WebixModelForm):
                 'multiview': True,
                 'options': [
                     {"id": "dettagli", "value": _("Private data")},
-                    {"id": "informazioni_personali", "value": _("Private informations")},
+                    {"id": "informazioni_personali", "value": _("Personal informations")},
                     {"id": "permessi", "value": _("Permissions")},
                     {"id": "gruppi", "value": _("Groups")},
                 ],
