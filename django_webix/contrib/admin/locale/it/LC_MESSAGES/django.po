@@ -7,9 +7,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-08-23 14:25+0200\n"
-"PO-Revision-Date: 2023-05-25 10:53+0200\n"
-"Last-Translator: Stefano Menegon <menegon@mpasol.it>\n"
+"POT-Creation-Date: 2023-09-07 17:26+0200\n"
+"PO-Revision-Date: 2023-09-07 14:24+0200\n"
+"Last-Translator: Stefano Menegon <dallago@mpasol.it>\n"
 "Language-Team: \n"
 "Language: it\n"
 "MIME-Version: 1.0\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Poedit 2.1.1\n"
-"X-Translated-Using: django-rosetta 0.9.8\n"
+"X-Translated-Using: django-rosetta 0.9.9\n"
 
 #: contrib/admin/apps.py:27
 msgid "Administration"
@@ -27,36 +27,36 @@ msgstr "Amministrazione"
 msgid "Groups"
 msgstr "Gruppi"
 
-#: contrib/admin/dwadmin.py:52
+#: contrib/admin/dwadmin.py:55
 #: contrib/admin/templates/django_webix/admin/include/menu.js:38
 msgid "User"
 msgstr "Utente"
 
-#: contrib/admin/dwadmin.py:63
+#: contrib/admin/dwadmin.py:66
 msgid "Email"
 msgstr "Email"
 
-#: contrib/admin/dwadmin.py:74
+#: contrib/admin/dwadmin.py:77
 msgid "Name"
 msgstr "Nome"
 
-#: contrib/admin/dwadmin.py:85
+#: contrib/admin/dwadmin.py:88
 msgid "Surname"
 msgstr "Cognome"
 
-#: contrib/admin/dwadmin.py:98
+#: contrib/admin/dwadmin.py:101
 msgid "Staff"
 msgstr "Staff"
 
-#: contrib/admin/dwadmin.py:111
+#: contrib/admin/dwadmin.py:114
 msgid "Superuser"
 msgstr "Superuser"
 
-#: contrib/admin/dwadmin.py:124
+#: contrib/admin/dwadmin.py:127
 msgid "Active"
 msgstr "Attivo"
 
-#: contrib/admin/dwadmin.py:135
+#: contrib/admin/dwadmin.py:138
 msgid "Group"
 msgstr "Gruppo"
 
@@ -92,7 +92,7 @@ msgid "Private data"
 msgstr "Dati privati"
 
 #: contrib/admin/forms.py:158
-msgid "Private informations"
+msgid "Personal informations"
 msgstr "Informazioni personali"
 
 #: contrib/admin/forms.py:159
@@ -168,7 +168,7 @@ msgstr "Amministrazione"
 msgid "Site administration"
 msgstr "Amministrazione sito"
 
-#: contrib/admin/sites.py:656
+#: contrib/admin/sites.py:658
 #, python-format
 msgid ""
 "Please enter the correct %(username)s and password for a staff account. Note "
@@ -178,7 +178,7 @@ msgstr ""
 "staff.\n"
 "Attenzione alle lettere maiuscole e minuscole."
 
-#: contrib/admin/sites.py:673
+#: contrib/admin/sites.py:675
 msgid "Log in"
 msgstr "Entra"
 
@@ -330,11 +330,11 @@ msgstr "Sicurezza account"
 msgid "Under construction"
 msgstr "In costruzione"
 
-#: contrib/admin/templates/django_webix/admin/base_site.html:121
+#: contrib/admin/templates/django_webix/admin/base_site.html:122
 msgid "DATA"
 msgstr "DATI"
 
-#: contrib/admin/templates/django_webix/admin/base_site.html:122
+#: contrib/admin/templates/django_webix/admin/base_site.html:123
 msgid "WEBGIS"
 msgstr "WEBGIS"
 

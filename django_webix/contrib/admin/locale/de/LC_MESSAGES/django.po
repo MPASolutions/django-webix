@@ -8,16 +8,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-08-23 14:25+0200\n"
-"PO-Revision-Date: 2022-07-19 15:50+0050\n"
-"Last-Translator: Stefano Menegon <menegon@mpasol.it>\n"
+"POT-Creation-Date: 2023-09-07 17:26+0200\n"
+"PO-Revision-Date: 2023-09-07 15:02+0200\n"
+"Last-Translator: Stefano Menegon <dallago@mpasol.it>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Translated-Using: django-rosetta 0.9.8\n"
+"X-Translated-Using: django-rosetta 0.9.9\n"
 
 #: contrib/admin/apps.py:27
 msgid "Administration"
@@ -27,44 +27,38 @@ msgstr "Verwaltung"
 msgid "Groups"
 msgstr "Gruppen"
 
-#: contrib/admin/dwadmin.py:52
+#: contrib/admin/dwadmin.py:55
 #: contrib/admin/templates/django_webix/admin/include/menu.js:38
 msgid "User"
 msgstr "Benutzer"
 
-#: contrib/admin/dwadmin.py:63
+#: contrib/admin/dwadmin.py:66
 msgid "Email"
-msgstr ""
+msgstr "Email"
 
-#: contrib/admin/dwadmin.py:74
+#: contrib/admin/dwadmin.py:77
 msgid "Name"
-msgstr ""
+msgstr "Name"
 
-#: contrib/admin/dwadmin.py:85
-#, fuzzy
-#| msgid "Username"
+#: contrib/admin/dwadmin.py:88
 msgid "Surname"
-msgstr "Benutzer"
+msgstr "Nachname"
 
-#: contrib/admin/dwadmin.py:98
+#: contrib/admin/dwadmin.py:101
 msgid "Staff"
-msgstr ""
+msgstr "Staff"
 
-#: contrib/admin/dwadmin.py:111
+#: contrib/admin/dwadmin.py:114
 msgid "Superuser"
-msgstr ""
+msgstr "Superuser"
 
-#: contrib/admin/dwadmin.py:124
-#, fuzzy
-#| msgid "Active for all"
+#: contrib/admin/dwadmin.py:127
 msgid "Active"
-msgstr "Aktiv für alle"
+msgstr "Aktiv"
 
-#: contrib/admin/dwadmin.py:135
-#, fuzzy
-#| msgid "Groups"
+#: contrib/admin/dwadmin.py:138
 msgid "Group"
-msgstr "Gruppen"
+msgstr "Gruppe"
 
 #: contrib/admin/forms.py:24 contrib/admin/forms.py:129
 #: contrib/admin/forms.py:136
@@ -98,8 +92,8 @@ msgid "Private data"
 msgstr "Private data"
 
 #: contrib/admin/forms.py:158
-msgid "Private informations"
-msgstr "Private Informationen"
+msgid "Personal informations"
+msgstr "Persönliches Datenblatt"
 
 #: contrib/admin/forms.py:159
 msgid "Permissions"
@@ -174,7 +168,7 @@ msgstr "Django webix Verwaltung"
 msgid "Site administration"
 msgstr "Site Verwaltung"
 
-#: contrib/admin/sites.py:656
+#: contrib/admin/sites.py:658
 #, python-format
 msgid ""
 "Please enter the correct %(username)s and password for a staff account. Note "
@@ -183,7 +177,7 @@ msgstr ""
 "Bitte geben Sie den korrekten %(username)s und Passwort für einen Staff-"
 "Nutzer. Achten Sie darauf dass beide Felder könnten case-sensitive sein."
 
-#: contrib/admin/sites.py:673
+#: contrib/admin/sites.py:675
 msgid "Log in"
 msgstr "Einloggen"
 
@@ -194,26 +188,20 @@ msgstr "Benutzerpasswort ändern"
 #: contrib/admin/templates/django_webix/admin/account/password_change.js:43
 #: contrib/admin/templates/django_webix/admin/account/password_reset.html:31
 #: contrib/admin/templates/django_webix/admin/password_change.html:29
-#, fuzzy
-#| msgid "Change password"
 msgid "Current password"
-msgstr "Passwort  ändern"
+msgstr "Aktuelles Passwort"
 
 #: contrib/admin/templates/django_webix/admin/account/password_change.js:52
 #: contrib/admin/templates/django_webix/admin/account/password_reset.html:40
 #: contrib/admin/templates/django_webix/admin/password_change.html:38
-#, fuzzy
-#| msgid "Nuova password"
 msgid "New password"
 msgstr "Neues Passwort"
 
 #: contrib/admin/templates/django_webix/admin/account/password_change.js:61
 #: contrib/admin/templates/django_webix/admin/account/password_reset.html:49
 #: contrib/admin/templates/django_webix/admin/password_change.html:47
-#, fuzzy
-#| msgid "Password confirmation"
 msgid "Password confirm"
-msgstr "Passwort Bestätigung"
+msgstr "Passwortbestätigung"
 
 #: contrib/admin/templates/django_webix/admin/account/password_change.js:70
 #: contrib/admin/templates/django_webix/admin/account/password_reset.html:56
@@ -221,8 +209,6 @@ msgstr "Passwort Bestätigung"
 #: contrib/admin/templates/django_webix/admin/account/password_reset_form.html:34
 #: contrib/admin/templates/django_webix/admin/account/password_reset_form.js:45
 #: contrib/admin/templates/django_webix/admin/password_change.html:54
-#, fuzzy
-#| msgid "Conferma"
 msgid "Confirm"
 msgstr "Bestätigung"
 
@@ -232,35 +218,29 @@ msgstr "Passwort korrekt geändert"
 
 #: contrib/admin/templates/django_webix/admin/account/password_reset.html:13
 #: contrib/admin/templates/django_webix/admin/password_change.html:13
-#, fuzzy
-#| msgid "Password change"
 msgid "User password change"
-msgstr "Passwort ändern"
+msgstr "Änderung des Benutzerpassworts"
 
 #: contrib/admin/templates/django_webix/admin/account/password_reset_complete.html:11
-#, fuzzy
-#| msgid "Password reset"
 msgid "password reset complete"
-msgstr "Passwort zurücksetzen"
+msgstr "Reset des Passworts abgeschlossen"
 
 #: contrib/admin/templates/django_webix/admin/account/password_reset_complete.html:17
 msgid "Your password has been set. You can log-in"
-msgstr ""
+msgstr "Ihr Passwort wurde festgelegt. Sie können sich anmelden"
 
 #: contrib/admin/templates/django_webix/admin/account/password_reset_complete.html:32
 #: contrib/admin/templates/django_webix/admin/login.html:54
 msgid "Login"
-msgstr ""
+msgstr "Login"
 
 #: contrib/admin/templates/django_webix/admin/account/password_reset_complete.html:42
 msgid "Back"
 msgstr "Zurück"
 
 #: contrib/admin/templates/django_webix/admin/account/password_reset_confirm.html:11
-#, fuzzy
-#| msgid "Conferma password"
 msgid "Insert new password"
-msgstr "Passwort bestätigen"
+msgstr "Neues Passwort eingeben"
 
 #: contrib/admin/templates/django_webix/admin/account/password_reset_confirm.html:16
 msgid ""
@@ -268,10 +248,8 @@ msgid ""
 msgstr ""
 
 #: contrib/admin/templates/django_webix/admin/account/password_reset_done.html:10
-#, fuzzy
-#| msgid "Password reset"
 msgid "password reset sent"
-msgstr "Passwort zurücksetzen"
+msgstr "Passwort-Reset gesendet"
 
 #: contrib/admin/templates/django_webix/admin/account/password_reset_done.html:15
 #: contrib/admin/templates/django_webix/admin/account/password_reset_done.js:33
@@ -289,10 +267,8 @@ msgid ""
 msgstr ""
 
 #: contrib/admin/templates/django_webix/admin/account/password_reset_done.js:20
-#, fuzzy
-#| msgid "Change password"
 msgid "Reset password"
-msgstr "Passwort  ändern"
+msgstr "Reset Passwort"
 
 #: contrib/admin/templates/django_webix/admin/account/password_reset_email.html:2
 #, python-format
@@ -321,10 +297,8 @@ msgid "The %(site_name)s team"
 msgstr "Das %(site_name)s Team"
 
 #: contrib/admin/templates/django_webix/admin/account/password_reset_form.html:11
-#, fuzzy
-#| msgid "Change password"
 msgid "reset password"
-msgstr "Passwort  ändern"
+msgstr "Reset Passwort"
 
 #: contrib/admin/templates/django_webix/admin/account/password_reset_form.html:16
 #: contrib/admin/templates/django_webix/admin/account/password_reset_form.js:26
@@ -346,11 +320,11 @@ msgstr ""
 msgid "Under construction"
 msgstr ""
 
-#: contrib/admin/templates/django_webix/admin/base_site.html:121
+#: contrib/admin/templates/django_webix/admin/base_site.html:122
 msgid "DATA"
 msgstr "DATA"
 
-#: contrib/admin/templates/django_webix/admin/base_site.html:122
+#: contrib/admin/templates/django_webix/admin/base_site.html:123
 msgid "WEBGIS"
 msgstr "WEBGIS"
 
@@ -383,8 +357,6 @@ msgid "Username"
 msgstr "Benutzer"
 
 #: contrib/admin/templates/django_webix/admin/login.html:71
-#, fuzzy
-#| msgid "Password reset"
 msgid "Password recovery"
 msgstr "Passwort zurücksetzen"
 

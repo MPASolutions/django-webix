@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-08-23 14:25+0200\n"
+"POT-Creation-Date: 2023-09-07 13:55+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -22,40 +22,40 @@ msgstr ""
 msgid "Upload new image"
 msgstr ""
 
-#: forms/forms.py:491 forms/forms.py:611
+#: forms/forms.py:489 forms/forms.py:611
 msgid "Deleted"
 msgstr ""
 
-#: forms/forms.py:522
+#: forms/forms.py:520
 msgid "Upload file"
 msgstr ""
 
-#: forms/forms.py:536
+#: forms/forms.py:533
 msgid "Upload folder"
 msgstr ""
 
-#: forms/forms.py:541
+#: forms/forms.py:538
 msgid "Upload files"
 msgstr ""
 
-#: forms/forms.py:637
+#: forms/forms.py:642
 msgid "MultipleChoiceField is available only with PRO webix license"
 msgstr ""
 
-#: forms/forms.py:669 forms/forms.py:696 forms/forms.py:750 forms/forms.py:784
-#: forms/forms.py:794 forms/forms.py:808 forms/forms.py:858
+#: forms/forms.py:674 forms/forms.py:701 forms/forms.py:755 forms/forms.py:789
+#: forms/forms.py:799 forms/forms.py:813 forms/forms.py:863
 msgid "Click to select"
 msgstr ""
 
-#: forms/forms.py:897
+#: forms/forms.py:902
 msgid "Initial value {} for geo field {} is not supported"
 msgstr ""
 
-#: forms/forms.py:946
+#: forms/forms.py:952
 msgid "Edit"
 msgstr ""
 
-#: forms/forms.py:1097
+#: forms/forms.py:1104
 msgid "Type of field {} not supported"
 msgstr ""
 
@@ -93,41 +93,41 @@ msgstr ""
 msgid "Extra filters removal"
 msgstr ""
 
-#: templates/django_webix/generic/list.js:62
+#: templates/django_webix/generic/list.js:60
 msgid "Geographic filter removal"
 msgstr ""
 
-#: templates/django_webix/generic/list.js:80
+#: templates/django_webix/generic/list.js:78
 msgid "Advanced filter"
 msgstr ""
 
-#: templates/django_webix/generic/list.js:159
-#: templates/django_webix/generic/list.js:245
+#: templates/django_webix/generic/list.js:157
+#: templates/django_webix/generic/list.js:243
 #: templates/django_webix/include/actions_list.js:9
 #: templates/django_webix/include/toolbar_navigation.js:48
 #: templates/django_webix/include/toolbar_navigation.js:104
 msgid "Go to map"
 msgstr ""
 
-#: templates/django_webix/generic/list.js:161
+#: templates/django_webix/generic/list.js:159
 #: templates/django_webix/include/toolbar_navigation.js:44
 #: templates/django_webix/include/toolbar_navigation.js:100
 msgid "Geometry does not exist"
 msgstr ""
 
-#: templates/django_webix/generic/list.js:258
+#: templates/django_webix/generic/list.js:256
 msgid "Remove filters"
 msgstr ""
 
-#: templates/django_webix/generic/list.js:259
+#: templates/django_webix/generic/list.js:257
 msgid "Apply filters"
 msgstr ""
 
-#: templates/django_webix/generic/list.js:259
+#: templates/django_webix/generic/list.js:257
 msgid "Filter"
 msgstr ""
 
-#: templates/django_webix/generic/list.js:506
+#: templates/django_webix/generic/list.js:504
 msgid "Double click to edit the element"
 msgstr ""
 
@@ -256,20 +256,20 @@ msgstr ""
 msgid "Description"
 msgstr ""
 
-#: templates/django_webix/include/toolbar_form.js:17
+#: templates/django_webix/include/toolbar_form.js:18
 #: views/generic/actions.py:44
 msgid "Delete"
 msgstr ""
 
-#: templates/django_webix/include/toolbar_form.js:42
+#: templates/django_webix/include/toolbar_form.js:43
 msgid "Save and continue"
 msgstr ""
 
-#: templates/django_webix/include/toolbar_form.js:67
+#: templates/django_webix/include/toolbar_form.js:68
 msgid "Save and add another"
 msgstr ""
 
-#: templates/django_webix/include/toolbar_form.js:94
+#: templates/django_webix/include/toolbar_form.js:95
 msgid "Save"
 msgstr ""
 
@@ -431,7 +431,7 @@ msgstr ""
 
 #: views/generic/create_update.py:365 views/generic/create_update.py:452
 #: views/generic/delete.py:43 views/generic/detail.py:20
-#: views/generic/list.py:644
+#: views/generic/list.py:650
 msgid "View permission is not allowed"
 msgstr ""
 
@@ -500,30 +500,30 @@ msgstr ""
 msgid "Paginate start is not integer"
 msgstr ""
 
-#: views/generic/list.py:485
+#: views/generic/list.py:488
 msgid ""
 "Actions style is improperly configured only options are 'buttons' or "
 "'select' (select by default)."
 msgstr ""
 
-#: views/generic/list.py:605
+#: views/generic/list.py:611
 msgid ""
 "Json response is available only if get_queryset() return a queryset and not "
 "a list"
 msgstr ""
 
-#: views/generic/list.py:624
+#: views/generic/list.py:630
 msgid "This action is not registered"
 msgstr ""
 
-#: views/generic/list.py:630
+#: views/generic/list.py:636
 msgid "Permission denied: {}"
 msgstr ""
 
-#: views/generic/list.py:632
+#: views/generic/list.py:638
 msgid "This permission is not registered on this class"
 msgstr ""
 
-#: views/generic/list.py:707
+#: views/generic/list.py:713
 msgid "Generic TemplateListView needs to define data for datatable"
 msgstr ""
