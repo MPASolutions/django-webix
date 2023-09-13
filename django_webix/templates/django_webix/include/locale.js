@@ -29,4 +29,7 @@ http://www.lingoes.net/en/translator/langcode.htm
   webix.i18n.setLocale("zh-CN");
 {% elif LANGUAGE_CODE|slice:":2"|lower == 'pt' %}
   webix.i18n.setLocale("pt-BR");
+{% else %}
+    {# To add extra languages extend this file, override the other_languages block and include related javascript locale file #}
+    {% block other_languages %}{% endblock other_languages %}
 {% endif %}
