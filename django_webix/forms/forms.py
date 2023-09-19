@@ -1124,7 +1124,7 @@ class BaseWebixMixin:
 
             # Widget RadioSelect
             if isinstance(field.widget, forms.PasswordInput):
-                el.update({"type": "password"})
+                el.update({"type": "password", "view":"search", "icon":"fas fa-eye"})
 
             # Widget Hidden Fields
             if isinstance(field.widget, forms.HiddenInput):
