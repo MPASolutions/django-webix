@@ -234,7 +234,7 @@ class ModelWebixAdmin(ModelWebixAdminPermissionsMixin):
                 raise Exception('TODO?')
         return _next
 
-    def create_list_display(self, list_display, request=None):
+    def create_list_display(self, list_display, view=None, request=None):
         _fields = []
         for j, field_name in enumerate(list_display):
             if field_name in self.list_display_header:
@@ -333,7 +333,7 @@ class ModelWebixAdmin(ModelWebixAdminPermissionsMixin):
                         extra_filter_options = conf_header.get('extra_filter_options', '')
                     if 'footer' in conf_header:
                         footer = conf_header.get('footer', None)
-                if field_name not in self.get_list_editable(request=request):
+                if field_name not in self.get_list_editable(view=view, request=request):
                     editor = ''
 
                 field_list = {
@@ -373,16 +373,16 @@ class ModelWebixAdmin(ModelWebixAdminPermissionsMixin):
                 _fields.append(field_list)
         return _fields
 
-    def get_list_editable(self, request=None):
+    def get_list_editable(self, view=None, request=None):
         return self.list_editable
 
-    def get_list_display(self, request=None):
+    def get_list_display(self, view=None, request=None):
         if request is not None and request.user_agent.is_mobile and len(self.list_display_mobile)>0:
             _list_display = self.list_display_mobile
         else:
             _list_display = self.list_display
         if type(_list_display[0]) == str:
-            return self.create_list_display(_list_display, request=request)
+            return self.create_list_display(_list_display, view=view, request=request)
         else:
             return _list_display
 
@@ -1044,7 +1044,7 @@ class ModelWebixAdmin(ModelWebixAdminPermissionsMixin):
                 # full mode
                 @property
                 def fields(self):
-                    _fields = _admin.get_list_display(request=self.request)
+                    _fields = _admin.get_list_display(view=self, request=self.request)
                     if len(_fields) > 0:
                         return _fields
                     else:

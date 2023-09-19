@@ -139,8 +139,8 @@ class UserAdmin(admin.ModelWebixAdmin):
         },
     }
 
-    def get_list_display(self, request=None):
-        _list_display = super().get_list_display(request=request)
+    def get_list_display(self, view=None, request=None):
+        _list_display = super().get_list_display(view=view, request=request)
         if apps.is_installed("hijack") and request.user.is_superuser:
             hijack_column = {
                 'field_name': 'userid',
