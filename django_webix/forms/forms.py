@@ -79,7 +79,7 @@ class BaseWebixMixin:
                 key = self.add_prefix(name)
                 if key in data and \
                     name not in readonly_fields:
-                    if isinstance(field, forms.models.ModelMultipleChoiceField):
+                    if isinstance(field, (forms.models.ModelMultipleChoiceField, forms.MultipleChoiceField)):
                         temp_list = []
                         # it must be "type" and not "isinstance" because QueryDict is inherited from MultiValueDict
                         if type(data) == MultiValueDict:
@@ -272,8 +272,7 @@ class BaseWebixMixin:
 
             # Get initial value
             if hasattr(self, 'cleaned_data'):
-
-                if type(field) == forms.models.ModelMultipleChoiceField:
+                if isinstance(field, (forms.models.ModelMultipleChoiceField, forms.MultipleChoiceField)):
                     initial = self.data.getlist(self.add_prefix(name), field.initial)
                 elif connection.vendor == 'postgresql' and isinstance(field, JSONField):
                     initial = self.data.get(self.add_prefix(name), None)
