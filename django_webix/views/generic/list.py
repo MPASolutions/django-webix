@@ -313,17 +313,22 @@ class WebixListView(WebixBaseMixin,
                     field_name = field.get('field_name')
                     _fields_choices[field_name] = [
                         {'id': 'null', 'value': '---'},
-                    ] # detaul add null/'' option
-                    if 'boolean' in str(field.get('field_type','')).lower():
+                    ] # default add null/'' option
+                    try:
+                        _modelfield = self.model._meta.get_field(field_name)
+                    except FieldDoesNotExist:
+                        _modelfield = None
+                    if 'boolean' in str(field.get('field_type', '')).lower():
                         _fields_choices[field_name] += [
                             {'id': 'true', 'value': _('Yes')},
                             {'id': 'false', 'value': _('No')},
                         ]
-
+                    elif _modelfield is not None and _modelfield.choices is not None:
+                        _fields_choices[field_name] = [{'id':i[0], 'value':i[1]} for i in _modelfield.get_choices()]
                     elif ('serverSelectFilter' in field.get('datalist_column') or
-                       'serverRichSelectFilter' in field.get('datalist_column') or
-                       'serverMultiSelectFilter' in field.get('datalist_column') or
-                       'serverMultiComboFilter' in field.get('datalist_column')):
+                          'serverRichSelectFilter' in field.get('datalist_column') or
+                          'serverMultiSelectFilter' in field.get('datalist_column') or
+                          'serverMultiComboFilter' in field.get('datalist_column')):
                         if field.get('field_pk') is None:
                             _fields_choices[field_name] += [str(i) for i in
                                                              self.get_queryset().filter(**{field_name + '__isnull': False})\
@@ -332,7 +337,7 @@ class WebixListView(WebixBaseMixin,
                             _fields_choices[field_name] += [{
                                 'id': key,
                                 'value': value,
-                            } for key,value in self.get_queryset().filter(
+                            } for key, value in self.get_queryset().filter(
                                           **{field_name + '__isnull': False}) \
                                           .values_list(field.get('field_pk'), field_name).distinct().order_by()]
 

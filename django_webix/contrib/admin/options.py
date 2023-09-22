@@ -267,7 +267,7 @@ class ModelWebixAdmin(ModelWebixAdminPermissionsMixin):
                     editor = 'editor:"select",collection: {}_options '.format(field_name)
                     filter_type = ''
                     filter_option = 'serverSelectFilter' if self.enable_json_loading else 'selectFilter'
-                    extra_filter_options = ", options:[{id: 'True', value: '" + _('Yes') + "'}, {id: 'False', value: '" + _("No") + "'}] "
+                    extra_filter_options = "options:[{id: 'True', value: '" + _('Yes') + "'}, {id: 'False', value: '" + _("No") + "'}] "
                     column_template = ' template:custom_checkbox_yesnonone, '
                 elif type(model_field) == models.DateTimeField:
                     editor = 'editor:"datetime", '
@@ -292,7 +292,7 @@ class ModelWebixAdmin(ModelWebixAdminPermissionsMixin):
                             filter_type = 'iexact'
                             editor = 'editor:"select", collection:{}_options '.format(field_name)
                             filter_option = 'serverRichSelectFilter' if self.enable_json_loading else 'selectFilter'
-                            extra_filter_options = ", options:{}_options ".format(field_name)
+                            extra_filter_options = "options:{}_options ".format(field_name)
                 # if choices... the same of FK
                 else:
                     editor = 'editor:"text", '
@@ -302,15 +302,18 @@ class ModelWebixAdmin(ModelWebixAdminPermissionsMixin):
                         pass
                     else:
                         if hasattr(_first_field, 'choices') and _first_field.choices is not None:
-                            editor = 'editor:"select",collection: {}_options '.format(field_name)
+                            editor = 'editor:"select" '
+                            extra_header = 'collection: {}_options '.format(field_name)
                             filter_type = 'iexact'
                             filter_option = 'serverRichSelectFilter' if self.enable_json_loading else 'selectFilter'
-                            extra_filter_options = ", options: {}_options ".format(field_name)
+                            extra_filter_options = "options: {}_options ".format(field_name)
 
                 if issubclass(type(model_field),models.FloatField) or \
                     issubclass(type(model_field), models.DecimalField) or \
                     issubclass(type(model_field), models.IntegerField):
-                    extra_header = " css:{'text-align':'right'}"
+                    if extra_header!='':
+                        extra_header += ','
+                    extra_header += " css:{'text-align':'right'}"
                     filter_type = 'numbercompare'
 
                 if field_name in self.extra_header:  # TO BE REMOVED IN FUTURE
@@ -354,13 +357,13 @@ class ModelWebixAdmin(ModelWebixAdminPermissionsMixin):
                         header_title=header_title,
                         filter=filter_option,
                         format_type=' format: ' + format_type + ', ' if format_type is not None else '',
-                        extra_filter_options=extra_filter_options,
+                        extra_filter_options=extra_filter_options if extra_filter_options=='' else ' , '+extra_filter_options,
                         width_adapt=width_adapt,
                         adjust_batch=self.paginate_count_default,
                         sort_option=sort_option,
                         filter_type=filter_type,
-                        column_template=column_template,
-                        editor = editor,
+                        column_template=column_template if column_template=='' else column_template+', ',
+                        editor = editor if editor=='' else editor+', ',
                         extra_header=extra_header
                     )
                 }
