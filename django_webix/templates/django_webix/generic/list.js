@@ -449,7 +449,14 @@ if (
                             return false
                         }
                     }
-                    load_js('{{ url_list|safe }}{% if '?' in url_list %}&{% else %}?{% endif %}update', undefined, undefined, 'POST', _params, undefined, 'json', false, undefined, undefined, always_save, undefined, undefined, false);
+                    function fail_edit(xhr, textStatus){
+                        if(xhr.status === 403){
+                            webix.alert('{{_("You do not have permission to edit this item")|escapejs}}')
+                        }else{
+                            webix.alert('{{_("Server error")|escapejs}}')
+                        }
+                    }
+                    load_js('{{ url_list|safe }}{% if '?' in url_list %}&{% else %}?{% endif %}update', undefined, undefined, 'POST', _params, undefined, 'json', false, undefined, fail_edit, always_save, undefined, undefined, false);
                 },
                 {% endif %}
                 onItemClick: function (id, e, trg) {
