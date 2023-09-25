@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-03-24 15:44+0100\n"
+"POT-Creation-Date: 2023-09-25 14:27+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -50,8 +50,8 @@ msgstr ""
 msgid "Insert user"
 msgstr ""
 
-#: contrib/filter/models.py:25
-msgid "Visiblity"
+#: contrib/filter/models.py:25 contrib/filter/views.py:375
+msgid "Visibility"
 msgstr ""
 
 #: contrib/filter/models.py:26
@@ -88,8 +88,8 @@ msgstr ""
 
 #: contrib/filter/templates/django_webix/filter/create_update.js:32
 msgid ""
-"There is a filter error, caused by a garment or model that is now non-"
-"existent or not correctly configured."
+"There is an error in the filter configuration, caused by a field or model "
+"that is now missing or not configured correctly."
 msgstr ""
 
 #: contrib/filter/templates/django_webix/filter/create_update.js:33
@@ -162,8 +162,4 @@ msgstr ""
 
 #: contrib/filter/utils/operators.py:204
 msgid "Contained by"
-msgstr ""
-
-#: contrib/filter/views.py:375
-msgid "Visibility"
 msgstr ""
