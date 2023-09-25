@@ -22,7 +22,7 @@ class WebixFilter(DALModel):
 
     insert_user = models.ForeignKey(settings.AUTH_USER_MODEL, verbose_name=_('Insert user'),
                                     blank=True, null=True, on_delete=models.CASCADE)
-    visibility = models.CharField(_('Visiblity'), max_length=32, choices=[
+    visibility = models.CharField(_('Visibility'), max_length=32, choices=[
         ("public", _('Public') ),
         ("private", _('Private') ),
         ("restricted", _('Restricted') ),
