@@ -29,7 +29,7 @@
         if (!corrupted_filter) {
             webix.alert({
                 title: "{{_("Filter error")|escapejs}}",
-                text: "{{_("There is a filter error, caused by a garment or model that is now non-existent or not correctly configured.")|escapejs}}"+
+                text: "{{_("There is an error in the filter configuration, caused by a field or model that is now missing or not configured correctly.")|escapejs}}"+
                 "{{_("Unable to load filter, contact administrators to correct it")|escapejs}}.",
                 type: "alert-error"
             });
