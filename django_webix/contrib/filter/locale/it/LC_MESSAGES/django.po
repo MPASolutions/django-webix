@@ -7,9 +7,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-03-24 15:44+0100\n"
-"PO-Revision-Date: 2023-03-24 15:45+0100\n"
-"Last-Translator: Stefano Menegon <menegon@mpasol.it>\n"
+"POT-Creation-Date: 2023-09-25 16:17+0200\n"
+"PO-Revision-Date: 2023-09-25 15:41+0200\n"
+"Last-Translator: Stefano Menegon <dallago@mpasol.it>\n"
 "Language-Team: \n"
 "Language: it\n"
 "MIME-Version: 1.0\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Poedit 2.1.1\n"
-"X-Translated-Using: django-rosetta 0.9.8\n"
+"X-Translated-Using: django-rosetta 0.9.9\n"
 
 #: contrib/filter/apps.py:11
 msgid "Django Webix Filter"
@@ -51,8 +51,8 @@ msgstr "Filtra"
 msgid "Insert user"
 msgstr "Utente inserimento"
 
-#: contrib/filter/models.py:25
-msgid "Visiblity"
+#: contrib/filter/models.py:25 contrib/filter/views.py:375
+msgid "Visibility"
 msgstr "Visibilità"
 
 #: contrib/filter/models.py:26
@@ -89,17 +89,16 @@ msgstr "Errore nel filtro"
 
 #: contrib/filter/templates/django_webix/filter/create_update.js:32
 msgid ""
-"There is a filter error, caused by a garment or model that is now non-"
-"existent or not correctly configured."
+"There is an error in the filter configuration, caused by a field or model "
+"that is now missing or not configured correctly."
 msgstr ""
-"C'è un errore del filtro, causato da un modello ormai inesistente o non "
-"configurato correttamente."
+"È presente un errore nella configurazione dei filtri, causato da un campo o "
+"un modello ora inesistenti o non configurati correttamente."
 
 #: contrib/filter/templates/django_webix/filter/create_update.js:33
 msgid "Unable to load filter, contact administrators to correct it"
 msgstr ""
-"Impossibile caricare il filtro, contattare gli amministratori per "
-"correggerlo"
+"Impossibile caricare il filtro, contattare gli amministratori per correggerlo"
 
 #: contrib/filter/templates/django_webix/filter/create_update.js:106
 #: contrib/filter/templates/django_webix/filter/create_update.js:122
@@ -171,6 +170,5 @@ msgstr "Sovrapposizione"
 msgid "Contained by"
 msgstr "Contenuto in"
 
-#: contrib/filter/views.py:375
-msgid "Visibility"
-msgstr "Visibilità"
+#~ msgid "Visiblity"
+#~ msgstr "Visibilità"

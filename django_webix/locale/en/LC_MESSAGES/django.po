@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-09-07 13:55+0200\n"
+"POT-Creation-Date: 2023-09-25 14:26+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,44 +18,44 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: forms/forms.py:415
+#: forms/forms.py:414
 msgid "Upload new image"
 msgstr ""
 
-#: forms/forms.py:489 forms/forms.py:611
+#: forms/forms.py:488 forms/forms.py:610
 msgid "Deleted"
 msgstr ""
 
-#: forms/forms.py:520
+#: forms/forms.py:519
 msgid "Upload file"
 msgstr ""
 
-#: forms/forms.py:533
+#: forms/forms.py:532
 msgid "Upload folder"
 msgstr ""
 
-#: forms/forms.py:538
+#: forms/forms.py:537
 msgid "Upload files"
 msgstr ""
 
-#: forms/forms.py:642
+#: forms/forms.py:641
 msgid "MultipleChoiceField is available only with PRO webix license"
 msgstr ""
 
-#: forms/forms.py:674 forms/forms.py:701 forms/forms.py:755 forms/forms.py:789
-#: forms/forms.py:799 forms/forms.py:813 forms/forms.py:863
+#: forms/forms.py:673 forms/forms.py:700 forms/forms.py:754 forms/forms.py:788
+#: forms/forms.py:798 forms/forms.py:812 forms/forms.py:862
 msgid "Click to select"
 msgstr ""
 
-#: forms/forms.py:902
+#: forms/forms.py:901
 msgid "Initial value {} for geo field {} is not supported"
 msgstr ""
 
-#: forms/forms.py:952
+#: forms/forms.py:951
 msgid "Edit"
 msgstr ""
 
-#: forms/forms.py:1104
+#: forms/forms.py:1103
 msgid "Type of field {} not supported"
 msgstr ""
 
@@ -127,7 +127,17 @@ msgstr ""
 msgid "Filter"
 msgstr ""
 
-#: templates/django_webix/generic/list.js:504
+#: templates/django_webix/generic/list.js:454
+msgid "You do not have permission to edit this item"
+msgstr ""
+
+#: templates/django_webix/generic/list.js:456
+#: templates/django_webix/include/utils.js:357
+#: templates/django_webix/include/utils.js:415
+msgid "Server error"
+msgstr ""
+
+#: templates/django_webix/generic/list.js:511
 msgid "Double click to edit the element"
 msgstr ""
 
@@ -324,12 +334,12 @@ msgid "Back to list"
 msgstr ""
 
 #: templates/django_webix/include/utils.js:209
-#: templates/django_webix/include/utils.js:216 views/generic/list.py:319
+#: templates/django_webix/include/utils.js:216 views/generic/list.py:323
 msgid "Yes"
 msgstr ""
 
 #: templates/django_webix/include/utils.js:211
-#: templates/django_webix/include/utils.js:218 views/generic/list.py:320
+#: templates/django_webix/include/utils.js:218 views/generic/list.py:324
 msgid "No"
 msgstr ""
 
@@ -355,11 +365,6 @@ msgstr ""
 
 #: templates/django_webix/include/utils.js:272
 msgid "Image"
-msgstr ""
-
-#: templates/django_webix/include/utils.js:357
-#: templates/django_webix/include/utils.js:415
-msgid "Server error"
 msgstr ""
 
 #: templates/django_webix/include/utils.js:615
@@ -431,7 +436,7 @@ msgstr ""
 
 #: views/generic/create_update.py:365 views/generic/create_update.py:452
 #: views/generic/delete.py:43 views/generic/detail.py:20
-#: views/generic/list.py:650
+#: views/generic/list.py:655
 msgid "View permission is not allowed"
 msgstr ""
 
@@ -492,38 +497,38 @@ msgid ""
 "get_absolute_url method on the Model."
 msgstr ""
 
-#: views/generic/list.py:382
+#: views/generic/list.py:387
 msgid "Paginate count is not integer"
 msgstr ""
 
-#: views/generic/list.py:391
+#: views/generic/list.py:396
 msgid "Paginate start is not integer"
 msgstr ""
 
-#: views/generic/list.py:488
+#: views/generic/list.py:493
 msgid ""
 "Actions style is improperly configured only options are 'buttons' or "
 "'select' (select by default)."
 msgstr ""
 
-#: views/generic/list.py:611
+#: views/generic/list.py:616
 msgid ""
 "Json response is available only if get_queryset() return a queryset and not "
 "a list"
 msgstr ""
 
-#: views/generic/list.py:630
+#: views/generic/list.py:635
 msgid "This action is not registered"
 msgstr ""
 
-#: views/generic/list.py:636
+#: views/generic/list.py:641
 msgid "Permission denied: {}"
 msgstr ""
 
-#: views/generic/list.py:638
+#: views/generic/list.py:643
 msgid "This permission is not registered on this class"
 msgstr ""
 
-#: views/generic/list.py:713
+#: views/generic/list.py:718
 msgid "Generic TemplateListView needs to define data for datatable"
 msgstr ""

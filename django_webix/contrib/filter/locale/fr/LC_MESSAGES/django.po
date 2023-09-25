@@ -8,36 +8,32 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-03-24 15:44+0100\n"
-"PO-Revision-Date: 2022-03-21 12:39+0050\n"
-"Last-Translator: Traduzioni CBC <>\n"
+"POT-Creation-Date: 2023-09-25 16:17+0200\n"
+"PO-Revision-Date: 2023-09-25 16:02+0200\n"
+"Last-Translator: Stefano Menegon <dallago@mpasol.it>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Translated-Using: django-rosetta 0.9.8\n"
+"X-Translated-Using: django-rosetta 0.9.9\n"
 
 #: contrib/filter/apps.py:11
-#, fuzzy
-#| msgid "Django webix site admin"
 msgid "Django Webix Filter"
-msgstr "Admin site webix Django"
+msgstr "Django Webix Filter"
 
 #: contrib/filter/models.py:16
 msgid "Insert date"
-msgstr ""
+msgstr "Date de saisie"
 
 #: contrib/filter/models.py:17
-#, fuzzy
-#| msgid "Private data"
 msgid "Update date"
-msgstr "Données privées"
+msgstr "Dernière mise à jour"
 
 #: contrib/filter/models.py:18 contrib/filter/views.py:342
 msgid "Title"
-msgstr ""
+msgstr "Title"
 
 #: contrib/filter/models.py:19 contrib/filter/views.py:353
 msgid "Description"
@@ -52,146 +48,127 @@ msgid "Filter"
 msgstr "Filtrer"
 
 #: contrib/filter/models.py:23
-#, fuzzy
-#| msgid "Manage users"
 msgid "Insert user"
-msgstr "Gérer les utilisateurs"
+msgstr "Insertion utilisateur"
 
-#: contrib/filter/models.py:25
-msgid "Visiblity"
-msgstr ""
+#: contrib/filter/models.py:25 contrib/filter/views.py:375
+msgid "Visibility"
+msgstr "Visibilité"
 
 #: contrib/filter/models.py:26
 msgid "Public"
-msgstr ""
+msgstr "Public"
 
 #: contrib/filter/models.py:27
-#, fuzzy
-#| msgid "Private data"
 msgid "Private"
-msgstr "Données privées"
+msgstr "Privé"
 
 #: contrib/filter/models.py:28
 msgid "Restricted"
-msgstr ""
+msgstr "Restreint"
 
 #: contrib/filter/models.py:30
-#, fuzzy
-#| msgid "Enabled groups"
 msgid "Assignees groups"
-msgstr "Groupes autorisés"
+msgstr "Groupe des alloués"
 
 #: contrib/filter/models.py:31
 msgid "Shared edit group"
-msgstr ""
+msgstr "Modifier le groupe de partage"
 
 #: contrib/filter/models.py:36
-#, fuzzy
-#| msgid "Filter"
 msgid "Webix Filter"
-msgstr "Filtrer"
+msgstr "Webix Filter"
 
 #: contrib/filter/models.py:37
-#, fuzzy
-#| msgid "Filter"
 msgid "Webix Filters"
-msgstr "Filtrer"
+msgstr "Webix Filters"
 
 #: contrib/filter/templates/django_webix/filter/create_update.js:31
-#, fuzzy
-#| msgid "Server error"
 msgid "Filter error"
-msgstr "Erreur du serveur"
+msgstr "Erreur de filtre"
 
 #: contrib/filter/templates/django_webix/filter/create_update.js:32
 msgid ""
-"There is a filter error, caused by a garment or model that is now non-"
-"existent or not correctly configured."
+"There is an error in the filter configuration, caused by a field or model "
+"that is now missing or not configured correctly."
 msgstr ""
+"Il y a une erreur dans la configuration du filtre, causée par un champ ou un "
+"modèle qui est maintenant manquant ou mal configuré."
 
 #: contrib/filter/templates/django_webix/filter/create_update.js:33
 msgid "Unable to load filter, contact administrators to correct it"
-msgstr ""
+msgstr "Impossible d’appliquer un filtre, contactez les administrateurs"
 
 #: contrib/filter/templates/django_webix/filter/create_update.js:106
 #: contrib/filter/templates/django_webix/filter/create_update.js:122
 #: contrib/filter/templates/django_webix/filter/create_update.js:138
 #: contrib/filter/templates/django_webix/filter/create_update.js:207
 msgid "You need to insert a filter before saving"
-msgstr ""
+msgstr "Vous devez appliquer un filtre avant de sauvegarder"
 
 #: contrib/filter/templates/django_webix/filter/create_update.js:150
 msgid "Apply temporary filter"
-msgstr ""
+msgstr "Appliquer le filtre temporaire"
 
 #: contrib/filter/templates/django_webix/filter/list.js:33
 msgid "No"
-msgstr ""
+msgstr "Non"
 
 #: contrib/filter/templates/django_webix/filter/list.js:34
 msgid "Yes"
-msgstr ""
+msgstr "Oui"
 
 #: contrib/filter/templates/django_webix/filter/list.js:38
 msgid "Show active only"
-msgstr ""
+msgstr "Afficher uniquement les actifs"
 
 #: contrib/filter/templates/django_webix/filter/list.js:46
-#, fuzzy
-#| msgid "Advanced filter"
 msgid "Advanced filters"
-msgstr "Filtre avancé"
+msgstr "Filtres avancés"
 
 #: contrib/filter/templates/django_webix/filter/list.js:63
 msgid "Close"
 msgstr "Fermer"
 
 #: contrib/filter/templates/django_webix/filter/list.js:100
-#, fuzzy
-#| msgid "Advanced filter"
 msgid "Create new filter"
-msgstr "Filtre avancé"
+msgstr "Créer un nouveau filtre"
 
 #: contrib/filter/templates/django_webix/filter/list.js:169
 msgid "Configuration error"
-msgstr ""
+msgstr "Erreur de configuration"
 
 #: contrib/filter/templates/django_webix/filter/list.js:170
 msgid ""
 "ATTENTION: there is a filter application configuration error. Contact "
 "administrators."
 msgstr ""
+"Attention ! Erreur dans la configuration d’un filtre. Contactez les "
+"administrateurs"
 
 #: contrib/filter/templates/django_webix/filter/list.js:193
 #: contrib/filter/templates/django_webix/filter/list.js:236
 msgid "Change temporary filter"
-msgstr ""
+msgstr "Changer le filtre temporaire"
 
 #: contrib/filter/templates/django_webix/filter/list.js:205
 #: contrib/filter/templates/django_webix/filter/list.js:249
-#, fuzzy
-#| msgid "Invalid email"
 msgid "Invalid filter"
-msgstr "Email invalide"
+msgstr "Filtre invalide"
 
 #: contrib/filter/templates/django_webix/filter/list.js:214
 #: contrib/filter/templates/django_webix/filter/list.js:258
 msgid "Disable temporary filter"
-msgstr ""
+msgstr "Désactiver le filtre temporaire"
 
 #: contrib/filter/utils/operators.py:202
 msgid "Overlap"
-msgstr ""
+msgstr "Superposé"
 
 #: contrib/filter/utils/operators.py:204
 msgid "Contained by"
-msgstr ""
-
-#: contrib/filter/views.py:375
-msgid "Visibility"
-msgstr ""
+msgstr "Contenu par"
 
 #, fuzzy
-#~| msgid "Applica i filtri impostati"
 #~ msgid "Applica filtro temporaneo"
 #~ msgstr "Appliquer les filtres définis"
