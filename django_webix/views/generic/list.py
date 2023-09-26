@@ -1,4 +1,3 @@
-
 from copy import deepcopy
 from django.apps import apps
 from django.contrib.auth.decorators import login_required
@@ -314,9 +313,12 @@ class WebixListView(WebixBaseMixin,
                     _fields_choices[field_name] = [
                         {'id': 'null', 'value': '---'},
                     ] # default add null/'' option
-                    try:
-                        _modelfield = self.model._meta.get_field(field_name)
-                    except FieldDoesNotExist:
+                    if self.model is not None:
+                        try:
+                            _modelfield = self.model._meta.get_field(field_name)
+                        except FieldDoesNotExist:
+                            _modelfield = None
+                    else:
                         _modelfield = None
                     if 'boolean' in str(field.get('field_type', '')).lower():
                         _fields_choices[field_name] += [
