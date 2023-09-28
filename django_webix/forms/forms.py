@@ -35,6 +35,10 @@ try:
 except ImportError:
     from django.utils.encoding import force_str
 
+try:
+    from phonenumber_field.formfields import PhoneNumberField
+except ImportError:
+    PhoneNumberField = None
 
 try:
     from django.contrib.postgres.forms import SimpleArrayField
@@ -877,6 +881,10 @@ class BaseWebixMixin:
                         })
                 elif initial is not None:
                     el.update({'value': initial})
+            # phonenumber_field PhoneNumberField
+            elif PhoneNumberField is not None and isinstance(field, PhoneNumberField):
+                if initial is not None and hasattr(initial, "as_e164"):
+                    el.update({'value': initial.as_e164})
             # CharField
             elif isinstance(field, forms.CharField):
                 if isinstance(field.widget, forms.widgets.Textarea):
