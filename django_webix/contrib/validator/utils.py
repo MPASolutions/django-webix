@@ -1,4 +1,3 @@
-
 import inspect
 from collections import OrderedDict
 
@@ -14,7 +13,7 @@ from django.contrib.gis import forms
 from django.core.files.uploadedfile import InMemoryUploadedFile
 from django.db import models
 from django.utils.text import slugify
-from django.utils.translation import gettext as _
+from django.utils.translation import gettext as _, gettext_lazy
 from xlrd import colname as xlcolname
 
 from django_webix.contrib.validator.models import ImportFile
@@ -32,22 +31,24 @@ MIME = {
 }
 
 ERR_MSG = {
-    'NOFILE': _('No file uploaded'),
-    'PARSE_ERR': _('Text file not recognizable as delimiter-separated values with separator \' {} \' (Exception:{})'),
-    'WRONG_FILE': _('Could not find file \'{}\' (or read from buffer)'),
-    'WRONG_EXT': _('File format \'{}\' not recognized, supported formats: {}'),
-    'WRONG_CONTENT_UNDETERMINED': _('Internal file format content was not recognized'),
-    'WRONG_TYPE': _('File type \'{}\' not supported'),
-    'NOFOGLI': _('There is no sheet'),
-    'NODATA': _('There is no data in the sheet {}'),
-    'UNAMED_COLS': _('There are columns with no name'),
-    'UNAMED_COLS_XL': _('There are columns with no name: {}'),
-    'LESS_COLS': _('There are not enough columns: there are {} columns, {} needed'),
-    'HEADER': _('Column headers ({}^ row) are incorrect'),
-    'COLUMN': _('There is no column \'{}\''),
-    'COL_POS': _('The name of the {}^ column ({}) must be \' {} \' (instead of \'{}\')'),
-    'UNIQ_VIOLATION': _('A uniqueness rule has been violated in the fields {}'),
-    'ZIP_SHP': _('The zip file is supported only if the following files are contained .shp, .dbf, .prj, .shx'),
+    'NOFILE': gettext_lazy('No file uploaded'),
+    'PARSE_ERR': gettext_lazy(
+        'Text file not recognizable as delimiter-separated values with separator \' {} \' (Exception:{})'),
+    'WRONG_FILE': gettext_lazy('Could not find file \'{}\' (or read from buffer)'),
+    'WRONG_EXT': gettext_lazy('File format \'{}\' not recognized, supported formats: {}'),
+    'WRONG_CONTENT_UNDETERMINED': gettext_lazy('Internal file format content was not recognized'),
+    'WRONG_TYPE': gettext_lazy('File type \'{}\' not supported'),
+    'NOFOGLI': gettext_lazy('There is no sheet'),
+    'NODATA': gettext_lazy('There is no data in the sheet {}'),
+    'UNAMED_COLS': gettext_lazy('There are columns with no name'),
+    'UNAMED_COLS_XL': gettext_lazy('There are columns with no name: {}'),
+    'LESS_COLS': gettext_lazy('There are not enough columns: there are {} columns, {} needed'),
+    'HEADER': gettext_lazy('Column headers ({}^ row) are incorrect'),
+    'COLUMN': gettext_lazy('There is no column \'{}\''),
+    'COL_POS': gettext_lazy('The name of the {}^ column ({}) must be \' {} \' (instead of \'{}\')'),
+    'UNIQ_VIOLATION': gettext_lazy('A uniqueness rule has been violated in the fields {}'),
+    'ZIP_SHP': gettext_lazy(
+        'The zip file is supported only if the following files are contained .shp, .dbf, .prj, .shx'),
 }
 
 
@@ -198,7 +199,6 @@ class ImportValidator:
                 # TODO if flabel not in self.df_rows.columns (latrimenti aggiungo colonna geometryb per excel con wkt)
                 if 'geometry' not in self.df_rows.columns:
                     self.df_rows['geometry'] = 'POLYGON EMPTY'
-
 
         nfields = len(field_label)
         self.field_decod = field_decod
@@ -355,7 +355,8 @@ class ImportValidator:
             for field, mess in form.errors.items():
                 self.errors.extend([{
                     'pos': row_dict['Index'] + (self.header + 2 if self.header is not None else 1) + self.skiprows,
-                    'field': self.field_decod.get(field, 'OTHER'),  # 'COMPLESSIVO' if field == '__all__' else self.field_decod[field],
+                    'field': self.field_decod.get(field, 'OTHER'),
+                    # 'COMPLESSIVO' if field == '__all__' else self.field_decod[field],
                     'value': form.data.get(field, None),  # if field != '__all__' else None
                     'mess': m
                 } for m in mess])
@@ -488,7 +489,8 @@ class ImportValidator:
                             # convert wkt to ewkt
                             # self.df_rows['geometry'] = 'SRID=' + str(self.srid) + ';' + self.df_rows['geometry'].astype(str)
                             # FIX: changed to a LAMBDA because sometimes it requires too much ram to do the astype
-                            self.df_rows['geometry'] = self.df_rows['geometry'].apply(lambda x: 'SRID=' + str(self.srid) + ';' + x)
+                            self.df_rows['geometry'] = self.df_rows['geometry'].apply(
+                                lambda x: 'SRID=' + str(self.srid) + ';' + x)
 
                         else:
                             self.file_err.append(ERR_MSG['ZIP_SHP'])
