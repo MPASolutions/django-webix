@@ -1,5 +1,7 @@
 {% load django_webix_utils i18n %}
 
+{% block webix_content %}
+
 $$('{{ inline.get_container_id|default_if_none:inline.get_container_id }}').addView({
     rows: [
         {
@@ -108,6 +110,7 @@ $$('{{ inline.get_container_id|default_if_none:inline.get_container_id }}').addV
 });
 
 {# Delete trigger on all inlines #}
+{% block trigger %}
 {% for row in inline %}
 delete_trigger("{{ row.prefix }}");
 {% block extra_trigger_init %}
@@ -116,11 +119,16 @@ if (typeof trigger_{{inline.prefix}} === "function") {
 }
 {% endblock %}
 {% endfor %}
+{% endblock %}
 
 
 {# Rules event on all inlines #}
+{% block rules %}
 {% for row in inline %}
 {% for field in row %}
 add_rule("{{ field.auto_id }}");
 {% endfor %}
 {% endfor %}
+{% endblock %}
+
+{% endblock %}

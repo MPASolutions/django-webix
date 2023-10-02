@@ -1,6 +1,7 @@
 {% load static %}
 {
     view: "toolbar",
+    id: "id_main_toolbar",
     cols:[
         {% if webix_menu_type == 'sidebar' %}
         {
@@ -36,12 +37,14 @@
         {$template: "Spacer"},
         {% endblock %}
         {% block header_right %}
+        {% if not request.user_agent.is_mobile %}
         {
             id: "id_title_user",
             align: "right",
             type:"clean",
             template: "<span style='color:#fff;font-size: 1.17em;float:right;padding-top:5px;'>{{ user }}</span>",
         },
+        {% endif %}
         {% endblock %}
         {% if user.is_staff %}
         {

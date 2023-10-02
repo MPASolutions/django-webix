@@ -548,7 +548,11 @@ if (
         {% include "django_webix/include/toolbar_list.js" %}
         {% endblock %}
 
-        {%  if is_json_loading %}
+ {%  if is_json_loading %}
+
+        {% if request.user_agent.is_mobile %}
+            webix.ui($$('{{ view_prefix }}datatable_pager'), $$("{{ webix_container_id }}_toolbar_middle"));
+        {% endif %}
 
         {# save for other purpose #}
         var {{ view_prefix }}initial_state = {{ view_prefix }}get_state_ui();
