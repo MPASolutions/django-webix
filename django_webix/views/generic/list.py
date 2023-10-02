@@ -132,6 +132,9 @@ class WebixListView(WebixBaseMixin,
 
     fields_editable = [] # es. ['utilizzo__denominazione']
 
+    def is_actions_flexport_enable(self, request):
+        return True
+
     def is_errors_on_popup(self, request):
         return self.errors_on_popup
 
@@ -462,8 +465,11 @@ class WebixListView(WebixBaseMixin,
     def _get_action_dict(self, action):
         return get_action_dict(self.request, action)
 
-    def _get_actions_flexport(self):
-        return get_actions_flexport(self.request, self.model)
+    def _get_actions_flexport(self, request):
+        if self.is_actions_flexport_enable(request=request):
+            return get_actions_flexport(request, self.model)
+        else:
+            return []
 
     def get_actions(self):
         '''
@@ -473,7 +479,7 @@ class WebixListView(WebixBaseMixin,
         # _actions = self.actions
         # tentativo di fix delle azioni sbagliate
         _actions = deepcopy(self.actions)
-        _actions += self._get_actions_flexport()
+        _actions += self._get_actions_flexport(request=self.request)
 
         _dict_actions = {}
         for _action in _actions:

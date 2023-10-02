@@ -180,11 +180,12 @@ class UserAdmin(admin.ModelWebixAdmin):
         from django_webix.views import WebixUpdateView
 
         class WebixAdminUpdateView(WebixUpdateView):
+            template_name = 'django_webix/admin/account/admin_password_change.js'
             url_pattern_update = 'dwadmin:users.user.update_password'
             url_pattern_list = 'dwadmin:users.user.list'
             form_class = AdminPasswordChangeForm
             model = _admin.model
-            inlines = _admin.inlines
+            inlines = [] #_admin.inlines
             model_copy_fields = _admin.get_form_fields()
             enable_button_save_continue = False
             enable_button_save_addanother = False

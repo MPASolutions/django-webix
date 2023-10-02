@@ -113,6 +113,7 @@ class ModelWebixAdmin(ModelWebixAdminPermissionsMixin):
     # LIST SETTINGS
     ordering = None
     actions = []
+
     list_display = [] # for choice with custom key [...('utilizzo__id', 'utilizzo__denominazione')...]
     list_display_mobile = []
     list_display_header = {}  # NEW OVERRIDE HEADER MODALITY
@@ -416,6 +417,7 @@ class ModelWebixAdmin(ModelWebixAdminPermissionsMixin):
                 else:
                     _fields.append(_field.name)
         return _fields
+
 
     def get_form_class(self, view=None):
         from django_webix.views import WebixCreateView, WebixUpdateView
@@ -908,6 +910,11 @@ class ModelWebixAdmin(ModelWebixAdminPermissionsMixin):
 
             return WebixAdminDeleteView
 
+    def is_actions_flexport_enable(self, view, request):
+        if request.user_agent.is_mobile:
+            return []
+        return super(view.__class__, view).is_actions_flexport_enable(request=request)
+
     def get_list_view(self):
         _admin = self
         if self.list_view is not None:
@@ -944,6 +951,9 @@ class ModelWebixAdmin(ModelWebixAdminPermissionsMixin):
                 pk_field = _admin.pk_field
                 order_by = _admin.ordering
                 actions = _admin.actions
+
+                def is_actions_flexport_enable(self, request):
+                    return _admin.is_actions_flexport_enable(view=self, request=request)
 
                 if hasattr(_admin, 'get_actions'):
                     def get_actions(self):

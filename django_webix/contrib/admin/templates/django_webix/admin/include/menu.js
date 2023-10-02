@@ -122,9 +122,11 @@
             if (loading_type == 'redirect') {
                 loading(url);
             } else if (loading_type == 'js_script') {
+                {% if request.user_agent.is_mobile %}
                 if ($$('id_toggle_menu') != undefined) {
                     $$('id_toggle_menu').callEvent('onItemClick', []);
                 }
+                {% endif %}
                 load_js(url);
             }
         }

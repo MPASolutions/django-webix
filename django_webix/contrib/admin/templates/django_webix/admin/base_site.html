@@ -82,7 +82,7 @@
         {% endblock %}
         {
         id:"content",
-        type:"space",
+        type: "{% if request.user_agent.is_mobile %}clean{% else %}space{% endif %}",
         cols:[
             {% block dashborad_left %}
             {
@@ -106,7 +106,7 @@
                           {
                               margin: 5,
                               id: '{{webix_container_id}}',
-                              type: "space",
+                              type: "{% if request.user_agent.is_mobile %}clean{% else %}space{% endif %}",
                               rows: [],
                           },
                           {% else %}
@@ -125,7 +125,7 @@
                           },
                           {
                             animate: false,
-                            type: "space",
+                            type: "{% if request.user_agent.is_mobile %}clean{% else %}space{% endif %}",
                             cells: [
                               {
                                 id: '{{ webix_container_id }}',
@@ -173,9 +173,13 @@
         {% if request.user_agent.is_mobile %}
             $$("main_menu").hide();
             $$("id_title").hide();
-            $$("id_title_user").hide();
-            $$('main_content_right').define('optionWidth', 70);
-            $$('main_content_right').refresh();
+            if ($$("id_title_user")!=undefined) {
+                $$("id_title_user").hide();
+            }
+            if ($$('main_content_right')!=undefined) {
+                $$('main_content_right').define('optionWidth', 70);
+                $$('main_content_right').refresh();
+            }
         {% endif %}
     {% endblock %}
 
