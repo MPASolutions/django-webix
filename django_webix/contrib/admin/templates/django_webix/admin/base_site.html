@@ -70,8 +70,10 @@
 
     {% include "django_webix/include/locale.js" %}
 
+    {% block init_custom_scroll %}
     if (webix.CustomScroll.init())
         webix.CustomScroll.trackBar = true;
+    {% endblock %}
 
     webix.ui.fullScreen();
     webix.ui({
