@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-07-03 11:40+0200\n"
+"POT-Creation-Date: 2023-10-18 16:49+0200\n"
 "PO-Revision-Date: 2023-08-23 15:07+0200\n"
 "Last-Translator: Stefano Menegon <dallago@mpasol.it>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -77,14 +77,14 @@ msgstr "Chiudi e correggi"
 msgid "Continue with warnings"
 msgstr "Continua con gli avvisi"
 
-#: contrib/validator/utils.py:35
+#: contrib/validator/utils.py:34
 msgid "No file uploaded"
 msgstr "Nessun file caricato"
 
 #: contrib/validator/utils.py:36
 msgid ""
-"Text file not recognizable as delimiter-separated values with separator ' {}"
-" ' (Exception:{})"
+"Text file not recognizable as delimiter-separated values with separator ' {} "
+"' (Exception:{})"
 msgstr ""
 "File di testo non riconoscibile come delimiter-separated values con "
 "separatore ' {} ' (Exception:{})"
@@ -142,20 +142,20 @@ msgstr "Il nome della {}^ colonna ({}) deve essere '{}' (anzichè '{}')"
 msgid "A uniqueness rule has been violated in the fields {}"
 msgstr "È stata violata una regola di unicità sui campi {}"
 
-#: contrib/validator/utils.py:50
+#: contrib/validator/utils.py:51
 msgid ""
-"The zip file is supported only if the following files are contained .shp, "
-".dbf, .prj, .shx"
+"The zip file is supported only if the following files are contained .shp, ."
+"dbf, .prj, .shx"
 msgstr ""
-"Lo zip file è supportato solo se sono contenuti i seguenti file .shp, .dbf, "
-".prj, .shx"
+"Lo zip file è supportato solo se sono contenuti i seguenti file .shp, .dbf, ."
+"prj, .shx"
 
-#: contrib/validator/utils.py:130 contrib/validator/utils.py:140
-#: contrib/validator/utils.py:150 contrib/validator/utils.py:165
+#: contrib/validator/utils.py:131 contrib/validator/utils.py:141
+#: contrib/validator/utils.py:151 contrib/validator/utils.py:166
 msgid "This operation can only be done before validating"
 msgstr "Questa operazione può essere eseguita solo prima di validare"
 
-#: contrib/validator/utils.py:553
+#: contrib/validator/utils.py:555
 msgid "Validate save mode are ROW | FULL"
 msgstr "Le modalità di validazione sono RIGA | COMPLETO"
 

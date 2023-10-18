@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-09-07 17:26+0200\n"
+"POT-Creation-Date: 2023-10-18 16:49+0200\n"
 "PO-Revision-Date: 2023-09-07 15:04+0200\n"
 "Last-Translator: Stefano Menegon <dallago@mpasol.it>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -148,11 +148,11 @@ msgstr "Maestro"
 msgid "Webix Admin Menu"
 msgstr "Menú administración Webix"
 
-#: contrib/admin/options.py:270
+#: contrib/admin/options.py:271
 msgid "Yes"
 msgstr "Sí"
 
-#: contrib/admin/options.py:270
+#: contrib/admin/options.py:271
 msgid "No"
 msgstr "No"
 
@@ -328,11 +328,11 @@ msgstr "Seguridad de cuenta"
 msgid "Under construction"
 msgstr "En construcción"
 
-#: contrib/admin/templates/django_webix/admin/base_site.html:122
+#: contrib/admin/templates/django_webix/admin/base_site.html:124
 msgid "DATA"
 msgstr "Datos"
 
-#: contrib/admin/templates/django_webix/admin/base_site.html:123
+#: contrib/admin/templates/django_webix/admin/base_site.html:125
 msgid "WEBGIS"
 msgstr "WEBGIS"
 
