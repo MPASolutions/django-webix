@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-09-25 14:26+0200\n"
+"POT-Creation-Date: 2023-10-18 16:49+0200\n"
 "PO-Revision-Date: 2023-09-07 15:07+0200\n"
 "Last-Translator: Stefano Menegon <dallago@mpasol.it>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -19,46 +19,46 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Translated-Using: django-rosetta 0.9.9\n"
 
-#: forms/forms.py:414
+#: forms/forms.py:418
 msgid "Upload new image"
 msgstr "Subir nueva imagen"
 
-#: forms/forms.py:488 forms/forms.py:610
+#: forms/forms.py:492 forms/forms.py:614
 msgid "Deleted"
 msgstr "Eliminado"
 
-#: forms/forms.py:519
+#: forms/forms.py:523
 msgid "Upload file"
 msgstr "Subir archivo"
 
-#: forms/forms.py:532
+#: forms/forms.py:536
 msgid "Upload folder"
 msgstr "Subir carpeta"
 
-#: forms/forms.py:537
+#: forms/forms.py:541
 msgid "Upload files"
 msgstr "Subir archivos"
 
-#: forms/forms.py:641
+#: forms/forms.py:645
 msgid "MultipleChoiceField is available only with PRO webix license"
 msgstr ""
 "La elección de múltiples campos solo está permitida con la licencia webix "
 "PRO "
 
-#: forms/forms.py:673 forms/forms.py:700 forms/forms.py:754 forms/forms.py:788
-#: forms/forms.py:798 forms/forms.py:812 forms/forms.py:862
+#: forms/forms.py:677 forms/forms.py:704 forms/forms.py:758 forms/forms.py:792
+#: forms/forms.py:802 forms/forms.py:816 forms/forms.py:866
 msgid "Click to select"
 msgstr "Clic para seleccionar"
 
-#: forms/forms.py:901
+#: forms/forms.py:909
 msgid "Initial value {} for geo field {} is not supported"
 msgstr "El valor inicial {} para el campo geográfico {} no es compatible"
 
-#: forms/forms.py:951
+#: forms/forms.py:959
 msgid "Edit"
 msgstr "Editar"
 
-#: forms/forms.py:1103
+#: forms/forms.py:1111
 msgid "Type of field {} not supported"
 msgstr "El tipo de campo {} no compatible"
 
@@ -107,14 +107,14 @@ msgstr "Filtro avanzado"
 #: templates/django_webix/generic/list.js:157
 #: templates/django_webix/generic/list.js:243
 #: templates/django_webix/include/actions_list.js:9
-#: templates/django_webix/include/toolbar_navigation.js:48
-#: templates/django_webix/include/toolbar_navigation.js:104
+#: templates/django_webix/include/toolbar_navigation.js:49
+#: templates/django_webix/include/toolbar_navigation.js:106
 msgid "Go to map"
 msgstr "Mostrar en el mapa"
 
 #: templates/django_webix/generic/list.js:159
-#: templates/django_webix/include/toolbar_navigation.js:44
-#: templates/django_webix/include/toolbar_navigation.js:100
+#: templates/django_webix/include/toolbar_navigation.js:45
+#: templates/django_webix/include/toolbar_navigation.js:102
 msgid "Geometry does not exist"
 msgstr "La geometría no existe"
 
@@ -184,15 +184,15 @@ msgstr "Algo salió mal"
 msgid "Action successful"
 msgstr "Acción ejecutada correctamente"
 
-#: templates/django_webix/include/edit_inline/stacked.js:19
-#: templates/django_webix/include/edit_inline/stacked.js:30
+#: templates/django_webix/include/edit_inline/stacked.js:21
+#: templates/django_webix/include/edit_inline/stacked.js:32
 msgid "New Item"
 msgstr "Nuevo artículo"
 
-#: templates/django_webix/include/edit_inline/stacked.js:51
-#: templates/django_webix/include/edit_inline/tabular.js:50
-#: templates/django_webix/include/toolbar_navigation.js:36
-#: templates/django_webix/include/toolbar_navigation.js:92
+#: templates/django_webix/include/edit_inline/stacked.js:53
+#: templates/django_webix/include/edit_inline/tabular.js:52
+#: templates/django_webix/include/toolbar_navigation.js:37
+#: templates/django_webix/include/toolbar_navigation.js:94
 msgid "Add"
 msgstr "Añadir"
 
@@ -245,7 +245,7 @@ msgid "Oops! Some warnings here..."
 msgstr "¡Ha ocurrido un fallo!"
 
 #: templates/django_webix/include/form_warnings.js:52
-#: views/generic/decorators.py:27 views/generic/list.py:83
+#: views/generic/decorators.py:27 views/generic/list.py:82
 msgid "Undo"
 msgstr "Deshacer"
 
@@ -322,27 +322,27 @@ msgid "Select an action"
 msgstr "Seleccionar una acción"
 
 #: templates/django_webix/include/toolbar_list_actions_select.js:20
-#: views/generic/decorators.py:25 views/generic/list.py:81
+#: views/generic/decorators.py:25 views/generic/list.py:80
 msgid "Go"
 msgstr "Ir"
 
 #: templates/django_webix/include/toolbar_navigation.js:14
-#: templates/django_webix/include/toolbar_navigation.js:70
+#: templates/django_webix/include/toolbar_navigation.js:71
 msgid "Back"
 msgstr "Volver"
 
 #: templates/django_webix/include/toolbar_navigation.js:25
-#: templates/django_webix/include/toolbar_navigation.js:81
+#: templates/django_webix/include/toolbar_navigation.js:82
 msgid "Back to list"
 msgstr "Volver a la lista"
 
 #: templates/django_webix/include/utils.js:209
-#: templates/django_webix/include/utils.js:216 views/generic/list.py:323
+#: templates/django_webix/include/utils.js:216 views/generic/list.py:328
 msgid "Yes"
 msgstr "Sí"
 
 #: templates/django_webix/include/utils.js:211
-#: templates/django_webix/include/utils.js:218 views/generic/list.py:324
+#: templates/django_webix/include/utils.js:218 views/generic/list.py:329
 msgid "No"
 msgstr "No"
 
@@ -441,7 +441,7 @@ msgstr ""
 
 #: views/generic/create_update.py:365 views/generic/create_update.py:452
 #: views/generic/delete.py:43 views/generic/detail.py:20
-#: views/generic/list.py:655
+#: views/generic/list.py:663
 msgid "View permission is not allowed"
 msgstr "Ver permiso no está permitido"
 
@@ -462,15 +462,15 @@ msgstr "Cambiar %s."
 msgid "and"
 msgstr "y"
 
-#: views/generic/decorators.py:23 views/generic/list.py:79
+#: views/generic/decorators.py:23 views/generic/list.py:78
 msgid "Fill in the form"
 msgstr "Rellenar el formulario"
 
-#: views/generic/decorators.py:24 views/generic/list.py:80
+#: views/generic/decorators.py:24 views/generic/list.py:79
 msgid "Are you sure you want to proceed with this action?"
 msgstr "¿Estás seguro que quieres seguir con esta acción?"
 
-#: views/generic/decorators.py:26 views/generic/list.py:82
+#: views/generic/decorators.py:26 views/generic/list.py:81
 msgid "Proceed"
 msgstr "Continua"
 
@@ -506,15 +506,15 @@ msgstr ""
 "No hay URL a la que redirigir. Proporcione una url o defina un método \"\n"
 "\"get_absolute_url en el Modelo."
 
-#: views/generic/list.py:387
+#: views/generic/list.py:392
 msgid "Paginate count is not integer"
 msgstr "El recuento del paginado no es entero"
 
-#: views/generic/list.py:396
+#: views/generic/list.py:401
 msgid "Paginate start is not integer"
 msgstr "El inicio del paginado no es entero"
 
-#: views/generic/list.py:493
+#: views/generic/list.py:501
 msgid ""
 "Actions style is improperly configured only options are 'buttons' or "
 "'select' (select by default)."
@@ -522,7 +522,7 @@ msgstr ""
 "El estilo de acciones no está bien configurado las únicas opciones son "
 "'botones' o 'seleccionar' (seleccionar por defecto)."
 
-#: views/generic/list.py:616
+#: views/generic/list.py:624
 msgid ""
 "Json response is available only if get_queryset() return a queryset and not "
 "a list"
@@ -530,19 +530,19 @@ msgstr ""
 "La respuesta de Json solo está disponible si get_queryset () devuelve un "
 "conjunto de consultas y no una lista"
 
-#: views/generic/list.py:635
+#: views/generic/list.py:643
 msgid "This action is not registered"
 msgstr "Esta acción no está registrada"
 
-#: views/generic/list.py:641
+#: views/generic/list.py:649
 msgid "Permission denied: {}"
 msgstr "Permiso denegado:{}"
 
-#: views/generic/list.py:643
+#: views/generic/list.py:651
 msgid "This permission is not registered on this class"
 msgstr "Este permiso no está registrado en esta clase"
 
-#: views/generic/list.py:718
+#: views/generic/list.py:726
 msgid "Generic TemplateListView needs to define data for datatable"
 msgstr ""
 "TemplateListView genérico necesita definir datos para la tabla de datos"

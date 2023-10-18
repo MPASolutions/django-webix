@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-07-03 11:40+0200\n"
+"POT-Creation-Date: 2023-10-18 16:49+0200\n"
 "PO-Revision-Date: 2022-03-09 14:49+0050\n"
 "Last-Translator: Sambado Paolo CBC Spagna <>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -77,7 +77,7 @@ msgstr "Cerrar y corregir"
 msgid "Continue with warnings"
 msgstr "Continuar con la advertencias"
 
-#: contrib/validator/utils.py:35
+#: contrib/validator/utils.py:34
 msgid "No file uploaded"
 msgstr "Ningún archivo cargado"
 
@@ -139,7 +139,7 @@ msgstr "El nombre de {}^ columna ({}) debe ser ' {} ' (en lugar de '{}')"
 msgid "A uniqueness rule has been violated in the fields {}"
 msgstr "Se ha violado una regla de unicidad en los campos {}"
 
-#: contrib/validator/utils.py:50
+#: contrib/validator/utils.py:51
 msgid ""
 "The zip file is supported only if the following files are contained .shp, ."
 "dbf, .prj, .shx"
@@ -147,12 +147,12 @@ msgstr ""
 "El archivo zip es compatible sólo si contiene los siguientes archivos .shp, ."
 "dbf, .prj, .shx"
 
-#: contrib/validator/utils.py:130 contrib/validator/utils.py:140
-#: contrib/validator/utils.py:150 contrib/validator/utils.py:165
+#: contrib/validator/utils.py:131 contrib/validator/utils.py:141
+#: contrib/validator/utils.py:151 contrib/validator/utils.py:166
 msgid "This operation can only be done before validating"
 msgstr "Esta operación solo se puede hacer antes de validar"
 
-#: contrib/validator/utils.py:553
+#: contrib/validator/utils.py:555
 msgid "Validate save mode are ROW | FULL"
 msgstr "Los sistemas de validación son ROW | FULL"
 
