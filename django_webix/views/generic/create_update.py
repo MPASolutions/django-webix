@@ -180,15 +180,28 @@ class WebixCreateUpdateMixin:
         return None
 
 
+    def prepare_warnings(self, form, inlines, warnings):
+        _warnings_template = []
+        for w in warnings:
+            label = w[0]
+            if label in form.fields:
+                label = form.fields[label].label
+            _warnings_template.append({
+                'label': label,
+                'message': w[1],
+            })
+        return _warnings_template
+
     def forms_valid(self, form, inlines, **kwargs):
         # warnings
         if self.request.POST.get('warnings_enabled'):
             warnings = self.get_warnings(form, inlines, **kwargs)
             if len(warnings) > 0:
+                warnings_template = self.prepare_warnings(form, inlines, warnings)
                 return render(self.request,
                               self.template_warnings_name,
                               {
-                                  'warnings': warnings,
+                                  'warnings': warnings_template,
                                   'form': form,
                                   'inlines': inlines,
                               })

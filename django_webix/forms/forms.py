@@ -59,6 +59,8 @@ except ImportError:
 
 class BaseWebixMixin:
 
+    warnings = []
+
     form_fix_height = None
     min_count_suggest = 100
     style = 'stacked'

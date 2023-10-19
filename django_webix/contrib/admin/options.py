@@ -945,6 +945,9 @@ class ModelWebixAdmin(ModelWebixAdminPermissionsMixin):
                 url_pattern_update = '{}:{}'.format(_admin.admin_site.urls_namespace, _admin.get_url_pattern_update())
                 url_pattern_delete = '{}:{}'.format(_admin.admin_site.urls_namespace, _admin.get_url_pattern_delete())
 
+                def get_adjust_row_height(self, request):
+                    return _admin.get_adjust_row_height(view=self, request=request)
+
                 adjust_row_height = False
 
                 model = _admin.model

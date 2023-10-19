@@ -2,7 +2,7 @@
 
 {% block webix_warnings %}
 var warnings = [
-    {%  for warning in warnings %} {'label':'{{ warning.0|escapejs }}', 'message':'{{ warning.1|escapejs }}'} {% endfor %}
+    {% for warning in warnings %} {'label':'{{ warning.label|default_if_none:''|escapejs }}', 'message':'{{ warning.message|escapejs }}'} {% if not forloop.last %}, {% endif %}{% endfor %}
     ]
 
 function show_warnings(warnings) {
@@ -34,8 +34,8 @@ function show_warnings(warnings) {
                         view: "list",
                         type: {height: "auto"},
                         template: function (item) {
-                            if (item.label == null)
-                                return "<b>" + item.warning + "</b></p>";
+                            if ((item.label == null) || (item.label == ''))
+                                return "<b>" + item.message + "</b></p>";
                             else
                                 return "<p style='margin:5px 0px;'><b>" + item.label + "</b>: " + item.message + "</p>";
                         },
