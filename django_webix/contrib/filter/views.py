@@ -336,7 +336,6 @@ class WebixFilterList(WebixFilterMixin, ListView):
                     '''{{
                     id: "title",
                     header: ["{}", {{content: "textFilter"}}],
-                    adjust: "all",
                     fillspace: true
                     }} ''',
                     escapejs(_("Title")))
@@ -347,7 +346,6 @@ class WebixFilterList(WebixFilterMixin, ListView):
                     '''{{
                     id: "description",
                     header: ["{}", {{content: "textFilter"}}],
-                    adjust: "all",
                     fillspace: true
                     }} ''',
                     escapejs(_("Description")))
@@ -357,9 +355,8 @@ class WebixFilterList(WebixFilterMixin, ListView):
                 'datalist_column': format_lazy(
                     '''{{
                     id: "model",
-                    header: ["{}", {{content: "textFilter"}}],
-                    adjust: "all",
-                    fillspace: true
+                    header: ["{}", {{content: "richSelectFilter"}}],
+                    minWidth: 250,
                     }} ''',
                     escapejs(_("Model")))
             },
@@ -368,9 +365,8 @@ class WebixFilterList(WebixFilterMixin, ListView):
                 'datalist_column': format_lazy(
                     '''{{
                     id: "visibility_display",
-                    header: ["{}", {{content: "textFilter"}}],
-                    adjust: "all",
-                    fillspace: true
+                    header: ["{}", {{content: "richSelectFilter"}}],
+                    minWidth: 150,
                     }} ''',
                     escapejs(_("Visibility")))
             }
