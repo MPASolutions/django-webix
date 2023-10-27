@@ -284,8 +284,7 @@ class SenderMessagesListView(WebixListView):
                         id: "send_method_type",
                         serverFilterType: "exact",
                         header: ["{}", {{content: "serverSelectFilter", options: send_method_type_options}}],
-                        adjust: "all",
-                        fillspace: true
+                        adjust: "all"
                     }}''',
                     escapejs(_("Send method type")))
             },
@@ -297,7 +296,6 @@ class SenderMessagesListView(WebixListView):
                         serverFilterType: "range",
                         header: ["{}", {{content: "serverDateRangeFilter"}}],
                         adjust: "all",
-                        fillspace: true,
                         sort: "server",
                         format: webix.i18n.fullDateFormatStr,
                         template: function(obj) {{if (obj.creation_date === null) {{return ""}} else {{return this.format(new Date(obj.creation_date)) }} }},
@@ -312,8 +310,7 @@ class SenderMessagesListView(WebixListView):
                         id: "message_sent__typology__typology",
                         serverFilterType: "icontains",
                         header: ["{}", {{content: "serverSelectFilter", options: message_sent__typology__typology_options}}],
-                        adjust: "all",
-                        fillspace: true
+                        adjust: "all"
                     }}''',
                     escapejs(_("Typology")))
             },
@@ -324,8 +321,7 @@ class SenderMessagesListView(WebixListView):
                         id: "message_sent__subject",
                         serverFilterType: "icontains",
                         header: ["{}", {{content: "serverFilter"}}],
-                        adjust: "all",
-                        fillspace: true
+                        adjust: "all"
                     }}''',
                     escapejs(_("Subject")))
             },
