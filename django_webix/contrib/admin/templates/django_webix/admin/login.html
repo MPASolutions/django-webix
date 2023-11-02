@@ -31,21 +31,22 @@
                 },
                 elements: [
                     {
-                        labelWidth: 130,
-                        view: "text",
-                        name: "username",
                         id: "id_username",
+                        name: "username",
+                        view: "text",
                         label: "{{ _("Username")|escapejs }}",
-                        required: true
+                        required: true,
+                        labelWidth: 130
                     },
                     {
-                        labelWidth: 130,
-                        view: "text",
-                        name: "password",
                         id: "id_password",
+                        name: "password",
+                        view: "search",
                         type: "password",
                         label: "{{ _("Password")|escapejs }}",
-                        required: true
+                        required: true,
+                        icon: "fas fa-eye",
+                        labelWidth: 130
                     },
                     {
                         margin: 5, cols: [{
@@ -80,6 +81,20 @@
             {% block extra_post_form %}{% endblock %}
         ]
     });
+
+    $$('id_password').attachEvent("onSearchIconClick", function (e) {
+        const input = this.getInputNode();
+        webix.html.removeCss(e.target, "fas fa-eye-slash");
+        webix.html.removeCss(e.target, "fas fa-eye");
+        if (input.type == "text") {
+            webix.html.addCss(e.target, "fas fa-eye");
+            input.type = "password";
+        } else {
+            webix.html.addCss(e.target, "fas fa-eye-slash");
+            input.type = "text";
+        }
+    })
+
     $$('login_form').setValues({csrfmiddlewaretoken: "{{ csrf_token }}"});
 
     {% block extra_login_content %}{% endblock %}
