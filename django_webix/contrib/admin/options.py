@@ -6,7 +6,7 @@ from django.utils.text import capfirst
 from django.utils.translation import gettext as _
 from django_webix.utils.decorators import script_login_required
 from django.utils.decorators import method_decorator
-
+import copy
 from django_webix.views.generic.base import WebixPermissionsBaseMixin
 from django_webix.utils.layers import get_layers
 
@@ -116,8 +116,8 @@ class ModelWebixAdmin(ModelWebixAdminPermissionsMixin):
 
     list_display = [] # for choice with custom key [...('utilizzo__id', 'utilizzo__denominazione')...]
     list_display_mobile = []
-    list_display_header = {}  # NEW OVERRIDE HEADER MODALITY
-    extra_header = {}  # TO BE REMOVED IN FUTURE
+    list_display_header = {} # NEW OVERRIDE HEADER MODALITY
+    extra_header = {} # TO BE REMOVED IN FUTURE
     list_editable = [] # ex. ['utilizzo__denominazione']
     list_editable_mode = 'field' # field ; row
 
@@ -138,9 +138,14 @@ class ModelWebixAdmin(ModelWebixAdminPermissionsMixin):
     # permission custom
     only_superuser = False
 
-    # prefix = None
-    # def __init__(self, prefix=None):
-    #    self.prefix = prefix
+    def get_inlines(self, view, object, request):
+        _inlines = copy.deepcopy(self.inlines)
+        if apps.is_installed('django_webix.contrib.extra_fields'):
+            from django_webix.contrib.extra_fields.models_mixin import ExtraFieldsModel
+            if issubclass(self.model, ExtraFieldsModel):
+                from django_webix.contrib.extra_fields.dwadmin_inline_utils import ModelFieldValueInline
+                _inlines.append(ModelFieldValueInline)
+        return _inlines
 
     def is_enable_button_save_continue(self, view, request):
         return super(view.__class__, view).is_enable_button_save_continue(request)
@@ -235,7 +240,9 @@ class ModelWebixAdmin(ModelWebixAdminPermissionsMixin):
                 raise Exception('TODO?')
         return _next
 
-    def create_list_display(self, list_display, view=None, request=None):
+    def create_list_display(self, list_display, view=None, request=None, defaults=None):
+        if defaults is None:
+            defaults = {}
         _fields = []
         for j, field_name in enumerate(list_display):
             if field_name in self.list_display_header:
@@ -254,7 +261,10 @@ class ModelWebixAdmin(ModelWebixAdminPermissionsMixin):
                 column_template = ''
                 editor = ''
                 extra_header = ''
-                width_adapt = 'fillspace:true, minWidth:150' if j == 0 else 'adjust:"all"'
+                if 'width' in defaults:
+                    width_adapt = defaults['width']
+                else:
+                    width_adapt = 'fillspace:true, minWidth:150' if j == 0 else 'adjust:"all"'
                 sort_option = 'server' if self.enable_json_loading else 'string'
                 click_action = None
                 footer = None
@@ -340,6 +350,11 @@ class ModelWebixAdmin(ModelWebixAdminPermissionsMixin):
                 if field_name not in self.get_list_editable(view=view, request=request):
                     editor = ''
 
+                if 'extra_header' in defaults:
+                    if extra_header!='':
+                        extra_header += ','
+                    extra_header += defaults['extra_header']
+
                 field_list = {
                     'field_type': type(model_field),
                     'field_name': field_name,
@@ -381,14 +396,32 @@ class ModelWebixAdmin(ModelWebixAdminPermissionsMixin):
         return self.list_editable
 
     def get_list_display(self, view=None, request=None):
-        if request is not None and request.user_agent.is_mobile and len(self.list_display_mobile)>0:
+        if request is not None and request.user_agent.is_mobile and len(self.list_display_mobile) > 0:
             _list_display = self.list_display_mobile
         else:
             _list_display = self.list_display
+
         if type(_list_display[0]) == str:
-            return self.create_list_display(_list_display, view=view, request=request)
+            _model_list_display = self.create_list_display(_list_display, view=view, request=request)
         else:
-            return _list_display
+            _model_list_display = list(_list_display)
+
+        # extra_fields columns
+        if apps.is_installed('django_webix.contrib.extra_fields'):
+            from django_webix.contrib.extra_fields.models import ModelField
+            from django.contrib.contenttypes.models import ContentType
+            content_type_pk = ContentType.objects.get_for_model(self.model).pk
+            model_fields_names = ModelField.objects.filter(content_type_id=content_type_pk)\
+                                                   .values_list('field_name', flat=True)\
+                                                   .distinct().order_by('field_name')
+            _model_list_display += self.create_list_display(model_fields_names,
+                                                            view=view,
+                                                            request=request,
+                                                            defaults={
+                                                                'width': 'adjust:"all"',
+                                                                'extra_header': 'hidden:true'
+                                                            })
+        return _model_list_display
 
     def __init__(self, model, admin_site):
         self.model = model

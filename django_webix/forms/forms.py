@@ -1263,7 +1263,8 @@ class BaseWebixForm(forms.BaseForm, BaseWebixMixin):
                  initial=None, error_class=ErrorList, label_suffix=None,
                  empty_permitted=False, field_order=None, use_required_attribute=None,
                  renderer=None, request=None, inline_id=None,
-                 has_add_permission=None, has_change_permission=None, has_delete_permission=None, **kwparams):
+                 has_add_permission=None, has_change_permission=None, has_delete_permission=None,
+                 parent_model=None, **kwparams):
 
         # Set default parameter
         self.readonly_fields = []
@@ -1273,6 +1274,7 @@ class BaseWebixForm(forms.BaseForm, BaseWebixMixin):
 
         # Set request
         self.request = request
+        self.parent_model = parent_model
         self.has_add_permission = has_add_permission
         self.has_change_permission = has_change_permission
         self.has_delete_permission = has_delete_permission
@@ -1319,7 +1321,8 @@ class BaseWebixModelForm(forms.BaseModelForm, BaseWebixMixin):
                  initial=None, error_class=ErrorList, label_suffix=None,
                  empty_permitted=False, instance=None, use_required_attribute=None,
                  renderer=None, request=None, inline_id=None,
-                 has_add_permission=None, has_change_permission=None, has_delete_permission=None, **kwargs):
+                 has_add_permission=None, has_change_permission=None, has_delete_permission=None,
+                 parent_model=None, **kwargs):
 
         # Set default
         self.readonly_fields = []
@@ -1329,6 +1332,7 @@ class BaseWebixModelForm(forms.BaseModelForm, BaseWebixMixin):
 
         # Set request
         self.request = request
+        self.parent_model = parent_model
         self.has_add_permission = has_add_permission
         self.has_change_permission = has_change_permission
         self.has_delete_permission = has_delete_permission
