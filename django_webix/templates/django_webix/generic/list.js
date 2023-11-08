@@ -199,7 +199,7 @@ if (
             {% if adjust_row_height %}
             fixedRowHeight: false,
             {% endif %}
-            //sort:"multi", {# TODO: to be implemented #}
+            sort:"multi",
             select: "row",
             resizeColumn: true,
             {% block datatable_headermenu %}
@@ -305,15 +305,18 @@ if (
                         _params.filters = JSON.stringify({{ view_prefix }}get_filters_qsets());
 
                         // elaborate sort
+                        _params.sort = [];
                         sort = $$('{{ view_prefix }}datatable').getState().sort;
-                        if (sort != undefined) {
-                            if (sort.dir == 'desc') {
-                                _params.sort = ['-' + sort.id]
+                        if (sort.length==undefined){
+                            sort = [sort];
+                        }
+                        for (let i = 0; i < sort.length; i++) {
+                            if (sort[i].dir == 'desc') {
+                                _params.sort.push('-' + sort[i].id)
                             } else {
-                                _params.sort = ['' + sort.id]
+                                _params.sort.push('' + sort[i].id)
                             }
                         }
-
                         return webix.ajax().bind(view).post(this.source, $.param(_params))
                             .then(function (data) {
                                 var _data = data.json();
