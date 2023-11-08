@@ -35,11 +35,12 @@ class ModelField(Model):
                                                                               'FloatField',
                                                                               'BooleanField',
                                                                               'CharField',
-                                                                              #'DateField',
-                                                                              # 'ChoiceField' # TODO
-                                                                              # ForeignKey
+                                                                              # 'DateField',
+                                                                              # 'ChoiceField',
+                                                                              # 'ForeignKey',
                                                                               ]
                                   ])
+    # TODO max and min
     related_to = models.ForeignKey(ContentType, verbose_name=_('Model for FK'), on_delete=models.CASCADE,
                                    related_name='extra_fields_related_to', blank=True, null=True)
     locked = models.BooleanField(_('Locked'), blank=True, default=False)
