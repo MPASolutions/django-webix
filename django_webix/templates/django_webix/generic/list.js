@@ -307,14 +307,16 @@ if (
                         // elaborate sort
                         _params.sort = [];
                         sort = $$('{{ view_prefix }}datatable').getState().sort;
-                        if (sort.length==undefined){
-                            sort = [sort];
-                        }
-                        for (let i = 0; i < sort.length; i++) {
-                            if (sort[i].dir == 'desc') {
-                                _params.sort.push('-' + sort[i].id)
-                            } else {
-                                _params.sort.push('' + sort[i].id)
+                        if (sort!=undefined) {
+                            if (sort.length == undefined) {
+                                sort = [sort];
+                            }
+                            for (let i = 0; i < sort.length; i++) {
+                                if (sort[i].dir == 'desc') {
+                                    _params.sort.push('-' + sort[i].id)
+                                } else {
+                                    _params.sort.push('' + sort[i].id)
+                                }
                             }
                         }
                         return webix.ajax().bind(view).post(this.source, $.param(_params))
