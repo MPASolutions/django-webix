@@ -1,36 +1,16 @@
+from django.contrib.contenttypes.forms import BaseGenericInlineFormSet
 from django.core.exceptions import ValidationError
-from django.forms import BaseInlineFormSet
-from django.forms.fields import IntegerField
 from django.forms.formsets import TOTAL_FORM_COUNT, INITIAL_FORM_COUNT, MIN_NUM_FORM_COUNT, MAX_NUM_FORM_COUNT
-from django.forms.widgets import HiddenInput
 from django.utils.functional import cached_property
 from django.utils.text import capfirst
 from django.utils.translation import gettext_lazy as _
-from extra_views import InlineFormSetFactory
+from extra_views.generic import GenericInlineFormSetFactory
 
-from django_webix.forms import WebixForm, WebixModelForm
-
-
-class WebixManagementForm(WebixForm):
-    """
-    ``ManagementForm`` is used to keep track of how many form instances
-    are displayed on the page. If adding new forms via javascript, you should
-    increment the count field of this form as well.
-    """
-
-    def __init__(self, *args, **kwargs):
-        self.base_fields[TOTAL_FORM_COUNT] = IntegerField(widget=HiddenInput)
-        self.base_fields[INITIAL_FORM_COUNT] = IntegerField(widget=HiddenInput)
-        # MIN_NUM_FORM_COUNT and MAX_NUM_FORM_COUNT are output with the rest of
-        # the management form, but only for the convenience of client-side
-        # code. The POST value of them returned from the client is not checked.
-        self.base_fields[MIN_NUM_FORM_COUNT] = IntegerField(required=False, widget=HiddenInput)
-        self.base_fields[MAX_NUM_FORM_COUNT] = IntegerField(required=False, widget=HiddenInput)
-        super().__init__(*args, **kwargs)
+from django_webix.forms import WebixModelForm
+from django_webix.forms.formsets import WebixManagementForm
 
 
-class BaseWebixInlineFormSet(BaseInlineFormSet):
-
+class BaseGenericWebixInlineFormSet(BaseGenericInlineFormSet):
     def __init__(self, **kwargs):
         self.parent_model = kwargs.pop('parent_model', None)
         self.request = kwargs.pop('request', None)
@@ -45,8 +25,8 @@ class BaseWebixInlineFormSet(BaseInlineFormSet):
     def get_form_kwargs(self, index):
         _form_kwargs = super().get_form_kwargs(index)
         _form_kwargs.update({
-            'parent_model': self.parent_model,
             'request': self.request,
+            'parent_model': self.parent_model,
             'inline_id': index,
             'has_add_permission': self.has_add_permission,
             'has_change_permission': self.has_change_permission,
@@ -66,7 +46,7 @@ class BaseWebixInlineFormSet(BaseInlineFormSet):
         """Returns the rules template"""
 
         rules_old = self.form(**{'request': self.request}).get_rules() or {}
-        rules_old.pop(self.fk.name, None)  # Remove fk rule
+#        rules_old.pop(self.fk.name, None)  # Remove fk rule
         rules_new = {}
         for key in rules_old:
             rules_new['{}-__prefix__-{}'.format(self.prefix, key)] = rules_old[key]
@@ -109,7 +89,7 @@ class BaseWebixInlineFormSet(BaseInlineFormSet):
             return self.webix_id() + '-container'  # default
 
 
-class WebixInlineFormSet(InlineFormSetFactory):
+class WebixGenericInlineFormSet(GenericInlineFormSetFactory):
     template_name = None
 
     def __init__(self, parent_model, request, instance, view_kwargs=None, view=None, initial=None):
@@ -127,7 +107,7 @@ class WebixInlineFormSet(InlineFormSetFactory):
         if hasattr(self, 'custom_formset_class'):
             self.formset_class = self.custom_formset_class
         else:
-            self.formset_class = BaseWebixInlineFormSet
+            self.formset_class = BaseGenericWebixInlineFormSet
         self.formset_class = type(
             str('WebixInlineFormSet'),
             (self.formset_class,),
@@ -187,19 +167,19 @@ class WebixInlineFormSet(InlineFormSetFactory):
         return True
 
 
-class WebixStackedInlineFormSet(WebixInlineFormSet):
+class WebixGenericStackedInlineFormSet(WebixGenericInlineFormSet):
     template_name = 'django_webix/include/edit_inline/stacked.js'
     style = 'stacked'
 
     def __init__(self, parent_model, request, instance, view_kwargs=None, view=None, initial=None):
         super().__init__(parent_model, request, instance, view_kwargs, view, initial)
-        self.form_class = type(str('WebixStackedModelForm'), (self.form_class,), {'style': self.style})
+        self.form_class = type(str('WebixGenericStackedModelForm'), (self.form_class,), {'style': self.style})
 
 
-class WebixTabularInlineFormSet(WebixInlineFormSet):
+class WebixGenericTabularInlineFormSet(WebixGenericInlineFormSet):
     template_name = 'django_webix/include/edit_inline/tabular.js'
     style = 'tabular'
 
     def __init__(self, parent_model, request, instance, view_kwargs=None, view=None, initial=None):
         super().__init__(parent_model, request, instance, view_kwargs, view, initial)
-        self.form_class = type(str('WebixTabularModelForm'), (self.form_class,), {'style': self.style})
+        self.form_class = type(str('WebixGenericTabularModelForm'), (self.form_class,), {'style': self.style})

@@ -311,7 +311,6 @@ class ImportValidator:
         # if any(filters):
         #   for do,fcol in zip(do_filter,filter_cols):
         #     if do:
-        #       #print do,fcol
         #       self.df_rows = self.df_rows[df_rows[fcol]==self.kwargs[fcol]]
         # do_filter = pd.Series(filter_cols).isin(self.df_rows.columns)
         for fcol, fval in self.filter_cols.items():
@@ -520,7 +519,6 @@ class ImportValidator:
             return len(self.errors) == 0 and len(self.warnings) == 0
         # for nr,row_dict in enumerate(iter(df_rows.to_dict(orient='record'))):
         #   nr+=1
-        #   # print nr,row_dict
         #   errors_row = validate_row(form_class,row_dict,save)
         #   if len(errors_row)>0:
         #     errors['rows'][nr] = errors_row
