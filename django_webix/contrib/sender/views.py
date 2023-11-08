@@ -274,6 +274,7 @@ class SenderMessagesListView(WebixListView):
     model = MessageRecipient
     template_name = "django_webix/sender/list_messages.js"
     title = _("Messages")
+    order_by = ['-creation_date']
 
     def get_fields(self):
         _fields = [
