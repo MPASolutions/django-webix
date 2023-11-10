@@ -35,7 +35,7 @@ class ModelField(Model):
                                                                               'FloatField',
                                                                               'BooleanField',
                                                                               'CharField',
-                                                                              # 'DateField',
+                                                                              'DateField',
                                                                               # 'ChoiceField',
                                                                               # 'ForeignKey',
                                                                               ]

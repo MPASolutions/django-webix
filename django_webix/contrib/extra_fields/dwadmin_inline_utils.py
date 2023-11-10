@@ -18,6 +18,7 @@ class ModelFieldValueFormSet(BaseGenericWebixInlineFormSet):
 
 
 class ModelFieldValueInline(WebixGenericTabularInlineFormSet):
+    template_name = 'django_webix/extra_fields/edit_inline/tabular.js'
     prefix = 'modelfieldvalue_set'
     model = ModelFieldValue
     form_class = ModelFieldValueForm
