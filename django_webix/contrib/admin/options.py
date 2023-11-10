@@ -274,20 +274,20 @@ class ModelWebixAdmin(ModelWebixAdminPermissionsMixin):
                     # if boolean then custom choices
                     header_title = capfirst(model_field.verbose_name)
 
-                if type(model_field) == models.BooleanField:
+                if issubclass(type(model_field), models.BooleanField):
                     editor = 'editor:"select",collection: {}_options '.format(field_name)
                     filter_type = ''
                     filter_option = 'serverSelectFilter' if self.enable_json_loading else 'selectFilter'
                     extra_filter_options = "options:[{id: 'True', value: '" + _('Yes') + "'}, {id: 'False', value: '" + _("No") + "'}] "
                     column_template = 'template:custom_checkbox_yesnonone'
-                elif type(model_field) == models.DateTimeField:
+                elif issubclass(type(model_field), models.DateTimeField):
                     editor = 'editor:"datetime", '
                     filter_type = 'range'
                     filter_option = 'serverDateRangeFilter' if self.enable_json_loading else 'dateRangeFilter'
                     format_type = 'webix.i18n.fullDateFormatStr'
                     column_template = 'template:function(obj){{if (obj.{field_name}===null) {{return ""}} else {{return this.format(new Date(obj.{field_name})) }} }}'.format(
                         field_name=field_name)
-                elif type(model_field) == models.DateField:
+                elif issubclass(type(model_field), models.DateField):
                     #width_adapt = 'width:"85"'
                     editor = 'editor:"date", '
                     filter_type = 'range'
@@ -319,7 +319,7 @@ class ModelWebixAdmin(ModelWebixAdminPermissionsMixin):
                             filter_option = 'serverRichSelectFilter' if self.enable_json_loading else 'selectFilter'
                             extra_filter_options = "options: {}_options ".format(field_name)
 
-                if issubclass(type(model_field),models.FloatField) or \
+                if issubclass(type(model_field), models.FloatField) or \
                     issubclass(type(model_field), models.DecimalField) or \
                     issubclass(type(model_field), models.IntegerField):
                     if extra_header!='':
