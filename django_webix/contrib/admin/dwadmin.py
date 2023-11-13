@@ -163,7 +163,6 @@ class UserAdmin(admin.ModelWebixAdmin):
     change_form_template = 'django_webix/admin/account/admin_user_update.js'
 
     actions = [multiple_delete_action]
-    actions_style = 'buttons'
 
     def get_urls(self):
         return [

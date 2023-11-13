@@ -412,6 +412,19 @@ class WebixBaseMixin:
     def get_overlay_container_id(self, request):
         return getattr(settings, 'WEBIX_OVERLAY_CONTAINER_ID', settings.WEBIX_CONTAINER_ID)
 
+    def get_layers(self, area=None):
+        '''
+        Function to obtain list of layers
+        :param area: 'columns_list' or 'actions_list' or None
+        :return: list of layers
+        '''
+        layers = []
+
+        if getattr(self, 'model', None) is not None:
+            layers = get_layers(getattr(self, 'model', None), getattr(self, 'qxs_layers', None))
+
+        return layers
+
     def get_context_data_webix_base(self, request, **kwargs):
         context = {
             'webix_container_id': self.get_container_id(request=self.request),
@@ -428,14 +441,6 @@ class WebixBaseMixin:
         })
 
         return context
-
-    def get_layers(self):
-        layers = []
-
-        if getattr(self, 'model', None) is not None:
-            layers = get_layers(getattr(self, 'model', None), getattr(self, 'qxs_layers', None))
-
-        return layers
 
 
 class WebixTemplateView(WebixBaseMixin, TemplateView):

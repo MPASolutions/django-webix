@@ -31,10 +31,15 @@ except ImportError:
 
 
 def get_action_dict(request, action):
-    # needed for set var with NOne as value
+    # needed for set var with None as value
     form = action.form(request=request) if hasattr(action, 'form') and action.form is not None else None
     template_view = action.template_view if hasattr(action, 'template_view') and action.template_view is not None else None
     form_view = action.form_view if hasattr(action, 'form_view') and action.form_view is not None else None
+
+    if callable(action.group_name):
+        _group_name = action.group_name(request)
+    else:
+        _group_name = action.group_name
 
     return {
         'func': action,
@@ -52,7 +57,8 @@ def get_action_dict(request, action):
         'template_view': template_view,
         'dynamic': action.dynamic,
         'form_view_template': action.form_view_template,
-        'form_view': form_view
+        'form_view': form_view,
+        'group_name': _group_name,
     }
 
 
@@ -66,11 +72,9 @@ def get_actions_flexport(request, model):
 
         model_ct = ContentType.objects.get(model=model._meta.model_name,
                                            app_label=model._meta.app_label)
-        flexport_actions = {}
-
         def action_builder(export_instance):
             _action = lambda listview, request, qs: create_extraction(request, export_instance.id, qs)
-            _action.__name__ = 'flexport_action_%s' % export_instance.id  # verificare se è corretto
+            _action.__name__ = 'flexport_action_%s' % export_instance.id
             _action.response_type = 'blank'
             _action.short_description = export_instance.action_name
             _action.action_key = 'flexport_{}'.format(export_instance.id)
@@ -84,6 +88,7 @@ def get_actions_flexport(request, model):
             _action.dynamic = False
             _action.form_view_template = None
             _action.form_view = None
+            _action.group_name = _('Exports')
             return _action
 
         for export_instance in Export.objects.filter(model=model_ct, active=True):
@@ -122,7 +127,6 @@ class WebixListView(WebixBaseMixin,
     # template vars
     template_name = 'django_webix/generic/list.js'
     title = None
-    actions_style = None
     enable_column_webgis = True
     enable_column_copy = True
     enable_column_delete = True
@@ -484,23 +488,41 @@ class WebixListView(WebixBaseMixin,
         _dict_actions = {}
         for _action in _actions:
             _dict_actions[_action.action_key] = self._get_action_dict(_action)
-
         return _dict_actions
 
-    def get_actions_style(self):
-        _actions_style = None
-        if self.actions_style is None:
-            if self.request and self.request.user_agent.is_mobile:
-                _actions_style = 'buttons'
+    def get_actions_menu_grouped(self):
+        _menus = {}
+        _no_group = []
+        # default actions
+        for action_key, action in self.get_actions().items():
+            _action_menu = {'id': action_key,
+                            'value': action['short_description']}
+            if action['group_name'] is None:
+                _no_group.append(_action_menu)
             else:
-                _actions_style = 'select'
-        elif self.actions_style in ['buttons', 'select']:
-            _actions_style = self.actions_style
-        else:
-            raise ImproperlyConfigured(_(
-                "Actions style is improperly configured"
-                " only options are 'buttons' or 'select' (select by default)."))
-        return _actions_style
+                if action['group_name'] in _menus:
+                    _menus[action['group_name']].append(_action_menu)
+                else:
+                    _menus[action['group_name']] = [_action_menu]
+        # add webgis actions
+        for layer in self.get_layers(area='actions_list'):
+            _layer_actions_menu = [{'id': 'gotowebgis_' + layer['codename'],
+                                    'value': _("Go to map") + ' ' + layer['layername']},
+                                   {'id': 'filtertowebgis_' + layer['codename'],
+                                    'value': _("Filter in map") + ' ' + layer['layername']}
+                                   ]
+            if 'Webgis' in _menus:
+                _menus['Webgis'] += _layer_actions_menu
+            else:
+                _menus['Webgis'] = _layer_actions_menu
+        # rebuild output for webix
+        _menu_out = _no_group
+        for j, (_group_name, _submenu) in enumerate(_menus.items(), 1):
+            _menu_out.append({'id': j,
+                              'value': _group_name,
+                              'disable': 'true',
+                              'submenu': _submenu})
+        return _menu_out
 
     def is_enable_actions(self, request):
         return self.enable_actions
@@ -680,6 +702,7 @@ class WebixListView(WebixBaseMixin,
             'fields': self.get_fields(),
             'orders': self.get_ordering(),
             'actions': self.get_actions(),
+            'actions_menu_grouped': self.get_actions_menu_grouped(),
             'choices_filters': self.get_choices_filters(),
             'footer': self.get_footer() if not self.enable_json_loading else None,  # footer only if not paging
             'is_enable_footer': self.is_enable_footer(),
@@ -694,7 +717,6 @@ class WebixListView(WebixBaseMixin,
             'is_enable_row_click': self.is_enable_row_click(self.request),
             'type_row_click': self.get_type_row_click(self.request),
             'is_enable_actions': self.is_enable_actions(self.request),
-            'actions_style': self.get_actions_style(),
             'title': self.get_title(),
             'header_rows': self.get_header_rows(self.request),
             'adjust_row_height': self.get_adjust_row_height(self.request),
@@ -707,6 +729,9 @@ class WebixListView(WebixBaseMixin,
             # extra filters
             'is_installed_django_webix_filter': self.is_installed_django_webix_filter(),
             'is_enabled_django_webix_filter': self.is_enabled_django_webix_filter(),
+            # extra layers
+            'layers_actions': self.get_layers(area='actions_list'),
+            'layers_columns': self.get_layers(area='columns_list'),
         })
         return context
 
