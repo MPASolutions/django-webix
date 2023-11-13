@@ -275,7 +275,6 @@ class WebixFilterList(WebixFilterMixin, ListView):
     enable_row_click = True
     enable_column_copy = False
     type_row_click = 'single'
-    actions_style = 'buttons'
 
     template_name = 'django_webix/filter/list.js'
 

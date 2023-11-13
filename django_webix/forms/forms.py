@@ -911,15 +911,14 @@ class BaseWebixMixin:
                         raise Exception(_('Initial value {} for geo field {} is not supported').format(initial, field))
 
                 if apps.is_installed("django_webix_leaflet"):
-                    if hasattr(self, 'instance') and \
-                        self.instance.pk is not None:
+                    if hasattr(self, 'instance') and self.instance.pk is not None:
                         object_pk = self.instance.pk
                     else:
                         object_pk = None
 
                     model = self.get_model()
                     if model is not None:
-                        if hasattr(self,'get_layers'):
+                        if hasattr(self, 'get_layers'):
                             # nel WebixModelForm puo essere definita get_layers specifica
                             layers = self.get_layers(name)  # name is geo field name
                         else:
@@ -932,15 +931,6 @@ class BaseWebixMixin:
                     else:
                         layers = []
                         _mode = 'draw'
-
-                    # el.update({
-                    #     "on": {
-                    #         "onChange": "(function (newv, oldv) {{ geo_change('{geo_type}','{field_name}'); }})".format(
-                    #             geo_type=field.__class__.__name__,
-                    #             field_name=self[name].auto_id,
-                    #         )
-                    #     }
-                    # })
 
                     _row_1 = [
                         {

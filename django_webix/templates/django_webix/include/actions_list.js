@@ -2,19 +2,12 @@
 
 {% if is_enable_actions %}
 
-var {{ view_prefix }}actions_list = [
+var {{ view_prefix }}actions_list = {{actions_menu_grouped|safe}};
+
+{{ view_prefix }}actions_list.concat([
     {% block actions_list %}
-    {% if not request.user_agent.is_mobile %}
-    {% for layer in layers %}
-        {id: 'gotowebgis_{{ layer.codename }}', value: "{{_("Go to map")|escapejs}} ({{layer.layername}})"},
-        {id: 'filtertowebgis_{{ layer.codename }}', value: "{{_("Filter in map")|escapejs}} ({{layer.layername}})"},
-    {% endfor %}
-    {% endif %}
-    {% for action_key,action in actions.items %}
-    {id: '{{ action_key }}', value: '{{action.short_description}}'},
-    {% endfor %}
     {% endblock %}
-];
+]);
 
 {% for action_key,action in actions.items %}
 {% if action.dynamic %}
@@ -227,7 +220,7 @@ function _{{ action_key }}_action_execute_form(ids, all) {
 
 function {{ view_prefix }}actions_execute(action, ids, all) {
     {% block action_execute %}
-    {% for layer in layers %}
+    {% for layer in layers_actions %}
     if (action=='gotowebgis_{{ layer.codename }}') {
         $$("map").goToWebgisPks('{{layer.qxsname}}', '{{ pk_field_name }}', ids, 'selectMode');
     } else if (action=='filtertowebgis_{{ layer.codename }}') {

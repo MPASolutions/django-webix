@@ -70,7 +70,6 @@ function {{ view_prefix }}get_items_page_datatable() {
     return ids;
 }
 
-
 function {{ view_prefix }}master_checkbox_click() {
     $$('{{ view_prefix }}select_all_checkbox').setValue(0);
     if ($('input[name="{{ view_prefix }}master_checkbox"]').prop("checked") == true) {
@@ -109,7 +108,6 @@ function {{ view_prefix }}prepare_actions_execute(action_name) {
     }
 }
 
-
 {# hide column selection if no one actions #}
 if ((typeof {{ view_prefix }}actions_list == 'undefined') || (typeof {{ view_prefix }}actions_execute == 'undefined') || ({{ view_prefix }}actions_list.length == 0)) {
     $$('{{ view_prefix }}datatable').hideColumn("checkbox_action");
@@ -117,12 +115,7 @@ if ((typeof {{ view_prefix }}actions_list == 'undefined') || (typeof {{ view_pre
 }
 
 {% block toolbar_list_actions %}
-{% if actions_style == 'buttons' %}
-{% include "django_webix/include/toolbar_list_actions_buttons.js" %}
-{% endif %}
-{% if actions_style == 'select' %}
-{% include "django_webix/include/toolbar_list_actions_select.js" %}
-{% endif %}
+{% include "django_webix/include/toolbar_list_actions.js" %}
 {% endblock %}
 
 {# create toolbar footer #}
@@ -130,35 +123,8 @@ $$("{{ webix_container_id }}").addView({
     view: "toolbar",
     margin: 5,
     id: "{{ webix_container_id }}_toolbar",
-    {% if request.user_agent.is_mobile %}height:40,{% else %}height:65,{% endif %}
+    {% if request.user_agent.is_mobile %}height:35,{% else %}height:55,{% endif %}
     cols: {{ view_prefix }}toolbar_actions.concat([
-        {id: '{{ view_prefix }}stats_list', view: 'label', label: '', width: 230},
-        {
-            id: '{{ view_prefix }}select_all_button',
-            view: 'button',
-            value: '{{ _("Select all")|escapejs }}',
-            width: 120,
-            hidden: true,
-            click: function (id, event) {
-                $$('{{ view_prefix }}select_all_checkbox').setValue(1);
-                {{ view_prefix }}update_counter();
-            }
-        },
-        {
-            id: '{{ view_prefix }}unselect_all_button',
-            view: 'button',
-            value: '{{ _("Cancel selection")|escapejs }}',
-            width: 120,
-            hidden: true,
-            click: function (id, event) {
-                $$('{{ view_prefix }}select_all_checkbox').setValue(0);
-                $('input[name={{ view_prefix }}master_checkbox]').prop('checked', false);
-                {{ view_prefix }}master_checkbox_click();
-                {{ view_prefix }}update_counter();
-            }
-        },
-        {id: '{{ view_prefix }}select_all_checkbox', view: 'checkbox', value: 0, hidden:true},
-
         {% block toolbar_middle %}
         {
             id: "{{ webix_container_id }}_toolbar_middle",

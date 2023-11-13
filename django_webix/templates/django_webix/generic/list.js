@@ -167,25 +167,75 @@ if (
         if ( {{ view_prefix }}get_state()!=undefined) {
             {{ view_prefix }}initial_page = {{ view_prefix }}get_state()['page'];
         }
+        {% endif %}
 
         $$("{{ webix_container_id }}").addView({
-            template: "{common.first()} {common.prev()} {common.pages()} {common.next()} {common.last()}",
-            id: "{{ view_prefix }}datatable_pager", // the container to place the pager controls into
-            view: "pager",
-            group: 5, // buttons for next amd back
-            // must to be the same of url request because managed from interface
-            size: {{ paginate_count_default }},
-            page: {{ view_prefix }}initial_page,
-            on: {
-                onBeforePageChange: function (new_page, old_page) {
-                    if ($('input[name="{{ view_prefix }}master_checkbox"]').prop("checked") == true) {
-                        $('input[name="{{ view_prefix }}master_checkbox"]').click();
-                        {{ view_prefix }}update_counter();
-                    }
+            cols:[
+                {width:360,
+                 cols:[
+                    {
+                        id: '{{ view_prefix }}select_all_button',
+                        view: 'button',
+                        css:'webix_danger',
+                        value: '{{ _("Select all")|escapejs }}',
+                        width: 120,
+                        hidden: true,
+                        click: function (id, event) {
+                            $$('{{ view_prefix }}select_all_checkbox').setValue(1);
+                            {{ view_prefix }}update_counter();
+                        }
+                    },
+                    {
+                        id: '{{ view_prefix }}unselect_all_button',
+                        view: 'button',
+                        value: '{{ _("Cancel selection")|escapejs }}',
+                        width: 120,
+                        hidden: true,
+                        click: function (id, event) {
+                            $$('{{ view_prefix }}select_all_checkbox').setValue(0);
+                            $('input[name={{ view_prefix }}master_checkbox]').prop('checked', false);
+                            {{ view_prefix }}master_checkbox_click();
+                            {{ view_prefix }}update_counter();
+                        }
+                    },
+                    {id: '{{ view_prefix }}select_all_checkbox', view: 'checkbox', value: 0, hidden:true},
+                    {id: '{{ view_prefix }}stats_list', view: 'label', label: '', width: 230},
+                    ]
                 },
-            }
+                {
+                    cols:[
+                        {},
+                        {%  if is_json_loading %}
+                        {
+                        template: "{common.first()} {common.prev()} {common.pages()} {common.next()} {common.last()}",
+                        id: "{{ view_prefix }}datatable_pager", // the container to place the pager controls into
+                        view: "pager",
+                        hidden: true,
+                        minWidth: 460,
+                        group: 4, // buttons for next and back
+                        css: {'text-align':'center'},
+                        // must to be the same of url request because managed from interface
+                        size: {{ paginate_count_default }},
+                        page: {{ view_prefix }}initial_page,
+                        on: {
+                            onBeforePageChange: function(new_page, old_page) {
+                                if ($('input[name="{{ view_prefix }}master_checkbox"]').prop("checked") == true) {
+                                    $('input[name="{{ view_prefix }}master_checkbox"]').click();
+                                    {{ view_prefix }}update_counter();
+                                    }
+                                }
+                            }
+                        },
+                        {% endif %}
+                        {}
+                    ]
+                },
+                {
+                    width:360,
+                    $template: "Spacer"
+                }]
         })
-        {% endif %}
+
 
         {%  if is_json_loading %}
         {% include "django_webix/include/list_state.js" %}
@@ -237,7 +287,7 @@ if (
                 {% endblock %}
                 {% block datatable_columns_commands %}
                 {% if is_enable_column_webgis %}
-                    {% for layer in layers %}
+                    {% for layer in layers_columns %}
                         {
                             id: "cmd_gotomap_{{layer.codename}}",
                             // header: '<span title="{{_("Go to map")|escapejs}} ({{layer.layername}})" class="webix_icon fas fa-map-marked-alt"></span>',
@@ -324,6 +374,11 @@ if (
                                 var _data = data.json();
                                 $$('{{ view_prefix }}datatable').view_count = _data.data.length;
                                 $$('{{ view_prefix }}datatable').view_count_total = _data.total_count;
+                                if (_data.total_count > {{ paginate_count_default }}){
+                                    $$('{{ view_prefix }}datatable_pager').show();
+                                } else {
+                                    $$('{{ view_prefix }}datatable_pager').hide();
+                                }
                                 // counter
                                 {{ view_prefix }}update_counter();
                                 {% if is_enable_footer %}
@@ -483,7 +538,7 @@ if (
                     {% endif %}
                     {% endfor %}
                     {% if is_enable_column_webgis %}
-                    {% for layer in layers %}
+                    {% for layer in layers_columns %}
                     if ((id.column == 'cmd_gotomap_{{layer.codename}}')) {
                         if (String(el.{{ layer.geofieldname }}_available).toLowerCase() == "true") {
                             $$("map").goToWebgisPk('{{layer.qxsname}}', '{{ pk_field_name }}', el.{{column_id}});
@@ -541,16 +596,13 @@ if (
         {% endblock %}
 
         {% block toolbar_list %}
-
-        {% if model %}
-        {% include "django_webix/include/actions_utils.js" %}
-
-        {% block toolbar_list_actions %}
-        {% include "django_webix/include/actions_list.js" %}
-        {% endblock %}
-        {% endif  %}
-
-        {% include "django_webix/include/toolbar_list.js" %}
+          {% if model %}
+            {% include "django_webix/include/actions_utils.js" %}
+            {% block toolbar_list_actions %}
+              {% include "django_webix/include/actions_list.js" %}
+            {% endblock %}
+          {% endif %}
+          {% include "django_webix/include/toolbar_list.js" %}
         {% endblock %}
 
  {%  if is_json_loading %}

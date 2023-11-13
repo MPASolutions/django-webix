@@ -125,7 +125,6 @@ class ModelWebixAdmin(ModelWebixAdminPermissionsMixin):
     paginate_count_default = 100
     pk_field = None
     title = None
-    actions_style = None
     enable_column_copy = True
     model_copy_fields = None
     inlines_copy_fields = None
@@ -490,7 +489,12 @@ class ModelWebixAdmin(ModelWebixAdminPermissionsMixin):
 
             return WebixAdminCreateUpdateForm
 
-    def get_layers(self):
+    def get_layers(self, area=None):
+        '''
+        Function to obtain list of layers
+        :param area: 'columns_list' or 'actions_list' or None
+        :return: list of layers
+        '''
         layers = []
         if getattr(self, 'model', None) is not None:
             layers = get_layers(getattr(self, 'model', None), getattr(self, 'qxs_layers', None))
@@ -1005,7 +1009,6 @@ class ModelWebixAdmin(ModelWebixAdminPermissionsMixin):
                 enable_json_loading = _admin.enable_json_loading
                 paginate_count_default = _admin.paginate_count_default
                 title = _admin.title
-                actions_style = _admin.actions_style
                 enable_column_copy = _admin.enable_column_copy
                 enable_column_delete = _admin.enable_column_delete
                 enable_row_click = _admin.enable_row_click
