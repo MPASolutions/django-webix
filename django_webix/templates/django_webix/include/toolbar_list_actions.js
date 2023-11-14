@@ -4,6 +4,7 @@ var {{ view_prefix }}toolbar_actions = [{
   view:"menu",
   id: "{{ view_prefix }}actions_menu",
   data:{{ view_prefix }}actions_list,
+  autowidth: true,
   on:{
     onMenuItemClick:function(id){
         item = this.getMenuItem(id);
