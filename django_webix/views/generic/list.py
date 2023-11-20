@@ -3,7 +3,7 @@ from django.apps import apps
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import FieldDoesNotExist
 from django.core.exceptions import PermissionDenied, ImproperlyConfigured
-from django.db.models import F, ManyToManyField, Case, When, Value, BooleanField
+from django.db.models import F, ManyToManyField, Case, When, Value, BooleanField, ForeignKey
 from django.db.models.functions import Coalesce
 from django.http import JsonResponse, Http404
 from django.template import Template, Context
@@ -171,7 +171,8 @@ class WebixListView(WebixBaseMixin,
                                 raise FieldDoesNotExist()
                         except FieldDoesNotExist:
                             break  # name is probably a lookup or transform such as __contains
-                        if hasattr(_field, 'related_model') and _field.related_model is not None:
+
+                        if isinstance(_field, ForeignKey) and hasattr(_field, 'related_model') and _field.related_model is not None:
                             _related.append(name)
                             _model = _field.related_model  # field is a relation
                         else:
