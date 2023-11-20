@@ -112,6 +112,7 @@ function {{ view_prefix }}prepare_actions_execute(action_name) {
 if ((typeof {{ view_prefix }}actions_list == 'undefined') || (typeof {{ view_prefix }}actions_execute == 'undefined') || ({{ view_prefix }}actions_list.length == 0)) {
     $$('{{ view_prefix }}datatable').hideColumn("checkbox_action");
     var {{ view_prefix }}toolbar_actions = [];
+    var {{ view_prefix }}actions_list = [];
 }
 
 {% block toolbar_list_actions %}
