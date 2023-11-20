@@ -38,7 +38,7 @@ class UserForm(WebixModelForm):
         fields = [
             i.name for i in get_user_model()._meta.fields
             if i.editable and
-               i.attname not in ['password', 'is_staff', 'is_active', 'is_superuser', 'date_joined', 'data']
+               i.attname not in ['password', 'is_staff', 'is_active', 'is_superuser', 'date_joined', 'data', 'last_login']
         ]
 
     @property
