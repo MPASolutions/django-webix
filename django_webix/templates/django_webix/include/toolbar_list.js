@@ -2,6 +2,11 @@
 
 {# counter #}
 function {{ view_prefix }}update_counter() {
+    if ($$('{{ view_prefix }}datatable').getHeaderContent("id_{{ view_prefix }}master_checkbox")!=undefined) {
+        if ($$('{{ view_prefix }}datatable').getHeaderContent("id_{{ view_prefix }}master_checkbox").isChecked() == false) {
+            $$('{{ view_prefix }}select_all_checkbox').setValue(0);
+        }
+    }
     $$('{{ view_prefix }}select_all_button').hide();
     $$('{{ view_prefix }}unselect_all_button').hide();
 
@@ -14,10 +19,8 @@ function {{ view_prefix }}update_counter() {
         }
     });
     if (ids.length != view_count) {
-        $('input[name="{{ view_prefix }}master_checkbox"]').prop("checked", false);
         $$('{{ view_prefix }}select_all_checkbox').setValue(0);
     } else {
-        $('input[name="{{ view_prefix }}master_checkbox"]').prop("checked", true);
         {% if not is_json_loading %}
             $$('{{ view_prefix }}select_all_checkbox').setValue(1);
         {% endif %}
@@ -34,8 +37,10 @@ function {{ view_prefix }}update_counter() {
                 }
             }
         {% else %}
-            if ($('input[name="{{ view_prefix }}master_checkbox"]').prop("checked") == true) {
-                txt = '{{ _("All")|escapejs }} ' + view_count_total + ' {{ _("elements selected")|escapejs }}';
+            if ($$('{{ view_prefix }}datatable').getHeaderContent("id_{{ view_prefix }}master_checkbox")!=undefined) {
+                if ($$('{{ view_prefix }}datatable').getHeaderContent("id_{{ view_prefix }}master_checkbox").isChecked() == true) {
+                    txt = '{{ _("All")|escapejs }} ' + view_count_total + ' {{ _("elements selected")|escapejs }}';
+                }
             }
         {% endif %}
     } else if (view_count_total != undefined) {
@@ -68,29 +73,6 @@ function {{ view_prefix }}get_items_page_datatable() {
         })
     {% endif %}
     return ids;
-}
-
-function {{ view_prefix }}master_checkbox_click() {
-    $$('{{ view_prefix }}select_all_checkbox').setValue(0);
-    if ($('input[name="{{ view_prefix }}master_checkbox"]').prop("checked") == true) {
-        var ids = {{ view_prefix }}get_items_page_datatable()
-        $.each(ids, function (index, id) {
-            var row = $$("{{ view_prefix }}datatable").getItem(id);
-            row['checkbox_action'] = true;
-        })
-        {% if not is_json_loading %}
-        $$('{{ view_prefix }}select_all_checkbox').setValue(1);
-        {% endif %}
-    } else {
-        $$("{{ view_prefix }}datatable").eachRow(function (id) {
-            row = this.getItem(id);
-            if (row != undefined) {
-                row['checkbox_action'] = undefined;
-            }
-        });
-    }
-    $$("{{ view_prefix }}datatable").refresh();
-    {{ view_prefix }}update_counter();
 }
 
 function {{ view_prefix }}prepare_actions_execute(action_name) {

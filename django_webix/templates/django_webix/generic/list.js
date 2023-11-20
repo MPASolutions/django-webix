@@ -193,8 +193,7 @@ if (
                         hidden: true,
                         click: function (id, event) {
                             $$('{{ view_prefix }}select_all_checkbox').setValue(0);
-                            $('input[name={{ view_prefix }}master_checkbox]').prop('checked', false);
-                            {{ view_prefix }}master_checkbox_click();
+                            $$('{{ view_prefix }}datatable').getHeaderContent("id_{{ view_prefix }}master_checkbox").uncheck();
                             {{ view_prefix }}update_counter();
                         }
                     },
@@ -207,21 +206,21 @@ if (
                         {},
                         {%  if is_json_loading %}
                         {
-                        template: "{common.first()} {common.prev()} {common.pages()} {common.next()} {common.last()}",
-                        id: "{{ view_prefix }}datatable_pager", // the container to place the pager controls into
-                        view: "pager",
-                        hidden: true,
-                        minWidth: 460,
-                        group: 4, // buttons for next and back
-                        css: {'text-align':'center'},
-                        // must to be the same of url request because managed from interface
-                        size: {{ paginate_count_default }},
-                        page: {{ view_prefix }}initial_page,
-                        on: {
-                            onBeforePageChange: function(new_page, old_page) {
-                                if ($('input[name="{{ view_prefix }}master_checkbox"]').prop("checked") == true) {
-                                    $('input[name="{{ view_prefix }}master_checkbox"]').click();
-                                    {{ view_prefix }}update_counter();
+                            template: "{common.first()} {common.prev()} {common.pages()} {common.next()} {common.last()}",
+                            id: "{{ view_prefix }}datatable_pager", // the container to place the pager controls into
+                            view: "pager",
+                            hidden: true,
+                            minWidth: 460,
+                            group: 4, // buttons for next and back
+                            css: {'text-align':'center'},
+                            // must to be the same of url request because managed from interface
+                            size: {{ paginate_count_default }},
+                            page: {{ view_prefix }}initial_page,
+                            on: {
+                                onBeforePageChange: function (new_page, old_page) {
+                                    if ($$('{{ view_prefix }}datatable').getHeaderContent("id_{{ view_prefix }}master_checkbox").isChecked() == true) {
+                                        $$('{{ view_prefix }}datatable').getHeaderContent("id_{{ view_prefix }}master_checkbox").check();
+                                        {{ view_prefix }}update_counter();
                                     }
                                 }
                             }
@@ -270,7 +269,7 @@ if (
                     id: "checkbox_action",
                     header: [
                         {content: "headerMenu"},
-                        {text: "<input name='{{ view_prefix }}master_checkbox' style='width: 22px;height: 22px;' type='checkbox' onclick='{{ view_prefix }}master_checkbox_click()'>"}
+                        {content:"masterCheckbox" , contentId:"id_{{ view_prefix }}master_checkbox"},
                     ],
                     template: "{common.checkbox()}",
                     tooltip: false,
