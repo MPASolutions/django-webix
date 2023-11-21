@@ -37,6 +37,7 @@ class Migration(migrations.Migration):
                             ("FloatField", "FLOATFIELD"),
                             ("BooleanField", "BOOLEANFIELD"),
                             ("CharField", "CHARFIELD"),
+                            ("DateField", "DATEFIELD"),
                         ],
                         max_length=64,
                         verbose_name="Field type",
