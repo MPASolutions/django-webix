@@ -169,16 +169,20 @@ if (
         }
         {% endif %}
 
+
         $$("{{ webix_container_id }}").addView({
             cols:[
-                {width:360,
+
+                {
+                 {% if request.user_agent.is_mobile %}hidden: true,{% endif %}
+                 width:360,
                  cols:[
                     {
                         id: '{{ view_prefix }}select_all_button',
                         view: 'button',
                         css:'webix_danger',
                         value: '{{ _("Select all")|escapejs }}',
-                        width: 120,
+                        width:120,
                         hidden: true,
                         click: function (id, event) {
                             $$('{{ view_prefix }}select_all_checkbox').setValue(1);
@@ -189,7 +193,7 @@ if (
                         id: '{{ view_prefix }}unselect_all_button',
                         view: 'button',
                         value: '{{ _("Cancel selection")|escapejs }}',
-                        width: 120,
+                        width:120,
                         hidden: true,
                         click: function (id, event) {
                             $$('{{ view_prefix }}select_all_checkbox').setValue(0);
@@ -198,19 +202,22 @@ if (
                         }
                     },
                     {id: '{{ view_prefix }}select_all_checkbox', view: 'checkbox', value: 0, hidden:true},
-                    {id: '{{ view_prefix }}stats_list', view: 'label', label: '', width: 230},
+                    {id: '{{ view_prefix }}stats_list', view: 'label', label: '',width:230},
                     ]
                 },
+
                 {
                     cols:[
-                        {},
+                        {
+                            {% if request.user_agent.is_mobile %}hidden: true,{% endif %}
+                        },
                         {%  if is_json_loading %}
                         {
                             template: "{common.first()} {common.prev()} {common.pages()} {common.next()} {common.last()}",
                             id: "{{ view_prefix }}datatable_pager", // the container to place the pager controls into
                             view: "pager",
                             hidden: true,
-                            minWidth: 460,
+                            {% if not request.user_agent.is_mobile %}minWidth: 460,{% endif %}
                             group: 4, // buttons for next and back
                             css: {'text-align':'center'},
                             // must to be the same of url request because managed from interface
@@ -226,13 +233,18 @@ if (
                             }
                         },
                         {% endif %}
-                        {}
+                        {
+                            {% if request.user_agent.is_mobile %}hidden: true,{% endif %}
+                        }
                     ]
                 },
+
                 {
                     width:360,
+                    {% if request.user_agent.is_mobile %}hidden: true,{% endif %}
                     $template: "Spacer"
-                }]
+                }
+            ]
         })
 
 
@@ -605,10 +617,6 @@ if (
         {% endblock %}
 
  {%  if is_json_loading %}
-
-        {% if request.user_agent.is_mobile %}
-            webix.ui($$('{{ view_prefix }}datatable_pager'), $$("{{ webix_container_id }}_toolbar_middle"));
-        {% endif %}
 
         {# save for other purpose #}
         var {{ view_prefix }}initial_state = {{ view_prefix }}get_state_ui();
