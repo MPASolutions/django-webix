@@ -11,10 +11,17 @@ from django.utils.translation import gettext_lazy as _
 from django_webix.contrib import admin
 from django_webix.contrib.admin.forms import GroupAdminForm, AdminPasswordChangeForm
 from django_webix.contrib.admin.forms import UserAdminUpdateForm, UserAdminCreateForm
+from django_webix.views import WebixUpdateView
 from django_webix.views.generic.actions import multiple_delete_action
 
 
 class UserAdmin(admin.ModelWebixAdmin):
+    def get_extra_context(self, view=None, request=None):
+        context = super().get_extra_context(view, request)
+        if issubclass(type(view), WebixUpdateView):
+            context["auth_user_model"] = settings.AUTH_USER_MODEL.lower()
+        return context
+
     def has_add_permission(self, view, request):
         if request.user.is_superuser:
             return super().has_add_permission(view, request)
