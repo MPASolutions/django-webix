@@ -1,4 +1,5 @@
 from django.apps import apps
+from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import Group
 from django.db.models import F
@@ -169,7 +170,7 @@ class UserAdmin(admin.ModelWebixAdmin):
                    path(
                        '<int:pk>/password/admin',
                        self.user_change_password().as_view(),
-                       name='users.user.update_password',
+                       name=f'{settings.AUTH_USER_MODEL.lower()}.update_password',
                    ),
                ] + super().get_urls()
 
@@ -180,8 +181,8 @@ class UserAdmin(admin.ModelWebixAdmin):
 
         class WebixAdminUpdateView(WebixUpdateView):
             template_name = 'django_webix/admin/account/admin_password_change.js'
-            url_pattern_update = 'dwadmin:users.user.update_password'
-            url_pattern_list = 'dwadmin:users.user.list'
+            url_pattern_update = f'dwadmin:{settings.AUTH_USER_MODEL.lower()}.update_password'
+            url_pattern_list = f'dwadmin:{settings.AUTH_USER_MODEL.lower()}.list'
             form_class = AdminPasswordChangeForm
             model = _admin.model
             inlines = [] #_admin.inlines
