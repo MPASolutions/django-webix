@@ -218,3 +218,83 @@ div.webix_ss_header input[type='checkbox'] {
 .locked_column {
     background-color: #DDDDDD !important;
 }
+
+/**
+* stile usato per action toolbar con stile come bototni
+*/
+
+.actionToolbar {
+
+}
+
+.webix_menu-x.actionToolbar .webix_list_item:first-child {
+    margin: 2px 0 1px 3px;
+    border-radius: 6px 0 0 6px;
+}
+
+.webix_menu-x.actionToolbar .webix_list_item {
+    margin: 3px 0 1px 0;
+    padding: 0 10px;
+    border: 1px solid white;
+    border-right: 0;
+    height: calc(100% - 4px) !important;
+    display: flex;
+    align-items: center;
+    flex-direction: row-reverse;
+}
+
+.webix_menu-x.actionToolbar .webix_list_item:last-child {
+    border-right: 1px solid white;
+    border-radius: 0 6px 6px 0;
+}
+
+.webix_menu-x.actionToolbar .webix_list_item:only-child {
+    border-right: 1px solid white;
+    border-radius: 6px;
+}
+
+.webix_menu-x.actionToolbar .webix_scroll_cont {
+    height: 100%;
+    display: flex;
+    align-items: center;
+}
+
+.webix_menu-x.actionToolbar .webix_submenu_icon {
+    position: static;
+    margin-right: 4px;
+}
+
+.webix_menu-x.actionToolbar .webix_icon {
+    order: 1;
+    padding-bottom: 3px;
+    margin-right: 6px;
+}
+
+/**
+* stile per eventuale action toolbar con stile come bottoni
+*/
+.webix_menu-x.actionToolbarButtons .webix_list_item {
+    margin: 3px 3px 1px 3px;
+    border: 1px solid white;
+    border-radius: 6px;
+    height: calc(100% - 4px) !important;
+    display: flex;
+    align-items: center;
+    flex-direction: row-reverse;
+}
+
+.webix_menu-x.actionToolbarButtons .webix_scroll_cont {
+    height: 100%;
+    display: flex;
+    align-items: center;
+}
+
+.webix_menu-x.actionToolbarButtons .webix_submenu_icon {
+    position: static;
+}
+
+.webix_menu-x.actionToolbarButtons .webix_icon {
+    order: 1;
+    padding-bottom: 3px;
+    margin-right: 6px;
+}

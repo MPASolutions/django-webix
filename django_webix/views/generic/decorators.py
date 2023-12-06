@@ -32,7 +32,8 @@ def action_config(
     dynamic=False,
     form_view=DynamicTemplateFormView,
     form_view_template=None,
-    group_name=None,
+    group=None,
+    icon=None
 ):  # TODO: permission check before execution
     """
     Decorator to configure action on list
@@ -53,7 +54,8 @@ def action_config(
     :param dynamic: (optional) boolean for obtain a dynamic action load
     :param form_view: (optional) FormView for dynamic render action window
     :param form_view_template: (optional) FormView template for dynamic render action window
-    :param group_name: text for actions grouping
+    :param group: text for actions grouping
+    :param icon: fonts awesome icons
     :return:
         - response_type: json
         JsonResponse with 'status', 'message', 'message_on_popup', 'message_type' keys
@@ -207,7 +209,8 @@ def action_config(
         setattr(wrapper, 'dynamic', dynamic)
         setattr(wrapper, 'form_view', form_view)
         setattr(wrapper, 'form_view_template', form_view_template)
-        setattr(wrapper, 'group_name', group_name)
+        setattr(wrapper, 'group', group)
+        setattr(wrapper, 'icon', icon)
         return wrapper
 
     return decorator
