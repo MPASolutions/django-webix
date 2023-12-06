@@ -109,10 +109,6 @@ $$("{{ webix_container_id }}").addView({
     {% if request.user_agent.is_mobile %}height:35,{% else %}height:55,{% endif %}
     cols: {{ view_prefix }}toolbar_actions.concat([
         {% block toolbar_middle %}
-        {
-            id: "{{ webix_container_id }}_toolbar_middle",
-            cols: [{$template: "Spacer"}]
-        },
         {% endblock %}
 
         {% block add_button %}

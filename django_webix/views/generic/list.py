@@ -18,6 +18,8 @@ from django_webix.forms import WebixModelForm
 from django_webix.views import WebixUpdateView
 from django_webix.views.generic.base import WebixBaseMixin, WebixPermissionsMixin, WebixUrlMixin
 from django_webix.utils.layers import get_model_geo_field_names
+from django_webix.views.generic.actions_groups import actions_group_webgis, actions_group_export
+from collections import OrderedDict
 
 try:
     from django.contrib.gis.geos import GEOSGeometry
@@ -30,16 +32,12 @@ except ImportError:
     MultiPolygon = object
 
 
+
 def get_action_dict(request, action):
     # needed for set var with None as value
     form = action.form(request=request) if hasattr(action, 'form') and action.form is not None else None
     template_view = action.template_view if hasattr(action, 'template_view') and action.template_view is not None else None
     form_view = action.form_view if hasattr(action, 'form_view') and action.form_view is not None else None
-
-    if callable(action.group_name):
-        _group_name = action.group_name(request)
-    else:
-        _group_name = action.group_name
 
     return {
         'func': action,
@@ -58,7 +56,8 @@ def get_action_dict(request, action):
         'dynamic': action.dynamic,
         'form_view_template': action.form_view_template,
         'form_view': form_view,
-        'group_name': _group_name,
+        'group': action.group,
+        'icon': action.icon or '',
     }
 
 
@@ -88,7 +87,8 @@ def get_actions_flexport(request, model):
             _action.dynamic = False
             _action.form_view_template = None
             _action.form_view = None
-            _action.group_name = _('Exports')
+            _action.group = actions_group_export
+            _action.icon = None
             return _action
 
         for export_instance in Export.objects.filter(model=model_ct, active=True):
@@ -492,19 +492,24 @@ class WebixListView(WebixBaseMixin,
         return _dict_actions
 
     def get_actions_menu_grouped(self):
-        _menus = {}
+        _menus = OrderedDict()
         _no_group = []
         # default actions
         for action_key, action in self.get_actions().items():
-            _action_menu = {'id': action_key,
-                            'value': action['short_description']}
-            if action['group_name'] is None:
+            _action_menu = {
+                'id': action_key,
+                'value': action['short_description'],
+                'icon': action.get('icon', ''),
+
+            }
+            if action['group'] is None:
                 _no_group.append(_action_menu)
             else:
-                if action['group_name'] in _menus:
-                    _menus[action['group_name']].append(_action_menu)
+                if action['group'] in _menus:
+                    _menus[action['group']].append(_action_menu)
                 else:
-                    _menus[action['group_name']] = [_action_menu]
+                    _menus[action['group']] = [_action_menu]
+
         # add webgis actions
         for layer in self.get_layers(area='actions_list'):
             _layer_actions_menu = [{'id': 'gotowebgis_' + layer['codename'],
@@ -512,17 +517,19 @@ class WebixListView(WebixBaseMixin,
                                    {'id': 'filtertowebgis_' + layer['codename'],
                                     'value': _("Filter in map") + ' ' + layer['layername']}
                                    ]
-            if 'Webgis' in _menus:
-                _menus['Webgis'] += _layer_actions_menu
+            if actions_group_webgis in _menus:
+                _menus[actions_group_webgis] += _layer_actions_menu
             else:
-                _menus['Webgis'] = _layer_actions_menu
+                _menus[actions_group_webgis] = _layer_actions_menu
+
         # rebuild output for webix
         _menu_out = _no_group
-        for j, (_group_name, _submenu) in enumerate(_menus.items(), 1):
+        for j, (_group) in enumerate(sorted(_menus, key=lambda x: x.order), 1):
             _menu_out.append({'id': j,
-                              'value': _group_name,
+                              'value': _group.name,
+                              'icon': _group.icon,
                               'disable': 'true',
-                              'submenu': _submenu})
+                              'submenu': _menus[_group]})
         return _menu_out
 
     def is_enable_actions(self, request):

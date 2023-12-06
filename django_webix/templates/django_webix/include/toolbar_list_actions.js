@@ -13,17 +13,12 @@ var {{ view_prefix }}toolbar_actions = [{
         }
     }
   },
-  type:{
-    {% block type %}
-    height:{% if request.user_agent.is_mobile %}35{% else %}55{% endif %},
-    template:function(obj){
-        var _template = '<p style="padding:{% if request.user_agent.is_mobile %}10{% else %}13{% endif %}px 5px 0px 5px;margin:0px">' + obj.value;
-        if (obj.submenu!=undefined){
-            _template += '<span class="webix_submenu_icon"></span>';
-        }
-        _template += '</p>';
-        return _template
-        }
-    {% endblock %}
-  }
+  {% block type %}
+  css: 'actionToolbar',
+  // another style to have separated buttons
+  // css: 'actionToolbarButtons',
+  type: {
+      subsign:true,
+  },
+  {% endblock %}
 }];
