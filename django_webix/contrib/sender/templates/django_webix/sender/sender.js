@@ -255,12 +255,21 @@ function DjangoWebixSender() {
                                 }
                             });
                         },
-                        error: function () {
+                        error: function(xhr, status, error) {
+                            var text = "";
+                            if (xhr.responseJSON !== undefined) {
+                                xhr.responseJSON.forEach(function (element) {
+                                    if (element["status"] === 400) {
+                                        text += "<b>" + element['result']['status'] + "</b>: " + element['result']['data'] + "<br />";
+                                    }
+                                });
+                            }
+
                             $$('{{ webix_container_id }}').hideOverlay();
-                            webix.message({
-                                type: "error",
-                                expire: 10000,
-                                text: '{{ _("Unable to send messages")|escapejs }}'
+                            webix.alert({
+                                title: '{{ _("Unable to send messages")|escapejs }}',
+                                text: text,
+                                type: "alert-error"
                             });
                         }
                     });
