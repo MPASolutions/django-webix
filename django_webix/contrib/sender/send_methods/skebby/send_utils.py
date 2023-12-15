@@ -1,4 +1,3 @@
-
 from typing import Dict, List
 
 import phonenumbers
@@ -10,7 +9,32 @@ from django_webix.contrib.sender.send_methods.skebby.enums import SkebbyBoolean
 from django_webix.contrib.sender.send_methods.skebby.exceptions import SkebbyException
 from django_webix.contrib.sender.send_methods.skebby.gateway import Skebby
 
-ISO_8859_1_limited = '@èéùìò_ !"#%\\\'()*+,-./0123456789:<=>?ABCDEFGHIJKLMNOPQRSTUVWXYZÄÖÑÜabcdefghijklmnopqrstuvwxyzäöñüà'
+# https://en.wikipedia.org/wiki/GSM_03.38#GSM_7-bit_default_alphabet_and_extension_table_of_3GPP_TS_23.038_.2F_GSM_03.38
+# ESC is an Escape to extension table (maps to NBSP).
+# FF is a Page Break control. If not recognized, it shall be treated like LF.
+# CR2 is a control character. No language specific character shall be encoded at this position.
+# SS2 is a second Single Shift Escape control reserved for future extensions.
+GSM_7_BIT = [
+    # Basic Character Set
+    "@", "Δ", " ", "0", "¡", "P", "¿", "p",
+    "£", "_", "!", "1", "A", "Q", "a", "q",
+    "$", "Φ", "\"", "2", "B", "R", "b", "r",
+    "¥", "Γ", "#", "3", "C", "S", "c", "s",
+    "è", "Λ", "¤", "4", "D", "T", "d", "t",
+    "é", "Ω", "%", "5", "E", "U", "e", "u",
+    "ù", "Π", ";", "6", "F", "V", "f", "v",
+    "ì", "Ψ", "'", "7", "G", "W", "g", "w",
+    "ò", "Σ", "(", "8", "H", "X", "h", "x",
+    "Ç", "Θ", ")", "9", "I", "Y", "i", "y",
+    "\n", "Ξ", "*", ":", "J", "Z", "j", "z",
+    "Ø", "ESC", "+", ";", "K", "Ä", "k", "ä",
+    "ø", "Æ", ",", ";", "L", "Ö", "l", "ö",
+    "\r", "æ", "-", "=", "M", "Ñ", "m", "ñ",
+    "Å", "ß", ".", ";", "N", "Ü", "n", "ü",
+    "å", "É", "/", "?", "O", "§", "o", "à",
+    # Basic Character Set Extension
+    "|", "^", "€", "{", "}", "FF", "SS2", "[", "CR2", "~", "]", "\\",
+]
 
 
 def send(recipients: Dict[str, List[int]], subject: str, body: str, message_sent):
@@ -160,7 +184,7 @@ def presend_check(subject, body):
     # Verifico che il corpo dell'sms sia valido
     invalid_characters = ''
     for c in body:
-        if c not in ISO_8859_1_limited:
+        if c not in GSM_7_BIT:
             invalid_characters += c
     if invalid_characters != '':
         return {'status': _('Invalid characters'), 'data': invalid_characters}, 400
