@@ -676,7 +676,7 @@ class BaseWebixMixin:
                     el.update({
                         "view": "multicombo",
                         'selectAll': True,
-                        'placeholder': _('Click to select'),
+                        'placeholder': _('Write and select'),
                         'options': {
                             'dynamic': True,
                             'body': {
@@ -703,7 +703,7 @@ class BaseWebixMixin:
                     el.update({
                         "view": "multicombo",
                         'selectAll': True,
-                        'placeholder': _('Click to select'),
+                        'placeholder': _('Write and select'),
                         'options': {
                             'selectAll': True,
                             'dynamic': True,
@@ -757,7 +757,7 @@ class BaseWebixMixin:
                 if name in self.autocomplete_fields:
                     el.update({
                         'view': 'combo',
-                        'placeholder': _('Click to select'),
+                        'placeholder': _('Write and select'),
                         'suggest': {
                             'view': "suggest",
                             'keyPressTimeout': 400,
@@ -791,7 +791,7 @@ class BaseWebixMixin:
                             'options': choices,
                             'view': 'richselect',
                             'selectAll': True,
-                            'placeholder': _('Click to select')
+                            'placeholder': _('Click and select') # clicca e seleziona
                         })
                         # Default if is required and there are only one option
                         if field.required and initial is None and count == 1:
@@ -801,7 +801,7 @@ class BaseWebixMixin:
                     else:
                         el.update({
                             'view': 'combo',
-                            'placeholder': _('Click to select'),
+                            'placeholder': _('Write and select'), # scrivi e seleziona
                             'options': choices,
                         })
             # TypedChoiceField ChoiceField
@@ -815,7 +815,7 @@ class BaseWebixMixin:
                 el.update({
                     'selectAll': True,
                     'view': 'richselect',
-                    'placeholder': _('Click to select'),
+                    'placeholder': _('Click and select'),
                     'options': choices
                 })
                 if initial is not None:
@@ -865,7 +865,7 @@ class BaseWebixMixin:
                     el.update({
                         "view": "multicombo",
                         'selectAll': True,
-                        'placeholder': _('Click to select'),
+                        'placeholder': _('Write and select'),
                         'options': {
                             'selectAll': True,
                             'dynamic': True,

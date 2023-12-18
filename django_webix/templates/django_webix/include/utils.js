@@ -462,7 +462,6 @@ function webix_post(path, params) {
             hiddenField.type = 'hidden';
             hiddenField.name = key;
             hiddenField.value = params[key];
-
             form.appendChild(hiddenField);
         }
     }
