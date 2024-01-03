@@ -8,20 +8,18 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-07-03 11:40+0200\n"
-"PO-Revision-Date: 2022-07-19 15:50+0050\n"
-"Last-Translator: Stefano Menegon <menegon@mpasol.it>\n"
+"POT-Creation-Date: 2024-01-03 07:25+0100\n"
+"PO-Revision-Date: 2023-12-22 12:19+0100\n"
+"Last-Translator: Stefano Menegon <dallago@mpasol.it>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Translated-Using: django-rosetta 0.9.8\n"
+"X-Translated-Using: django-rosetta 0.9.9\n"
 
 #: contrib/auth/apps.py:8
-#, fuzzy
-#| msgid "Django webix administration"
 msgid "Django Webix Authentication and Authorization"
 msgstr "Django webix Verwaltung"
 
@@ -35,20 +33,20 @@ msgstr "Geben Sie Ihren Benutzernamen ein"
 
 #: contrib/auth/templates/django_webix/auth/password_reset/password_reset_complete.js:26
 msgid "Your password has been set. You can log-in"
-msgstr ""
+msgstr "Ihr Passwort wurde festgelegt. Sie können sich einloggen"
 
 #: contrib/auth/templates/django_webix/auth/password_reset/password_reset_complete.js:38
 msgid "Login"
-msgstr ""
+msgstr "Login"
 
 #: contrib/auth/templates/django_webix/auth/password_reset/password_reset_confirm.js:36
 msgid ""
 "Enter the new password twice, to verify that you have written it correctly"
 msgstr ""
+"Geben Sie das neue Passwort zweimal ein, um zu überprüfen, ob Sie es richtig "
+"geschrieben haben."
 
 #: contrib/auth/templates/django_webix/auth/password_reset/password_reset_confirm.js:56
-#, fuzzy
-#| msgid "Change password"
 msgid "Change my password"
 msgstr "Passwort  ändern"
 
@@ -57,12 +55,14 @@ msgid ""
 "The link you used is invalid, try to request a new email to reset your "
 "password."
 msgstr ""
+"Der von Ihnen verwendete Link ist ungültig. Versuchen Sie, eine neue E-Mail "
+"anzufordern, um Ihr Passwort zurückzusetzen."
 
 #: contrib/auth/templates/django_webix/auth/password_reset/password_reset_confirm.js:86
 #: contrib/auth/templates/django_webix/auth/password_reset/password_reset_done.js:49
 #: contrib/auth/templates/django_webix/auth/password_reset/password_reset_form.js:74
 msgid "Go back to the home page"
-msgstr ""
+msgstr "Zurück zur Startseite"
 
 #: contrib/auth/templates/django_webix/auth/password_reset/password_reset_done.js:26
 msgid ""
@@ -70,12 +70,18 @@ msgid ""
 "provided. You should receive them shortly as long as the address you entered "
 "is valid."
 msgstr ""
+"Wir haben eine Anleitung zum Einrichten des Passworts an die von Ihnen "
+"angegebene E-Mail-Adresse geschickt. Sie sollten sie in Kürze erhalten, "
+"sofern die von Ihnen angegebene Adresse gültig ist."
 
 #: contrib/auth/templates/django_webix/auth/password_reset/password_reset_done.js:35
 msgid ""
 "If you do not receive an email, make sure you have entered the address you "
 "registered with, and check your spam folder"
 msgstr ""
+"Wenn Sie keine E-Mail erhalten, vergewissern Sie sich, dass Sie die Adresse "
+"eingegeben haben, mit der Sie sich registriert haben, und überprüfen Sie "
+"Ihren Spam-Ordner."
 
 #: contrib/auth/templates/django_webix/auth/password_reset/password_reset_email.html:2
 #, python-format
@@ -108,9 +114,9 @@ msgid ""
 "Forgot password? Enter your email address below, and we will send you "
 "instructions to set up a new one"
 msgstr ""
+"Passwort vergessen? Geben Sie unten Ihre E-Mail-Adresse ein, und wir senden "
+"Ihnen eine Anleitung zum Einrichten eines neuen Passworts."
 
 #: contrib/auth/templates/django_webix/auth/password_reset/password_reset_form.js:55
-#, fuzzy
-#| msgid "Change password"
 msgid "Reset my password"
 msgstr "Passwort  ändern"

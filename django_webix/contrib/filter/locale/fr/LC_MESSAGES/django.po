@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-09-25 16:17+0200\n"
+"POT-Creation-Date: 2023-11-14 11:56+0100\n"
 "PO-Revision-Date: 2023-09-25 16:02+0200\n"
 "Last-Translator: Stefano Menegon <dallago@mpasol.it>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -31,15 +31,15 @@ msgstr "Date de saisie"
 msgid "Update date"
 msgstr "Dernière mise à jour"
 
-#: contrib/filter/models.py:18 contrib/filter/views.py:342
+#: contrib/filter/models.py:18 contrib/filter/views.py:340
 msgid "Title"
 msgstr "Title"
 
-#: contrib/filter/models.py:19 contrib/filter/views.py:353
+#: contrib/filter/models.py:19 contrib/filter/views.py:350
 msgid "Description"
 msgstr "Description"
 
-#: contrib/filter/models.py:20 contrib/filter/views.py:364
+#: contrib/filter/models.py:20 contrib/filter/views.py:360
 msgid "Model"
 msgstr "Modèle"
 
@@ -51,7 +51,7 @@ msgstr "Filtrer"
 msgid "Insert user"
 msgstr "Insertion utilisateur"
 
-#: contrib/filter/models.py:25 contrib/filter/views.py:375
+#: contrib/filter/models.py:25 contrib/filter/views.py:370
 msgid "Visibility"
 msgstr "Visibilité"
 

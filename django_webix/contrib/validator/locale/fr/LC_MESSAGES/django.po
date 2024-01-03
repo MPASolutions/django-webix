@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-10-18 16:49+0200\n"
+"POT-Creation-Date: 2023-11-09 08:34+0100\n"
 "PO-Revision-Date: 2020-05-26 09:37+0050\n"
 "Last-Translator: b'Stefano Menegon <menegon@mpasol.it>'\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -155,7 +155,7 @@ msgstr ""
 msgid "This operation can only be done before validating"
 msgstr "Cette opération peut être effectuée seulement avant validation"
 
-#: contrib/validator/utils.py:555
+#: contrib/validator/utils.py:553
 msgid "Validate save mode are ROW | FULL"
 msgstr "La Validation du mode d'enregistrement sont ROW | FULL"
 

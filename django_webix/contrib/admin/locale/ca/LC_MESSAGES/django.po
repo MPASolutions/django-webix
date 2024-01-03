@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-10-18 16:49+0200\n"
+"POT-Creation-Date: 2023-12-04 17:10+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -26,36 +26,36 @@ msgstr ""
 msgid "Groups"
 msgstr ""
 
-#: contrib/admin/dwadmin.py:55
+#: contrib/admin/dwadmin.py:63
 #: contrib/admin/templates/django_webix/admin/include/menu.js:38
 msgid "User"
 msgstr ""
 
-#: contrib/admin/dwadmin.py:66
+#: contrib/admin/dwadmin.py:74
 msgid "Email"
 msgstr ""
 
-#: contrib/admin/dwadmin.py:77
+#: contrib/admin/dwadmin.py:85
 msgid "Name"
 msgstr ""
 
-#: contrib/admin/dwadmin.py:88
+#: contrib/admin/dwadmin.py:96
 msgid "Surname"
 msgstr ""
 
-#: contrib/admin/dwadmin.py:101
+#: contrib/admin/dwadmin.py:109
 msgid "Staff"
 msgstr ""
 
-#: contrib/admin/dwadmin.py:114
+#: contrib/admin/dwadmin.py:122
 msgid "Superuser"
 msgstr ""
 
-#: contrib/admin/dwadmin.py:127
+#: contrib/admin/dwadmin.py:135
 msgid "Active"
 msgstr ""
 
-#: contrib/admin/dwadmin.py:138
+#: contrib/admin/dwadmin.py:146
 msgid "Group"
 msgstr ""
 
@@ -74,7 +74,7 @@ msgid "The two password fields didn’t match."
 msgstr ""
 
 #: contrib/admin/forms.py:56 contrib/admin/forms.py:237
-#: contrib/admin/templates/django_webix/admin/login.html:47
+#: contrib/admin/templates/django_webix/admin/login.html:46
 msgid "Password"
 msgstr ""
 
@@ -147,11 +147,11 @@ msgstr ""
 msgid "Webix Admin Menu"
 msgstr ""
 
-#: contrib/admin/options.py:271
+#: contrib/admin/options.py:280
 msgid "Yes"
 msgstr ""
 
-#: contrib/admin/options.py:271
+#: contrib/admin/options.py:280
 msgid "No"
 msgstr ""
 
@@ -227,7 +227,7 @@ msgid "Your password has been set. You can log-in"
 msgstr ""
 
 #: contrib/admin/templates/django_webix/admin/account/password_reset_complete.html:32
-#: contrib/admin/templates/django_webix/admin/login.html:54
+#: contrib/admin/templates/django_webix/admin/login.html:55
 msgid "Login"
 msgstr ""
 
@@ -347,11 +347,11 @@ msgstr ""
 msgid "Log in again"
 msgstr ""
 
-#: contrib/admin/templates/django_webix/admin/login.html:38
+#: contrib/admin/templates/django_webix/admin/login.html:37
 msgid "Username"
 msgstr ""
 
-#: contrib/admin/templates/django_webix/admin/login.html:71
+#: contrib/admin/templates/django_webix/admin/login.html:72
 msgid "Password recovery"
 msgstr ""
 
