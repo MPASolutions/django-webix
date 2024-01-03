@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-10-18 16:49+0200\n"
+"POT-Creation-Date: 2023-12-04 17:10+0100\n"
 "PO-Revision-Date: 2023-09-07 14:49+0200\n"
 "Last-Translator: Stefano Menegon <dallago@mpasol.it>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -27,36 +27,36 @@ msgstr "Administration"
 msgid "Groups"
 msgstr "Groupes"
 
-#: contrib/admin/dwadmin.py:55
+#: contrib/admin/dwadmin.py:63
 #: contrib/admin/templates/django_webix/admin/include/menu.js:38
 msgid "User"
 msgstr "Utilisateur"
 
-#: contrib/admin/dwadmin.py:66
+#: contrib/admin/dwadmin.py:74
 msgid "Email"
 msgstr "Courriér électronique"
 
-#: contrib/admin/dwadmin.py:77
+#: contrib/admin/dwadmin.py:85
 msgid "Name"
 msgstr "Prénom"
 
-#: contrib/admin/dwadmin.py:88
+#: contrib/admin/dwadmin.py:96
 msgid "Surname"
 msgstr "Nom"
 
-#: contrib/admin/dwadmin.py:101
+#: contrib/admin/dwadmin.py:109
 msgid "Staff"
 msgstr "Staff"
 
-#: contrib/admin/dwadmin.py:114
+#: contrib/admin/dwadmin.py:122
 msgid "Superuser"
 msgstr "Superutilisateur"
 
-#: contrib/admin/dwadmin.py:127
+#: contrib/admin/dwadmin.py:135
 msgid "Active"
 msgstr "Actif"
 
-#: contrib/admin/dwadmin.py:138
+#: contrib/admin/dwadmin.py:146
 msgid "Group"
 msgstr "Group"
 
@@ -75,7 +75,7 @@ msgid "The two password fields didn’t match."
 msgstr "Les deux champs de mots de passe ne correspondent pas"
 
 #: contrib/admin/forms.py:56 contrib/admin/forms.py:237
-#: contrib/admin/templates/django_webix/admin/login.html:47
+#: contrib/admin/templates/django_webix/admin/login.html:46
 msgid "Password"
 msgstr "Mot de passe"
 
@@ -148,11 +148,11 @@ msgstr "Parent"
 msgid "Webix Admin Menu"
 msgstr "Menu Admin Webix"
 
-#: contrib/admin/options.py:271
+#: contrib/admin/options.py:280
 msgid "Yes"
 msgstr "Oui"
 
-#: contrib/admin/options.py:271
+#: contrib/admin/options.py:280
 msgid "No"
 msgstr "Non"
 
@@ -231,7 +231,7 @@ msgstr ""
 "Votre mot de passe a été defini. Vous pouves maintenant accéder au système "
 
 #: contrib/admin/templates/django_webix/admin/account/password_reset_complete.html:32
-#: contrib/admin/templates/django_webix/admin/login.html:54
+#: contrib/admin/templates/django_webix/admin/login.html:55
 msgid "Login"
 msgstr "Accéder"
 
@@ -362,11 +362,11 @@ msgstr "Utilisateurs"
 msgid "Log in again"
 msgstr "Connectez-vous à nouveau"
 
-#: contrib/admin/templates/django_webix/admin/login.html:38
+#: contrib/admin/templates/django_webix/admin/login.html:37
 msgid "Username"
 msgstr "Nom d'utilisateur"
 
-#: contrib/admin/templates/django_webix/admin/login.html:71
+#: contrib/admin/templates/django_webix/admin/login.html:72
 msgid "Password recovery"
 msgstr "Récupérer le mot de passe"
 

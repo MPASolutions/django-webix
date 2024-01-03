@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-09-25 16:17+0200\n"
+"POT-Creation-Date: 2023-11-14 11:56+0100\n"
 "PO-Revision-Date: 2023-09-25 15:41+0200\n"
 "Last-Translator: Stefano Menegon <dallago@mpasol.it>\n"
 "Language-Team: \n"
@@ -31,15 +31,15 @@ msgstr "Data inserimento"
 msgid "Update date"
 msgstr "Data aggiornamento"
 
-#: contrib/filter/models.py:18 contrib/filter/views.py:342
+#: contrib/filter/models.py:18 contrib/filter/views.py:340
 msgid "Title"
 msgstr "Titolo"
 
-#: contrib/filter/models.py:19 contrib/filter/views.py:353
+#: contrib/filter/models.py:19 contrib/filter/views.py:350
 msgid "Description"
 msgstr "Descrizione"
 
-#: contrib/filter/models.py:20 contrib/filter/views.py:364
+#: contrib/filter/models.py:20 contrib/filter/views.py:360
 msgid "Model"
 msgstr "Modello"
 
@@ -51,7 +51,7 @@ msgstr "Filtra"
 msgid "Insert user"
 msgstr "Utente inserimento"
 
-#: contrib/filter/models.py:25 contrib/filter/views.py:375
+#: contrib/filter/models.py:25 contrib/filter/views.py:370
 msgid "Visibility"
 msgstr "Visibilità"
 
