@@ -86,11 +86,11 @@
         id:"content",
         type: "{% if request.user_agent.is_mobile %}clean{% else %}space{% endif %}",
         cols:[
-            {% block dashborad_left %}
+            {% block dashboard_left %}
             {
                 id: 'content_left',
                 rows: [
-                    {% block dashborad_menu %}
+                    {% block dashboard_menu %}
                         {% include "django_webix/admin/include/menu.js" %},
                     {% endblock %}
                 ]
