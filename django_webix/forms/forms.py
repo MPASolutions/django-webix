@@ -417,7 +417,7 @@ class BaseWebixMixin:
                     'multiple': False,
                     'width': 150,
                     'height': 50,
-                    'label': _('Upload new image'),
+                    'label': _('Upload new image') if not initial else _("Change image"),
                     'labelAlign': self.label_align,
                     # 'on': {
                     #     'onAfterFileAdd': "image_add('" + self[name].auto_id + "');"
@@ -473,6 +473,9 @@ class BaseWebixMixin:
                                                 'view': "button",
                                                 'type': "icon",
                                                 'icon': 'fas fa-download',
+                                                "tooltip": '{}'.format(
+                                                    os.path.basename(initial.name) if initial else ''
+                                                ),
                                                 'width': 75,
                                                 'height': 50,
                                                 'css': "webix_primary",
@@ -492,6 +495,9 @@ class BaseWebixMixin:
                                                 'onIcon': 'fas fa-trash-alt',
                                                 'offLabel': '',
                                                 'onLabel': _('Deleted'),
+                                                "tooltip": '{}'.format(
+                                                    os.path.basename(initial.name) if initial else ''
+                                                ),
                                                 'width': 75,
                                                 'height': 50,
                                                 'css': "webix_danger",
@@ -522,7 +528,7 @@ class BaseWebixMixin:
                     'directory': False,
                     'width': 150,
                     'heigth': 40,
-                    'label': _('Upload file'),
+                    'label': _('Upload file') if not initial else _('Change file'),
                 })
                 if isinstance(field.widget, forms.widgets.FileInput):
                     directory = field.widget.attrs.get('directory', False)
@@ -535,12 +541,11 @@ class BaseWebixMixin:
 
                     if directory:
                         el.update({
-                            'label': _('Upload folder')
+                            'label': _('Upload folder') if not initial else _('Change folder')
                         })
-
-                    if multiple and not directory:
+                    elif multiple and not directory:
                         el.update({
-                            'label': _('Upload files')
+                            'label': _('Upload files') if not initial else _('Change files')
                         })
 
                 delete_hidden = True
@@ -555,13 +560,13 @@ class BaseWebixMixin:
                             {
                                 'height': 80,
                                 'width': self.get_label_width(),
+                                'labelVisibility': {'tabular': False},
                                 'rows': [
                                     {
                                         'name_label': name,
                                         'id_label': name,
                                         'borderless': True,
                                         'template': label,
-                                        'labelVisibility': {'tabular': False},
                                         'height': 40,
                                         # attenzione qui non funziona il labelAlign perche non è un input ma è un template
                                         'css': {'background-color': 'transparent !important',
@@ -594,6 +599,9 @@ class BaseWebixMixin:
                                                 'view': "button",
                                                 'type': "icon",
                                                 "icon": "fas fa-download",
+                                                "tooltip": '{}'.format(
+                                                    os.path.basename(initial.name) if initial else ''
+                                                ),
                                                 'css': "webix_primary",
                                                 'hidden': delete_hidden,
                                                 "width": 75,
@@ -614,6 +622,9 @@ class BaseWebixMixin:
                                                 'onIcon': 'fas fa-trash-alt',
                                                 'offLabel': '',
                                                 'onLabel': _('Deleted'),
+                                                "tooltip": '{}'.format(
+                                                    os.path.basename(initial.name) if initial else ''
+                                                ),
                                                 'width': 75,
                                                 'height': 40,
                                                 'css': "webix_danger",
@@ -1213,30 +1224,36 @@ class BaseWebixMixin:
         """ Returns a dict with all the fields """
 
         def _hide_elements(el, visibility_key):
-            if 'cols' in el:
+            if 'labelVisibility' in el and not el['labelVisibility'].get(visibility_key, True):
+                if 'label' in el:
+                    el['label'] = ''
+                    el['labelWidth'] = 0
+                elif 'template' in el:
+                    # foto and file block use bare template as label
+                    el['template'] = ''
+                    el['width'] = 0
+                elif "cols" in el:
+                    el["cols"] = []
+                    el["width"] = 0
+                elif "rows" in el:
+                    el["rows"] = []
+                    el["width"] = 0
+                else:
+                    raise Exception(
+                        'Django-webix form block labelVisibility configured in element without label or template to hide'
+                    )
+            elif 'cols' in el:
                 for col in el['cols']:
                     _hide_elements(col, visibility_key)
             elif 'rows' in el:
                 for row in el['rows']:
                     _hide_elements(row, visibility_key)
-            else:
-                if 'labelVisibility' in el and not el['labelVisibility'].get(visibility_key, True):
-                    if 'label' in el:
-                        el['label'] = ''
-                        el['labelWidth'] = 0
-                    elif 'template' in el:
-                        # foto and file block use bare template as label
-                        el['template'] = ''
-                        el['width'] = 0
-                    else:
-                        raise Exception(
-                            'Django-webix form block labelVisibility configured in element without label or template to hide'
-                        )
 
         if 'fs' in kwargs and kwargs['fs'] is not None:
             fs = kwargs['fs']
         else:
             fs = self.get_elements
+
         if self.style == 'tabular':
             for field in fs:
                 fs[field]['label'] = ''
