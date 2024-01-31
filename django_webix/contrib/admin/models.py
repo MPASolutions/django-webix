@@ -1,14 +1,15 @@
+from django.conf import settings
 from django.contrib.contenttypes.models import ContentType
 from django.db import models
 from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 from mptt.models import TreeForeignKey
 
-from django_dal.models import DALMPTTModel as MPTTModel
+from django_dal.models import DALMPTTModel, DALModel
 from django_dal.mptt_managers import DALTreeManager
 
 
-class WebixAdminMenuAbstract(MPTTModel):
+class WebixAdminMenuAbstract(DALMPTTModel):
     objects = DALTreeManager()
 
     label = models.CharField(verbose_name=_('Node name'), max_length=255, blank=True, null=True)
@@ -29,12 +30,7 @@ class WebixAdminMenuAbstract(MPTTModel):
         abstract = True
 
     def __str__(self):
-        if self.label:
-            return self.label
-        elif self.model:
-            return (self.model.model_class()._meta.verbose_name_plural).title()
-        else:
-            raise Exception('Label or model needed')
+        return self.get_label(language=settings.LANGUAGE_CODE)
 
     def get_url(self, urls_namespace):
         if self.model:
@@ -46,9 +42,30 @@ class WebixAdminMenuAbstract(MPTTModel):
             return self.url
         return ''
 
-class WebixAdminMenu(WebixAdminMenuAbstract):
+    def get_label(self, language: str):
+        if label_translated := self.webixadminmenulanguage_set.filter(
+            language=language
+        ).values_list("label", flat=True).first():
+            return label_translated
+        elif self.label:
+            return self.label
+        elif self.model:
+            return self.model.model_class()._meta.verbose_name_plural.title()
+        raise Exception('Label or model needed')
 
+
+class WebixAdminMenu(WebixAdminMenuAbstract):
     class Meta:
         verbose_name = _('Webix Admin Menu')
         verbose_name_plural = _('Webix Admin Menu')
 
+
+class WebixAdminMenuLanguage(DALModel):
+    menu = models.ForeignKey("dwadmin.WebixAdminMenu", on_delete=models.CASCADE, verbose_name=_("Menu"))
+    language = models.CharField(max_length=8, choices=settings.LANGUAGES, verbose_name=_("Language"))
+    label = models.CharField(max_length=255, verbose_name=_("Node name"))
+
+    class Meta:
+        verbose_name = _("Webix Admin Menu Language")
+        verbose_name_plural = _("Webix Admin Menu Languages")
+        unique_together = (("menu", "language"),)

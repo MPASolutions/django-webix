@@ -4,15 +4,20 @@ from django.utils.safestring import mark_safe
 from django.utils.translation import gettext as _
 
 from django_webix.contrib.admin.forms import WebixAdminMenuForm
-from django_webix.contrib.admin.models import WebixAdminMenu
+from django_webix.contrib.admin.models import WebixAdminMenu, WebixAdminMenuLanguage
 
 
 def menu_dwadmin_register(site):
     from mptt.admin import DraggableMPTTAdmin
 
+    class MenuLanguageInline(admin.StackedInline):
+        model = WebixAdminMenuLanguage
+        fields = ("language", "label")
+
     @admin.register(WebixAdminMenu)
     class MenuAdmin(DraggableMPTTAdmin):
         form = WebixAdminMenuForm
+        inlines = [MenuLanguageInline]
         raw_id_fields = ('parent',)
         search_fields = ('label', 'url', 'model__model')
         filter_horizontal = ['groups']
@@ -20,7 +25,9 @@ def menu_dwadmin_register(site):
         list_per_page = 1000
         expand_tree_by_default = True
         mptt_level_indent = 30
-        list_display = ('tree_actions', 'indented_title', 'label', 'enabled', 'active_all', 'model', 'prefix', 'get_groups_string')
+        list_display = (
+            'tree_actions', 'indented_title', 'label', 'enabled', 'active_all', 'model', 'prefix', 'get_groups_string'
+        )
         list_display_links = (
             'indented_title',
         )
