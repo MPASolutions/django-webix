@@ -11,7 +11,7 @@ from django.urls import NoReverseMatch, reverse, reverse_lazy, resolve
 from django.utils.functional import LazyObject
 from django.utils.module_loading import import_string
 from django.utils.text import capfirst
-from django.utils.translation import gettext
+from django.utils.translation import gettext, get_language
 from django.utils.translation import gettext_lazy as _
 from django.views.decorators.cache import never_cache
 from django.views.decorators.csrf import csrf_protect
@@ -277,18 +277,20 @@ class AdminWebixSite:
                     out.append(el.id)
         return out
 
-    def get_tree(self, items, available_items):
+    def get_tree(self, items, available_items, language: str):
         out = []
-        new_level = True
         for item in items:
             if item.id in available_items:
                 menu_item = {
                     "id": "menu_{}".format(item.id),
-                    "value": "{}".format(item),
+                    "value": "{}".format(item.get_label(language=language)),
                     "icon": item.icon if item.icon not in ['', None] else "fas fa-archive",
                 }
-                soons = self.model_admin_menu().objects.filter(parent=item, id__in=available_items).order_by('tree_id', 'lft')
-                children = self.get_tree(soons, available_items)
+                soons = self.model_admin_menu().objects.filter(
+                    parent=item,
+                    id__in=available_items
+                ).order_by('tree_id', 'lft')
+                children = self.get_tree(soons, available_items, language=language)
 
                 if children != []:
                     if self.webix_menu_type == 'sidebar':
@@ -296,7 +298,7 @@ class AdminWebixSite:
                     elif self.webix_menu_type == 'menu':
                         menu_item["submenu"] = children  # for menu
                     enable = True
-                elif (item.model is not None) or (item.url not in ['', None]):
+                elif item.model is not None or item.url not in ['', None]:
                     if item.get_url is None:
                         URL = ""
                     else:
@@ -315,8 +317,11 @@ class AdminWebixSite:
             return {}
         available = self.available_menu_items(request.user)
 
-        return self.get_tree(self.model_admin_menu().objects.filter(level=0, id__in=available).order_by('tree_id', 'lft'),
-                             available)
+        return self.get_tree(
+            self.model_admin_menu().objects.filter(level=0, id__in=available).order_by('tree_id', 'lft'),
+            available,
+            language=get_language()
+        )
 
     def admin_view(self, view, cacheable=False):
         """
