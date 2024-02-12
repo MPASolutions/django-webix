@@ -139,6 +139,7 @@ class WebixCreateUpdateMixin:
 
     def get_context_data_webix_create_update(self, request, obj=None, **kwargs):
         return {
+            'response_datatype': 'script',
             'has_warning_clean': self.has_warning_clean(request=self.request),
             # buttons for saving
             'is_enable_button_save_continue': self.is_enable_button_save_continue(request=self.request),
