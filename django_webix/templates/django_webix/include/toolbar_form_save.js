@@ -50,7 +50,7 @@ if (form_validate('{{ form.webix_id }}')) {
         {% elif url_send and url_send != '' %}
             url: "{{ url_send|safe }}{% if extra_params_button %}{% if not '?' in url_send %}?{% else %}&{% endif %}{{ extra_params_button }}{% endif %}",
         {% endif %}
-        dataType: {% block datatype %}"script"{% endblock %},
+        dataType: {% block datatype %}"{{response_datatype}}"{% endblock %},
         type: "POST",
         data: form_data,
         processData: false,
@@ -68,7 +68,11 @@ if (form_validate('{{ form.webix_id }}')) {
             else if ($$('{{ webix_container_id }}') !== undefined && $$('{{ webix_container_id }}') !== null && $$('{{ webix_container_id }}').hideOverlay !== undefined)
                 $$('{{ webix_container_id }}').hideOverlay();
             if (typeof {{ form.webix_id|comma_to_underscore }}_success === "function"){
-                {{ form.webix_id|comma_to_underscore }}_success();
+                {% if response_datatype == 'script' %}
+                    {{ form.webix_id|comma_to_underscore }}_success();
+                {% else %}
+                    {{ form.webix_id|comma_to_underscore }}_success(data);
+                {% endif %}
             }
         },
         error: function (jqXHR, textStatus, errorThrown) {
