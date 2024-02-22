@@ -37,6 +37,13 @@ if (form_validate('{{ form.webix_id }}')) {
     }
     {% endif %}
 
+    if (webix.storage.local.get("{{ form.webix_id }}_extra_fields")!=null) {
+        for (const [field_name, value] of Object.entries(JSON.parse(webix.storage.local.get("{{ form.webix_id }}_extra_fields")))) {
+            form_data.append(field_name, value);
+        }
+        webix.storage.local.remove("{{ form.webix_id }}_extra_fields");
+    }
+
     {% block post_form_data %}{% endblock %}
     if ($$('{{ form.webix_id }}-inlines-tabbar')!=null) {
         var active_tab = $$('{{ form.webix_id }}-inlines-tabbar').getValue() + '';
