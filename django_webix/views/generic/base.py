@@ -484,6 +484,7 @@ class WebixFormView(WebixTemplateView, WebixUrlUtilsMixin, BaseFormView):
     def get_context_data(self, **kwargs):
         context = super(WebixFormView, self).get_context_data(**kwargs)
         context.update({
+            'response_datatype': 'script',
             # Urls
             'url_send': self.get_url_send(),
             # form view info

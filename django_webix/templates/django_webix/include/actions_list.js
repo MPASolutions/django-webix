@@ -27,11 +27,25 @@ var {{ view_prefix }}actions_list = {{actions_menu_grouped|safe}};
               dataType: 'script', // directly execute
               data: _params,
               error: function (jqXHR, textStatus, errorThrown) {
-                  webix.message({
-                      text: "{{ _("Action is not executable")|escapejs }}",
-                      type: "error",
-                      expire: 10000
-                  });
+                  // if 400 then is form invalid
+                  if (jqXHR.status == 400) {
+                      var responseJson = jQuery.parseJSON(jqXHR.responseText);
+                      show_errors(responseJson.errors);
+                  } else {
+                      {% if is_errors_on_popup %}
+                          webix.alert({
+                              title: "{{ _("Oops! Something went wrong...")|escapejs }}",
+                              text: "{{ _("Action is not executable")|escapejs }}",
+                              type:"alert-error"
+                          });
+                      {% else %}
+                          webix.message({
+                              text: "{{ _("Action is not executable")|escapejs }}",
+                              type: "error",
+                              expire: 10000
+                          });
+                      {% endif %}
+                  }
                   $$('{{ view_prefix }}datatable').hideOverlay();
               },
               success: function (data) {

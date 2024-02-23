@@ -225,7 +225,7 @@ if (
                             page: {{ view_prefix }}initial_page,
                             on: {
                                 onBeforePageChange: function (new_page, old_page) {
-                                    if ($$('{{ view_prefix }}datatable').getHeaderContent("id_{{ view_prefix }}master_checkbox").isChecked() == true) {
+                                    if ($$('{{ view_prefix }}datatable').getHeaderContent("id_{{ view_prefix }}master_checkbox") != undefined && $$('{{ view_prefix }}datatable').getHeaderContent("id_{{ view_prefix }}master_checkbox").isChecked() == true) {
                                         $$('{{ view_prefix }}datatable').getHeaderContent("id_{{ view_prefix }}master_checkbox").check();
                                         {{ view_prefix }}update_counter();
                                     }
