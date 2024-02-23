@@ -274,13 +274,13 @@ class ModelWebixAdmin(ModelWebixAdminPermissionsMixin):
                     header_title = capfirst(model_field.verbose_name)
 
                 if issubclass(type(model_field), models.BooleanField):
-                    editor = 'editor:"select",collection: {}_options '.format(field_name)
+                    editor = 'editor:"select",collection: {}_options'.format(field_name)
                     filter_type = ''
                     filter_option = 'serverSelectFilter' if self.enable_json_loading else 'selectFilter'
                     extra_filter_options = "options:[{id: 'True', value: '" + _('Yes') + "'}, {id: 'False', value: '" + _("No") + "'}] "
                     column_template = 'template:custom_checkbox_yesnonone'
                 elif issubclass(type(model_field), models.DateTimeField):
-                    editor = 'editor:"datetime", '
+                    editor = 'editor:"datetime"'
                     filter_type = 'range'
                     filter_option = 'serverDateRangeFilter' if self.enable_json_loading else 'dateRangeFilter'
                     format_type = 'webix.i18n.fullDateFormatStr'
@@ -288,7 +288,7 @@ class ModelWebixAdmin(ModelWebixAdminPermissionsMixin):
                         field_name=field_name)
                 elif issubclass(type(model_field), models.DateField):
                     #width_adapt = 'width:"85"'
-                    editor = 'editor:"date", '
+                    editor = 'editor:"date"'
                     filter_type = 'range'
                     filter_option = 'serverDateRangeFilter' if self.enable_json_loading else 'dateRangeFilter'
                     format_type = 'webix.i18n.dateFormatStr'
@@ -300,19 +300,19 @@ class ModelWebixAdmin(ModelWebixAdminPermissionsMixin):
                     else:
                         if type(_first_field) == models.ForeignKey:
                             filter_type = 'iexact'
-                            editor = 'editor:"select", collection:{}_options '.format(field_name)
+                            editor = 'editor:"select", collection:{}_options'.format(field_name)
                             filter_option = 'serverRichSelectFilter' if self.enable_json_loading else 'selectFilter'
                             extra_filter_options = "options:{}_options ".format(field_name)
                 # if choices... the same of FK
                 else:
-                    editor = 'editor:"text", '
+                    editor = 'editor:"text"'
                     try:
                         _first_field = self.model._meta.get_field(field_name)
                     except FieldDoesNotExist:
                         pass
                     else:
                         if hasattr(_first_field, 'choices') and _first_field.choices is not None:
-                            editor = 'editor:"select" '
+                            editor = 'editor:"select"'
                             extra_header = 'collection: {}_options '.format(field_name)
                             filter_type = 'iexact'
                             filter_option = 'serverRichSelectFilter' if self.enable_json_loading else 'selectFilter'
@@ -350,7 +350,7 @@ class ModelWebixAdmin(ModelWebixAdminPermissionsMixin):
                     editor = ''
 
                 if 'extra_header' in defaults:
-                    if extra_header!='':
+                    if extra_header != '':
                         extra_header += ','
                     extra_header += defaults['extra_header']
 
@@ -368,17 +368,17 @@ class ModelWebixAdmin(ModelWebixAdminPermissionsMixin):
                 {editor}
                 {extra_header} }}'''.format(
                         field_name=field_name,
-                        header_icon='editheadericon' if editor!='' else '""',
+                        header_icon='editheadericon' if editor != '' else '""',
                         header_title=header_title,
                         filter=filter_option,
                         format_type=' format: ' + format_type + ', ' if format_type is not None else '',
-                        extra_filter_options=extra_filter_options if extra_filter_options=='' else ' , '+extra_filter_options,
+                        extra_filter_options=extra_filter_options if extra_filter_options == '' else ' , ' + extra_filter_options,
                         width_adapt=width_adapt,
                         adjust_batch=self.paginate_count_default,
                         sort_option=sort_option,
                         filter_type=filter_type,
-                        column_template=column_template if column_template=='' else column_template+', ',
-                        editor = editor if editor=='' else editor+', ',
+                        column_template=column_template if column_template == '' else column_template+', ',
+                        editor=editor if editor == '' else editor + ', ',
                         extra_header=extra_header
                     )
                 }
