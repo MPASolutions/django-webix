@@ -530,6 +530,11 @@ if (
                     load_js('{{ url_list|safe }}{% if '?' in url_list %}&{% else %}?{% endif %}update', undefined, undefined, 'POST', _params, undefined, 'json', false, undefined, fail_edit, always_save, undefined, undefined, false);
                 },
                 {% endif %}
+                onColumnResize:function(id,newWidth,oldWidth,user_action){
+                    {% if adjust_row_height %}
+                        this.adjustRowHeight();
+                    {% endif %}
+                    },
                 onItemClick: function (id, e, trg) {
                     var el = $$('{{ view_prefix }}datatable').getSelectedItem();
 
