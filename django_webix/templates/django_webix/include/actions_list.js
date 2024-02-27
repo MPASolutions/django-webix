@@ -4,7 +4,7 @@
 
 var {{ view_prefix }}actions_list = {{actions_menu_grouped|safe}};
 
-{{ view_prefix }}actions_list.concat([
+{{ view_prefix }}actions_list = {{ view_prefix }}actions_list.concat([
     {% block actions_list %}
     {% endblock %}
 ]);
