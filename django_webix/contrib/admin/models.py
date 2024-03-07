@@ -2,6 +2,7 @@ from django.conf import settings
 from django.contrib.contenttypes.models import ContentType
 from django.db import models
 from django.urls import reverse
+from django.utils.text import capfirst
 from django.utils.translation import gettext_lazy as _
 from mptt.models import TreeForeignKey
 
@@ -50,7 +51,7 @@ class WebixAdminMenuAbstract(DALMPTTModel):
         elif self.label:
             return self.label
         elif self.model:
-            return self.model.model_class()._meta.verbose_name_plural.title()
+            return capfirst(self.model.model_class()._meta.verbose_name_plural.strip())
         raise Exception('Label or model needed')
 
 

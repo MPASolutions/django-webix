@@ -2,7 +2,7 @@ import importlib
 from django.apps import apps
 from django.conf import settings
 from django.db.models import Q, Value
-from django.utils.text import format_lazy
+from django.utils.text import format_lazy, capfirst
 from django.utils.translation import gettext_lazy as _
 from typing import List, Dict, Any, Optional, Tuple
 
@@ -207,7 +207,7 @@ def send_mixin(send_method: str, typology: Optional[int], subject: str, body: st
     # 8. Send messages
     send_function = my_import(function)
     result = send_function(_recipients, subject, body, message_sent)
-    status = format_lazy('{method} sent', method=method.capitalize())
+    status = format_lazy('{method} sent', method=capfirst(method.strip()))
 
     # Add optional extra params
     if kwargs.get('extra') is not None and isinstance(kwargs.get('extra'), dict):
