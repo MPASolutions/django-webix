@@ -118,7 +118,7 @@ class BaseWebixMixin:
                     isinstance(_field, django.forms.fields.DateTimeInput):
                     # TODO: it can be improved
                     self.fields[readonly_field] = forms.CharField(
-                        label=_(_field.verbose_name).capitalize(),
+                        label=capfirst(_field.verbose_name.strip()),
                         required=False
                     )
                     if hasattr(self, 'instance') and \
@@ -133,7 +133,7 @@ class BaseWebixMixin:
                     isinstance(_field, django.forms.fields.DateField):
                     # TODO: it can be improved
                     self.fields[readonly_field] = forms.CharField(
-                        label=_(_field.verbose_name).capitalize(),
+                        label=capfirst(_field.verbose_name.strip()),
                         required=False
                     )
                     if hasattr(self, 'instance') and \
@@ -145,7 +145,7 @@ class BaseWebixMixin:
                     isinstance(_field, django.forms.fields.CheckboxInput):
                     # TODO: it can be improved
                     self.fields[readonly_field] = forms.BooleanField(
-                        label=_(_field.verbose_name).capitalize(),
+                        label=capfirst(_field.verbose_name.strip()),
                         required=False
                     )
                     if hasattr(self, 'instance') and self.instance.pk is not None:
@@ -154,7 +154,7 @@ class BaseWebixMixin:
                         value = None
                 else:
                     self.fields[readonly_field] = forms.CharField(
-                        label=_(_field.verbose_name).capitalize(),
+                        label=capfirst(_field.verbose_name.strip()),
                         required=False
                     )
                     if hasattr(self, 'instance') and self.instance.pk is not None:
@@ -250,7 +250,7 @@ class BaseWebixMixin:
         elements = OrderedDict()
         for name, field in self.fields.items():
             _pass = False
-            label = force_str(field.label).capitalize()
+            label = capfirst(force_str(field.label).strip())
             el = {
                 'view': 'text',
                 'label': label,
@@ -1385,7 +1385,7 @@ class BaseWebixModelForm(forms.BaseModelForm, BaseWebixMixin):
 
     def get_name(self):
         model = self.get_model()
-        return capfirst(model._meta.verbose_name)
+        return capfirst(model._meta.verbose_name.strip())
 
 
 class WebixForm(six.with_metaclass(DeclarativeFieldsMetaclass, BaseWebixForm)):
