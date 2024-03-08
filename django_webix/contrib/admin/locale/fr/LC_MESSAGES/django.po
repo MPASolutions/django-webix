@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-12-04 17:10+0100\n"
+"POT-Creation-Date: 2024-03-07 18:13+0100\n"
 "PO-Revision-Date: 2023-09-07 14:49+0200\n"
 "Last-Translator: Stefano Menegon <dallago@mpasol.it>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -23,7 +23,7 @@ msgstr ""
 msgid "Administration"
 msgstr "Administration"
 
-#: contrib/admin/django_admin_utils.py:43 contrib/admin/forms.py:160
+#: contrib/admin/django_admin_utils.py:50 contrib/admin/forms.py:160
 msgid "Groups"
 msgstr "Groupes"
 
@@ -107,45 +107,65 @@ msgstr "Changer mot de passe"
 msgid "Password (again)"
 msgstr "Mot de passe (à nouveau)"
 
-#: contrib/admin/models.py:14
+#: contrib/admin/models.py:16 contrib/admin/models.py:67
 msgid "Node name"
 msgstr "Nom du module"
 
-#: contrib/admin/models.py:15
+#: contrib/admin/models.py:17
 msgid "Icon"
 msgstr "Icône"
 
-#: contrib/admin/models.py:16
+#: contrib/admin/models.py:18
 msgid "Web link"
 msgstr "lien internet"
 
-#: contrib/admin/models.py:17
+#: contrib/admin/models.py:19
 msgid "Enabled"
 msgstr "Non autorisé"
 
-#: contrib/admin/models.py:18
+#: contrib/admin/models.py:20
 msgid "Active for all"
 msgstr "Actif pour tous"
 
-#: contrib/admin/models.py:19
+#: contrib/admin/models.py:21
 msgid "Model"
 msgstr "Modèle"
 
-#: contrib/admin/models.py:20
+#: contrib/admin/models.py:22
 msgid "Enabled groups"
 msgstr "Groupes autorisés"
 
-#: contrib/admin/models.py:21
+#: contrib/admin/models.py:23
 msgid "Prefix"
 msgstr "Préfixe"
 
-#: contrib/admin/models.py:23
+#: contrib/admin/models.py:25
 msgid "Parent"
 msgstr "Parent"
 
-#: contrib/admin/models.py:27 contrib/admin/models.py:28
-#: contrib/admin/models.py:52 contrib/admin/models.py:53
+#: contrib/admin/models.py:29 contrib/admin/models.py:30
+#: contrib/admin/models.py:60 contrib/admin/models.py:61
 msgid "Webix Admin Menu"
+msgstr "Menu Admin Webix"
+
+#: contrib/admin/models.py:65
+msgid "Menu"
+msgstr ""
+
+#: contrib/admin/models.py:66
+msgid "Language"
+msgstr ""
+
+#: contrib/admin/models.py:70
+#, fuzzy
+#| msgid "Webix Admin Menu"
+msgid "Webix Admin Menu Language"
+msgstr "Menu Admin Webix"
+
+#: contrib/admin/models.py:71
+#, fuzzy
+#| msgid "Webix Admin Menu"
+msgid "Webix Admin Menu Languages"
 msgstr "Menu Admin Webix"
 
 #: contrib/admin/options.py:280
@@ -168,7 +188,7 @@ msgstr "Administration Django Webix"
 msgid "Site administration"
 msgstr "Administration du site"
 
-#: contrib/admin/sites.py:658
+#: contrib/admin/sites.py:663
 #, python-format
 msgid ""
 "Please enter the correct %(username)s and password for a staff account. Note "
@@ -177,7 +197,7 @@ msgstr ""
 "Merci de saisir le bon %(username)s et mot de passe pour un compte. Les 2 "
 "champs peuvent être sensible à la casse"
 
-#: contrib/admin/sites.py:675
+#: contrib/admin/sites.py:680
 msgid "Log in"
 msgstr "Connectez-vous"
 

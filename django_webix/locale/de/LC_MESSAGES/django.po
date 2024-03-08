@@ -8,24 +8,24 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-01-03 07:25+0100\n"
-"PO-Revision-Date: 2023-12-22 12:29+0100\n"
-"Last-Translator: Stefano Menegon <dallago@mpasol.it>\n"
+"POT-Creation-Date: 2024-03-08 17:49+0100\n"
+"PO-Revision-Date: 2024-01-08 15:38+0100\n"
+"Last-Translator:   <>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Translated-Using: django-rosetta 0.9.9\n"
+"X-Translated-Using: django-rosetta 0.10.0\n"
 
-#: contrib/extra_fields/apps.py:11
+#: contrib/extra_fields/apps.py:12
 msgid "Django Webix Extra Fields"
-msgstr "Django Webix Extra Felder"
+msgstr "Django Webix Zusätzliche Felder"
 
 #: contrib/extra_fields/dwadmin_inline_utils.py:17
 msgid "This choice has already been filled in."
-msgstr "Diese Option wurde bereits ausgefüllt."
+msgstr "Diese Auswahl wurde bereits ausgefüllt."
 
 #: contrib/extra_fields/models.py:26
 msgid "Model"
@@ -50,7 +50,7 @@ msgstr "Modell für FK"
 
 #: contrib/extra_fields/models.py:46 contrib/extra_fields/models.py:91
 msgid "Locked"
-msgstr "Gesperrte Daten"
+msgstr "Gesperrt"
 
 #: contrib/extra_fields/models.py:49 contrib/extra_fields/models.py:67
 #: contrib/extra_fields/models.py:83
@@ -59,7 +59,7 @@ msgstr "Modellfeld "
 
 #: contrib/extra_fields/models.py:50
 msgid "Model fields"
-msgstr "Modellfeld "
+msgstr "Modellfelder"
 
 #: contrib/extra_fields/models.py:69
 msgid "Key"
@@ -71,11 +71,11 @@ msgstr "Wert"
 
 #: contrib/extra_fields/models.py:73
 msgid "Model field choice"
-msgstr "Wahl des Modellfeldes"
+msgstr "Auswahl des Modellfeldes"
 
 #: contrib/extra_fields/models.py:74
 msgid "Model fields choices"
-msgstr "Wahl des Modellfeldes"
+msgstr "Auswahl der Modellfelder"
 
 #: contrib/extra_fields/models.py:85
 msgid "Content type"
@@ -83,7 +83,7 @@ msgstr "Art des Inhalts"
 
 #: contrib/extra_fields/models.py:86
 msgid "Object ID"
-msgstr "Object ID"
+msgstr "Objekt-ID"
 
 #: contrib/extra_fields/models.py:94
 msgid "Model field value"
@@ -91,66 +91,90 @@ msgstr "Wert des Modellfeldes"
 
 #: contrib/extra_fields/models.py:95
 msgid "Model fields values"
-msgstr "Werte des Modellfeldes"
+msgstr "Werte der Modellfelder"
 
 #: forms/forms.py:420
 msgid "Upload new image"
 msgstr "Neues Bild hochladen"
 
-#: forms/forms.py:494 forms/forms.py:616
+#: forms/forms.py:420
+#, fuzzy
+#| msgid "Upload new image"
+msgid "Change image"
+msgstr "Neues Bild hochladen"
+
+#: forms/forms.py:497 forms/forms.py:624
 msgid "Deleted"
 msgstr "Gelöscht"
 
-#: forms/forms.py:525
+#: forms/forms.py:531
 msgid "Upload file"
 msgstr "Datei hochladen"
 
-#: forms/forms.py:538
+#: forms/forms.py:531
+#, fuzzy
+#| msgid "Changed %s."
+msgid "Change file"
+msgstr "Geändert  %s."
+
+#: forms/forms.py:544
 msgid "Upload folder"
 msgstr "Ordner hochladen"
 
-#: forms/forms.py:543
+#: forms/forms.py:544
+#, fuzzy
+#| msgid "Upload folder"
+msgid "Change folder"
+msgstr "Ordner hochladen"
+
+#: forms/forms.py:548
 msgid "Upload files"
 msgstr "Dateien hochladen"
 
-#: forms/forms.py:647
-msgid "MultipleChoiceField is available only with PRO webix license"
-msgstr "MehrfachauswahlFeld verfügbar nur mit PRO webix license"
+#: forms/forms.py:548
+#, fuzzy
+#| msgid "Changed %s."
+msgid "Change files"
+msgstr "Geändert  %s."
 
-#: forms/forms.py:679 forms/forms.py:706 forms/forms.py:760 forms/forms.py:804
-#: forms/forms.py:868
+#: forms/forms.py:658
+msgid "MultipleChoiceField is available only with PRO webix license"
+msgstr "Mehrfachauswahl-Feld nur mit PRO webix Lizenz verfügbar"
+
+#: forms/forms.py:690 forms/forms.py:717 forms/forms.py:771 forms/forms.py:815
+#: forms/forms.py:879
 msgid "Write and select"
 msgstr "Schreiben und auswählen"
 
-#: forms/forms.py:794 forms/forms.py:818
+#: forms/forms.py:805 forms/forms.py:829
 msgid "Click and select"
-msgstr "Klicken Sie zum Auswählen"
+msgstr "Klicken und auswählen"
 
-#: forms/forms.py:911
+#: forms/forms.py:922
 msgid "Initial value {} for geo field {} is not supported"
-msgstr "Anfangswert {} für Geo Feld {} nicht unterstützt"
+msgstr "Anfangswert {} für Geo-Feld {} nicht unterstützt"
 
-#: forms/forms.py:951
+#: forms/forms.py:962
 msgid "Edit"
 msgstr "Bearbeiten"
 
-#: forms/forms.py:1103
+#: forms/forms.py:1114
 msgid "Type of field {} not supported"
 msgstr "Feldtyp {} nicht unterstutzt "
 
 #: forms/formsets.py:90 forms/formsets_generic.py:70
 msgid "ManagementForm data is missing or has been tampered with"
-msgstr "ManagementForm Datei fehlt oder wurde geändert"
+msgstr "ManagementForm-Daten fehlen oder wurden geändert"
 
 #: templates/django_webix/generic/delete.js:32
 #: templates/django_webix/include/action_deleterelatedobjects.js:8
 msgid "The following objects will be deleted"
-msgstr "Folgende Elemente werden gelöscht"
+msgstr "Folgende Objekte werden gelöscht"
 
 #: templates/django_webix/generic/delete.js:56
 #: templates/django_webix/include/action_deleterelatedobjects.js:23
 msgid "Details"
-msgstr "Detail"
+msgstr "Details"
 
 #: templates/django_webix/generic/delete.js:86
 msgid "Confirm cancellation"
@@ -158,11 +182,11 @@ msgstr "Löschung bestätigen"
 
 #: templates/django_webix/generic/delete.js:92
 msgid "Delete confirmation"
-msgstr "Löschung Bestätigung"
+msgstr "Bestätigung löschen"
 
 #: templates/django_webix/generic/delete.js:93
 msgid "Warning! All linked objects will also be deleted."
-msgstr "Achtung! Alle verknüpfte Objekte werden gelöscht."
+msgstr "Achtung! Alle verknüpften Objekte werden ebenfalls gelöscht."
 
 #: templates/django_webix/generic/form.js:26
 msgid "Send"
@@ -170,15 +194,15 @@ msgstr "Senden"
 
 #: templates/django_webix/generic/list.js:45
 msgid "Extra filters removal"
-msgstr "Extra filter beseitigung"
+msgstr "Beseitigung zusätzlicher Filter"
 
 #: templates/django_webix/generic/list.js:60
 msgid "Geographic filter removal"
-msgstr "Geo filter beseitigung"
+msgstr "Beseitigung des geografischen Filters"
 
 #: templates/django_webix/generic/list.js:78
 msgid "Advanced filter"
-msgstr "Erweiterte Filter"
+msgstr "Erweiterter Filter"
 
 #: templates/django_webix/generic/list.js:157
 #: templates/django_webix/generic/list.js:304
@@ -186,21 +210,21 @@ msgstr "Erweiterte Filter"
 #: templates/django_webix/include/toolbar_navigation.js:106
 #: views/generic/list.py:516
 msgid "Go to map"
-msgstr "Zur Karte"
+msgstr "Zur Karte gehen"
 
 #: templates/django_webix/generic/list.js:159
 #: templates/django_webix/include/toolbar_navigation.js:45
 #: templates/django_webix/include/toolbar_navigation.js:102
 msgid "Geometry does not exist"
-msgstr "Die Geometrie existiert nicht"
+msgstr "Geometrie existiert nicht"
 
 #: templates/django_webix/generic/list.js:184
 msgid "Select all"
-msgstr "Wählen Sie alle"
+msgstr "Alles auswählen"
 
 #: templates/django_webix/generic/list.js:195
 msgid "Cancel selection"
-msgstr "Auswahl löschen"
+msgstr "Auswahl aufheben"
 
 #: templates/django_webix/generic/list.js:317
 msgid "Remove filters"
@@ -216,32 +240,41 @@ msgstr "Filter"
 
 #: templates/django_webix/generic/list.js:525
 msgid "You do not have permission to edit this item"
-msgstr "Sie haben nicht die Erlaubnis, diesen Artikel zu bearbeiten"
+msgstr "Sie haben keine Berechtigung, dieses Element zu bearbeiten"
 
 #: templates/django_webix/generic/list.js:527
 #: templates/django_webix/include/utils.js:357
 #: templates/django_webix/include/utils.js:415
 msgid "Server error"
-msgstr "Server fehler"
+msgstr "Server-Fehler"
 
-#: templates/django_webix/generic/list.js:582
+#: templates/django_webix/generic/list.js:587
 msgid "Double click to edit the element"
-msgstr "Doppelklicken um das Element zu ändern"
+msgstr "Doppelklick, um das Element zu bearbeiten"
 
 #: templates/django_webix/include/action_dynamic.js:19
-#: templates/django_webix/include/actions_list.js:60
+#: templates/django_webix/include/actions_list.js:74
 #: templates/django_webix/include/form_errors_popup.js:16
 #: templates/django_webix/include/form_warnings.js:23
 #: templates/django_webix/include/utils.js:275
 msgid "Close"
 msgstr "Schließen"
 
-#: templates/django_webix/include/actions_list.js:31
-#: templates/django_webix/include/actions_list.js:204
+#: templates/django_webix/include/actions_list.js:37
+#: templates/django_webix/include/actions_utils.js:66
+#: templates/django_webix/include/actions_utils.js:97
+#: templates/django_webix/include/form_errors_message.js:13
+#: templates/django_webix/include/form_errors_popup.js:13
+msgid "Oops! Something went wrong..."
+msgstr "Hoppla! Etwas ist schief gelaufen..."
+
+#: templates/django_webix/include/actions_list.js:38
+#: templates/django_webix/include/actions_list.js:43
+#: templates/django_webix/include/actions_list.js:218
 #: templates/django_webix/include/actions_utils.js:67
 #: templates/django_webix/include/actions_utils.js:72
 msgid "Action is not executable"
-msgstr "Aktion nicht ausführbar"
+msgstr "Aktion ist nicht ausführbar"
 
 #: templates/django_webix/include/actions_utils.js:40
 #: templates/django_webix/include/toolbar_list.js:29
@@ -253,16 +286,9 @@ msgstr "Elemente"
 msgid "selected"
 msgstr "Ausgewählt"
 
-#: templates/django_webix/include/actions_utils.js:66
-#: templates/django_webix/include/actions_utils.js:97
-#: templates/django_webix/include/form_errors_message.js:13
-#: templates/django_webix/include/form_errors_popup.js:13
-msgid "Oops! Something went wrong..."
-msgstr "Etwas is schief gegangen"
-
 #: templates/django_webix/include/actions_utils.js:96
 msgid "Action successful"
-msgstr "Erfolgreiche Aktion"
+msgstr "Aktion erfolgreich"
 
 #: templates/django_webix/include/edit_inline/stacked.js:21
 #: templates/django_webix/include/edit_inline/stacked.js:32
@@ -278,7 +304,7 @@ msgstr "Hinzufügen"
 
 #: templates/django_webix/include/form_errors_message.js:15
 msgid "Error in the following fields:"
-msgstr "Fehler in folgenden Felder"
+msgstr "Fehler in folgenden Feldern"
 
 #: templates/django_webix/include/form_monotabs.js:66
 #: templates/django_webix/include/form_standard.js:61
@@ -296,7 +322,7 @@ msgstr "Ungültige E-mail"
 
 #: templates/django_webix/include/form_validation.js:72
 msgid "Not integer field"
-msgstr "Kein Integer-Field"
+msgstr "Kein Ganzzahlfeld"
 
 #: templates/django_webix/include/form_validation.js:76
 #: templates/django_webix/include/form_validation.js:117
@@ -310,24 +336,24 @@ msgstr "Wert größer als"
 
 #: templates/django_webix/include/form_validation.js:113
 msgid "Not decimal field"
-msgstr "Feld ist nicht dezimal"
+msgstr "Feld nicht dezimal"
 
 #: templates/django_webix/include/form_validation.js:142
 msgid "String shorter than "
-msgstr "String kürzer als"
+msgstr "Zeichenfolge kürzer als"
 
 #: templates/django_webix/include/form_validation.js:146
 msgid "String longer than "
-msgstr "String länger als"
+msgstr "Zeichenfolge länger als"
 
 #: templates/django_webix/include/form_warnings.js:20
 msgid "Oops! Some warnings here..."
-msgstr "Etwas is schief gegangen"
+msgstr "Hoppla! Einige Warnungen hier..."
 
 #: templates/django_webix/include/form_warnings.js:52
 #: views/generic/decorators.py:27 views/generic/list.py:85
 msgid "Undo"
-msgstr "Lösen"
+msgstr "Widerrufen"
 
 #: templates/django_webix/include/form_warnings.js:63
 msgid "Continue anyway"
@@ -335,11 +361,11 @@ msgstr "Trotzdem fortfahren"
 
 #: templates/django_webix/include/list_failure_blocking_objects.js:6
 msgid "Missing data to add item"
-msgstr "Daten fehlen um ein Element hinzufügen"
+msgstr "Fehlende Daten, um Element hinzuzufügen "
 
 #: templates/django_webix/include/list_failure_related_objects.js:6
 msgid "These objects do not allow the requested operation"
-msgstr "Diese Elemente erlauben die erforderte Verfahren nicht"
+msgstr "Diese Objekte erlauben den angeforderten Vorgang nicht"
 
 #: templates/django_webix/include/list_failure_related_objects.js:23
 msgid "Data type"
@@ -356,7 +382,7 @@ msgstr "Speichern und fortfahren"
 
 #: templates/django_webix/include/toolbar_form.js:68
 msgid "Save and add another"
-msgstr "Speichern und ein weiteres hinzufügen"
+msgstr "Speichern und weitere hinzufügen"
 
 #: templates/django_webix/include/toolbar_form.js:95
 msgid "Save"
@@ -375,7 +401,7 @@ msgstr "Alle"
 #: templates/django_webix/include/toolbar_list.js:35
 #: templates/django_webix/include/toolbar_list.js:42
 msgid "elements selected"
-msgstr "Ausgewählte Elemente"
+msgstr "Elemente ausgewählt"
 
 #: templates/django_webix/include/toolbar_list.js:89
 msgid "No row has been selected"
@@ -411,11 +437,11 @@ msgstr "Default"
 
 #: templates/django_webix/include/utils.js:237
 msgid "Show on map"
-msgstr "Auf der Karte zeigen "
+msgstr "Auf Karte anzeigen "
 
 #: templates/django_webix/include/utils.js:243
 msgid "Duplicate element"
-msgstr "Element verdoppeln"
+msgstr "Element duplizieren"
 
 #: templates/django_webix/include/utils.js:247
 msgid "Remove element"
@@ -439,11 +465,11 @@ msgstr "Gesperrte Daten"
 
 #: templates/django_webix/include/utils.js:656
 msgid "Editable column"
-msgstr "Editierbare Spalte"
+msgstr "Bearbeitbare Spalte"
 
 #: templates/django_webix/redirect_to_login.js:2
 msgid "User is not authenticated"
-msgstr "Nutzer ist nicht authentifiziert"
+msgstr "Benutzer ist nicht authentifiziert"
 
 #: templates/django_webix/redirect_to_login.js:5
 msgid "You are no longer authenticated, please login again."
@@ -476,7 +502,7 @@ msgstr "Alle Anhänge herunterladen"
 
 #: views/generic/actions_groups.py:17
 msgid "Exports"
-msgstr "Exporte"
+msgstr "Export"
 
 #: views/generic/actions_groups.py:22
 msgid "Webgis"
@@ -484,48 +510,48 @@ msgstr "Webgis"
 
 #: views/generic/base.py:172
 msgid "You haven't add permission"
-msgstr "Sie haben keine Berechtigung hinzugefügt"
+msgstr "Sie haben keine Berechtigung zum Hinzufügen"
 
 #: views/generic/base.py:177
 msgid "You haven't change permission"
-msgstr "Sie haben keine Berechtigung geändert"
+msgstr "Sie haben keine Berechtigung zu ändern"
 
 #: views/generic/base.py:182
 msgid "You haven't delete permission"
-msgstr "Sie haben keine Berechtigung geändert"
+msgstr "Sie haben keine Berechtigung zum Löschen"
 
 #: views/generic/base.py:187
 msgid "You haven't view permission"
-msgstr "You haben keine Ansichtsberechtigung"
+msgstr "Sie haben keine Ansichtsberechtigung"
 
 #: views/generic/create_update.py:94
 msgid ""
 "Template style is improperly configured only options are 'standard' or "
 "'tabs' (standard by default)."
 msgstr ""
-"Formatvorlage falsch eingestellt, einzige Optionen sind \"standard\" oder "
-"\"tabs\" (standard by default)"
+"Template-Stil nicht richtig konfiguriert, einzige Optionen sind \"standard\" "
+"oder \"tabs\" (standardmäßig)"
 
-#: views/generic/create_update.py:378 views/generic/create_update.py:465
+#: views/generic/create_update.py:379 views/generic/create_update.py:466
 #: views/generic/delete.py:43 views/generic/detail.py:20
 #: views/generic/list.py:693
 msgid "View permission is not allowed"
 msgstr "Ansichtsberechtigung nicht erlaubt"
 
-#: views/generic/create_update.py:381
+#: views/generic/create_update.py:382
 msgid "Add permission is not allowed"
-msgstr "Add permission nicht erlaubt"
+msgstr "Berechtigung zum Hinzufügen nicht erlaubt"
 
-#: views/generic/create_update.py:468
+#: views/generic/create_update.py:469
 msgid "Change permission is not allowed"
-msgstr "Änderungsberechtigung nicht erlaubt"
+msgstr "Berechtigung zu ändern nicht erlaubt"
 
-#: views/generic/create_update.py:531
+#: views/generic/create_update.py:532
 #, python-format
 msgid "Changed %s."
 msgstr "Geändert  %s."
 
-#: views/generic/create_update.py:531
+#: views/generic/create_update.py:532
 msgid "and"
 msgstr "und"
 
@@ -535,7 +561,7 @@ msgstr "Form ausfüllen"
 
 #: views/generic/decorators.py:24 views/generic/list.py:82
 msgid "Are you sure you want to proceed with this action?"
-msgstr "Möchten Sie mit dieser Aktion fortfahren?"
+msgstr "Sind Sie sicher, dass Sie mit dieser Aktion fortfahren wollen?"
 
 #: views/generic/decorators.py:25 views/generic/list.py:83
 msgid "Go"
@@ -547,15 +573,15 @@ msgstr "Fortfahren"
 
 #: views/generic/decorators.py:98
 msgid "You can perform this action on a maximum of {} raws"
-msgstr "Sie können diese Aktion für maximal {} Zeilen durchführen"
+msgstr "Sie können diese Aktion auf maximal {} Zeilen durchführen"
 
 #: views/generic/decorators.py:165
 msgid "Action success: {} data:{}"
-msgstr "Action success: {} data:{}"
+msgstr "Aktion erfolgreich: {} Datum:{}"
 
 #: views/generic/decorators.py:191
 msgid "Action success: {}"
-msgstr "Action success: {}"
+msgstr "Aktion erfolgreich: {}"
 
 #: views/generic/delete.py:46
 msgid "Delete permission is not allowed"
@@ -566,8 +592,8 @@ msgid ""
 "No URL to redirect to.  Either provide a url or define a get_absolute_url "
 "method on the Model."
 msgstr ""
-"Keine Weiterleitung zum URL. Entweder liefern Sie ein URL oder definieren "
-"Sie ein get_absolute_url auf dem Modell"
+"Keine URL, auf die umgeleitet werden kann. Entweder eine URL angeben oder "
+"eine get_absolute_url-Methode im Modell definieren."
 
 #: views/generic/delete.py:92
 msgid ""
@@ -575,19 +601,19 @@ msgid ""
 "get_absolute_url method on the Model."
 msgstr ""
 "Keine URL, auf die umgeleitet werden kann. Entweder eine URL angeben oder "
-"eine get_absolute_url-Methode für das Model definieren"
+"eine get_absolute_url-Methode im Modell definieren."
 
 #: views/generic/list.py:397
 msgid "Paginate count is not integer"
-msgstr "Paginatzahl ist nicht ganzzahlig"
+msgstr "Seitenzahl ist nicht ganzzahlig"
 
 #: views/generic/list.py:406
 msgid "Paginate start is not integer"
-msgstr "Paginatanfang ist nicht ganzzahlig"
+msgstr "Seitenanfang ist nicht ganzzahlig"
 
 #: views/generic/list.py:518
 msgid "Filter in map"
-msgstr "Filter auf der Karte"
+msgstr "In der Karte filtern"
 
 #: views/generic/list.py:654
 msgid ""
@@ -595,11 +621,11 @@ msgid ""
 "a list"
 msgstr ""
 "Json-Antwort ist nur verfügbar, wenn get_queryset() ein Queryset und nicht "
-"eine Liste zurückgib"
+"eine Liste zurückgibt"
 
 #: views/generic/list.py:673
 msgid "This action is not registered"
-msgstr "Diese aktion ist nicht registriert"
+msgstr "Diese Aktion ist nicht registriert"
 
 #: views/generic/list.py:679
 msgid "Permission denied: {}"

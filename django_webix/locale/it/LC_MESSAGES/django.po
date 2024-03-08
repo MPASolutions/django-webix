@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-01-03 07:25+0100\n"
+"POT-Creation-Date: 2024-03-08 17:49+0100\n"
 "PO-Revision-Date: 2023-12-18 10:57+0100\n"
 "Last-Translator: Stefano Menegon <dallago@mpasol.it>\n"
 "Language-Team: \n"
@@ -19,7 +19,7 @@ msgstr ""
 "X-Generator: Poedit 2.1.1\n"
 "X-Translated-Using: django-rosetta 0.9.9\n"
 
-#: contrib/extra_fields/apps.py:11
+#: contrib/extra_fields/apps.py:12
 msgid "Django Webix Extra Fields"
 msgstr ""
 
@@ -97,44 +97,68 @@ msgstr "Valori"
 msgid "Upload new image"
 msgstr "Carica un’immagine"
 
-#: forms/forms.py:494 forms/forms.py:616
+#: forms/forms.py:420
+#, fuzzy
+#| msgid "Upload new image"
+msgid "Change image"
+msgstr "Carica un’immagine"
+
+#: forms/forms.py:497 forms/forms.py:624
 msgid "Deleted"
 msgstr "Cancella"
 
-#: forms/forms.py:525
+#: forms/forms.py:531
 msgid "Upload file"
 msgstr "Carica un file"
 
-#: forms/forms.py:538
+#: forms/forms.py:531
+#, fuzzy
+#| msgid "Changed %s."
+msgid "Change file"
+msgstr "Modificato %s."
+
+#: forms/forms.py:544
 msgid "Upload folder"
 msgstr "Carica una cartella"
 
-#: forms/forms.py:543
+#: forms/forms.py:544
+#, fuzzy
+#| msgid "Upload folder"
+msgid "Change folder"
+msgstr "Carica una cartella"
+
+#: forms/forms.py:548
 msgid "Upload files"
 msgstr "Carica files"
 
-#: forms/forms.py:647
+#: forms/forms.py:548
+#, fuzzy
+#| msgid "Changed %s."
+msgid "Change files"
+msgstr "Modificato %s."
+
+#: forms/forms.py:658
 msgid "MultipleChoiceField is available only with PRO webix license"
 msgstr "MultipleChoiceField è disponibile solo con licenza PRO webix"
 
-#: forms/forms.py:679 forms/forms.py:706 forms/forms.py:760 forms/forms.py:804
-#: forms/forms.py:868
+#: forms/forms.py:690 forms/forms.py:717 forms/forms.py:771 forms/forms.py:815
+#: forms/forms.py:879
 msgid "Write and select"
 msgstr "Scrivi e seleziona"
 
-#: forms/forms.py:794 forms/forms.py:818
+#: forms/forms.py:805 forms/forms.py:829
 msgid "Click and select"
 msgstr "Clicca e seleziona"
 
-#: forms/forms.py:911
+#: forms/forms.py:922
 msgid "Initial value {} for geo field {} is not supported"
 msgstr "Il valore iniziale {} per il campo geografico {} non è supportato"
 
-#: forms/forms.py:951
+#: forms/forms.py:962
 msgid "Edit"
 msgstr "Modifica"
 
-#: forms/forms.py:1103
+#: forms/forms.py:1114
 msgid "Type of field {} not supported"
 msgstr "Tipo di campo {} non supportato"
 
@@ -224,20 +248,29 @@ msgstr "Non hai i permessi per modificare questo elemento"
 msgid "Server error"
 msgstr "Errore sul server"
 
-#: templates/django_webix/generic/list.js:582
+#: templates/django_webix/generic/list.js:587
 msgid "Double click to edit the element"
 msgstr "Doppio click per editare l'elemento"
 
 #: templates/django_webix/include/action_dynamic.js:19
-#: templates/django_webix/include/actions_list.js:60
+#: templates/django_webix/include/actions_list.js:74
 #: templates/django_webix/include/form_errors_popup.js:16
 #: templates/django_webix/include/form_warnings.js:23
 #: templates/django_webix/include/utils.js:275
 msgid "Close"
 msgstr "Chiudi"
 
-#: templates/django_webix/include/actions_list.js:31
-#: templates/django_webix/include/actions_list.js:204
+#: templates/django_webix/include/actions_list.js:37
+#: templates/django_webix/include/actions_utils.js:66
+#: templates/django_webix/include/actions_utils.js:97
+#: templates/django_webix/include/form_errors_message.js:13
+#: templates/django_webix/include/form_errors_popup.js:13
+msgid "Oops! Something went wrong..."
+msgstr "Oops! qualcosa è andato storto..."
+
+#: templates/django_webix/include/actions_list.js:38
+#: templates/django_webix/include/actions_list.js:43
+#: templates/django_webix/include/actions_list.js:218
 #: templates/django_webix/include/actions_utils.js:67
 #: templates/django_webix/include/actions_utils.js:72
 msgid "Action is not executable"
@@ -252,13 +285,6 @@ msgstr "elementi"
 #: templates/django_webix/include/actions_utils.js:40
 msgid "selected"
 msgstr "selezionati"
-
-#: templates/django_webix/include/actions_utils.js:66
-#: templates/django_webix/include/actions_utils.js:97
-#: templates/django_webix/include/form_errors_message.js:13
-#: templates/django_webix/include/form_errors_popup.js:13
-msgid "Oops! Something went wrong..."
-msgstr "Oops! qualcosa è andato storto..."
 
 #: templates/django_webix/include/actions_utils.js:96
 msgid "Action successful"
@@ -507,26 +533,26 @@ msgstr ""
 "Lo stile del modello è configurato in modo errato, le sole opzioni "
 "disponibili sono 'standard' o 'tabs' (standard di default)."
 
-#: views/generic/create_update.py:378 views/generic/create_update.py:465
+#: views/generic/create_update.py:379 views/generic/create_update.py:466
 #: views/generic/delete.py:43 views/generic/detail.py:20
 #: views/generic/list.py:693
 msgid "View permission is not allowed"
 msgstr "Non disponi del permesso di visione"
 
-#: views/generic/create_update.py:381
+#: views/generic/create_update.py:382
 msgid "Add permission is not allowed"
 msgstr "Non disponi del permesso di aggiunta"
 
-#: views/generic/create_update.py:468
+#: views/generic/create_update.py:469
 msgid "Change permission is not allowed"
 msgstr "Non disponi del permesso di modifica"
 
-#: views/generic/create_update.py:531
+#: views/generic/create_update.py:532
 #, python-format
 msgid "Changed %s."
 msgstr "Modificato %s."
 
-#: views/generic/create_update.py:531
+#: views/generic/create_update.py:532
 msgid "and"
 msgstr "e"
 
