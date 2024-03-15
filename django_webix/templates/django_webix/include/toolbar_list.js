@@ -7,8 +7,12 @@ function {{ view_prefix }}update_counter() {
             $$('{{ view_prefix }}select_all_checkbox').setValue(0);
         }
     }
-    $$('{{ view_prefix }}select_all_button').hide();
-    $$('{{ view_prefix }}unselect_all_button').hide();
+    if ($$('{{ view_prefix }}select_all_button')!=undefined) {
+        $$('{{ view_prefix }}select_all_button').hide();
+    }
+    if ($$('{{ view_prefix }}unselect_all_button')!=undefined) {
+        $$('{{ view_prefix }}unselect_all_button').hide();
+    }
 
     view_count = $$('{{ view_prefix }}datatable').view_count;
     view_count_total = $$('{{ view_prefix }}datatable').view_count_total;
@@ -30,10 +34,14 @@ function {{ view_prefix }}update_counter() {
         {% if is_json_loading %}
             if (ids.length ==view_count) {
                 if ($$('{{ view_prefix }}select_all_checkbox').getValue() == 0) {
-                    $$('{{ view_prefix }}select_all_button').show();
+                    if ($$('{{ view_prefix }}select_all_button')!=undefined) {
+                        $$('{{ view_prefix }}select_all_button').show();
+                    }
                 } else {
                     txt = '{{ _("All")|escapejs }} ' + view_count_total + ' {{ _("elements selected")|escapejs }}';
-                    $$('{{ view_prefix }}unselect_all_button').show();
+                    if ($$('{{ view_prefix }}unselect_all_button')!=undefined) {
+                        $$('{{ view_prefix }}unselect_all_button').show();
+                    }
                 }
             }
         {% else %}
