@@ -295,17 +295,19 @@ function preloadImage(url) {
  * Helper to send request (ajax or http redirect)
  *
  * @param lnk url of the new request
- * @param hide specify if hide loading area
- * @param area location to add loader
- * @param method http method [GET, POST, etc.]
- * @param data data to send to request
- * @param headers header to send to request
- * @param dataType type of expected response
- * @param abortAllPending if ajax and true, then abort pending requests
- * @param done function to call at the end of request (success)
- * @param fail function to call when request fails (error)
- * @param always function to call in any case
- * @param ajaxExtra extra dict to merge with ajax params
+ * @param hide specify whether to hide the loading area (defaults false)
+ * @param area location to add theloader (defaults to webix_container_id django tag)
+ * @param method http method [GET, POST, etc.] (defaults to GET)
+ * @param data data to send to request (defaults to {})
+ * @param headers header to send to request (defaults to undefined)
+ * @param dataType type of expected response (defaults to script)
+ * @param abortAllPending if ajax and true, then abort pending requests (defaults to false)
+ * @param done function to call at the end of request (success) (by default it resizes the webix ui and hides the overlay)
+ * @param fail function to call when request fails (error) (by default it shows an error alert)
+ * @param always function to call in any case (by default it does nothing)
+ * @param ajaxExtra extra dict to merge with ajax params (defaults to {})
+ * @param enableHistory whether to enable history change (sets lnk in the url) (defaults to true if tag history_enable evaluates to true)
+ * @param overlay whether to automatically show and hide the overlay, only if dataType evaluates to json (defaults to true)
  */
 function load_js(lnk, hide, area, method, data, headers, dataType, abortAllPending, done, fail, always, ajaxExtra, enableHistory, overlay) {
     asyncRequest = typeof asyncRequest !== 'undefined' ? asyncRequest : true;
