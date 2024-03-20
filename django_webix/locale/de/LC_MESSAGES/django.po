@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-03-08 17:49+0100\n"
+"POT-Creation-Date: 2024-03-19 11:30+0100\n"
 "PO-Revision-Date: 2024-01-08 15:38+0100\n"
 "Last-Translator:   <>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -205,7 +205,7 @@ msgid "Advanced filter"
 msgstr "Erweiterter Filter"
 
 #: templates/django_webix/generic/list.js:157
-#: templates/django_webix/generic/list.js:304
+#: templates/django_webix/generic/list.js:229
 #: templates/django_webix/include/toolbar_navigation.js:49
 #: templates/django_webix/include/toolbar_navigation.js:106
 #: views/generic/list.py:516
@@ -218,37 +218,29 @@ msgstr "Zur Karte gehen"
 msgid "Geometry does not exist"
 msgstr "Geometrie existiert nicht"
 
-#: templates/django_webix/generic/list.js:184
-msgid "Select all"
-msgstr "Alles auswählen"
-
-#: templates/django_webix/generic/list.js:195
-msgid "Cancel selection"
-msgstr "Auswahl aufheben"
-
-#: templates/django_webix/generic/list.js:317
+#: templates/django_webix/generic/list.js:242
 msgid "Remove filters"
 msgstr "Filter entfernen"
 
-#: templates/django_webix/generic/list.js:318
+#: templates/django_webix/generic/list.js:243
 msgid "Apply filters"
 msgstr "Filter anwenden"
 
-#: templates/django_webix/generic/list.js:318
+#: templates/django_webix/generic/list.js:243
 msgid "Filter"
 msgstr "Filter"
 
-#: templates/django_webix/generic/list.js:525
+#: templates/django_webix/generic/list.js:450
 msgid "You do not have permission to edit this item"
 msgstr "Sie haben keine Berechtigung, dieses Element zu bearbeiten"
 
-#: templates/django_webix/generic/list.js:527
-#: templates/django_webix/include/utils.js:357
-#: templates/django_webix/include/utils.js:415
+#: templates/django_webix/generic/list.js:452
+#: templates/django_webix/include/utils.js:359
+#: templates/django_webix/include/utils.js:417
 msgid "Server error"
 msgstr "Server-Fehler"
 
-#: templates/django_webix/generic/list.js:587
+#: templates/django_webix/generic/list.js:512
 msgid "Double click to edit the element"
 msgstr "Doppelklick, um das Element zu bearbeiten"
 
@@ -277,8 +269,8 @@ msgid "Action is not executable"
 msgstr "Aktion ist nicht ausführbar"
 
 #: templates/django_webix/include/actions_utils.js:40
-#: templates/django_webix/include/toolbar_list.js:29
-#: templates/django_webix/include/toolbar_list.js:47
+#: templates/django_webix/include/toolbar_list.js:33
+#: templates/django_webix/include/toolbar_list.js:55
 msgid "elements"
 msgstr "Elemente"
 
@@ -371,6 +363,14 @@ msgstr "Diese Objekte erlauben den angeforderten Vorgang nicht"
 msgid "Data type"
 msgstr "Datentyp"
 
+#: templates/django_webix/include/list_pager.js:13
+msgid "Select all"
+msgstr "Alles auswählen"
+
+#: templates/django_webix/include/list_pager.js:24
+msgid "Cancel selection"
+msgstr "Auswahl aufheben"
+
 #: templates/django_webix/include/toolbar_form.js:18
 #: views/generic/actions.py:44
 msgid "Delete"
@@ -388,26 +388,26 @@ msgstr "Speichern und weitere hinzufügen"
 msgid "Save"
 msgstr "Speichern"
 
-#: templates/django_webix/include/toolbar_list.js:29
+#: templates/django_webix/include/toolbar_list.js:33
 msgid "of"
 msgstr "Von "
 
-#: templates/django_webix/include/toolbar_list.js:35
-#: templates/django_webix/include/toolbar_list.js:42
-#: templates/django_webix/include/utils.js:580
+#: templates/django_webix/include/toolbar_list.js:41
+#: templates/django_webix/include/toolbar_list.js:50
+#: templates/django_webix/include/utils.js:582
 msgid "All"
 msgstr "Alle"
 
-#: templates/django_webix/include/toolbar_list.js:35
-#: templates/django_webix/include/toolbar_list.js:42
+#: templates/django_webix/include/toolbar_list.js:41
+#: templates/django_webix/include/toolbar_list.js:50
 msgid "elements selected"
 msgstr "Elemente ausgewählt"
 
-#: templates/django_webix/include/toolbar_list.js:89
+#: templates/django_webix/include/toolbar_list.js:97
 msgid "No row has been selected"
 msgstr "Keine Reihe ausgewählt"
 
-#: templates/django_webix/include/toolbar_list.js:121
+#: templates/django_webix/include/toolbar_list.js:129
 msgid "Add new"
 msgstr "Neu hinzufügen"
 
@@ -455,15 +455,15 @@ msgstr "Detail"
 msgid "Image"
 msgstr "Bild"
 
-#: templates/django_webix/include/utils.js:614
+#: templates/django_webix/include/utils.js:616
 msgid "Click and change"
 msgstr "Klicken und ändern"
 
-#: templates/django_webix/include/utils.js:616
+#: templates/django_webix/include/utils.js:618
 msgid "Locked data"
 msgstr "Gesperrte Daten"
 
-#: templates/django_webix/include/utils.js:656
+#: templates/django_webix/include/utils.js:658
 msgid "Editable column"
 msgstr "Bearbeitbare Spalte"
 

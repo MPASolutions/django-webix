@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-01-03 07:30+0100\n"
-"PO-Revision-Date: 2023-12-22 08:05+0100\n"
+"PO-Revision-Date: 2024-03-19 11:50+0100\n"
 "Last-Translator: Stefano Menegon <dallago@mpasol.it>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: \n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Translated-Using: django-rosetta 0.9.9\n"
+"X-Translated-Using: django-rosetta 0.10.0\n"
 
 #: contrib/validator/apps.py:8
 msgid "Django Webix Validator"
@@ -83,8 +83,8 @@ msgstr "Keine Datei hochgeladen"
 
 #: contrib/validator/utils.py:36
 msgid ""
-"Text file not recognizable as delimiter-separated values with separator ' {} "
-"' (Exception:{})"
+"Text file not recognizable as delimiter-separated values with separator ' {}"
+" ' (Exception:{})"
 msgstr ""
 "Textdatei nicht als Trennzeichen-getrennte Werte mit Trennzeichen ' {} ' "
 "erkennbar (Ausnahme:{})"
@@ -143,8 +143,8 @@ msgstr "Eine Einzigartigkeitsregel wurde in den Feldern {}"
 
 #: contrib/validator/utils.py:51
 msgid ""
-"The zip file is supported only if the following files are contained .shp, ."
-"dbf, .prj, .shx"
+"The zip file is supported only if the following files are contained .shp, "
+".dbf, .prj, .shx"
 msgstr ""
 "Die Zip-Datei wird nur unterstützt, wenn die folgenden Dateien enthalten "
 "sind: .shp, .dbf, .prj, .shx"
@@ -164,9 +164,9 @@ msgid "%(value)s is not a boolean value"
 msgstr "%(value)s ist kein boolescher Wert"
 
 #: contrib/validator/validators.py:26
-#, fuzzy, python-format
+#, python-format
 #| msgid "Ensure this value is strictly greater than %(limit_value)s."
 msgid "Ensure this value is strictly greater than %(limit_value)s."
 msgstr ""
 "Vergewissern Sie sich, dass dieser Wert unbedingt größer ist als "
-"%(Grenzwert)s."
+"%(limit_value)s."
