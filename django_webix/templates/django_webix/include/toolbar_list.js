@@ -22,12 +22,14 @@ function {{ view_prefix }}update_counter() {
             ids.push(id);
         }
     });
-    if (ids.length != view_count) {
-        $$('{{ view_prefix }}select_all_checkbox').setValue(0);
-    } else {
-        {% if not is_json_loading %}
-            $$('{{ view_prefix }}select_all_checkbox').setValue(1);
-        {% endif %}
+    if($$('{{ view_prefix }}select_all_checkbox') != undefined){
+        if (ids.length != view_count) {
+            $$('{{ view_prefix }}select_all_checkbox').setValue(0);
+        } else {
+            {% if not is_json_loading %}
+                $$('{{ view_prefix }}select_all_checkbox').setValue(1);
+            {% endif %}
+        }
     }
     if (ids.length > 0) {
         txt = ids.length + ' {{ _("of")|escapejs }} ' + view_count_total + ' {{ _("elements")|escapejs }}';
@@ -56,9 +58,10 @@ function {{ view_prefix }}update_counter() {
     } else {
         txt = '';
     }
-
-    $$('{{ view_prefix }}stats_list').define('label', txt);
-    $$('{{ view_prefix }}stats_list').refresh();
+    if ($$('{{ view_prefix }}stats_list') != undefined) {
+        $$('{{ view_prefix }}stats_list').define('label', txt);
+        $$('{{ view_prefix }}stats_list').refresh();
+    }
 }
 
 function {{ view_prefix }}get_items_page_datatable() {
