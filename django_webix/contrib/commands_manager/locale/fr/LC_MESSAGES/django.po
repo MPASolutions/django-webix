@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-01-27 08:25+0100\n"
+"POT-Creation-Date: 2024-03-19 11:30+0100\n"
 "PO-Revision-Date: 2022-03-21 12:42+0050\n"
 "Last-Translator: Traduzioni CBC <>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -91,6 +91,6 @@ msgstr ""
 msgid "Last ex. state"
 msgstr ""
 
-#: contrib/commands_manager/views_js.py:66
+#: contrib/commands_manager/views_js.py:67
 msgid "Invalid command name"
 msgstr "Nom de commande invalide"

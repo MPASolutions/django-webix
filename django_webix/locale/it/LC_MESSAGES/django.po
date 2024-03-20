@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-03-08 17:49+0100\n"
-"PO-Revision-Date: 2023-12-18 10:57+0100\n"
+"POT-Creation-Date: 2024-03-19 11:30+0100\n"
+"PO-Revision-Date: 2024-03-19 11:45+0100\n"
 "Last-Translator: Stefano Menegon <dallago@mpasol.it>\n"
 "Language-Team: \n"
 "Language: it\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Poedit 2.1.1\n"
-"X-Translated-Using: django-rosetta 0.9.9\n"
+"X-Translated-Using: django-rosetta 0.10.0\n"
 
 #: contrib/extra_fields/apps.py:12
 msgid "Django Webix Extra Fields"
@@ -98,10 +98,9 @@ msgid "Upload new image"
 msgstr "Carica un’immagine"
 
 #: forms/forms.py:420
-#, fuzzy
 #| msgid "Upload new image"
 msgid "Change image"
-msgstr "Carica un’immagine"
+msgstr "Cambia immagine"
 
 #: forms/forms.py:497 forms/forms.py:624
 msgid "Deleted"
@@ -112,30 +111,27 @@ msgid "Upload file"
 msgstr "Carica un file"
 
 #: forms/forms.py:531
-#, fuzzy
 #| msgid "Changed %s."
 msgid "Change file"
-msgstr "Modificato %s."
+msgstr "Cambia file"
 
 #: forms/forms.py:544
 msgid "Upload folder"
 msgstr "Carica una cartella"
 
 #: forms/forms.py:544
-#, fuzzy
 #| msgid "Upload folder"
 msgid "Change folder"
-msgstr "Carica una cartella"
+msgstr "Cambia cartella"
 
 #: forms/forms.py:548
 msgid "Upload files"
 msgstr "Carica files"
 
 #: forms/forms.py:548
-#, fuzzy
 #| msgid "Changed %s."
 msgid "Change files"
-msgstr "Modificato %s."
+msgstr "Cambia files"
 
 #: forms/forms.py:658
 msgid "MultipleChoiceField is available only with PRO webix license"
@@ -205,7 +201,7 @@ msgid "Advanced filter"
 msgstr "Filtro avanzato"
 
 #: templates/django_webix/generic/list.js:157
-#: templates/django_webix/generic/list.js:304
+#: templates/django_webix/generic/list.js:229
 #: templates/django_webix/include/toolbar_navigation.js:49
 #: templates/django_webix/include/toolbar_navigation.js:106
 #: views/generic/list.py:516
@@ -218,37 +214,29 @@ msgstr "Mostra in mappa"
 msgid "Geometry does not exist"
 msgstr "Geometria non esistente"
 
-#: templates/django_webix/generic/list.js:184
-msgid "Select all"
-msgstr "Seleziona tutti"
-
-#: templates/django_webix/generic/list.js:195
-msgid "Cancel selection"
-msgstr "Annulla selezione"
-
-#: templates/django_webix/generic/list.js:317
+#: templates/django_webix/generic/list.js:242
 msgid "Remove filters"
 msgstr "Rimuovi filtri"
 
-#: templates/django_webix/generic/list.js:318
+#: templates/django_webix/generic/list.js:243
 msgid "Apply filters"
 msgstr "Applica i filtri"
 
-#: templates/django_webix/generic/list.js:318
+#: templates/django_webix/generic/list.js:243
 msgid "Filter"
 msgstr "Filtra"
 
-#: templates/django_webix/generic/list.js:525
+#: templates/django_webix/generic/list.js:450
 msgid "You do not have permission to edit this item"
 msgstr "Non hai i permessi per modificare questo elemento"
 
-#: templates/django_webix/generic/list.js:527
-#: templates/django_webix/include/utils.js:357
-#: templates/django_webix/include/utils.js:415
+#: templates/django_webix/generic/list.js:452
+#: templates/django_webix/include/utils.js:359
+#: templates/django_webix/include/utils.js:417
 msgid "Server error"
 msgstr "Errore sul server"
 
-#: templates/django_webix/generic/list.js:587
+#: templates/django_webix/generic/list.js:512
 msgid "Double click to edit the element"
 msgstr "Doppio click per editare l'elemento"
 
@@ -277,8 +265,8 @@ msgid "Action is not executable"
 msgstr "Questa azione non è registrata"
 
 #: templates/django_webix/include/actions_utils.js:40
-#: templates/django_webix/include/toolbar_list.js:29
-#: templates/django_webix/include/toolbar_list.js:47
+#: templates/django_webix/include/toolbar_list.js:33
+#: templates/django_webix/include/toolbar_list.js:55
 msgid "elements"
 msgstr "elementi"
 
@@ -371,6 +359,14 @@ msgstr "Questi oggetti non consentono l'operazione richiesta"
 msgid "Data type"
 msgstr "Tipo di dato"
 
+#: templates/django_webix/include/list_pager.js:13
+msgid "Select all"
+msgstr "Seleziona tutti"
+
+#: templates/django_webix/include/list_pager.js:24
+msgid "Cancel selection"
+msgstr "Annulla selezione"
+
 #: templates/django_webix/include/toolbar_form.js:18
 #: views/generic/actions.py:44
 msgid "Delete"
@@ -388,26 +384,26 @@ msgstr "Salva e aggiungi un altro"
 msgid "Save"
 msgstr "Salva"
 
-#: templates/django_webix/include/toolbar_list.js:29
+#: templates/django_webix/include/toolbar_list.js:33
 msgid "of"
 msgstr "di"
 
-#: templates/django_webix/include/toolbar_list.js:35
-#: templates/django_webix/include/toolbar_list.js:42
-#: templates/django_webix/include/utils.js:580
+#: templates/django_webix/include/toolbar_list.js:41
+#: templates/django_webix/include/toolbar_list.js:50
+#: templates/django_webix/include/utils.js:582
 msgid "All"
 msgstr "Tutti"
 
-#: templates/django_webix/include/toolbar_list.js:35
-#: templates/django_webix/include/toolbar_list.js:42
+#: templates/django_webix/include/toolbar_list.js:41
+#: templates/django_webix/include/toolbar_list.js:50
 msgid "elements selected"
 msgstr "elementi selezionati"
 
-#: templates/django_webix/include/toolbar_list.js:89
+#: templates/django_webix/include/toolbar_list.js:97
 msgid "No row has been selected"
 msgstr "Nessuna riga selezionata"
 
-#: templates/django_webix/include/toolbar_list.js:121
+#: templates/django_webix/include/toolbar_list.js:129
 msgid "Add new"
 msgstr "Aggiungi nuovo"
 
@@ -455,15 +451,15 @@ msgstr "Dettaglio"
 msgid "Image"
 msgstr "Immagine"
 
-#: templates/django_webix/include/utils.js:614
+#: templates/django_webix/include/utils.js:616
 msgid "Click and change"
 msgstr "Clicca e cambia"
 
-#: templates/django_webix/include/utils.js:616
+#: templates/django_webix/include/utils.js:618
 msgid "Locked data"
 msgstr "Dati bloccati"
 
-#: templates/django_webix/include/utils.js:656
+#: templates/django_webix/include/utils.js:658
 msgid "Editable column"
 msgstr "Colonna modificabile"
 
@@ -621,8 +617,8 @@ msgid ""
 "Json response is available only if get_queryset() return a queryset and not "
 "a list"
 msgstr ""
-"La risposta in json è disponibile solo se get_queryset() ritorna un queryset "
-"e non una lista"
+"La risposta in json è disponibile solo se get_queryset() ritorna un queryset"
+" e non una lista"
 
 #: views/generic/list.py:673
 msgid "This action is not registered"
@@ -638,7 +634,8 @@ msgstr "Questo permesso non è registrato su questa classe"
 
 #: views/generic/list.py:759
 msgid "Generic TemplateListView needs to define data for datatable"
-msgstr "In un generico TemplateListView vanno definiti i dati per il datatable"
+msgstr ""
+"In un generico TemplateListView vanno definiti i dati per il datatable"
 
 #~ msgid "Select an action"
 #~ msgstr "Scegli una azione"

@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-03-07 18:13+0100\n"
-"PO-Revision-Date: 2023-09-07 14:24+0200\n"
+"PO-Revision-Date: 2024-03-19 11:42+0100\n"
 "Last-Translator: Stefano Menegon <dallago@mpasol.it>\n"
 "Language-Team: \n"
 "Language: it\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Poedit 2.1.1\n"
-"X-Translated-Using: django-rosetta 0.9.9\n"
+"X-Translated-Using: django-rosetta 0.10.0\n"
 
 #: contrib/admin/apps.py:27
 msgid "Administration"
@@ -150,20 +150,18 @@ msgstr "Menu"
 
 #: contrib/admin/models.py:65
 msgid "Menu"
-msgstr ""
+msgstr "Menu"
 
 #: contrib/admin/models.py:66
 msgid "Language"
-msgstr ""
+msgstr "Lingua"
 
 #: contrib/admin/models.py:70
-#, fuzzy
 #| msgid "Webix Admin Menu"
 msgid "Webix Admin Menu Language"
 msgstr "Menu"
 
 #: contrib/admin/models.py:71
-#, fuzzy
 #| msgid "Webix Admin Menu"
 msgid "Webix Admin Menu Languages"
 msgstr "Menu"
@@ -191,11 +189,10 @@ msgstr "Amministrazione sito"
 #: contrib/admin/sites.py:663
 #, python-format
 msgid ""
-"Please enter the correct %(username)s and password for a staff account. Note "
-"that both fields may be case-sensitive."
+"Please enter the correct %(username)s and password for a staff account. Note"
+" that both fields may be case-sensitive."
 msgstr ""
-"Per favore inserisci il corretto %(username)s e password di un account "
-"staff.\n"
+"Per favore inserisci il corretto %(username)s e password di un account staff.\n"
 "Attenzione alle lettere maiuscole e minuscole."
 
 #: contrib/admin/sites.py:680
@@ -278,8 +275,8 @@ msgstr "Reset password inviato"
 #: contrib/admin/templates/django_webix/admin/account/password_reset_done.js:33
 msgid ""
 "We have sent instructions for setting the password to the email address you "
-"provided. You should receive them shortly as long as the address you entered "
-"is valid."
+"provided. You should receive them shortly as long as the address you entered"
+" is valid."
 msgstr ""
 "Abbiamo inviato le istruzioni per impostare la password all'indirizzo email "
 "che hai fornito. Dovresti riceverle a breve, purché l'indirizzo che hai "
