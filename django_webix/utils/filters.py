@@ -4,6 +4,7 @@ import json
 import django
 from dateutil.parser import parse
 from dateutil.relativedelta import relativedelta
+from django.conf import settings
 from django.contrib.contenttypes.fields import GenericRelation
 from django.core.exceptions import FieldDoesNotExist
 from django.db import models
