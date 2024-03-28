@@ -1,15 +1,14 @@
-import datetime
 # noinspection PyUnresolvedReferences
 from argparse import _StoreTrueAction, _StoreFalseAction
-from zoneinfo import ZoneInfo
-from django.conf import settings
+
 from django.contrib.auth.decorators import login_required
 from django.core.management import get_commands, load_command_class
 from django.http import JsonResponse, Http404
+from django.utils import timezone
 from django.utils.decorators import method_decorator
 from django.utils.translation import gettext_lazy as _
 from django.views.generic import DetailView
-from django.utils import timezone
+
 from django_webix.contrib.commands_manager.models import CommandExecution
 from django_webix.contrib.commands_manager.tasks import execute_command_task
 
@@ -100,6 +99,7 @@ class CommandParameters(DetailView):
 @method_decorator(login_required, name='dispatch')
 class CommandExecute(DetailView):
     model = CommandExecution
+
     def get(self, request, *args, **kwargs):
         ce = self.get_object()
         ce.last_execution_state = 'started'
