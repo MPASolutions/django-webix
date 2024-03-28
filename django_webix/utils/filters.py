@@ -10,7 +10,12 @@ from django.core.exceptions import FieldDoesNotExist
 from django.db import models
 from django.db.models import Q, DateTimeField
 from django.db.models.fields.reverse_related import ForeignObjectRel
-from zoneinfo import ZoneInfo
+
+try:
+    import zoneinfo
+except ImportError:
+    from backports import zoneinfo
+
 try:
     import psycopg2
 except ModuleNotFoundError:
@@ -94,7 +99,7 @@ def from_dict_to_qset(data, model):
                         if isinstance(_curr_field, DateTimeField) and \
                             datetime.datetime.combine(data_end.date(),
                                                       datetime.datetime.min.time(),
-                                                      tzinfo=ZoneInfo(settings.TIME_ZONE)) == data_end:
+                                                      tzinfo=zoneinfo.ZoneInfo(settings.TIME_ZONE)) == data_end:
                             data_end += relativedelta(days=1)
                         qset_to_applicate &= Q(**{base_path + '__lte': data_end})
                 elif data_qset.get('path').endswith("__exact_in"):
