@@ -70,7 +70,7 @@
             view: "icon", align: "right", icon: "fas fa-sign-out-alt", on: {
                 onItemClick: function (id, e) {
                     {% with pattern_logout=urls_namespace|add:':logout' %}
-                    document.location.href = '{% url pattern_logout %}';
+                        webix_post('{% url pattern_logout %}', {});
                     {% endwith %}
                 }
             }
