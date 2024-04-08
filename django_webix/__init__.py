@@ -1,3 +1,3 @@
-__version__ = '24.3.3'
+__version__ = '24.4.1'
 
 default_app_config = 'django_webix.apps.DjangoWebixConfig'
