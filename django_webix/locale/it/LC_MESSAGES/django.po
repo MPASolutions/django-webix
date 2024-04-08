@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-03-19 11:30+0100\n"
+"POT-Creation-Date: 2024-04-08 17:36+0200\n"
 "PO-Revision-Date: 2024-03-19 11:45+0100\n"
 "Last-Translator: Stefano Menegon <dallago@mpasol.it>\n"
 "Language-Team: \n"
@@ -98,7 +98,6 @@ msgid "Upload new image"
 msgstr "Carica un’immagine"
 
 #: forms/forms.py:420
-#| msgid "Upload new image"
 msgid "Change image"
 msgstr "Cambia immagine"
 
@@ -111,7 +110,6 @@ msgid "Upload file"
 msgstr "Carica un file"
 
 #: forms/forms.py:531
-#| msgid "Changed %s."
 msgid "Change file"
 msgstr "Cambia file"
 
@@ -120,7 +118,6 @@ msgid "Upload folder"
 msgstr "Carica una cartella"
 
 #: forms/forms.py:544
-#| msgid "Upload folder"
 msgid "Change folder"
 msgstr "Cambia cartella"
 
@@ -129,7 +126,6 @@ msgid "Upload files"
 msgstr "Carica files"
 
 #: forms/forms.py:548
-#| msgid "Changed %s."
 msgid "Change files"
 msgstr "Cambia files"
 
@@ -265,8 +261,8 @@ msgid "Action is not executable"
 msgstr "Questa azione non è registrata"
 
 #: templates/django_webix/include/actions_utils.js:40
-#: templates/django_webix/include/toolbar_list.js:33
-#: templates/django_webix/include/toolbar_list.js:55
+#: templates/django_webix/include/toolbar_list.js:35
+#: templates/django_webix/include/toolbar_list.js:57
 msgid "elements"
 msgstr "elementi"
 
@@ -384,26 +380,26 @@ msgstr "Salva e aggiungi un altro"
 msgid "Save"
 msgstr "Salva"
 
-#: templates/django_webix/include/toolbar_list.js:33
+#: templates/django_webix/include/toolbar_list.js:35
 msgid "of"
 msgstr "di"
 
-#: templates/django_webix/include/toolbar_list.js:41
-#: templates/django_webix/include/toolbar_list.js:50
+#: templates/django_webix/include/toolbar_list.js:43
+#: templates/django_webix/include/toolbar_list.js:52
 #: templates/django_webix/include/utils.js:582
 msgid "All"
 msgstr "Tutti"
 
-#: templates/django_webix/include/toolbar_list.js:41
-#: templates/django_webix/include/toolbar_list.js:50
+#: templates/django_webix/include/toolbar_list.js:43
+#: templates/django_webix/include/toolbar_list.js:52
 msgid "elements selected"
 msgstr "elementi selezionati"
 
-#: templates/django_webix/include/toolbar_list.js:97
+#: templates/django_webix/include/toolbar_list.js:100
 msgid "No row has been selected"
 msgstr "Nessuna riga selezionata"
 
-#: templates/django_webix/include/toolbar_list.js:129
+#: templates/django_webix/include/toolbar_list.js:132
 msgid "Add new"
 msgstr "Aggiungi nuovo"
 
@@ -617,8 +613,8 @@ msgid ""
 "Json response is available only if get_queryset() return a queryset and not "
 "a list"
 msgstr ""
-"La risposta in json è disponibile solo se get_queryset() ritorna un queryset"
-" e non una lista"
+"La risposta in json è disponibile solo se get_queryset() ritorna un queryset "
+"e non una lista"
 
 #: views/generic/list.py:673
 msgid "This action is not registered"
@@ -634,8 +630,7 @@ msgstr "Questo permesso non è registrato su questa classe"
 
 #: views/generic/list.py:759
 msgid "Generic TemplateListView needs to define data for datatable"
-msgstr ""
-"In un generico TemplateListView vanno definiti i dati per il datatable"
+msgstr "In un generico TemplateListView vanno definiti i dati per il datatable"
 
 #~ msgid "Select an action"
 #~ msgstr "Scegli una azione"
