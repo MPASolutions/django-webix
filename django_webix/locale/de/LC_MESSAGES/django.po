@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-03-19 11:30+0100\n"
+"POT-Creation-Date: 2024-04-08 17:36+0200\n"
 "PO-Revision-Date: 2024-01-08 15:38+0100\n"
 "Last-Translator:   <>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -269,8 +269,8 @@ msgid "Action is not executable"
 msgstr "Aktion ist nicht ausführbar"
 
 #: templates/django_webix/include/actions_utils.js:40
-#: templates/django_webix/include/toolbar_list.js:33
-#: templates/django_webix/include/toolbar_list.js:55
+#: templates/django_webix/include/toolbar_list.js:35
+#: templates/django_webix/include/toolbar_list.js:57
 msgid "elements"
 msgstr "Elemente"
 
@@ -388,26 +388,26 @@ msgstr "Speichern und weitere hinzufügen"
 msgid "Save"
 msgstr "Speichern"
 
-#: templates/django_webix/include/toolbar_list.js:33
+#: templates/django_webix/include/toolbar_list.js:35
 msgid "of"
 msgstr "Von "
 
-#: templates/django_webix/include/toolbar_list.js:41
-#: templates/django_webix/include/toolbar_list.js:50
+#: templates/django_webix/include/toolbar_list.js:43
+#: templates/django_webix/include/toolbar_list.js:52
 #: templates/django_webix/include/utils.js:582
 msgid "All"
 msgstr "Alle"
 
-#: templates/django_webix/include/toolbar_list.js:41
-#: templates/django_webix/include/toolbar_list.js:50
+#: templates/django_webix/include/toolbar_list.js:43
+#: templates/django_webix/include/toolbar_list.js:52
 msgid "elements selected"
 msgstr "Elemente ausgewählt"
 
-#: templates/django_webix/include/toolbar_list.js:97
+#: templates/django_webix/include/toolbar_list.js:100
 msgid "No row has been selected"
 msgstr "Keine Reihe ausgewählt"
 
-#: templates/django_webix/include/toolbar_list.js:129
+#: templates/django_webix/include/toolbar_list.js:132
 msgid "Add new"
 msgstr "Neu hinzufügen"
 

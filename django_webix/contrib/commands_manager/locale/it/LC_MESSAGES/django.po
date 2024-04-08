@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-03-19 11:30+0100\n"
+"POT-Creation-Date: 2024-04-08 17:36+0200\n"
 "PO-Revision-Date: 2023-02-24 09:00+0100\n"
 "Last-Translator: Stefano Menegon <menegon@mpasol.it>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -91,6 +91,6 @@ msgstr "Ultima esecuzione"
 msgid "Last ex. state"
 msgstr "Ultimo stato"
 
-#: contrib/commands_manager/views_js.py:67
+#: contrib/commands_manager/views_js.py:66
 msgid "Invalid command name"
 msgstr "Nome invalido command"
