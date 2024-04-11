@@ -195,10 +195,12 @@ class ImportValidator:
                 if field.initial is not None and not field.required:
                     field_initials[fname] = field.initial
 
+            # even if the column is not mandatory (required=False in form),
+            # the validator expects that at least the column is present in the uploaded file
+            # if you want to use the "geometry" column in the import file, just add it and insert the wkt value
             if issubclass(field.__class__, forms.GeometryField):
-                # TODO if flabel not in self.df_rows.columns (latrimenti aggiungo colonna geometryb per excel con wkt)
                 if 'geometry' not in self.df_rows.columns:
-                    self.df_rows['geometry'] = 'POLYGON EMPTY'
+                    self.df_rows['geometry'] = None
 
         nfields = len(field_label)
         self.field_decod = field_decod
