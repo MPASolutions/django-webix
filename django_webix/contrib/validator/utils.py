@@ -45,7 +45,7 @@ ERR_MSG = {
     'LESS_COLS': gettext_lazy('There are not enough columns: there are {} columns, {} needed'),
     'HEADER': gettext_lazy('Column headers ({}^ row) are incorrect'),
     'COLUMN': gettext_lazy('There is no column \'{}\''),
-    'COL_POS': gettext_lazy('The name of the {}^ column ({}) must be \' {} \' (instead of \'{}\')'),
+    'COL_POS': gettext_lazy('The name of the {}^ column ({}) must be \'{}\' (instead of \'{}\')'),
     'UNIQ_VIOLATION': gettext_lazy('A uniqueness rule has been violated in the fields {}'),
     'ZIP_SHP': gettext_lazy(
         'The zip file is supported only if the following files are contained .shp, .dbf, .prj, .shx'),
