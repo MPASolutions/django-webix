@@ -4,7 +4,10 @@ from django_webix.utils.filters import from_dict_to_qset, decode_text_filters
 
 
 class DjangoBaseLockedWebixFilter(RequestFilter):
-    PARAM = 'locked'
+    """
+    Mainly used in webgis interaction, actions "go to webgis"/"go to data" and wms filter selected features
+    """
+    PARAM = 'LOCKEDFILTER'  # wms params must be uppercase
 
     def filter_queryset(self, queryset, **kwargs):
         locked_filters = self.get_param(self.PARAM)
