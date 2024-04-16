@@ -77,7 +77,7 @@ class TestAdminWebixCalls(TestCase):
             'QXSCLASSESFILTER': '',
             'OTFFILTER': '',
             'ADVANCEDFILTER':'',
-            'locked':'{"operator":"AND","qsets":[{"path":"id","val":"1"}]}',
+            'LOCKEDFILTER':'{"operator":"AND","qsets":[{"path":"id","val":"1"}]}',
             'location': '',
             'start':0,
             'count': 100,
