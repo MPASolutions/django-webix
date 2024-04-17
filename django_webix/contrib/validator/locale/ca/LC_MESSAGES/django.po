@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-11-09 08:34+0100\n"
+"POT-Creation-Date: 2024-04-15 12:22+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -131,7 +131,7 @@ msgid "There is no column '{}'"
 msgstr ""
 
 #: contrib/validator/utils.py:48
-msgid "The name of the {}^ column ({}) must be ' {} ' (instead of '{}')"
+msgid "The name of the {}^ column ({}) must be '{}' (instead of '{}')"
 msgstr ""
 
 #: contrib/validator/utils.py:49
@@ -149,7 +149,7 @@ msgstr ""
 msgid "This operation can only be done before validating"
 msgstr ""
 
-#: contrib/validator/utils.py:553
+#: contrib/validator/utils.py:555
 msgid "Validate save mode are ROW | FULL"
 msgstr ""
 

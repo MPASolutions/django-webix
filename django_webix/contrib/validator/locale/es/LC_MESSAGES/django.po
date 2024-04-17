@@ -8,16 +8,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-11-09 08:34+0100\n"
-"PO-Revision-Date: 2022-03-09 14:49+0050\n"
-"Last-Translator: Sambado Paolo CBC Spagna <>\n"
+"POT-Creation-Date: 2024-04-17 09:23+0200\n"
+"PO-Revision-Date: 2024-04-15 12:27+0200\n"
+"Last-Translator: Stefano Menegon <dallago@mpasol.it>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Translated-Using: django-rosetta 0.9.8\n"
+"X-Translated-Using: django-rosetta 0.10.0\n"
 
 #: contrib/validator/apps.py:8
 msgid "Django Webix Validator"
@@ -132,8 +132,8 @@ msgid "There is no column '{}'"
 msgstr "No hay columna '{}'"
 
 #: contrib/validator/utils.py:48
-msgid "The name of the {}^ column ({}) must be ' {} ' (instead of '{}')"
-msgstr "El nombre de {}^ columna ({}) debe ser ' {} ' (en lugar de '{}')"
+msgid "The name of the {}^ column ({}) must be '{}' (instead of '{}')"
+msgstr "El nombre de {}^ columna ({}) debe ser '{}' (en lugar de '{}')"
 
 #: contrib/validator/utils.py:49
 msgid "A uniqueness rule has been violated in the fields {}"
@@ -152,7 +152,7 @@ msgstr ""
 msgid "This operation can only be done before validating"
 msgstr "Esta operación solo se puede hacer antes de validar"
 
-#: contrib/validator/utils.py:553
+#: contrib/validator/utils.py:555
 msgid "Validate save mode are ROW | FULL"
 msgstr "Los sistemas de validación son ROW | FULL"
 
