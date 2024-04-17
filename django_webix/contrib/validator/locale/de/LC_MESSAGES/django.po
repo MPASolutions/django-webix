@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-04-08 17:36+0200\n"
-"PO-Revision-Date: 2024-03-19 11:50+0100\n"
+"POT-Creation-Date: 2024-04-17 09:23+0200\n"
+"PO-Revision-Date: 2024-04-15 12:27+0200\n"
 "Last-Translator: Stefano Menegon <dallago@mpasol.it>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: \n"
@@ -134,8 +134,8 @@ msgid "There is no column '{}'"
 msgstr "Es gibt keine Spalte '{}'."
 
 #: contrib/validator/utils.py:48
-msgid "The name of the {}^ column ({}) must be ' {} ' (instead of '{}')"
-msgstr "Der Name der {}^-Spalte ({}) muss ' {} ' lauten (anstelle von '{}')"
+msgid "The name of the {}^ column ({}) must be '{}' (instead of '{}')"
+msgstr "Der Name der {}^-Spalte ({}) muss '{}' lauten (anstelle von '{}')"
 
 #: contrib/validator/utils.py:49
 msgid "A uniqueness rule has been violated in the fields {}"
@@ -154,7 +154,7 @@ msgstr ""
 msgid "This operation can only be done before validating"
 msgstr "Dieser Vorgang kann nur vor der Validierung durchgeführt werden"
 
-#: contrib/validator/utils.py:553
+#: contrib/validator/utils.py:555
 msgid "Validate save mode are ROW | FULL"
 msgstr "Überprüfung des Speichermodus: ROW | FULL"
 
