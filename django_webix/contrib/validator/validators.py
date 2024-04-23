@@ -1,6 +1,7 @@
 from django.contrib.gis import forms
 from django.contrib.gis.geos import GEOSGeometry, MultiPolygon
 from django.core.validators import BaseValidator
+from django.utils.module_loading import import_string
 from django.utils.translation import gettext as _
 from django.utils.text import slugify
 from django.utils.encoding import force_str
@@ -34,6 +35,7 @@ class SlugifyCharField(forms.CharField):
     def to_python(self, value):
         return slugify(value)
 
+
 class SlugifyChoiceField(forms.ChoiceField):
     def to_python(self, value):
         "Returns a Unicode object."
@@ -41,33 +43,56 @@ class SlugifyChoiceField(forms.ChoiceField):
             return ''
         return slugify(force_str(value))
 
-class AutoMultiPolygonField(forms.MultiPolygonField):
 
-    def __init__(self, *args, **kwargs):
-        self.source_srid = kwargs.pop('source_srid', None)
-        super().__init__(*args, **kwargs)
+class AutoMultiGeometryField(forms.GeometryField):
+
+    def __init__(self, *, source_srid=None, **kwargs):
+        """
+
+        :param source_srid: optional parameter defined in impotrer form field to define/overwrite the sorce data srid
+        :param kwargs:
+
+        Example:
+        geo = AutoMultiPolygonField(required=True, label='WKT', srid=settings.SRS, source_srid=3003)
+        """
+        self.source_srid = source_srid
+        super().__init__(**kwargs)
 
     def to_python(self, value):
-        geo = GEOSGeometry(value)
+        geom = super().to_python(value)
 
-        # only if there is geometry, because the 'geometry' field is always added by the validator
-        if not geo.empty:
+        if geom is not None:
+            if self.source_srid is not None:
+                geom.srid = self.source_srid
 
-            # set geometry srid
-            if geo.srid is None:
-                if self.source_srid is not None:
-                    geo.srid = self.source_srid
-                else:
-                    raise Exception('Error: missing geometry field SRID')
+            if 'MULTI' + str(geom.geom_type).upper() == self.geom_type:
+                geom = import_string('django.contrib.gis.geos.Multi' + geom.geom_type)(geom, srid=geom.srid)
 
-            # convert geometry to MultiPolygon
-            if geo.geom_type == 'Polygon':
-                return MultiPolygon(geo, srid=geo.srid)
-            else:
-                return geo
+        return geom
 
-        else:
-            return None
+
+class AutoPointField(AutoMultiGeometryField):
+    geom_type = "POINT"
+
+
+class AutoMultiPointField(AutoMultiGeometryField):
+    geom_type = "MULTIPOINT"
+
+
+class AutoLineStringField(AutoMultiGeometryField):
+    geom_type = "LINESTRING"
+
+
+class AutoMultiLineStringField(AutoMultiGeometryField):
+    geom_type = "MULTILINESTRING"
+
+
+class AutoPolygonField(AutoMultiGeometryField):
+    geom_type = "POLYGON"
+
+
+class AutoMultiPolygonField(AutoMultiGeometryField):
+    geom_type = "MULTIPOLYGON"
 
 
 class ModelChoiceZFillField(forms.ModelChoiceField):
