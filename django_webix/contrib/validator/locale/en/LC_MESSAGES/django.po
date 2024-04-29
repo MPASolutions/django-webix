@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-04-15 12:22+0200\n"
+"POT-Creation-Date: 2024-04-29 09:28+0200\n"
 "PO-Revision-Date: 2022-07-13 13:51+0050\n"
 "Last-Translator: Stefano Menegon <menegon@mpasol.it>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -154,12 +154,12 @@ msgstr ""
 msgid "Validate save mode are ROW | FULL"
 msgstr ""
 
-#: contrib/validator/validators.py:20
+#: contrib/validator/validators.py:21
 #, python-format
 msgid "%(value)s is not a boolean value"
 msgstr ""
 
-#: contrib/validator/validators.py:26
+#: contrib/validator/validators.py:27
 #, python-format
 msgid "Ensure this value is strictly greater than %(limit_value)s."
 msgstr ""
