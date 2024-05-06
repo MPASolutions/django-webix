@@ -302,7 +302,7 @@ class ModelWebixAdmin(ModelWebixAdminPermissionsMixin):
                             filter_type = 'iexact'
                             editor = 'editor:"select", collection:{}_options'.format(field_name)
                             filter_option = 'serverRichSelectFilter' if self.enable_json_loading else 'selectFilter'
-                            extra_filter_options = "options:{}_options ".format(field_name)
+                            extra_filter_options = "options:{}_options ".format(field_name) if self.enable_json_loading else ''
                 # if choices... the same of FK
                 else:
                     editor = 'editor:"text"'
@@ -316,7 +316,7 @@ class ModelWebixAdmin(ModelWebixAdminPermissionsMixin):
                             extra_header = 'collection: {}_options '.format(field_name)
                             filter_type = 'iexact'
                             filter_option = 'serverRichSelectFilter' if self.enable_json_loading else 'selectFilter'
-                            extra_filter_options = "options: {}_options ".format(field_name)
+                            extra_filter_options = "options: {}_options ".format(field_name) if self.enable_json_loading else ''
 
                 if issubclass(type(model_field), models.FloatField) or \
                     issubclass(type(model_field), models.DecimalField) or \
