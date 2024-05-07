@@ -340,6 +340,7 @@ class WebixCreateView(WebixCreateUpdateMixin,
                                          fields=fields_to_copy))
         return initial
 
+
     def get_initial_inlines(self):
         initial_inlines = {}
         if self.request.GET.get('pk_copy', None) is not None:
@@ -352,10 +353,13 @@ class WebixCreateView(WebixCreateUpdateMixin,
                 fk_name = None
                 if hasattr(inline, 'factory_kwargs') and inline.factory_kwargs.get('fk_name') is not None:
                     fk_name = inline.factory_kwargs.get('fk_name')
-                fk = _get_foreign_key(self.model, inline.model, fk_name=fk_name)
-                for obj in inline.model._default_manager.filter(**{fk.name: object_to_copy}):
-                    datas.append(model_to_dict(obj,
-                                               fields=fields_to_copy))
+                try:
+                    fk = _get_foreign_key(self.model, inline.model, fk_name=fk_name)
+                except ValueError: # bad FK... ex dynamic fk by dwextra_fields.ModelFieldValue
+                    pass
+                else:
+                    for obj in inline.model._default_manager.filter(**{fk.name: object_to_copy}):
+                        datas.append(model_to_dict(obj, fields=fields_to_copy))
                 initial_inlines.update({inline: datas})
         return initial_inlines
 
