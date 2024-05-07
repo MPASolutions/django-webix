@@ -100,7 +100,7 @@ setup(
         ],
         "validator": [
             "python-magic==0.4.27", # ==0.4.27
-            "numpy>=1.21.5", # 1.21.6
+            "numpy==1.21.5", # 1.21.6
             "pandas>=1.3.5",
             "geopandas<=0.14.3", # 0.14.4 bug
             "xlrd>=2.0.1",
