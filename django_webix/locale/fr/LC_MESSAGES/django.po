@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-04-08 17:36+0200\n"
+"POT-Creation-Date: 2024-05-08 08:55+0200\n"
 "PO-Revision-Date: 2023-09-07 15:14+0200\n"
 "Last-Translator: Stefano Menegon <dallago@mpasol.it>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -540,26 +540,26 @@ msgstr ""
 "Le style du modèle n'est pas configuré correctement. Les seules options sont "
 "'standard' ou 'tabs' (standard par défaut)."
 
-#: views/generic/create_update.py:379 views/generic/create_update.py:466
+#: views/generic/create_update.py:383 views/generic/create_update.py:470
 #: views/generic/delete.py:43 views/generic/detail.py:20
 #: views/generic/list.py:693
 msgid "View permission is not allowed"
 msgstr "La visualisation de la licence n'est pas autorisée"
 
-#: views/generic/create_update.py:382
+#: views/generic/create_update.py:386
 msgid "Add permission is not allowed"
 msgstr "Ajouter une licence n'est pas autorisé"
 
-#: views/generic/create_update.py:469
+#: views/generic/create_update.py:473
 msgid "Change permission is not allowed"
 msgstr "La modification de licence n'est pas autorisée"
 
-#: views/generic/create_update.py:532
+#: views/generic/create_update.py:536
 #, python-format
 msgid "Changed %s."
 msgstr "%s modifié."
 
-#: views/generic/create_update.py:532
+#: views/generic/create_update.py:536
 msgid "and"
 msgstr "et"
 
