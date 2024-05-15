@@ -128,7 +128,7 @@ function _{{ view_prefix }}action_execute(action, ids, all, response_type, short
                                     }
                                     // callback success by js
                                     try {
-                                        window['{{ view_prefix }}' + action + '_callback_success']();
+                                        window['{{ view_prefix }}' + action + '_callback_success'](data);
                                     } catch (error) { // only for custom purpose
                                     }
                                 } else {
