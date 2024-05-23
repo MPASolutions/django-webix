@@ -1,3 +1,4 @@
+from django.contrib.contenttypes.models import ContentType
 from django.db import models
 from django.db.models import Min, Q
 from django.db.models.functions import Cast
@@ -19,7 +20,6 @@ except ImportError:
 
 
 class ExtraFieldsQuerySet(QuerySet):
-
     def _annotate(self, args, kwargs, select=True):
         self._validate_values_are_expressions(
             args + tuple(kwargs.values()), method_name="annotate"
@@ -78,7 +78,7 @@ class ExtraFieldsQuerySet(QuerySet):
 
 def add_extra_fields_to_queryset(queryset):
     # queryset = queryset.select_related('extra_fields')
-    for mf in ModelField.objects.all():
+    for mf in ModelField.objects.filter(content_type=ContentType.objects.get_for_model(queryset.model)):
         field_class = getattr(models, mf.field_type)
         queryset = queryset.annotate(**{mf.field_name: Cast(Min('extra_fields__value',
                                                                 filter=Q(extra_fields__model_field_id=int(mf.pk))),

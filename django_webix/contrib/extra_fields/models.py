@@ -51,7 +51,7 @@ class ModelField(Model):
         unique_together = [('content_type', 'field_name')]
 
     def __str__(self):
-        return '{}: {}'.format(self.content_type, self.label)
+        return self.label
 
     def save(self, force_insert=False, force_update=False, using=None, update_fields=None):
         try:
