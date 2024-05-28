@@ -407,19 +407,21 @@ class ModelWebixAdmin(ModelWebixAdminPermissionsMixin):
 
         # extra_fields columns
         if apps.is_installed('django_webix.contrib.extra_fields'):
-            from django_webix.contrib.extra_fields.models import ModelField
-            from django.contrib.contenttypes.models import ContentType
-            content_type_pk = ContentType.objects.get_for_model(self.model).pk
-            model_fields_names = ModelField.objects.filter(content_type_id=content_type_pk)\
-                                                   .values_list('field_name', flat=True)\
-                                                   .distinct().order_by('field_name')
-            _model_list_display += self.create_list_display(model_fields_names,
-                                                            view=view,
-                                                            request=request,
-                                                            defaults={
-                                                                'width': 'adjust:"all"',
-                                                                'extra_header': 'hidden:true'
-                                                            })
+            from django_webix.contrib.extra_fields.models_mixin import ExtraFieldsModel
+            if issubclass(self.model, ExtraFieldsModel):
+                from django_webix.contrib.extra_fields.models import ModelField
+                from django.contrib.contenttypes.models import ContentType
+                content_type_pk = ContentType.objects.get_for_model(self.model).pk
+                model_fields_names = ModelField.objects.filter(content_type_id=content_type_pk)\
+                                                       .values_list('field_name', flat=True)\
+                                                       .distinct().order_by('field_name')
+                _model_list_display += self.create_list_display(model_fields_names,
+                                                                view=view,
+                                                                request=request,
+                                                                defaults={
+                                                                    'width': 'adjust:"all"',
+                                                                    'extra_header': 'hidden:true'
+                                                                })
         return _model_list_display
 
     def __init__(self, model, admin_site):
