@@ -1,4 +1,5 @@
 from django.apps import apps
+from django.core.validators import RegexValidator
 from django.contrib.contenttypes.fields import GenericForeignKey
 from django.contrib.contenttypes.models import ContentType
 from django.db import models
@@ -28,7 +29,13 @@ class ModelField(Model):
                                      # limit_choices_to={'id__in':[i.pk for i in get_ct_models_with_extra_fields()]}
                                      )
     label = models.CharField(_('Description'), max_length=255)
-    field_name = models.CharField(_('Field name'), max_length=64)
+    field_name = models.CharField(_('Field name'), max_length=64,
+                                      validators=[
+                                          RegexValidator(
+                                              regex=r'^[a-zA-Z]+[\w-]*$',
+                                              message=_("Field name must not contain spaces and special characters, and must begin with a letter")
+                                          ),
+                                      ])
     field_type = models.CharField(_('Field type'), max_length=64,
                                   choices=[
                                       (_field, _field.upper()) for _field in ['IntegerField',
