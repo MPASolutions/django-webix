@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-05-08 08:55+0200\n"
+"POT-Creation-Date: 2024-05-29 12:14+0200\n"
 "PO-Revision-Date: 2023-09-07 15:07+0200\n"
 "Last-Translator: Stefano Menegon <dallago@mpasol.it>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -27,75 +27,81 @@ msgstr ""
 msgid "This choice has already been filled in."
 msgstr ""
 
-#: contrib/extra_fields/models.py:26
+#: contrib/extra_fields/models.py:27
 msgid "Model"
 msgstr ""
 
-#: contrib/extra_fields/models.py:30
+#: contrib/extra_fields/models.py:31
 #: templates/django_webix/include/list_failure_related_objects.js:24
 msgid "Description"
 msgstr "Descripción"
 
-#: contrib/extra_fields/models.py:31
+#: contrib/extra_fields/models.py:32
 msgid "Field name"
 msgstr ""
 
-#: contrib/extra_fields/models.py:32
+#: contrib/extra_fields/models.py:36
+msgid ""
+"Field name must not contain spaces and special characters, and must begin "
+"with a letter"
+msgstr ""
+
+#: contrib/extra_fields/models.py:39
 msgid "Field type"
 msgstr ""
 
-#: contrib/extra_fields/models.py:44
+#: contrib/extra_fields/models.py:51
 msgid "Model for FK"
 msgstr ""
 
-#: contrib/extra_fields/models.py:46 contrib/extra_fields/models.py:91
+#: contrib/extra_fields/models.py:53 contrib/extra_fields/models.py:98
 #, fuzzy
 #| msgid "Locked data"
 msgid "Locked"
 msgstr "Datos bloqueados"
 
-#: contrib/extra_fields/models.py:49 contrib/extra_fields/models.py:67
-#: contrib/extra_fields/models.py:83
+#: contrib/extra_fields/models.py:56 contrib/extra_fields/models.py:74
+#: contrib/extra_fields/models.py:90
 #, fuzzy
 #| msgid "Not decimal field"
 msgid "Model field"
 msgstr "Sin campo decimal"
 
-#: contrib/extra_fields/models.py:50
+#: contrib/extra_fields/models.py:57
 #, fuzzy
 #| msgid "Not decimal field"
 msgid "Model fields"
 msgstr "Sin campo decimal"
 
-#: contrib/extra_fields/models.py:69
+#: contrib/extra_fields/models.py:76
 msgid "Key"
 msgstr ""
 
-#: contrib/extra_fields/models.py:70 contrib/extra_fields/models.py:89
+#: contrib/extra_fields/models.py:77 contrib/extra_fields/models.py:96
 msgid "Value"
 msgstr ""
 
-#: contrib/extra_fields/models.py:73
+#: contrib/extra_fields/models.py:80
 msgid "Model field choice"
 msgstr ""
 
-#: contrib/extra_fields/models.py:74
+#: contrib/extra_fields/models.py:81
 msgid "Model fields choices"
 msgstr ""
 
-#: contrib/extra_fields/models.py:85
+#: contrib/extra_fields/models.py:92
 msgid "Content type"
 msgstr ""
 
-#: contrib/extra_fields/models.py:86
+#: contrib/extra_fields/models.py:93
 msgid "Object ID"
 msgstr ""
 
-#: contrib/extra_fields/models.py:94
+#: contrib/extra_fields/models.py:101
 msgid "Model field value"
 msgstr ""
 
-#: contrib/extra_fields/models.py:95
+#: contrib/extra_fields/models.py:102
 msgid "Model fields values"
 msgstr ""
 
@@ -245,8 +251,8 @@ msgid "You do not have permission to edit this item"
 msgstr ""
 
 #: templates/django_webix/generic/list.js:452
-#: templates/django_webix/include/utils.js:359
-#: templates/django_webix/include/utils.js:417
+#: templates/django_webix/include/utils.js:385
+#: templates/django_webix/include/utils.js:443
 msgid "Server error"
 msgstr "Error del servidor"
 
@@ -258,7 +264,7 @@ msgstr "Doble clic para editar el elemento"
 #: templates/django_webix/include/actions_list.js:74
 #: templates/django_webix/include/form_errors_popup.js:16
 #: templates/django_webix/include/form_warnings.js:23
-#: templates/django_webix/include/utils.js:275
+#: templates/django_webix/include/utils.js:301
 msgid "Close"
 msgstr "Cerrar"
 
@@ -404,7 +410,7 @@ msgstr "de"
 
 #: templates/django_webix/include/toolbar_list.js:43
 #: templates/django_webix/include/toolbar_list.js:52
-#: templates/django_webix/include/utils.js:582
+#: templates/django_webix/include/utils.js:608
 msgid "All"
 msgstr "Todo"
 
@@ -431,49 +437,49 @@ msgstr "Volver"
 msgid "Back to list"
 msgstr "Volver a la lista"
 
-#: templates/django_webix/include/utils.js:209
-#: templates/django_webix/include/utils.js:216 views/generic/list.py:333
+#: templates/django_webix/include/utils.js:235
+#: templates/django_webix/include/utils.js:242 views/generic/list.py:333
 msgid "Yes"
 msgstr "Sí"
 
-#: templates/django_webix/include/utils.js:211
-#: templates/django_webix/include/utils.js:218 views/generic/list.py:334
+#: templates/django_webix/include/utils.js:237
+#: templates/django_webix/include/utils.js:244 views/generic/list.py:334
 msgid "No"
 msgstr "No"
 
-#: templates/django_webix/include/utils.js:230
+#: templates/django_webix/include/utils.js:256
 msgid "Default"
 msgstr "Por defecto"
 
-#: templates/django_webix/include/utils.js:237
+#: templates/django_webix/include/utils.js:263
 msgid "Show on map"
 msgstr "Mostrar en el mapa"
 
-#: templates/django_webix/include/utils.js:243
+#: templates/django_webix/include/utils.js:269
 msgid "Duplicate element"
 msgstr "Duplicar elemento"
 
-#: templates/django_webix/include/utils.js:247
+#: templates/django_webix/include/utils.js:273
 msgid "Remove element"
 msgstr "Eliminar elemento"
 
-#: templates/django_webix/include/utils.js:251
+#: templates/django_webix/include/utils.js:277
 msgid "Detail"
 msgstr "Detalle"
 
-#: templates/django_webix/include/utils.js:272
+#: templates/django_webix/include/utils.js:298
 msgid "Image"
 msgstr "Imagen"
 
-#: templates/django_webix/include/utils.js:616
+#: templates/django_webix/include/utils.js:642
 msgid "Click and change"
 msgstr "Haz click para cambiar"
 
-#: templates/django_webix/include/utils.js:618
+#: templates/django_webix/include/utils.js:644
 msgid "Locked data"
 msgstr "Datos bloqueados"
 
-#: templates/django_webix/include/utils.js:658
+#: templates/django_webix/include/utils.js:684
 msgid "Editable column"
 msgstr ""
 
