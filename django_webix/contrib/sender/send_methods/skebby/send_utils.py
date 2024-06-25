@@ -124,7 +124,7 @@ def send(recipients: Dict[str, List[int]], subject: str, body: str, message_sent
             recipient=recipient,
             sent_number=0,
             status='invalid',
-            recipient_address=recipient_address,
+            recipient_address=recipient_address or "invalid",
             extra={'status': "Mobile number not present or not valid ({}) and therefore SMS not sent".format(recipient)}
         )
         message_recipient.save()
