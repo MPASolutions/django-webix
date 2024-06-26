@@ -96,10 +96,11 @@ def from_dict_to_qset(data, model):
                         qset_to_applicate = Q(**{base_path + '__gte': parse(val.get('start'))})
                     if val is not None and val.get('end') is not None:
                         data_end = parse(val.get('end'))
-                        if isinstance(_curr_field, DateTimeField) and \
-                            datetime.datetime.combine(data_end.date(),
-                                                      datetime.datetime.min.time(),
-                                                      tzinfo=zoneinfo.ZoneInfo(settings.TIME_ZONE)) == data_end:
+                        if _curr_field is None or \
+                            (isinstance(_curr_field, DateTimeField) and
+                             datetime.datetime.combine(data_end.date(),
+                                                       datetime.datetime.min.time(),
+                                                       tzinfo=zoneinfo.ZoneInfo(settings.TIME_ZONE)) == data_end):
                             data_end += relativedelta(days=1)
                         qset_to_applicate &= Q(**{base_path + '__lte': data_end})
                 elif data_qset.get('path').endswith("__exact_in"):
@@ -142,7 +143,7 @@ def combo_with_icontains_filter(combo_widget):
 
     options_data = combo_widget['options']
     combo_widget.update({
-        'view':'combo',
+        'view': 'combo',
         'options': {
             'filter': 'filter_icontains',
             'body': {
