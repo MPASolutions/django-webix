@@ -400,7 +400,7 @@ class ModelWebixAdmin(ModelWebixAdminPermissionsMixin):
         else:
             _list_display = self.list_display
 
-        if type(_list_display[0]) == str:
+        if _list_display==[] or type(_list_display[0]) == str:
             _model_list_display = self.create_list_display(_list_display, view=view, request=request)
         else:
             _model_list_display = list(_list_display)
