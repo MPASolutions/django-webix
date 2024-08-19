@@ -681,4 +681,4 @@ function geo_change(geo_type, field_name){
   return arr[1];
      */
 }
-var editheadericon = "<span title='{{_("Editable column")|escapejs}}' style='float:right;margin-top:7px;text-align:right;cursor:help' class='webix_icon fas fa-pencil-alt'></span>"
+var editheadericon = "<span title='{{_("Editable column")|escapejs}}' style='float:right;margin-top:7px;text-align:right;cursor:help' class='webix_icon fas fa-pencil-alt'></span>";

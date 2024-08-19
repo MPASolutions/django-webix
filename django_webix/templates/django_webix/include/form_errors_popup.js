@@ -28,7 +28,7 @@ function show_errors(errors) {
                         type: {height: "auto"},
                         template: function (item) {
                             if (item.label == null)
-                                return "<b>" + item.error + "</b></p>";
+                                return "<p style='margin:5px 0px;'><b>" + item.error + "</b></p>";
                             else
                                 return "<p style='margin:5px 0px;'><b>" + item.label + "</b>: " + item.error + "</p>";
                         },

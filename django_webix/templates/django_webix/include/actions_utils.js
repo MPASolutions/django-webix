@@ -37,7 +37,7 @@ function _{{ view_prefix }}action_execute(action, ids, all, response_type, short
         title: short_description,
         ok: modal_ok,
         cancel: modal_cancel,
-        text: modal_title + "</br><b>" + _{{ view_prefix }}datatable_count() + " {{_("elements")|escapejs}}</b> {{_("selected")|escapejs}}",
+        text: modal_title + "<br/><b>" + _{{ view_prefix }}datatable_count() + " {{_("elements")|escapejs}}</b> {{_("selected")|escapejs}}",
         callback: function (confirm) {
             if (confirm == true) {
                 $$('{{ view_prefix }}datatable').showOverlay("<img src='{% static 'django_webix/loading.gif' %}'>");

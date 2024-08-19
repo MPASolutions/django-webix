@@ -35,7 +35,7 @@ function show_warnings(warnings) {
                         type: {height: "auto"},
                         template: function (item) {
                             if ((item.label == null) || (item.label == ''))
-                                return "<b>" + item.message + "</b></p>";
+                                return "<p style='margin:5px 0px;'><b>" + item.message + "</b></p>";
                             else
                                 return "<p style='margin:5px 0px;'><b>" + item.label + "</b>: " + item.message + "</p>";
                         },

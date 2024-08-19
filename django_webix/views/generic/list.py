@@ -448,7 +448,7 @@ class WebixListView(WebixBaseMixin,
 
     def filters_objects_datatable(self, qs):
         ids = self.request.POST.get('ids', '').split(',')
-        ids = list(set(ids) - set([None, '']))
+        ids = list(set(ids) - {None, ''})
 
         if len(ids) > 0:
             if type(qs) == list:
@@ -587,7 +587,7 @@ class WebixListView(WebixBaseMixin,
         _list_view = self
         class UpdateForm(WebixModelForm):
             class Meta:
-                localized_fields = ('__all__')
+                localized_fields = '__all__'
                 model = _list_view.model
                 fields = [i.split('__')[0] for i in _list_view.get_fields_editable()]
         return UpdateForm

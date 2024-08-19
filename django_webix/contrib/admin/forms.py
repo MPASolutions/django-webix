@@ -11,7 +11,7 @@ from django_webix.forms import WebixForm, WebixModelForm
 
 class GroupAdminForm(WebixModelForm):
     class Meta:
-        localized_fields = ('__all__')
+        localized_fields = '__all__'
         model = Group
         fields = ['name', 'permissions']
 

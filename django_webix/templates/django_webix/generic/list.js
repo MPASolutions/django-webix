@@ -33,6 +33,7 @@ $$("{{ webix_container_id }}").addView({
         },
 
         {
+            id: '{{ view_prefix }}title',
             view: "template",
             type: "header",
             borderless: true,

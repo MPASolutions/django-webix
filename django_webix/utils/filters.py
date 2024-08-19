@@ -14,6 +14,7 @@ from django.db.models.fields.reverse_related import ForeignObjectRel
 try:
     import zoneinfo
 except ImportError:
+    # noinspection PyUnresolvedReferences
     from backports import zoneinfo
 
 try:
