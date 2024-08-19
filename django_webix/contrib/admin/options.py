@@ -478,7 +478,7 @@ class ModelWebixAdmin(ModelWebixAdminPermissionsMixin):
             class WebixAdminCreateUpdateForm(WebixModelForm):
 
                 class Meta:
-                    localized_fields = ('__all__')
+                    localized_fields = '__all__'
                     model = _admin.model
                     fields = _admin.get_form_fields()
 

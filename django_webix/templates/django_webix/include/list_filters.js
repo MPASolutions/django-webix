@@ -2,9 +2,9 @@
 
 function {{ view_prefix }}get_filters_qsets() {
     var qsets = [];
-
-    $.each($$('{{ view_prefix }}datatable').config.columns, function (index, el) {
-        el = $$('{{ view_prefix }}datatable').config.columns[index];
+    var columns = $$('{{ view_prefix }}datatable').getColumns(true);
+    $.each(columns, function (index, el) {
+        el = columns[index];
         ds_filter = $$('{{ view_prefix }}datatable').getFilter(el.id);
         if ((ds_filter != null) && (ds_filter != undefined)) {
             if (ds_filter.getValue != undefined) {

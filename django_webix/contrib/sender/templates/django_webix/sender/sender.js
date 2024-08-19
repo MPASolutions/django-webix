@@ -232,7 +232,7 @@ function DjangoWebixSender() {
                                                 var result = "";
                                                 data.forEach(function (element) {
                                                     result += element["result"]["status"];
-                                                    result += "</br>"
+                                                    result += "<br/>"
                                                 });
 
                                                 $$('{{ webix_container_id }}').hideOverlay();

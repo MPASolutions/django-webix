@@ -121,7 +121,7 @@ def presend_check(subject, body):
 
 
 def attachments_format(attachments, body):
-    body += "</br></br>"
+    body += "<br/><br/>"
     for attachment in attachments:
-        body += "<a href='{attachment}'>{attachment}</a></br>".format(attachment=attachment.get_url())
+        body += "<a href='{attachment}'>{attachment}</a><br/>".format(attachment=attachment.get_url())
     return body

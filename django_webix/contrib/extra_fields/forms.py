@@ -8,7 +8,7 @@ from django_webix.forms import WebixModelForm
 
 class ModelFieldCreateForm(WebixModelForm):
     class Meta:
-        localized_fields = ('__all__')
+        localized_fields = '__all__'
         model = ModelField
         fields = ['content_type', 'label', 'field_name', 'field_type', 'related_to', 'locked']
 
@@ -47,14 +47,14 @@ class ModelFieldUpdateForm(ModelFieldCreateForm):
 
 class ModelFieldChoiceForm(WebixModelForm):
     class Meta:
-        localized_fields = ('__all__')
+        localized_fields = '__all__'
         model = ModelFieldChoice
         fields = ['key', 'value']
 
 
 class ModelFieldValueForm(WebixModelForm):
     class Meta:
-        localized_fields = ('__all__')
+        localized_fields = '__all__'
         model = ModelFieldValue
         fields = ['model_field', 'value']
 
