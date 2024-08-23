@@ -64,8 +64,8 @@ def from_dict_to_qset(data, model):
                 # search field type for filer applied
                 _curr_model = model
                 _curr_field = None
-
-                for _field in data_qset.get('path').split("__")[:-1]:
+                _path = data_qset.get('path').split("__")[:-1]
+                for k, _field in enumerate(_path):
                     try:
                         _curr_field = _curr_model._meta.get_field(_field)
                     except FieldDoesNotExist:
@@ -80,10 +80,13 @@ def from_dict_to_qset(data, model):
                             _curr_model = _curr_field.remote_field.get_related_field().model
                         elif issubclass(type(_curr_field), django.contrib.contenttypes.fields.GenericRelation):
                             _curr_model = _curr_field.related_model
+                        elif issubclass(type(_curr_field), models.JSONField):
+                            _curr_field = '__'.join(_path[k:])
+                            break
                         else:
                             pass  # there are no others field
 
-                # its an array so put in into array
+                # it's an array so put in into array
                 if ArrayField and isinstance(_curr_field, ArrayField) and not isinstance(data_qset['val'], list):
                     data_qset['val'] = [data_qset.get('val')]
 
@@ -119,6 +122,7 @@ def from_dict_to_qset(data, model):
                         else:
                             valore_query = True
                     qset_to_applicate = Q(**{data_qset.get('path'): valore_query})
+
             if j == 0:
                 qset = qset_to_applicate
             else:
