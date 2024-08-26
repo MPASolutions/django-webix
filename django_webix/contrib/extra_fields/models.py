@@ -101,8 +101,10 @@ class ModelFieldValue(Model):
         verbose_name = _('Model field value')
         verbose_name_plural = _('Model fields values')
         unique_together = [('content_type', 'object_id', 'model_field')]
-        index_together = [('content_type', 'object_id'),
-                          ('content_type', 'object_id', 'model_field')]
+        indexes = [
+            models.Index(fields=['content_type', 'object_id']),
+            models.Index(fields=['content_type', 'object_id', 'model_field'])
+        ]
 
     def __str__(self):
         return '{}: {}'.format(self.content_object, self.model_field.label)

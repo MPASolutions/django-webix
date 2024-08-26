@@ -121,10 +121,10 @@ class Migration(migrations.Migration):
                 "verbose_name": "Model field value",
                 "verbose_name_plural": "Model fields values",
                 "unique_together": {("content_type", "object_id", "model_field")},
-                "index_together": {
-                    ("content_type", "object_id", "model_field"),
-                    ("content_type", "object_id"),
-                },
+                #"index_together": {
+                #    ("content_type", "object_id", "model_field"),
+                #    ("content_type", "object_id"),
+                #},
             },
         ),
         migrations.CreateModel(
