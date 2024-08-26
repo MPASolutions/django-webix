@@ -8,9 +8,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-05-29 12:14+0200\n"
-"PO-Revision-Date: 2024-01-08 15:38+0100\n"
-"Last-Translator:   <>\n"
+"POT-Creation-Date: 2024-08-26 16:03+0200\n"
+"PO-Revision-Date: 2024-08-26 14:58+0200\n"
+"Last-Translator: Stefano Menegon <dallago@mpasol.it>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: \n"
 "MIME-Version: 1.0\n"
@@ -45,6 +45,8 @@ msgid ""
 "Field name must not contain spaces and special characters, and must begin "
 "with a letter"
 msgstr ""
+"Der Feldname darf keine Leer- und Sonderzeichen enthalten und muss mit einem "
+"Buchstaben beginnen"
 
 #: contrib/extra_fields/models.py:39
 msgid "Field type"
@@ -104,10 +106,8 @@ msgid "Upload new image"
 msgstr "Neues Bild hochladen"
 
 #: forms/forms.py:420
-#, fuzzy
-#| msgid "Upload new image"
 msgid "Change image"
-msgstr "Neues Bild hochladen"
+msgstr "Bild ändern"
 
 #: forms/forms.py:497 forms/forms.py:624
 msgid "Deleted"
@@ -118,30 +118,24 @@ msgid "Upload file"
 msgstr "Datei hochladen"
 
 #: forms/forms.py:531
-#, fuzzy
-#| msgid "Changed %s."
 msgid "Change file"
-msgstr "Geändert  %s."
+msgstr "Datei ändern"
 
 #: forms/forms.py:544
 msgid "Upload folder"
 msgstr "Ordner hochladen"
 
 #: forms/forms.py:544
-#, fuzzy
-#| msgid "Upload folder"
 msgid "Change folder"
-msgstr "Ordner hochladen"
+msgstr "Ordner ändern"
 
 #: forms/forms.py:548
 msgid "Upload files"
 msgstr "Dateien hochladen"
 
 #: forms/forms.py:548
-#, fuzzy
-#| msgid "Changed %s."
 msgid "Change files"
-msgstr "Geändert  %s."
+msgstr "Dateien ändern"
 
 #: forms/forms.py:658
 msgid "MultipleChoiceField is available only with PRO webix license"
@@ -198,55 +192,55 @@ msgstr "Achtung! Alle verknüpften Objekte werden ebenfalls gelöscht."
 msgid "Send"
 msgstr "Senden"
 
-#: templates/django_webix/generic/list.js:45
+#: templates/django_webix/generic/list.js:46
 msgid "Extra filters removal"
 msgstr "Beseitigung zusätzlicher Filter"
 
-#: templates/django_webix/generic/list.js:60
+#: templates/django_webix/generic/list.js:61
 msgid "Geographic filter removal"
 msgstr "Beseitigung des geografischen Filters"
 
-#: templates/django_webix/generic/list.js:78
+#: templates/django_webix/generic/list.js:79
 msgid "Advanced filter"
 msgstr "Erweiterter Filter"
 
-#: templates/django_webix/generic/list.js:157
-#: templates/django_webix/generic/list.js:229
+#: templates/django_webix/generic/list.js:158
+#: templates/django_webix/generic/list.js:230
 #: templates/django_webix/include/toolbar_navigation.js:49
 #: templates/django_webix/include/toolbar_navigation.js:106
 #: views/generic/list.py:516
 msgid "Go to map"
 msgstr "Zur Karte gehen"
 
-#: templates/django_webix/generic/list.js:159
+#: templates/django_webix/generic/list.js:160
 #: templates/django_webix/include/toolbar_navigation.js:45
 #: templates/django_webix/include/toolbar_navigation.js:102
 msgid "Geometry does not exist"
 msgstr "Geometrie existiert nicht"
 
-#: templates/django_webix/generic/list.js:242
+#: templates/django_webix/generic/list.js:243
 msgid "Remove filters"
 msgstr "Filter entfernen"
 
-#: templates/django_webix/generic/list.js:243
+#: templates/django_webix/generic/list.js:244
 msgid "Apply filters"
 msgstr "Filter anwenden"
 
-#: templates/django_webix/generic/list.js:243
+#: templates/django_webix/generic/list.js:244
 msgid "Filter"
 msgstr "Filter"
 
-#: templates/django_webix/generic/list.js:450
+#: templates/django_webix/generic/list.js:451
 msgid "You do not have permission to edit this item"
 msgstr "Sie haben keine Berechtigung, dieses Element zu bearbeiten"
 
-#: templates/django_webix/generic/list.js:452
+#: templates/django_webix/generic/list.js:453
 #: templates/django_webix/include/utils.js:385
 #: templates/django_webix/include/utils.js:443
 msgid "Server error"
 msgstr "Server-Fehler"
 
-#: templates/django_webix/generic/list.js:512
+#: templates/django_webix/generic/list.js:513
 msgid "Double click to edit the element"
 msgstr "Doppelklick, um das Element zu bearbeiten"
 

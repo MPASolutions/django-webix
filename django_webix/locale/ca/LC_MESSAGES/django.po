@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-05-29 12:14+0200\n"
+"POT-Creation-Date: 2024-08-26 13:41+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -189,55 +189,55 @@ msgstr ""
 msgid "Send"
 msgstr ""
 
-#: templates/django_webix/generic/list.js:45
+#: templates/django_webix/generic/list.js:46
 msgid "Extra filters removal"
 msgstr ""
 
-#: templates/django_webix/generic/list.js:60
+#: templates/django_webix/generic/list.js:61
 msgid "Geographic filter removal"
 msgstr ""
 
-#: templates/django_webix/generic/list.js:78
+#: templates/django_webix/generic/list.js:79
 msgid "Advanced filter"
 msgstr ""
 
-#: templates/django_webix/generic/list.js:157
-#: templates/django_webix/generic/list.js:229
+#: templates/django_webix/generic/list.js:158
+#: templates/django_webix/generic/list.js:230
 #: templates/django_webix/include/toolbar_navigation.js:49
 #: templates/django_webix/include/toolbar_navigation.js:106
 #: views/generic/list.py:516
 msgid "Go to map"
 msgstr ""
 
-#: templates/django_webix/generic/list.js:159
+#: templates/django_webix/generic/list.js:160
 #: templates/django_webix/include/toolbar_navigation.js:45
 #: templates/django_webix/include/toolbar_navigation.js:102
 msgid "Geometry does not exist"
 msgstr ""
 
-#: templates/django_webix/generic/list.js:242
+#: templates/django_webix/generic/list.js:243
 msgid "Remove filters"
 msgstr ""
 
-#: templates/django_webix/generic/list.js:243
+#: templates/django_webix/generic/list.js:244
 msgid "Apply filters"
 msgstr ""
 
-#: templates/django_webix/generic/list.js:243
+#: templates/django_webix/generic/list.js:244
 msgid "Filter"
 msgstr ""
 
-#: templates/django_webix/generic/list.js:450
+#: templates/django_webix/generic/list.js:451
 msgid "You do not have permission to edit this item"
 msgstr ""
 
-#: templates/django_webix/generic/list.js:452
+#: templates/django_webix/generic/list.js:453
 #: templates/django_webix/include/utils.js:385
 #: templates/django_webix/include/utils.js:443
 msgid "Server error"
 msgstr ""
 
-#: templates/django_webix/generic/list.js:512
+#: templates/django_webix/generic/list.js:513
 msgid "Double click to edit the element"
 msgstr ""
 
