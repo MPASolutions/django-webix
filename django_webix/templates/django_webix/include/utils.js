@@ -439,7 +439,9 @@ function load_js(lnk, hide, area, method, data, headers, dataType, abortAllPendi
                         $$('{{ webix_overlay_container_id }}').hideOverlay();
                     else if ($$(area) !== undefined && $$(area) !== null && $$(area).hideOverlay !== undefined)
                         $$(area).hideOverlay();
-                    if (textStatus!='abort') {
+                    if (xhr.status==403){
+                        webix.alert('{{_("Permission denied")|escapejs}}')
+                    } else if (textStatus!='abort') {
                         webix.alert('{{_("Server error")|escapejs}}')
                     }
                 }
