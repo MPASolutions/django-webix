@@ -2,7 +2,7 @@ from django import forms
 from django.apps import apps
 from django.conf import settings
 from django.contrib.auth import get_user_model, password_validation
-from django.contrib.auth.forms import AuthenticationForm, SetPasswordForm, PasswordResetForm
+from django.contrib.auth.forms import AuthenticationForm, SetPasswordForm, PasswordResetForm, SetPasswordMixin
 from django.contrib.auth.models import Group, Permission
 from django.utils.translation import gettext_lazy as _
 
@@ -327,6 +327,18 @@ class FieldSetMixin:
         ]
 
 
+def change_form_class(bases):
+    if WebixForm not in bases and forms.Form in bases:
+        bases = tuple([x if x != forms.Form else WebixForm for x in bases])
+    return bases
+
+
+def change_model_form_class(bases):
+    if WebixModelForm not in bases and forms.ModelForm in bases:
+        bases = tuple([x if x != forms.ModelForm else WebixModelForm for x in bases])
+    return bases
+
+
 if apps.is_installed("two_factor"):
 
     from two_factor.forms import (AuthenticationTokenForm, BackupTokenForm, DisableForm, MethodForm, TOTPDeviceForm,
@@ -334,37 +346,37 @@ if apps.is_installed("two_factor"):
     from django_otp.forms import OTPAuthenticationFormMixin
 
     # ################################ Autenticazione a 2 fattori - django-two-factor-auth ################################
-    AuthenticationForm.__bases__ = (WebixForm,)
+    AuthenticationForm.__bases__ = change_form_class(AuthenticationForm.__bases__)
     WebixAuthenticationAuthForm = type(str('WebixAuthenticationAuthForm'), (AuthenticationForm,),
                                        {'get_fieldsets': FieldSetMixin.authenticationForm_get_fieldsets})
 
-    AuthenticationTokenForm.__bases__ = (OTPAuthenticationFormMixin, WebixForm)
+    AuthenticationTokenForm.__bases__ = change_form_class(AuthenticationTokenForm.__bases__)
     WebixAuthenticationTokenForm = type(str('WebixAuthenticationTokenForm'), (AuthenticationTokenForm,), {})
 
     BackupTokenForm.__bases__ = (WebixAuthenticationTokenForm,)
     WebixAuthenticationBackupTokenForm = type(str('WebixAuthenticationBackupTokenForm'), (BackupTokenForm,), {})
 
-    SetPasswordForm.__bases__ = (WebixForm,)
+    SetPasswordForm.__bases__ = change_form_class(SetPasswordForm.__bases__)
     WebixSetPasswordForm = type(str('WebixSetPasswordForm'), (SetPasswordForm,),
                                 {'get_fieldsets': FieldSetMixin.setPasswordForm_get_fieldsets})
 
-    DisableForm.__bases__ = (WebixForm,)
+    DisableForm.__bases__ = change_form_class(DisableForm.__bases__)
     WebixDisableForm = type(str('WebixDisableForm'), (DisableForm,), {})
 
-    MethodForm.__bases__ = (WebixForm,)
+    MethodForm.__bases__ = change_form_class(MethodForm.__bases__)
     WebixMethodForm = type(str('WebixMethodForm'), (MethodForm,), {})
 
-    TOTPDeviceForm.__bases__ = (WebixForm,)
+    TOTPDeviceForm.__bases__ = change_form_class(TOTPDeviceForm.__bases__)
     WebixTOTPDeviceForm = type(str('WebixTOTPDeviceForm'), (TOTPDeviceForm,), {})
 
     if apps.is_installed("two_factor.plugins.phonenumber"):
 
         # noinspection PyUnresolvedReferences
         from two_factor.plugins.phonenumber.forms import PhoneNumberForm
-        PhoneNumberForm.__bases__ = (WebixModelForm,)
+        PhoneNumberForm.__bases__ = change_model_form_class(PhoneNumberForm.__bases__)
         WebixPhoneNumberForm = type(str('WebixPhoneNumberForm'), (PhoneNumberForm,), {})
 
-    DeviceValidationForm.__bases__ = (WebixForm,)
+    DeviceValidationForm.__bases__ = change_form_class(DeviceValidationForm.__bases__)
     WebixDeviceValidationForm = type(str('WebixDeviceValidationForm'), (DeviceValidationForm,), {})
 
     if apps.is_installed("two_factor.plugins.yubikey"):
@@ -374,10 +386,10 @@ if apps.is_installed("two_factor"):
         WebixYubiKeyDeviceForm = type(str('WebixYubiKeyDeviceForm'), (YubiKeyDeviceForm,), {})
 
     # ############################################## Reset password by email ##############################################
-    PasswordResetForm.__bases__ = (WebixForm,)
+    PasswordResetForm.__bases__ = change_form_class(PasswordResetForm.__bases__)
     WebixPasswordResetForm = type(str('WebixPasswordResetForm'), (PasswordResetForm,), {'label_width': 60})
 else:
-    AuthenticationForm.__bases__ = (WebixForm,)
+    AuthenticationForm.__bases__ = change_form_class(AuthenticationForm.__bases__)
     WebixAuthenticationAuthForm = type(str('WebixAuthenticationAuthForm'), (AuthenticationForm,),
                                        {'get_fieldsets': FieldSetMixin.authenticationForm_get_fieldsets})
 
@@ -387,7 +399,7 @@ else:
     #    BackupTokenForm.__bases__ = (WebixAuthenticationTokenForm,)
     #    WebixAuthenticationBackupTokenForm = type(str('WebixAuthenticationBackupTokenForm'), (BackupTokenForm,), {})
 
-    SetPasswordForm.__bases__ = (WebixForm,)
+    SetPasswordForm.__bases__ = change_form_class(SetPasswordForm.__bases__)
     WebixSetPasswordForm = type(str('WebixSetPasswordForm'), (SetPasswordForm,),
                                 {'get_fieldsets': FieldSetMixin.setPasswordForm_get_fieldsets})
 
@@ -410,5 +422,5 @@ else:
     #    WebixYubiKeyDeviceForm = type(str('WebixYubiKeyDeviceForm'), (YubiKeyDeviceForm,), {})
 
     # ############################################## Reset password by email ##############################################
-    PasswordResetForm.__bases__ = (WebixForm,)
+    PasswordResetForm.__bases__ = change_form_class(PasswordResetForm.__bases__)
     WebixPasswordResetForm = type(str('WebixPasswordResetForm'), (PasswordResetForm,), {'label_width': 60})
