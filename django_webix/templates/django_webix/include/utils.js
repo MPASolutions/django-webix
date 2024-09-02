@@ -666,7 +666,9 @@ function i18nNumberFormat(decimalSize) {
         groupDelimiter: webix.i18n.groupDelimiter,
         groupSize: webix.i18n.groupSize,
         decimalDelimiter: webix.i18n.decimalDelimiter,
-        decimalSize: decimalSize
+        decimalSize: decimalSize,
+        minusPosition: webix.i18n.minusPosition,
+        minusSign: webix.i18n.minusSign
     })
 }
 
