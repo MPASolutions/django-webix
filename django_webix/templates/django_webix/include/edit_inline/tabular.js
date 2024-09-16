@@ -4,11 +4,11 @@
 
 $$('{{ inline.get_container_id|default_if_none:inline.get_container_id }}').addView({
     rows: [
-        {% if inline|length > 0 %}
+        {% if inline|length > 0 and inline.0.get_tabular_header %}
         {{ inline.0.get_tabular_header|safe }},
         {% endif %}
         {
-            id: '{{ inline.prefix }}-form',
+            id: '{{ inline.prefix|safe }}-form',
             borderless: true,
             type: 'clean',
             rows: [
@@ -55,11 +55,8 @@ $$('{{ inline.get_container_id|default_if_none:inline.get_container_id }}').addV
                         onBeforeRender: function () {
                             var totalForms = $$("id_{{ inline.prefix }}-TOTAL_FORMS");
                             var maxNumForms = $$("id_{{ inline.prefix }}-MAX_NUM_FORMS");
-
                             var showAddButton = maxNumForms.getValue() === '' || (maxNumForms.getValue() - totalForms.getValue()) > 0;
-
                             // TODO: non funziona nel caso in cui non ci siano inlines (0 inlines). Non entra proprio in questo evento
-
                             if (showAddButton) {
                                 this.show();
                             } else {
