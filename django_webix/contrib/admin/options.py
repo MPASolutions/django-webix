@@ -1125,9 +1125,9 @@ class ModelWebixAdmin(ModelWebixAdminPermissionsMixin):
         if self.enable_url_create == True:
             _urls.append(path(_prefix+'create/', self.get_add_view().as_view(), name=self.get_url_pattern_create()))
         if self.enable_url_delete == True:
-            _urls.append(path(_prefix+'<int:pk>/delete/', self.get_delete_view().as_view(), name=self.get_url_pattern_delete()))
+            _urls.append(path(_prefix+'<str:pk>/delete/', self.get_delete_view().as_view(), name=self.get_url_pattern_delete()))
         if self.enable_url_update == True:
-            _urls.append(path(_prefix+'<int:pk>/update/', self.get_change_view().as_view(), name=self.get_url_pattern_update()))
+            _urls.append(path(_prefix+'<str:pk>/update/', self.get_change_view().as_view(), name=self.get_url_pattern_update()))
         return _urls
 
     @property
