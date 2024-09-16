@@ -2,7 +2,7 @@ from django import forms
 from django.apps import apps
 from django.conf import settings
 from django.contrib.auth import get_user_model, password_validation
-from django.contrib.auth.forms import AuthenticationForm, SetPasswordForm, PasswordResetForm, SetPasswordMixin
+from django.contrib.auth.forms import AuthenticationForm, SetPasswordForm, PasswordResetForm
 from django.contrib.auth.models import Group, Permission
 from django.utils.translation import gettext_lazy as _
 
