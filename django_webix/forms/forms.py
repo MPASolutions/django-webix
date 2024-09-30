@@ -393,9 +393,12 @@ class BaseWebixMixin:
                     'uncheckValue': ''
                 })
                 if initial is not None:
-                    if (isinstance(initial, bool) and initial) or \
-                        (isinstance(initial, six.string_types) and initial.lower() == 'true') or \
-                        (isinstance(initial, int) and initial == 2):
+                    if(
+                            (isinstance(initial, bool) and initial) or
+                            (isinstance(initial, six.string_types) and initial.lower() == 'true') or
+                            (isinstance(initial, six.string_types) and initial == '2') or
+                            (isinstance(initial, int) and initial == 2)
+                    ):
                         el.update({'value': '2'})
             # URLField
             elif isinstance(field, forms.URLField):
