@@ -66,6 +66,7 @@ class BaseWebixMixin:
     style = 'stacked'
     label_width = 300
     label_width_mobile = 120
+    suggest_width = None  # options : int | None for width as parent
     label_align = 'left'
     help_text_template = "&nbsp;<i style='font-size:14px;' class='webix_icon far fa-info-circle'></i>"
 
@@ -99,7 +100,7 @@ class BaseWebixMixin:
                         qdict.setlist(key, temp_list)
                     else:
                         val = data[key]
-                        qdict.update({key: val if val not in ['null', u'null'] else None})
+                        qdict.update({key: val if val not in ['null'] else None})
             data = qdict
         return data
 
@@ -186,7 +187,7 @@ class BaseWebixMixin:
             return self.readonly_fields
 
     def _add_null_choice(self, choices):
-        return [option for option in choices if option['id'] not in ['', u'', None]]
+        return [option for option in choices if option['id'] not in ['', None]]
 
     def _get_url_suggest(self, app_label, model_name, to_field_name=None, limit_choices_to=None):
         """ Returns the url to autocomplete model choiche field """
@@ -691,14 +692,19 @@ class BaseWebixMixin:
                         "view": "multicombo",
                         'selectAll': True,
                         'placeholder': _('Write and select'),
-                        'options': {
-                            'dynamic': True,
+                        'suggest': {
+                            'view': "checksuggest",
+                            'keyPressTimeout': 400,
                             'body': {
                                 'data': [],
                                 'dataFeed': self.autocomplete_fields_urls[name]
-                            }
+                            },
                         },
                     })
+                    if self.suggest_width is not None and isinstance(self.suggest_width, int):
+                        el['suggest']['fitMaster'] = False
+                        el['suggest']['width'] = self.suggest_width
+
                     _vals = []
                     if 'value' in el:
                         _vals = el['value'].split(",")
@@ -707,7 +713,7 @@ class BaseWebixMixin:
                             record = field.queryset.get(**{field.to_field_name or 'pk': _val})
                         except field.queryset.model.DoesNotExist as e:
                             raise ValueError(str(e))
-                        el['options']['body']['data'].append({
+                        el['suggest']['body']['data'].append({
                             'id': '{}'.format(getattr(record, field.to_field_name or 'pk')),
                             'value': '{}'.format(record)
                         })
@@ -718,9 +724,9 @@ class BaseWebixMixin:
                         "view": "multicombo",
                         'selectAll': True,
                         'placeholder': _('Write and select'),
-                        'options': {
-                            'selectAll': True,
-                            'dynamic': True,
+                        'suggest': {
+                            'view': "checksuggest",
+                            'keyPressTimeout': 400,
                             'body': {
                                 'data': self._add_null_choice([{
                                     'id': '{}'.format(getattr(i, field.to_field_name or 'pk')),
@@ -729,6 +735,10 @@ class BaseWebixMixin:
                             }
                         },
                     })
+                    if self.suggest_width is not None and isinstance(self.suggest_width, int):
+                        el['suggest']['fitMaster'] = False
+                        el['suggest']['width'] = self.suggest_width
+
                     # Default if is required and there are only one option
                     if callable(field.choices):
                         _choices = list(field.choices())
@@ -738,7 +748,7 @@ class BaseWebixMixin:
                         el.update({'value': '{}'.format(_choices[0][0])})
             # ModelChoiceField
             elif isinstance(field, forms.models.ModelChoiceField):
-                if initial not in [None,'']:
+                if initial not in [None, '']:
                     el.update({
                         'value': str(getattr(initial, field.to_field_name or 'pk'))
                         if isinstance(initial, models.Model) else
@@ -781,6 +791,10 @@ class BaseWebixMixin:
                             },
                         }
                     })
+                    if self.suggest_width is not None and isinstance(self.suggest_width, int):
+                        el['suggest']['fitMaster'] = False
+                        el['suggest']['width'] = self.suggest_width
+
                     if 'value' in el and el['value'] != '':  # and int(el['value']) > 0:
                         try:
                             record = field.queryset.get(**{field.to_field_name or 'pk': el['value']})
@@ -802,11 +816,21 @@ class BaseWebixMixin:
                     # regular field without autocomplete
                     if count <= 6:
                         el.update({
-                            'options': choices,
                             'view': 'richselect',
                             'selectAll': True,
-                            'placeholder': _('Click and select') # clicca e seleziona
+                            'placeholder': _('Click and select'),
+                            'suggest': {
+                                'view': "suggest",
+                                'keyPressTimeout': 400,
+                                'body': {
+                                    'data': choices,
+                                },
+                            }
                         })
+                        if self.suggest_width is not None and isinstance(self.suggest_width, int):
+                            el['suggest']['fitMaster'] = False
+                            el['suggest']['width'] = self.suggest_width
+
                         # Default if is required and there are only one option
                         if field.required and initial is None and count == 1:
                             #  TODO attenzione da rivedere perche puo dare problemi su inlines
@@ -815,9 +839,19 @@ class BaseWebixMixin:
                     else:
                         el.update({
                             'view': 'combo',
-                            'placeholder': _('Write and select'), # scrivi e seleziona
-                            'options': choices,
+                            'placeholder': _('Write and select'),  # scrivi e seleziona
+                            'suggest': {
+                                'view': "suggest",
+                                'keyPressTimeout': 400,
+                                'body': {
+                                    'data': choices,
+                                },
+                            }
                         })
+                        if self.suggest_width is not None and isinstance(self.suggest_width, int):
+                            el['suggest']['fitMaster'] = False
+                            el['suggest']['width'] = self.suggest_width
+
             # TypedChoiceField ChoiceField
             elif isinstance(field, forms.TypedChoiceField) or isinstance(field, forms.ChoiceField):
                 choices = self._add_null_choice([{
@@ -830,8 +864,18 @@ class BaseWebixMixin:
                     'selectAll': True,
                     'view': 'richselect',
                     'placeholder': _('Click and select'),
-                    'options': choices
+                    'suggest': {
+                        'view': "suggest",
+                        'keyPressTimeout': 400,
+                        'body': {
+                            'data': choices,
+                        },
+                    }
                 })
+                if self.suggest_width is not None and isinstance(self.suggest_width, int):
+                    el['suggest']['fitMaster'] = False
+                    el['suggest']['width'] = self.suggest_width
+
                 if initial is not None:
                     el.update({'value': initial})
                 # Default if is required and there are only one option
@@ -880,21 +924,26 @@ class BaseWebixMixin:
                         "view": "multicombo",
                         'selectAll': True,
                         'placeholder': _('Write and select'),
-                        'options': {
-                            'selectAll': True,
-                            'dynamic': True,
+                        'suggest': {
+                            'view': "checksuggest",
+                            'keyPressTimeout': 400,
                             'body': {
                                 'data': self._add_null_choice([{
                                     'id': '{}'.format(k),
                                     'value': '{}'.format(v)
                                 } for k, v in _choices])
-                            }
-                        },
+                            },
+                        }
                     })
+                    if self.suggest_width is not None and isinstance(self.suggest_width, int):
+                        el['suggest']['fitMaster'] = False
+                        el['suggest']['width'] = self.suggest_width
+
                     if initial is not None:
                         el.update({
                             'value': ','.join([str(i.pk) if isinstance(i, models.Model) else str(i) for i in initial])
                         })
+
                 elif initial is not None:
                     el.update({'value': initial})
             # phonenumber_field PhoneNumberField
@@ -1107,7 +1156,6 @@ class BaseWebixMixin:
                             ]
                         }
                     })
-
 
             # InlineForeignKey
             elif isinstance(field, forms.models.InlineForeignKeyField):

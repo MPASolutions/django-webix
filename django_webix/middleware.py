@@ -31,7 +31,7 @@ def get_limit_version(family):
 
 
 class UserAgentLimitMiddleware(MiddlewareMixin):
-    # user_agent.browser  # returns Browser(family=u'Mobile Safari', version=(5, 1), version_string='5.1')
+    # user_agent.browser  # returns Browser(family='Mobile Safari', version=(5, 1), version_string='5.1')
     # user_agent.browser.family  # returns 'Mobile Safari'
     # user_agent.browser.version  # returns (5, 1)
     # user_agent.browser.version_string   # returns '5.1'
