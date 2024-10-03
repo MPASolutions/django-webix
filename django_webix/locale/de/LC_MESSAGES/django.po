@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-08-26 16:03+0200\n"
-"PO-Revision-Date: 2024-08-26 14:58+0200\n"
+"POT-Creation-Date: 2024-10-03 13:25+0200\n"
+"PO-Revision-Date: 2024-10-01 18:00+0200\n"
 "Last-Translator: Stefano Menegon <dallago@mpasol.it>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: \n"
@@ -101,64 +101,64 @@ msgstr "Wert des Modellfeldes"
 msgid "Model fields values"
 msgstr "Werte der Modellfelder"
 
-#: forms/forms.py:420
+#: forms/forms.py:424
 msgid "Upload new image"
 msgstr "Neues Bild hochladen"
 
-#: forms/forms.py:420
+#: forms/forms.py:424
 msgid "Change image"
 msgstr "Bild ändern"
 
-#: forms/forms.py:497 forms/forms.py:624
+#: forms/forms.py:501 forms/forms.py:628
 msgid "Deleted"
 msgstr "Gelöscht"
 
-#: forms/forms.py:531
+#: forms/forms.py:535
 msgid "Upload file"
 msgstr "Datei hochladen"
 
-#: forms/forms.py:531
+#: forms/forms.py:535
 msgid "Change file"
 msgstr "Datei ändern"
 
-#: forms/forms.py:544
+#: forms/forms.py:548
 msgid "Upload folder"
 msgstr "Ordner hochladen"
 
-#: forms/forms.py:544
+#: forms/forms.py:548
 msgid "Change folder"
 msgstr "Ordner ändern"
 
-#: forms/forms.py:548
+#: forms/forms.py:552
 msgid "Upload files"
 msgstr "Dateien hochladen"
 
-#: forms/forms.py:548
+#: forms/forms.py:552
 msgid "Change files"
 msgstr "Dateien ändern"
 
-#: forms/forms.py:658
+#: forms/forms.py:662
 msgid "MultipleChoiceField is available only with PRO webix license"
 msgstr "Mehrfachauswahl-Feld nur mit PRO webix Lizenz verfügbar"
 
-#: forms/forms.py:690 forms/forms.py:717 forms/forms.py:771 forms/forms.py:815
-#: forms/forms.py:879
+#: forms/forms.py:694 forms/forms.py:726 forms/forms.py:784 forms/forms.py:842
+#: forms/forms.py:926
 msgid "Write and select"
 msgstr "Schreiben und auswählen"
 
-#: forms/forms.py:805 forms/forms.py:829
+#: forms/forms.py:821 forms/forms.py:866
 msgid "Click and select"
 msgstr "Klicken und auswählen"
 
-#: forms/forms.py:922
+#: forms/forms.py:974
 msgid "Initial value {} for geo field {} is not supported"
 msgstr "Anfangswert {} für Geo-Feld {} nicht unterstützt"
 
-#: forms/forms.py:962
+#: forms/forms.py:1014
 msgid "Edit"
 msgstr "Bearbeiten"
 
-#: forms/forms.py:1114
+#: forms/forms.py:1165
 msgid "Type of field {} not supported"
 msgstr "Feldtyp {} nicht unterstutzt "
 
@@ -236,7 +236,7 @@ msgstr "Sie haben keine Berechtigung, dieses Element zu bearbeiten"
 
 #: templates/django_webix/generic/list.js:453
 #: templates/django_webix/include/utils.js:385
-#: templates/django_webix/include/utils.js:443
+#: templates/django_webix/include/utils.js:445
 msgid "Server error"
 msgstr "Server-Fehler"
 
@@ -394,7 +394,7 @@ msgstr "Von "
 
 #: templates/django_webix/include/toolbar_list.js:43
 #: templates/django_webix/include/toolbar_list.js:52
-#: templates/django_webix/include/utils.js:608
+#: templates/django_webix/include/utils.js:610
 msgid "All"
 msgstr "Alle"
 
@@ -455,15 +455,19 @@ msgstr "Detail"
 msgid "Image"
 msgstr "Bild"
 
-#: templates/django_webix/include/utils.js:642
+#: templates/django_webix/include/utils.js:443
+msgid "Permission denied"
+msgstr "Permission denied"
+
+#: templates/django_webix/include/utils.js:644
 msgid "Click and change"
 msgstr "Klicken und ändern"
 
-#: templates/django_webix/include/utils.js:644
+#: templates/django_webix/include/utils.js:646
 msgid "Locked data"
 msgstr "Gesperrte Daten"
 
-#: templates/django_webix/include/utils.js:684
+#: templates/django_webix/include/utils.js:688
 msgid "Editable column"
 msgstr "Bearbeitbare Spalte"
 
