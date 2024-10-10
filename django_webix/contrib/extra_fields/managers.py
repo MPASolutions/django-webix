@@ -89,6 +89,9 @@ def add_extra_fields_to_queryset(queryset):
 
 class ExtraFieldsManager(Manager.from_queryset(ExtraFieldsQuerySet)):
 
+    def no_extra_fields(self):
+        return super().get_queryset()
+
     def get_queryset(self):
         queryset = super().get_queryset()
         queryset = add_extra_fields_to_queryset(queryset)

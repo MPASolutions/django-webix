@@ -128,7 +128,7 @@ class UserAdminUpdateForm(WebixModelForm):
             "list": {"scroll": True},
             "labelLeft": _("Available permissions"),
             "labelRight": _("Selected"),
-            "data": fs['groups']['options']['body']['data']
+            "data": fs['groups']['suggest']['body']['data']
         })
         fs['user_permissions'].update({
             "view": "dbllist",

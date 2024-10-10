@@ -100,6 +100,11 @@ class WebixDeleteView(WebixBaseMixin, WebixPermissionsMixin, WebixUrlMixin, Dele
         django_webix_view_post_delete.send(sender=self, instance=self.copied_object)
 
     def response_valid(self, success_url=None, **kwargs):
+        if success_url is not None:
+            if '?' in success_url:
+                success_url += f'?state={success_url}'
+            else:
+                success_url += ''
         return HttpResponseRedirect(success_url)
 
     def response_invalid(self, failure_url=None, **kwargs):

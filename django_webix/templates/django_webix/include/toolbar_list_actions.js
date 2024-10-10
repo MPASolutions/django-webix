@@ -13,7 +13,7 @@ var {{ view_prefix }}toolbar_actions = [{
         }
     }
   },
-  {% block type %}
+  {% block type_actions %}
   css: 'actionToolbar',
   // another style to have separated buttons
   // css: 'actionToolbarButtons',
