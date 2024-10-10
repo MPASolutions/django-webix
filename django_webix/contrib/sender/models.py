@@ -348,7 +348,7 @@ class ExternalSubject(DjangoWebixSender):
         return F('name')
 
 
-class MessageAttachment(Model):
+class  MessageAttachment(Model):
     """
     Message attachments model
     """
