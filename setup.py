@@ -65,6 +65,32 @@ setup(
         "python-dateutil>=2.8.1", # for date parsing
     ],
     extras_require={
+        "kora": [
+            "django==5.1.2",
+            "django-extra-views==0.15.0",
+            "six==1.16.0",
+            "django-user-agents==0.4.0",
+            "python-dateutil==2.9.0.post0",
+            "sorl-thumbnail==12.11.0",
+            "pillow==11.0.0",
+            "django-two-factor-auth==1.17.0",
+            "django-modeltranslation==0.19.9",
+            "django-hijack==3.6.1",
+            "django-mptt==0.16.0",
+            "celery==5.4.0",
+            "requests==2.32.3",
+            "amqp==5.2.0",
+            "billiard==4.2.1",
+            "kombu==5.4.2",
+            "vine==5.1.0",
+            "phonenumbers==8.13.47",
+            "python-telegram-bot>=13.1,<=13.1.5",
+            "python-magic==0.4.27",
+            "numpy==2.1.2",
+            "pandas==2.2.3",
+            "geopandas==1.0.1",
+            "xlrd==2.0.1"
+        ],
         "addones": [
             "sorl-thumbnail>=12.4.1",
             "pillow",

@@ -113,6 +113,7 @@ if ((typeof {{ view_prefix }}actions_list == 'undefined') || (typeof {{ view_pre
 {% endblock %}
 
 {# create toolbar footer #}
+{% block toolbar_footer %}
 $$("{{ webix_container_id }}").addView({
     view: "toolbar",
     margin: 5,
@@ -143,5 +144,5 @@ $$("{{ webix_container_id }}").addView({
         {% endblock %}
     ])
 });
-
 {{ view_prefix }}update_counter();
+{% endblock %}

@@ -58,6 +58,7 @@ class UserAdmin(admin.ModelWebixAdmin):
                 header: ["{}", {{content: "serverFilter" }}],
                 fillspace:true,
                 sort: "server",
+                minWidth:200,
                 serverFilterType: "icontains",
             }}''',
             escapejs(_("User")))
