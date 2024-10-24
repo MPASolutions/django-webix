@@ -298,8 +298,7 @@ class ImportValidator:
         # For all other conversions use the data-type converters pd.to_datetime, pd.to_timedelta and pd.to_numeric.
         # pd.to_datetime(self.df_rows[date_col], infer_datetime_format=True, errors='coerce')
         for date_col in self.df_rows.infer_objects().select_dtypes(include=['datetime64']).columns:
-            self.df_rows[date_col] = self.df_rows[date_col].dt.strftime('%Y-%m-%d')
-            self.df_rows[date_col].replace({'NaT': ''}, inplace=True)
+            self.df_rows[date_col] = pd.to_datetime(self.df_rows[date_col]).dt.strftime('%Y-%m-%d').replace({'NaT': ''})
 
         # # fill NaN (and dates NaT) with '' (otherwise initialize form with nan string)
         self.df_rows.replace([np.nan, pd.NaT], ['', ''], inplace=True)
