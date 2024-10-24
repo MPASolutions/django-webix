@@ -74,7 +74,7 @@ class BaseWebixMixin:
         localized_fields = '__all__'  # to use comma as separator in i18n
 
     def get_label_width(self):
-        if self.request is not None and self.request.user_agent.is_mobile:
+        if self.request is not None and hasattr(self.request, 'user_agent') and self.request.user_agent.is_mobile:
             return self.label_width_mobile
         return self.label_width
 
