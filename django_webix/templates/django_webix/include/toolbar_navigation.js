@@ -111,6 +111,18 @@ $$("{{ webix_container_id }}").addView({
                 },
             {% endfor %}
         {% endif %}
+        {% if is_enable_button_reload %}
+        {
+            view: "tootipButton",
+            type: "base",
+            align: "left",
+            label: '<span title="{{_("Reload")|escapejs}}" class="webix_icon fas fa-undo"></span>',
+            autowidth: true,
+            click: function () {
+                load_js('{% if object.pk %}{{url_update}}{% else %}{{url_create}}{% endif %}');
+            }
+        }
+        {% endif %}
     ]
 }, 0);
 {% endif %}
