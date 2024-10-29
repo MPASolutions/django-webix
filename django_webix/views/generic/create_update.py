@@ -37,6 +37,7 @@ class WebixCreateUpdateMixin:
     enable_button_save_continue = True
     enable_button_save_addanother = True
     enable_button_save_gotolist = True
+    enable_button_reload = True
 
     template_style = None
     default_id_tabbar = None
@@ -111,6 +112,9 @@ class WebixCreateUpdateMixin:
     def is_enable_button_save_gotolist(self, request):
         return self.enable_button_save_gotolist
 
+    def is_enable_button_reload(self, request):
+        return self.enable_button_reload
+
     def get_success_url(self, next_step=None):
         if self.success_url is not None:
             url = self.success_url
@@ -145,6 +149,7 @@ class WebixCreateUpdateMixin:
             'is_enable_button_save_continue': self.is_enable_button_save_continue(request=self.request),
             'is_enable_button_save_addanother': self.is_enable_button_save_addanother(request=self.request),
             'is_enable_button_save_gotolist': self.is_enable_button_save_gotolist(request=self.request),
+            'is_enable_button_reload': self.is_enable_button_reload(request=self.request),
             # Template style
             'is_errors_on_popup': self.is_errors_on_popup(request=self.request),
             'template_style': self.get_template_style(),
