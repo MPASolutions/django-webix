@@ -569,6 +569,7 @@ class BaseWebixMixin:
                                     {
                                         'name_label': name,
                                         'id_label': name,
+                                        'id': 'block_label_' + self[name].auto_id,
                                         'borderless': True,
                                         'template': label,
                                         'height': 40,
