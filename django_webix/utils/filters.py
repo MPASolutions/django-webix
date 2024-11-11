@@ -143,17 +143,20 @@ def from_dict_to_qset(data, model):
 
 
 def combo_with_icontains_filter(combo_widget):
-    if 'options' not in combo_widget:
-        return combo_widget
+    if 'options' in combo_widget:
 
-    options_data = combo_widget['options']
-    combo_widget.update({
-        'view': 'combo',
-        'options': {
-            'filter': 'filter_icontains',
-            'body': {
-                'data': options_data
+        options_data = combo_widget['options']
+        combo_widget.update({
+            'view': 'combo',
+            'options': {
+                'filter': 'filter_icontains',
+                'body': {
+                    'data': options_data
+                }
             }
-        }
-    })
+        })
+    elif 'suggest' in combo_widget:
+        combo_widget['suggest'].update({
+            'filter': 'filter_icontains',
+        })
     return combo_widget
