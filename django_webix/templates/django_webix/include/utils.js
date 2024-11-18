@@ -288,6 +288,9 @@ function makeid() {
 }
 
 function image_modal(url, width, height, id) {
+    if ($$(id) != undefined){
+        $$(id).close();
+    }
     webix.ui({
         id: id,
         view: "window",
