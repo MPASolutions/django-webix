@@ -1,5 +1,6 @@
 from django.apps import apps
 from django.conf import settings
+from django.contrib.admin.models import LogEntry
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import Group
 from django.db.models import F
@@ -216,3 +217,131 @@ class GroupAdmin(admin.ModelWebixAdmin):
 
 
 admin.site.register(Group, admin_class=GroupAdmin)
+
+
+class LogEntryAdmin(admin.ModelWebixAdmin):
+
+    #label_width = 300
+    suggest_width = 300  # options : int | None for width as parent
+    #label_align = 'left'
+    ordering = ['-action_time']
+
+    list_display = ['id', 'action_time', 'user__username', 'object_id', 'content_type__model', 'object_repr',
+                    'action_flag', 'change_message', 'url']
+    enable_json_loading = True
+    only_superuser = True
+
+    enable_column_copy = False
+    enable_column_delete = False
+    delete_permission = False
+    add_permission = False
+    change_permission = False
+
+    list_display_header = {
+        'user__username': {
+            'field_name': 'user__username',
+            'datalist_column': format_lazy('''{{
+                id: "user__username",
+                header: [{{text:"{}"}},
+                        {{content: "serverRichSelectFilter",
+                            options:user__username_options,
+                            inputConfig:{{ suggest: {{fitMaster: false}} }} }}],
+                adjust:"all",
+                sort: "server",
+                serverFilterType: "iexact",
+                collection: user__username_options
+            }}''',
+            escapejs(_("User")))
+        },
+        'id': {
+            'field_name': 'id',
+            'datalist_column': format_lazy('''{{
+                id: "id",
+                header: ["{}", {{content: "serverFilter" }}],
+                adjust: "all",
+                sort: "server",
+                serverFilterType: "numbercompare",
+                css:{{'text-align':'right'}}
+            }}''',
+            escapejs(_("ID")))
+        },
+        'object_id': {
+            'field_name': 'object_id',
+            'datalist_column': format_lazy('''{{
+                    id: "object_id",
+                    header: [{{text:"{}"}}, {{content: "serverFilter" }}],
+                    adjust:"all",
+                    sort: "server",
+                    serverFilterType: "icontains",
+                    css:{{'text-align':'right'}}
+                }}''',
+                escapejs(_("Object ID")))
+        },
+        'content_type__model': {
+            'field_name': 'content_type__model',
+            'datalist_column': format_lazy('''{{
+                    id: "content_type__model",
+                    header: [{{text:"{}"}}, {{content: "serverFilter" }}],
+                    adjust:"all",
+                    sort: "server",
+                    serverFilterType: "icontains",
+                }}''',
+                escapejs(_("Data type")))
+        },
+        'object_repr': {
+            'click_action': '''load_js(el['url'])''',
+            'field_name': 'object_repr',
+            'datalist_column': format_lazy('''{{
+                    id: "object_repr",
+                    header: [{{text:"{}"}}, {{content: "serverFilter" }}],
+                    adjust:"all",
+                    sort: "server",
+                    serverFilterType: "icontains",
+                    css:{{'color':'blue'}}
+                }}''',
+                escapejs(_("Object")))
+        },
+        'action_flag': {
+            'field_name': 'action_flag',
+            'datalist_column': format_lazy('''{{
+                    id: "action_flag",
+                    header: [{{text:"{}"}},
+                            {{content: "serverRichSelectFilter",
+                                options: action_flag_options,
+                                inputConfig:{{ suggest: {{fitMaster: false}} }} }}],
+                    adjust:"all",
+                    sort: "server",
+                    serverFilterType: "iexact",
+                    collection: action_flag_options
+                }}''',
+                escapejs(_("Action")))
+        },
+        'change_message': {
+            'field_name': 'change_message',
+            'datalist_column': format_lazy('''{{
+                    id: "change_message",
+                    header: [{{text:"{}"}}, {{content: "serverFilter" }}],
+                    fillspace:true,
+                    sort: "server",
+                    serverFilterType: "icontains",
+                }}''',
+                escapejs(_("Informations")))
+        },
+        'url': {
+            'field_name': 'url',
+            'queryset_exclude': True,
+            'datalist_column': '{id: "url", hidden: true}'
+        },
+    }
+
+    def _get_objects_datatable_values(self, view, qs):
+        data = super(view.__class__, view)._get_objects_datatable_values(qs)
+        for item, value in zip(qs, data):
+            value.update({
+                'url': self.admin_site.get_object_url(item.content_type,
+                                                object_pk=item.object_id)
+            })
+        return data
+
+
+admin.site.register(LogEntry, admin_class=LogEntryAdmin)

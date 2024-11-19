@@ -78,6 +78,12 @@ class BaseWebixMixin:
             return self.label_width_mobile
         return self.label_width
 
+    def get_suggest_width(self):
+        return self.suggest_width
+
+    def get_label_align(self):
+        return self.label_align
+
     def get_fields_data_with_prefix(self, data=None):
         readonly_fields = self.get_readonly_fields()
         if data is not None:
@@ -258,7 +264,7 @@ class BaseWebixMixin:
                 'name': self.add_prefix(name),
                 'id': self[name].auto_id,
                 'labelWidth': self.get_label_width(),
-                'labelAlign': self.label_align,
+                'labelAlign': self.get_label_align(),
                 'django_type_field': str(type(field).__name__),
             }
 
@@ -422,7 +428,7 @@ class BaseWebixMixin:
                     'width': 150,
                     'height': 50,
                     'label': _('Upload new image') if not initial else _("Change image"),
-                    'labelAlign': self.label_align,
+                    'labelAlign': self.get_label_align(),
                     # 'on': {
                     #     'onAfterFileAdd': "image_add('" + self[name].auto_id + "');"
                     # }
@@ -454,7 +460,7 @@ class BaseWebixMixin:
                                 'height': 30,
                                 'width': self.get_label_width(),
                                 # attenzione qui non funziona il labelAlign perche non è un input ma è un template
-                                'css': {'background-color': 'transparent !important', 'text-align': self.label_align}
+                                'css': {'background-color': 'transparent !important', 'text-align': self.get_label_align()}
                             },
                             {
                                 'name_label': name,
@@ -575,7 +581,7 @@ class BaseWebixMixin:
                                         'height': 40,
                                         # attenzione qui non funziona il labelAlign perche non è un input ma è un template
                                         'css': {'background-color': 'transparent !important',
-                                                'text-align': self.label_align}
+                                                'text-align': self.get_label_align()}
                                     },
                                     {
                                         'name_label': name,
@@ -585,7 +591,7 @@ class BaseWebixMixin:
                                         'height': 40,
                                         # attenzione qui non funziona il labelAlign perche non è un input ma è un template
                                         'css': {'background-color': 'transparent !important', 'color': 'blue',
-                                                'text-align': self.label_align}
+                                                'text-align': self.get_label_align()}
                                     },
                                 ]
                             },
@@ -702,9 +708,9 @@ class BaseWebixMixin:
                             },
                         },
                     })
-                    if self.suggest_width is not None and isinstance(self.suggest_width, int):
+                    if self.get_suggest_width() is not None and isinstance(self.get_suggest_width(), int):
                         el['suggest']['fitMaster'] = False
-                        el['suggest']['width'] = self.suggest_width
+                        el['suggest']['width'] = self.get_suggest_width()
 
                     _vals = []
                     if 'value' in el:
@@ -736,9 +742,9 @@ class BaseWebixMixin:
                             }
                         },
                     })
-                    if self.suggest_width is not None and isinstance(self.suggest_width, int):
+                    if self.get_suggest_width() is not None and isinstance(self.get_suggest_width(), int):
                         el['suggest']['fitMaster'] = False
-                        el['suggest']['width'] = self.suggest_width
+                        el['suggest']['width'] = self.get_suggest_width()
 
                     # Default if is required and there are only one option
                     if callable(field.choices):
@@ -792,9 +798,9 @@ class BaseWebixMixin:
                             },
                         }
                     })
-                    if self.suggest_width is not None and isinstance(self.suggest_width, int):
+                    if self.get_suggest_width() is not None and isinstance(self.get_suggest_width(), int):
                         el['suggest']['fitMaster'] = False
-                        el['suggest']['width'] = self.suggest_width
+                        el['suggest']['width'] = self.get_suggest_width()
 
                     if 'value' in el and el['value'] != '':  # and int(el['value']) > 0:
                         try:
@@ -828,9 +834,9 @@ class BaseWebixMixin:
                                 },
                             }
                         })
-                        if self.suggest_width is not None and isinstance(self.suggest_width, int):
+                        if self.get_suggest_width() is not None and isinstance(self.get_suggest_width(), int):
                             el['suggest']['fitMaster'] = False
-                            el['suggest']['width'] = self.suggest_width
+                            el['suggest']['width'] = self.get_suggest_width()
 
                         # Default if is required and there are only one option
                         if field.required and initial is None and count == 1:
@@ -849,9 +855,9 @@ class BaseWebixMixin:
                                 },
                             }
                         })
-                        if self.suggest_width is not None and isinstance(self.suggest_width, int):
+                        if self.get_suggest_width() is not None and isinstance(self.get_suggest_width(), int):
                             el['suggest']['fitMaster'] = False
-                            el['suggest']['width'] = self.suggest_width
+                            el['suggest']['width'] = self.get_suggest_width()
 
             # TypedChoiceField ChoiceField
             elif isinstance(field, forms.TypedChoiceField) or isinstance(field, forms.ChoiceField):
@@ -873,9 +879,9 @@ class BaseWebixMixin:
                         },
                     }
                 })
-                if self.suggest_width is not None and isinstance(self.suggest_width, int):
+                if self.get_suggest_width() is not None and isinstance(self.get_suggest_width(), int):
                     el['suggest']['fitMaster'] = False
-                    el['suggest']['width'] = self.suggest_width
+                    el['suggest']['width'] = self.get_suggest_width()
 
                 if initial is not None:
                     el.update({'value': initial})
@@ -936,9 +942,9 @@ class BaseWebixMixin:
                             },
                         }
                     })
-                    if self.suggest_width is not None and isinstance(self.suggest_width, int):
+                    if self.get_suggest_width() is not None and isinstance(self.get_suggest_width(), int):
                         el['suggest']['fitMaster'] = False
-                        el['suggest']['width'] = self.suggest_width
+                        el['suggest']['width'] = self.get_suggest_width()
 
                     if initial is not None:
                         el.update({
@@ -1002,7 +1008,7 @@ class BaseWebixMixin:
                             'name': self.add_prefix(name) + '_layer',
                             'label': label,
                             'labelWidth': self.get_label_width(),
-                            'labelAlign': self.label_align,
+                            'labelAlign': self.get_label_align(),
                             'labelVisibility': {'tabular': False},
                             'view': "select",
                             'options': [{'id': _layer['qxsname'], 'value': _layer['layername']} for _layer in

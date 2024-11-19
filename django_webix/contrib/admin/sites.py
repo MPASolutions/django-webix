@@ -89,6 +89,23 @@ class AdminWebixSite:
         """
         return request.user.is_active
 
+    def get_object_url(self, content_type, object_pk=None):
+        if content_type is not None:
+            model = content_type.model_class()
+            if model is not None:
+                info = (model._meta.app_label, model._meta.model_name)
+                try:
+                    if object_pk is None:
+                        return reverse(f'{self.urls_namespace}:%s.%s.list' % info,
+                                       current_app=self.name)
+                    else:
+                        return reverse(f'{self.urls_namespace}:%s.%s.update' % info,
+                                       current_app=self.name,
+                                       kwargs={'pk': object_pk})
+                except NoReverseMatch as e:
+                    pass
+        return None
+
     #    def check(self, app_configs): # TODO
     #        if app_configs is None:
     #            app_configs = apps.get_app_configs()
