@@ -1,7 +1,7 @@
 from django.apps import apps
 from django.core.exceptions import FieldDoesNotExist
 from django.db import models
-from django.urls import path
+from django.urls import path, reverse
 from django.utils.text import capfirst
 from django.utils.translation import gettext as _
 from django_webix.utils.decorators import script_login_required
@@ -105,6 +105,8 @@ class ModelWebixAdmin(ModelWebixAdminPermissionsMixin):
     template_form_style = None
 
     label_width = None
+    suggest_width = None  # options : int | None for width as parent
+    label_align = 'left'
 
     inlines = []
 
@@ -137,6 +139,18 @@ class ModelWebixAdmin(ModelWebixAdminPermissionsMixin):
     # permission custom
     only_superuser = False
 
+    def __init__(self, model, admin_site):
+        self.model = model
+        self.opts = model._meta
+        self.admin_site = admin_site
+        super().__init__()
+
+    def __str__(self):
+        _str = "%s.%s" % (self.model._meta.app_label, self.__class__.__name__)
+        if self.get_prefix() is not None:
+            _str += '.%s' % self.get_prefix()
+        return _str
+
     def get_inlines(self, view, object, request):
         _inlines = copy.deepcopy(self.inlines)
         if apps.is_installed('django_webix.contrib.extra_fields'):
@@ -163,6 +177,12 @@ class ModelWebixAdmin(ModelWebixAdminPermissionsMixin):
 
     def get_label_width(self):
         return getattr(self, 'label_width', None)
+
+    def get_label_align(self):
+        return getattr(self, 'label_align', None)
+
+    def get_suggest_width(self):
+        return getattr(self, 'suggest_width', None)
 
     def get_prefix(self):
         return getattr(self, 'prefix', None)
@@ -424,18 +444,6 @@ class ModelWebixAdmin(ModelWebixAdminPermissionsMixin):
                                                                 })
         return _model_list_display
 
-    def __init__(self, model, admin_site):
-        self.model = model
-        self.opts = model._meta
-        self.admin_site = admin_site
-        super().__init__()
-
-    def __str__(self):
-        _str = "%s.%s" % (self.model._meta.app_label, self.__class__.__name__)
-        if self.get_prefix() is not None:
-            _str += '.%s' % self.get_prefix()
-        return _str
-
     def get_queryset(self, view=None, request=None):
         return self.model._default_manager.all()
 
@@ -488,6 +496,10 @@ class ModelWebixAdmin(ModelWebixAdminPermissionsMixin):
                     self.autocomplete_fields = _admin.autocomplete_fields
                     if _admin.get_label_width() is not None:
                         self.label_width = _admin.get_label_width()
+                    if _admin.get_label_align() is not None:
+                        self.label_align = _admin.get_label_align()
+                    if _admin.get_suggest_width() is not None:
+                        self.suggest_width = _admin.get_suggest_width()
 
             return WebixAdminCreateUpdateForm
 
@@ -1091,6 +1103,10 @@ class ModelWebixAdmin(ModelWebixAdminPermissionsMixin):
 
                 def get_fields_editable(self):
                     return _admin.get_list_editable(request=self.request)
+
+                if hasattr(_admin, '_get_objects_datatable_values'):
+                    def _get_objects_datatable_values(self, qs):
+                        return _admin._get_objects_datatable_values(view=self, qs=qs)
 
                 @property
                 def fields_editable(self):
