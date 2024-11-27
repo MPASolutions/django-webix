@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-03-07 18:14+0100\n"
+"POT-Creation-Date: 2024-11-27 08:41+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -26,37 +26,61 @@ msgstr ""
 msgid "Groups"
 msgstr ""
 
-#: contrib/admin/dwadmin.py:63
+#: contrib/admin/dwadmin.py:65 contrib/admin/dwadmin.py:254
 #: contrib/admin/templates/django_webix/admin/include/menu.js:38
 msgid "User"
 msgstr ""
 
-#: contrib/admin/dwadmin.py:74
+#: contrib/admin/dwadmin.py:76
 msgid "Email"
 msgstr ""
 
-#: contrib/admin/dwadmin.py:85
+#: contrib/admin/dwadmin.py:87
 msgid "Name"
 msgstr ""
 
-#: contrib/admin/dwadmin.py:96
+#: contrib/admin/dwadmin.py:98
 msgid "Surname"
 msgstr ""
 
-#: contrib/admin/dwadmin.py:109
+#: contrib/admin/dwadmin.py:111
 msgid "Staff"
 msgstr ""
 
-#: contrib/admin/dwadmin.py:122
+#: contrib/admin/dwadmin.py:124
 msgid "Superuser"
 msgstr ""
 
-#: contrib/admin/dwadmin.py:135
+#: contrib/admin/dwadmin.py:137
 msgid "Active"
 msgstr ""
 
-#: contrib/admin/dwadmin.py:146
+#: contrib/admin/dwadmin.py:148
 msgid "Group"
+msgstr ""
+
+#: contrib/admin/dwadmin.py:266
+msgid "ID"
+msgstr ""
+
+#: contrib/admin/dwadmin.py:278
+msgid "Object ID"
+msgstr ""
+
+#: contrib/admin/dwadmin.py:289
+msgid "Data type"
+msgstr ""
+
+#: contrib/admin/dwadmin.py:302
+msgid "Object"
+msgstr ""
+
+#: contrib/admin/dwadmin.py:317
+msgid "Action"
+msgstr ""
+
+#: contrib/admin/dwadmin.py:328
+msgid "Informations"
 msgstr ""
 
 #: contrib/admin/forms.py:24 contrib/admin/forms.py:129
@@ -163,11 +187,11 @@ msgstr ""
 msgid "Webix Admin Menu Languages"
 msgstr ""
 
-#: contrib/admin/options.py:280
+#: contrib/admin/options.py:300
 msgid "Yes"
 msgstr ""
 
-#: contrib/admin/options.py:280
+#: contrib/admin/options.py:300
 msgid "No"
 msgstr ""
 
@@ -183,14 +207,14 @@ msgstr ""
 msgid "Site administration"
 msgstr ""
 
-#: contrib/admin/sites.py:663
+#: contrib/admin/sites.py:680
 #, python-format
 msgid ""
 "Please enter the correct %(username)s and password for a staff account. Note "
 "that both fields may be case-sensitive."
 msgstr ""
 
-#: contrib/admin/sites.py:680
+#: contrib/admin/sites.py:697
 msgid "Log in"
 msgstr ""
 
