@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-03-07 18:13+0100\n"
+"POT-Creation-Date: 2024-11-27 08:41+0100\n"
 "PO-Revision-Date: 2024-03-08 10:28+0100\n"
 "Last-Translator: Stefano Menegon <dallago@mpasol.it>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -27,38 +27,66 @@ msgstr "Verwaltung"
 msgid "Groups"
 msgstr "Gruppen"
 
-#: contrib/admin/dwadmin.py:63
+#: contrib/admin/dwadmin.py:65 contrib/admin/dwadmin.py:254
 #: contrib/admin/templates/django_webix/admin/include/menu.js:38
 msgid "User"
 msgstr "Benutzer"
 
-#: contrib/admin/dwadmin.py:74
+#: contrib/admin/dwadmin.py:76
 msgid "Email"
 msgstr "Email"
 
-#: contrib/admin/dwadmin.py:85
+#: contrib/admin/dwadmin.py:87
 msgid "Name"
 msgstr "Name"
 
-#: contrib/admin/dwadmin.py:96
+#: contrib/admin/dwadmin.py:98
 msgid "Surname"
 msgstr "Nachname"
 
-#: contrib/admin/dwadmin.py:109
+#: contrib/admin/dwadmin.py:111
 msgid "Staff"
 msgstr "Staff"
 
-#: contrib/admin/dwadmin.py:122
+#: contrib/admin/dwadmin.py:124
 msgid "Superuser"
 msgstr "Superuser"
 
-#: contrib/admin/dwadmin.py:135
+#: contrib/admin/dwadmin.py:137
 msgid "Active"
 msgstr "Aktiv"
 
-#: contrib/admin/dwadmin.py:146
+#: contrib/admin/dwadmin.py:148
 msgid "Group"
 msgstr "Gruppe"
+
+#: contrib/admin/dwadmin.py:266
+msgid "ID"
+msgstr ""
+
+#: contrib/admin/dwadmin.py:278
+msgid "Object ID"
+msgstr ""
+
+#: contrib/admin/dwadmin.py:289
+msgid "Data type"
+msgstr ""
+
+#: contrib/admin/dwadmin.py:302
+msgid "Object"
+msgstr ""
+
+#: contrib/admin/dwadmin.py:317
+#, fuzzy
+#| msgid "Active"
+msgid "Action"
+msgstr "Aktiv"
+
+#: contrib/admin/dwadmin.py:328
+#, fuzzy
+#| msgid "Personal informations"
+msgid "Informations"
+msgstr "Persönliche Informationen"
 
 #: contrib/admin/forms.py:24 contrib/admin/forms.py:129
 #: contrib/admin/forms.py:136
@@ -168,11 +196,11 @@ msgstr "Webix Admin Menu"
 msgid "Webix Admin Menu Languages"
 msgstr "Webix Admin Menu"
 
-#: contrib/admin/options.py:280
+#: contrib/admin/options.py:300
 msgid "Yes"
 msgstr "Ja"
 
-#: contrib/admin/options.py:280
+#: contrib/admin/options.py:300
 msgid "No"
 msgstr "Nein"
 
@@ -188,16 +216,16 @@ msgstr "Django webix Verwaltung"
 msgid "Site administration"
 msgstr "Verwaltung der Webseite"
 
-#: contrib/admin/sites.py:663
+#: contrib/admin/sites.py:680
 #, python-format
 msgid ""
-"Please enter the correct %(username)s and password for a staff account. Note"
-" that both fields may be case-sensitive."
+"Please enter the correct %(username)s and password for a staff account. Note "
+"that both fields may be case-sensitive."
 msgstr ""
 "Bitte geben Sie den korrekten %(username)s und Passwort für einen Staff-"
 "Nutzer ein. Bei beiden Feldern bitte auf Groß- und Kleinschreibung achten."
 
-#: contrib/admin/sites.py:680
+#: contrib/admin/sites.py:697
 msgid "Log in"
 msgstr "Einloggen"
 
@@ -266,8 +294,8 @@ msgstr "Neues Passwort eingeben"
 msgid ""
 "Enter the new password twice, to verify that you have written it correctly"
 msgstr ""
-"Geben Sie das neue Passwort zweimal ein, um zu überprüfen, ob Sie es richtig"
-" geschrieben haben"
+"Geben Sie das neue Passwort zweimal ein, um zu überprüfen, ob Sie es richtig "
+"geschrieben haben"
 
 #: contrib/admin/templates/django_webix/admin/account/password_reset_done.html:10
 msgid "password reset sent"
@@ -277,8 +305,8 @@ msgstr "Passwortrücksetzung gesendet"
 #: contrib/admin/templates/django_webix/admin/account/password_reset_done.js:33
 msgid ""
 "We have sent instructions for setting the password to the email address you "
-"provided. You should receive them shortly as long as the address you entered"
-" is valid."
+"provided. You should receive them shortly as long as the address you entered "
+"is valid."
 msgstr ""
 "Wir haben Anweisungen zum Festlegen des Passworts an die von Ihnen "
 "angegebene E-Mail-Adresse gesendet. Sie sollten diese in Kürze erhalten, "

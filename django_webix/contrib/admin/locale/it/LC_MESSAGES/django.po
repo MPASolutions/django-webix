@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-04-08 17:36+0200\n"
+"POT-Creation-Date: 2024-11-27 08:41+0100\n"
 "PO-Revision-Date: 2024-03-19 11:42+0100\n"
 "Last-Translator: Stefano Menegon <dallago@mpasol.it>\n"
 "Language-Team: \n"
@@ -27,38 +27,66 @@ msgstr "Amministrazione"
 msgid "Groups"
 msgstr "Gruppi"
 
-#: contrib/admin/dwadmin.py:63
+#: contrib/admin/dwadmin.py:65 contrib/admin/dwadmin.py:254
 #: contrib/admin/templates/django_webix/admin/include/menu.js:38
 msgid "User"
 msgstr "Utente"
 
-#: contrib/admin/dwadmin.py:74
+#: contrib/admin/dwadmin.py:76
 msgid "Email"
 msgstr "Email"
 
-#: contrib/admin/dwadmin.py:85
+#: contrib/admin/dwadmin.py:87
 msgid "Name"
 msgstr "Nome"
 
-#: contrib/admin/dwadmin.py:96
+#: contrib/admin/dwadmin.py:98
 msgid "Surname"
 msgstr "Cognome"
 
-#: contrib/admin/dwadmin.py:109
+#: contrib/admin/dwadmin.py:111
 msgid "Staff"
 msgstr "Staff"
 
-#: contrib/admin/dwadmin.py:122
+#: contrib/admin/dwadmin.py:124
 msgid "Superuser"
 msgstr "Superuser"
 
-#: contrib/admin/dwadmin.py:135
+#: contrib/admin/dwadmin.py:137
 msgid "Active"
 msgstr "Attivo"
 
-#: contrib/admin/dwadmin.py:146
+#: contrib/admin/dwadmin.py:148
 msgid "Group"
 msgstr "Gruppo"
+
+#: contrib/admin/dwadmin.py:266
+msgid "ID"
+msgstr ""
+
+#: contrib/admin/dwadmin.py:278
+msgid "Object ID"
+msgstr ""
+
+#: contrib/admin/dwadmin.py:289
+msgid "Data type"
+msgstr ""
+
+#: contrib/admin/dwadmin.py:302
+msgid "Object"
+msgstr ""
+
+#: contrib/admin/dwadmin.py:317
+#, fuzzy
+#| msgid "Active"
+msgid "Action"
+msgstr "Attivo"
+
+#: contrib/admin/dwadmin.py:328
+#, fuzzy
+#| msgid "Personal informations"
+msgid "Informations"
+msgstr "Informazioni personali"
 
 #: contrib/admin/forms.py:24 contrib/admin/forms.py:129
 #: contrib/admin/forms.py:136
@@ -164,11 +192,11 @@ msgstr "Menu"
 msgid "Webix Admin Menu Languages"
 msgstr "Menu"
 
-#: contrib/admin/options.py:280
+#: contrib/admin/options.py:300
 msgid "Yes"
 msgstr "Sì"
 
-#: contrib/admin/options.py:280
+#: contrib/admin/options.py:300
 msgid "No"
 msgstr "No"
 
@@ -184,7 +212,7 @@ msgstr "Amministrazione"
 msgid "Site administration"
 msgstr "Amministrazione sito"
 
-#: contrib/admin/sites.py:663
+#: contrib/admin/sites.py:680
 #, python-format
 msgid ""
 "Please enter the correct %(username)s and password for a staff account. Note "
@@ -194,7 +222,7 @@ msgstr ""
 "staff.\n"
 "Attenzione alle lettere maiuscole e minuscole."
 
-#: contrib/admin/sites.py:680
+#: contrib/admin/sites.py:697
 msgid "Log in"
 msgstr "Entra"
 

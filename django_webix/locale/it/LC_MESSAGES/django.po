@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-10-03 13:25+0200\n"
+"POT-Creation-Date: 2024-11-27 08:41+0100\n"
 "PO-Revision-Date: 2024-03-19 11:45+0100\n"
 "Last-Translator: Stefano Menegon <dallago@mpasol.it>\n"
 "Language-Team: \n"
@@ -99,64 +99,64 @@ msgstr "Valore"
 msgid "Model fields values"
 msgstr "Valori"
 
-#: forms/forms.py:424
+#: forms/forms.py:430
 msgid "Upload new image"
 msgstr "Carica un’immagine"
 
-#: forms/forms.py:424
+#: forms/forms.py:430
 msgid "Change image"
 msgstr "Cambia immagine"
 
-#: forms/forms.py:501 forms/forms.py:628
+#: forms/forms.py:507 forms/forms.py:635
 msgid "Deleted"
 msgstr "Cancella"
 
-#: forms/forms.py:535
+#: forms/forms.py:541
 msgid "Upload file"
 msgstr "Carica un file"
 
-#: forms/forms.py:535
+#: forms/forms.py:541
 msgid "Change file"
 msgstr "Cambia file"
 
-#: forms/forms.py:548
+#: forms/forms.py:554
 msgid "Upload folder"
 msgstr "Carica una cartella"
 
-#: forms/forms.py:548
+#: forms/forms.py:554
 msgid "Change folder"
 msgstr "Cambia cartella"
 
-#: forms/forms.py:552
+#: forms/forms.py:558
 msgid "Upload files"
 msgstr "Carica files"
 
-#: forms/forms.py:552
+#: forms/forms.py:558
 msgid "Change files"
 msgstr "Cambia files"
 
-#: forms/forms.py:662
+#: forms/forms.py:669
 msgid "MultipleChoiceField is available only with PRO webix license"
 msgstr "MultipleChoiceField è disponibile solo con licenza PRO webix"
 
-#: forms/forms.py:694 forms/forms.py:726 forms/forms.py:784 forms/forms.py:842
-#: forms/forms.py:926
+#: forms/forms.py:701 forms/forms.py:733 forms/forms.py:791 forms/forms.py:849
+#: forms/forms.py:933
 msgid "Write and select"
 msgstr "Scrivi e seleziona"
 
-#: forms/forms.py:821 forms/forms.py:866
+#: forms/forms.py:828 forms/forms.py:873
 msgid "Click and select"
 msgstr "Clicca e seleziona"
 
-#: forms/forms.py:974
+#: forms/forms.py:981
 msgid "Initial value {} for geo field {} is not supported"
 msgstr "Il valore iniziale {} per il campo geografico {} non è supportato"
 
-#: forms/forms.py:1014
+#: forms/forms.py:1021
 msgid "Edit"
 msgstr "Modifica"
 
-#: forms/forms.py:1165
+#: forms/forms.py:1172
 msgid "Type of field {} not supported"
 msgstr "Tipo di campo {} non supportato"
 
@@ -190,55 +190,55 @@ msgstr "Attenzione! Verranno eliminati anche tutti gli oggetti collegati."
 msgid "Send"
 msgstr "Invia"
 
-#: templates/django_webix/generic/list.js:46
+#: templates/django_webix/generic/list.js:59
 msgid "Extra filters removal"
 msgstr "Rimozione filtri aggiuntivi"
 
-#: templates/django_webix/generic/list.js:61
+#: templates/django_webix/generic/list.js:74
 msgid "Geographic filter removal"
 msgstr "Rimozione filtro geografico"
 
-#: templates/django_webix/generic/list.js:79
+#: templates/django_webix/generic/list.js:92
 msgid "Advanced filter"
 msgstr "Filtro avanzato"
 
-#: templates/django_webix/generic/list.js:158
-#: templates/django_webix/generic/list.js:230
+#: templates/django_webix/generic/list.js:171
+#: templates/django_webix/generic/list.js:243
 #: templates/django_webix/include/toolbar_navigation.js:49
 #: templates/django_webix/include/toolbar_navigation.js:106
 #: views/generic/list.py:516
 msgid "Go to map"
 msgstr "Mostra in mappa"
 
-#: templates/django_webix/generic/list.js:160
+#: templates/django_webix/generic/list.js:173
 #: templates/django_webix/include/toolbar_navigation.js:45
 #: templates/django_webix/include/toolbar_navigation.js:102
 msgid "Geometry does not exist"
 msgstr "Geometria non esistente"
 
-#: templates/django_webix/generic/list.js:243
+#: templates/django_webix/generic/list.js:256
 msgid "Remove filters"
 msgstr "Rimuovi filtri"
 
-#: templates/django_webix/generic/list.js:244
+#: templates/django_webix/generic/list.js:257
 msgid "Apply filters"
 msgstr "Applica i filtri"
 
-#: templates/django_webix/generic/list.js:244
+#: templates/django_webix/generic/list.js:257
 msgid "Filter"
 msgstr "Filtra"
 
-#: templates/django_webix/generic/list.js:451
+#: templates/django_webix/generic/list.js:465
 msgid "You do not have permission to edit this item"
 msgstr "Non hai i permessi per modificare questo elemento"
 
-#: templates/django_webix/generic/list.js:453
-#: templates/django_webix/include/utils.js:385
-#: templates/django_webix/include/utils.js:445
+#: templates/django_webix/generic/list.js:467
+#: templates/django_webix/include/utils.js:388
+#: templates/django_webix/include/utils.js:448
 msgid "Server error"
 msgstr "Errore sul server"
 
-#: templates/django_webix/generic/list.js:513
+#: templates/django_webix/generic/list.js:527
 msgid "Double click to edit the element"
 msgstr "Doppio click per editare l'elemento"
 
@@ -246,7 +246,7 @@ msgstr "Doppio click per editare l'elemento"
 #: templates/django_webix/include/actions_list.js:74
 #: templates/django_webix/include/form_errors_popup.js:16
 #: templates/django_webix/include/form_warnings.js:23
-#: templates/django_webix/include/utils.js:301
+#: templates/django_webix/include/utils.js:304
 msgid "Close"
 msgstr "Chiudi"
 
@@ -392,7 +392,7 @@ msgstr "di"
 
 #: templates/django_webix/include/toolbar_list.js:43
 #: templates/django_webix/include/toolbar_list.js:52
-#: templates/django_webix/include/utils.js:610
+#: templates/django_webix/include/utils.js:613
 msgid "All"
 msgstr "Tutti"
 
@@ -405,7 +405,7 @@ msgstr "elementi selezionati"
 msgid "No row has been selected"
 msgstr "Nessuna riga selezionata"
 
-#: templates/django_webix/include/toolbar_list.js:132
+#: templates/django_webix/include/toolbar_list.js:133
 msgid "Add new"
 msgstr "Aggiungi nuovo"
 
@@ -418,6 +418,10 @@ msgstr "Indietro"
 #: templates/django_webix/include/toolbar_navigation.js:82
 msgid "Back to list"
 msgstr "Torna alla lista"
+
+#: templates/django_webix/include/toolbar_navigation.js:119
+msgid "Reload"
+msgstr ""
 
 #: templates/django_webix/include/utils.js:235
 #: templates/django_webix/include/utils.js:242 views/generic/list.py:333
@@ -449,25 +453,25 @@ msgstr "Rimuovi elemento"
 msgid "Detail"
 msgstr "Dettaglio"
 
-#: templates/django_webix/include/utils.js:298
+#: templates/django_webix/include/utils.js:301
 msgid "Image"
 msgstr "Immagine"
 
-#: templates/django_webix/include/utils.js:443
+#: templates/django_webix/include/utils.js:446
 #, fuzzy
 #| msgid "Permission denied: {}"
 msgid "Permission denied"
 msgstr "Permesso negato: {}"
 
-#: templates/django_webix/include/utils.js:644
+#: templates/django_webix/include/utils.js:647
 msgid "Click and change"
 msgstr "Clicca e cambia"
 
-#: templates/django_webix/include/utils.js:646
+#: templates/django_webix/include/utils.js:649
 msgid "Locked data"
 msgstr "Dati bloccati"
 
-#: templates/django_webix/include/utils.js:688
+#: templates/django_webix/include/utils.js:691
 msgid "Editable column"
 msgstr "Colonna modificabile"
 
@@ -529,7 +533,7 @@ msgstr "Non hai il permesso di cancellare"
 msgid "You haven't view permission"
 msgstr "Non hai il permesso di vedere"
 
-#: views/generic/create_update.py:94
+#: views/generic/create_update.py:95
 msgid ""
 "Template style is improperly configured only options are 'standard' or "
 "'tabs' (standard by default)."
@@ -537,26 +541,26 @@ msgstr ""
 "Lo stile del modello è configurato in modo errato, le sole opzioni "
 "disponibili sono 'standard' o 'tabs' (standard di default)."
 
-#: views/generic/create_update.py:383 views/generic/create_update.py:470
+#: views/generic/create_update.py:388 views/generic/create_update.py:475
 #: views/generic/delete.py:43 views/generic/detail.py:20
 #: views/generic/list.py:693
 msgid "View permission is not allowed"
 msgstr "Non disponi del permesso di visione"
 
-#: views/generic/create_update.py:386
+#: views/generic/create_update.py:391
 msgid "Add permission is not allowed"
 msgstr "Non disponi del permesso di aggiunta"
 
-#: views/generic/create_update.py:473
+#: views/generic/create_update.py:478
 msgid "Change permission is not allowed"
 msgstr "Non disponi del permesso di modifica"
 
-#: views/generic/create_update.py:536
+#: views/generic/create_update.py:541
 #, python-format
 msgid "Changed %s."
 msgstr "Modificato %s."
 
-#: views/generic/create_update.py:536
+#: views/generic/create_update.py:541
 msgid "and"
 msgstr "e"
 
