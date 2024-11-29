@@ -138,4 +138,3 @@ You can override main dashboard (not work only on his context).
 .. code-block:: python
 
     def dashboard(self, request, extra_context=None):
-

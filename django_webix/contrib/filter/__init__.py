@@ -1,1 +1,1 @@
-default_app_config = 'django_webix.contrib.filter.apps.FilterConfig'
+default_app_config = "django_webix.contrib.filter.apps.FilterConfig"

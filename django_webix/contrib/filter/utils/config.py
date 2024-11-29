@@ -1,18 +1,16 @@
 from django.apps import apps
 from django.conf import settings
+from django.contrib.contenttypes.fields import GenericForeignKey, GenericRelation
+from django.contrib.postgres.fields import ArrayField
 from django.db import models
 from django.db.models.fields.reverse_related import ForeignObjectRel
-from django.contrib.postgres.fields import ArrayField
-from django.contrib.contenttypes.fields import GenericRelation, GenericForeignKey
-
-from django_webix.contrib.filter.utils.operators import operators_override, counter_operator, matches
+from django_webix.contrib.filter.utils.operators import counter_operator, matches, operators_override
 
 
 def _get_config_new(model_class):
     fields = []
-    prefix_id = '{app_label}.{model_name}.'.format(
-        app_label=model_class._meta.app_label,
-        model_name=model_class._meta.model_name
+    prefix_id = "{app_label}.{model_name}.".format(
+        app_label=model_class._meta.app_label, model_name=model_class._meta.model_name
     )
     # Iterate through model fields excluding relations and adds it to model configuration dict
     for field in get_enable_field(model_class):
@@ -22,8 +20,7 @@ def _get_config_new(model_class):
         if issubclass(type(field), models.ForeignKey):
             model = field.remote_field.get_related_field().model
             model_name = "{app_label}.{model_name}".format(
-                app_label=model._meta.app_label,
-                model_name=model._meta.model_name
+                app_label=model._meta.app_label, model_name=model._meta.model_name
             )
             fields_to_insert = {
                 "id": prefix_id + field.name,
@@ -31,13 +28,12 @@ def _get_config_new(model_class):
                 "type": field.get_internal_type(),
                 "operators": list(field.get_lookups().keys()),
                 "follow": True,
-                "follow_model": model_name
+                "follow_model": model_name,
             }
         elif issubclass(type(field), ForeignObjectRel):
             model = field.related_model
             model_name = "{app_label}.{model_name}".format(
-                app_label=model._meta.app_label,
-                model_name=model._meta.model_name
+                app_label=model._meta.app_label, model_name=model._meta.model_name
             )
             fields_to_insert = {
                 "id": prefix_id + field.remote_field.related_query_name(),
@@ -45,14 +41,13 @@ def _get_config_new(model_class):
                 "type": field.get_internal_type(),
                 "operators": list(field.remote_field.get_lookups().keys()),
                 "follow": True,
-                "follow_model": model_name
+                "follow_model": model_name,
             }
         elif issubclass(type(field), models.ManyToManyField):
             model = field.remote_field.get_related_field().model
             model_name = "{app_label}.{model_name}".format(
                 app_label=model._meta.app_label,
                 model_name=model._meta.model_name,
-                model_prefix=model._meta.verbose_name
             )
             fields_to_insert = {
                 "id": prefix_id + field.name,
@@ -60,7 +55,7 @@ def _get_config_new(model_class):
                 "type": field.get_internal_type(),
                 "operators": list(field.get_lookups().keys()),
                 "follow": True,
-                "follow_model": model_name
+                "follow_model": model_name,
             }
         # generic models
         elif issubclass(type(field), GenericRelation):
@@ -68,7 +63,6 @@ def _get_config_new(model_class):
             model_name = "{app_label}.{model_name}".format(
                 app_label=model._meta.app_label,
                 model_name=model._meta.model_name,
-                model_prefix=model._meta.verbose_name
             )
             fields_to_insert = {
                 "id": prefix_id + field.name,
@@ -76,7 +70,7 @@ def _get_config_new(model_class):
                 "type": field.get_internal_type(),
                 "operators": list(field.get_lookups().keys()),
                 "follow": True,
-                "follow_model": model_name
+                "follow_model": model_name,
             }
         else:
             fields_to_insert = {
@@ -86,54 +80,54 @@ def _get_config_new(model_class):
                 "operators": list(field.get_lookups().keys()),
             }
             if (
-                hasattr(field, "base_field") and
-                hasattr(field.base_field, 'choices') and
-                field.base_field.choices is not None and
-                len(field.base_field.choices) > 0
+                hasattr(field, "base_field")
+                and hasattr(field.base_field, "choices")
+                and field.base_field.choices is not None
+                and len(field.base_field.choices) > 0
             ):
 
-                fields_to_insert.update({
-                    # 'input': 'select',
-                    "operators": ["exact", "isnull"],
-                    "values": [{x[0]: x[1]} for x in field.base_field.choices]
-                })
+                fields_to_insert.update(
+                    {
+                        # 'input': 'select',
+                        "operators": ["exact", "isnull"],
+                        "values": [{x[0]: x[1]} for x in field.base_field.choices],
+                    }
+                )
 
                 if not isinstance(field, ArrayField):
-                    fields_to_insert.update({
-                        'input': 'select'
-                    })
+                    fields_to_insert.update({"input": "select"})
 
-            if (
-                hasattr(field, 'choices') and
-                field.choices is not None and
-                len(field.choices) > 0
-            ):
-                fields_to_insert.update({
-                    'input': 'select',
-                    "operators": ["exact", "isnull"],
-                    "values": [{x[0]: x[1]} for x in field.choices]
-                })
+            if hasattr(field, "choices") and field.choices is not None and len(field.choices) > 0:
+                fields_to_insert.update(
+                    {
+                        "input": "select",
+                        "operators": ["exact", "isnull"],
+                        "values": [{x[0]: x[1]} for x in field.choices],
+                    }
+                )
 
-        for operator in fields_to_insert['operators']:
+        for operator in fields_to_insert["operators"]:
             if counter_operator.get(operator, None) is not None:
-                fields_to_insert['operators'].append(counter_operator.get(operator, None))
+                fields_to_insert["operators"].append(counter_operator.get(operator, None))
 
         ovveride = matches.get(type(field), None)
         if ovveride is not None:
-            if ovveride.get('operators', None) is not None:
-                fields_to_insert['operators'] = ovveride.get('operators', None)
-            if ovveride.get('input') is not None:
-                fields_to_insert['input'] = ovveride.get('input', None)
-            if ovveride.get('values') is not None:
-                fields_to_insert['values'] = ovveride.get('values', None)
-            if ovveride.get('webix_type') is not None:
-                fields_to_insert['webix_type'] = ovveride.get('webix_type', None)
-            if ovveride.get('plugin_webix') is not None:
-                fields_to_insert['plugin_webix'] = ovveride.get('plugin_webix', None)
+            if ovveride.get("operators", None) is not None:
+                fields_to_insert["operators"] = ovveride.get("operators", None)
+            if ovveride.get("input") is not None:
+                fields_to_insert["input"] = ovveride.get("input", None)
+            if ovveride.get("values") is not None:
+                fields_to_insert["values"] = ovveride.get("values", None)
+            if ovveride.get("webix_type") is not None:
+                fields_to_insert["webix_type"] = ovveride.get("webix_type", None)
+            if ovveride.get("plugin_webix") is not None:
+                fields_to_insert["plugin_webix"] = ovveride.get("plugin_webix", None)
 
-        fields_to_insert.update({
-            'value_separator': ';',
-        })
+        fields_to_insert.update(
+            {
+                "value_separator": ";",
+            }
+        )
 
         fields.append(fields_to_insert)
 
@@ -142,35 +136,34 @@ def _get_config_new(model_class):
 
     for k, v in operators_override.items():
         item = {
-            'name': k,
-            'label': v.get('label', k),
-            'nb_inputs': v.get('nb_inputs', 1),
-            'multiple': v.get('multiple', False),
-            'values': v.get('values', None),
-            'pick_geometry': v.get('pick_geometry', False),
+            "name": k,
+            "label": v.get("label", k),
+            "nb_inputs": v.get("nb_inputs", 1),
+            "multiple": v.get("multiple", False),
+            "values": v.get("values", None),
+            "pick_geometry": v.get("pick_geometry", False),
         }
         op_final.append(item)
 
     return {
         "model": "{app_label}.{model_name}".format(
-            app_label=model_class._meta.app_label,
-            model_name=model_class._meta.model_name
+            app_label=model_class._meta.app_label, model_name=model_class._meta.model_name
         ),
         "label": model_class._meta.verbose_name,
         "fields": fields,
-        "operators": op_final
+        "operators": op_final,
     }
 
 
 def get_enabled_model(initial=False):
     result = []
     for key, value in settings.DJANGO_WEBIX_FILTER["models"].items():
-        if initial is True and isinstance(value, dict) and 'initial' in value and value['initial'] is False:
+        if initial is True and isinstance(value, dict) and "initial" in value and value["initial"] is False:
             continue  # Non enabled to initial filter
         app_label, model_name = key.split(".")
         try:
             model = apps.get_model(app_label, model_name)
-        except:
+        except Exception:
             pass
         else:
             result.append(model)
@@ -192,8 +185,8 @@ def get_enable_field(model):
     field_def = model._meta.get_fields()
     filter_sett = settings.DJANGO_WEBIX_FILTER["models"]
     modello = filter_sett.get("{}.{}".format(model._meta.app_label, model._meta.model_name), None)
-    campi_inclusi = modello.get('fields', None)
-    campi_esclusi = modello.get('exclude', None)
+    campi_inclusi = modello.get("fields", None)
+    campi_esclusi = modello.get("exclude", None)
     result = []
     if campi_inclusi is not None and campi_esclusi is not None:
         pre_result = field_def
@@ -225,7 +218,7 @@ def get_enable_field(model):
 
 
 def get_limit_suggest():
-    if 'AUTOCOMPLETE_LIMITS' in settings.DJANGO_WEBIX_FILTER:
-        return settings.DJANGO_WEBIX_FILTER['AUTOCOMPLETE_LIMITS']
+    if "AUTOCOMPLETE_LIMITS" in settings.DJANGO_WEBIX_FILTER:
+        return settings.DJANGO_WEBIX_FILTER["AUTOCOMPLETE_LIMITS"]
     # dafualt
     return 30

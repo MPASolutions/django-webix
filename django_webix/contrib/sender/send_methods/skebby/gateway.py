@@ -1,8 +1,7 @@
 import json
 
 import requests
-
-from django_webix.contrib.sender.send_methods.skebby.enums import SkebbyBoolean, SkebbyMessageType, SkebbyEncoding
+from django_webix.contrib.sender.send_methods.skebby.enums import SkebbyBoolean, SkebbyEncoding, SkebbyMessageType
 from django_webix.contrib.sender.send_methods.skebby.exceptions import SkebbyException
 
 
@@ -35,11 +34,17 @@ class Skebby:
         def headers(self):
             if self._user_key is not None and (self._session_key is not None or self._access_token is not None):
                 if self._session_key is not None:
-                    return {'user_key': self._user_key, 'Session_key': self._session_key,
-                            'Content-type': 'application/json'}
+                    return {
+                        "user_key": self._user_key,
+                        "Session_key": self._session_key,
+                        "Content-type": "application/json",
+                    }
                 elif self._access_token is not None:
-                    return {'user_key': self._user_key, 'Access_token': self._access_token,
-                            'Content-type': 'application/json'}
+                    return {
+                        "user_key": self._user_key,
+                        "Access_token": self._access_token,
+                        "Content-type": "application/json",
+                    }
             raise SkebbyException("You need to authenticate before")
 
         def session_key(self, username, password):
@@ -54,17 +59,14 @@ class Skebby:
             Where USER_KEY and SESSION_KEY are the values returned by the login API.
             """
 
-            params = {
-                "username": username,
-                "password": password
-            }
+            params = {"username": username, "password": password}
             r = requests.get("{url}login".format(url=Skebby.url), params=params)
 
             if r.status_code != 200:
                 raise SkebbyException("Error! http code: " + str(r.status_code) + ", body message: " + str(r.content))
             else:
                 response = r.text
-                user_key, session_key = response.split(';')
+                user_key, session_key = response.split(";")
                 self._user_key = user_key
                 self._session_key = session_key
 
@@ -80,17 +82,14 @@ class Skebby:
             Where USER_KEY and ACCESS_TOKEN are the values returned by the login API.
             """
 
-            params = {
-                "username": username,
-                "password": password
-            }
+            params = {"username": username, "password": password}
             r = requests.get("{url}token".format(url=Skebby.url), params=params)
 
             if r.status_code != 200:
                 raise SkebbyException("Error! http code: " + str(r.status_code) + ", body message: " + str(r.content))
             else:
                 response = r.text
-                user_key, access_token = response.split(';')
+                user_key, access_token = response.split(";")
                 self._user_key = user_key
                 self._access_token = access_token
 
@@ -98,7 +97,8 @@ class Skebby:
         """
         User API
 
-        The following are utility functions regarding the Authenticated User (e.g. the user status, password reset, etc)
+        The following are utility functions regarding the Authenticated User
+        (e.g. the user status, password reset, etc)
         """
 
         def __init__(self, authentication):
@@ -141,13 +141,9 @@ class Skebby:
             Changes the authenticated user’s password
             """
 
-            params = {
-                "password": password
-            }
+            params = {"password": password}
             r = requests.get(
-                "{url}pwdreset".format(url=Skebby.url),
-                params=params,
-                headers=self._authentication.headers
+                "{url}pwdreset".format(url=Skebby.url), params=params, headers=self._authentication.headers
             )
 
             if r.status_code != 200:
@@ -168,15 +164,8 @@ class Skebby:
             if not isinstance(type_aliases, SkebbyBoolean):
                 raise SkebbyException("typeAliases allows only SkebbyBoolean enum")
 
-            params = {
-                "getMoney": get_money.value,
-                "typeAliases": type_aliases.value
-            }
-            r = requests.get(
-                "{url}status".format(url=Skebby.url),
-                params=params,
-                headers=self._authentication.headers
-            )
+            params = {"getMoney": get_money.value, "typeAliases": type_aliases.value}
+            r = requests.get("{url}status".format(url=Skebby.url), params=params, headers=self._authentication.headers)
 
             if r.status_code != 200:
                 raise SkebbyException("Error! http code: " + str(r.status_code) + ", body message: " + str(r.content))
@@ -196,10 +185,33 @@ class Skebby:
         def __init__(self, authentication):
             self._authentication = authentication
 
-        def add_contact(self, email, phone_number, name="", surname="", gender="", fax="", address="", city="",
-                        province="", birthdate="", promotiondate="", rememberdate="", zip_code="", group_ids=None,
-                        custom1="", custom2="", custom3="", custom4="", custom5="", custom6="", custom7="", custom8="",
-                        custom9="", custom10=""):
+        def add_contact(
+            self,
+            email,
+            phone_number,
+            name="",
+            surname="",
+            gender="",
+            fax="",
+            address="",
+            city="",
+            province="",
+            birthdate="",
+            promotiondate="",
+            rememberdate="",
+            zip_code="",
+            group_ids=None,
+            custom1="",
+            custom2="",
+            custom3="",
+            custom4="",
+            custom5="",
+            custom6="",
+            custom7="",
+            custom8="",
+            custom9="",
+            custom10="",
+        ):
             """
             Add a contact
 
@@ -213,32 +225,56 @@ class Skebby:
                 "email": email,
                 "phoneNumber": phone_number,
             }
-            if name is not None: payload["name"] = name
-            if surname is not None: payload["surname"] = surname
-            if gender is not None: payload["gender"] = gender
-            if fax is not None: payload["fax"] = fax
-            if zip_code is not None: payload["zip"] = zip_code
-            if address is not None: payload["address"] = address
-            if city is not None: payload["city"] = city
-            if province is not None: payload["province"] = province
-            if birthdate is not None: payload["birthdate"] = birthdate
-            if group_ids is not None: payload["groupIds"] = group_ids
-            if promotiondate is not None: payload["promotiondate"] = promotiondate
-            if rememberdate is not None: payload["rememberdate"] = rememberdate
-            if custom1 is not None: payload["custom1"] = custom1
-            if custom2 is not None: payload["custom2"] = custom2
-            if custom3 is not None: payload["custom3"] = custom3
-            if custom4 is not None: payload["custom4"] = custom4
-            if custom5 is not None: payload["custom5"] = custom5
-            if custom6 is not None: payload["custom6"] = custom6
-            if custom7 is not None: payload["custom7"] = custom7
-            if custom8 is not None: payload["custom8"] = custom8
-            if custom9 is not None: payload["custom9"] = custom9
-            if custom10 is not None: payload["custom10"] = custom10
+            if name is not None:
+                payload["name"] = name
+            if surname is not None:
+                payload["surname"] = surname
+            if gender is not None:
+                payload["gender"] = gender
+            if fax is not None:
+                payload["fax"] = fax
+            if zip_code is not None:
+                payload["zip"] = zip_code
+            if address is not None:
+                payload["address"] = address
+            if city is not None:
+                payload["city"] = city
+            if province is not None:
+                payload["province"] = province
+            if birthdate is not None:
+                payload["birthdate"] = birthdate
+            if group_ids is not None:
+                payload["groupIds"] = group_ids
+            if promotiondate is not None:
+                payload["promotiondate"] = promotiondate
+            if rememberdate is not None:
+                payload["rememberdate"] = rememberdate
+            if custom1 is not None:
+                payload["custom1"] = custom1
+            if custom2 is not None:
+                payload["custom2"] = custom2
+            if custom3 is not None:
+                payload["custom3"] = custom3
+            if custom4 is not None:
+                payload["custom4"] = custom4
+            if custom5 is not None:
+                payload["custom5"] = custom5
+            if custom6 is not None:
+                payload["custom6"] = custom6
+            if custom7 is not None:
+                payload["custom7"] = custom7
+            if custom8 is not None:
+                payload["custom8"] = custom8
+            if custom9 is not None:
+                payload["custom9"] = custom9
+            if custom10 is not None:
+                payload["custom10"] = custom10
 
             payload = str(json.dumps(payload))
 
-            r = requests.post("{url}contact".format(url=Skebby.url), headers=self._authentication.headers, data=payload)
+            r = requests.post(
+                "{url}contact".format(url=Skebby.url), headers=self._authentication.headers, data=payload
+            )
 
             if r.status_code != 201:
                 raise SkebbyException("Error! http code: " + str(r.status_code) + ", body message: " + str(r.content))
@@ -349,11 +385,25 @@ class Skebby:
         def __init__(self, authentication):
             self._authentication = authentication
 
-        def send_sms(self, message_type: SkebbyMessageType, message, recipient, sender="", scheduled_delivery_time=None,
-                     scheduled_delivery_timezone=None, order_id=None, return_credits=SkebbyBoolean.FALSE,
-                     return_remaining=SkebbyBoolean.FALSE, allow_invalid_recipients=SkebbyBoolean.FALSE,
-                     encoding=SkebbyEncoding.GSM, id_landing=None, campaign_name=None, max_fragments=7,
-                     truncate=SkebbyBoolean.TRUE, richsms_url=None):
+        def send_sms(
+            self,
+            message_type: SkebbyMessageType,
+            message,
+            recipient,
+            sender="",
+            scheduled_delivery_time=None,
+            scheduled_delivery_timezone=None,
+            order_id=None,
+            return_credits=SkebbyBoolean.FALSE,
+            return_remaining=SkebbyBoolean.FALSE,
+            allow_invalid_recipients=SkebbyBoolean.FALSE,
+            encoding=SkebbyEncoding.GSM,
+            id_landing=None,
+            campaign_name=None,
+            max_fragments=7,
+            truncate=SkebbyBoolean.TRUE,
+            richsms_url=None,
+        ):
             """
             Send an SMS message
 
@@ -390,20 +440,32 @@ class Skebby:
                 "recipient": recipient,
             }
 
-            if sender is not None: payload["sender"] = sender
-            if scheduled_delivery_time is not None: payload["scheduled_delivery_time"] = scheduled_delivery_time
+            if sender is not None:
+                payload["sender"] = sender
+            if scheduled_delivery_time is not None:
+                payload["scheduled_delivery_time"] = scheduled_delivery_time
             if scheduled_delivery_timezone is not None:
                 payload["scheduled_delivery_timezone"] = scheduled_delivery_timezone
-            if order_id is not None: payload["order_id"] = order_id
-            if return_credits is not None: payload["returnCredits"] = return_credits.value
-            if return_remaining is not None: payload["returnRemaining"] = return_remaining.value
-            if allow_invalid_recipients is not None: payload["allowInvalidRecipients"] = allow_invalid_recipients.value
-            if encoding is not None: payload["encoding"] = encoding.value
-            if id_landing is not None: payload["id_landing"] = id_landing
-            if campaign_name is not None: payload["campaign_name"] = campaign_name
-            if max_fragments is not None: payload["max_fragments"] = max_fragments
-            if truncate is not None: payload["truncate"] = truncate.value
-            if richsms_url is not None: payload["richsms_url"] = richsms_url
+            if order_id is not None:
+                payload["order_id"] = order_id
+            if return_credits is not None:
+                payload["returnCredits"] = return_credits.value
+            if return_remaining is not None:
+                payload["returnRemaining"] = return_remaining.value
+            if allow_invalid_recipients is not None:
+                payload["allowInvalidRecipients"] = allow_invalid_recipients.value
+            if encoding is not None:
+                payload["encoding"] = encoding.value
+            if id_landing is not None:
+                payload["id_landing"] = id_landing
+            if campaign_name is not None:
+                payload["campaign_name"] = campaign_name
+            if max_fragments is not None:
+                payload["max_fragments"] = max_fragments
+            if truncate is not None:
+                payload["truncate"] = truncate.value
+            if richsms_url is not None:
+                payload["richsms_url"] = richsms_url
 
             payload = str(json.dumps(payload))
 
@@ -417,12 +479,26 @@ class Skebby:
                 obj = json.loads(response)
                 return obj
 
-        def send_parametric_sms(self, message_type: SkebbyMessageType, message, recipients, sender="",
-                                scheduled_delivery_time=None, scheduled_delivery_timezone=None, order_id=None,
-                                return_credits=SkebbyBoolean.FALSE, return_remaining=SkebbyBoolean.FALSE,
-                                allow_invalid_recipients=SkebbyBoolean.FALSE, encoding=SkebbyEncoding.GSM,
-                                id_landing=None, campaign_name=None, max_fragments=7, truncate=SkebbyBoolean.TRUE,
-                                richsms_url=None, richsms_mode=None):
+        def send_parametric_sms(
+            self,
+            message_type: SkebbyMessageType,
+            message,
+            recipients,
+            sender="",
+            scheduled_delivery_time=None,
+            scheduled_delivery_timezone=None,
+            order_id=None,
+            return_credits=SkebbyBoolean.FALSE,
+            return_remaining=SkebbyBoolean.FALSE,
+            allow_invalid_recipients=SkebbyBoolean.FALSE,
+            encoding=SkebbyEncoding.GSM,
+            id_landing=None,
+            campaign_name=None,
+            max_fragments=7,
+            truncate=SkebbyBoolean.TRUE,
+            richsms_url=None,
+            richsms_mode=None,
+        ):
             """
             Send a parametric SMS message
 
@@ -462,28 +538,39 @@ class Skebby:
                 "recipients": recipients,
             }
 
-            if sender is not None: payload["sender"] = sender
-            if scheduled_delivery_time is not None: payload["scheduled_delivery_time"] = scheduled_delivery_time
+            if sender is not None:
+                payload["sender"] = sender
+            if scheduled_delivery_time is not None:
+                payload["scheduled_delivery_time"] = scheduled_delivery_time
             if scheduled_delivery_timezone is not None:
                 payload["scheduled_delivery_timezone"] = scheduled_delivery_timezone
-            if order_id is not None: payload["order_id"] = order_id
-            if return_credits is not None: payload["returnCredits"] = return_credits.value
-            if return_remaining is not None: payload["returnRemaining"] = return_remaining.value
-            if allow_invalid_recipients is not None: payload["allowInvalidRecipients"] = allow_invalid_recipients.value
-            if encoding is not None: payload["encoding"] = encoding.value
-            if id_landing is not None: payload["id_landing"] = id_landing
-            if campaign_name is not None: payload["campaign_name"] = campaign_name
-            if max_fragments is not None: payload["max_fragments"] = max_fragments
-            if truncate is not None: payload["truncate"] = truncate.value
-            if richsms_url is not None: payload["richsms_url"] = richsms_url
-            if richsms_mode is not None: payload["richsms_mode"] = richsms_mode
+            if order_id is not None:
+                payload["order_id"] = order_id
+            if return_credits is not None:
+                payload["returnCredits"] = return_credits.value
+            if return_remaining is not None:
+                payload["returnRemaining"] = return_remaining.value
+            if allow_invalid_recipients is not None:
+                payload["allowInvalidRecipients"] = allow_invalid_recipients.value
+            if encoding is not None:
+                payload["encoding"] = encoding.value
+            if id_landing is not None:
+                payload["id_landing"] = id_landing
+            if campaign_name is not None:
+                payload["campaign_name"] = campaign_name
+            if max_fragments is not None:
+                payload["max_fragments"] = max_fragments
+            if truncate is not None:
+                payload["truncate"] = truncate.value
+            if richsms_url is not None:
+                payload["richsms_url"] = richsms_url
+            if richsms_mode is not None:
+                payload["richsms_mode"] = richsms_mode
 
             payload = str(json.dumps(payload))
 
             r = requests.post(
-                "{url}paramsms".format(url=Skebby.url),
-                headers=self._authentication.headers,
-                data=payload
+                "{url}paramsms".format(url=Skebby.url), headers=self._authentication.headers, data=payload
             )
 
             if r.status_code != 201:
@@ -505,10 +592,9 @@ class Skebby:
             Get informations on the SMS delivery status of the given order_id.
             """
 
-            r = requests.get("{url}sms/{order_id}".format(
-                url=Skebby.url,
-                order_id=order_id
-            ), headers=self._authentication.headers)
+            r = requests.get(
+                "{url}sms/{order_id}".format(url=Skebby.url, order_id=order_id), headers=self._authentication.headers
+            )
 
             if r.status_code != 200:
                 raise SkebbyException("Error! http code: " + str(r.status_code) + ", body message: " + str(r.content))
@@ -543,19 +629,12 @@ class Skebby:
             Returns the user’s SMS messages history
             """
 
-            params = {
-                "from": date_from,
-                "to": date_to,
-                "pageNumber": page_number,
-                "pageSize": page_size
-            }
+            params = {"from": date_from, "to": date_to, "pageNumber": page_number, "pageSize": page_size}
             if timezone is not None:
-                params['timezone'] = timezone
+                params["timezone"] = timezone
 
             r = requests.get(
-                "{url}smshistory".format(url=Skebby.url),
-                params=params,
-                headers=self._authentication.headers
+                "{url}smshistory".format(url=Skebby.url), params=params, headers=self._authentication.headers
             )
 
             if r.status_code != 200:
@@ -566,8 +645,9 @@ class Skebby:
                 obj = json.loads(response)
                 return obj
 
-        def get_sent_sms_to_recipient(self, recipient, date_from, date_to="now", timezone=None, page_number=1,
-                                      page_size=10):
+        def get_sent_sms_to_recipient(
+            self, recipient, date_from, date_to="now", timezone=None, page_number=1, page_size=10
+        ):
             """
             Get sent SMS to a recipient
 
@@ -579,15 +659,13 @@ class Skebby:
                 "from": date_from,
                 "to": date_to,
                 "pageNumber": page_number,
-                "pageSize": page_size
+                "pageSize": page_size,
             }
             if timezone is not None:
-                params['timezone'] = timezone
+                params["timezone"] = timezone
 
             r = requests.get(
-                "{url}rcptHistory".format(url=Skebby.url),
-                params=params,
-                headers=self._authentication.headers
+                "{url}rcptHistory".format(url=Skebby.url), params=params, headers=self._authentication.headers
             )
 
             if r.status_code != 200:
@@ -607,13 +685,9 @@ class Skebby:
             request in the near future.
             """
 
-            params = {
-                "order_id": order_id
-            }
+            params = {"order_id": order_id}
             r = requests.get(
-                "{url}smsrich/statistics".format(url=Skebby.url),
-                params=params,
-                headers=self._authentication.headers
+                "{url}smsrich/statistics".format(url=Skebby.url), params=params, headers=self._authentication.headers
             )
 
             if r.status_code != 200:

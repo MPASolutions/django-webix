@@ -1,8 +1,6 @@
-
 import types
 
 from django.contrib.admin.utils import NestedObjects
-
 from django.utils.text import capfirst
 
 try:
@@ -79,8 +77,7 @@ def walk_items(item_list):
 def tree_formatter(item_list):
     output = []
     for item, children in walk_items(item_list):
-        _data = {"value": '{}: {}'.format(capfirst(item._meta.verbose_name), force_str(item))}
-        _sub_data = None
+        _data = {"value": "{}: {}".format(capfirst(item._meta.verbose_name), force_str(item))}
         if children:
             _data.update({"data": tree_formatter(children), "open": True})
         output.append(_data)
@@ -92,10 +89,10 @@ class NestedObjectsWithLimit(NestedObjects):
     only_models = None
 
     def __init__(self, *args, **kwargs):
-        self.exclude_models = kwargs.pop('exclude_models', None)
-        self.only_models = kwargs.pop('only_models', None)
+        self.exclude_models = kwargs.pop("exclude_models", None)
+        self.only_models = kwargs.pop("only_models", None)
         if self.exclude_models is not None and self.only_models is not None:
-            raise Exception('Set only one of exclude_models or only_models parameter')
+            raise Exception("Set only one of exclude_models or only_models parameter")
         super().__init__(*args, **kwargs)
 
     def add_edge(self, source, target):

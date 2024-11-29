@@ -1,54 +1,71 @@
 import inspect
-from collections import OrderedDict
-
-import magic
-import numpy as np
+import io
 import os
-import pandas as pd
-import geopandas
 import tempfile
 import zipfile
-import io
+from collections import OrderedDict
+
+import geopandas
+import magic
+import numpy as np
+import pandas as pd
 from django.contrib.gis import forms
 from django.core.files.uploadedfile import InMemoryUploadedFile
 from django.db import models
 from django.utils.text import slugify
 from django.utils.translation import gettext as _, gettext_lazy
+from django_webix.contrib.validator.models import ImportFile
 from xlrd import colname as xlcolname
 
-from django_webix.contrib.validator.models import ImportFile
-
 MIME = {
-    'xlsx': ['application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', 'text/xml'],
-    'xls': ['application/vnd.ms-excel', 'application/msexcel', 'application/x-msexcel',
-            'application/x-ms-excel', 'application/x-excel', 'application/x-dos_ms_excel',
-            'application/xls', 'application/x-xls', 'application/vnd.ms-office',
-            'application/vnd-xls', 'application/excel'],
-    'csv': ['text/csv', 'text/x-csv', 'application/csv', 'application/x-csv',
-            'text/csv', 'text/comma-separated-values', 'text/x-comma-separated-values'],
-    'txt': ['text/plain', 'text/tab-separated-values'],
-    'zip': ['application/zip', 'text/plain']
+    "xlsx": ["application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "text/xml"],
+    "xls": [
+        "application/vnd.ms-excel",
+        "application/msexcel",
+        "application/x-msexcel",
+        "application/x-ms-excel",
+        "application/x-excel",
+        "application/x-dos_ms_excel",
+        "application/xls",
+        "application/x-xls",
+        "application/vnd.ms-office",
+        "application/vnd-xls",
+        "application/excel",
+    ],
+    "csv": [
+        "text/csv",
+        "text/x-csv",
+        "application/csv",
+        "application/x-csv",
+        "text/csv",
+        "text/comma-separated-values",
+        "text/x-comma-separated-values",
+    ],
+    "txt": ["text/plain", "text/tab-separated-values"],
+    "zip": ["application/zip", "text/plain"],
 }
 
 ERR_MSG = {
-    'NOFILE': gettext_lazy('No file uploaded'),
-    'PARSE_ERR': gettext_lazy(
-        'Text file not recognizable as delimiter-separated values with separator \' {} \' (Exception:{})'),
-    'WRONG_FILE': gettext_lazy('Could not find file \'{}\' (or read from buffer)'),
-    'WRONG_EXT': gettext_lazy('File format \'{}\' not recognized, supported formats: {}'),
-    'WRONG_CONTENT_UNDETERMINED': gettext_lazy('Internal file format content was not recognized'),
-    'WRONG_TYPE': gettext_lazy('File type \'{}\' not supported'),
-    'NOFOGLI': gettext_lazy('There is no sheet'),
-    'NODATA': gettext_lazy('There is no data in the sheet {}'),
-    'UNAMED_COLS': gettext_lazy('There are columns with no name'),
-    'UNAMED_COLS_XL': gettext_lazy('There are columns with no name: {}'),
-    'LESS_COLS': gettext_lazy('There are not enough columns: there are {} columns, {} needed'),
-    'HEADER': gettext_lazy('Column headers ({}^ row) are incorrect'),
-    'COLUMN': gettext_lazy('There is no column \'{}\''),
-    'COL_POS': gettext_lazy('The name of the {}^ column ({}) must be \'{}\' (instead of \'{}\')'),
-    'UNIQ_VIOLATION': gettext_lazy('A uniqueness rule has been violated in the fields {}'),
-    'ZIP_SHP': gettext_lazy(
-        'The zip file is supported only if the following files are contained .shp, .dbf, .prj, .shx'),
+    "NOFILE": gettext_lazy("No file uploaded"),
+    "PARSE_ERR": gettext_lazy(
+        "Text file not recognizable as delimiter-separated values with separator ' {} ' (Exception:{})"
+    ),
+    "WRONG_FILE": gettext_lazy("Could not find file '{}' (or read from buffer)"),
+    "WRONG_EXT": gettext_lazy("File format '{}' not recognized, supported formats: {}"),
+    "WRONG_CONTENT_UNDETERMINED": gettext_lazy("Internal file format content was not recognized"),
+    "WRONG_TYPE": gettext_lazy("File type '{}' not supported"),
+    "NOFOGLI": gettext_lazy("There is no sheet"),
+    "NODATA": gettext_lazy("There is no data in the sheet {}"),
+    "UNAMED_COLS": gettext_lazy("There are columns with no name"),
+    "UNAMED_COLS_XL": gettext_lazy("There are columns with no name: {}"),
+    "LESS_COLS": gettext_lazy("There are not enough columns: there are {} columns, {} needed"),
+    "HEADER": gettext_lazy("Column headers ({}^ row) are incorrect"),
+    "COLUMN": gettext_lazy("There is no column '{}'"),
+    "COL_POS": gettext_lazy("The name of the {}^ column ({}) must be '{}' (instead of '{}')"),
+    "UNIQ_VIOLATION": gettext_lazy("A uniqueness rule has been violated in the fields {}"),
+    "ZIP_SHP": gettext_lazy(
+        "The zip file is supported only if the following files are contained .shp, .dbf, .prj, .shx"
+    ),
 }
 
 
@@ -57,20 +74,32 @@ class ValidationError(Exception):
 
 
 class ImportValidator:
-    def __init__(self, filepath_or_buffer, template, field_names=None, fixpos=False,
-                 initial_as_default=True, label_as_colname=True, pass_warning=False, check_mimetype=True,
-                 **kw_pandas_read):
+    def __init__(
+        self,
+        filepath_or_buffer,
+        template,
+        field_names=None,
+        fixpos=False,
+        initial_as_default=True,
+        label_as_colname=True,
+        pass_warning=False,
+        check_mimetype=True,
+        **kw_pandas_read
+    ):
         """
-        Read the file (with existance/extension/type validation) and store in pandas dataframe (eventually build ModelForm from Model)
+        Read the file (with existance/extension/type validation) and store in pandas dataframe
+        (eventually build ModelForm from Model)
         :param filepath_or_buffer: filename/filepath string or file-like buffer
         :param template: Form or Model used as tabplate to validate file
         :param field_names: list of field_names used to create ModelForm from Model (default __all__)
-        :param fixpos: Boolean, True to raise better header validation, only if file colums are exactly the same and in the same order of the Form fields
+        :param fixpos: Boolean, True to raise better header validation, only if file colums
+        are exactly the same and in the same order of the Form fields
         :param initial_as_default, default True: use field inital value as default (only if required=Fasle)
         :param label_as_colname, default True: use field label as column name
         :param kw_pandas_read: pandas read_excel or read_csv arguments
             header : int, list of ints, default 0
-                Row (0-indexed) to use for the column labels of the parsed DataFrame (and the start of the data). Use None if there is no header.
+                Row (0-indexed) to use for the column labels of the parsed DataFrame (and the start of the data).
+                Use None if there is no header.
             skiprows : list-like or integer, default None
                 Line numbers to skip (0-indexed) or number of lines to skip (int) at the start of the file.
             sheet_name : string, int, mixed list of strings/ints, or None, default 0
@@ -86,9 +115,9 @@ class ImportValidator:
         self.constants_fields = {}  # initialized by set_constant_fields
         self.extra_options = {}  # initialized by set_extra_options
         self.is_initialized = False
-        self.header = kw_pandas_read.get('header', 0)
-        self.sheet_name = kw_pandas_read.get('sheet_name', 0)
-        self.skiprows = kw_pandas_read.get('skiprows', 0)
+        self.header = kw_pandas_read.get("header", 0)
+        self.sheet_name = kw_pandas_read.get("sheet_name", 0)
+        self.skiprows = kw_pandas_read.get("skiprows", 0)
         self.file_err = []
         self.errors = None
         self.warnings = None
@@ -105,21 +134,19 @@ class ImportValidator:
             self.form_class = template
         elif issubclass(template, models.Model):
             self.form_class = type(
-                str('ModelForm{}'.format(template._meta.model_name)),
+                str("ModelForm{}".format(template._meta.model_name)),
                 (forms.ModelForm,),
-                {'Meta': type(str('Meta'), (), {
-                    'model': template,
-                    'fields': field_names if field_names is not None else '__all__'
-                })}
+                {
+                    "Meta": type(
+                        str("Meta"),
+                        (),
+                        {"model": template, "fields": field_names if field_names is not None else "__all__"},
+                    )
+                },
             )
 
     def __return_file_errors(self):
-        return [{
-            'pos': 'GENERALE',
-            'field': 'File',
-            'value': self.meta['filename'],
-            'mess': m
-        } for m in self.file_err]
+        return [{"pos": "GENERALE", "field": "File", "value": self.meta["filename"], "mess": m} for m in self.file_err]
 
     def set_filters(self, **kwargs):
         """
@@ -128,7 +155,7 @@ class ImportValidator:
         """
 
         if self.is_initialized:
-            raise ValidationError(_('This operation can only be done before validating'))
+            raise ValidationError(_("This operation can only be done before validating"))
         self.filter_cols = kwargs
 
     def set_constant_fields(self, **kwargs):
@@ -138,7 +165,7 @@ class ImportValidator:
         """
 
         if self.is_initialized:
-            raise ValidationError(_('This operation can only be done before validating'))
+            raise ValidationError(_("This operation can only be done before validating"))
         self.constants_fields = kwargs
 
     def set_extra_options(self, **kwargs):
@@ -148,7 +175,7 @@ class ImportValidator:
         :return:
         """
         if self.is_initialized:
-            raise ValidationError(_('This operation can only be done before validating'))
+            raise ValidationError(_("This operation can only be done before validating"))
         self.extra_options = kwargs
 
     def set_unique_together(self, unique_together):
@@ -163,7 +190,7 @@ class ImportValidator:
         """
 
         if self.is_initialized:
-            raise ValidationError(_('This operation can only be done before validating'))
+            raise ValidationError(_("This operation can only be done before validating"))
         self.unique_together = unique_together
 
     def _base_validation(self):
@@ -183,7 +210,7 @@ class ImportValidator:
         header_encode = OrderedDict()  # map {col_slug =[slugify(field_label)]: field_name}
         field_initials = {}
         # for fname in set(self.form_class.base_fields) - set(self.constants_fields):
-        geometry_field = None
+        # geometry_field = None
 
         for fname, field in self.form_class().fields.items():
             if fname not in list(self.constants_fields):
@@ -199,15 +226,15 @@ class ImportValidator:
             # the validator expects that at least the column is present in the uploaded file
             # if you want to use the "geometry" column in the import file, just add it and insert the wkt value
             if issubclass(field.__class__, forms.GeometryField):
-                if 'geometry' not in self.df_rows.columns:
-                    self.df_rows['geometry'] = None
+                if "geometry" not in self.df_rows.columns:
+                    self.df_rows["geometry"] = None
 
         nfields = len(field_label)
         self.field_decod = field_decod
 
         # # check empty # #
         if self.df_rows.empty:
-            self.file_err.append(ERR_MSG['NODATA'].format(self.sheet_name + 1))
+            self.file_err.append(ERR_MSG["NODATA"].format(self.sheet_name + 1))
         # # check headers # #
         elif self.header is not None:
             # # normalize column names (lower and strip) -> slugify
@@ -232,44 +259,50 @@ class ImportValidator:
 
             if not self.fixpos:
                 if self.df_rows.shape[1] < nfields:
-                    self.file_err.append(ERR_MSG['LESS_COLS'].format(self.df_rows.shape[1], nfields))
+                    self.file_err.append(ERR_MSG["LESS_COLS"].format(self.df_rows.shape[1], nfields))
                 if not set(field_label).issubset(list(norm_header.values())):
-                    self.file_err.append(ERR_MSG['HEADER'].format(self.header + self.skiprows + 1))
+                    self.file_err.append(ERR_MSG["HEADER"].format(self.header + self.skiprows + 1))
                     col_diffs = ~pd.Series(field_label).isin(list(norm_header.values()))
                     for nc, diff in enumerate(col_diffs):
                         if diff:
-                            self.file_err.append(ERR_MSG['COLUMN'].format(
-                                # field_label[nc],
-                                list(field_decod.values())[nc],
-                            ))
+                            self.file_err.append(
+                                ERR_MSG["COLUMN"].format(
+                                    # field_label[nc],
+                                    list(field_decod.values())[nc],
+                                )
+                            )
             elif self.fixpos:
                 if self.df_rows.shape[1] < nfields:
-                    self.file_err.append(ERR_MSG['LESS_COLS'].format(self.df_rows.shape[1], nfields))
-                    self.file_err.append(ERR_MSG['HEADER'].format(self.header + self.skiprows + 1))
+                    self.file_err.append(ERR_MSG["LESS_COLS"].format(self.df_rows.shape[1], nfields))
+                    self.file_err.append(ERR_MSG["HEADER"].format(self.header + self.skiprows + 1))
                     col_diffs = ~pd.Series(field_label).isin(list(norm_header.values()))
                     for nc, diff in enumerate(col_diffs):
                         if diff:
-                            self.file_err.append(ERR_MSG['COLUMN'].format(
-                                # field_label[nc],
-                                list(field_decod.values())[nc],
-                            ))
+                            self.file_err.append(
+                                ERR_MSG["COLUMN"].format(
+                                    # field_label[nc],
+                                    list(field_decod.values())[nc],
+                                )
+                            )
                 elif not field_label == list(norm_header.values())[:nfields]:
-                    self.file_err.append(ERR_MSG['HEADER'].format(self.header + self.skiprows + 1))
+                    self.file_err.append(ERR_MSG["HEADER"].format(self.header + self.skiprows + 1))
                     col_diffs = ~(pd.Series(field_label) == list(norm_header.values())[:nfields])
                     for nc, diff in enumerate(col_diffs):
                         if diff:
-                            self.file_err.append(ERR_MSG['COL_POS'].format(
-                                nc + 1,
-                                xlcolname(nc),
-                                # field_label[nc],
-                                list(field_decod.values())[nc],
-                                list(norm_header.keys())[nc],
-                            ))
+                            self.file_err.append(
+                                ERR_MSG["COL_POS"].format(
+                                    nc + 1,
+                                    xlcolname(nc),
+                                    # field_label[nc],
+                                    list(field_decod.values())[nc],
+                                    list(norm_header.keys())[nc],
+                                )
+                            )
 
         else:  # no header: positional mode
             ncols = self.df_rows.shape[1]
             if ncols < nfields:
-                self.file_err.append(ERR_MSG['LESS_COLS'].format(ncols, nfields, '\', \''.join(field_label)))
+                self.file_err.append(ERR_MSG["LESS_COLS"].format(ncols, nfields, "', '".join(field_label)))
 
         if self.file_err:
             return
@@ -297,11 +330,13 @@ class ImportValidator:
         # To re-infer data dtypes for object columns, use DataFrame.infer_objects()
         # For all other conversions use the data-type converters pd.to_datetime, pd.to_timedelta and pd.to_numeric.
         # pd.to_datetime(self.df_rows[date_col], infer_datetime_format=True, errors='coerce')
-        for date_col in self.df_rows.infer_objects().select_dtypes(include=['datetime64']).columns:
-            self.df_rows[date_col] = pd.to_datetime(self.df_rows[date_col]).dt.strftime('%Y-%m-%d').replace({'NaT': ''})
+        for date_col in self.df_rows.infer_objects().select_dtypes(include=["datetime64"]).columns:
+            self.df_rows[date_col] = (
+                pd.to_datetime(self.df_rows[date_col]).dt.strftime("%Y-%m-%d").replace({"NaT": ""})
+            )
 
         # # fill NaN (and dates NaT) with '' (otherwise initialize form with nan string)
-        self.df_rows.replace([np.nan, pd.NaT], ['', ''], inplace=True)
+        self.df_rows.replace([np.nan, pd.NaT], ["", ""], inplace=True)
         # could not rplace with None because pandas try to chage dtype to float
         # self.df_rows.replace([np.nan, pd.NaT], [None, None], inplace=True)
 
@@ -339,10 +374,10 @@ class ImportValidator:
             form.extra_options = self.extra_options
         # valido e salvo il form
         if form.is_valid():
-            if save and hasattr(form, 'save') and callable(form.save):
+            if save and hasattr(form, "save") and callable(form.save):
                 return form.save()
-            elif not save and hasattr(form, 'save') and callable(form.save):
-                if 'commit' in inspect.getfullargspec(form.save).args:
+            elif not save and hasattr(form, "save") and callable(form.save):
+                if "commit" in inspect.getfullargspec(form.save).args:
                     return form.save(commit=False)
         else:
             # row_err = {}
@@ -353,13 +388,20 @@ class ImportValidator:
             #     'err': row_err
             # })
             for field, mess in form.errors.items():
-                self.errors.extend([{
-                    'pos': row_dict['Index'] + (self.header + 2 if self.header is not None else 1) + self.skiprows,
-                    'field': self.field_decod.get(field, 'OTHER'),
-                    # 'COMPLESSIVO' if field == '__all__' else self.field_decod[field],
-                    'value': form.data.get(field, None),  # if field != '__all__' else None
-                    'mess': m
-                } for m in mess])
+                self.errors.extend(
+                    [
+                        {
+                            "pos": row_dict["Index"]
+                            + (self.header + 2 if self.header is not None else 1)
+                            + self.skiprows,
+                            "field": self.field_decod.get(field, "OTHER"),
+                            # 'COMPLESSIVO' if field == '__all__' else self.field_decod[field],
+                            "value": form.data.get(field, None),  # if field != '__all__' else None
+                            "mess": m,
+                        }
+                        for m in mess
+                    ]
+                )
 
     def postprocess_record(self, instance, save):
         """
@@ -372,37 +414,45 @@ class ImportValidator:
     def _unique_together_check(self):
         if self.unique_together is not None:
             # error part
-            if 'errors' in self.unique_together:
-                errors_unique = self.unique_together['errors']
+            if "errors" in self.unique_together:
+                errors_unique = self.unique_together["errors"]
                 for er in errors_unique:
-                    if type(er) == list:
+                    if type(er) is list:
                         df_tmp = self.df_rows[er].astype(str)
                         for index, duplicated in df_tmp.duplicated(subset=er, keep=False).items():
                             if duplicated:
-                                self.errors.append({
-                                    'pos': index + (self.header + 2 if self.header is not None else 1) + self.skiprows,
-                                    'field': ' - '.join(er),
-                                    'value': '',
-                                    'mess': ERR_MSG['UNIQ_VIOLATION'].format(' - '.join(er))
-                                })
+                                self.errors.append(
+                                    {
+                                        "pos": index
+                                        + (self.header + 2 if self.header is not None else 1)
+                                        + self.skiprows,
+                                        "field": " - ".join(er),
+                                        "value": "",
+                                        "mess": ERR_MSG["UNIQ_VIOLATION"].format(" - ".join(er)),
+                                    }
+                                )
             # warning part
-            if 'warnings' in self.unique_together:
-                warnings_unique = self.unique_together['warnings']
+            if "warnings" in self.unique_together:
+                warnings_unique = self.unique_together["warnings"]
                 for war in warnings_unique:
-                    if type(war) == list:
+                    if type(war) is list:
                         df_tmp = self.df_rows[war].astype(str)
                         for index, duplicated in df_tmp.duplicated(subset=war, keep=False).items():
                             if duplicated:
-                                self.warnings.append({
-                                    'pos': index + (self.header + 2 if self.header is not None else 1) + self.skiprows,
-                                    'field': ' - '.join(war),
-                                    'value': '',
-                                    'mess': ERR_MSG['UNIQ_VIOLATION'].format(' - '.join(war))
-                                })
+                                self.warnings.append(
+                                    {
+                                        "pos": index
+                                        + (self.header + 2 if self.header is not None else 1)
+                                        + self.skiprows,
+                                        "field": " - ".join(war),
+                                        "value": "",
+                                        "mess": ERR_MSG["UNIQ_VIOLATION"].format(" - ".join(war)),
+                                    }
+                                )
 
     def get_dataframe(self):
 
-        if not hasattr(self, 'df_rows') or self.df_rows is None:
+        if not hasattr(self, "df_rows") or self.df_rows is None:
             mime = magic.Magic(mime=True, uncompress=True)  # uncompress, otherwise xlsx is zip
             mimetype = None
             ext = None
@@ -410,69 +460,76 @@ class ImportValidator:
 
             if not self.file_err:
                 if not self.filepath_or_buffer:
-                    self.file_err.append(ERR_MSG['NOFILE'])
+                    self.file_err.append(ERR_MSG["NOFILE"])
 
             if not self.file_err:
                 if isinstance(self.filepath_or_buffer, InMemoryUploadedFile):
                     # https://docs.djangoproject.com/en/2.1/_modules/django/core/files/uploadedfile/
                     mimetype = self.filepath_or_buffer.content_type
-                    ext = os.path.splitext(self.filepath_or_buffer.name)[-1].lower().lstrip('.')
+                    ext = os.path.splitext(self.filepath_or_buffer.name)[-1].lower().lstrip(".")
                     filename = self.filepath_or_buffer.name
-                elif not hasattr(self.filepath_or_buffer, 'read') \
-                    and os.path.exists(self.filepath_or_buffer) \
-                    and os.path.isfile(self.filepath_or_buffer):
+                elif (
+                    not hasattr(self.filepath_or_buffer, "read")
+                    and os.path.exists(self.filepath_or_buffer)
+                    and os.path.isfile(self.filepath_or_buffer)
+                ):
                     mimetype = mime.from_file(self.filepath_or_buffer)
-                    ext = os.path.splitext(self.filepath_or_buffer)[-1].lower().lstrip('.')
+                    ext = os.path.splitext(self.filepath_or_buffer)[-1].lower().lstrip(".")
                     filename = self.filepath_or_buffer
-                elif hasattr(self.filepath_or_buffer, 'read'):
+                elif hasattr(self.filepath_or_buffer, "read"):
                     mimetype = mime.from_buffer(self.filepath_or_buffer.read())
-                    filename = 'buffer'
+                    filename = "buffer"
                 else:
-                    self.file_err.append(ERR_MSG['WRONG_FILE'].format(self.filepath_or_buffer))
+                    self.file_err.append(ERR_MSG["WRONG_FILE"].format(self.filepath_or_buffer))
 
             self.meta = {
-                'filename': filename,
-                'sheet': self.sheet_name + 1 if type(self.sheet_name) == int else self.sheet_name
+                "filename": filename,
+                "sheet": self.sheet_name + 1 if type(self.sheet_name) is int else self.sheet_name,
             }
 
             if not self.file_err:
                 if ext and ext not in list(MIME):
-                    self.file_err.append(ERR_MSG['WRONG_EXT'].format(ext, ', '.join(list(MIME))))
+                    self.file_err.append(ERR_MSG["WRONG_EXT"].format(ext, ", ".join(list(MIME))))
 
             if not self.file_err:
-                # read with dtype='object' to allow mixed dtype columns, prevent pandas to autocast (eg int with NaN to float)
-                if ext in ['xls', 'xlsx'] and \
-                    (self.check_mimetype is False or (mimetype in MIME['xls'] or mimetype in MIME['xlsx'])):
+                # read with dtype='object' to allow mixed dtype columns, prevent pandas to autocast
+                # (eg int with NaN to float)
+                if ext in ["xls", "xlsx"] and (
+                    self.check_mimetype is False or (mimetype in MIME["xls"] or mimetype in MIME["xlsx"])
+                ):
                     try:
-                        self.df_rows = pd.read_excel(self.filepath_or_buffer, dtype='object', **self.kw_pandas_read)
-                    except ValueError as e:
-                        self.file_err.append(ERR_MSG['WRONG_CONTENT_UNDETERMINED'])
-                elif ext in ['csv', 'txt'] and \
-                    (self.check_mimetype is False or (mimetype in MIME['csv'] or mimetype in MIME['txt'])):
+                        self.df_rows = pd.read_excel(self.filepath_or_buffer, dtype="object", **self.kw_pandas_read)
+                    except ValueError:
+                        self.file_err.append(ERR_MSG["WRONG_CONTENT_UNDETERMINED"])
+                elif ext in ["csv", "txt"] and (
+                    self.check_mimetype is False or (mimetype in MIME["csv"] or mimetype in MIME["txt"])
+                ):
                     try:
                         # check nrighe se usa skiprows, pandas si spacca se uso skiprows=1 ma c'è una sola riga
-                        self.df_rows = pd.read_csv(self.filepath_or_buffer, dtype='object', **self.kw_pandas_read)
+                        self.df_rows = pd.read_csv(self.filepath_or_buffer, dtype="object", **self.kw_pandas_read)
                     except pd.errors.EmptyDataError:
-                        self.file_err.append(ERR_MSG['NODATA'].format(self.sheet_name + 1))
+                        self.file_err.append(ERR_MSG["NODATA"].format(self.sheet_name + 1))
                     except pd.errors.ParserError as e:
-                        self.file_err.append(ERR_MSG['PARSE_ERR'].format(
-                            self.kw_pandas_read.get('sep', self.kw_pandas_read.get('delimiter', ',')), e))
-                elif ext in ['zip'] and \
-                    (self.check_mimetype is False or (mimetype in MIME['zip'])):
+                        self.file_err.append(
+                            ERR_MSG["PARSE_ERR"].format(
+                                self.kw_pandas_read.get("sep", self.kw_pandas_read.get("delimiter", ",")), e
+                            )
+                        )
+                elif ext in ["zip"] and (self.check_mimetype is False or (mimetype in MIME["zip"])):
                     # decomprimere tutto in temp dir e poi leggere con geopadas
                     with tempfile.TemporaryDirectory() as tmpdir:
                         # raise Exception(filepath_or_buffer, type(filepath_or_buffer), filepath_or_buffer.read())
                         zp = zipfile.ZipFile(self.filepath_or_buffer)
-                        core_file = ''
-                        files_ext_necessary = ['shp', 'dbf', 'prj', 'shx']
+                        core_file = ""
+                        files_ext_necessary = ["shp", "dbf", "prj", "shx"]
                         files_ext = []
                         all_files = True
 
                         for name in zp.namelist():
-                            ext_file = os.path.splitext(name)[-1].lower().lstrip('.')
+                            ext_file = os.path.splitext(name)[-1].lower().lstrip(".")
                             files_ext.append(ext_file)
-                            if ext_file == 'shp':
-                                core_file = tmpdir + '/' + name
+                            if ext_file == "shp":
+                                core_file = tmpdir + "/" + name
                             zp.extract(name, tmpdir)
 
                         zp.close()
@@ -480,22 +537,24 @@ class ImportValidator:
                             if ex not in files_ext:
                                 all_files = False
 
-                        if core_file != '' and all_files:
+                        if core_file != "" and all_files:
                             df_rows = geopandas.read_file(core_file)
                             self.srid = df_rows.crs.to_epsg()
                             str_csv = df_rows.to_csv(index=False)
-                            str_csv = str_csv.replace('.0,', ',')
-                            self.df_rows = pd.read_csv(io.StringIO(str_csv), dtype='object')
+                            str_csv = str_csv.replace(".0,", ",")
+                            self.df_rows = pd.read_csv(io.StringIO(str_csv), dtype="object")
                             # convert wkt to ewkt
-                            # self.df_rows['geometry'] = 'SRID=' + str(self.srid) + ';' + self.df_rows['geometry'].astype(str)
+                            # self.df_rows['geometry'] = 'SRID=' + str(self.srid) + ';' +
+                            #                             self.df_rows['geometry'].astype(str)
                             # FIX: changed to a LAMBDA because sometimes it requires too much ram to do the astype
-                            self.df_rows['geometry'] = self.df_rows['geometry'].apply(
-                                lambda x: 'SRID=' + str(self.srid) + ';' + x)
+                            self.df_rows["geometry"] = self.df_rows["geometry"].apply(
+                                lambda x: "SRID=" + str(self.srid) + ";" + x
+                            )
 
                         else:
-                            self.file_err.append(ERR_MSG['ZIP_SHP'])
+                            self.file_err.append(ERR_MSG["ZIP_SHP"])
                 else:
-                    self.file_err.append(ERR_MSG['WRONG_TYPE'].format(mimetype))
+                    self.file_err.append(ERR_MSG["WRONG_TYPE"].format(mimetype))
 
     def _validate_rows(self, save=False):
         """
@@ -509,7 +568,7 @@ class ImportValidator:
         # insert unique_together as control
         self._unique_together_check()
 
-        for row in self.df_rows.itertuples(index=True, name='Row'):
+        for row in self.df_rows.itertuples(index=True, name="Row"):
             row_dict = row._asdict()
             instance = self._validate_row(row_dict, save=save)
             self.postprocess_record(instance, save)
@@ -543,23 +602,25 @@ class ImportValidator:
         if self.file_err:
             self.errors = self.__return_file_errors()
             self.warnings = []
-            return {'valid': False,
-                    'errors': self.errors,
-                    'nerrors': len(self.errors),
-                    'warnings': self.warnings,
-                    'nwarnings': len(self.warnings),
-                    'meta': self.meta}
+            return {
+                "valid": False,
+                "errors": self.errors,
+                "nerrors": len(self.errors),
+                "warnings": self.warnings,
+                "nwarnings": len(self.warnings),
+                "meta": self.meta,
+            }
 
-        if save and save not in ['ROW', 'FULL']:
-            raise TypeError(_('Validate save mode are ROW | FULL'))
+        if save and save not in ["ROW", "FULL"]:
+            raise TypeError(_("Validate save mode are ROW | FULL"))
 
         if save is None:
             valid = self._validate_rows(save=False)
 
-        elif save == 'ROW':
+        elif save == "ROW":
             valid = self._validate_rows(save=True)
 
-        elif save == 'FULL':
+        elif save == "FULL":
             if self._validate_rows(save=False):
                 valid = self._validate_rows(save=True)
             else:
@@ -576,13 +637,15 @@ class ImportValidator:
                 file_saved = ImportFile(allegato=self.filepath_or_buffer)
                 file_saved.save()
 
-        return {'valid': valid,
-                'errors': self.errors,
-                'nerrors': len(self.errors),
-                'warnings': self.warnings,
-                'nwarnings': len(self.warnings),
-                'meta': self.meta,
-                'id_file': file_saved.id if file_saved is not None else None}
+        return {
+            "valid": valid,
+            "errors": self.errors,
+            "nerrors": len(self.errors),
+            "warnings": self.warnings,
+            "nwarnings": len(self.warnings),
+            "meta": self.meta,
+            "id_file": file_saved.id if file_saved is not None else None,
+        }
 
 
 class ImportValidatorAppendOut(ImportValidator):

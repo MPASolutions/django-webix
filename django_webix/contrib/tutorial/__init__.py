@@ -1,1 +1,1 @@
-default_app_config = 'django_webix.contrib.tutorial.apps.TutorialConfig'
+default_app_config = "django_webix.contrib.tutorial.apps.TutorialConfig"

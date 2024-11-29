@@ -1,6 +1,6 @@
+from django.contrib.contenttypes.fields import GenericRelation
 from django_webix.contrib.extra_fields.managers import ExtraFieldsManager
 from django_webix.contrib.extra_fields.models import ModelFieldValue
-from django.contrib.contenttypes.fields import GenericRelation
 
 try:
     from django_dal.models import DALModel as Model

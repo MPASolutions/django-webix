@@ -2,40 +2,34 @@
 
 import json
 
-from django.views.generic import TemplateView, FormView
+from django.views.generic import FormView, TemplateView
+from django_webix.views import WebixCreateView, WebixDeleteView, WebixListView, WebixUpdateView
 
-from django_webix.views import (WebixCreateView,
-                                WebixUpdateView,
-                                WebixDeleteView, WebixListView)
-from .forms import (MyLoginForm,
-                    InlineStackedModelInline,
-                    InlineModelInline,
-                    InlineEmptyModelInline,
-                    MyModelForm)
-from .models import (MyModel,
-                     InlineModel,
-                     InlineStackedModel)
+from .forms import InlineEmptyModelInline, InlineModelInline, InlineStackedModelInline, MyLoginForm, MyModelForm
+from .models import MyModel
 
-####################### FORMVIEW #######################
+# ###################### FORMVIEW #######################
+
 
 class MyLoginView(FormView):
     form_class = MyLoginForm
-    template_name = 'django_webix/generic/create.js'
+    template_name = "django_webix/generic/create.js"
 
-####################### LISTVIEW #######################
+
+# ###################### LISTVIEW #######################
+
 
 class MyModelListView(TemplateView):
-    template_name = 'list.js'
+    template_name = "list.js"
 
     def get_context_data(self, **kwargs):
         context = super(MyModelListView, self).get_context_data(**kwargs)
-        context['datalist'] = json.dumps([{
-            'id': i.pk,
-            'field': i.field
-        } for i in MyModel.objects.all()])
+        context["datalist"] = json.dumps([{"id": i.pk, "field": i.field} for i in MyModel.objects.all()])
         return context
 
-####################### CREATEVIEW #######################
+
+# ###################### CREATEVIEW #######################
+
 
 class MyModelCreateBaseView(WebixCreateView):
     model = MyModel
@@ -53,15 +47,18 @@ class MyModelCreateErrorView(WebixCreateView):
     model = MyModel
     inlines = [InlineModelInline, InlineStackedModelInline, InlineEmptyModelInline]
     form_class = MyModelForm
-    style = 'error'
+    style = "error"
 
-    url_create = 'app_name.mymodel.create_error'
+    url_create = "app_name.mymodel.create_error"
 
-####################### UPDATEVIEW #######################
+
+# ###################### UPDATEVIEW #######################
+
 
 class MyModelUpdateBaseView(WebixUpdateView):
     model = MyModel
     form_class = MyModelForm
+
 
 class MyModelUpdateView(WebixUpdateView):
     model = MyModel
@@ -73,28 +70,34 @@ class MyModelUpdateErrorView(WebixUpdateView):
     model = MyModel
     inlines = [InlineModelInline, InlineStackedModelInline, InlineEmptyModelInline]
     form_class = MyModelForm
-    style = 'error'
+    style = "error"
 
-    url_create = 'app_name.mymodel.update_error'
+    url_create = "app_name.mymodel.update_error"
 
-####################### DELETEVIEW #######################
+
+# ###################### DELETEVIEW #######################
+
 
 class MyModelDeleteBaseView(WebixDeleteView):
     model = MyModel
 
+
 class MyModelDeleteView(WebixDeleteView):
     model = MyModel
 
-####################### LISTVIEW #######################
+
+# ###################### LISTVIEW #######################
+
 
 class MyModelListBaseView(WebixListView):
     model = MyModel
 
-####################### EXTRA TO CHECK #######################
-#class InlineModelUpdateView(WebixUpdateView):
+
+# ###################### EXTRA TO CHECK #######################
+# class InlineModelUpdateView(WebixUpdateView):
 #    model = InlineModel
 #    fields = '__all__'
 
 
-#class InlineStackedModelDelete(WebixDeleteView):
+# class InlineStackedModelDelete(WebixDeleteView):
 #    model = InlineStackedModel

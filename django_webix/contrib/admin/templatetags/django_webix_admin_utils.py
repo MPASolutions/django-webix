@@ -1,15 +1,10 @@
 import re
 
 from django import template
-from django.template import Library, TemplateSyntaxError
 from django.apps import apps
+from django.template import Library, TemplateSyntaxError
 from django.template.base import TokenType
-
-from django.template.defaulttags import (CommentNode,
-                                         IfNode,
-                                         LoadNode,
-                                         find_library,
-                                         load_from_library)
+from django.template.defaulttags import CommentNode, IfNode, LoadNode, find_library, load_from_library
 from django.template.smartif import Literal
 
 register = Library()
@@ -17,24 +12,25 @@ register = Library()
 
 @register.filter_function
 def order_by(queryset, args):
-    args = [x.strip() for x in args.split(',')]
+    args = [x.strip() for x in args.split(",")]
     return queryset.order_by(*args)
 
 
 @register.filter
 def is_app_installed(appname):
     from django.apps import apps
+
     return apps.is_installed(appname)
 
 
-@register.filter(name='split')
+@register.filter(name="split")
 def split(value, arg):
     return value.split(arg)
 
 
 @register.filter
 def getattr(obj, args):
-    """ Try to get an attribute from an object.
+    """Try to get an attribute from an object.
 
     Example: {% if block|getattr:"editable,True" %}
 
@@ -42,20 +38,20 @@ def getattr(obj, args):
     to return False, pass an empty second argument:
     {% if block|getattr:"editable," %}
     """
-    splitargs = args.split(',')
+    splitargs = args.split(",")
     try:
         (attribute, default) = splitargs
     except ValueError:
-        (attribute, default) = args, ''
+        (attribute, default) = args, ""
 
     try:
         attr = obj.__getattribute__(attribute)
     except AttributeError:
         attr = obj.__dict__.get(attribute, default)
-    except:
+    except Exception:
         attr = default
 
-    if hasattr(attr, '__call__'):
+    if hasattr(attr, "__call__"):
         return attr.__call__()
     else:
         return attr
@@ -68,16 +64,18 @@ class SetVarNode(template.Node):
 
     def render(self, context):
         context[self.var_name] = self.new_val
-        return ''
+        return ""
 
 
 @register.simple_tag(takes_context=True)
 def header_webgis(context):
     if apps.is_installed("django_webix_leaflet"):
         from django_webix_leaflet.templatetags.utils_leaflet import header_leaflet
+
         return header_leaflet(context)
     else:
-        return ''
+        return ""
+
 
 @register.tag
 def setvar(parser, token):
@@ -87,7 +85,7 @@ def setvar(parser, token):
         tag_name, arg = token.contents.split(None, 1)
     except ValueError:
         raise template.TemplateSyntaxError("%r tag requires arguments" % token.contents.split()[0])
-    m = re.search(r'(.*?) as (\w+)', arg)
+    m = re.search(r"(.*?) as (\w+)", arg)
     if not m:
         raise template.TemplateSyntaxError("%r tag had invalid arguments" % tag_name)
     new_val, var_name = m.groups()
@@ -158,29 +156,25 @@ def do_if_has_tag(parser, token, negate=False):
     bits = list(token.split_contents())
     if len(bits) < 2:
         raise TemplateSyntaxError("%r takes at least one arguments" % bits[0])
-    end_tag = 'end%s' % bits[0]
+    end_tag = "end%s" % bits[0]
     has_tag = all([tag in parser.tags for tag in bits[1:]])
     has_tag = (not negate and has_tag) or (negate and not has_tag)
     nodelist_true = nodelist_false = CommentNode()
     if has_tag:
-        nodelist_true = parser.parse(('else', end_tag))
+        nodelist_true = parser.parse(("else", end_tag))
         token = parser.next_token()
-        if token.contents == 'else':
+        if token.contents == "else":
             parser.skip_past(end_tag)
     else:
         while parser.tokens:
             token = parser.next_token()
             if token.token_type == TokenType.BLOCK and token.contents == end_tag:
-                return IfNode([
-                    (Literal(has_tag), nodelist_true),
-                    (None, nodelist_false)
-                ])
-            elif token.token_type == TokenType.BLOCK and token.contents == 'else':
+                return IfNode([(Literal(has_tag), nodelist_true), (None, nodelist_false)])
+            elif token.token_type == TokenType.BLOCK and token.contents == "else":
                 break
         nodelist_false = parser.parse((end_tag,))
         parser.next_token()
-    return IfNode([(Literal(has_tag), nodelist_true),
-                   (None, nodelist_false)])
+    return IfNode([(Literal(has_tag), nodelist_true), (None, nodelist_false)])
 
 
 @register.tag

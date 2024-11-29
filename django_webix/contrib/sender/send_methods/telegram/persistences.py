@@ -1,12 +1,10 @@
-
 from collections import defaultdict
 from copy import deepcopy
-from typing import DefaultDict, Dict, Any, Tuple, Optional
-
-from telegram.ext import BasePersistence
-from telegram.utils.types import ConversationDict
+from typing import Any, DefaultDict, Dict, Optional, Tuple
 
 from django_webix.contrib.sender.models import TelegramPersistence
+from telegram.ext import BasePersistence
+from telegram.utils.types import ConversationDict
 
 
 class ReMapKeys:
@@ -16,18 +14,18 @@ class ReMapKeys:
         for k, v in mapping.items():
             if isinstance(v, dict):
                 v = ReMapKeys.encode(v)
-            _result.append({'key': k, 'value': v})
+            _result.append({"key": k, "value": v})
         return _result
 
     @staticmethod
     def decode(mapping):
         _result = {}
         for i in mapping:
-            if isinstance(i['value'], list) and all(isinstance(n, dict) for n in i['value']):
-                i['value'] = ReMapKeys.decode(i['value'])
-            if isinstance(i['key'], list) and all(isinstance(n, int) for n in i['key']):
-                i['key'] = tuple(i['key'])
-            _result[i['key']] = i['value']
+            if isinstance(i["value"], list) and all(isinstance(n, dict) for n in i["value"]):
+                i["value"] = ReMapKeys.decode(i["value"])
+            if isinstance(i["key"], list) and all(isinstance(n, int) for n in i["key"]):
+                i["key"] = tuple(i["key"])
+            _result[i["key"]] = i["value"]
         return _result
 
 
@@ -49,22 +47,20 @@ class DatabaseTelegramPersistence(BasePersistence):
         self._conversations = None
 
         self._user_data = defaultdict(
-            dict,
-            TelegramPersistence.objects.filter(typology='user_data').values_list('data', flat=True).first() or {}
+            dict, TelegramPersistence.objects.filter(typology="user_data").values_list("data", flat=True).first() or {}
         )
         self._chat_data = defaultdict(
-            dict,
-            TelegramPersistence.objects.filter(typology='chat_data').values_list('data', flat=True).first() or {}
+            dict, TelegramPersistence.objects.filter(typology="chat_data").values_list("data", flat=True).first() or {}
         )
         self._bot_data = defaultdict(
-            dict,
-            TelegramPersistence.objects.filter(typology='bot_data').values_list('data', flat=True).first() or {}
+            dict, TelegramPersistence.objects.filter(typology="bot_data").values_list("data", flat=True).first() or {}
         )
         self._conversations = defaultdict(
             dict,
-            ReMapKeys.decode(TelegramPersistence.objects.filter(
-                typology='conversations'
-            ).values_list('data', flat=True).first() or {})
+            ReMapKeys.decode(
+                TelegramPersistence.objects.filter(typology="conversations").values_list("data", flat=True).first()
+                or {}
+            ),
         )
 
     def get_user_data(self) -> DefaultDict[int, Dict[Any, Any]]:
@@ -94,7 +90,7 @@ class DatabaseTelegramPersistence(BasePersistence):
         if self._user_data.get(user_id) == data:
             return
         self._user_data[user_id] = data
-        TelegramPersistence.objects.update_or_create(typology='user_data', defaults={"data": self._user_data})
+        TelegramPersistence.objects.update_or_create(typology="user_data", defaults={"data": self._user_data})
 
     def get_chat_data(self) -> DefaultDict[int, Dict[Any, Any]]:
         """ "Will be called by :class:`telegram.ext.Dispatcher` upon creation with a
@@ -123,7 +119,7 @@ class DatabaseTelegramPersistence(BasePersistence):
         if self._chat_data.get(chat_id) == data:
             return
         self._chat_data[chat_id] = data
-        TelegramPersistence.objects.update_or_create(typology='chat_data', defaults={"data": self._chat_data})
+        TelegramPersistence.objects.update_or_create(typology="chat_data", defaults={"data": self._chat_data})
 
     def get_bot_data(self) -> Dict[Any, Any]:
         """ "Will be called by :class:`telegram.ext.Dispatcher` upon creation with a
@@ -149,7 +145,7 @@ class DatabaseTelegramPersistence(BasePersistence):
         if self._bot_data == data:
             return
         self._bot_data = data.copy()
-        TelegramPersistence.objects.update_or_create(typology='bot_data', defaults={"data": self._bot_data})
+        TelegramPersistence.objects.update_or_create(typology="bot_data", defaults={"data": self._bot_data})
 
     def get_conversations(self, name: str) -> ConversationDict:
         """ "Will be called by :class:`telegram.ext.Dispatcher` when a
@@ -170,9 +166,7 @@ class DatabaseTelegramPersistence(BasePersistence):
             self._conversations = {}
         return self._conversations.get(name, {}).copy()  # type: ignore[union-attr]
 
-    def update_conversation(
-        self, name: str, key: Tuple[int, ...], new_state: Optional[object]
-    ) -> None:
+    def update_conversation(self, name: str, key: Tuple[int, ...], new_state: Optional[object]) -> None:
         """Will be called when a :attr:`telegram.ext.ConversationHandler.update_state`
         is called. This allows the storage of the new state in the persistence.
 
@@ -190,6 +184,5 @@ class DatabaseTelegramPersistence(BasePersistence):
             del self._conversations[name][key]
 
         TelegramPersistence.objects.update_or_create(
-            typology='conversations',
-            defaults={"data": ReMapKeys.encode(self._conversations)}
+            typology="conversations", defaults={"data": ReMapKeys.encode(self._conversations)}
         )

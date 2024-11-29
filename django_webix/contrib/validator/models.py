@@ -8,6 +8,7 @@ try:
 except ImportError:
     from django.db.models import Model
 
+
 class ImportFile(Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    allegato = models.FileField(verbose_name=_('Attachment'), upload_to='import_file', blank=True, null=True)
+    allegato = models.FileField(verbose_name=_("Attachment"), upload_to="import_file", blank=True, null=True)

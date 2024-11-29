@@ -27,4 +27,3 @@ Description
 
     # file where is possibile get app celery config
     DJANGO_WEBIX_COMMANDS_MANAGER_APP_CELERY = 'prjcore.celery_init'
-

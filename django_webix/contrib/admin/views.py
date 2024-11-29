@@ -1,11 +1,10 @@
 from django.apps import apps
 from django.contrib.auth import get_user_model
-from django.contrib.auth.views import PasswordResetConfirmView, PasswordChangeView
+from django.contrib.auth.views import PasswordChangeView, PasswordResetConfirmView
 from django.http import Http404
 from django.utils.translation import gettext as _
-
-from django_webix.contrib.admin.forms import UserForm, UserAdminUpdateForm, UserAdminCreateForm
-from django_webix.views import WebixUpdateView, WebixCreateView
+from django_webix.contrib.admin.forms import UserForm
+from django_webix.views import WebixUpdateView
 
 
 class UserUpdate(WebixUpdateView):
@@ -13,11 +12,11 @@ class UserUpdate(WebixUpdateView):
     form_class = UserForm
     enable_button_save_continue = False
     enable_button_save_addanother = False
-    success_url = '.'
-    url_pattern_update = 'dwadmin:account_update'
+    success_url = "."
+    url_pattern_update = "dwadmin:account_update"
 
     def get_object(self, queryset=None):
-        if getattr(self, 'object', None) is not None:
+        if getattr(self, "object", None) is not None:
             return self.object
 
         if queryset is None:
@@ -30,8 +29,7 @@ class UserUpdate(WebixUpdateView):
             obj = queryset.get()
         except queryset.model.DoesNotExist:
             raise Http404(
-                _("No %(verbose_name)s found matching the query")
-                % {"verbose_name": queryset.model._meta.verbose_name}
+                _("No %(verbose_name)s found matching the query") % {"verbose_name": queryset.model._meta.verbose_name}
             )
         return obj
 

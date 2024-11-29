@@ -1,1 +1,1 @@
-default_app_config = 'django_webix.contrib.sender.apps.SenderConfig'
+default_app_config = "django_webix.contrib.sender.apps.SenderConfig"

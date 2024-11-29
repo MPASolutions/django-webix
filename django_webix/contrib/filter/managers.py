@@ -1,5 +1,4 @@
 from django.db.models import Q
-
 from django_dal.managers import DALManager, DALQuerySet
 from django_dal.params import cxpr
 
@@ -23,23 +22,29 @@ class WebixFilterManager(DALManager.from_queryset(WebixFilterQueryset)):
         """
         if cxpr.user is None:
             return Q(
-                Q(visibility='public') |
-                (Q(visibility='private') & Q(insert_user__isnull=True)) |
-                (Q(visibility='restricted') & Q(insert_user__isnull=True))
+                Q(visibility="public")
+                | (Q(visibility="private") & Q(insert_user__isnull=True))
+                | (Q(visibility="restricted") & Q(insert_user__isnull=True))
             )
         return Q(
-            Q(visibility='public') |
-            (Q(visibility='private') & (
-                Q(insert_user=cxpr.user) |
-                Q(insert_user__isnull=True) |
-                (Q(shared_edit_group=True) & Q(insert_user__groups__in=cxpr.user.groups.all()))
-            )) |
-            (Q(visibility='restricted') & (
-                Q(insert_user=cxpr.user) |
-                Q(insert_user__isnull=True) |
-                Q(assignees_groups__in=cxpr.user.groups.all()) |
-                (Q(shared_edit_group=True) & Q(insert_user__groups__in=cxpr.user.groups.all()))
-            ))
+            Q(visibility="public")
+            | (
+                Q(visibility="private")
+                & (
+                    Q(insert_user=cxpr.user)
+                    | Q(insert_user__isnull=True)
+                    | (Q(shared_edit_group=True) & Q(insert_user__groups__in=cxpr.user.groups.all()))
+                )
+            )
+            | (
+                Q(visibility="restricted")
+                & (
+                    Q(insert_user=cxpr.user)
+                    | Q(insert_user__isnull=True)
+                    | Q(assignees_groups__in=cxpr.user.groups.all())
+                    | (Q(shared_edit_group=True) & Q(insert_user__groups__in=cxpr.user.groups.all()))
+                )
+            )
         )
 
     def get_queryset(self, ignore_filters=False):
