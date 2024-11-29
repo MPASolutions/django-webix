@@ -1,12 +1,9 @@
-
-from django.apps import apps
 from django.conf import settings
-from django.urls import reverse, resolve
+from django.urls import resolve, reverse
 from django.urls.exceptions import NoReverseMatch
 from django.utils.translation import gettext as _
 from django.views.generic import TemplateView
 from django.views.generic.edit import BaseFormView
-
 from django_webix.utils.layers import get_layers
 
 
@@ -43,50 +40,50 @@ class WebixPermissionsBaseMixin:
 
     def get_failure_add_related_objects(self, request):
         if self.model is not None:
-            model_related_objects = getattr(self.model, 'get_failure_add_related_objects', None)
+            model_related_objects = getattr(self.model, "get_failure_add_related_objects", None)
             if model_related_objects is not None:
                 return model_related_objects(request=request)
         return []
 
     def get_failure_change_related_objects(self, request, obj=None):
         if self.model is not None:
-            model_related_objects = getattr(self.model, 'get_failure_change_related_objects', None)
+            model_related_objects = getattr(self.model, "get_failure_change_related_objects", None)
             if model_related_objects is not None:
                 return model_related_objects(request=request, obj=obj)
         return []
 
     def get_failure_delete_related_objects(self, request, obj=None):
         if self.model is not None:
-            model_related_objects = getattr(self.model, 'get_failure_delete_related_objects', None)
+            model_related_objects = getattr(self.model, "get_failure_delete_related_objects", None)
             if model_related_objects is not None:
                 return model_related_objects(request=request, obj=obj)
         return []
 
     def get_failure_view_related_objects(self, request, obj=None):
         if self.model is not None:
-            model_related_objects = getattr(self.model, 'get_failure_view_related_objects', None)
+            model_related_objects = getattr(self.model, "get_failure_view_related_objects", None)
             if model_related_objects is not None:
                 return model_related_objects(request=request, obj=obj)
         return []
 
     def has_add_django_user_permission(self, user):
         if self.model is not None:
-            return user.has_perm('{}.add_{}'.format(self.model._meta.app_label, self.model._meta.model_name))
+            return user.has_perm("{}.add_{}".format(self.model._meta.app_label, self.model._meta.model_name))
         return False
 
     def has_change_django_user_permission(self, user):
         if self.model is not None:
-            return user.has_perm('{}.change_{}'.format(self.model._meta.app_label, self.model._meta.model_name))
+            return user.has_perm("{}.change_{}".format(self.model._meta.app_label, self.model._meta.model_name))
         return False
 
     def has_delete_django_user_permission(self, user):
         if self.model is not None:
-            return user.has_perm('{}.delete_{}'.format(self.model._meta.app_label, self.model._meta.model_name))
+            return user.has_perm("{}.delete_{}".format(self.model._meta.app_label, self.model._meta.model_name))
         return False
 
     def has_view_django_user_permission(self, user):
         if self.model is not None:
-            return user.has_perm('{}.view_{}'.format(self.model._meta.app_label, self.model._meta.model_name))
+            return user.has_perm("{}.view_{}".format(self.model._meta.app_label, self.model._meta.model_name))
         return False
 
     def has_module_permission(self, request):
@@ -111,7 +108,7 @@ class WebixPermissionsBaseMixin:
         elif not self.has_add_django_user_permission(user=request.user):
             return False
         elif self.model is not None:
-            has_permission = getattr(self.model, 'has_add_permission', None)
+            has_permission = getattr(self.model, "has_add_permission", None)
             if has_permission is not None:
                 return has_permission(request=request)
         return True
@@ -126,7 +123,7 @@ class WebixPermissionsBaseMixin:
         elif not self.has_change_django_user_permission(user=request.user):
             return False
         elif self.model is not None:
-            has_permission = getattr(self.model, 'has_change_permission', None)
+            has_permission = getattr(self.model, "has_change_permission", None)
             if has_permission is not None:
                 return has_permission(request=request, obj=obj)
         return True
@@ -141,7 +138,7 @@ class WebixPermissionsBaseMixin:
         elif not self.has_delete_django_user_permission(user=request.user):
             return False
         elif self.model is not None:
-            has_permission = getattr(self.model, 'has_delete_permission', None)
+            has_permission = getattr(self.model, "has_delete_permission", None)
             if has_permission is not None:
                 return has_permission(request=request, obj=obj)
         return True
@@ -156,7 +153,7 @@ class WebixPermissionsBaseMixin:
         elif not self.has_view_django_user_permission(user=request.user):
             return False
         elif self.model is not None:
-            has_permission = getattr(self.model, 'has_view_permission', None)
+            has_permission = getattr(self.model, "has_view_permission", None)
             if has_permission is not None:
                 return has_permission(request=request, obj=obj)
         return True
@@ -164,15 +161,21 @@ class WebixPermissionsBaseMixin:
     def _has_view_or_change_permission(self, request, obj=None):
         if self.view_permission is not None or self.change_permission is not None:
             return self.view_permission or self.change_permission
-        return self._has_view_permission(request=request, obj=obj) or \
-               self._has_change_permission(request=request, obj=obj)
+        return self._has_view_permission(request=request, obj=obj) or self._has_change_permission(
+            request=request, obj=obj
+        )
 
     def _get_info_no_add_permission(self, has_permission, request):
         if not has_permission:
             return [_("You haven't add permission")]
         return []
 
-    def _get_info_no_change_permission(self, has_permission, request, obj=None,):
+    def _get_info_no_change_permission(
+        self,
+        has_permission,
+        request,
+        obj=None,
+    ):
         if not has_permission:
             return [_("You haven't change permission")]
         return []
@@ -224,48 +227,46 @@ class WebixPermissionsMixin(WebixPermissionsBaseMixin):
         _has_delete_permission = self.has_delete_permission(request=self.request, obj=obj)
         return {
             # Buttons
-            'remove_disabled_buttons': self.get_remove_disabled_buttons(request=self.request),
+            "remove_disabled_buttons": self.get_remove_disabled_buttons(request=self.request),
             # Permissions
-            'has_view_permission': _has_view_permission,
-            'has_add_permission': _has_add_permission,
-            'has_change_permission': _has_change_permission,
-            'has_delete_permission': _has_delete_permission,
-            'has_view_or_change_permission': self.has_view_or_change_permission(request=self.request, obj=obj),
-            'has_module_permission': self.has_module_permission(request=self.request),
+            "has_view_permission": _has_view_permission,
+            "has_add_permission": _has_add_permission,
+            "has_change_permission": _has_change_permission,
+            "has_delete_permission": _has_delete_permission,
+            "has_view_or_change_permission": self.has_view_or_change_permission(request=self.request, obj=obj),
+            "has_module_permission": self.has_module_permission(request=self.request),
             # info no permissions
-            'info_no_add_permission': self.get_info_no_add_permission(has_permission=_has_add_permission,
-                                                                      request=self.request),
-            'info_no_change_permission': self.get_info_no_change_permission(has_permission=_has_change_permission,
-                                                                            request=self.request,
-                                                                            obj=obj),
-            'info_no_delete_permission': self.get_info_no_delete_permission(has_permission=_has_delete_permission,
-                                                                            request=self.request,
-                                                                            obj=obj),
-            'info_no_view_permission': self.get_info_no_view_permission(has_permission=_has_view_permission,
-                                                                        request=self.request,
-                                                                        obj=obj),
+            "info_no_add_permission": self.get_info_no_add_permission(
+                has_permission=_has_add_permission, request=self.request
+            ),
+            "info_no_change_permission": self.get_info_no_change_permission(
+                has_permission=_has_change_permission, request=self.request, obj=obj
+            ),
+            "info_no_delete_permission": self.get_info_no_delete_permission(
+                has_permission=_has_delete_permission, request=self.request, obj=obj
+            ),
+            "info_no_view_permission": self.get_info_no_view_permission(
+                has_permission=_has_view_permission, request=self.request, obj=obj
+            ),
             # failure related objects
-            'failure_view_related_objects': self.get_failure_view_related_objects(request=self.request,
-                                                                                  obj=obj),
-            'failure_add_related_objects': self.get_failure_add_related_objects(request=self.request),
-            'failure_change_related_objects': self.get_failure_change_related_objects(request=self.request,
-                                                                                      obj=obj),
-            'failure_delete_related_objects': self.get_failure_delete_related_objects(request=self.request,
-                                                                                      obj=obj),
+            "failure_view_related_objects": self.get_failure_view_related_objects(request=self.request, obj=obj),
+            "failure_add_related_objects": self.get_failure_add_related_objects(request=self.request),
+            "failure_change_related_objects": self.get_failure_change_related_objects(request=self.request, obj=obj),
+            "failure_delete_related_objects": self.get_failure_delete_related_objects(request=self.request, obj=obj),
             # filure add missing_objects
-            'failure_add_blocking_objects': self.get_failure_add_blocking_objects(request=self.request),
+            "failure_add_blocking_objects": self.get_failure_add_blocking_objects(request=self.request),
         }
 
 
 class WebixUrlUtilsMixin:
 
     def is_popup(self):
-        return self.request.GET.get('_popup', self.request.POST.get('_popup', False)) != False
+        return self.request.GET.get("_popup", self.request.POST.get("_popup", False)) is not False
 
     def wrap_url_popup(self, url):
         if url is not None:
             if self.is_popup():
-                return url + '&_popup' if '?' in url else url + '?_popup'
+                return url + "&_popup" if "?" in url else url + "?_popup"
             else:
                 return url
         else:
@@ -283,8 +284,8 @@ class WebixUrlUtilsMixin:
             reverse_kwargs = {}
 
         try:
-            url = reverse(url_name, kwargs=reverse_kwargs)
-            return url_name
+            _url = reverse(url_name, kwargs=reverse_kwargs)
+            return _url
         except NoReverseMatch:
             return None
 
@@ -303,35 +304,33 @@ class WebixUrlMixin(WebixUrlUtilsMixin):
         if self.url_pattern_list is not None:
             return self.url_pattern_list
         else:
-            return '{}.list'.format(self.get_model_name())
+            return "{}.list".format(self.get_model_name())
 
     def get_url_pattern_create(self):
         if self.url_pattern_create is not None:
             return self.url_pattern_create
         else:
-            return '{}.create'.format(self.get_model_name())
+            return "{}.create".format(self.get_model_name())
 
     def get_url_pattern_update(self):
         if self.url_pattern_update is not None:
             return self.url_pattern_update
         else:
-            return '{}.update'.format(self.get_model_name())
+            return "{}.update".format(self.get_model_name())
 
     def get_url_pattern_delete(self):
         if self.url_pattern_delete is not None:
             return self.url_pattern_delete
         else:
-            return '{}.delete'.format(self.get_model_name())
+            return "{}.delete".format(self.get_model_name())
 
     def get_model_name(self):
         if self.model is not None:
-            if self.url_using_namespace==True:
-                _separator = ':'
+            if self.url_using_namespace is True:
+                _separator = ":"
             else:
-                _separator = '.'
-            return '{}{}{}'.format(self.model._meta.app_label,
-                                   _separator,
-                                   self.model._meta.model_name)
+                _separator = "."
+            return "{}{}{}".format(self.model._meta.app_label, _separator, self.model._meta.model_name)
         return None
 
     def get_url_list(self):
@@ -350,8 +349,9 @@ class WebixUrlMixin(WebixUrlUtilsMixin):
             # noinspection PyNoneFunctionAssignment
             create_kwargs = self.get_url_create_kwargs()
             if create_kwargs is not None:
-                _url_pattern_name = self._check_url(self.get_url_pattern_create(),
-                                                    reverse_kwargs=self.get_url_create_kwargs())
+                _url_pattern_name = self._check_url(
+                    self.get_url_pattern_create(), reverse_kwargs=self.get_url_create_kwargs()
+                )
             else:
                 _url_pattern_name = self._check_url(self.get_url_pattern_create())
             if _url_pattern_name is not None:
@@ -364,43 +364,43 @@ class WebixUrlMixin(WebixUrlUtilsMixin):
 
     def get_url_update(self, obj=None):
         if self.model is not None:
-            _url_pattern_name = self._check_url(self.get_url_pattern_update(), {'pk': 0})
+            _url_pattern_name = self._check_url(self.get_url_pattern_update(), {"pk": 0})
             if _url_pattern_name is not None:
                 if obj is not None and obj.pk is not None:
                     _pk = obj.pk
                 else:
                     _pk = 0
-                return self.wrap_url_popup(reverse(_url_pattern_name, kwargs={'pk': _pk}))
+                return self.wrap_url_popup(reverse(_url_pattern_name, kwargs={"pk": _pk}))
         return None
 
     def get_url_delete(self, obj=None):
         if self.model is not None:
-            _url_pattern_name = self._check_url(self.get_url_pattern_delete(), {'pk': 0})
+            _url_pattern_name = self._check_url(self.get_url_pattern_delete(), {"pk": 0})
             if _url_pattern_name is not None:
                 if obj is not None and obj.pk is not None:
                     _pk = obj.pk
                 else:
                     _pk = 0
-                return self.wrap_url_popup(reverse(_url_pattern_name, kwargs={'pk': _pk}))
+                return self.wrap_url_popup(reverse(_url_pattern_name, kwargs={"pk": _pk}))
         return None
 
     def get_view_prefix(self):
-        return '{}_{}_'.format(self.model._meta.app_label, self.model._meta.model_name)
+        return "{}_{}_".format(self.model._meta.app_label, self.model._meta.model_name)
 
     def get_context_data_webix_url(self, request, obj=None, **kwargs):
         return {
             # Urls
-            'url_list': self.get_url_list(),
-            'url_create': self.get_url_create(),
-            'url_update': self.get_url_update(obj=obj),
-            'url_delete': self.get_url_delete(obj=obj),
+            "url_list": self.get_url_list(),
+            "url_create": self.get_url_create(),
+            "url_update": self.get_url_update(obj=obj),
+            "url_delete": self.get_url_delete(obj=obj),
             # Model info
-            'is_popup': self.is_popup(),
-            'model': self.model,
-            'model_name': self.get_model_name(),
-            'app_label': self.model._meta.app_label if self.model else None,
-            'module_name': self.model._meta.model_name if self.model else None,
-            'view_prefix': self.get_view_prefix()
+            "is_popup": self.is_popup(),
+            "model": self.model,
+            "model_name": self.get_model_name(),
+            "app_label": self.model._meta.app_label if self.model else None,
+            "module_name": self.model._meta.model_name if self.model else None,
+            "view_prefix": self.get_view_prefix(),
         }
 
 
@@ -410,35 +410,39 @@ class WebixBaseMixin:
         return settings.WEBIX_CONTAINER_ID
 
     def get_overlay_container_id(self, request):
-        return getattr(settings, 'WEBIX_OVERLAY_CONTAINER_ID', settings.WEBIX_CONTAINER_ID)
+        return getattr(settings, "WEBIX_OVERLAY_CONTAINER_ID", settings.WEBIX_CONTAINER_ID)
 
     def get_layers(self, area=None):
-        '''
+        """
         Function to obtain list of layers
         :param area: 'columns_list' or 'actions_list' or None
         :return: list of layers
-        '''
+        """
         layers = []
 
-        if getattr(self, 'model', None) is not None:
-            layers = get_layers(getattr(self, 'model', None), getattr(self, 'qxs_layers', None))
+        if getattr(self, "model", None) is not None:
+            layers = get_layers(getattr(self, "model", None), getattr(self, "qxs_layers", None))
 
         return layers
 
     def get_context_data_webix_base(self, request, **kwargs):
         context = {
-            'webix_container_id': self.get_container_id(request=self.request),
-            'webix_overlay_container_id': self.get_overlay_container_id(request=self.request),
+            "webix_container_id": self.get_container_id(request=self.request),
+            "webix_overlay_container_id": self.get_overlay_container_id(request=self.request),
         }
-        if hasattr(self, 'model') and self.model is not None:
-            context.update({
-                'pk_field_name': self.model._meta.pk.name,
-            })
+        if hasattr(self, "model") and self.model is not None:
+            context.update(
+                {
+                    "pk_field_name": self.model._meta.pk.name,
+                }
+            )
 
         # extra data id django_webix_leaflet is installed
-        context.update({
-            'layers': self.get_layers(),
-        })
+        context.update(
+            {
+                "layers": self.get_layers(),
+            }
+        )
 
         return context
 
@@ -451,19 +455,19 @@ class WebixTemplateView(WebixBaseMixin, TemplateView):
         return context
 
     def get_view_prefix(self):
-        return ''
+        return ""
 
 
 class WebixFormView(WebixTemplateView, WebixUrlUtilsMixin, BaseFormView):
     """A base view for displaying a form with webix."""
 
-    template_name = 'django_webix/generic/form.js'
+    template_name = "django_webix/generic/form.js"
 
     url_pattern_send = None
 
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()
-        kwargs.update({'request': self.request})
+        kwargs.update({"request": self.request})
         return kwargs
 
     def get_url_pattern_send(self):
@@ -483,12 +487,14 @@ class WebixFormView(WebixTemplateView, WebixUrlUtilsMixin, BaseFormView):
 
     def get_context_data(self, **kwargs):
         context = super(WebixFormView, self).get_context_data(**kwargs)
-        context.update({
-            'response_datatype': 'script',
-            # Urls
-            'url_send': self.get_url_send(),
-            # form view info
-            'is_popup': self.is_popup(),
-            'view_prefix': self.get_view_prefix()
-        })
+        context.update(
+            {
+                "response_datatype": "script",
+                # Urls
+                "url_send": self.get_url_send(),
+                # form view info
+                "is_popup": self.is_popup(),
+                "view_prefix": self.get_view_prefix(),
+            }
+        )
         return context

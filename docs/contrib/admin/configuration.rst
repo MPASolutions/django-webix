@@ -38,4 +38,3 @@ Register the views url (e.g. <project_name>/urls.py)
     urlpatterns = [
       path('admin_webix/', dwadmin.site.urls), # or another path :-)
     ]
-

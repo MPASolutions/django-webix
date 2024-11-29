@@ -1,4 +1,3 @@
-
 from django.contrib.auth import get_user_model
 from django.db.models import Q
 
@@ -9,7 +8,8 @@ User = get_user_model()
 def _filters_messages(self):
     return Q(
         # Model dwsender.Customer filter
-        Q(customer_message_recipients__user=self) |
+        Q(customer_message_recipients__user=self)
+        |
         # Model dwsender.ExternalSubject
         Q(externalsubject_message_recipients__user=self)
     )

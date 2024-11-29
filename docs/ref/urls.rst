@@ -19,6 +19,3 @@ Register the views url (e.g. <project_name>/urls.py)
         path('mymodel/delete/<int:pk>', MyModelDeleteView.as_view(), name='myapplication.mymodel.delete'),
         # ...
     ]
-
-
-

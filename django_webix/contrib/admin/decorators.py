@@ -12,19 +12,19 @@ def register(*models, site=None, prefix=None):
     """
 
     from django_webix.contrib.admin import ModelWebixAdmin
-    from django_webix.contrib.admin.sites import site as default_site, AdminWebixSite
+    from django_webix.contrib.admin.sites import AdminWebixSite, site as default_site
 
     def _model_admin_wrapper(admin_class):
         if not models:
-            raise ValueError('At least one model must be passed to register.')
+            raise ValueError("At least one model must be passed to register.")
 
         admin_site = site or default_site
 
         if not isinstance(admin_site, AdminWebixSite):
-            raise ValueError('Site must subclass AdminSite')
+            raise ValueError("Site must subclass AdminSite")
 
         if not issubclass(admin_class, ModelWebixAdmin):
-            raise ValueError('Wrapped class must subclass ModelAdmin.')
+            raise ValueError("Wrapped class must subclass ModelAdmin.")
 
         admin_site.register(models, admin_class=admin_class, prefix=prefix)
 

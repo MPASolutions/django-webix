@@ -1,9 +1,8 @@
-
+from django.conf import settings
 from django.http import HttpResponseRedirect
 from django.urls import reverse
-from django_user_agents.utils import get_user_agent
-from django.conf import settings
 from django.utils.deprecation import MiddlewareMixin
+from django_user_agents.utils import get_user_agent
 
 
 def get_limit_version(family):
@@ -14,19 +13,19 @@ def get_limit_version(family):
     # Edge >= 40(1 / 4 / 2017)
     # Firefox >= 60(9 / 5 / 2018)
     # Opera >= 47(9 / 8 / 2017)
-    if 'chrom' in family:
+    if "chrom" in family:
         return 60
-    elif 'ie' in family:
+    elif "ie" in family:
         return 12  # escludo ogni 11
-    elif 'samsung internet' in family:
+    elif "samsung internet" in family:
         return 8
-    elif 'safari' in family:
+    elif "safari" in family:
         return 11
-    elif 'edge' in family:
+    elif "edge" in family:
         return 40
-    elif 'firefox' in family:
+    elif "firefox" in family:
         return 60
-    elif 'opera' in family:
+    elif "opera" in family:
         return 47
 
 
@@ -38,14 +37,16 @@ class UserAgentLimitMiddleware(MiddlewareMixin):
     def process_request(self, request):
 
         user_agent = get_user_agent(request)
-        if user_agent is not None and \
-            user_agent.browser is not None and \
-            user_agent.browser.family is not None and \
-            user_agent.browser.version is not None and \
-            len(user_agent.browser.version) > 0:
+        if (
+            user_agent is not None
+            and user_agent.browser is not None
+            and user_agent.browser.family is not None
+            and user_agent.browser.version is not None
+            and len(user_agent.browser.version) > 0
+        ):
             family = user_agent.browser.family.lower()
             major_version = user_agent.browser.version[0]
-            url_redirect = getattr(settings, 'WEBIX_USER_AGENT_LIMIT_REDIRECT', 'webix_user_agent_limit')
+            url_redirect = getattr(settings, "WEBIX_USER_AGENT_LIMIT_REDIRECT", "webix_user_agent_limit")
 
             limit_version = get_limit_version(family)
             if limit_version is not None and major_version < limit_version:

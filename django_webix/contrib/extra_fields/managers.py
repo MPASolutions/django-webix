@@ -1,10 +1,10 @@
+from itertools import chain
+
 from django.contrib.contenttypes.models import ContentType
 from django.db import models
 from django.db.models import Min, Q
 from django.db.models.functions import Cast
-from itertools import chain
 from django.db.models.query_utils import FilteredRelation
-
 from django_webix.contrib.extra_fields.models import ModelField
 
 try:
@@ -21,9 +21,7 @@ except ImportError:
 
 class ExtraFieldsQuerySet(QuerySet):
     def _annotate(self, args, kwargs, select=True):
-        self._validate_values_are_expressions(
-            args + tuple(kwargs.values()), method_name="annotate"
-        )
+        self._validate_values_are_expressions(args + tuple(kwargs.values()), method_name="annotate")
         annotations = {}
         for arg in args:
             # The default_alias property may raise a TypeError.
@@ -43,20 +41,15 @@ class ExtraFieldsQuerySet(QuerySet):
         if names is None:
             names = set(
                 chain.from_iterable(
-                    (field.name, field.attname)
-                    if hasattr(field, "attname")
-                    else (field.name,)
+                    (field.name, field.attname) if hasattr(field, "attname") else (field.name,)
                     for field in self.model._meta.get_fields()
                 )
             )
 
         for alias, annotation in annotations.items():
             if alias in names:
-                if self.model._meta.get_field(alias).concrete == True:
-                    raise ValueError(
-                        "The annotation '%s' conflicts with a field on "
-                        "the model." % alias
-                    )
+                if self.model._meta.get_field(alias).concrete is True:
+                    raise ValueError("The annotation '%s' conflicts with a field on " "the model." % alias)
             if isinstance(annotation, FilteredRelation):
                 clone.query.add_filtered_relation(annotation, alias)
             else:
@@ -80,10 +73,13 @@ def add_extra_fields_to_queryset(queryset):
     # queryset = queryset.select_related('extra_fields')
     for mf in ModelField.objects.filter(content_type=ContentType.objects.get_for_model(queryset.model)):
         field_class = getattr(models, mf.field_type)
-        queryset = queryset.annotate(**{mf.field_name: Cast(Min('extra_fields__value',
-                                                                filter=Q(extra_fields__model_field_id=int(mf.pk))),
-                                                            field_class())
-                                        })
+        queryset = queryset.annotate(
+            **{
+                mf.field_name: Cast(
+                    Min("extra_fields__value", filter=Q(extra_fields__model_field_id=int(mf.pk))), field_class()
+                )
+            }
+        )
     return queryset
 
 

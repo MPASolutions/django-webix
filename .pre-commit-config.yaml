@@ -1,0 +1,57 @@
+exclude: .*migrations.*\/.*
+repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v5.0.0
+    hooks:
+      - id: check-added-large-files
+      - id: check-json
+      - id: check-merge-conflict
+      - id: check-shebang-scripts-are-executable
+      - id: check-toml
+      - id: check-yaml
+        args: [ --allow-multiple-documents, --unsafe ]
+      - id: debug-statements
+      #  files: ^dj/
+      - id: end-of-file-fixer
+      #  files: ^dj/
+      - id: trailing-whitespace
+      #  files: ^dj/
+      - id: fix-encoding-pragma
+      #  files: ^dj/
+        args: [ '--remove' ]
+      - id: mixed-line-ending
+        args: [ --fix=lf ]
+      - id: pretty-format-json
+        args: [ --no-sort-keys, --autofix, --no-ensure-ascii ]
+      # - id: requirements-txt-fixer
+  - repo: https://github.com/pre-commit/pygrep-hooks
+    rev: v1.10.0
+    hooks:
+      - id: python-check-blanket-noqa
+      - id: python-no-eval
+      - id: python-use-type-annotations
+  #- repo: https://github.com/shellcheck-py/shellcheck-py
+  #  rev: v0.10.0.1
+  #  hooks:
+  #    - id: shellcheck
+  - repo: https://github.com/psf/black
+    rev: 24.10.0
+    hooks:
+      - id: black
+      #  files: ^dj/
+  - repo: https://github.com/PyCQA/isort
+    rev: 5.13.2
+    hooks:
+      - id: isort
+  - repo: https://github.com/PyCQA/flake8
+    rev: 7.0.0
+    hooks:
+      - id: flake8
+        entry: pflake8
+      #  files: ^dj/
+        additional_dependencies:
+          - pyproject-flake8
+  - repo: meta
+    hooks:
+      - id: check-hooks-apply
+      - id: check-useless-excludes

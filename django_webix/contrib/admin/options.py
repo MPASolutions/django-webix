@@ -1,14 +1,15 @@
+import copy
+
 from django.apps import apps
 from django.core.exceptions import FieldDoesNotExist
 from django.db import models
-from django.urls import path, reverse
+from django.urls import path
+from django.utils.decorators import method_decorator
 from django.utils.text import capfirst
 from django.utils.translation import gettext as _
 from django_webix.utils.decorators import script_login_required
-from django.utils.decorators import method_decorator
-import copy
-from django_webix.views.generic.base import WebixPermissionsBaseMixin
 from django_webix.utils.layers import get_layers
+from django_webix.views.generic.base import WebixPermissionsBaseMixin
 
 
 class ModelWebixAdminPermissionsMixin(WebixPermissionsBaseMixin):
@@ -39,7 +40,7 @@ class ModelWebixAdminPermissionsMixin(WebixPermissionsBaseMixin):
 
     def get_info_no_add_permission(self, view, has_permission, request):
         if view is not None:
-           return super(view.__class__, view).get_info_no_add_permission(has_permission, request)
+            return super(view.__class__, view).get_info_no_add_permission(has_permission, request)
         else:
             return self._get_info_no_add_permission(has_permission, request)
 
@@ -106,7 +107,7 @@ class ModelWebixAdmin(ModelWebixAdminPermissionsMixin):
 
     label_width = None
     suggest_width = None  # options : int | None for width as parent
-    label_align = 'left'
+    label_align = "left"
 
     inlines = []
 
@@ -116,12 +117,12 @@ class ModelWebixAdmin(ModelWebixAdminPermissionsMixin):
     ordering = None
     actions = []
 
-    list_display = [] # for choice with custom key [...('utilizzo__id', 'utilizzo__denominazione')...]
+    list_display = []  # for choice with custom key [...('utilizzo__id', 'utilizzo__denominazione')...]
     list_display_mobile = []
-    list_display_header = {} # NEW OVERRIDE HEADER MODALITY
-    extra_header = {} # TO BE REMOVED IN FUTURE
-    list_editable = [] # ex. ['utilizzo__denominazione']
-    list_editable_mode = 'field' # field ; row
+    list_display_header = {}  # NEW OVERRIDE HEADER MODALITY
+    extra_header = {}  # TO BE REMOVED IN FUTURE
+    list_editable = []  # ex. ['utilizzo__denominazione']
+    list_editable_mode = "field"  # field ; row
 
     enable_json_loading = True  # changed from the past
     paginate_count_default = 100
@@ -132,7 +133,7 @@ class ModelWebixAdmin(ModelWebixAdminPermissionsMixin):
     inlines_copy_fields = None
     enable_column_delete = True
     enable_row_click = True
-    type_row_click = 'single'
+    type_row_click = "single"
     enable_actions = True
     remove_disabled_buttons = False
 
@@ -148,15 +149,17 @@ class ModelWebixAdmin(ModelWebixAdminPermissionsMixin):
     def __str__(self):
         _str = "%s.%s" % (self.model._meta.app_label, self.__class__.__name__)
         if self.get_prefix() is not None:
-            _str += '.%s' % self.get_prefix()
+            _str += ".%s" % self.get_prefix()
         return _str
 
     def get_inlines(self, view, object, request):
         _inlines = copy.deepcopy(self.inlines)
-        if apps.is_installed('django_webix.contrib.extra_fields'):
+        if apps.is_installed("django_webix.contrib.extra_fields"):
             from django_webix.contrib.extra_fields.models_mixin import ExtraFieldsModel
+
             if issubclass(self.model, ExtraFieldsModel):
                 from django_webix.contrib.extra_fields.dwadmin_inline_utils import ModelFieldValueInline
+
                 _inlines.append(ModelFieldValueInline)
         return _inlines
 
@@ -176,16 +179,16 @@ class ModelWebixAdmin(ModelWebixAdminPermissionsMixin):
         return {}
 
     def get_label_width(self):
-        return getattr(self, 'label_width', None)
+        return getattr(self, "label_width", None)
 
     def get_label_align(self):
-        return getattr(self, 'label_align', None)
+        return getattr(self, "label_align", None)
 
     def get_suggest_width(self):
-        return getattr(self, 'suggest_width', None)
+        return getattr(self, "suggest_width", None)
 
     def get_prefix(self):
-        return getattr(self, 'prefix', None)
+        return getattr(self, "prefix", None)
 
     def get_model_copy_fields(self):
         if self.model_copy_fields is not None:
@@ -198,30 +201,30 @@ class ModelWebixAdmin(ModelWebixAdminPermissionsMixin):
 
     def get_url_pattern_list(self):
         info = self.model._meta.app_label, self.model._meta.model_name
-        pattern = '%s.%s.list' % info
-        if self.get_prefix() not in ['', None]:
-            pattern += '.%s' % self.get_prefix()
+        pattern = "%s.%s.list" % info
+        if self.get_prefix() not in ["", None]:
+            pattern += ".%s" % self.get_prefix()
         return pattern
 
     def get_url_pattern_create(self):
         info = self.model._meta.app_label, self.model._meta.model_name
-        pattern = '%s.%s.create' % info
-        if self.get_prefix() not in ['', None]:
-            pattern += '.%s' % self.get_prefix()
+        pattern = "%s.%s.create" % info
+        if self.get_prefix() not in ["", None]:
+            pattern += ".%s" % self.get_prefix()
         return pattern
 
     def get_url_pattern_update(self):
         info = self.model._meta.app_label, self.model._meta.model_name
-        pattern = '%s.%s.update' % info
-        if self.get_prefix() not in ['', None]:
-            pattern += '.%s' % self.get_prefix()
+        pattern = "%s.%s.update" % info
+        if self.get_prefix() not in ["", None]:
+            pattern += ".%s" % self.get_prefix()
         return pattern
 
     def get_url_pattern_delete(self):
         info = self.model._meta.app_label, self.model._meta.model_name
-        pattern = '%s.%s.delete' % info
-        if self.get_prefix() not in ['', None]:
-            pattern += '.%s' % self.get_prefix()
+        pattern = "%s.%s.delete" % info
+        if self.get_prefix() not in ["", None]:
+            pattern += ".%s" % self.get_prefix()
         return pattern
 
     def get_model_perms(self, request):
@@ -231,10 +234,10 @@ class ModelWebixAdmin(ModelWebixAdminPermissionsMixin):
         for each of those actions.
         """
         return {
-            'add': self.has_add_permission(view=None, request=request),
-            'change': self.has_change_permission(view=None, request=request),
-            'delete': self.has_delete_permission(view=None, request=request),
-            'view': self.has_view_permission(view=None, request=request),
+            "add": self.has_add_permission(view=None, request=request),
+            "change": self.has_change_permission(view=None, request=request),
+            "delete": self.has_delete_permission(view=None, request=request),
+            "view": self.has_view_permission(view=None, request=request),
         }
 
     def has_module_permission(self, request):
@@ -246,17 +249,17 @@ class ModelWebixAdmin(ModelWebixAdminPermissionsMixin):
 
     def get_field_traverse(self, path):
         _next = self.model
-        for j, key in enumerate(path.split('__')):
+        for j, key in enumerate(path.split("__")):
             if j == 0:
                 try:
                     _next = _next._meta.get_field(key)
                 except FieldDoesNotExist:
                     # VIEW MANAGE BY HERSELF
                     return key
-            elif hasattr(_next, 'related_model'):
+            elif hasattr(_next, "related_model"):
                 _next = _next.related_model._meta.get_field(key)
             else:
-                raise Exception('TODO?')
+                raise Exception("TODO?")
         return _next
 
     def create_list_display(self, list_display, view=None, request=None, defaults=None):
@@ -273,21 +276,21 @@ class ModelWebixAdmin(ModelWebixAdminPermissionsMixin):
                 else:
                     field_pk = None
                 model_field = self.get_field_traverse(field_name)
-                filter_type = 'icontains'
+                filter_type = "icontains"
                 format_type = None
-                extra_filter_options = ''
-                filter_option = 'serverFilter' if self.enable_json_loading else 'textFilter'
-                column_template = ''
-                editor = ''
-                extra_header = ''
-                if 'width' in defaults:
-                    width_adapt = defaults['width']
+                extra_filter_options = ""
+                filter_option = "serverFilter" if self.enable_json_loading else "textFilter"
+                column_template = ""
+                editor = ""
+                extra_header = ""
+                if "width" in defaults:
+                    width_adapt = defaults["width"]
                 else:
-                    width_adapt = 'fillspace:true, minWidth:150' if j == 0 else 'adjust:"all"'
-                sort_option = 'server' if self.enable_json_loading else 'string'
+                    width_adapt = "fillspace:true, minWidth:150" if j == 0 else 'adjust:"all"'
+                sort_option = "server" if self.enable_json_loading else "string"
                 click_action = None
                 footer = None
-                if type(model_field) == str:
+                if type(model_field) is str:
                     header_title = model_field
                 else:
                     # if boolean then custom choices
@@ -295,34 +298,45 @@ class ModelWebixAdmin(ModelWebixAdminPermissionsMixin):
 
                 if issubclass(type(model_field), models.BooleanField):
                     editor = 'editor:"select",collection: {}_options'.format(field_name)
-                    filter_type = ''
-                    filter_option = 'serverSelectFilter' if self.enable_json_loading else 'selectFilter'
-                    extra_filter_options = "options:[{id: 'True', value: '" + _('Yes') + "'}, {id: 'False', value: '" + _("No") + "'}] "
-                    column_template = 'template:custom_checkbox_yesnonone'
+                    filter_type = ""
+                    filter_option = "serverSelectFilter" if self.enable_json_loading else "selectFilter"
+                    extra_filter_options = (
+                        "options:[{id: 'True', value: '" + _("Yes") + "'}, {id: 'False', value: '" + _("No") + "'}] "
+                    )
+                    column_template = "template:custom_checkbox_yesnonone"
                 elif issubclass(type(model_field), models.DateTimeField):
                     editor = 'editor:"datetime"'
-                    filter_type = 'range'
-                    filter_option = 'serverDateRangeFilter' if self.enable_json_loading else 'dateRangeFilter'
-                    format_type = 'webix.i18n.fullDateFormatStr'
-                    column_template = 'template:function(obj){{if (obj.{field_name}===null) {{return ""}} else {{return this.format(new Date(obj.{field_name})) }} }}'.format(
-                        field_name=field_name)
+                    filter_type = "range"
+                    filter_option = "serverDateRangeFilter" if self.enable_json_loading else "dateRangeFilter"
+                    format_type = "webix.i18n.fullDateFormatStr"
+                    column_template = (
+                        "template:function(obj){{"
+                        "if (obj.{field_name}===null) {{"
+                        'return ""'
+                        "}} else {{"
+                        "return this.format(new Date(obj.{field_name})) "
+                        "}} "
+                        "}}"
+                    ).format(field_name=field_name)
                 elif issubclass(type(model_field), models.DateField):
-                    #width_adapt = 'width:"85"'
+                    # width_adapt = 'width:"85"'
                     editor = 'editor:"date"'
-                    filter_type = 'range'
-                    filter_option = 'serverDateRangeFilter' if self.enable_json_loading else 'dateRangeFilter'
-                    format_type = 'webix.i18n.dateFormatStr'
-                elif '__' in field_name:
+                    filter_type = "range"
+                    filter_option = "serverDateRangeFilter" if self.enable_json_loading else "dateRangeFilter"
+                    format_type = "webix.i18n.dateFormatStr"
+                elif "__" in field_name:
                     try:
-                        _first_field = self.model._meta.get_field(field_name.split('__')[0])
+                        _first_field = self.model._meta.get_field(field_name.split("__")[0])
                     except FieldDoesNotExist:
                         pass
                     else:
-                        if type(_first_field) == models.ForeignKey:
-                            filter_type = 'iexact'
+                        if type(_first_field) is models.ForeignKey:
+                            filter_type = "iexact"
                             editor = 'editor:"select", collection:{}_options'.format(field_name)
-                            filter_option = 'serverRichSelectFilter' if self.enable_json_loading else 'selectFilter'
-                            extra_filter_options = "options:{}_options ".format(field_name) if self.enable_json_loading else ''
+                            filter_option = "serverRichSelectFilter" if self.enable_json_loading else "selectFilter"
+                            extra_filter_options = (
+                                "options:{}_options ".format(field_name) if self.enable_json_loading else ""
+                            )
                 # if choices... the same of FK
                 else:
                     editor = 'editor:"text"'
@@ -331,53 +345,57 @@ class ModelWebixAdmin(ModelWebixAdminPermissionsMixin):
                     except FieldDoesNotExist:
                         pass
                     else:
-                        if hasattr(_first_field, 'choices') and _first_field.choices is not None:
+                        if hasattr(_first_field, "choices") and _first_field.choices is not None:
                             editor = 'editor:"select"'
-                            extra_header = 'collection: {}_options '.format(field_name)
-                            filter_type = 'iexact'
-                            filter_option = 'serverRichSelectFilter' if self.enable_json_loading else 'selectFilter'
-                            extra_filter_options = "options: {}_options ".format(field_name) if self.enable_json_loading else ''
+                            extra_header = "collection: {}_options ".format(field_name)
+                            filter_type = "iexact"
+                            filter_option = "serverRichSelectFilter" if self.enable_json_loading else "selectFilter"
+                            extra_filter_options = (
+                                "options: {}_options ".format(field_name) if self.enable_json_loading else ""
+                            )
 
-                if issubclass(type(model_field), models.FloatField) or \
-                    issubclass(type(model_field), models.DecimalField) or \
-                    issubclass(type(model_field), models.IntegerField):
-                    if extra_header!='':
-                        extra_header += ','
+                if (
+                    issubclass(type(model_field), models.FloatField)
+                    or issubclass(type(model_field), models.DecimalField)
+                    or issubclass(type(model_field), models.IntegerField)
+                ):
+                    if extra_header != "":
+                        extra_header += ","
                     extra_header += " css:{'text-align':'right'}"
-                    filter_type = 'numbercompare'
+                    filter_type = "numbercompare"
 
                 if field_name in self.extra_header:  # TO BE REMOVED IN FUTURE
                     conf_header = self.extra_header.get(field_name, {})
-                    if 'header_title' in conf_header:
-                        header_title = conf_header.get('header_title', '')
-                    if 'extra' in conf_header:
-                        extra_header = conf_header.get('extra', '')
-                    if 'width_adapt' in conf_header:
-                        width_adapt = conf_header.get('width_adapt', '')
-                    if 'filter_option' in conf_header:
-                        filter_option = conf_header.get('filter_option', '')
-                    if 'filter_type' in conf_header:
-                        filter_type = conf_header.get('filter_type', '')
-                    if 'click_action' in conf_header:
-                        click_action = conf_header.get('click_action', '')
-                    if 'column_template' in conf_header:
-                        column_template = conf_header.get('column_template', '')
-                    if 'extra_filter_options' in conf_header:
-                        extra_filter_options = conf_header.get('extra_filter_options', '')
-                    if 'footer' in conf_header:
-                        footer = conf_header.get('footer', None)
+                    if "header_title" in conf_header:
+                        header_title = conf_header.get("header_title", "")
+                    if "extra" in conf_header:
+                        extra_header = conf_header.get("extra", "")
+                    if "width_adapt" in conf_header:
+                        width_adapt = conf_header.get("width_adapt", "")
+                    if "filter_option" in conf_header:
+                        filter_option = conf_header.get("filter_option", "")
+                    if "filter_type" in conf_header:
+                        filter_type = conf_header.get("filter_type", "")
+                    if "click_action" in conf_header:
+                        click_action = conf_header.get("click_action", "")
+                    if "column_template" in conf_header:
+                        column_template = conf_header.get("column_template", "")
+                    if "extra_filter_options" in conf_header:
+                        extra_filter_options = conf_header.get("extra_filter_options", "")
+                    if "footer" in conf_header:
+                        footer = conf_header.get("footer", None)
                 if field_name not in self.get_list_editable(view=view, request=request):
-                    editor = ''
+                    editor = ""
 
-                if 'extra_header' in defaults:
-                    if extra_header != '':
-                        extra_header += ','
-                    extra_header += defaults['extra_header']
+                if "extra_header" in defaults:
+                    if extra_header != "":
+                        extra_header += ","
+                    extra_header += defaults["extra_header"]
 
                 field_list = {
-                    'field_type': type(model_field),
-                    'field_name': field_name,
-                    'datalist_column': '''{{id: "{field_name}",
+                    "field_type": type(model_field),
+                    "field_name": field_name,
+                    "datalist_column": """{{id: "{field_name}",
                 header: [{{text:{header_icon}+"{header_title}"}}, {{content: "{filter}" {extra_filter_options}}}],
                 {width_adapt},
                 adjustBatch: {adjust_batch},
@@ -386,28 +404,30 @@ class ModelWebixAdmin(ModelWebixAdminPermissionsMixin):
                 serverFilterType: "{filter_type}",
                 {column_template}
                 {editor}
-                {extra_header} }}'''.format(
+                {extra_header} }}""".format(
                         field_name=field_name,
-                        header_icon='editheadericon' if editor != '' else '""',
+                        header_icon="editheadericon" if editor != "" else '""',
                         header_title=header_title,
                         filter=filter_option,
-                        format_type=' format: ' + format_type + ', ' if format_type is not None else '',
-                        extra_filter_options=extra_filter_options if extra_filter_options == '' else ' , ' + extra_filter_options,
+                        format_type=" format: " + format_type + ", " if format_type is not None else "",
+                        extra_filter_options=(
+                            extra_filter_options if extra_filter_options == "" else " , " + extra_filter_options
+                        ),
                         width_adapt=width_adapt,
                         adjust_batch=self.paginate_count_default,
                         sort_option=sort_option,
                         filter_type=filter_type,
-                        column_template=column_template if column_template == '' else column_template+', ',
-                        editor=editor if editor == '' else editor + ', ',
-                        extra_header=extra_header
-                    )
+                        column_template=column_template if column_template == "" else column_template + ", ",
+                        editor=editor if editor == "" else editor + ", ",
+                        extra_header=extra_header,
+                    ),
                 }
                 if field_pk is not None:
-                    field_list.update({'field_pk': field_pk})
+                    field_list.update({"field_pk": field_pk})
                 if footer is not None:
-                    field_list.update({'footer': footer})
+                    field_list.update({"footer": footer})
                 if click_action is not None:
-                    field_list['click_action'] = click_action
+                    field_list["click_action"] = click_action
                 _fields.append(field_list)
         return _fields
 
@@ -420,28 +440,32 @@ class ModelWebixAdmin(ModelWebixAdminPermissionsMixin):
         else:
             _list_display = self.list_display
 
-        if _list_display==[] or type(_list_display[0]) == str:
+        if _list_display == [] or type(_list_display[0]) is str:
             _model_list_display = self.create_list_display(_list_display, view=view, request=request)
         else:
             _model_list_display = list(_list_display)
 
         # extra_fields columns
-        if apps.is_installed('django_webix.contrib.extra_fields'):
+        if apps.is_installed("django_webix.contrib.extra_fields"):
             from django_webix.contrib.extra_fields.models_mixin import ExtraFieldsModel
+
             if issubclass(self.model, ExtraFieldsModel):
-                from django_webix.contrib.extra_fields.models import ModelField
                 from django.contrib.contenttypes.models import ContentType
+                from django_webix.contrib.extra_fields.models import ModelField
+
                 content_type_pk = ContentType.objects.get_for_model(self.model).pk
-                model_fields_names = ModelField.objects.filter(content_type_id=content_type_pk)\
-                                                       .values_list('field_name', flat=True)\
-                                                       .distinct().order_by('field_name')
-                _model_list_display += self.create_list_display(model_fields_names,
-                                                                view=view,
-                                                                request=request,
-                                                                defaults={
-                                                                    'width': 'adjust:"all"',
-                                                                    'extra_header': 'hidden:true'
-                                                                })
+                model_fields_names = (
+                    ModelField.objects.filter(content_type_id=content_type_pk)
+                    .values_list("field_name", flat=True)
+                    .distinct()
+                    .order_by("field_name")
+                )
+                _model_list_display += self.create_list_display(
+                    model_fields_names,
+                    view=view,
+                    request=request,
+                    defaults={"width": 'adjust:"all"', "extra_header": "hidden:true"},
+                )
         return _model_list_display
 
     def get_queryset(self, view=None, request=None):
@@ -449,10 +473,12 @@ class ModelWebixAdmin(ModelWebixAdminPermissionsMixin):
 
     def get_form_fields(self):
         _fields = []
-        for _field in (self.model._meta.fields + self.model._meta.many_to_many):
-            if type(_field) != models.AutoField and \
-                (self.exclude is None or _field.name not in self.exclude) and \
-                _field.editable is True:
+        for _field in self.model._meta.fields + self.model._meta.many_to_many:
+            if (
+                type(_field) is not models.AutoField
+                and (self.exclude is None or _field.name not in self.exclude)
+                and _field.editable is True
+            ):
                 if self.fields is not None and len(self.fields) > 0:
                     if _field.name in self.fields:
                         _fields.append(_field.name)
@@ -460,9 +486,9 @@ class ModelWebixAdmin(ModelWebixAdminPermissionsMixin):
                     _fields.append(_field.name)
         return _fields
 
-
     def get_form_class(self, view=None):
         from django_webix.views import WebixCreateView, WebixUpdateView
+
         _is_mobile = view is not None and view.request is not None and view.request.user_agent.is_mobile
         _admin = self
         if self.form:
@@ -486,7 +512,7 @@ class ModelWebixAdmin(ModelWebixAdminPermissionsMixin):
             class WebixAdminCreateUpdateForm(WebixModelForm):
 
                 class Meta:
-                    localized_fields = '__all__'
+                    localized_fields = "__all__"
                     model = _admin.model
                     fields = _admin.get_form_fields()
 
@@ -504,14 +530,14 @@ class ModelWebixAdmin(ModelWebixAdminPermissionsMixin):
             return WebixAdminCreateUpdateForm
 
     def get_layers(self, area=None):
-        '''
+        """
         Function to obtain list of layers
         :param area: 'columns_list' or 'actions_list' or None
         :return: list of layers
-        '''
+        """
         layers = []
-        if getattr(self, 'model', None) is not None:
-            layers = get_layers(getattr(self, 'model', None), getattr(self, 'qxs_layers', None))
+        if getattr(self, "model", None) is not None:
+            layers = get_layers(getattr(self, "model", None), getattr(self, "qxs_layers", None))
         return layers
 
     def get_add_view(self):
@@ -521,29 +547,29 @@ class ModelWebixAdmin(ModelWebixAdminPermissionsMixin):
         else:
             from django_webix.views import WebixCreateView
 
-            @method_decorator(script_login_required, name='dispatch')
+            @method_decorator(script_login_required, name="dispatch")
             class WebixAdminCreateView(WebixCreateView):
 
-                if hasattr(_admin, 'dispatch'):
+                if hasattr(_admin, "dispatch"):
+
                     def dispatch(self, *args, **kwargs):
-                        kwargs.update({'view': self})
+                        kwargs.update({"view": self})
                         return _admin.dispatch(*args, **kwargs)
 
                 admin_prefix = _admin.get_prefix()
 
                 def get_view_prefix(self):
                     if self.admin_prefix is not None:
-                        return '{}_{}_{}_'.format(self.admin_prefix,
-                                                  self.model._meta.app_label,
-                                                  self.model._meta.model_name)
+                        return "{}_{}_{}_".format(
+                            self.admin_prefix, self.model._meta.app_label, self.model._meta.model_name
+                        )
                     else:
-                        return '{}_{}_'.format(self.model._meta.app_label,
-                                               self.model._meta.model_name)
+                        return "{}_{}_".format(self.model._meta.app_label, self.model._meta.model_name)
 
-                url_pattern_list = '{}:{}'.format(_admin.admin_site.urls_namespace, _admin.get_url_pattern_list())
-                url_pattern_create = '{}:{}'.format(_admin.admin_site.urls_namespace, _admin.get_url_pattern_create())
-                url_pattern_update = '{}:{}'.format(_admin.admin_site.urls_namespace, _admin.get_url_pattern_update())
-                url_pattern_delete = '{}:{}'.format(_admin.admin_site.urls_namespace, _admin.get_url_pattern_delete())
+                url_pattern_list = "{}:{}".format(_admin.admin_site.urls_namespace, _admin.get_url_pattern_list())
+                url_pattern_create = "{}:{}".format(_admin.admin_site.urls_namespace, _admin.get_url_pattern_create())
+                url_pattern_update = "{}:{}".format(_admin.admin_site.urls_namespace, _admin.get_url_pattern_update())
+                url_pattern_delete = "{}:{}".format(_admin.admin_site.urls_namespace, _admin.get_url_pattern_delete())
 
                 model = _admin.model
 
@@ -562,76 +588,104 @@ class ModelWebixAdmin(ModelWebixAdminPermissionsMixin):
                 template_style = _admin.get_template_form_style()
                 inlines = _admin.inlines
 
-                if hasattr(_admin, 'response_valid'):
+                if hasattr(_admin, "response_valid"):
+
                     def response_valid(self, view=None, success_url=None, **kwargs):
                         return _admin.response_valid(view=self, success_url=success_url, **kwargs)
 
-                if hasattr(_admin, 'get_success_url'):
+                if hasattr(_admin, "get_success_url"):
+
                     def get_success_url(self, next_step=None):
                         return _admin.get_success_url(view=self, next_step=next_step)
 
-                if hasattr(_admin, 'get_url_create_kwargs'):
+                if hasattr(_admin, "get_url_create_kwargs"):
+
                     def get_url_create_kwargs(self):
                         return _admin.get_url_create_kwargs(view=self)
 
-                if hasattr(_admin, 'get_url_create'):
+                if hasattr(_admin, "get_url_create"):
+
                     def get_url_create(self):
                         return _admin.get_url_create(view=self)
 
-                if hasattr(_admin, 'get_url_update'):
+                if hasattr(_admin, "get_url_update"):
+
                     def get_url_update(self, obj=None):
                         return _admin.get_url_update(view=self, obj=obj)
 
-                if hasattr(_admin, 'get_url_delete'):
+                if hasattr(_admin, "get_url_delete"):
+
                     def get_url_delete(self, obj=None):
                         return _admin.get_url_delete(view=self, obj=obj)
 
-                if hasattr(_admin, 'get_url_list'):
+                if hasattr(_admin, "get_url_list"):
+
                     def get_url_list(self):
                         return _admin.get_url_list(view=self)
 
-                if hasattr(_admin, 'get_container_id'):
+                if hasattr(_admin, "get_container_id"):
+
                     def get_container_id(self, request):
                         return _admin.get_container_id(view=self, request=request)
 
-                if hasattr(_admin, 'get_form'):
+                if hasattr(_admin, "get_form"):
+
                     def get_form(self, form_class=None):
                         return _admin.get_form(view=self, form_class=form_class)
 
-                if hasattr(_admin, 'get_form_kwargs'):
+                if hasattr(_admin, "get_form_kwargs"):
+
                     def get_form_kwargs(self):
                         return _admin.get_form_kwargs(view=self)
 
-                if hasattr(_admin, 'forms_valid'):
+                if hasattr(_admin, "forms_valid"):
+
                     def forms_valid(self, form, inlines, **kwargs):
                         return _admin.forms_valid(view=self, form=form, inlines=inlines, **kwargs)
 
-                if hasattr(_admin, 'pre_forms_valid'):
+                if hasattr(_admin, "pre_forms_valid"):
+
                     def pre_forms_valid(self, form, inlines, **kwargs):
                         return _admin.pre_forms_valid(view=self, form=form, inlines=inlines, **kwargs)
 
-                if hasattr(_admin, 'post_form_save'):
+                if hasattr(_admin, "post_form_save"):
+
                     def post_form_save(self, form, inlines, **kwargs):
                         return _admin.post_form_save(view=self, form=form, inlines=inlines, **kwargs)
 
-                if hasattr(_admin, 'post_forms_valid'):
+                if hasattr(_admin, "post_forms_valid"):
+
                     def post_forms_valid(self, form, inlines, **kwargs):
                         return _admin.post_forms_valid(view=self, form=form, inlines=inlines, **kwargs)
 
-                if hasattr(_admin, 'get_initial'):
+                if hasattr(_admin, "get_initial"):
+
                     def get_initial(self):
                         return _admin.get_initial(view=self)
 
-                if hasattr(_admin, 'get_inlines'):
+                if hasattr(_admin, "get_inlines"):
+
                     def get_inlines(self):
                         return _admin.get_inlines(view=self, object=self.object, request=self.request)
 
                 errors_on_popup = _admin.errors_on_popup
 
                 model_copy_fields = _admin.get_model_copy_fields()
-                enable_button_save_continue = _admin.enable_button_save_continue_create if _admin.enable_button_save_continue_create is not None else _admin.enable_button_save_continue
-                enable_button_save_addanother = _admin.enable_button_save_addanother_create if _admin.enable_button_save_addanother_create is not None else _admin.enable_button_save_addanother
-                enable_button_save_gotolist = _admin.enable_button_save_gotolist_create if _admin.enable_button_save_gotolist_create is not None else _admin.enable_button_save_gotolist
+                enable_button_save_continue = (
+                    _admin.enable_button_save_continue_create
+                    if _admin.enable_button_save_continue_create is not None
+                    else _admin.enable_button_save_continue
+                )
+                enable_button_save_addanother = (
+                    _admin.enable_button_save_addanother_create
+                    if _admin.enable_button_save_addanother_create is not None
+                    else _admin.enable_button_save_addanother
+                )
+                enable_button_save_gotolist = (
+                    _admin.enable_button_save_gotolist_create
+                    if _admin.enable_button_save_gotolist_create is not None
+                    else _admin.enable_button_save_gotolist
+                )
 
                 add_permission = _admin.add_permission
                 change_permission = _admin.change_permission
@@ -642,10 +696,13 @@ class ModelWebixAdmin(ModelWebixAdminPermissionsMixin):
 
                 def has_add_permission(self, request):
                     return _admin.has_add_permission(view=self, request=request)
+
                 def has_change_permission(self, request, obj=None):
                     return _admin.has_change_permission(view=self, request=request, obj=obj)
+
                 def has_delete_permission(self, request, obj=None):
                     return _admin.has_delete_permission(view=self, request=request, obj=obj)
+
                 def has_view_permission(self, request, obj=None):
                     return _admin.has_view_permission(view=self, request=request, obj=obj)
 
@@ -656,10 +713,13 @@ class ModelWebixAdmin(ModelWebixAdminPermissionsMixin):
 
                 def get_info_no_add_permission(self, has_permission, request):
                     return _admin.get_info_no_add_permission(self, has_permission, request)
+
                 def get_info_no_change_permission(self, has_permission, request, obj=None):
                     return _admin.get_info_no_change_permission(self, has_permission, request, obj=obj)
+
                 def get_info_no_delete_permission(self, has_permission, request, obj=None):
                     return _admin.get_info_no_delete_permission(self, has_permission, request, obj=obj)
+
                 def get_info_no_view_permission(self, has_permission, request, obj=None):
                     return _admin.get_info_no_view_permission(self, has_permission, request, obj=obj)
 
@@ -674,7 +734,7 @@ class ModelWebixAdmin(ModelWebixAdminPermissionsMixin):
 
                 def get_context_data(self, **kwargs):
                     context = super().get_context_data(**kwargs)
-                    context['urls_namespace'] = _admin.admin_site.urls_namespace
+                    context["urls_namespace"] = _admin.admin_site.urls_namespace
                     context.update(_admin.get_extra_context(view=self, request=self.request))
                     return context
 
@@ -687,28 +747,29 @@ class ModelWebixAdmin(ModelWebixAdminPermissionsMixin):
         else:
             from django_webix.views import WebixUpdateView
 
-            @method_decorator(script_login_required, name='dispatch')
+            @method_decorator(script_login_required, name="dispatch")
             class WebixAdminUpdateView(WebixUpdateView):
 
-                if hasattr(_admin, 'dispatch'):
+                if hasattr(_admin, "dispatch"):
+
                     def dispatch(self, *args, **kwargs):
-                        kwargs.update({'view': self})
+                        kwargs.update({"view": self})
                         return _admin.dispatch(*args, **kwargs)
 
                 admin_prefix = _admin.get_prefix()
+
                 def get_view_prefix(self):
                     if self.admin_prefix is not None:
-                        return '{}_{}_{}_'.format(self.admin_prefix,
-                                                  self.model._meta.app_label,
-                                                  self.model._meta.model_name)
+                        return "{}_{}_{}_".format(
+                            self.admin_prefix, self.model._meta.app_label, self.model._meta.model_name
+                        )
                     else:
-                        return '{}_{}_'.format(self.model._meta.app_label,
-                                               self.model._meta.model_name)
+                        return "{}_{}_".format(self.model._meta.app_label, self.model._meta.model_name)
 
-                url_pattern_list = '{}:{}'.format(_admin.admin_site.urls_namespace, _admin.get_url_pattern_list())
-                url_pattern_create = '{}:{}'.format(_admin.admin_site.urls_namespace, _admin.get_url_pattern_create())
-                url_pattern_update = '{}:{}'.format(_admin.admin_site.urls_namespace, _admin.get_url_pattern_update())
-                url_pattern_delete = '{}:{}'.format(_admin.admin_site.urls_namespace, _admin.get_url_pattern_delete())
+                url_pattern_list = "{}:{}".format(_admin.admin_site.urls_namespace, _admin.get_url_pattern_list())
+                url_pattern_create = "{}:{}".format(_admin.admin_site.urls_namespace, _admin.get_url_pattern_create())
+                url_pattern_update = "{}:{}".format(_admin.admin_site.urls_namespace, _admin.get_url_pattern_update())
+                url_pattern_delete = "{}:{}".format(_admin.admin_site.urls_namespace, _admin.get_url_pattern_delete())
 
                 model = _admin.model
 
@@ -727,76 +788,104 @@ class ModelWebixAdmin(ModelWebixAdminPermissionsMixin):
                 def is_enable_button_save_gotolist(self, request):
                     return _admin.is_enable_button_save_gotolist(view=self, request=request)
 
-                if hasattr(_admin, 'response_valid'):
+                if hasattr(_admin, "response_valid"):
+
                     def response_valid(self, view=None, success_url=None, **kwargs):
                         return _admin.response_valid(view=self, success_url=success_url, **kwargs)
 
-                if hasattr(_admin, 'get_success_url'):
+                if hasattr(_admin, "get_success_url"):
+
                     def get_success_url(self, next_step=None):
                         return _admin.get_success_url(view=self, next_step=next_step)
 
-                if hasattr(_admin, 'get_url_create_kwargs'):
+                if hasattr(_admin, "get_url_create_kwargs"):
+
                     def get_url_create_kwargs(self):
                         return _admin.get_url_create_kwargs(view=self)
 
-                if hasattr(_admin, 'get_url_create'):
+                if hasattr(_admin, "get_url_create"):
+
                     def get_url_create(self):
                         return _admin.get_url_create(view=self)
 
-                if hasattr(_admin, 'get_url_update'):
+                if hasattr(_admin, "get_url_update"):
+
                     def get_url_update(self, obj=None):
                         return _admin.get_url_update(view=self, obj=obj)
 
-                if hasattr(_admin, 'get_url_delete'):
+                if hasattr(_admin, "get_url_delete"):
+
                     def get_url_delete(self, obj=None):
                         return _admin.get_url_delete(view=self, obj=obj)
 
-                if hasattr(_admin, 'get_url_list'):
+                if hasattr(_admin, "get_url_list"):
+
                     def get_url_list(self):
                         return _admin.get_url_list(view=self)
 
-                if hasattr(_admin, 'get_container_id'):
+                if hasattr(_admin, "get_container_id"):
+
                     def get_container_id(self, request):
                         return _admin.get_container_id(view=self, request=request)
 
-                if hasattr(_admin, 'get_form'):
+                if hasattr(_admin, "get_form"):
+
                     def get_form(self, form_class=None):
                         return _admin.get_form(view=self, form_class=form_class)
 
-                if hasattr(_admin, 'get_form_kwargs'):
+                if hasattr(_admin, "get_form_kwargs"):
+
                     def get_form_kwargs(self):
                         return _admin.get_form_kwargs(view=self)
 
-                if hasattr(_admin, 'forms_valid'):
+                if hasattr(_admin, "forms_valid"):
+
                     def forms_valid(self, form, inlines, **kwargs):
                         return _admin.forms_valid(view=self, form=form, inlines=inlines, **kwargs)
 
-                if hasattr(_admin, 'pre_forms_valid'):
+                if hasattr(_admin, "pre_forms_valid"):
+
                     def pre_forms_valid(self, form, inlines, **kwargs):
                         return _admin.pre_forms_valid(view=self, form=form, inlines=inlines, **kwargs)
 
-                if hasattr(_admin, 'post_form_save'):
+                if hasattr(_admin, "post_form_save"):
+
                     def post_form_save(self, form, inlines, **kwargs):
                         return _admin.post_form_save(view=self, form=form, inlines=inlines, **kwargs)
 
-                if hasattr(_admin, 'post_forms_valid'):
+                if hasattr(_admin, "post_forms_valid"):
+
                     def post_forms_valid(self, form, inlines, **kwargs):
                         return _admin.post_forms_valid(view=self, form=form, inlines=inlines, **kwargs)
 
-                if hasattr(_admin, 'get_initial'):
+                if hasattr(_admin, "get_initial"):
+
                     def get_initial(self):
                         return _admin.get_initial(view=self)
 
-                if hasattr(_admin, 'get_inlines'):
+                if hasattr(_admin, "get_inlines"):
+
                     def get_inlines(self):
                         return _admin.get_inlines(view=self, object=self.object, request=self.request)
 
                 errors_on_popup = _admin.errors_on_popup
 
                 model_copy_fields = _admin.get_model_copy_fields()
-                enable_button_save_continue = _admin.enable_button_save_continue_update if _admin.enable_button_save_continue_update is not None else _admin.enable_button_save_continue
-                enable_button_save_addanother = _admin.enable_button_save_addanother_update if _admin.enable_button_save_addanother_update is not None else _admin.enable_button_save_addanother
-                enable_button_save_gotolist = _admin.enable_button_save_gotolist_update if _admin.enable_button_save_gotolist_update is not None else _admin.enable_button_save_gotolist
+                enable_button_save_continue = (
+                    _admin.enable_button_save_continue_update
+                    if _admin.enable_button_save_continue_update is not None
+                    else _admin.enable_button_save_continue
+                )
+                enable_button_save_addanother = (
+                    _admin.enable_button_save_addanother_update
+                    if _admin.enable_button_save_addanother_update is not None
+                    else _admin.enable_button_save_addanother
+                )
+                enable_button_save_gotolist = (
+                    _admin.enable_button_save_gotolist_update
+                    if _admin.enable_button_save_gotolist_update is not None
+                    else _admin.enable_button_save_gotolist
+                )
 
                 add_permission = _admin.add_permission
                 change_permission = _admin.change_permission
@@ -807,10 +896,13 @@ class ModelWebixAdmin(ModelWebixAdminPermissionsMixin):
 
                 def has_add_permission(self, request):
                     return _admin.has_add_permission(view=self, request=request)
+
                 def has_change_permission(self, request, obj=None):
                     return _admin.has_change_permission(view=self, request=request, obj=obj)
+
                 def has_delete_permission(self, request, obj=None):
                     return _admin.has_delete_permission(view=self, request=request, obj=obj)
+
                 def has_view_permission(self, request, obj=None):
                     return _admin.has_view_permission(view=self, request=request, obj=obj)
 
@@ -821,10 +913,13 @@ class ModelWebixAdmin(ModelWebixAdminPermissionsMixin):
 
                 def get_info_no_add_permission(self, has_permission, request):
                     return _admin.get_info_no_add_permission(self, has_permission, request)
+
                 def get_info_no_change_permission(self, has_permission, request, obj=None):
                     return _admin.get_info_no_change_permission(self, has_permission, request, obj=obj)
+
                 def get_info_no_delete_permission(self, has_permission, request, obj=None):
                     return _admin.get_info_no_delete_permission(self, has_permission, request, obj=obj)
+
                 def get_info_no_view_permission(self, has_permission, request, obj=None):
                     return _admin.get_info_no_view_permission(self, has_permission, request, obj=obj)
 
@@ -835,15 +930,12 @@ class ModelWebixAdmin(ModelWebixAdminPermissionsMixin):
                     template_name = _admin.change_form_template
 
                 def get_queryset(self):
-                    return _admin.get_queryset(view=self,
-                                               request=self.request)
+                    return _admin.get_queryset(view=self, request=self.request)
 
                 def get_context_data(self, **kwargs):
                     context = super().get_context_data(**kwargs)
-                    context['urls_namespace'] = _admin.admin_site.urls_namespace
-                    context.update(_admin.get_extra_context(view=self,
-                                                            request=self.request
-                                                            ))
+                    context["urls_namespace"] = _admin.admin_site.urls_namespace
+                    context.update(_admin.get_extra_context(view=self, request=self.request))
                     return context
 
             return WebixAdminUpdateView
@@ -855,28 +947,29 @@ class ModelWebixAdmin(ModelWebixAdminPermissionsMixin):
         else:
             from django_webix.views import WebixDeleteView
 
-            @method_decorator(script_login_required, name='dispatch')
+            @method_decorator(script_login_required, name="dispatch")
             class WebixAdminDeleteView(WebixDeleteView):
 
-                if hasattr(_admin, 'dispatch'):
+                if hasattr(_admin, "dispatch"):
+
                     def dispatch(self, *args, **kwargs):
-                        kwargs.update({'view': self})
+                        kwargs.update({"view": self})
                         return _admin.dispatch(*args, **kwargs)
 
                 admin_prefix = _admin.get_prefix()
+
                 def get_view_prefix(self):
                     if self.admin_prefix is not None:
-                        return '{}_{}_{}_'.format(self.admin_prefix,
-                                                  self.model._meta.app_label,
-                                                  self.model._meta.model_name)
+                        return "{}_{}_{}_".format(
+                            self.admin_prefix, self.model._meta.app_label, self.model._meta.model_name
+                        )
                     else:
-                        return '{}_{}_'.format(self.model._meta.app_label,
-                                               self.model._meta.model_name)
+                        return "{}_{}_".format(self.model._meta.app_label, self.model._meta.model_name)
 
-                url_pattern_list =   '{}:{}'.format(_admin.admin_site.urls_namespace, _admin.get_url_pattern_list())
-                url_pattern_create = '{}:{}'.format(_admin.admin_site.urls_namespace, _admin.get_url_pattern_create())
-                url_pattern_update = '{}:{}'.format(_admin.admin_site.urls_namespace, _admin.get_url_pattern_update())
-                url_pattern_delete = '{}:{}'.format(_admin.admin_site.urls_namespace, _admin.get_url_pattern_delete())
+                url_pattern_list = "{}:{}".format(_admin.admin_site.urls_namespace, _admin.get_url_pattern_list())
+                url_pattern_create = "{}:{}".format(_admin.admin_site.urls_namespace, _admin.get_url_pattern_create())
+                url_pattern_update = "{}:{}".format(_admin.admin_site.urls_namespace, _admin.get_url_pattern_update())
+                url_pattern_delete = "{}:{}".format(_admin.admin_site.urls_namespace, _admin.get_url_pattern_delete())
 
                 add_permission = _admin.add_permission
                 change_permission = _admin.change_permission
@@ -887,10 +980,13 @@ class ModelWebixAdmin(ModelWebixAdminPermissionsMixin):
 
                 def has_add_permission(self, request):
                     return _admin.has_add_permission(view=self, request=request)
+
                 def has_change_permission(self, request, obj=None):
                     return _admin.has_change_permission(view=self, request=request, obj=obj)
+
                 def has_delete_permission(self, request, obj=None):
                     return _admin.has_delete_permission(view=self, request=request, obj=obj)
+
                 def has_view_permission(self, request, obj=None):
                     return _admin.has_view_permission(view=self, request=request, obj=obj)
 
@@ -901,10 +997,13 @@ class ModelWebixAdmin(ModelWebixAdminPermissionsMixin):
 
                 def get_info_no_add_permission(self, has_permission, request):
                     return _admin.get_info_no_add_permission(self, has_permission, request)
+
                 def get_info_no_change_permission(self, has_permission, request, obj=None):
                     return _admin.get_info_no_change_permission(self, has_permission, request, obj=obj)
+
                 def get_info_no_delete_permission(self, has_permission, request, obj=None):
                     return _admin.get_info_no_delete_permission(self, has_permission, request, obj=obj)
+
                 def get_info_no_view_permission(self, has_permission, request, obj=None):
                     return _admin.get_info_no_view_permission(self, has_permission, request, obj=obj)
 
@@ -913,35 +1012,43 @@ class ModelWebixAdmin(ModelWebixAdminPermissionsMixin):
 
                 model = _admin.model
 
-                if hasattr(_admin, 'response_valid'):
+                if hasattr(_admin, "response_valid"):
+
                     def response_valid(self, view=None, success_url=None, **kwargs):
                         return _admin.response_valid(view=self, success_url=success_url, **kwargs)
 
-                if hasattr(_admin, 'get_container_id'):
+                if hasattr(_admin, "get_container_id"):
+
                     def get_container_id(self, request):
                         return _admin.get_container_id(view=self, request=request)
 
-                if hasattr(_admin, 'get_success_url'):
+                if hasattr(_admin, "get_success_url"):
+
                     def get_success_url(self, next_step=None):
                         return _admin.get_success_url(view=self, next_step=next_step)
 
-                if hasattr(_admin, 'get_url_create_kwargs'):
+                if hasattr(_admin, "get_url_create_kwargs"):
+
                     def get_url_create_kwargs(self):
                         return _admin.get_url_create_kwargs(view=self)
 
-                if hasattr(_admin, 'get_url_create'):
+                if hasattr(_admin, "get_url_create"):
+
                     def get_url_create(self):
                         return _admin.get_url_create(view=self)
 
-                if hasattr(_admin, 'get_url_update'):
+                if hasattr(_admin, "get_url_update"):
+
                     def get_url_update(self, obj=None):
                         return _admin.get_url_update(view=self, obj=obj)
 
-                if hasattr(_admin, 'get_url_delete'):
+                if hasattr(_admin, "get_url_delete"):
+
                     def get_url_delete(self, obj=None):
                         return _admin.get_url_delete(view=self, obj=obj)
 
-                if hasattr(_admin, 'get_url_list'):
+                if hasattr(_admin, "get_url_list"):
+
                     def get_url_list(self):
                         return _admin.get_url_list(view=self)
 
@@ -949,14 +1056,12 @@ class ModelWebixAdmin(ModelWebixAdminPermissionsMixin):
                     template_name = _admin.delete_template
 
                 def get_queryset(self):
-                    return _admin.get_queryset(view=self,
-                                               request=self.request)
+                    return _admin.get_queryset(view=self, request=self.request)
 
                 def get_context_data(self, **kwargs):
                     context = super().get_context_data(**kwargs)
-                    context['urls_namespace'] = _admin.admin_site.urls_namespace
-                    context.update(_admin.get_extra_context(view=self,
-                                                            request=self.request))
+                    context["urls_namespace"] = _admin.admin_site.urls_namespace
+                    context.update(_admin.get_extra_context(view=self, request=self.request))
                     return context
 
             return WebixAdminDeleteView
@@ -973,30 +1078,32 @@ class ModelWebixAdmin(ModelWebixAdminPermissionsMixin):
         else:
             from django_webix.views import WebixListView
 
-            @method_decorator(script_login_required, name='dispatch')
+            @method_decorator(script_login_required, name="dispatch")
             class WebixAdminListView(WebixListView):
 
-                if hasattr(_admin, 'dispatch'):
+                if hasattr(_admin, "dispatch"):
+
                     def dispatch(self, *args, **kwargs):
-                        kwargs.update({'view': self})
+                        kwargs.update({"view": self})
                         return _admin.dispatch(*args, **kwargs)
 
                 admin_prefix = _admin.get_prefix()
+
                 def get_view_prefix(self):
                     if self.admin_prefix is not None:
-                        return '{}_{}_{}_'.format(self.admin_prefix,
-                                                  self.model._meta.app_label,
-                                                  self.model._meta.model_name)
+                        return "{}_{}_{}_".format(
+                            self.admin_prefix, self.model._meta.app_label, self.model._meta.model_name
+                        )
                     else:
-                        return '{}_{}_'.format(self.model._meta.app_label,
-                                               self.model._meta.model_name)
+                        return "{}_{}_".format(self.model._meta.app_label, self.model._meta.model_name)
 
-                url_pattern_list =   '{}:{}'.format(_admin.admin_site.urls_namespace, _admin.get_url_pattern_list())
-                url_pattern_create = '{}:{}'.format(_admin.admin_site.urls_namespace, _admin.get_url_pattern_create())
-                url_pattern_update = '{}:{}'.format(_admin.admin_site.urls_namespace, _admin.get_url_pattern_update())
-                url_pattern_delete = '{}:{}'.format(_admin.admin_site.urls_namespace, _admin.get_url_pattern_delete())
+                url_pattern_list = "{}:{}".format(_admin.admin_site.urls_namespace, _admin.get_url_pattern_list())
+                url_pattern_create = "{}:{}".format(_admin.admin_site.urls_namespace, _admin.get_url_pattern_create())
+                url_pattern_update = "{}:{}".format(_admin.admin_site.urls_namespace, _admin.get_url_pattern_update())
+                url_pattern_delete = "{}:{}".format(_admin.admin_site.urls_namespace, _admin.get_url_pattern_delete())
 
-                if hasattr(_admin, 'get_adjust_row_height'):
+                if hasattr(_admin, "get_adjust_row_height"):
+
                     def get_adjust_row_height(self, request):
                         return _admin.get_adjust_row_height(view=self, request=request)
 
@@ -1010,11 +1117,13 @@ class ModelWebixAdmin(ModelWebixAdminPermissionsMixin):
                 def is_actions_flexport_enable(self, request):
                     return _admin.is_actions_flexport_enable(view=self, request=request)
 
-                if hasattr(_admin, 'get_actions'):
+                if hasattr(_admin, "get_actions"):
+
                     def get_actions(self):
                         return _admin.get_actions(view=self)
 
-                if hasattr(_admin, 'get_choices_filters'):
+                if hasattr(_admin, "get_choices_filters"):
+
                     def get_choices_filters(self):
                         return _admin.get_choices_filters(view=self)
 
@@ -1039,10 +1148,13 @@ class ModelWebixAdmin(ModelWebixAdminPermissionsMixin):
 
                 def has_add_permission(self, request):
                     return _admin.has_add_permission(view=self, request=request)
+
                 def has_change_permission(self, request, obj=None):
                     return _admin.has_change_permission(view=self, request=request, obj=obj)
+
                 def has_delete_permission(self, request, obj=None):
                     return _admin.has_delete_permission(view=self, request=request, obj=obj)
+
                 def has_view_permission(self, request, obj=None):
                     return _admin.has_view_permission(view=self, request=request, obj=obj)
 
@@ -1053,10 +1165,13 @@ class ModelWebixAdmin(ModelWebixAdminPermissionsMixin):
 
                 def get_info_no_add_permission(self, has_permission, request):
                     return _admin.get_info_no_add_permission(self, has_permission, request)
+
                 def get_info_no_change_permission(self, has_permission, request, obj=None):
                     return _admin.get_info_no_change_permission(self, has_permission, request, obj=obj)
+
                 def get_info_no_delete_permission(self, has_permission, request, obj=None):
                     return _admin.get_info_no_delete_permission(self, has_permission, request, obj=obj)
+
                 def get_info_no_view_permission(self, has_permission, request, obj=None):
                     return _admin.get_info_no_view_permission(self, has_permission, request, obj=obj)
 
@@ -1066,45 +1181,50 @@ class ModelWebixAdmin(ModelWebixAdminPermissionsMixin):
                 if _admin.change_list_template is not None:
                     template_name = _admin.change_list_template
 
-                if hasattr(_admin, 'get_container_id'):
+                if hasattr(_admin, "get_container_id"):
+
                     def get_container_id(self, request):
                         return _admin.get_container_id(view=self, request=request)
 
-                if hasattr(_admin, 'get_url_create_kwargs'):
+                if hasattr(_admin, "get_url_create_kwargs"):
+
                     def get_url_create_kwargs(self):
                         return _admin.get_url_create_kwargs(view=self)
 
-                if hasattr(_admin, 'get_url_create'):
+                if hasattr(_admin, "get_url_create"):
+
                     def get_url_create(self):
                         return _admin.get_url_create(view=self)
 
-                if hasattr(_admin, 'get_url_update'):
+                if hasattr(_admin, "get_url_update"):
+
                     def get_url_update(self, obj=None):
                         return _admin.get_url_update(view=self, obj=obj)
 
-                if hasattr(_admin, 'get_url_delete'):
+                if hasattr(_admin, "get_url_delete"):
+
                     def get_url_delete(self, obj=None):
                         return _admin.get_url_delete(view=self, obj=obj)
 
-                if hasattr(_admin, 'get_url_list'):
+                if hasattr(_admin, "get_url_list"):
+
                     def get_url_list(self):
                         return _admin.get_url_list(view=self)
 
                 def get_initial_queryset(self):
-                    return _admin.get_queryset(view=self,
-                                               request=self.request)
+                    return _admin.get_queryset(view=self, request=self.request)
 
                 def get_context_data(self, **kwargs):
                     context = super().get_context_data(**kwargs)
-                    context['urls_namespace'] = _admin.admin_site.urls_namespace
-                    context.update(_admin.get_extra_context(view=self,
-                                                            request=self.request))
+                    context["urls_namespace"] = _admin.admin_site.urls_namespace
+                    context.update(_admin.get_extra_context(view=self, request=self.request))
                     return context
 
                 def get_fields_editable(self):
                     return _admin.get_list_editable(request=self.request)
 
-                if hasattr(_admin, '_get_objects_datatable_values'):
+                if hasattr(_admin, "_get_objects_datatable_values"):
+
                     def _get_objects_datatable_values(self, qs):
                         return _admin._get_objects_datatable_values(view=self, qs=qs)
 
@@ -1130,20 +1250,28 @@ class ModelWebixAdmin(ModelWebixAdminPermissionsMixin):
 
     def get_urls(self):
         _prefix = self.get_prefix()
-        if _prefix not in [None, '']:
-            _prefix += '/'
+        if _prefix not in [None, ""]:
+            _prefix += "/"
         else:
-            _prefix = ''
+            _prefix = ""
 
         _urls = []
-        if self.enable_url_list == True:
-            _urls.append(path(_prefix+'', self.get_list_view().as_view(), name=self.get_url_pattern_list()))
-        if self.enable_url_create == True:
-            _urls.append(path(_prefix+'create/', self.get_add_view().as_view(), name=self.get_url_pattern_create()))
-        if self.enable_url_delete == True:
-            _urls.append(path(_prefix+'<str:pk>/delete/', self.get_delete_view().as_view(), name=self.get_url_pattern_delete()))
-        if self.enable_url_update == True:
-            _urls.append(path(_prefix+'<str:pk>/update/', self.get_change_view().as_view(), name=self.get_url_pattern_update()))
+        if self.enable_url_list is True:
+            _urls.append(path(_prefix + "", self.get_list_view().as_view(), name=self.get_url_pattern_list()))
+        if self.enable_url_create is True:
+            _urls.append(path(_prefix + "create/", self.get_add_view().as_view(), name=self.get_url_pattern_create()))
+        if self.enable_url_delete is True:
+            _urls.append(
+                path(
+                    _prefix + "<str:pk>/delete/", self.get_delete_view().as_view(), name=self.get_url_pattern_delete()
+                )
+            )
+        if self.enable_url_update is True:
+            _urls.append(
+                path(
+                    _prefix + "<str:pk>/update/", self.get_change_view().as_view(), name=self.get_url_pattern_update()
+                )
+            )
         return _urls
 
     @property

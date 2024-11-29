@@ -1,24 +1,23 @@
 import re
+from functools import update_wrapper
+from weakref import WeakSet
+
 from django.apps import apps
-from django.contrib.auth import REDIRECT_FIELD_NAME
-from django.contrib.auth import get_user_model
+from django.contrib.auth import REDIRECT_FIELD_NAME, get_user_model
 from django.core.exceptions import ImproperlyConfigured
 from django.db.models import Q
 from django.db.models.base import ModelBase
 from django.http import HttpResponseRedirect
 from django.template.response import TemplateResponse
-from django.urls import NoReverseMatch, reverse, reverse_lazy, resolve
+from django.urls import NoReverseMatch, resolve, reverse, reverse_lazy
+from django.utils.decorators import method_decorator
 from django.utils.functional import LazyObject
 from django.utils.module_loading import import_string
 from django.utils.text import capfirst
-from django.utils.translation import gettext, get_language
-from django.utils.translation import gettext_lazy as _
+from django.utils.translation import get_language, gettext, gettext_lazy as _
 from django.views.decorators.cache import never_cache
 from django.views.decorators.csrf import csrf_protect
 from django_webix.contrib.admin import ModelWebixAdmin
-from functools import update_wrapper
-from weakref import WeakSet
-from django.utils.decorators import method_decorator
 
 all_sites = WeakSet()
 
@@ -33,41 +32,42 @@ class NotRegistered(Exception):
 
 class AdminWebixSite:
     # Text to put at the end of each page's <title>.
-    site_title = _('Django webix site admin')
+    site_title = _("Django webix site admin")
 
     # Text to put in each page's <h1>.
-    site_header = _('Django webix administration')
+    site_header = _("Django webix administration")
 
     # Text to put at the top of the admin index page.
-    index_title = _('Site administration')
+    index_title = _("Site administration")
 
-    site_url = '/'
+    site_url = "/"
 
-    urls_namespace = 'dwadmin'
+    urls_namespace = "dwadmin"
 
     login_form = None
 
     label_width = None
 
-    webix_container_id = 'content_right'
-    webix_menu_type = 'menu'  # ['menu', 'sidebar']
+    webix_container_id = "content_right"
+    webix_menu_type = "menu"  # ['menu', 'sidebar']
 
     webix_menu_width = 180
 
     index_template = None
     login_template = None
     logout_template = None
-    dashboard_template = 'django_webix/admin/dashboard.js'
+    dashboard_template = "django_webix/admin/dashboard.js"
     password_change_template = None
     password_change_done_template = None
 
-    def __init__(self, name='dwadmin'):
+    def __init__(self, name="dwadmin"):
         self._registry = {}
         self.name = name
         all_sites.add(self)
 
     def model_admin_menu(self):
         from django_webix.contrib.admin.models import WebixAdminMenu
+
         return WebixAdminMenu
 
     def get_label_width(self):
@@ -96,13 +96,14 @@ class AdminWebixSite:
                 info = (model._meta.app_label, model._meta.model_name)
                 try:
                     if object_pk is None:
-                        return reverse(f'{self.urls_namespace}:%s.%s.list' % info,
-                                       current_app=self.name)
+                        return reverse(f"{self.urls_namespace}:%s.%s.list" % info, current_app=self.name)
                     else:
-                        return reverse(f'{self.urls_namespace}:%s.%s.update' % info,
-                                       current_app=self.name,
-                                       kwargs={'pk': object_pk})
-                except NoReverseMatch as e:
+                        return reverse(
+                            f"{self.urls_namespace}:%s.%s.update" % info,
+                            current_app=self.name,
+                            kwargs={"pk": object_pk},
+                        )
+                except NoReverseMatch:
                     pass
         return None
 
@@ -136,32 +137,32 @@ class AdminWebixSite:
             if model is not None:
                 if model._meta.abstract:
                     raise ImproperlyConfigured(
-                        'The model %s is abstract, so it cannot be registered with admin.' % model.__name__
+                        "The model %s is abstract, so it cannot be registered with admin." % model.__name__
                     )
 
                 if (model, prefix) in self._registry:
                     registered_admin = str(self._registry[(model, prefix)])
-                    msg = 'The model %s is already registered ' % model.__name__
-                    if registered_admin.endswith('.ModelWebixAdmin'):
+                    msg = "The model %s is already registered " % model.__name__
+                    if registered_admin.endswith(".ModelWebixAdmin"):
                         # Most likely registered without a ModelWebixAdmin subclass.
-                        msg += 'in app %r.' % re.sub(r'\.ModelWebixAdmin$', '', registered_admin)
+                        msg += "in app %r." % re.sub(r"\.ModelWebixAdmin$", "", registered_admin)
                     else:
-                        msg += 'with %r.' % registered_admin
+                        msg += "with %r." % registered_admin
                     raise AlreadyRegistered(msg)
 
                 # Ignore the registration if the model has been
                 # swapped out.
                 if prefix is not None:
                     if options:
-                        options['prefix'] = prefix
+                        options["prefix"] = prefix
                     else:
-                        options = {'prefix': prefix}
+                        options = {"prefix": prefix}
 
                 if self.get_label_width() is not None:
                     if options:
-                        options['label_width'] = self.get_label_width()
+                        options["label_width"] = self.get_label_width()
                     else:
-                        options = {'label_width': self.get_label_width()}
+                        options = {"label_width": self.get_label_width()}
 
                 if not model._meta.swapped:
 
@@ -171,7 +172,7 @@ class AdminWebixSite:
                         # For reasons I don't quite understand, without a __module__
                         # the created class appears to "live" in the wrong place,
                         # which causes issues later on.
-                        options['__module__'] = __name__
+                        options["__module__"] = __name__
                         admin_class = type("%sAdmin" % model.__name__, (admin_class,), options)
 
                     # Instantiate the admin class to save in the registry
@@ -190,7 +191,7 @@ class AdminWebixSite:
 
         for model in model_or_iterable:
             if model not in self._registry:
-                raise NotRegistered('The model {} is not registered'.format(model))
+                raise NotRegistered("The model {} is not registered".format(model))
             del self._registry[model]
 
     def is_registered(self, model, prefix=None):
@@ -207,10 +208,7 @@ class AdminWebixSite:
         app_dict = {}
 
         if label:
-            models = {
-                m: m_a for m, (m_a, _p) in self._registry.items()
-                if m._meta.app_label == label
-            }
+            models = {m: m_a for m, (m_a, _p) in self._registry.items() if m._meta.app_label == label}
         else:
             models = self._registry
 
@@ -230,34 +228,36 @@ class AdminWebixSite:
 
             info = (app_label, model._meta.model_name)
             model_dict = {
-                'prefix': _prefix,
-                'name': capfirst(model._meta.verbose_name_plural),
-                'object_name': model._meta.object_name,
-                'model_name': model._meta.model_name,
-                'perms': perms,
-                'admin_url': None,
-                'add_url': None,
+                "prefix": _prefix,
+                "name": capfirst(model._meta.verbose_name_plural),
+                "object_name": model._meta.object_name,
+                "model_name": model._meta.model_name,
+                "perms": perms,
+                "admin_url": None,
+                "add_url": None,
             }
-            if perms.get('change') or perms.get('view'):
-                model_dict['view_only'] = not perms.get('change')
+            if perms.get("change") or perms.get("view"):
+                model_dict["view_only"] = not perms.get("change")
                 try:
-                    model_dict['admin_url'] = reverse(f'{self.urls_namespace}:%s.%s.list' % info, current_app=self.name)
+                    model_dict["admin_url"] = reverse(
+                        f"{self.urls_namespace}:%s.%s.list" % info, current_app=self.name
+                    )
                 except NoReverseMatch:
                     pass
-            if perms.get('add'):
+            if perms.get("add"):
                 try:
-                    model_dict['add_url'] = reverse(f'{self.urls_namespace}:%s.%s.add' % info, current_app=self.name)
+                    model_dict["add_url"] = reverse(f"{self.urls_namespace}:%s.%s.add" % info, current_app=self.name)
                 except NoReverseMatch:
                     pass
 
             if app_label in app_dict:
-                app_dict[app_label]['models'].append(model_dict)
+                app_dict[app_label]["models"].append(model_dict)
             else:
                 app_dict[app_label] = {
-                    'name': apps.get_app_config(app_label).verbose_name,
-                    'app_label': app_label,
-                    'has_module_perms': has_module_perms,
-                    'models': [model_dict],
+                    "name": apps.get_app_config(app_label).verbose_name,
+                    "app_label": app_label,
+                    "has_module_perms": has_module_perms,
+                    "models": [model_dict],
                 }
 
         if label:
@@ -272,23 +272,23 @@ class AdminWebixSite:
         app_dict = self._build_app_dict(request)
 
         # Sort the apps alphabetically.
-        app_list = sorted(app_dict.values(), key=lambda x: x['name'].lower())
+        app_list = sorted(app_dict.values(), key=lambda x: x["name"].lower())
 
         # Sort the models alphabetically within each app.
         for app in app_list:
-            app['models'].sort(key=lambda x: x['name'])
+            app["models"].sort(key=lambda x: x["name"])
 
         return app_list
 
     def available_menu_items(self, user):
         queryset = self.model_admin_menu().objects.all()
         if user.is_superuser:
-            out = queryset.values_list('pk', flat=True)
+            out = queryset.values_list("pk", flat=True)
         else:
             out = []
             for el in queryset.filter(enabled=True).filter(Q(active_all=True) | Q(groups__in=user.groups.all())):
                 if el.model is not None:
-                    if user.has_perm(el.model.app_label + '.view_' + el.model.model):
+                    if user.has_perm(el.model.app_label + ".view_" + el.model.model):
                         out.append(el.id)
                 else:
                     out.append(el.id)
@@ -301,21 +301,22 @@ class AdminWebixSite:
                 menu_item = {
                     "id": "menu_{}".format(item.id),
                     "value": "{}".format(item.get_label(language=language)),
-                    "icon": item.icon if item.icon not in ['', None] else "fas fa-archive",
+                    "icon": item.icon if item.icon not in ["", None] else "fas fa-archive",
                 }
-                soons = self.model_admin_menu().objects.filter(
-                    parent=item,
-                    id__in=available_items
-                ).order_by('tree_id', 'lft')
+                soons = (
+                    self.model_admin_menu()
+                    .objects.filter(parent=item, id__in=available_items)
+                    .order_by("tree_id", "lft")
+                )
                 children = self.get_tree(soons, available_items, language=language)
 
                 if children != []:
-                    if self.webix_menu_type == 'sidebar':
+                    if self.webix_menu_type == "sidebar":
                         menu_item["data"] = children  # for sidebar
-                    elif self.webix_menu_type == 'menu':
+                    elif self.webix_menu_type == "menu":
                         menu_item["submenu"] = children  # for menu
                     enable = True
-                elif item.model is not None or item.url not in ['', None]:
+                elif item.model is not None or item.url not in ["", None]:
                     if item.get_url is None:
                         URL = ""
                     else:
@@ -335,9 +336,9 @@ class AdminWebixSite:
         available = self.available_menu_items(request.user)
 
         return self.get_tree(
-            self.model_admin_menu().objects.filter(level=0, id__in=available).order_by('tree_id', 'lft'),
+            self.model_admin_menu().objects.filter(level=0, id__in=available).order_by("tree_id", "lft"),
             available,
-            language=get_language()
+            language=get_language(),
         )
 
     def admin_view(self, view, cacheable=False):
@@ -352,15 +353,15 @@ class AdminWebixSite:
 
         def inner(request, *args, **kwargs):
             if not self.has_permission(request):
-                if request.path == reverse(f'{self.urls_namespace}:logout', current_app=self.name):
-                    index_path = reverse(f'{self.urls_namespace}:index', current_app=self.name)
+                if request.path == reverse(f"{self.urls_namespace}:logout", current_app=self.name):
+                    index_path = reverse(f"{self.urls_namespace}:index", current_app=self.name)
                     return HttpResponseRedirect(index_path)
                 # Inner import to prevent django.contrib.admin (app) from
                 # importing django.contrib.auth.models.User (unrelated model).
                 from django.contrib.auth.views import redirect_to_login
+
                 return redirect_to_login(
-                    request.get_full_path(),
-                    reverse(f'{self.urls_namespace}:login', current_app=self.name)
+                    request.get_full_path(), reverse(f"{self.urls_namespace}:login", current_app=self.name)
                 )
             return view(request, *args, **kwargs)
 
@@ -368,17 +369,17 @@ class AdminWebixSite:
             inner = never_cache(inner)
         # We add csrf_protect here so this function can be used as a utility
         # function for any view, without having to repeat 'csrf_protect'.
-        if not getattr(view, 'csrf_exempt', False):
+        if not getattr(view, "csrf_exempt", False):
             inner = csrf_protect(inner)
         return update_wrapper(inner, view)
 
     def get_urls(self):
         from django.urls import include, path
+
         # Since this module gets imported in the application's root package,
         # it cannot import models from other applications at the module level,
         # and django.contrib.contenttypes.views imports ContentType.
-        from django_webix.contrib.admin import forms
-        from django_webix.contrib.admin import views
+        from django_webix.contrib.admin import forms, views
 
         def wrap(view, cacheable=False):
             def wrapper(*args, **kwargs):
@@ -389,22 +390,20 @@ class AdminWebixSite:
 
         # Admin-site-wide views.
         urlpatterns = [  # prefix = f'{self.urls_namespace}:XXXX
-
-            path('', wrap(self.index), name='index'),
-            path('login/', self.login, name='login'),
-            path('logout/', wrap(self.logout), name='logout'),
-            path('dashboard/', wrap(self.dashboard), name='dashboard'),
-            path('index/', wrap(self.index), name='index'),
-            path('password_change/', wrap(self.password_change, cacheable=True), name='password_change'),
-            path('password_change/done/', wrap(self.password_change_done, cacheable=True), name='password_change_done'),
-
+            path("", wrap(self.index), name="index"),
+            path("login/", self.login, name="login"),
+            path("logout/", wrap(self.logout), name="logout"),
+            path("dashboard/", wrap(self.dashboard), name="dashboard"),
+            path("index/", wrap(self.index), name="index"),
+            path("password_change/", wrap(self.password_change, cacheable=True), name="password_change"),
+            path(
+                "password_change/done/", wrap(self.password_change_done, cacheable=True), name="password_change_done"
+            ),
             # ################################################ user update ############################################
-
-            path('account/update/', views.UserUpdate.as_view(), name='account_update'),
-
+            path("account/update/", views.UserUpdate.as_view(), name="account_update"),
             # ############################################ Reset password by email ####################################
             # nessuna di queste view deve essere sotto wrap perche si deve poter accedere anche non essendo loggati
-            path('password_reset/', self.password_reset, name='password_reset'),
+            path("password_reset/", self.password_reset, name="password_reset"),
             # OLD
             # path('reset/<uidb64>/<token>/', self.password_reset_confirm, name='password_reset_confirm'),
             # path('reset/<uidb64>/<token>/', PasswordResetConfirmView.as_view(
@@ -412,33 +411,38 @@ class AdminWebixSite:
             #     success_url=reverse_lazy(f'{self.urls_namespace}:password_reset_complete'),
             #     template_name='django_webix/admin/account/password_reset_confirm.html'
             # ), name='password_reset_confirm'),
-            path('reset/<uidb64>/<token>/', views.PasswordResetConfirmViewCustom.as_view(
-                form_class=forms.WebixSetPasswordForm,
-                success_url=reverse_lazy(f'{self.urls_namespace}:password_reset_complete'),
-                template_name='django_webix/admin/account/password_reset_confirm.html'
-            ), name='password_reset_confirm'),
-
-            path('password_reset/done/', self.password_reset_done, name='password_reset_done'),
-            path('reset/done/', self.password_reset_complete, name='password_reset_complete'),
+            path(
+                "reset/<uidb64>/<token>/",
+                views.PasswordResetConfirmViewCustom.as_view(
+                    form_class=forms.WebixSetPasswordForm,
+                    success_url=reverse_lazy(f"{self.urls_namespace}:password_reset_complete"),
+                    template_name="django_webix/admin/account/password_reset_confirm.html",
+                ),
+                name="password_reset_confirm",
+            ),
+            path("password_reset/done/", self.password_reset_done, name="password_reset_done"),
+            path("reset/done/", self.password_reset_complete, name="password_reset_complete"),
         ]
         if apps.is_installed("two_factor"):
             urlpatterns += [
-                path('two_factor/', wrap(self.two_factor_profile), name='two_factor_profile'),
+                path("two_factor/", wrap(self.two_factor_profile), name="two_factor_profile"),
             ]
 
         # Add in each model's views, and create a list of valid URLS for the
         # app_index
-        valid_app_labels = []
+        # valid_app_labels = []
 
         for (model, prefix), model_admin in self._registry.items():
             if prefix is None:
                 urlpatterns += [
-                    path('%s/%s/' % (model._meta.app_label, model._meta.model_name), include(model_admin.urls)),
+                    path("%s/%s/" % (model._meta.app_label, model._meta.model_name), include(model_admin.urls)),
                 ]
             else:
                 urlpatterns += [
-                    path('%s/%s/%s/' % (prefix, model._meta.app_label, model._meta.model_name),
-                         include(model_admin.urls)),
+                    path(
+                        "%s/%s/%s/" % (prefix, model._meta.app_label, model._meta.model_name),
+                        include(model_admin.urls),
+                    ),
                 ]
             # if model._meta.app_label not in valid_app_labels:
             #    valid_app_labels.append(model._meta.app_label)
@@ -459,7 +463,7 @@ class AdminWebixSite:
     def _get_user_model_list_url(self):
         UserModel = get_user_model()
         if UserModel is not None:
-            return f'{self.urls_namespace}:' + UserModel._meta.app_label + '.' + UserModel._meta.model_name + '.list'
+            return f"{self.urls_namespace}:" + UserModel._meta.app_label + "." + UserModel._meta.model_name + ".list"
         else:
             return None
 
@@ -470,33 +474,34 @@ class AdminWebixSite:
         For sites running on a subpath, use the SCRIPT_NAME value if site_url
         hasn't been customized.
         """
-        script_name = request.META['SCRIPT_NAME']
-        site_url = script_name if self.site_url == '/' and script_name else self.site_url
+        script_name = request.META["SCRIPT_NAME"]
+        site_url = script_name if self.site_url == "/" and script_name else self.site_url
         return {
-            'site_title': self.site_title,
-            'site_header': self.site_header,
-            'site_url': site_url,
-            'is_webgis_enable': self.is_webgis_enable(),
-            'is_hijack_enable': self.is_hijack_enable(),
-            'is_webix_filter_enable': self.is_webix_filter_enable(),
-            'has_permission': self.has_permission(request) if permission_check else False,  # utils for menu
-            'menu_list': self.get_menu_list(request) if permission_check else False,  # utils for menu
-            'available_apps': self.get_app_list(request) if permission_check else False,  # utils for menu
-            'webix_container_id': self.webix_container_id,
-            'webix_menu_type': self.webix_menu_type,
-            'webix_menu_width': self.webix_menu_width,
-            'user_list_url': self._get_user_model_list_url(),
-            'urls_namespace': self.urls_namespace,
+            "site_title": self.site_title,
+            "site_header": self.site_header,
+            "site_url": site_url,
+            "is_webgis_enable": self.is_webgis_enable(),
+            "is_hijack_enable": self.is_hijack_enable(),
+            "is_webix_filter_enable": self.is_webix_filter_enable(),
+            "has_permission": self.has_permission(request) if permission_check else False,  # utils for menu
+            "menu_list": self.get_menu_list(request) if permission_check else False,  # utils for menu
+            "available_apps": self.get_app_list(request) if permission_check else False,  # utils for menu
+            "webix_container_id": self.webix_container_id,
+            "webix_menu_type": self.webix_menu_type,
+            "webix_menu_width": self.webix_menu_width,
+            "user_list_url": self._get_user_model_list_url(),
+            "urls_namespace": self.urls_namespace,
         }
 
     @method_decorator(never_cache)
     def dashboard(self, request, extra_context=None):
         from django.views.generic import TemplateView
+
         defaults = {
-            'extra_context': {**self.each_context(request), **(extra_context or {})},
+            "extra_context": {**self.each_context(request), **(extra_context or {})},
         }
         if self.dashboard_template is not None:
-            defaults['template_name'] = self.dashboard_template
+            defaults["template_name"] = self.dashboard_template
         return TemplateView.as_view(**defaults)(request)
 
     def password_change(self, request, extra_context=None):
@@ -508,12 +513,13 @@ class AdminWebixSite:
         #        else:
         #            from django.contrib.admin.forms import AdminPasswordChangeForm
         from django_webix.contrib.admin.views import PasswordChangeViewCustom
-        url = reverse(f'{self.urls_namespace}:password_change_done', current_app=self.name)
+
+        url = reverse(f"{self.urls_namespace}:password_change_done", current_app=self.name)
         defaults = {
             #            'form_class': AdminPasswordChangeForm,
-            'success_url': url,
-            'extra_context': {**self.each_context(request), **(extra_context or {})},
-            'template_name': self.password_change_template or 'django_webix/admin/account/password_change.js',
+            "success_url": url,
+            "extra_context": {**self.each_context(request), **(extra_context or {})},
+            "template_name": self.password_change_template or "django_webix/admin/account/password_change.js",
         }
 
         request.current_app = self.name
@@ -524,9 +530,10 @@ class AdminWebixSite:
         Display the "success" page after a password change.
         """
         from django.contrib.auth.views import PasswordChangeDoneView
+
         defaults = {
-            'extra_context': {**self.each_context(request), **(extra_context or {})},
-            'template_name': self.password_change_template or 'django_webix/admin/account/password_change_done.js',
+            "extra_context": {**self.each_context(request), **(extra_context or {})},
+            "template_name": self.password_change_template or "django_webix/admin/account/password_change_done.js",
         }
         request.current_app = self.name
         return PasswordChangeDoneView.as_view(**defaults)(request)
@@ -537,8 +544,8 @@ class AdminWebixSite:
         """
 
         from django.contrib.auth.views import PasswordResetView
-        from django_webix.contrib.admin import forms
         from django.contrib.sites.shortcuts import get_current_site
+        from django_webix.contrib.admin import forms
 
         current_site = get_current_site(request)
         site_name = current_site.name
@@ -546,20 +553,20 @@ class AdminWebixSite:
 
         if extra_context is None:
             extra_context = {}
-        extra_context['domain'] = domain
-        extra_context['site_name'] = site_name
-        extra_context['urls_namespace'] = self.urls_namespace
+        extra_context["domain"] = domain
+        extra_context["site_name"] = site_name
+        extra_context["urls_namespace"] = self.urls_namespace
 
-        template = 'django_webix/admin/account/password_reset_form.js'
+        template = "django_webix/admin/account/password_reset_form.js"
         if not self.has_permission(request):
-            template = 'django_webix/admin/account/password_reset_form.html'
+            template = "django_webix/admin/account/password_reset_form.html"
 
         defaults = {
-            'template_name': template,
-            'email_template_name': 'django_webix/admin/account/password_reset_email.html',
-            'form_class': forms.WebixPasswordResetForm,
-            'success_url': reverse_lazy(f'{self.urls_namespace}:password_reset_done'),
-            'extra_context': {**self.each_context(request), **(extra_context or {})},
+            "template_name": template,
+            "email_template_name": "django_webix/admin/account/password_reset_email.html",
+            "form_class": forms.WebixPasswordResetForm,
+            "success_url": reverse_lazy(f"{self.urls_namespace}:password_reset_done"),
+            "extra_context": {**self.each_context(request), **(extra_context or {})},
         }
 
         request.current_app = self.name
@@ -573,13 +580,13 @@ class AdminWebixSite:
 
         from django.contrib.auth.views import PasswordResetDoneView
 
-        template = 'django_webix/admin/account/password_reset_done.js'
+        template = "django_webix/admin/account/password_reset_done.js"
         if not self.has_permission(request):
-            template = 'django_webix/admin/account/password_reset_done.html'
+            template = "django_webix/admin/account/password_reset_done.html"
 
         defaults = {
-            'template_name': template,
-            'extra_context': {**self.each_context(request), **(extra_context or {})},
+            "template_name": template,
+            "extra_context": {**self.each_context(request), **(extra_context or {})},
         }
 
         request.current_app = self.name
@@ -610,8 +617,8 @@ class AdminWebixSite:
         from django.contrib.auth.views import PasswordResetCompleteView
 
         defaults = {
-            'template_name': 'django_webix/admin/account/password_reset_complete.html',
-            'extra_context': {**self.each_context(request), **(extra_context or {})},
+            "template_name": "django_webix/admin/account/password_reset_complete.html",
+            "extra_context": {**self.each_context(request), **(extra_context or {})},
         }
 
         request.current_app = self.name
@@ -622,8 +629,8 @@ class AdminWebixSite:
             from django_webix.views import WebixTemplateView
 
             defaults = {
-                'template_name': 'django_webix/admin/account/two_factor.js',
-                'extra_context': {**self.each_context(request), **(extra_context or {})},
+                "template_name": "django_webix/admin/account/two_factor.js",
+                "extra_context": {**self.each_context(request), **(extra_context or {})},
             }
 
             request.current_app = self.name
@@ -638,19 +645,20 @@ class AdminWebixSite:
         This should *not* assume the user is already logged in.
         """
         from django.contrib.auth.views import LogoutView
+
         defaults = {
-            'extra_context': {
+            "extra_context": {
                 **self.each_context(request, permission_check=False),
                 # Since the user isn't logged out at this point, the value of
                 # has_permission must be overridden.
-                #'has_permission': False,
-                'template_name': self.logout_template or 'django_webix/admin/logged_out.html',
-                'site_title': self.site_title,
-                **(extra_context or {})
+                # 'has_permission': False,
+                "template_name": self.logout_template or "django_webix/admin/logged_out.html",
+                "site_title": self.site_title,
+                **(extra_context or {}),
             },
         }
         request.current_app = self.name
-        LogoutView.template_name = self.logout_template or 'django_webix/admin/logged_out.html'
+        LogoutView.template_name = self.logout_template or "django_webix/admin/logged_out.html"
         return LogoutView.as_view(**defaults)(request)
 
     @method_decorator(never_cache)
@@ -658,30 +666,31 @@ class AdminWebixSite:
         """
         Display the login form for the given HttpRequest.
         """
-        if request.method == 'GET' and request.user.is_authenticated and self.has_permission(request):
+        if request.method == "GET" and request.user.is_authenticated and self.has_permission(request):
             # Already logged-in, redirect to admin index
-            index_path = reverse(f'{self.urls_namespace}:index', current_app=self.name)
+            index_path = reverse(f"{self.urls_namespace}:index", current_app=self.name)
             return HttpResponseRedirect(index_path)
 
-        from django.contrib.auth.views import LoginView
         # Since this module gets imported in the application's root package,
         # it cannot import models from other applications at the module level,
         # and django.contrib.admin.forms eventually imports User.
         # from django.contrib.admin.forms import AdminAuthenticationForm
         from django.contrib.auth.forms import AuthenticationForm
+        from django.contrib.auth.views import LoginView
 
         class AdminAuthenticationForm(AuthenticationForm):
             """
             A custom authentication form used in the admin app.
             """
+
             error_messages = {
                 **AuthenticationForm.error_messages,
-                'invalid_login': gettext(
+                "invalid_login": gettext(
                     "Please enter the correct %(username)s and password for a staff "
                     "account. Note that both fields may be case-sensitive."
                 ),
             }
-            required_css_class = 'required'
+            required_css_class = "required"
 
             def confirm_login_allowed(self, user):
                 super().confirm_login_allowed(user)
@@ -694,21 +703,20 @@ class AdminWebixSite:
 
         context = {
             **self.each_context(request),
-            'title': gettext('Log in'),
-            'app_path': request.get_full_path(),
-            'username': request.user.get_username(),
-            'site_title': self.site_title,
+            "title": gettext("Log in"),
+            "app_path": request.get_full_path(),
+            "username": request.user.get_username(),
+            "site_title": self.site_title,
         }
 
-        if (REDIRECT_FIELD_NAME not in request.GET and
-            REDIRECT_FIELD_NAME not in request.POST):
-            context[REDIRECT_FIELD_NAME] = reverse(f'{self.urls_namespace}:index', current_app=self.name)
+        if REDIRECT_FIELD_NAME not in request.GET and REDIRECT_FIELD_NAME not in request.POST:
+            context[REDIRECT_FIELD_NAME] = reverse(f"{self.urls_namespace}:index", current_app=self.name)
         context.update(extra_context or {})
 
         defaults = {
-            'extra_context': context,
-            'authentication_form': self.login_form or AdminAuthenticationForm,
-            'template_name': self.login_template or 'django_webix/admin/login.html',
+            "extra_context": context,
+            "authentication_form": self.login_form or AdminAuthenticationForm,
+            "template_name": self.login_template or "django_webix/admin/login.html",
         }
         request.current_app = self.name
         return LoginView.as_view(**defaults)(request)
@@ -723,38 +731,39 @@ class AdminWebixSite:
         apps that have been registered in this site.
         """
 
-        history_url = request.GET.get('state', None)
+        history_url = request.GET.get("state", None)
         try:
             resolve(history_url)
-        except:
+        except Exception:
             history_url = None
 
-        active_tab = request.GET.get('tab', None)
-        if active_tab not in ['webgis_leaflet', self.webix_container_id]:
+        active_tab = request.GET.get("tab", None)
+        if active_tab not in ["webgis_leaflet", self.webix_container_id]:
             active_tab = self.webix_container_id
 
         context = {
             **self.each_context(request),
             **self.extra_index_context(request),
-            'history_url': history_url,
-            'title': self.index_title,
-            'app_list': self.get_app_list(request),
-            'active_tab': active_tab,
+            "history_url": history_url,
+            "title": self.index_title,
+            "app_list": self.get_app_list(request),
+            "active_tab": active_tab,
             **(extra_context or {}),
         }
 
         request.current_app = self.name
 
-        return TemplateResponse(request, self.index_template or 'django_webix/admin/index.html', context)
+        return TemplateResponse(request, self.index_template or "django_webix/admin/index.html", context)
 
 
 class DefaultAdminWebixSite(LazyObject):
     def _setup(self):
-        AdminWebixSiteClass = import_string(apps.get_app_config('dwadmin').default_site)
+        AdminWebixSiteClass = import_string(apps.get_app_config("dwadmin").default_site)
         self._wrapped = AdminWebixSiteClass()
 
     def __repr__(self):
         return repr(self._wrapped)
+
 
 # This global object represents the default admin site, for the common case.
 # You can provide your own AdminWebixSite using the (Simple)AdminConfig.default_site

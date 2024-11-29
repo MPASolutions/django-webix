@@ -1,4 +1,3 @@
-
 import datetime
 import re
 
@@ -7,19 +6,17 @@ from django import template
 from django.apps import apps
 from django.conf import settings
 from django.template import TemplateSyntaxError
+from django.template.base import TokenType
+from django.template.defaulttags import CommentNode, IfNode, LoadNode, find_library, load_from_library
+from django.template.smartif import Literal
 from django.utils.timezone import is_naive, make_naive
 
-from django.template.base import TokenType
 TOKEN_BLOCK = TokenType.BLOCK
-
-from django.template.defaulttags import (CommentNode, IfNode, LoadNode,
-                                         find_library, load_from_library)
-from django.template.smartif import Literal
 
 register = template.Library()
 
 
-@register.filter('get_value_from_dict')
+@register.filter("get_value_from_dict")
 def get_value_from_dict(dict_data, key):
     """
     usage example {{ your_dict|get_value_from_dict:your_key }}
@@ -28,52 +25,53 @@ def get_value_from_dict(dict_data, key):
         return dict_data.get(key)
 
 
-@register.simple_tag(name='webix_version')
+@register.simple_tag(name="webix_version")
 def webix_version():
     return settings.WEBIX_VERSION
 
-@register.simple_tag(name='webix_debug')
+
+@register.simple_tag(name="webix_debug")
 def webix_debug():
-    return getattr(settings, 'DEBUG_WEBIX') if hasattr(settings, 'DEBUG_WEBIX') else False
+    return getattr(settings, "DEBUG_WEBIX") if hasattr(settings, "DEBUG_WEBIX") else False
 
 
-@register.simple_tag(name='webix_license')
+@register.simple_tag(name="webix_license")
 def webix_license():
     return settings.WEBIX_LICENSE
 
 
-@register.simple_tag(name='is_installed_djangowebixleaflet')
+@register.simple_tag(name="is_installed_djangowebixleaflet")
 def is_installed_djangowebixleaflet():
     return apps.is_installed("django_webix_leaflet")
 
 
-@register.simple_tag(name='is_installed_djangowebixfilter')
+@register.simple_tag(name="is_installed_djangowebixfilter")
 def is_installed_djangowebixfilter():
     return apps.is_installed("django_webix.contrib.filter")
 
 
-@register.simple_tag(name='webix_history_enable')
+@register.simple_tag(name="webix_history_enable")
 def webix_history_enable():
-    if hasattr(settings, 'WEBIX_HISTORY_ENABLE'):
+    if hasattr(settings, "WEBIX_HISTORY_ENABLE"):
         return settings.WEBIX_HISTORY_ENABLE
     else:
         return False
 
 
-@register.simple_tag(name='webix_fontawesome_css_url')
+@register.simple_tag(name="webix_fontawesome_css_url")
 def webix_fontawesome_css_url():
-    if hasattr(settings, 'WEBIX_FONTAWESOME_CSS_URL'):
+    if hasattr(settings, "WEBIX_FONTAWESOME_CSS_URL"):
         return settings.WEBIX_FONTAWESOME_CSS_URL
     else:
-        return 'django_webix/fontawesome-5.15.4/css/all.min.css'
+        return "django_webix/fontawesome-5.15.4/css/all.min.css"
 
 
-@register.simple_tag(name='webix_fontawesome_version')
+@register.simple_tag(name="webix_fontawesome_version")
 def webix_fontawesome_version():
-    if hasattr(settings, 'WEBIX_FONTAWESOME_VERSION'):
+    if hasattr(settings, "WEBIX_FONTAWESOME_VERSION"):
         return settings.WEBIX_FONTAWESOME_VERSION
     else:
-        return '5.15.4'
+        return "5.15.4"
 
 
 @register.filter
@@ -83,36 +81,36 @@ def comma_to_underscore(value):
 
 @register.filter_function
 def order_by(queryset, args):
-    args = [x.strip() for x in args.split(',')]
+    args = [x.strip() for x in args.split(",")]
     return queryset.order_by(*args)
 
 
 @register.filter
 def format_list_value(value):
-    if type(value) == datetime.date:
-        return value.strftime('%d/%m/%Y')
-    elif type(value) == datetime.datetime:
+    if type(value) is datetime.date:
+        return value.strftime("%d/%m/%Y")
+    elif type(value) is datetime.datetime:
         if not is_naive(value):
             value = make_naive(value)
-        return value.strftime('%d/%m/%Y %H:%M')
+        return value.strftime("%d/%m/%Y %H:%M")
     elif value is None:
-        return ''
+        return ""
     return str(value)
 
 
 @register.filter
 def getattr(obj, args):
-    """ Try to get an attribute from an object.
+    """Try to get an attribute from an object.
     Example: {% if block|getattr:"editable,True" %}
     Beware that the default is always a string, if you want this
     to return False, pass an empty second argument:
     {% if block|getattr:"editable," %}
     """
-    splitargs = args.split(',')
+    splitargs = args.split(",")
     try:
         (attribute, default) = splitargs
     except ValueError:
-        (attribute, default) = args, ''
+        (attribute, default) = args, ""
 
     if isinstance(obj, six.string_types):
         return obj
@@ -124,7 +122,7 @@ def getattr(obj, args):
     except Exception:
         attr = default
 
-    if hasattr(attr, '__call__'):
+    if hasattr(attr, "__call__"):
         return attr.__call__()
     else:
         return attr
@@ -137,7 +135,7 @@ class SetVarNode(template.Node):
 
     def render(self, context):
         context[self.var_name] = self.new_val
-        return ''
+        return ""
 
 
 @register.tag
@@ -148,7 +146,7 @@ def setvar(parser, token):
         tag_name, arg = token.contents.split(None, 1)
     except ValueError:
         raise template.TemplateSyntaxError("%r tag requires arguments" % token.contents.split()[0])
-    m = re.search(r'(.*?) as (\w+)', arg)
+    m = re.search(r"(.*?) as (\w+)", arg)
     if not m:
         raise template.TemplateSyntaxError("%r tag had invalid arguments" % tag_name)
     new_val, var_name = m.groups()
@@ -219,29 +217,25 @@ def do_if_has_tag(parser, token, negate=False):
     bits = list(token.split_contents())
     if len(bits) < 2:
         raise TemplateSyntaxError("%r takes at least one arguments" % bits[0])
-    end_tag = 'end%s' % bits[0]
+    end_tag = "end%s" % bits[0]
     has_tag = all([tag in parser.tags for tag in bits[1:]])
     has_tag = (not negate and has_tag) or (negate and not has_tag)
     nodelist_true = nodelist_false = CommentNode()
     if has_tag:
-        nodelist_true = parser.parse(('else', end_tag))
+        nodelist_true = parser.parse(("else", end_tag))
         token = parser.next_token()
-        if token.contents == 'else':
+        if token.contents == "else":
             parser.skip_past(end_tag)
     else:
         while parser.tokens:
             token = parser.next_token()
             if token.token_type == TOKEN_BLOCK and token.contents == end_tag:
-                return IfNode([
-                    (Literal(has_tag), nodelist_true),
-                    (None, nodelist_false)
-                ])
-            elif token.token_type == TOKEN_BLOCK and token.contents == 'else':
+                return IfNode([(Literal(has_tag), nodelist_true), (None, nodelist_false)])
+            elif token.token_type == TOKEN_BLOCK and token.contents == "else":
                 break
         nodelist_false = parser.parse((end_tag,))
         parser.next_token()
-    return IfNode([(Literal(has_tag), nodelist_true),
-                   (None, nodelist_false)])
+    return IfNode([(Literal(has_tag), nodelist_true), (None, nodelist_false)])
 
 
 @register.tag

@@ -1,30 +1,30 @@
 import inspect
 
 from django.apps import apps
-from django.core.exceptions import ImproperlyConfigured, ValidationError
-from django.core.exceptions import PermissionDenied
+from django.core.exceptions import ImproperlyConfigured, PermissionDenied, ValidationError
+from django.db.models import FileField
 from django.forms import model_to_dict
 from django.forms.formsets import all_valid
-from django.forms.models import _get_foreign_key, ModelForm, fields_for_model
-from django.http import HttpResponseRedirect
-from django.http import QueryDict
+from django.forms.models import ModelForm, _get_foreign_key, fields_for_model
+from django.http import HttpResponseRedirect, QueryDict
 from django.shortcuts import get_object_or_404, render
 from django.utils.text import get_text_list
 from django.utils.translation import gettext as _
-from extra_views import UpdateWithInlinesView, CreateWithInlinesView
-from sorl.thumbnail.fields import ImageField
-from django.db.models import FileField
-
 from django_webix.forms import WebixModelForm
 from django_webix.views.generic.base import WebixBaseMixin, WebixPermissionsMixin, WebixUrlMixin
-from django_webix.views.generic.signals import (django_webix_view_pre_save,
-                                                django_webix_view_pre_inline_save,
-                                                django_webix_view_post_save)
+from django_webix.views.generic.signals import (
+    django_webix_view_post_save,
+    django_webix_view_pre_inline_save,
+    django_webix_view_pre_save,
+)
+from extra_views import CreateWithInlinesView, UpdateWithInlinesView
+from sorl.thumbnail.fields import ImageField
 
 try:
     from django.utils.encoding import force_text as force_str
 except ImportError:
     from django.utils.encoding import force_str
+
 
 class WebixCreateUpdateMixin:
     logs_enable = True
@@ -42,18 +42,18 @@ class WebixCreateUpdateMixin:
     template_style = None
     default_id_tabbar = None
 
-    template_warnings_name = 'django_webix/include/form_warnings.js'
+    template_warnings_name = "django_webix/include/form_warnings.js"
 
     def has_warning_clean(self, request):
         form_class = self.get_form_class()
-        return hasattr(form_class, 'warnings_clean')
+        return hasattr(form_class, "warnings_clean")
 
     def get_warnings(self, form, inlines, **kwargs):
         warnings = []
-        if hasattr(form, 'warnings_clean'):
+        if hasattr(form, "warnings_clean"):
             warnings += form.warnings_clean()
         for _form in inlines:
-            if hasattr(_form, 'warnings_clean'):
+            if hasattr(_form, "warnings_clean"):
                 warnings += _form.warnings_clean()
         return warnings
 
@@ -67,7 +67,7 @@ class WebixCreateUpdateMixin:
             if self.model is not None:
                 # If a model has been explicitly provided, use it
                 model = self.model
-            elif getattr(self, 'object', None) is not None:
+            elif getattr(self, "object", None) is not None:
                 # If this view is operating on a single object, use
                 # the class of that object
                 model = self.object.__class__
@@ -77,7 +77,7 @@ class WebixCreateUpdateMixin:
                 model = self.get_queryset().model
 
             form_class.__bases__ = (WebixModelForm,)
-            form_class = type(str(model.__name__ + 'Form'), (form_class,), {})
+            form_class = type(str(model.__name__ + "Form"), (form_class,), {})
 
         return form_class
 
@@ -87,25 +87,28 @@ class WebixCreateUpdateMixin:
     def get_template_style(self):
         _template_style = None
         if self.template_style is None:
-            _template_style = 'standard'
-        elif self.template_style in ['standard', 'tabs', 'monotabs']:
+            _template_style = "standard"
+        elif self.template_style in ["standard", "tabs", "monotabs"]:
             _template_style = self.template_style
         else:
-            raise ImproperlyConfigured(_(
-                "Template style is improperly configured"
-                " only options are 'standard' or 'tabs' (standard by default)."))
+            raise ImproperlyConfigured(
+                _(
+                    "Template style is improperly configured"
+                    " only options are 'standard' or 'tabs' (standard by default)."
+                )
+            )
         return _template_style
 
     def is_errors_on_popup(self, request):
         return self.errors_on_popup
 
     def is_enable_button_save_continue(self, request):
-        if self.get_success_url(next_step='_continue') is None:
+        if self.get_success_url(next_step="_continue") is None:
             return False
         return self.enable_button_save_continue
 
     def is_enable_button_save_addanother(self, request):
-        if self.get_success_url(next_step='_addanother') is None:
+        if self.get_success_url(next_step="_addanother") is None:
             return False
         return self.enable_button_save_addanother
 
@@ -119,41 +122,44 @@ class WebixCreateUpdateMixin:
         if self.success_url is not None:
             url = self.success_url
 
-        elif (self.request.GET.get('_addanother', None) is not None or next_step=='_addanother') and \
-            self.enable_button_save_addanother and \
-            self.get_url_create() is not None:
+        elif (
+            (self.request.GET.get("_addanother", None) is not None or next_step == "_addanother")
+            and self.enable_button_save_addanother
+            and self.get_url_create() is not None
+        ):
             url = self.get_url_create()
 
-        elif (self.request.GET.get('_continue', None) is not None or next_step=='_continue') and \
-            self.enable_button_save_continue and \
-            self.get_url_update(obj=self.object) is not None:
+        elif (
+            (self.request.GET.get("_continue", None) is not None or next_step == "_continue")
+            and self.enable_button_save_continue
+            and self.get_url_update(obj=self.object) is not None
+        ):
             url = self.get_url_update(obj=self.object)
 
-        elif self.get_url_list() is not None and \
-            self.is_enable_button_save_gotolist(request=self.request):  # default
+        elif self.get_url_list() is not None and self.is_enable_button_save_gotolist(request=self.request):  # default
             url = self.get_url_list()
-            if '?' in url:
-                url += '&full_state'
+            if "?" in url:
+                url += "&full_state"
             else:
-                url += '?full_state'
+                url += "?full_state"
         else:
-            url = None # default
+            url = None  # default
 
         return url
 
     def get_context_data_webix_create_update(self, request, obj=None, **kwargs):
         return {
-            'response_datatype': 'script',
-            'has_warning_clean': self.has_warning_clean(request=self.request),
+            "response_datatype": "script",
+            "has_warning_clean": self.has_warning_clean(request=self.request),
             # buttons for saving
-            'is_enable_button_save_continue': self.is_enable_button_save_continue(request=self.request),
-            'is_enable_button_save_addanother': self.is_enable_button_save_addanother(request=self.request),
-            'is_enable_button_save_gotolist': self.is_enable_button_save_gotolist(request=self.request),
-            'is_enable_button_reload': self.is_enable_button_reload(request=self.request),
+            "is_enable_button_save_continue": self.is_enable_button_save_continue(request=self.request),
+            "is_enable_button_save_addanother": self.is_enable_button_save_addanother(request=self.request),
+            "is_enable_button_save_gotolist": self.is_enable_button_save_gotolist(request=self.request),
+            "is_enable_button_reload": self.is_enable_button_reload(request=self.request),
             # Template style
-            'is_errors_on_popup': self.is_errors_on_popup(request=self.request),
-            'template_style': self.get_template_style(),
-            'default_id_tabbar': self.get_default_id_tabbar(),
+            "is_errors_on_popup": self.is_errors_on_popup(request=self.request),
+            "template_style": self.get_template_style(),
+            "default_id_tabbar": self.get_default_id_tabbar(),
         }
 
     def form_save(self, form):
@@ -163,7 +169,7 @@ class WebixCreateUpdateMixin:
                 if not isinstance(field, FileField) and not isinstance(field, ImageField):
                     continue
 
-                if form.data.get(field.name + '_clean', None) == '1':
+                if form.data.get(field.name + "_clean", None) == "1":
                     setattr(obj, field.name, None)
 
         self.object = form.save()
@@ -178,13 +184,12 @@ class WebixCreateUpdateMixin:
                         if not isinstance(field, FileField) and not isinstance(field, ImageField):
                             continue
 
-                        if inline.data.get(inline.add_prefix(field.name) + '_clean', None) == '1':
+                        if inline.data.get(inline.add_prefix(field.name) + "_clean", None) == "1":
                             setattr(obj, field.name, None)
                             inline.save()
 
             formset.save()
         return None
-
 
     def prepare_warnings(self, form, inlines, warnings):
         _warnings_template = []
@@ -192,25 +197,29 @@ class WebixCreateUpdateMixin:
             label = w[0]
             if label in form.fields:
                 label = form.fields[label].label
-            _warnings_template.append({
-                'label': label,
-                'message': w[1],
-            })
+            _warnings_template.append(
+                {
+                    "label": label,
+                    "message": w[1],
+                }
+            )
         return _warnings_template
 
     def forms_valid(self, form, inlines, **kwargs):
         # warnings
-        if self.request.POST.get('warnings_enabled'):
+        if self.request.POST.get("warnings_enabled"):
             warnings = self.get_warnings(form, inlines, **kwargs)
             if len(warnings) > 0:
                 warnings_template = self.prepare_warnings(form, inlines, warnings)
-                return render(self.request,
-                              self.template_warnings_name,
-                              {
-                                  'warnings': warnings_template,
-                                  'form': form,
-                                  'inlines': inlines,
-                              })
+                return render(
+                    self.request,
+                    self.template_warnings_name,
+                    {
+                        "warnings": warnings_template,
+                        "form": form,
+                        "inlines": inlines,
+                    },
+                )
         # pre forms valid
         self.pre_forms_valid(form=form, inlines=inlines, **kwargs)
         # validate unique together
@@ -260,12 +269,10 @@ class WebixCreateUpdateMixin:
         return self.response_invalid(form=form, inlines=inlines, **kwargs)
 
 
-class WebixCreateView(WebixCreateUpdateMixin,
-                      WebixBaseMixin,
-                      WebixPermissionsMixin,
-                      WebixUrlMixin,
-                      CreateWithInlinesView):
-    template_name = 'django_webix/generic/create.js'
+class WebixCreateView(
+    WebixCreateUpdateMixin, WebixBaseMixin, WebixPermissionsMixin, WebixUrlMixin, CreateWithInlinesView
+):
+    template_name = "django_webix/generic/create.js"
     model_copy_fields = None
     inlines_copy_fields = None
     send_initial_data = None
@@ -286,7 +293,7 @@ class WebixCreateView(WebixCreateUpdateMixin,
 
     def get_form_kwargs(self):
         kwargs = super(WebixCreateView, self).get_form_kwargs()
-        kwargs.update({'request': self.request})
+        kwargs.update({"request": self.request})
         return kwargs
 
     def get_model_copy_fields(self):
@@ -295,13 +302,22 @@ class WebixCreateView(WebixCreateUpdateMixin,
             _model_copy_fields = form_class._meta.fields
             if _model_copy_fields is None:  # __all__ option
                 opts = form_class._meta
-                _model_copy_fields = list(fields_for_model(
-                    opts.model, opts.fields, opts.exclude, opts.widgets,
-                    getattr(opts, 'formfield_callback', None), opts.localized_fields, opts.labels,
-                    opts.help_texts, opts.error_messages, opts.field_classes,
-                    # limit_choices_to will be applied during ModelForm.__init__().
-                    apply_limit_choices_to=False,
-                ).keys())
+                _model_copy_fields = list(
+                    fields_for_model(
+                        opts.model,
+                        opts.fields,
+                        opts.exclude,
+                        opts.widgets,
+                        getattr(opts, "formfield_callback", None),
+                        opts.localized_fields,
+                        opts.labels,
+                        opts.help_texts,
+                        opts.error_messages,
+                        opts.field_classes,
+                        # limit_choices_to will be applied during ModelForm.__init__().
+                        apply_limit_choices_to=False,
+                    ).keys()
+                )
         else:
             _model_copy_fields = self.model_copy_fields
         return _model_copy_fields
@@ -321,12 +337,12 @@ class WebixCreateView(WebixCreateUpdateMixin,
         for inline, fields in _inlines_copy_fields.items():
             if fields is None:
                 fields = []
-            if hasattr(inline, 'form_class') and inline.form_class is not None:
+            if hasattr(inline, "form_class") and inline.form_class is not None:
                 full_inlines_copy_fields.update({inline: list(inline.form_class.base_fields.keys())})
-            elif hasattr(inline, 'fields'):
+            elif hasattr(inline, "fields"):
                 full_inlines_copy_fields.update({inline: list(inline.fields)})
             else:
-                raise Exception('Not identified fields for copying')
+                raise Exception("Not identified fields for copying")
 
         return full_inlines_copy_fields
 
@@ -336,31 +352,29 @@ class WebixCreateView(WebixCreateUpdateMixin,
         if self.send_initial_data is not None:
             initial.update(self.send_initial_data)
         # secondary option: send pk_copy for copy instance field values
-        elif self.request.GET.get('pk_copy', None) is not None:
-            object_to_copy = get_object_or_404(self.get_queryset(), pk=self.request.GET['pk_copy'])
+        elif self.request.GET.get("pk_copy", None) is not None:
+            object_to_copy = get_object_or_404(self.get_queryset(), pk=self.request.GET["pk_copy"])
             fields_to_copy = self.get_model_copy_fields()
             if self.model._meta.pk.name in fields_to_copy:
                 fields_to_copy.remove(self.model._meta.pk.name)
-            initial.update(model_to_dict(object_to_copy,
-                                         fields=fields_to_copy))
+            initial.update(model_to_dict(object_to_copy, fields=fields_to_copy))
         return initial
-
 
     def get_initial_inlines(self):
         initial_inlines = {}
-        if self.request.GET.get('pk_copy', None) is not None:
-            object_to_copy = get_object_or_404(self.get_queryset(), pk=self.request.GET['pk_copy'])
+        if self.request.GET.get("pk_copy", None) is not None:
+            object_to_copy = get_object_or_404(self.get_queryset(), pk=self.request.GET["pk_copy"])
             for inline, inline_copy_fields in self.get_inlines_copy_fields().items():
                 fields_to_copy = inline_copy_fields
                 if inline.model._meta.pk.name in fields_to_copy:
                     fields_to_copy.remove(self.model._meta.pk.name)
                 datas = []
                 fk_name = None
-                if hasattr(inline, 'factory_kwargs') and inline.factory_kwargs.get('fk_name') is not None:
-                    fk_name = inline.factory_kwargs.get('fk_name')
+                if hasattr(inline, "factory_kwargs") and inline.factory_kwargs.get("fk_name") is not None:
+                    fk_name = inline.factory_kwargs.get("fk_name")
                 try:
                     fk = _get_foreign_key(self.model, inline.model, fk_name=fk_name)
-                except ValueError: # bad FK... ex dynamic fk by dwextra_fields.ModelFieldValue
+                except ValueError:  # bad FK... ex dynamic fk by dwextra_fields.ModelFieldValue
                     pass
                 else:
                     for obj in inline.model._default_manager.filter(**{fk.name: object_to_copy}):
@@ -372,23 +386,25 @@ class WebixCreateView(WebixCreateUpdateMixin,
         self.object = None
 
         # BYPASS POST for initial data
-        if self.request.META.get('HTTP_SEND_INITIAL_DATA') or \
-            self.request.POST.get('SEND_INITIAL_DATA') or \
-            self.request.GET.get('SEND_INITIAL_DATA'):
-            if self.request.method == 'POST':
+        if (
+            self.request.META.get("HTTP_SEND_INITIAL_DATA")
+            or self.request.POST.get("SEND_INITIAL_DATA")
+            or self.request.GET.get("SEND_INITIAL_DATA")
+        ):
+            if self.request.method == "POST":
                 self.send_initial_data = self.request.POST.dict()
                 # switch to GET request
-                self.request.method = 'GET'
-                self.request.POST = QueryDict('', mutable=True)
-            elif self.request.method == 'GET':
+                self.request.method = "GET"
+                self.request.POST = QueryDict("", mutable=True)
+            elif self.request.method == "GET":
                 self.send_initial_data = self.request.GET.dict()
 
-        if self.request.method == 'GET':
+        if self.request.method == "GET":
             if not self.has_view_permission(request=self.request):
-                raise PermissionDenied(_('View permission is not allowed'))
+                raise PermissionDenied(_("View permission is not allowed"))
         else:
             if not self.has_add_permission(request=self.request):
-                raise PermissionDenied(_('Add permission is not allowed'))
+                raise PermissionDenied(_("Add permission is not allowed"))
         return super(WebixCreateView, self).dispatch(*args, **kwargs)
 
     def get_context_data(self, **kwargs):
@@ -400,82 +416,79 @@ class WebixCreateView(WebixCreateUpdateMixin,
         return context
 
     def pre_forms_valid(self, form=None, inlines=None, **kwargs):
-        '''
+        """
         Before all data saving
-        '''
-        django_webix_view_pre_save.send(sender=self,
-                                        instance=None,
-                                        created=True,
-                                        form=form,
-                                        inlines=inlines)
+        """
+        django_webix_view_pre_save.send(sender=self, instance=None, created=True, form=form, inlines=inlines)
 
     def post_form_save(self, form=None, inlines=None, **kwargs):
-        '''
+        """
         After form save and before inlines save
-        '''
-        django_webix_view_pre_inline_save.send(sender=self,
-                                               instance=self.object,
-                                               created=True,
-                                               form=form,
-                                               inlines=inlines)
+        """
+        django_webix_view_pre_inline_save.send(
+            sender=self, instance=self.object, created=True, form=form, inlines=inlines
+        )
 
     def post_forms_valid(self, form=None, inlines=None, **kwargs):
-        '''
+        """
         After all data saved
-        '''
-        django_webix_view_post_save.send(sender=self,
-                                         instance=self.object,
-                                         created=True,
-                                         form=form,
-                                         inlines=inlines)
+        """
+        django_webix_view_post_save.send(sender=self, instance=self.object, created=True, form=form, inlines=inlines)
         # LOG
-        anonymous = self.request.user.is_anonymous() if callable(
-            self.request.user.is_anonymous) else self.request.user.is_anonymous
-        if self.logs_enable is True and not anonymous and apps.is_installed('django.contrib.admin'):
-            from django.contrib.admin.models import LogEntry, ADDITION
+        anonymous = (
+            self.request.user.is_anonymous()
+            if callable(self.request.user.is_anonymous)
+            else self.request.user.is_anonymous
+        )
+        if self.logs_enable is True and not anonymous and apps.is_installed("django.contrib.admin"):
+            from django.contrib.admin.models import ADDITION, LogEntry
             from django.contrib.contenttypes.models import ContentType
+
             LogEntry.objects.log_action(
                 user_id=self.request.user.pk,
                 content_type_id=ContentType.objects.get_for_model(self.object).pk,
                 object_id=self.object.pk,
                 object_repr=force_str(self.object),
-                action_flag=ADDITION
+                action_flag=ADDITION,
             )
 
     def validate_unique_together(self, form=None, inlines=None, exclude=None, **kwargs):
         validate_unique_args = {"exclude": exclude}
-        if self.object is not None and \
-                hasattr(self.object, 'validate_unique') and \
-                callable(self.object.validate_unique) and \
-                'include_meta_constraints' in inspect.getfullargspec(self.object.validate_unique).args:
-            validate_unique_args['include_meta_constraints'] = True
+        if (
+            self.object is not None
+            and hasattr(self.object, "validate_unique")
+            and callable(self.object.validate_unique)
+            and "include_meta_constraints" in inspect.getfullargspec(self.object.validate_unique).args
+        ):
+            validate_unique_args["include_meta_constraints"] = True
         # self.object.validate_unique(**validate_unique_args)
         if form is not None:
             form.instance.validate_unique(**validate_unique_args)
 
 
-class WebixUpdateView(WebixCreateUpdateMixin, WebixBaseMixin, WebixPermissionsMixin, WebixUrlMixin,
-                      UpdateWithInlinesView):
-    template_name = 'django_webix/generic/update.js'
+class WebixUpdateView(
+    WebixCreateUpdateMixin, WebixBaseMixin, WebixPermissionsMixin, WebixUrlMixin, UpdateWithInlinesView
+):
+    template_name = "django_webix/generic/update.js"
 
     def get_form_kwargs(self):
         kwargs = super(WebixUpdateView, self).get_form_kwargs()
-        kwargs.update({'request': self.request})
+        kwargs.update({"request": self.request})
         return kwargs
 
     def get_object(self, queryset=None):
-        if getattr(self, 'object', None) is not None:
+        if getattr(self, "object", None) is not None:
             return self.object
         return super(WebixUpdateView, self).get_object(queryset=queryset)
 
     def dispatch(self, *args, **kwargs):
         self.object = self.get_object()
-        if self.request.method == 'GET':
+        if self.request.method == "GET":
             if not self.has_view_permission(request=self.request, obj=self.object):
-                raise PermissionDenied(_('View permission is not allowed'))
+                raise PermissionDenied(_("View permission is not allowed"))
         else:
             if not self.has_change_permission(request=self.request, obj=self.object):
-                raise PermissionDenied(_('Change permission is not allowed'))
+                raise PermissionDenied(_("Change permission is not allowed"))
         return super(WebixUpdateView, self).dispatch(*args, **kwargs)
 
     def get_context_data(self, **kwargs):
@@ -489,54 +502,50 @@ class WebixUpdateView(WebixCreateUpdateMixin, WebixBaseMixin, WebixPermissionsMi
     def validate_unique_together(self, form=None, inlines=None, exclude=None, **kwargs):
         validate_unique_args = {"exclude": exclude}
 
-        if self.object is not None and \
-                hasattr(self.object, 'validate_unique') and \
-                callable(self.object.validate_unique) and \
-                'include_meta_constraints' in inspect.getfullargspec(self.object.validate_unique).args:
-            validate_unique_args['include_meta_constraints'] = True
+        if (
+            self.object is not None
+            and hasattr(self.object, "validate_unique")
+            and callable(self.object.validate_unique)
+            and "include_meta_constraints" in inspect.getfullargspec(self.object.validate_unique).args
+        ):
+            validate_unique_args["include_meta_constraints"] = True
         self.object.validate_unique(**validate_unique_args)
         if form is not None:
             form.instance.validate_unique(**validate_unique_args)
 
     def pre_forms_valid(self, form=None, inlines=None, **kwargs):
-        '''
+        """
         Before all data saving
-        '''
-        django_webix_view_pre_save.send(sender=self,
-                                        instance=self.object,
-                                        created=False,
-                                        form=form,
-                                        inlines=inlines)
+        """
+        django_webix_view_pre_save.send(sender=self, instance=self.object, created=False, form=form, inlines=inlines)
 
     def post_form_save(self, form=None, inlines=None, **kwargs):
-        '''
+        """
         After form save and before inlines save
-        '''
+        """
 
-        django_webix_view_pre_inline_save.send(sender=self,
-                                               instance=self.object,
-                                               created=False,
-                                               form=form,
-                                               inlines=inlines)
+        django_webix_view_pre_inline_save.send(
+            sender=self, instance=self.object, created=False, form=form, inlines=inlines
+        )
 
     def post_forms_valid(self, form=None, inlines=None, **kwargs):
 
-        django_webix_view_post_save.send(sender=self,
-                                         instance=self.object,
-                                         created=False,
-                                         form=form,
-                                         inlines=inlines)
+        django_webix_view_post_save.send(sender=self, instance=self.object, created=False, form=form, inlines=inlines)
 
-        anonymous = self.request.user.is_anonymous() if callable(
-            self.request.user.is_anonymous) else self.request.user.is_anonymous
-        if self.logs_enable is True and not anonymous and apps.is_installed('django.contrib.admin'):
-            from django.contrib.admin.models import LogEntry, CHANGE
+        anonymous = (
+            self.request.user.is_anonymous()
+            if callable(self.request.user.is_anonymous)
+            else self.request.user.is_anonymous
+        )
+        if self.logs_enable is True and not anonymous and apps.is_installed("django.contrib.admin"):
+            from django.contrib.admin.models import CHANGE, LogEntry
             from django.contrib.contenttypes.models import ContentType
+
             LogEntry.objects.log_action(
                 user_id=self.request.user.pk,
                 content_type_id=ContentType.objects.get_for_model(self.object).pk,
                 object_id=self.object.pk,
                 object_repr=force_str(self.object),
                 action_flag=CHANGE,
-                change_message=_('Changed %s.') % get_text_list(form.changed_data, _('and'))
+                change_message=_("Changed %s.") % get_text_list(form.changed_data, _("and")),
             )

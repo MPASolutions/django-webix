@@ -1,15 +1,14 @@
 from django.contrib.gis import forms
-from django.contrib.gis.geos import GEOSGeometry, MultiPolygon
 from django.core.validators import BaseValidator
-from django.utils.module_loading import import_string
-from django.utils.translation import gettext as _
-from django.utils.text import slugify
 from django.utils.encoding import force_str
+from django.utils.module_loading import import_string
+from django.utils.text import slugify
+from django.utils.translation import gettext as _
 
 
 def validate_truefalse(value):
-    true_vals = ['true', 't', 'si', 'sì', 's', 'yes', 'y', 'ja', 'j', 'oui', 'o', '1', 'x']
-    false_vals = ['false', 'f', 'no', 'n', 'nein', 'kein', 'keine', 'k', 'non', 'aucun', 'a', '0']
+    true_vals = ["true", "t", "si", "sì", "s", "yes", "y", "ja", "j", "oui", "o", "1", "x"]
+    false_vals = ["false", "f", "no", "n", "nein", "kein", "keine", "k", "non", "aucun", "a", "0"]
 
     norm_val = str(value).lower()
     if norm_val in true_vals:
@@ -18,14 +17,14 @@ def validate_truefalse(value):
         return False
     else:
         raise forms.ValidationError(
-            _('%(value)s is not a boolean value'),
-            params={'value': value},
+            _("%(value)s is not a boolean value"),
+            params={"value": value},
         )
 
 
 class StrictMinValueValidator(BaseValidator):
-    message = _('Ensure this value is strictly greater than %(limit_value)s.')
-    code = 'min_value'
+    message = _("Ensure this value is strictly greater than %(limit_value)s.")
+    code = "min_value"
 
     def compare(self, a, b):
         return a <= b
@@ -40,7 +39,7 @@ class SlugifyChoiceField(forms.ChoiceField):
     def to_python(self, value):
         "Returns a Unicode object."
         if value in self.empty_values:
-            return ''
+            return ""
         return slugify(force_str(value))
 
 
@@ -65,8 +64,8 @@ class AutoMultiGeometryField(forms.GeometryField):
             if self.source_srid is not None:
                 geom.srid = self.source_srid
 
-            if 'MULTI' + str(geom.geom_type).upper() == self.geom_type:
-                geom = import_string('django.contrib.gis.geos.Multi' + geom.geom_type)(geom, srid=geom.srid)
+            if "MULTI" + str(geom.geom_type).upper() == self.geom_type:
+                geom = import_string("django.contrib.gis.geos.Multi" + geom.geom_type)(geom, srid=geom.srid)
 
         return geom
 

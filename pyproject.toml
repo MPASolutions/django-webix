@@ -1,0 +1,40 @@
+[tool.isort]
+profile = "black"
+combine_as_imports = true
+include_trailing_comma = true
+line_length = 119
+src_paths = ["django-webix" ]
+
+[tool.black]
+line-length = 119
+skip-magic-trailing-comma = false
+include = '\.pyi?$'
+exclude = '''
+/(
+    \.git
+  | \.hg
+  | \.mypy_cache
+  | \.tox
+  | \venv
+  | _build
+  | buck-out
+  | build
+  | dist
+)/
+'''
+
+[tool.flake8]
+extend-ignore = ["E203", "W503", "W504"]
+max-line-length = 119
+exclude = [".git", "__pycache__"]
+# max-complexity = 15
+
+# [tool.pytest.ini_options]
+# DJANGO_SETTINGS_MODULE = "prjcore.settings"
+# python_files = ["test_*.py", "*_test.py", "testing/python/*.py"]
+# filterwarnings = [
+#     "error",
+#     "ignore::DeprecationWarning:",
+#     "ignore::django.utils.deprecation.RemovedInDjango60Warning",
+#     "ignore::cryptography.utils.CryptographyDeprecationWarning",
+# ]

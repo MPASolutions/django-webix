@@ -1,10 +1,10 @@
 #!/usr/bin/env python
 
 from django import forms
-
-from django_webix.forms import (WebixModelForm, WebixForm, WebixTabularInlineFormSet, WebixStackedInlineFormSet)
+from django_webix.forms import WebixForm, WebixModelForm, WebixStackedInlineFormSet, WebixTabularInlineFormSet
 from django_webix.forms.formsets import BaseWebixInlineFormSet
-from .models import (MyModel, InlineModel, InlineStackedModel, InlineEmptyModel)
+
+from .models import InlineEmptyModel, InlineModel, InlineStackedModel, MyModel
 
 
 class MyLoginForm(WebixForm):
@@ -14,7 +14,7 @@ class MyLoginForm(WebixForm):
 
 class InlineModelInline(WebixTabularInlineFormSet):
     model = InlineModel
-    fields = '__all__'
+    fields = "__all__"
 
     def get_queryset(self):
         return self.inline_model.objects.all()
@@ -25,23 +25,21 @@ class InlineStackedModelForm(WebixModelForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.autocomplete_fields = ['inlinemodel']
+        self.autocomplete_fields = ["inlinemodel"]
 
     class Meta:
         model = InlineStackedModel
-        fields = '__all__'
+        fields = "__all__"
 
 
 class InlineStackedModelInline(WebixStackedInlineFormSet):
     model = InlineStackedModel
-    fields = '__all__'
+    fields = "__all__"
     form_class = InlineStackedModelForm
 
 
 class InlineEmptyModelForm(WebixModelForm):
-    factory_kwargs = {
-        'extra': 0
-    }
+    factory_kwargs = {"extra": 0}
 
 
 class InlineEmptyModelFormSet(BaseWebixInlineFormSet):
@@ -51,15 +49,22 @@ class InlineEmptyModelFormSet(BaseWebixInlineFormSet):
 
 class InlineEmptyModelInline(WebixTabularInlineFormSet):
     model = InlineEmptyModel
-    fields = '__all__'
+    fields = "__all__"
     form_class = InlineEmptyModelForm
     custom_formset_class = InlineEmptyModelFormSet
 
 
 class MyModelForm(WebixModelForm):
-    readonly_fields = ['readonly', 'raise_error', 'datetimefield', 'datefield', 'booleanfield', 'datefield_empty',
-                       'datetimefield_empty']
+    readonly_fields = [
+        "readonly",
+        "raise_error",
+        "datetimefield",
+        "datefield",
+        "booleanfield",
+        "datefield_empty",
+        "datetimefield_empty",
+    ]
 
     class Meta:
         model = MyModel
-        fields = '__all__'
+        fields = "__all__"

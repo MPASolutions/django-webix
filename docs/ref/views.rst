@@ -269,4 +269,3 @@ When deleteview works some signals are sended.
 
     django_webix_view_pre_delete.send(sender=self, instance=self.object)
     django_webix_view_post_delete.send(sender=self, instance=self.copied_object)
-

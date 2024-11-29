@@ -35,4 +35,3 @@ $$("{{ webix_container_id }}").addView({
         }
     }]
 });
-
