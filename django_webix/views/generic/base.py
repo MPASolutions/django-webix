@@ -285,7 +285,8 @@ class WebixUrlUtilsMixin:
 
         try:
             _url = reverse(url_name, kwargs=reverse_kwargs)
-            return _url
+            # attention: here return original pattern and not reversed: this is a check url not reverse url
+            return url_name
         except NoReverseMatch:
             return None
 
