@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-11-27 08:41+0100\n"
+"POT-Creation-Date: 2024-12-16 10:49+0100\n"
 "PO-Revision-Date: 2023-09-07 15:07+0200\n"
 "Last-Translator: Stefano Menegon <dallago@mpasol.it>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -19,166 +19,166 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Translated-Using: django-rosetta 0.9.9\n"
 
-#: contrib/extra_fields/apps.py:12
+#: contrib/extra_fields/apps.py:11
 msgid "Django Webix Extra Fields"
 msgstr ""
 
-#: contrib/extra_fields/dwadmin_inline_utils.py:17
+#: contrib/extra_fields/dwadmin_inline_utils.py:16
 msgid "This choice has already been filled in."
 msgstr ""
 
-#: contrib/extra_fields/models.py:27
+#: contrib/extra_fields/models.py:30
 msgid "Model"
 msgstr ""
 
-#: contrib/extra_fields/models.py:31
+#: contrib/extra_fields/models.py:35
 #: templates/django_webix/include/list_failure_related_objects.js:24
 msgid "Description"
 msgstr "Descripción"
 
-#: contrib/extra_fields/models.py:32
+#: contrib/extra_fields/models.py:37
 msgid "Field name"
 msgstr ""
 
-#: contrib/extra_fields/models.py:36
+#: contrib/extra_fields/models.py:42
 msgid ""
 "Field name must not contain spaces and special characters, and must begin "
 "with a letter"
 msgstr ""
 
-#: contrib/extra_fields/models.py:39
+#: contrib/extra_fields/models.py:47
 msgid "Field type"
 msgstr ""
 
-#: contrib/extra_fields/models.py:51
+#: contrib/extra_fields/models.py:65
 msgid "Model for FK"
 msgstr ""
 
-#: contrib/extra_fields/models.py:53 contrib/extra_fields/models.py:98
+#: contrib/extra_fields/models.py:71 contrib/extra_fields/models.py:116
 #, fuzzy
 #| msgid "Locked data"
 msgid "Locked"
 msgstr "Datos bloqueados"
 
-#: contrib/extra_fields/models.py:56 contrib/extra_fields/models.py:74
-#: contrib/extra_fields/models.py:90
+#: contrib/extra_fields/models.py:74 contrib/extra_fields/models.py:92
+#: contrib/extra_fields/models.py:108
 #, fuzzy
 #| msgid "Not decimal field"
 msgid "Model field"
 msgstr "Sin campo decimal"
 
-#: contrib/extra_fields/models.py:57
+#: contrib/extra_fields/models.py:75
 #, fuzzy
 #| msgid "Not decimal field"
 msgid "Model fields"
 msgstr "Sin campo decimal"
 
-#: contrib/extra_fields/models.py:76
+#: contrib/extra_fields/models.py:94
 msgid "Key"
 msgstr ""
 
-#: contrib/extra_fields/models.py:77 contrib/extra_fields/models.py:96
+#: contrib/extra_fields/models.py:95 contrib/extra_fields/models.py:114
 msgid "Value"
 msgstr ""
 
-#: contrib/extra_fields/models.py:80
+#: contrib/extra_fields/models.py:98
 msgid "Model field choice"
 msgstr ""
 
-#: contrib/extra_fields/models.py:81
+#: contrib/extra_fields/models.py:99
 msgid "Model fields choices"
 msgstr ""
 
-#: contrib/extra_fields/models.py:92
+#: contrib/extra_fields/models.py:110
 msgid "Content type"
 msgstr ""
 
-#: contrib/extra_fields/models.py:93
+#: contrib/extra_fields/models.py:111
 msgid "Object ID"
 msgstr ""
 
-#: contrib/extra_fields/models.py:101
+#: contrib/extra_fields/models.py:119
 msgid "Model field value"
 msgstr ""
 
-#: contrib/extra_fields/models.py:102
+#: contrib/extra_fields/models.py:120
 msgid "Model fields values"
 msgstr ""
 
-#: forms/forms.py:430
+#: forms/forms.py:431
 msgid "Upload new image"
 msgstr "Subir nueva imagen"
 
-#: forms/forms.py:430
+#: forms/forms.py:431
 #, fuzzy
 #| msgid "Upload new image"
 msgid "Change image"
 msgstr "Subir nueva imagen"
 
-#: forms/forms.py:507 forms/forms.py:635
+#: forms/forms.py:522 forms/forms.py:663
 msgid "Deleted"
 msgstr "Eliminado"
 
-#: forms/forms.py:541
+#: forms/forms.py:556
 msgid "Upload file"
 msgstr "Subir archivo"
 
-#: forms/forms.py:541
+#: forms/forms.py:556
 #, fuzzy
 #| msgid "Changed %s."
 msgid "Change file"
 msgstr "Cambiar %s."
 
-#: forms/forms.py:554
+#: forms/forms.py:571
 msgid "Upload folder"
 msgstr "Subir carpeta"
 
-#: forms/forms.py:554
+#: forms/forms.py:571
 #, fuzzy
 #| msgid "Upload folder"
 msgid "Change folder"
 msgstr "Subir carpeta"
 
-#: forms/forms.py:558
+#: forms/forms.py:573
 msgid "Upload files"
 msgstr "Subir archivos"
 
-#: forms/forms.py:558
+#: forms/forms.py:573
 #, fuzzy
 #| msgid "Changed %s."
 msgid "Change files"
 msgstr "Cambiar %s."
 
-#: forms/forms.py:669
+#: forms/forms.py:693
 msgid "MultipleChoiceField is available only with PRO webix license"
 msgstr ""
 "La elección de múltiples campos solo está permitida con la licencia webix "
 "PRO "
 
-#: forms/forms.py:701 forms/forms.py:733 forms/forms.py:791 forms/forms.py:849
-#: forms/forms.py:933
+#: forms/forms.py:734 forms/forms.py:767 forms/forms.py:837 forms/forms.py:901
+#: forms/forms.py:995
 msgid "Write and select"
 msgstr ""
 
-#: forms/forms.py:828 forms/forms.py:873
+#: forms/forms.py:877 forms/forms.py:926
 #, fuzzy
 #| msgid "Click to select"
 msgid "Click and select"
 msgstr "Clic para seleccionar"
 
-#: forms/forms.py:981
+#: forms/forms.py:1043
 msgid "Initial value {} for geo field {} is not supported"
 msgstr "El valor inicial {} para el campo geográfico {} no es compatible"
 
-#: forms/forms.py:1021
+#: forms/forms.py:1082
 msgid "Edit"
 msgstr "Editar"
 
-#: forms/forms.py:1172
+#: forms/forms.py:1242
 msgid "Type of field {} not supported"
 msgstr "El tipo de campo {} no compatible"
 
-#: forms/formsets.py:90 forms/formsets_generic.py:70
+#: forms/formsets.py:91 forms/formsets_generic.py:71
 msgid "ManagementForm data is missing or has been tampered with"
 msgstr "Faltan datos de ManagementForm o han sido alterados"
 
@@ -224,7 +224,7 @@ msgstr "Filtro avanzado"
 #: templates/django_webix/generic/list.js:243
 #: templates/django_webix/include/toolbar_navigation.js:49
 #: templates/django_webix/include/toolbar_navigation.js:106
-#: views/generic/list.py:516
+#: views/generic/list.py:542
 msgid "Go to map"
 msgstr "Mostrar en el mapa"
 
@@ -359,7 +359,7 @@ msgid "Oops! Some warnings here..."
 msgstr "¡Ha ocurrido un fallo!"
 
 #: templates/django_webix/include/form_warnings.js:52
-#: views/generic/decorators.py:27 views/generic/list.py:85
+#: views/generic/decorators.py:27 views/generic/list.py:86
 msgid "Undo"
 msgstr "Deshacer"
 
@@ -442,12 +442,12 @@ msgid "Reload"
 msgstr ""
 
 #: templates/django_webix/include/utils.js:235
-#: templates/django_webix/include/utils.js:242 views/generic/list.py:333
+#: templates/django_webix/include/utils.js:242 views/generic/list.py:346
 msgid "Yes"
 msgstr "Sí"
 
 #: templates/django_webix/include/utils.js:237
-#: templates/django_webix/include/utils.js:244 views/generic/list.py:334
+#: templates/django_webix/include/utils.js:244 views/generic/list.py:347
 msgid "No"
 msgstr "No"
 
@@ -517,40 +517,40 @@ msgstr "Existen alternativas válidas."
 msgid "You can use for example"
 msgstr "Sugerencias"
 
-#: views/generic/actions.py:53
+#: views/generic/actions.py:55
 #, python-brace-format
 msgid "{count_delete_instances} elements have been deleted"
 msgstr "{count_delete_instances} elementos han sido borrados"
 
-#: views/generic/actions.py:61
+#: views/generic/actions.py:67
 msgid "Download all attachments"
 msgstr "Descargar todos los elementos"
 
-#: views/generic/actions_groups.py:17
+#: views/generic/actions_groups.py:15
 msgid "Exports"
 msgstr ""
 
-#: views/generic/actions_groups.py:22
+#: views/generic/actions_groups.py:17
 msgid "Webgis"
 msgstr ""
 
-#: views/generic/base.py:172
+#: views/generic/base.py:170
 msgid "You haven't add permission"
 msgstr "No has añadido el permiso"
 
-#: views/generic/base.py:177
+#: views/generic/base.py:180
 msgid "You haven't change permission"
 msgstr "No has cambiado el permiso"
 
-#: views/generic/base.py:182
+#: views/generic/base.py:185
 msgid "You haven't delete permission"
 msgstr "No has eliminado el permiso"
 
-#: views/generic/base.py:187
+#: views/generic/base.py:190
 msgid "You haven't view permission"
 msgstr "No tienes permiso para ver esta información"
 
-#: views/generic/create_update.py:95
+#: views/generic/create_update.py:96
 msgid ""
 "Template style is improperly configured only options are 'standard' or "
 "'tabs' (standard by default)."
@@ -558,62 +558,62 @@ msgstr ""
 "El estilo de la plantilla está configurado incorrectamente, las opciones son "
 "'estándar' o 'pestañas' (estándar por defecto)."
 
-#: views/generic/create_update.py:388 views/generic/create_update.py:475
-#: views/generic/delete.py:43 views/generic/detail.py:20
-#: views/generic/list.py:693
+#: views/generic/create_update.py:404 views/generic/create_update.py:488
+#: views/generic/delete.py:42 views/generic/detail.py:18
+#: views/generic/list.py:725
 msgid "View permission is not allowed"
 msgstr "Ver permiso no está permitido"
 
-#: views/generic/create_update.py:391
+#: views/generic/create_update.py:407
 msgid "Add permission is not allowed"
 msgstr "Añadir permiso no está permitido"
 
-#: views/generic/create_update.py:478
+#: views/generic/create_update.py:491
 msgid "Change permission is not allowed"
 msgstr "Cambiar permiso no está permitido"
 
-#: views/generic/create_update.py:541
+#: views/generic/create_update.py:550
 #, python-format
 msgid "Changed %s."
 msgstr "Cambiar %s."
 
-#: views/generic/create_update.py:541
+#: views/generic/create_update.py:550
 msgid "and"
 msgstr "y"
 
-#: views/generic/decorators.py:23 views/generic/list.py:81
+#: views/generic/decorators.py:23 views/generic/list.py:82
 msgid "Fill in the form"
 msgstr "Rellenar el formulario"
 
-#: views/generic/decorators.py:24 views/generic/list.py:82
+#: views/generic/decorators.py:24 views/generic/list.py:83
 msgid "Are you sure you want to proceed with this action?"
 msgstr "¿Estás seguro que quieres seguir con esta acción?"
 
-#: views/generic/decorators.py:25 views/generic/list.py:83
+#: views/generic/decorators.py:25 views/generic/list.py:84
 msgid "Go"
 msgstr "Ir"
 
-#: views/generic/decorators.py:26 views/generic/list.py:84
+#: views/generic/decorators.py:26 views/generic/list.py:85
 msgid "Proceed"
 msgstr "Continua"
 
-#: views/generic/decorators.py:98
+#: views/generic/decorators.py:99
 msgid "You can perform this action on a maximum of {} raws"
 msgstr "Se puede realizar esta acción en un máximo de {} elementos"
 
-#: views/generic/decorators.py:165
+#: views/generic/decorators.py:176
 msgid "Action success: {} data:{}"
 msgstr "Acción ejecutada correctamente: {} data:{}"
 
-#: views/generic/decorators.py:191
+#: views/generic/decorators.py:205
 msgid "Action success: {}"
 msgstr "Acción ejecutada correctamente: {}"
 
-#: views/generic/delete.py:46
+#: views/generic/delete.py:45
 msgid "Delete permission is not allowed"
 msgstr "Eliminar permiso no está permitido"
 
-#: views/generic/delete.py:81
+#: views/generic/delete.py:82
 msgid ""
 "No URL to redirect to.  Either provide a url or define a get_absolute_url "
 "method on the Model."
@@ -621,7 +621,7 @@ msgstr ""
 "No hay URL a la que redirigir. Proporcione una url o defina un método "
 "get_absolute_url en el Modelo."
 
-#: views/generic/delete.py:92
+#: views/generic/delete.py:94
 msgid ""
 "No URL to failure redirect to.  Either provide a url or define a "
 "get_absolute_url method on the Model."
@@ -629,19 +629,19 @@ msgstr ""
 "No hay URL a la que redirigir. Proporcione una url o defina un método \"\n"
 "\"get_absolute_url en el Modelo."
 
-#: views/generic/list.py:397
+#: views/generic/list.py:422
 msgid "Paginate count is not integer"
 msgstr "El recuento del paginado no es entero"
 
-#: views/generic/list.py:406
+#: views/generic/list.py:431
 msgid "Paginate start is not integer"
 msgstr "El inicio del paginado no es entero"
 
-#: views/generic/list.py:518
+#: views/generic/list.py:543
 msgid "Filter in map"
 msgstr "Filtrar en el mapa"
 
-#: views/generic/list.py:654
+#: views/generic/list.py:685
 msgid ""
 "Json response is available only if get_queryset() return a queryset and not "
 "a list"
@@ -649,19 +649,19 @@ msgstr ""
 "La respuesta de Json solo está disponible si get_queryset () devuelve un "
 "conjunto de consultas y no una lista"
 
-#: views/generic/list.py:673
+#: views/generic/list.py:705
 msgid "This action is not registered"
 msgstr "Esta acción no está registrada"
 
-#: views/generic/list.py:679
+#: views/generic/list.py:711
 msgid "Permission denied: {}"
 msgstr "Permiso denegado:{}"
 
-#: views/generic/list.py:681
+#: views/generic/list.py:713
 msgid "This permission is not registered on this class"
 msgstr "Este permiso no está registrado en esta clase"
 
-#: views/generic/list.py:759
+#: views/generic/list.py:793
 msgid "Generic TemplateListView needs to define data for datatable"
 msgstr ""
 "TemplateListView genérico necesita definir datos para la tabla de datos"

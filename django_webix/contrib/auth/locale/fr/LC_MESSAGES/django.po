@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-07-03 11:40+0200\n"
+"POT-Creation-Date: 2024-12-16 10:49+0100\n"
 "PO-Revision-Date: 2022-03-21 12:39+0050\n"
 "Last-Translator: Traduzioni CBC <>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -19,17 +19,17 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 "X-Translated-Using: django-rosetta 0.9.8\n"
 
-#: contrib/auth/apps.py:8
+#: contrib/auth/apps.py:9
 #, fuzzy
 #| msgid "Django webix administration"
 msgid "Django Webix Authentication and Authorization"
 msgstr "Administration Django Webix"
 
-#: contrib/auth/forms.py:12
+#: contrib/auth/forms.py:11
 msgid "Username"
 msgstr "Nom d'utilisateur"
 
-#: contrib/auth/forms.py:40
+#: contrib/auth/forms.py:39
 msgid "Enter your username"
 msgstr "Entrer votre nom d'utilisateur"
 

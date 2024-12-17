@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-11-14 11:56+0100\n"
+"POT-Creation-Date: 2024-12-16 10:49+0100\n"
 "PO-Revision-Date: 2023-09-25 15:41+0200\n"
 "Last-Translator: Stefano Menegon <dallago@mpasol.it>\n"
 "Language-Team: \n"
@@ -23,35 +23,35 @@ msgstr ""
 msgid "Django Webix Filter"
 msgstr "Filtri"
 
-#: contrib/filter/models.py:16
+#: contrib/filter/models.py:12
 msgid "Insert date"
 msgstr "Data inserimento"
 
-#: contrib/filter/models.py:17
+#: contrib/filter/models.py:13
 msgid "Update date"
 msgstr "Data aggiornamento"
 
-#: contrib/filter/models.py:18 contrib/filter/views.py:340
+#: contrib/filter/models.py:14 contrib/filter/views.py:336
 msgid "Title"
 msgstr "Titolo"
 
-#: contrib/filter/models.py:19 contrib/filter/views.py:350
+#: contrib/filter/models.py:15 contrib/filter/views.py:347
 msgid "Description"
 msgstr "Descrizione"
 
-#: contrib/filter/models.py:20 contrib/filter/views.py:360
+#: contrib/filter/models.py:16 contrib/filter/views.py:358
 msgid "Model"
 msgstr "Modello"
 
-#: contrib/filter/models.py:21
+#: contrib/filter/models.py:17
 msgid "Filter"
 msgstr "Filtra"
 
-#: contrib/filter/models.py:23
+#: contrib/filter/models.py:20
 msgid "Insert user"
 msgstr "Utente inserimento"
 
-#: contrib/filter/models.py:25 contrib/filter/views.py:370
+#: contrib/filter/models.py:23 contrib/filter/views.py:369
 msgid "Visibility"
 msgstr "Visibilità"
 
@@ -67,19 +67,19 @@ msgstr "Privato"
 msgid "Restricted"
 msgstr "Limitato"
 
-#: contrib/filter/models.py:30
+#: contrib/filter/models.py:35
 msgid "Assignees groups"
 msgstr "Gruppi assegnati"
 
-#: contrib/filter/models.py:31
+#: contrib/filter/models.py:37
 msgid "Shared edit group"
 msgstr "Gruppo di modifica condiviso"
 
-#: contrib/filter/models.py:36
+#: contrib/filter/models.py:42
 msgid "Webix Filter"
 msgstr "Filtro"
 
-#: contrib/filter/models.py:37
+#: contrib/filter/models.py:43
 msgid "Webix Filters"
 msgstr "Filtri"
 
@@ -162,11 +162,11 @@ msgstr "Filtro invalido"
 msgid "Disable temporary filter"
 msgstr "Disabilita il filtro temporaneo"
 
-#: contrib/filter/utils/operators.py:202
+#: contrib/filter/utils/operators.py:273
 msgid "Overlap"
 msgstr "Sovrapposizione"
 
-#: contrib/filter/utils/operators.py:204
+#: contrib/filter/utils/operators.py:274
 msgid "Contained by"
 msgstr "Contenuto in"
 

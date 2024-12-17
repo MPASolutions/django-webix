@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-04-08 17:36+0200\n"
+"POT-Creation-Date: 2024-12-16 10:49+0100\n"
 "PO-Revision-Date: 2024-01-08 15:05+0100\n"
 "Last-Translator:   <>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -19,19 +19,19 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Translated-Using: django-rosetta 0.10.0\n"
 
-#: contrib/commands_manager/apps.py:9
+#: contrib/commands_manager/apps.py:10
 msgid "Django Webix Commands Manager"
 msgstr "Django Webix Befehls-Manager"
 
-#: contrib/commands_manager/forms.py:50 contrib/commands_manager/models.py:11
+#: contrib/commands_manager/forms.py:48 contrib/commands_manager/models.py:11
 msgid "Parameters"
 msgstr "Parameter"
 
-#: contrib/commands_manager/forms.py:65 contrib/commands_manager/models.py:20
+#: contrib/commands_manager/forms.py:58 contrib/commands_manager/models.py:24
 msgid "Output"
 msgstr "Ausgabe"
 
-#: contrib/commands_manager/models.py:8 contrib/commands_manager/views.py:49
+#: contrib/commands_manager/models.py:7 contrib/commands_manager/views.py:50
 msgid "Description"
 msgstr "Beschreibung"
 
@@ -47,47 +47,47 @@ msgstr "Datum einfügen"
 msgid "Last Execution"
 msgstr "letzte Ausführung"
 
-#: contrib/commands_manager/models.py:15
+#: contrib/commands_manager/models.py:17
 #: contrib/commands_manager/templates/django_webix/commands_manager/list.js:17
 #: contrib/commands_manager/templates/django_webix/commands_manager/update.js:21
 msgid "Started"
 msgstr "gestartet"
 
-#: contrib/commands_manager/models.py:16
+#: contrib/commands_manager/models.py:18
 #: contrib/commands_manager/templates/django_webix/commands_manager/list.js:9
 msgid "Error"
 msgstr "Fehler"
 
-#: contrib/commands_manager/models.py:17
+#: contrib/commands_manager/models.py:19
 msgid "Finished"
 msgstr "beendet"
 
-#: contrib/commands_manager/models.py:18
+#: contrib/commands_manager/models.py:20
 msgid "Unknown"
 msgstr "unbekannt"
 
-#: contrib/commands_manager/models.py:23
+#: contrib/commands_manager/models.py:27
 msgid "Command execution"
 msgstr "Befehlsausführung"
 
-#: contrib/commands_manager/models.py:24
+#: contrib/commands_manager/models.py:28
 msgid "Commands executions"
 msgstr "Befehlsausführungen"
 
-#: contrib/commands_manager/tasks.py:24
+#: contrib/commands_manager/tasks.py:25
 msgid "Command execution id is not valid"
 msgstr "Die Befehlsausführungs-ID ist nicht gültig"
 
 #: contrib/commands_manager/templates/django_webix/commands_manager/update.js:13
-#: contrib/commands_manager/views.py:88
+#: contrib/commands_manager/views.py:96
 msgid "Execute"
 msgstr "ausführen"
 
-#: contrib/commands_manager/views.py:63
+#: contrib/commands_manager/views.py:68
 msgid "Last ex. date"
 msgstr "Letztes Ausführungs-Datum"
 
-#: contrib/commands_manager/views.py:76
+#: contrib/commands_manager/views.py:82
 msgid "Last ex. state"
 msgstr "Letzter Ausführungs-Status"
 

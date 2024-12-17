@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-01-27 08:25+0100\n"
+"POT-Creation-Date: 2024-12-16 10:49+0100\n"
 "PO-Revision-Date: 2023-02-24 09:09+0100\n"
 "Last-Translator: Stefano Menegon <menegon@mpasol.it>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -19,24 +19,24 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Translated-Using: django-rosetta 0.9.8\n"
 
-#: contrib/tutorial/apps.py:8
+#: contrib/tutorial/apps.py:9
 msgid "Django Webix Tutorial"
 msgstr "Tutorial"
 
-#: contrib/tutorial/models.py:12 contrib/tutorial/models.py:24
+#: contrib/tutorial/models.py:11 contrib/tutorial/models.py:23
 #: contrib/tutorial/views.py:45
 msgid "Name"
 msgstr "Nme"
 
-#: contrib/tutorial/models.py:15
+#: contrib/tutorial/models.py:14
 msgid "Tutorial area"
 msgstr "Area tutorial"
 
-#: contrib/tutorial/models.py:16
+#: contrib/tutorial/models.py:15
 msgid "Tutorial areas"
 msgstr "Aree tutorial"
 
-#: contrib/tutorial/models.py:25 contrib/tutorial/views.py:55
+#: contrib/tutorial/models.py:24 contrib/tutorial/views.py:56
 msgid "Description"
 msgstr "Descrizione"
 
@@ -44,15 +44,15 @@ msgstr "Descrizione"
 msgid "Tutorial type"
 msgstr "Tipo di tutorial"
 
-#: contrib/tutorial/models.py:28
+#: contrib/tutorial/models.py:27
 msgid "PDF"
 msgstr "PDF"
 
-#: contrib/tutorial/models.py:29
+#: contrib/tutorial/models.py:27
 msgid "Video"
 msgstr "Video"
 
-#: contrib/tutorial/models.py:31
+#: contrib/tutorial/models.py:30
 msgid "Type of opening file"
 msgstr "Tipo di file da aprire"
 
@@ -60,31 +60,31 @@ msgstr "Tipo di file da aprire"
 msgid "Modal with iframe"
 msgstr "Modela con iframe"
 
-#: contrib/tutorial/models.py:33
+#: contrib/tutorial/models.py:32
 msgid "Same window"
 msgstr "Stessa finestra"
 
-#: contrib/tutorial/models.py:34
+#: contrib/tutorial/models.py:32
 msgid "New tab"
 msgstr "Nuovo tab"
 
-#: contrib/tutorial/models.py:36
+#: contrib/tutorial/models.py:35
 msgid "Area"
 msgstr "Area"
 
-#: contrib/tutorial/models.py:39
+#: contrib/tutorial/models.py:37
 msgid "Visible from"
 msgstr "Visibile dal"
 
-#: contrib/tutorial/models.py:40
+#: contrib/tutorial/models.py:38
 msgid "Visible to"
 msgstr "Visibile al"
 
-#: contrib/tutorial/models.py:43
+#: contrib/tutorial/models.py:41
 msgid "Tutorial item"
 msgstr "Elemento del tutorial"
 
-#: contrib/tutorial/models.py:44
+#: contrib/tutorial/models.py:42
 msgid "Tutorial items"
 msgstr "Elementi del tutorial"
 

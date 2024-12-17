@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-12-18 10:55+0100\n"
+"POT-Creation-Date: 2024-12-16 10:49+0100\n"
 "PO-Revision-Date: 2023-08-23 15:06+0200\n"
 "Last-Translator: Stefano Menegon <dallago@mpasol.it>\n"
 "Language-Team: \n"
@@ -19,312 +19,312 @@ msgstr ""
 "X-Generator: Poedit 2.4.2\n"
 "X-Translated-Using: django-rosetta 0.9.9\n"
 
-#: contrib/sender/admin.py:118
+#: contrib/sender/admin.py:144
 msgid "Total recipients"
 msgstr "Totale destinatari"
 
-#: contrib/sender/admin.py:124
+#: contrib/sender/admin.py:150
 msgid "Success recipients"
 msgstr "Destinatari con successo"
 
-#: contrib/sender/admin.py:130
+#: contrib/sender/admin.py:156
 msgid "Failed recipients"
 msgstr "Destinatari falliti"
 
-#: contrib/sender/admin.py:136
+#: contrib/sender/admin.py:162
 msgid "Unknown recipients"
 msgstr "Destinatari sconosciuti"
 
-#: contrib/sender/admin.py:142
+#: contrib/sender/admin.py:168
 msgid "Invalid recipients"
 msgstr "Destinatari non validi"
 
-#: contrib/sender/admin.py:148
+#: contrib/sender/admin.py:174
 msgid "Duplicate recipients"
 msgstr "Destinatari duplicati"
 
-#: contrib/sender/admin.py:155
+#: contrib/sender/admin.py:181
 msgid "Method"
 msgstr "Metodo"
 
-#: contrib/sender/admin.py:161
+#: contrib/sender/admin.py:187
 msgid "Function"
 msgstr "Funzione"
 
-#: contrib/sender/apps.py:14
+#: contrib/sender/apps.py:13
 msgid "Django Webix Sender"
 msgstr "Comunicazioni"
 
-#: contrib/sender/apps.py:23
+#: contrib/sender/apps.py:22
 msgid "`WEBIX_SENDER` is not configured in your settings.py file"
 msgstr "`WEBIX_SENDER` non è configurato nel tuo file settings.py"
 
-#: contrib/sender/apps.py:49
+#: contrib/sender/apps.py:48
 msgid "`method` is not configured in send method"
 msgstr "`method` non è configurato nel metodo di invio"
 
-#: contrib/sender/apps.py:51
+#: contrib/sender/apps.py:50
 msgid "`verbose_name` is not configured in send method"
 msgstr "`verbose_name` non è configurato nel metodo di invio"
 
-#: contrib/sender/apps.py:53
+#: contrib/sender/apps.py:52
 msgid "`show_in_list` is not configured in send method"
 msgstr "`show_in_list` non è configurato nel metodo di invio"
 
-#: contrib/sender/apps.py:55
+#: contrib/sender/apps.py:54
 msgid "`show_in_chat` is not configured in send method"
 msgstr "`show_in_chat` non è configurato nel metodo di invio"
 
-#: contrib/sender/apps.py:69 contrib/sender/apps.py:194
+#: contrib/sender/apps.py:68 contrib/sender/apps.py:211
 msgid "`function` is not configured in send method"
 msgstr "`function` non è configurato nel metodo di invio"
 
-#: contrib/sender/apps.py:81
+#: contrib/sender/apps.py:86
 msgid "`recipients_clean` is not configured in send method"
 msgstr "`show_in_chat` non è configurato nel metodo di invio"
 
-#: contrib/sender/apps.py:93
+#: contrib/sender/apps.py:98
 msgid "`presend_check` is not configured in send method"
 msgstr "`verbose_name` non è configurato nel metodo di invio"
 
-#: contrib/sender/apps.py:105
+#: contrib/sender/apps.py:118
 msgid "`attachments_format` is not configured in send method"
 msgstr "`method` non è configurato nel metodo di invio"
 
-#: contrib/sender/apps.py:117
+#: contrib/sender/apps.py:130
 msgid "`{}` method is used {} times instead of 1"
 msgstr "`{}` è utilizzato {} volte invece di 1"
 
-#: contrib/sender/apps.py:125
+#: contrib/sender/apps.py:137
 msgid "Email `config` is not configured in your settings.py file"
 msgstr "Email `config` non è configurato nel tuo file settings.py"
 
-#: contrib/sender/apps.py:136
+#: contrib/sender/apps.py:150
 msgid "Skebby `config` is not configured in your settings.py file"
 msgstr "Skebby `config` non è configurato nel tuo file settings.py"
 
-#: contrib/sender/apps.py:143
+#: contrib/sender/apps.py:156
 msgid "Telegram `config` is not configured in your settings.py file"
 msgstr "Telegram `config` non è configurato nel tuo file settings.py"
 
-#: contrib/sender/apps.py:181
+#: contrib/sender/apps.py:198
 msgid "`method` is not configured in initial send method"
 msgstr "`method` non è configurato nel metodo di invio"
 
-#: contrib/sender/apps.py:201
+#: contrib/sender/apps.py:218
 msgid "`recipients` is not configured in your settings"
 msgstr "Email `config` non è configurato nel tuo file settings.py"
 
-#: contrib/sender/apps.py:203
+#: contrib/sender/apps.py:220
 msgid "`recipients` must be a list"
 msgstr "Il recipiente deve essere una lista"
 
-#: contrib/sender/apps.py:207
+#: contrib/sender/apps.py:224
 msgid "You have to define a `model` as string in your recipients list"
 msgstr "Devi definire un modello come stringa nel tuo recipiente"
 
-#: contrib/sender/apps.py:209
+#: contrib/sender/apps.py:227
 msgid "You have to define a `datatable_fields` as list in your recipients list"
 msgstr ""
 "Devi definire un \"datartable_fields' come lista nella lista dei recipienti"
 
-#: contrib/sender/apps.py:215
+#: contrib/sender/apps.py:234
 msgid "Recipient model `{}` is not valid"
 msgstr "Il modello dei destinatari `{}` non è valido"
 
-#: contrib/sender/dwadmin.py:24 contrib/sender/models.py:187
-#: contrib/sender/models.py:215 contrib/sender/models.py:270
-#: contrib/sender/models.py:298 contrib/sender/models.py:381
+#: contrib/sender/dwadmin.py:21 contrib/sender/models.py:186
+#: contrib/sender/models.py:215 contrib/sender/models.py:271
+#: contrib/sender/models.py:300 contrib/sender/models.py:384
 #: contrib/sender/models.py:430
 #: contrib/sender/templates/django_webix/sender/sender.js:100
-#: contrib/sender/views.py:316
+#: contrib/sender/views.py:334
 msgid "Typology"
 msgstr "Tipologia"
 
-#: contrib/sender/dwadmin.py:42 contrib/sender/models.py:403
+#: contrib/sender/dwadmin.py:41 contrib/sender/models.py:406
 msgid "Group typologies"
 msgstr "Gruppo di tipologie"
 
-#: contrib/sender/management/commands/telegram_manage.py:35
+#: contrib/sender/management/commands/telegram_manage.py:34
 msgid "Telegram Webhooks successfully deleted"
 msgstr "Webhooks Telegram eliminati con successo"
 
-#: contrib/sender/management/commands/telegram_manage.py:37
+#: contrib/sender/management/commands/telegram_manage.py:36
 msgid "Telegram Webhooks cannot be deleted"
 msgstr "Webhooks Telegram non possono essere eliminati"
 
-#: contrib/sender/management/commands/telegram_manage.py:42
+#: contrib/sender/management/commands/telegram_manage.py:41
 msgid "Telegram Webhook successfully added"
 msgstr "Webhooks Telegram aggiunti con successo"
 
-#: contrib/sender/management/commands/telegram_manage.py:44
+#: contrib/sender/management/commands/telegram_manage.py:43
 msgid "Telegram Webhook cannot be added"
 msgstr "Webhooks Telegram non possono essere aggiunti"
 
-#: contrib/sender/management/commands/telegram_manage.py:48
+#: contrib/sender/management/commands/telegram_manage.py:47
 msgid "{} persistence elements have been deleted"
 msgstr "{} elementi di persistenza sono stati eliminati"
 
-#: contrib/sender/models.py:57
+#: contrib/sender/models.py:56
 msgid "`get_sms` not implemented!"
 msgstr "`get_sms` non implementato!"
 
-#: contrib/sender/models.py:67
+#: contrib/sender/models.py:66
 msgid "`get_email` not implemented!"
 msgstr "`get_email` non implementato!"
 
-#: contrib/sender/models.py:76
+#: contrib/sender/models.py:75
 msgid "`get_telegram` not implemented!"
 msgstr "`get_telegram` non implementato!"
 
-#: contrib/sender/models.py:86
+#: contrib/sender/models.py:85
 msgid "`get_sms_fieldpath` not implemented!"
 msgstr "`get_sms_fieldpath` non implementato!"
 
-#: contrib/sender/models.py:96
+#: contrib/sender/models.py:95
 msgid "`get_email_fieldpath` not implemented!"
 msgstr "`get_email_fieldpath` non implementato!"
 
-#: contrib/sender/models.py:106
+#: contrib/sender/models.py:105
 msgid "`get_telegram_fieldpath` not implemented!"
 msgstr "`get_telegram_fieldpath` non implementato!"
 
-#: contrib/sender/models.py:169
+#: contrib/sender/models.py:168
 msgid "`get_filters_viewers` not implemented!"
 msgstr "`get_filters_viewers` non implementato!"
 
-#: contrib/sender/models.py:179
+#: contrib/sender/models.py:178
 msgid "`get_representation` not implemented!"
 msgstr "`get_representation` non implementato!"
 
-#: contrib/sender/models.py:188 contrib/sender/models.py:216
-#: contrib/sender/models.py:271 contrib/sender/models.py:299
-#: contrib/sender/models.py:358 contrib/sender/models.py:382
-#: contrib/sender/models.py:406 contrib/sender/models.py:457
-#: contrib/sender/models.py:493 contrib/sender/models.py:513
+#: contrib/sender/models.py:187 contrib/sender/models.py:217
+#: contrib/sender/models.py:272 contrib/sender/models.py:302
+#: contrib/sender/models.py:361 contrib/sender/models.py:385
+#: contrib/sender/models.py:409 contrib/sender/models.py:459
+#: contrib/sender/models.py:498 contrib/sender/models.py:517
 msgid "Creation date"
 msgstr "Data di creazione"
 
-#: contrib/sender/models.py:189 contrib/sender/models.py:217
-#: contrib/sender/models.py:272 contrib/sender/models.py:300
-#: contrib/sender/models.py:359 contrib/sender/models.py:383
-#: contrib/sender/models.py:407 contrib/sender/models.py:458
-#: contrib/sender/models.py:494 contrib/sender/models.py:514
+#: contrib/sender/models.py:188 contrib/sender/models.py:218
+#: contrib/sender/models.py:273 contrib/sender/models.py:303
+#: contrib/sender/models.py:362 contrib/sender/models.py:386
+#: contrib/sender/models.py:410 contrib/sender/models.py:460
+#: contrib/sender/models.py:499 contrib/sender/models.py:518
 msgid "Modification data"
 msgstr "Dati di modifica"
 
-#: contrib/sender/models.py:192
+#: contrib/sender/models.py:191
 msgid "Customer typology"
 msgstr "Tipologia cliente"
 
-#: contrib/sender/models.py:193
+#: contrib/sender/models.py:192
 msgid "Customer typologies"
 msgstr "Tipologia clienti"
 
-#: contrib/sender/models.py:205 contrib/sender/models.py:288
-#: contrib/sender/models.py:454 contrib/sender/models.py:511
+#: contrib/sender/models.py:204 contrib/sender/models.py:289
+#: contrib/sender/models.py:455 contrib/sender/models.py:515
 msgid "User"
 msgstr "Utente"
 
-#: contrib/sender/models.py:206 contrib/sender/models.py:289
+#: contrib/sender/models.py:206 contrib/sender/models.py:291
 msgid "Name"
 msgstr "Nome"
 
-#: contrib/sender/models.py:207 contrib/sender/models.py:290
+#: contrib/sender/models.py:207 contrib/sender/models.py:292
 msgid "Vat number"
 msgstr "Partita IVA"
 
-#: contrib/sender/models.py:208 contrib/sender/models.py:291
+#: contrib/sender/models.py:208 contrib/sender/models.py:293
 msgid "Fiscal code"
 msgstr "Codice fiscale"
 
-#: contrib/sender/models.py:209 contrib/sender/models.py:292
+#: contrib/sender/models.py:209 contrib/sender/models.py:294
 msgid "Sms"
 msgstr "Sms"
 
-#: contrib/sender/models.py:210 contrib/sender/models.py:293
+#: contrib/sender/models.py:210 contrib/sender/models.py:295
 msgid "Email"
 msgstr "Email"
 
-#: contrib/sender/models.py:211 contrib/sender/models.py:294
+#: contrib/sender/models.py:211 contrib/sender/models.py:296
 msgid "Telegram"
 msgstr "Telegram"
 
-#: contrib/sender/models.py:212 contrib/sender/models.py:295
+#: contrib/sender/models.py:212 contrib/sender/models.py:297
 msgid "Note"
 msgstr "Note"
 
-#: contrib/sender/models.py:213 contrib/sender/models.py:296
-#: contrib/sender/models.py:439 contrib/sender/models.py:487
+#: contrib/sender/models.py:213 contrib/sender/models.py:298
+#: contrib/sender/models.py:443 contrib/sender/models.py:492
 msgid "Extra"
 msgstr "Extra"
 
-#: contrib/sender/models.py:220
+#: contrib/sender/models.py:221
 msgid "Customer"
 msgstr "Cliente"
 
-#: contrib/sender/models.py:221
+#: contrib/sender/models.py:222
 msgid "Customers"
 msgstr "Clienti"
 
-#: contrib/sender/models.py:275
+#: contrib/sender/models.py:276
 msgid "External subject typology"
 msgstr "Tipologia soggetto esterno"
 
-#: contrib/sender/models.py:276
+#: contrib/sender/models.py:277
 msgid "External subject typologies"
 msgstr "Tipologie soggetti esterni"
 
-#: contrib/sender/models.py:303
+#: contrib/sender/models.py:306
 msgid "External subject"
 msgstr "Soggetto esterno"
 
-#: contrib/sender/models.py:304
+#: contrib/sender/models.py:307
 msgid "External subjects"
 msgstr "Soggetti esterni"
 
-#: contrib/sender/models.py:310
+#: contrib/sender/models.py:313
 msgid "Not defined"
 msgstr "Non specificato"
 
-#: contrib/sender/models.py:356
+#: contrib/sender/models.py:359
 msgid "Document"
 msgstr "Documento"
 
-#: contrib/sender/models.py:357
+#: contrib/sender/models.py:360
 msgid "Insert date"
 msgstr "Data inserimento"
 
-#: contrib/sender/models.py:362
+#: contrib/sender/models.py:365
 msgid "Attachment"
 msgstr "Allegato"
 
-#: contrib/sender/models.py:363 contrib/sender/models.py:444
-#: contrib/sender/views.py:352
+#: contrib/sender/models.py:366 contrib/sender/models.py:445
+#: contrib/sender/views.py:373
 msgid "Attachments"
 msgstr "Allegati"
 
-#: contrib/sender/models.py:384 contrib/sender/models.py:446
+#: contrib/sender/models.py:387 contrib/sender/models.py:447
 msgid "Read required"
 msgstr "Lettura obbligatoria"
 
-#: contrib/sender/models.py:387
+#: contrib/sender/models.py:390
 msgid "Message typology"
 msgstr "Tipologia messaggio"
 
-#: contrib/sender/models.py:388 contrib/sender/models.py:405
+#: contrib/sender/models.py:391 contrib/sender/models.py:408
 msgid "Message typologies"
 msgstr "Tipologie messaggi"
 
-#: contrib/sender/models.py:404
+#: contrib/sender/models.py:407
 msgid "Icon"
 msgstr "Icona"
 
-#: contrib/sender/models.py:410
+#: contrib/sender/models.py:413
 msgid "Message typologies group"
 msgstr "Messaggio di un gruppo di tipologie"
 
-#: contrib/sender/models.py:411
+#: contrib/sender/models.py:414
 msgid "Message typologies groups"
 msgstr "Messaggio di gruppi di tipologie"
 
@@ -335,122 +335,122 @@ msgstr "Metodo di invio"
 
 #: contrib/sender/models.py:433
 #: contrib/sender/templates/django_webix/sender/sender.js:118
-#: contrib/sender/views.py:327
+#: contrib/sender/views.py:346
 msgid "Subject"
 msgstr "Oggetto"
 
-#: contrib/sender/models.py:434 contrib/sender/views.py:339
+#: contrib/sender/models.py:434 contrib/sender/views.py:359
 msgid "Body"
 msgstr "Corpo"
 
-#: contrib/sender/models.py:436
+#: contrib/sender/models.py:438
 msgid "Sent"
 msgstr "Inviati"
 
-#: contrib/sender/models.py:437
+#: contrib/sender/models.py:439
 msgid "Received"
 msgstr "Ricevuti"
 
-#: contrib/sender/models.py:449
+#: contrib/sender/models.py:450
 msgid "Cost"
 msgstr "Costo"
 
-#: contrib/sender/models.py:450
+#: contrib/sender/models.py:451
 #: contrib/sender/templates/django_webix/sender/invoices.js:86
-#: contrib/sender/views.py:800
+#: contrib/sender/views.py:848
 msgid "Invoiced"
 msgstr "Fatturato"
 
-#: contrib/sender/models.py:455
+#: contrib/sender/models.py:457
 msgid "Sender"
 msgstr "Mittente"
 
-#: contrib/sender/models.py:461
+#: contrib/sender/models.py:463
 msgid "Sent message"
 msgstr "Messaggio inviato"
 
-#: contrib/sender/models.py:462
+#: contrib/sender/models.py:464
 msgid "Sent messages"
 msgstr "Messaggi inviati"
 
-#: contrib/sender/models.py:474 contrib/sender/models.py:510
+#: contrib/sender/models.py:475 contrib/sender/models.py:514
 msgid "Message sent"
 msgstr "Messaggio inviato"
 
-#: contrib/sender/models.py:478
+#: contrib/sender/models.py:479
 msgid "Recipient address"
 msgstr "Indirizzo del destinatario"
 
-#: contrib/sender/models.py:479
+#: contrib/sender/models.py:480
 msgid "Sent number"
 msgstr "Numero inviati"
 
-#: contrib/sender/models.py:481
+#: contrib/sender/models.py:484
 #: contrib/sender/templates/django_webix/sender/invoices.js:68
 msgid "Success"
 msgstr "Successo"
 
-#: contrib/sender/models.py:482
+#: contrib/sender/models.py:485
 msgid "Failed"
 msgstr "Fallito"
 
-#: contrib/sender/models.py:483
+#: contrib/sender/models.py:486
 msgid "Unknown"
 msgstr "Sconosciuto"
 
-#: contrib/sender/models.py:484
+#: contrib/sender/models.py:487
 msgid "Invalid"
 msgstr "Non valido"
 
-#: contrib/sender/models.py:485
+#: contrib/sender/models.py:488
 msgid "Duplicate"
 msgstr "Duplicato"
 
-#: contrib/sender/models.py:488
+#: contrib/sender/models.py:493
 msgid "Extra JSON"
 msgstr "Extra JSON"
 
-#: contrib/sender/models.py:497
+#: contrib/sender/models.py:502
 msgid "Recipient"
 msgstr "Destinatario"
 
-#: contrib/sender/models.py:498
+#: contrib/sender/models.py:503
 msgid "Recipients"
 msgstr "Destinatari"
 
-#: contrib/sender/models.py:517
+#: contrib/sender/models.py:521
 msgid "Readed message"
 msgstr "Messaggio letto"
 
-#: contrib/sender/models.py:518
+#: contrib/sender/models.py:522
 msgid "Readed messages"
 msgstr "Messaggi letti"
 
-#: contrib/sender/models.py:537
+#: contrib/sender/models.py:541
 msgid "Telegram Persistence"
 msgstr "Persistenza Telegram"
 
-#: contrib/sender/models.py:538
+#: contrib/sender/models.py:542
 msgid "Telegram Persistences"
 msgstr "Persistenze Telegram"
 
-#: contrib/sender/send_methods/skebby/send_utils.py:190
+#: contrib/sender/send_methods/skebby/send_utils.py:315
 msgid "Invalid characters"
 msgstr "Caratteri invalidi"
 
-#: contrib/sender/send_methods/telegram/handlers.py:13
+#: contrib/sender/send_methods/telegram/handlers.py:18
 msgid "Hi!"
 msgstr "Ciao!"
 
-#: contrib/sender/send_methods/telegram/handlers.py:18
+#: contrib/sender/send_methods/telegram/handlers.py:23
 msgid "Help!"
 msgstr "Aiuto!"
 
-#: contrib/sender/send_methods/telegram/handlers.py:44
+#: contrib/sender/send_methods/telegram/handlers.py:49
 msgid "Your user is not authorized to use this Bot"
 msgstr "Il tuo utente non è autorizzato ad utilizzare questo Bot"
 
-#: contrib/sender/send_methods/telegram/handlers.py:52
+#: contrib/sender/send_methods/telegram/handlers.py:57
 msgid ""
 "Hi! Send me your phone number to connect your web account!\n"
 "Type /cancel to exit"
@@ -458,21 +458,21 @@ msgstr ""
 "Ciao! Inviami il tuo numero di telefono per connettere il tuo account!\n"
 "Scrivi /cancel per uscire"
 
-#: contrib/sender/send_methods/telegram/handlers.py:54
+#: contrib/sender/send_methods/telegram/handlers.py:59
 msgid "Send my phone number"
 msgstr "Invia il mio numero"
 
-#: contrib/sender/send_methods/telegram/handlers.py:84
+#: contrib/sender/send_methods/telegram/handlers.py:89
 msgid "Welcome {}! Now you can use this bot"
 msgstr "Benvenuto {}! Da ora puoi utilizzare questo bot"
 
-#: contrib/sender/send_methods/telegram/handlers.py:89
+#: contrib/sender/send_methods/telegram/handlers.py:94
 msgid "Your number is not in our database, contact us to add"
 msgstr ""
 "Il tuo numero di telefono non è nel nostro database, contattaci per "
 "aggiungerlo"
 
-#: contrib/sender/send_methods/telegram/handlers.py:100
+#: contrib/sender/send_methods/telegram/handlers.py:104
 msgid "Okay, if you want to connect your account type /start"
 msgstr "Ok, se vuoi connettere il tuo account scrivi /start"
 
@@ -673,140 +673,140 @@ msgstr "Risultati"
 msgid "There are no recipients for this communication"
 msgstr "Non ci sono destinatari per questa comunicazione"
 
-#: contrib/sender/utils.py:103 contrib/sender/utils.py:108
-#: contrib/sender/utils.py:113
+#: contrib/sender/utils.py:111 contrib/sender/utils.py:116
+#: contrib/sender/utils.py:121
 msgid "Related is not subclass of `DjangoWebixSender`"
 msgstr "Oggetto collegato non è una sottoclasse di `DjangoWebixSender`"
 
-#: contrib/sender/utils.py:126 contrib/sender/views.py:774
+#: contrib/sender/utils.py:134 contrib/sender/views.py:825
 msgid "Invalid send method"
 msgstr "Metodo di invio non valido"
 
-#: contrib/sender/views.py:155
+#: contrib/sender/views.py:160
 msgid "Content type doesn't match"
 msgstr "Nessun content type identificato"
 
-#: contrib/sender/views.py:160
+#: contrib/sender/views.py:165
 msgid "Not valid and/or filter"
 msgstr "Filtro e/o non valido"
 
-#: contrib/sender/views.py:276
+#: contrib/sender/views.py:288
 msgid "Messages"
 msgstr "Messaggi"
 
-#: contrib/sender/views.py:290
+#: contrib/sender/views.py:302
 msgid "Send method type"
 msgstr "Metodo di invio"
 
-#: contrib/sender/views.py:304
+#: contrib/sender/views.py:321
 msgid "Sent date"
 msgstr "Data invio"
 
-#: contrib/sender/views.py:618
+#: contrib/sender/views.py:668
 msgid "Jan"
 msgstr "Gen"
 
-#: contrib/sender/views.py:618
+#: contrib/sender/views.py:669
 msgid "Feb"
 msgstr "Feb"
 
-#: contrib/sender/views.py:618
+#: contrib/sender/views.py:670
 msgid "Mar"
 msgstr "Mar"
 
-#: contrib/sender/views.py:618
+#: contrib/sender/views.py:671
 msgid "Apr"
 msgstr "Apr"
 
-#: contrib/sender/views.py:618
+#: contrib/sender/views.py:672
 msgid "May"
 msgstr "Mag"
 
-#: contrib/sender/views.py:618
+#: contrib/sender/views.py:673
 msgid "Jun"
 msgstr "giu"
 
-#: contrib/sender/views.py:618
+#: contrib/sender/views.py:674
 msgid "Jul"
 msgstr "lug"
 
-#: contrib/sender/views.py:618
+#: contrib/sender/views.py:675
 msgid "Aug"
 msgstr "ago"
 
-#: contrib/sender/views.py:618
+#: contrib/sender/views.py:676
 msgid "Sep"
 msgstr "set"
 
-#: contrib/sender/views.py:618
+#: contrib/sender/views.py:677
 msgid "Oct"
 msgstr "ott"
 
-#: contrib/sender/views.py:619
+#: contrib/sender/views.py:678
 msgid "Nov"
 msgstr "nov"
 
-#: contrib/sender/views.py:619
+#: contrib/sender/views.py:679
 msgid "Dec"
 msgstr "dic"
 
-#: contrib/sender/views.py:622
+#: contrib/sender/views.py:681
 msgid "Jan - Feb"
 msgstr "gen - feb"
 
-#: contrib/sender/views.py:622
+#: contrib/sender/views.py:681
 msgid "Mar - Apr"
 msgstr "mar - apr"
 
-#: contrib/sender/views.py:622
+#: contrib/sender/views.py:681
 msgid "May - Jun"
 msgstr "mag - giu"
 
-#: contrib/sender/views.py:622
+#: contrib/sender/views.py:681
 msgid "Jul - Aug"
 msgstr "lug - ago"
 
-#: contrib/sender/views.py:622
+#: contrib/sender/views.py:681
 msgid "Sep - Oct"
 msgstr "set - ott"
 
-#: contrib/sender/views.py:622
+#: contrib/sender/views.py:681
 msgid "Nov - Dec"
 msgstr "nov - dic"
 
-#: contrib/sender/views.py:625
+#: contrib/sender/views.py:682
 msgid "First quarter"
 msgstr "Primo quarto"
 
-#: contrib/sender/views.py:625
+#: contrib/sender/views.py:682
 msgid "Second quarter"
 msgstr "Secondo quarto"
 
-#: contrib/sender/views.py:625
+#: contrib/sender/views.py:682
 msgid "Third quarter"
 msgstr "Terzo quarto"
 
-#: contrib/sender/views.py:625
+#: contrib/sender/views.py:682
 msgid "Fourth quarter"
 msgstr "Quarto quarto"
 
-#: contrib/sender/views.py:628
+#: contrib/sender/views.py:683
 msgid "First semester"
 msgstr "Primo semestre"
 
-#: contrib/sender/views.py:628
+#: contrib/sender/views.py:683
 msgid "Second semester"
 msgstr "Secondo semestre"
 
-#: contrib/sender/views.py:631
+#: contrib/sender/views.py:684
 msgid "Year"
 msgstr "Anno"
 
-#: contrib/sender/views.py:681 contrib/sender/views.py:775
+#: contrib/sender/views.py:725 contrib/sender/views.py:826
 msgid "Sender not specified"
 msgstr "Destinatario non specificato"
 
-#: contrib/sender/views.py:772
+#: contrib/sender/views.py:823
 msgid "Invalid period"
 msgstr "Periodo non valido"
 

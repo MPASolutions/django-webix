@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-11-27 08:41+0100\n"
+"POT-Creation-Date: 2024-12-16 10:49+0100\n"
 "PO-Revision-Date: 2024-04-15 12:26+0200\n"
 "Last-Translator: Stefano Menegon <dallago@mpasol.it>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -19,11 +19,11 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Translated-Using: django-rosetta 0.10.0\n"
 
-#: contrib/validator/apps.py:8
+#: contrib/validator/apps.py:9
 msgid "Django Webix Validator"
 msgstr "Validatore"
 
-#: contrib/validator/models.py:13
+#: contrib/validator/models.py:14
 #: contrib/validator/templates/django_webix/validator/form_import_validation.js:21
 msgid "Attachment"
 msgstr "Allegato"
@@ -77,11 +77,11 @@ msgstr "Chiudi e correggi"
 msgid "Continue with warnings"
 msgstr "Continua con gli avvisi"
 
-#: contrib/validator/utils.py:34
+#: contrib/validator/utils.py:49
 msgid "No file uploaded"
 msgstr "Nessun file caricato"
 
-#: contrib/validator/utils.py:36
+#: contrib/validator/utils.py:51
 msgid ""
 "Text file not recognizable as delimiter-separated values with separator ' {} "
 "' (Exception:{})"
@@ -89,60 +89,60 @@ msgstr ""
 "File di testo non riconoscibile come delimiter-separated values con "
 "separatore ' {} ' (Exception:{})"
 
-#: contrib/validator/utils.py:37
+#: contrib/validator/utils.py:53
 msgid "Could not find file '{}' (or read from buffer)"
 msgstr "Impossibile trovare il file '{}' (o leggere da buffer)"
 
-#: contrib/validator/utils.py:38
+#: contrib/validator/utils.py:54
 msgid "File format '{}' not recognized, supported formats: {}"
 msgstr "Formato del file '{}' non riconosciuto, formati supportati: {}"
 
-#: contrib/validator/utils.py:39
+#: contrib/validator/utils.py:55
 msgid "Internal file format content was not recognized"
 msgstr "Formato file non identificato"
 
-#: contrib/validator/utils.py:40
+#: contrib/validator/utils.py:56
 msgid "File type '{}' not supported"
 msgstr "Tipo di file '{}' non supportato"
 
-#: contrib/validator/utils.py:41
+#: contrib/validator/utils.py:57
 msgid "There is no sheet"
 msgstr "Non è presente alcun foglio"
 
-#: contrib/validator/utils.py:42
+#: contrib/validator/utils.py:58
 msgid "There is no data in the sheet {}"
 msgstr "Non è presente alcun dato nel foglio {}"
 
-#: contrib/validator/utils.py:43
+#: contrib/validator/utils.py:59
 msgid "There are columns with no name"
 msgstr "Sono presenti colonne senza nome"
 
-#: contrib/validator/utils.py:44
+#: contrib/validator/utils.py:60
 msgid "There are columns with no name: {}"
 msgstr "Sono presenti colonne senza nome: {}"
 
-#: contrib/validator/utils.py:45
+#: contrib/validator/utils.py:61
 msgid "There are not enough columns: there are {} columns, {} needed"
 msgstr ""
 "Non sono presenti sufficienti colonne: presenti {} colonne, {} necessarie"
 
-#: contrib/validator/utils.py:46
+#: contrib/validator/utils.py:62
 msgid "Column headers ({}^ row) are incorrect"
 msgstr "Le intestazioni delle colonne ({}^ riga) non sono corrette"
 
-#: contrib/validator/utils.py:47
+#: contrib/validator/utils.py:63
 msgid "There is no column '{}'"
 msgstr "Non è presente la colonna '{}'"
 
-#: contrib/validator/utils.py:48
+#: contrib/validator/utils.py:64
 msgid "The name of the {}^ column ({}) must be '{}' (instead of '{}')"
 msgstr "Il nome della {}^ colonna ({}) deve essere '{}' (anzichè '{}')"
 
-#: contrib/validator/utils.py:49
+#: contrib/validator/utils.py:65
 msgid "A uniqueness rule has been violated in the fields {}"
 msgstr "È stata violata una regola di unicità sui campi {}"
 
-#: contrib/validator/utils.py:51
+#: contrib/validator/utils.py:67
 msgid ""
 "The zip file is supported only if the following files are contained .shp, ."
 "dbf, .prj, .shx"
@@ -150,21 +150,21 @@ msgstr ""
 "Lo zip file è supportato solo se sono contenuti i seguenti file .shp, .dbf, ."
 "prj, .shx"
 
-#: contrib/validator/utils.py:131 contrib/validator/utils.py:141
-#: contrib/validator/utils.py:151 contrib/validator/utils.py:166
+#: contrib/validator/utils.py:158 contrib/validator/utils.py:168
+#: contrib/validator/utils.py:178 contrib/validator/utils.py:193
 msgid "This operation can only be done before validating"
 msgstr "Questa operazione può essere eseguita solo prima di validare"
 
-#: contrib/validator/utils.py:554
+#: contrib/validator/utils.py:615
 msgid "Validate save mode are ROW | FULL"
 msgstr "Le modalità di validazione sono RIGA | COMPLETO"
 
-#: contrib/validator/validators.py:21
+#: contrib/validator/validators.py:20
 #, python-format
 msgid "%(value)s is not a boolean value"
 msgstr "%(value)s non è un valore booleano"
 
-#: contrib/validator/validators.py:27
+#: contrib/validator/validators.py:26
 #, python-format
 msgid "Ensure this value is strictly greater than %(limit_value)s."
 msgstr ""
