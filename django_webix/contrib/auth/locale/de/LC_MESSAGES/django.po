@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-01-03 07:25+0100\n"
+"POT-Creation-Date: 2024-12-16 10:49+0100\n"
 "PO-Revision-Date: 2024-01-08 08:51+0100\n"
 "Last-Translator:   <>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -19,15 +19,15 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Translated-Using: django-rosetta 0.9.9\n"
 
-#: contrib/auth/apps.py:8
+#: contrib/auth/apps.py:9
 msgid "Django Webix Authentication and Authorization"
 msgstr "Django webix Verwaltung"
 
-#: contrib/auth/forms.py:12
+#: contrib/auth/forms.py:11
 msgid "Username"
 msgstr "Benutzer"
 
-#: contrib/auth/forms.py:40
+#: contrib/auth/forms.py:39
 msgid "Enter your username"
 msgstr "Geben Sie Ihren Benutzernamen ein"
 
@@ -43,8 +43,8 @@ msgstr "Login"
 msgid ""
 "Enter the new password twice, to verify that you have written it correctly"
 msgstr ""
-"Geben Sie das neue Passwort zweimal ein, um zu überprüfen, ob Sie es richtig"
-" geschrieben haben."
+"Geben Sie das neue Passwort zweimal ein, um zu überprüfen, ob Sie es richtig "
+"geschrieben haben."
 
 #: contrib/auth/templates/django_webix/auth/password_reset/password_reset_confirm.js:56
 msgid "Change my password"
@@ -67,8 +67,8 @@ msgstr "Zurück zur Startseite"
 #: contrib/auth/templates/django_webix/auth/password_reset/password_reset_done.js:26
 msgid ""
 "We have sent instructions for setting the password to the email address you "
-"provided. You should receive them shortly as long as the address you entered"
-" is valid."
+"provided. You should receive them shortly as long as the address you entered "
+"is valid."
 msgstr ""
 "Wir haben eine Anleitung zum Einrichten des Passworts an die von Ihnen "
 "angegebene E-Mail-Adresse geschickt. Sie sollten sie in Kürze erhalten, "

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-11-14 11:56+0100\n"
+"POT-Creation-Date: 2024-12-16 10:49+0100\n"
 "PO-Revision-Date: 2022-07-19 15:50+0050\n"
 "Last-Translator: Stefano Menegon <menegon@mpasol.it>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -25,39 +25,39 @@ msgstr ""
 msgid "Django Webix Filter"
 msgstr "Django webix Site Verwaltung"
 
-#: contrib/filter/models.py:16
+#: contrib/filter/models.py:12
 msgid "Insert date"
 msgstr ""
 
-#: contrib/filter/models.py:17
+#: contrib/filter/models.py:13
 #, fuzzy
 #| msgid "Private data"
 msgid "Update date"
 msgstr "Private data"
 
-#: contrib/filter/models.py:18 contrib/filter/views.py:340
+#: contrib/filter/models.py:14 contrib/filter/views.py:336
 msgid "Title"
 msgstr ""
 
-#: contrib/filter/models.py:19 contrib/filter/views.py:350
+#: contrib/filter/models.py:15 contrib/filter/views.py:347
 msgid "Description"
 msgstr "Beschreibung"
 
-#: contrib/filter/models.py:20 contrib/filter/views.py:360
+#: contrib/filter/models.py:16 contrib/filter/views.py:358
 msgid "Model"
 msgstr "Modell"
 
-#: contrib/filter/models.py:21
+#: contrib/filter/models.py:17
 msgid "Filter"
 msgstr "Filter"
 
-#: contrib/filter/models.py:23
+#: contrib/filter/models.py:20
 #, fuzzy
 #| msgid "Manage users"
 msgid "Insert user"
 msgstr "Verwalten von Benutzern"
 
-#: contrib/filter/models.py:25 contrib/filter/views.py:370
+#: contrib/filter/models.py:23 contrib/filter/views.py:369
 msgid "Visibility"
 msgstr ""
 
@@ -75,23 +75,23 @@ msgstr "Private data"
 msgid "Restricted"
 msgstr ""
 
-#: contrib/filter/models.py:30
+#: contrib/filter/models.py:35
 #, fuzzy
 #| msgid "Enabled groups"
 msgid "Assignees groups"
 msgstr "Aktivierte Gruppen"
 
-#: contrib/filter/models.py:31
+#: contrib/filter/models.py:37
 msgid "Shared edit group"
 msgstr ""
 
-#: contrib/filter/models.py:36
+#: contrib/filter/models.py:42
 #, fuzzy
 #| msgid "Filter"
 msgid "Webix Filter"
 msgstr "Filter"
 
-#: contrib/filter/models.py:37
+#: contrib/filter/models.py:43
 #, fuzzy
 #| msgid "Filter"
 msgid "Webix Filters"
@@ -179,10 +179,10 @@ msgstr "Ungültige E-mail"
 msgid "Disable temporary filter"
 msgstr ""
 
-#: contrib/filter/utils/operators.py:202
+#: contrib/filter/utils/operators.py:273
 msgid "Overlap"
 msgstr ""
 
-#: contrib/filter/utils/operators.py:204
+#: contrib/filter/utils/operators.py:274
 msgid "Contained by"
 msgstr ""

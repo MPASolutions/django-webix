@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-07-03 11:40+0200\n"
+"POT-Creation-Date: 2024-12-16 10:49+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,15 +18,15 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: contrib/auth/apps.py:8
+#: contrib/auth/apps.py:9
 msgid "Django Webix Authentication and Authorization"
 msgstr ""
 
-#: contrib/auth/forms.py:12
+#: contrib/auth/forms.py:11
 msgid "Username"
 msgstr ""
 
-#: contrib/auth/forms.py:40
+#: contrib/auth/forms.py:39
 msgid "Enter your username"
 msgstr ""
 
