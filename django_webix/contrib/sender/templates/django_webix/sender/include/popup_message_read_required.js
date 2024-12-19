@@ -11,7 +11,6 @@ webix.ui({
     id: "popup_messages_win",
     width: 1000,
     height: 400,
-    scrool: 'y',
     position: "center",
     modal: true,
     head: {
@@ -30,11 +29,18 @@ webix.ui({
     body: {
         rows: [
             {
-                id: "message",
-                type: {height: "auto"},
-                template: '<div style="padding:10px;font-size:20px;float:none;color:#000 !important;">' +
+                view: "scrollview",
+                scroll: "y",
+                body: {
+                rows:[{
+                    id: "message",
+                    view:"template",
+                    autoheight:true,
+                    template: '<p style="padding:10px;font-size:20px;color:#000 !important;">' +
                     "<span style='font-size: x-small; float: right'>{{ message_unread.creation_date|naturaltime }}</span>" +
-                    '{{ message_unread.message_sent.body|linebreaksbr }}</div>'
+                    '{{ message_unread.message_sent.body|linebreaksbr }}</p>'
+                    }]
+                },
             },
             {% if message_unread.message_sent.attachments.exists %}
             { view:"template", template:"{{_("Click and open each file before confirming the reading of this communication")}}", type:"header" },

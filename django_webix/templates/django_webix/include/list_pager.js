@@ -72,6 +72,32 @@
                     width:360,
                     {% if request.user_agent.is_mobile %}hidden: true,{% endif %}
                     $template: "Spacer"
+                },
+            {%  if is_json_loading %}
+                {
+                    id: '{{ view_prefix }}datatable_pager_goto',
+                    cols:[
+                        {
+                            view:"text",
+                            name:"goto_page",
+                            id:"goto_page",
+                            width:70,
+                            pattern:{ mask:'#'.repeat(Math.pow(2,10)), allow:/[0-9]/g}
+                        },
+                        {
+                            view:"button",
+                            value:"{{ _("Go")|escapejs }}",
+                            width:40,
+                            align:"right",
+                            on: {
+                                onItemClick: function (id, e, node){
+                                    $$('{{ view_prefix }}datatable').setPage($$('goto_page').getValue()-1);
+                                }
+                            }
+                        },
+                    ]
                 }
+            {% endif %}
+
             ]
         })

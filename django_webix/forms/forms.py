@@ -417,7 +417,7 @@ class BaseWebixMixin:
                 # el.update({'view':''})
                 if initial is not None:
                     el.update({"value": initial})
-            # Image  # TODO
+            # Image
             elif "image" in str(type(field)).lower():
                 if initial is not None:
                     el.update({"value": None})
@@ -430,9 +430,23 @@ class BaseWebixMixin:
                         "height": 50,
                         "label": _("Upload new image") if not initial else _("Change image"),
                         "labelAlign": self.get_label_align(),
-                        # 'on': {
-                        #     'onAfterFileAdd': "image_add('" + self[name].auto_id + "');"
-                        # }
+                        "on": {
+                            "onAfterFileAdd": (
+                                "(function (data) {{ "
+                                "var file = data.file; "
+                                "var reader = new FileReader(); "
+                                "reader.onload = function(event) { "
+                                " if (data.file.type.search('image')>=0) { "
+                                "  $$('block_preview_" + self[name].auto_id + "').setHTML("
+                                "'<img style=\"height: 100px; width: 170px;\" src=\"'+event.target.result+'\">');"
+                                " } else {"
+                                "  $$('block_preview_" + self[name].auto_id + "').setHTML(data.file.name); "
+                                " }"
+                                "}; "
+                                "reader.readAsDataURL(file);"
+                                "}} )"
+                            )
+                        },
                     }
                 )
                 delete_hidden = True
@@ -471,6 +485,7 @@ class BaseWebixMixin:
                                 {
                                     "name_label": name,
                                     "id_label": "preview_" + self[name].auto_id,
+                                    "id": "block_preview_" + self[name].auto_id,
                                     "borderless": True,
                                     "template": _template_file,
                                     "height": 100,
@@ -554,6 +569,13 @@ class BaseWebixMixin:
                         "width": 150,
                         "heigth": 40,
                         "label": _("Upload file") if not initial else _("Change file"),
+                        "on": {
+                            "onAfterFileAdd": (
+                                "(function (data) {{ "
+                                "$$('block_name_" + self[name].auto_id + "').setHTML(data.file.name);"
+                                "}} )"
+                            )
+                        },
                     }
                 )
                 if isinstance(field.widget, forms.widgets.FileInput):
@@ -603,7 +625,9 @@ class BaseWebixMixin:
                                         {
                                             "name_label": name,
                                             "id_label": name,
+                                            "id": "block_name_" + self[name].auto_id,
                                             "borderless": True,
+                                            "view": "template",
                                             "template": "{}".format(os.path.basename(initial.name) if initial else ""),
                                             "height": 40,
                                             # attention labelAlign here not works because input is not a template

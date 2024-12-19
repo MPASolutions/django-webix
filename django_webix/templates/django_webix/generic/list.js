@@ -326,8 +326,10 @@ if (
                                 $$('{{ view_prefix }}datatable').view_count_total = _data.total_count;
                                 if (_data.total_count > {{ paginate_count_default }}){
                                     $$('{{ view_prefix }}datatable_pager').show();
+                                    $$('{{ view_prefix }}datatable_pager_goto').show();
                                 } else {
                                     $$('{{ view_prefix }}datatable_pager').hide();
+                                    $$('{{ view_prefix }}datatable_pager_goto').hide();
                                 }
                                 // counter
                                 {{ view_prefix }}update_counter();
@@ -367,12 +369,24 @@ if (
             {% if is_enable_footer %}
             footer: true,
             {% endif %}
+            onMouseMove:{},
             on: {
                 {% block datatable_on %}
+                onMouseMoving:function(ev){
+                   var id = this.locate(ev);
+                   if (id != this.last_used_id)
+                     this.removeRowCss(this.last_used_id, "hover");
+                   this.addRowCss(id, "hover");
+                   this.last_used_id = id;
+                },
                 onCheck: function (row, column, state) {
+                    if (state==1){
+                       this.addRowCss(row, "selected");
+                    } else {
+                       this.removeRowCss(row, "selected");
+                    }
                     {{ view_prefix }}update_counter();
                 },
-
                 {% if is_json_loading %}
                 onBeforeFilter: function (id) {
                     if ({{ view_prefix }}_first_load==true) return false;

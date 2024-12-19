@@ -156,6 +156,13 @@ div.webix_ss_header input[type='checkbox'] {
     background: #F0DCB6;
 }
 
+.hover {
+    background: rgb(147, 211, 255) !important;
+}
+.selected {
+    background: rgb(222, 222, 222);
+}
+
 .webix_invalid .webix_inp_bottom_label {
     font-size: 11px;
     color: #fd595f;
