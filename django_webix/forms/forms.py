@@ -216,7 +216,7 @@ class BaseWebixMixin:
             from django.contrib.admin.widgets import url_params_from_lookup_dict
 
             dict_limit_choices_to = url_params_from_lookup_dict(limit_choices_to)
-            url += "&query_string=" + urlencode(dict_limit_choices_to)
+            url += "&query_string=" + urlencode(dict_limit_choices_to).replace("&", ":")
 
         return url.format(
             url=reverse("webix_autocomplete_lookup"),
