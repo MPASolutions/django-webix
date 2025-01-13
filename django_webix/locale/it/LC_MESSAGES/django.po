@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-12-16 10:49+0100\n"
+"POT-Creation-Date: 2025-01-13 17:42+0100\n"
 "PO-Revision-Date: 2024-03-19 11:45+0100\n"
 "Last-Translator: Stefano Menegon <dallago@mpasol.it>\n"
 "Language-Team: \n"
@@ -107,56 +107,56 @@ msgstr "Carica un’immagine"
 msgid "Change image"
 msgstr "Cambia immagine"
 
-#: forms/forms.py:522 forms/forms.py:663
+#: forms/forms.py:537 forms/forms.py:687
 msgid "Deleted"
 msgstr "Cancella"
 
-#: forms/forms.py:556
+#: forms/forms.py:571
 msgid "Upload file"
 msgstr "Carica un file"
 
-#: forms/forms.py:556
+#: forms/forms.py:571
 msgid "Change file"
 msgstr "Cambia file"
 
-#: forms/forms.py:571
+#: forms/forms.py:593
 msgid "Upload folder"
 msgstr "Carica una cartella"
 
-#: forms/forms.py:571
+#: forms/forms.py:593
 msgid "Change folder"
 msgstr "Cambia cartella"
 
-#: forms/forms.py:573
+#: forms/forms.py:595
 msgid "Upload files"
 msgstr "Carica files"
 
-#: forms/forms.py:573
+#: forms/forms.py:595
 msgid "Change files"
 msgstr "Cambia files"
 
-#: forms/forms.py:693
+#: forms/forms.py:717
 msgid "MultipleChoiceField is available only with PRO webix license"
 msgstr "MultipleChoiceField è disponibile solo con licenza PRO webix"
 
-#: forms/forms.py:734 forms/forms.py:767 forms/forms.py:837 forms/forms.py:901
-#: forms/forms.py:995
+#: forms/forms.py:758 forms/forms.py:791 forms/forms.py:861 forms/forms.py:925
+#: forms/forms.py:1019
 msgid "Write and select"
 msgstr "Scrivi e seleziona"
 
-#: forms/forms.py:877 forms/forms.py:926
+#: forms/forms.py:901 forms/forms.py:950
 msgid "Click and select"
 msgstr "Clicca e seleziona"
 
-#: forms/forms.py:1043
+#: forms/forms.py:1067
 msgid "Initial value {} for geo field {} is not supported"
 msgstr "Il valore iniziale {} per il campo geografico {} non è supportato"
 
-#: forms/forms.py:1082
+#: forms/forms.py:1106
 msgid "Edit"
 msgstr "Modifica"
 
-#: forms/forms.py:1242
+#: forms/forms.py:1266
 msgid "Type of field {} not supported"
 msgstr "Tipo di campo {} non supportato"
 
@@ -228,17 +228,17 @@ msgstr "Applica i filtri"
 msgid "Filter"
 msgstr "Filtra"
 
-#: templates/django_webix/generic/list.js:465
+#: templates/django_webix/generic/list.js:479
 msgid "You do not have permission to edit this item"
 msgstr "Non hai i permessi per modificare questo elemento"
 
-#: templates/django_webix/generic/list.js:467
+#: templates/django_webix/generic/list.js:481
 #: templates/django_webix/include/utils.js:388
 #: templates/django_webix/include/utils.js:448
 msgid "Server error"
 msgstr "Errore sul server"
 
-#: templates/django_webix/generic/list.js:527
+#: templates/django_webix/generic/list.js:541
 msgid "Double click to edit the element"
 msgstr "Doppio click per editare l'elemento"
 
@@ -253,7 +253,7 @@ msgstr "Chiudi"
 #: templates/django_webix/include/actions_list.js:37
 #: templates/django_webix/include/actions_utils.js:66
 #: templates/django_webix/include/actions_utils.js:97
-#: templates/django_webix/include/form_errors_message.js:13
+#: templates/django_webix/include/form_errors_message.js:20
 #: templates/django_webix/include/form_errors_popup.js:13
 msgid "Oops! Something went wrong..."
 msgstr "Oops! qualcosa è andato storto..."
@@ -292,7 +292,7 @@ msgstr "Nuovo elemento"
 msgid "Add"
 msgstr "Aggiungi"
 
-#: templates/django_webix/include/form_errors_message.js:15
+#: templates/django_webix/include/form_errors_message.js:22
 msgid "Error in the following fields:"
 msgstr "Errore nei seguenti campi:"
 
@@ -368,6 +368,11 @@ msgstr "Seleziona tutti"
 #: templates/django_webix/include/list_pager.js:24
 msgid "Cancel selection"
 msgstr "Annulla selezione"
+
+#: templates/django_webix/include/list_pager.js:89
+#: views/generic/decorators.py:25 views/generic/list.py:84
+msgid "Go"
+msgstr "Vai"
 
 #: templates/django_webix/include/toolbar_form.js:18
 #: views/generic/actions.py:44
@@ -571,10 +576,6 @@ msgstr "Compila i campi"
 #: views/generic/decorators.py:24 views/generic/list.py:83
 msgid "Are you sure you want to proceed with this action?"
 msgstr "Sei certo che vuoi procedere con questa azione?"
-
-#: views/generic/decorators.py:25 views/generic/list.py:84
-msgid "Go"
-msgstr "Vai"
 
 #: views/generic/decorators.py:26 views/generic/list.py:85
 msgid "Proceed"
