@@ -1275,7 +1275,7 @@ class BaseWebixMixin:
                 if initial is not None:
                     el.update({"value": initial})
                 # Default if is required and there are only one option
-                if field.required and initial is None and len(_choices) == 1:
+                if field.required and initial is None and len(list(_choices)) == 1:
                     el.update({"value": "{}".format(_choices[0][0])})
 
             # Widget RadioSelect
