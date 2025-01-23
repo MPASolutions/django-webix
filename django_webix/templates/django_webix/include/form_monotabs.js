@@ -31,7 +31,7 @@
                             {% if inline.auto_position %}
                                 {
                                     id: '{{ inline.get_container_id }}',
-                                    value: "<div style='position: relative'>{{ inline.get_name|escapejs }} <span class='webix_badge' style='background-color:#888 !important; margin-top: -2px; margin-right: 5px;'><strong>" + {{ inline.initial_form_count }} + "</strong></span></div>"
+                                    value: "<div style='position: relative'>{{ inline.get_name|escapejs }} <span class='webix_badge' style='background-color:#888 !important; position: relative; font-size: 14px;'><strong>" + {{ inline.initial_form_count }} + "</strong></span></div>"
                                 },
                             {% endif %}
                         {% endfor %}
