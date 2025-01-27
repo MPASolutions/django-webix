@@ -18,6 +18,7 @@ class BaseGenericWebixInlineFormSet(BaseGenericInlineFormSet):
         self.has_add_permission = kwargs.pop("has_add_permission", None)
         self.has_change_permission = kwargs.pop("has_change_permission", None)
         self.has_delete_permission = kwargs.pop("has_delete_permission", None)
+        self.accordion_collapsed = kwargs.pop("accordion_collapsed", False)
         self.name = kwargs.pop("name", None)
         super().__init__(**kwargs)
 
@@ -135,6 +136,7 @@ class WebixGenericInlineFormSet(GenericInlineFormSetFactory):
                 "request": self.request,
                 "container_id": getattr(self, "container_id", None),
                 "auto_position": getattr(self, "auto_position", True),
+                "accordion_collapsed": getattr(self, "accordion_collapsed", False),
                 "initial": self.initial,
                 "name": getattr(self, "name", None),
             }
