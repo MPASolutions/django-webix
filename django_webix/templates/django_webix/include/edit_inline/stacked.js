@@ -13,6 +13,9 @@ $$('{{ inline.get_container_id|default_if_none:inline.get_container_id }}').addV
                         id: '{{ inline.prefix }}-form',
                         view: "accordion",
                         multi: true,
+                        {% if inline.accordion_collapsed %}
+                        collapsed:true,
+                        {% endif %}
                         rows: [
                             {{ inline.management_form.as_webix|safe }},
                             {% for inline_form in inline %}
