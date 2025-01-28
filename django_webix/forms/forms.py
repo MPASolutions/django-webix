@@ -572,8 +572,9 @@ class BaseWebixMixin:
                         "on": {
                             "onAfterFileAdd": (
                                 "(function (data) {{ "
+                                "if ($$('block_name_" + self[name].auto_id + "')!=undefined){"
                                 "$$('block_name_" + self[name].auto_id + "').setHTML(data.file.name);"
-                                "}} )"
+                                "}}} )"
                             )
                         },
                     }
@@ -598,113 +599,104 @@ class BaseWebixMixin:
                 if initial:
                     delete_hidden = False
 
-                elements.update(
-                    {
-                        "{}_block".format(self[name].html_name): {
-                            "id": "block_" + self[name].auto_id,
-                            "label": label,  # used for tabular inline header
-                            "cols": [
+                _data = {
+                    "id": "block_" + self[name].auto_id,
+                    "label": label,  # used for tabular inline header
+                    "cols": [
+                        {
+                            "height": 80,
+                            "width": self.get_label_width(),
+                            "labelVisibility": {"tabular": False},
+                            "rows": [
                                 {
-                                    "height": 80,
-                                    "width": self.get_label_width(),
-                                    "labelVisibility": {"tabular": False},
-                                    "rows": [
-                                        {
-                                            "name_label": name,
-                                            "id_label": name,
-                                            "id": "block_label_" + self[name].auto_id,
-                                            "borderless": True,
-                                            "template": label,
-                                            "height": 40,
-                                            # attention labelAlign here not works because input is not a template
-                                            "css": {
-                                                "background-color": "transparent !important",
-                                                "text-align": self.get_label_align(),
-                                            },
-                                        },
-                                        {
-                                            "name_label": name,
-                                            "id_label": name,
-                                            "id": "block_name_" + self[name].auto_id,
-                                            "borderless": True,
-                                            "view": "template",
-                                            "template": "{}".format(os.path.basename(initial.name) if initial else ""),
-                                            "height": 40,
-                                            # attention labelAlign here not works because input is not a template
-                                            "css": {
-                                                "background-color": "transparent !important",
-                                                "color": "blue",
-                                                "text-align": self.get_label_align(),
-                                            },
-                                        },
-                                    ],
+                                    "name_label": name,
+                                    "id_label": name,
+                                    "id": "block_label_" + self[name].auto_id,
+                                    "borderless": True,
+                                    "template": label,
+                                    "height": 40,
+                                    # attention labelAlign here not works because input is not a template
+                                    "css": {
+                                        "background-color": "transparent !important",
+                                        "text-align": self.get_label_align(),
+                                    },
                                 },
                                 {
-                                    "height": 80,
-                                    "rows": [
-                                        el,
-                                        {
-                                            "height": 40,
-                                            "cols": [
-                                                {
-                                                    "id": self[name].auto_id + "_download",
-                                                    "name_label": name,
-                                                    "id_label": name,
-                                                    "borderless": True,
-                                                    "view": "button",
-                                                    "type": "icon",
-                                                    "icon": "fas fa-download",
-                                                    "tooltip": "{}".format(
-                                                        os.path.basename(initial.name) if initial else ""
-                                                    ),
-                                                    "css": "webix_primary",
-                                                    "hidden": delete_hidden,
-                                                    "width": 75,
-                                                    "height": 40,
-                                                    "on": {
-                                                        "onItemClick": (
-                                                            "(function (id, e) {{ "
-                                                            "window.open('{url}','_blank') "
-                                                            "}})"
-                                                        ).format(
-                                                            url=(
-                                                                initial.url
-                                                                if initial
-                                                                and not isinstance(initial, six.string_types)
-                                                                else str(initial)
-                                                            )
-                                                        )
-                                                    },
-                                                },
-                                                {
-                                                    "id": self[name].auto_id + "_clean",
-                                                    "name": self.add_prefix(name) + "_clean",
-                                                    "view": "toggle",
-                                                    "type": "icon",
-                                                    "offIcon": "fas fa-trash-alt",
-                                                    "onIcon": "fas fa-trash-alt",
-                                                    "offLabel": "",
-                                                    "onLabel": _("Deleted"),
-                                                    "tooltip": "{}".format(
-                                                        os.path.basename(initial.name) if initial else ""
-                                                    ),
-                                                    "width": 75,
-                                                    "height": 40,
-                                                    "css": "webix_danger",
-                                                    "hidden": delete_hidden,
-                                                    "click": "delete_attachment('block_{}', '{}_clean')".format(
-                                                        self[name].auto_id, self[name].auto_id
-                                                    ),
-                                                },
-                                            ],
-                                        },
-                                    ],
+                                    "name_label": name,
+                                    "id_label": name,
+                                    "id": "block_name_" + self[name].auto_id,
+                                    "borderless": True,
+                                    "view": "template",
+                                    "template": "{}".format(os.path.basename(initial.name) if initial else ""),
+                                    "height": 40,
+                                    # attention labelAlign here not works because input is not a template
+                                    "css": {
+                                        "background-color": "transparent !important",
+                                        "color": "blue",
+                                        "text-align": self.get_label_align(),
+                                    },
                                 },
-                                {"borderless": True, "template": "", "height": 30},
                             ],
-                        }
-                    }
-                )
+                        },
+                        {
+                            "height": 80,
+                            "rows": [
+                                el,
+                                {
+                                    "height": 40,
+                                    "cols": [
+                                        {
+                                            "id": self[name].auto_id + "_download",
+                                            "name_label": name,
+                                            "id_label": name,
+                                            "borderless": True,
+                                            "view": "button",
+                                            "type": "icon",
+                                            "icon": "fas fa-download",
+                                            "tooltip": "{}".format(os.path.basename(initial.name) if initial else ""),
+                                            "css": "webix_primary",
+                                            "hidden": delete_hidden,
+                                            "width": 75,
+                                            "height": 40,
+                                            "on": {
+                                                "onItemClick": (
+                                                    "(function (id, e) {{ " "window.open('{url}','_blank') " "}})"
+                                                ).format(
+                                                    url=(
+                                                        initial.url
+                                                        if initial and not isinstance(initial, six.string_types)
+                                                        else str(initial)
+                                                    )
+                                                )
+                                            },
+                                        },
+                                        {
+                                            "id": self[name].auto_id + "_clean",
+                                            "name": self.add_prefix(name) + "_clean",
+                                            "view": "toggle",
+                                            "type": "icon",
+                                            "offIcon": "fas fa-trash-alt",
+                                            "onIcon": "fas fa-trash-alt",
+                                            "offLabel": "",
+                                            "onLabel": _("Deleted"),
+                                            "tooltip": "{}".format(os.path.basename(initial.name) if initial else ""),
+                                            "width": 75,
+                                            "height": 40,
+                                            "css": "webix_danger",
+                                            "hidden": delete_hidden,
+                                            "click": "delete_attachment('block_{}', '{}_clean')".format(
+                                                self[name].auto_id, self[name].auto_id
+                                            ),
+                                        },
+                                    ],
+                                },
+                            ],
+                        },
+                        {"borderless": True, "template": "", "height": 30},
+                    ],
+                }
+                elements.update({"{}_block".format(self[name].html_name): _data})
+
                 _pass = True
             # FilePathFied
             elif isinstance(field, forms.FilePathField):
