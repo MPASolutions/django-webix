@@ -1,4 +1,5 @@
 import copy
+import datetime
 import os
 from collections import OrderedDict, defaultdict
 from json import dumps, loads
@@ -364,13 +365,18 @@ class BaseWebixMixin:
             # DateField
             elif isinstance(field, forms.DateField):
                 el.update({"view": "datepicker", "format": "%d/%m/%Y", "stringResult": True, "editable": True})
-                if initial is not None:
+                if initial not in [None, ""]:
                     if isinstance(initial, six.string_types):
-                        el.update({"value": "{}".format(initial[0:10]).replace("-", ",")})
-                    elif callable(initial):
-                        el.update({"value": "{}".format(initial().strftime("%Y,%m,%d"))})
-                    else:
-                        el.update({"value": "{}".format(initial.strftime("%Y,%m,%d"))})
+                        for DATE_INPUT_FORMAT in settings.DATE_INPUT_FORMATS:
+                            try:
+                                initial = datetime.datetime.strptime(initial, DATE_INPUT_FORMAT).date()
+                            except ValueError:
+                                pass
+                            else:
+                                break
+                    if callable(initial):
+                        initial = initial()
+                    el.update({"value": "{}".format(initial.strftime("%Y,%m,%d"))})
             # DateTimeField
             elif isinstance(field, forms.DateTimeField):
                 el.update(
@@ -382,20 +388,20 @@ class BaseWebixMixin:
                         "editable": True,
                     }
                 )
-                if initial is not None:
+                if initial not in [None, ""]:
                     if isinstance(initial, six.string_types):
-                        el.update(
-                            {"value": "{}".format(initial).replace("-", ",").replace(" ", ",").replace(":", ",")}
-                        )
-                    elif callable(initial):
-                        _value = initial()
-                        if not is_naive(_value):
-                            _value = make_naive(_value)
-                        el.update({"value": "{}".format(_value.strftime("%Y,%m,%d,%H,%M"))})
-                    else:
-                        if not is_naive(initial):
-                            initial = make_naive(initial)
-                        el.update({"value": "{}".format(initial.strftime("%Y,%m,%d,%H,%M"))})
+                        for DATETIME_INPUT_FORMAT in settings.DATETIME_INPUT_FORMATS:
+                            try:
+                                initial = datetime.datetime.strptime(initial, DATETIME_INPUT_FORMAT)
+                            except ValueError:
+                                pass
+                            else:
+                                break
+                    if callable(initial):
+                        initial = initial()
+                    if not is_naive(initial):
+                        initial = make_naive(initial)
+                    el.update({"value": "{}".format(initial.strftime("%Y,%m,%d,%H,%M"))})
             # BooleanField NullBooleanField
             elif isinstance(field, forms.NullBooleanField) or isinstance(field, forms.BooleanField):
                 el.update({"view": "checkbox", "checkValue": "2", "uncheckValue": ""})
