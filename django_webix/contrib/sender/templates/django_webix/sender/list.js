@@ -105,7 +105,12 @@ $$("{{webix_container_id}}").addView({
 
                                                     dt.load(url);
                                                 }
-                                            }
+                                            },
+                                            {% if datatable.active_filter %}
+                                                onAfterRender: webix.once(function(){
+                                                    this.setValue({{ datatable.active_filter }})
+                                                }),
+                                            {% endif %}
                                         }
                                     }
                                 ]
@@ -283,6 +288,8 @@ var getDatatablesItems = function () {
 
     return total;
 }
+
+
 
 {# Attach events to datatables and loads data if `filters` is not installed #}
 {% for datatable in datatables %}

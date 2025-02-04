@@ -35,6 +35,7 @@ class WebixFilter(DALModel):
         verbose_name=_("Assignees groups"),
     )
     shared_edit_group = models.BooleanField(_("Shared edit group"), blank=True, null=False)
+    temporary = models.BooleanField(_("Temporary filter"), default=False, blank=True)
 
     objects = WebixFilterManager()
 
