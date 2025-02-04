@@ -105,6 +105,13 @@ class SenderListView(WebixTemplateView):
                 "collapsed": recipient.get("collapsed", False),
             }
             if use_dynamic_filters:
+                active_filter_ids = self.request.GET.getlist("active_filter_id")
+                _dict["active_filter"] = list(
+                    WebixFilter.objects.filter(
+                        model__iexact=recipient["model"].lower(), id__in=active_filter_ids
+                    ).values_list("pk", flat=True)
+                )
+
                 _dict["filters"] = [
                     {"id": i.pk, "value": i.title}
                     for i in WebixFilter.objects.filter(model__iexact=recipient["model"].lower())
