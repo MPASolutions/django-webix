@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-01-13 17:42+0100\n"
+"POT-Creation-Date: 2025-02-05 10:42+0100\n"
 "PO-Revision-Date: 2023-09-07 15:14+0200\n"
 "Last-Translator: Stefano Menegon <dallago@mpasol.it>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -105,78 +105,78 @@ msgstr ""
 msgid "Model fields values"
 msgstr ""
 
-#: forms/forms.py:431
+#: forms/forms.py:437
 msgid "Upload new image"
 msgstr "Charger une nouvelle image"
 
-#: forms/forms.py:431
+#: forms/forms.py:437
 #, fuzzy
 #| msgid "Upload new image"
 msgid "Change image"
 msgstr "Charger une nouvelle image"
 
-#: forms/forms.py:537 forms/forms.py:687
+#: forms/forms.py:543 forms/forms.py:687
 msgid "Deleted"
 msgstr "Effacé"
 
-#: forms/forms.py:571
+#: forms/forms.py:577
 msgid "Upload file"
 msgstr "Charger un fichier"
 
-#: forms/forms.py:571
+#: forms/forms.py:577
 #, fuzzy
 #| msgid "Changed %s."
 msgid "Change file"
 msgstr "%s modifié."
 
-#: forms/forms.py:593
+#: forms/forms.py:600
 msgid "Upload folder"
 msgstr "Charger un dossier"
 
-#: forms/forms.py:593
+#: forms/forms.py:600
 #, fuzzy
 #| msgid "Upload folder"
 msgid "Change folder"
 msgstr "Charger un dossier"
 
-#: forms/forms.py:595
+#: forms/forms.py:602
 msgid "Upload files"
 msgstr "Charger des fichiers"
 
-#: forms/forms.py:595
+#: forms/forms.py:602
 #, fuzzy
 #| msgid "Changed %s."
 msgid "Change files"
 msgstr "%s modifié."
 
-#: forms/forms.py:717
+#: forms/forms.py:715
 msgid "MultipleChoiceField is available only with PRO webix license"
 msgstr "Le champs ChoixMultiple n'est disponible qu'avec la licence Webix PRO"
 
-#: forms/forms.py:758 forms/forms.py:791 forms/forms.py:861 forms/forms.py:925
-#: forms/forms.py:1019
+#: forms/forms.py:756 forms/forms.py:789 forms/forms.py:859 forms/forms.py:923
+#: forms/forms.py:1017
 msgid "Write and select"
 msgstr ""
 
-#: forms/forms.py:901 forms/forms.py:950
+#: forms/forms.py:899 forms/forms.py:948
 #, fuzzy
 #| msgid "Click to select"
 msgid "Click and select"
 msgstr "Cliquer pour sélectionner"
 
-#: forms/forms.py:1067
+#: forms/forms.py:1065
 msgid "Initial value {} for geo field {} is not supported"
 msgstr "La valeur initiale {} pour le champ geo {} n'est pas valide"
 
-#: forms/forms.py:1106
+#: forms/forms.py:1104
 msgid "Edit"
 msgstr "Modifier"
 
-#: forms/forms.py:1266
+#: forms/forms.py:1264
 msgid "Type of field {} not supported"
 msgstr "Type de champ {} non supporté"
 
-#: forms/formsets.py:91 forms/formsets_generic.py:71
+#: forms/formsets.py:92 forms/formsets_generic.py:72
 msgid "ManagementForm data is missing or has been tampered with"
 msgstr "La donnée ManagementForm est manquante ou a été altérée par"
 
@@ -296,12 +296,12 @@ msgstr "sélectionnés"
 msgid "Action successful"
 msgstr "Action réussie"
 
-#: templates/django_webix/include/edit_inline/stacked.js:21
-#: templates/django_webix/include/edit_inline/stacked.js:32
+#: templates/django_webix/include/edit_inline/stacked.js:24
+#: templates/django_webix/include/edit_inline/stacked.js:35
 msgid "New Item"
 msgstr "Nouvel élément"
 
-#: templates/django_webix/include/edit_inline/stacked.js:53
+#: templates/django_webix/include/edit_inline/stacked.js:56
 #: templates/django_webix/include/edit_inline/tabular.js:52
 #: templates/django_webix/include/toolbar_navigation.js:37
 #: templates/django_webix/include/toolbar_navigation.js:94
