@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-12-16 10:49+0100\n"
+"POT-Creation-Date: 2025-02-05 10:42+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -74,11 +74,15 @@ msgstr ""
 msgid "Shared edit group"
 msgstr ""
 
-#: contrib/filter/models.py:42
-msgid "Webix Filter"
+#: contrib/filter/models.py:38
+msgid "Temporary filter"
 msgstr ""
 
 #: contrib/filter/models.py:43
+msgid "Webix Filter"
+msgstr ""
+
+#: contrib/filter/models.py:44
 msgid "Webix Filters"
 msgstr ""
 

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-12-16 10:49+0100\n"
+"POT-Creation-Date: 2025-02-05 10:42+0100\n"
 "PO-Revision-Date: 2023-09-25 15:41+0200\n"
 "Last-Translator: Stefano Menegon <dallago@mpasol.it>\n"
 "Language-Team: \n"
@@ -75,11 +75,17 @@ msgstr "Gruppi assegnati"
 msgid "Shared edit group"
 msgstr "Gruppo di modifica condiviso"
 
-#: contrib/filter/models.py:42
+#: contrib/filter/models.py:38
+#, fuzzy
+#| msgid "Apply temporary filter"
+msgid "Temporary filter"
+msgstr "Applica filtro temporaneo"
+
+#: contrib/filter/models.py:43
 msgid "Webix Filter"
 msgstr "Filtro"
 
-#: contrib/filter/models.py:43
+#: contrib/filter/models.py:44
 msgid "Webix Filters"
 msgstr "Filtri"
 
