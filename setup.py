@@ -66,7 +66,7 @@ setup(
     ],
     extras_require={
         "kora": [
-            "django==5.1.2",
+            "django==5.1.5",
             "django-extra-views==0.15.0",
             "six==1.16.0",
             "django-user-agents==0.4.0",
