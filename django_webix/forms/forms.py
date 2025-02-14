@@ -376,7 +376,10 @@ class BaseWebixMixin:
                                 break
                     if callable(initial):
                         initial = initial()
-                    el.update({"value": "{}".format(initial.strftime("%Y,%m,%d"))})
+                    if isinstance(initial, six.string_types):
+                        el.update({"value": "{}".format(initial)})
+                    else:
+                        el.update({"value": "{}".format(initial.strftime("%Y,%m,%d"))})
             # DateTimeField
             elif isinstance(field, forms.DateTimeField):
                 el.update(
@@ -401,7 +404,10 @@ class BaseWebixMixin:
                         initial = initial()
                     if not is_naive(initial):
                         initial = make_naive(initial)
-                    el.update({"value": "{}".format(initial.strftime("%Y,%m,%d,%H,%M"))})
+                    if isinstance(initial, six.string_types):
+                        el.update({"value": "{}".format(initial)})
+                    else:
+                        el.update({"value": "{}".format(initial.strftime("%Y,%m,%d,%H,%M"))})
             # BooleanField NullBooleanField
             elif isinstance(field, forms.NullBooleanField) or isinstance(field, forms.BooleanField):
                 el.update({"view": "checkbox", "checkValue": "2", "uncheckValue": ""})
