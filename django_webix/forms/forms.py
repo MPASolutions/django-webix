@@ -758,10 +758,10 @@ class BaseWebixMixin:
                     el.update(
                         {
                             "view": "multicombo",
-                            "selectAll": True,
                             "placeholder": _("Write and select"),
                             "suggest": {
                                 "view": "checksuggest",
+                                "selectAll": True,
                                 "keyPressTimeout": 400,
                                 "body": {"data": [], "dataFeed": self.autocomplete_fields_urls[name]},
                             },
@@ -791,10 +791,10 @@ class BaseWebixMixin:
                     el.update(
                         {
                             "view": "multicombo",
-                            "selectAll": True,
                             "placeholder": _("Write and select"),
                             "suggest": {
                                 "view": "checksuggest",
+                                "selectAll": True,
                                 "keyPressTimeout": 400,
                                 "body": {
                                     "data": self._add_null_choice(
@@ -901,7 +901,6 @@ class BaseWebixMixin:
                         el.update(
                             {
                                 "view": "richselect",
-                                "selectAll": True,
                                 "placeholder": _("Click and select"),
                                 "suggest": {
                                     "view": "suggest",
@@ -949,7 +948,6 @@ class BaseWebixMixin:
                     choices.insert(0, {"id": "", "value": "------", "$empty": True})
                 el.update(
                     {
-                        "selectAll": True,
                         "view": "richselect",
                         "placeholder": _("Click and select"),
                         "suggest": {
@@ -1019,10 +1017,10 @@ class BaseWebixMixin:
                     el.update(
                         {
                             "view": "multicombo",
-                            "selectAll": True,
                             "placeholder": _("Write and select"),
                             "suggest": {
                                 "view": "checksuggest",
+                                "selectAll": True,
                                 "keyPressTimeout": 400,
                                 "body": {
                                     "data": self._add_null_choice(
