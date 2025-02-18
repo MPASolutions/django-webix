@@ -2,10 +2,10 @@ from typing import Dict, List
 
 import six
 from django.conf import settings
-from django.core.mail import EmailMessage
+from django.core.mail import EmailMessage, get_connection
 
 
-def send(recipients: Dict[str, List[int]], subject: str, body: str, message_sent):
+def send(recipients: Dict[str, List[int]], subject: str, body: str, message_sent, request=None):
     """
     Send email
 
@@ -13,10 +13,12 @@ def send(recipients: Dict[str, List[int]], subject: str, body: str, message_sent
     :param subject: Subject of email
     :param body: Body of message
     :param message_sent: MessageSent instance
+    :param request:
     :return: MessageSent instance
     """
 
     from django_webix.contrib.sender.models import MessageRecipient, MessageSent
+    from django_webix.contrib.sender.utils import get_config_from_settings
 
     if "django_webix.contrib.sender" not in settings.INSTALLED_APPS:
         raise Exception("Django Webix Sender is not in INSTALLED_APPS")
@@ -39,13 +41,24 @@ def send(recipients: Dict[str, List[int]], subject: str, body: str, message_sent
     if not isinstance(message_sent, MessageSent):
         raise Exception("`message_sent` must be MessageSent instance")
 
-    CONFIG_EMAIL = next((item for item in settings.WEBIX_SENDER["send_methods"] if item["method"] == "email"), {}).get(
-        "config"
+    config_email = get_config_from_settings("email", request)
+
+    mail_connection = get_connection(
+        backend=config_email.get("backend"),
+        fail_silently=config_email.get("fail_silently", False),
+        **config_email.get("backend_argumens", {})
     )
 
     # Per ogni istanza di destinatario ciclo
     for recipient, recipient_address in recipients["valids"]:
-        email = EmailMessage(subject=subject, body=body, from_email=CONFIG_EMAIL["from_email"], to=[recipient_address])
+
+        email = EmailMessage(
+            connection=mail_connection,
+            subject=subject,
+            body=body,
+            from_email=config_email["from_email"],
+            to=[recipient_address],
+        )
         email.content_subtype = "html"
 
         try:
@@ -93,7 +106,7 @@ def send(recipients: Dict[str, List[int]], subject: str, body: str, message_sent
     return message_sent
 
 
-def recipients_clean(recipients_instance, recipients):
+def recipients_clean(recipients_instance, recipients, request=None):
     for recipient in recipients_instance:
         # Prelevo l'indirizzo email e lo metto in una lista se non è già una lista
         _get_email = recipient.get_email

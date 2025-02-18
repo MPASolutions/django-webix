@@ -159,17 +159,29 @@ GSM_7_BIT = [
 ]
 
 
-def send(recipients: Dict[str, List[int]], subject: str, body: str, message_sent):
+def check_config_skebby(config_skebby):
+    assert isinstance(config_skebby, dict), "La configurazione di skebby deve essere un dizionario"
+    assert "region" in config_skebby, "Missing key region in the configuration"
+    assert "method" in config_skebby, "Missing key method in the configuration"
+    assert "username" in config_skebby, "Missing key username in the configuration"
+    assert "password" in config_skebby, "Missing key password in the configuration"
+    assert "sender_string" in config_skebby, "Missing key sender_string in the configuration"
+    assert "cost" in config_skebby, "Missing key cost in the configuration"
+
+
+def send(recipients: Dict[str, List[int]], subject: str, body: str, message_sent, request=None):
     """
     Send Sebby sms
 
     :param recipients: Dict {'<app_label>.<model>': [<id>, <id>]}
     :param body: Body of message
     :param message_sent: MessageSent instance
+    :param request:
     :return: MessageSent instance
     """
 
     from django_webix.contrib.sender.models import MessageRecipient, MessageSent
+    from django_webix.contrib.sender.utils import get_config_from_settings
 
     if "django_webix.contrib.sender" not in settings.INSTALLED_APPS:
         raise Exception("Django Webix Sender is not in INSTALLED_APPS")
@@ -194,30 +206,29 @@ def send(recipients: Dict[str, List[int]], subject: str, body: str, message_sent
     sent_per_recipient = 0
 
     try:
-        CONFIG_SKEBBY = next(
-            (item for item in settings.WEBIX_SENDER["send_methods"] if item["method"] == "skebby"), {}
-        ).get("config")
+        config_skebby = get_config_from_settings("skebby", request)
+        check_config_skebby(config_skebby)
 
         # Connection
         skebby = Skebby()
-        skebby.authentication.session_key(username=CONFIG_SKEBBY["username"], password=CONFIG_SKEBBY["password"])
+        skebby.authentication.session_key(username=config_skebby["username"], password=config_skebby["password"])
 
         # Set message configuration
         send_configuration = {
-            "message_type": CONFIG_SKEBBY["method"],
+            "message_type": config_skebby["method"],
             "message": body,
             "recipient": [number for _, number in recipients["valids"]],
-            "sender": CONFIG_SKEBBY["sender_string"],
+            "sender": config_skebby["sender_string"],
             "return_credits": SkebbyBoolean.TRUE,
         }
-        if "encoding" in CONFIG_SKEBBY:
-            send_configuration["encoding"] = CONFIG_SKEBBY["encoding"]
-        if "truncate" in CONFIG_SKEBBY:
-            send_configuration["truncate"] = CONFIG_SKEBBY["truncate"]
-        if "max_fragments" in CONFIG_SKEBBY:
-            send_configuration["max_fragments"] = CONFIG_SKEBBY["max_fragments"]
-        if "allow_invalid_recipients" in CONFIG_SKEBBY:
-            send_configuration["allow_invalid_recipients"] = CONFIG_SKEBBY["allow_invalid_recipients"]
+        if "encoding" in config_skebby:
+            send_configuration["encoding"] = config_skebby["encoding"]
+        if "truncate" in config_skebby:
+            send_configuration["truncate"] = config_skebby["truncate"]
+        if "max_fragments" in config_skebby:
+            send_configuration["max_fragments"] = config_skebby["max_fragments"]
+        if "allow_invalid_recipients" in config_skebby:
+            send_configuration["allow_invalid_recipients"] = config_skebby["allow_invalid_recipients"]
 
         # Send message
         result = skebby.sms_send.send_sms(**send_configuration)
@@ -272,10 +283,11 @@ def send(recipients: Dict[str, List[int]], subject: str, body: str, message_sent
     return message_sent
 
 
-def recipients_clean(recipients_instance, recipients):
-    CONFIG_SKEBBY = next(
-        (item for item in settings.WEBIX_SENDER["send_methods"] if item["method"] == "skebby"), {}
-    ).get("config")
+def recipients_clean(recipients_instance, recipients, request=None):
+    from django_webix.contrib.sender.utils import get_config_from_settings
+
+    config_skebby = get_config_from_settings("skebby", request)
+    check_config_skebby(config_skebby)
 
     for recipient in recipients_instance:
         # Prelevo il numero di telefono e lo metto in una lista se non è già una lista
@@ -287,7 +299,7 @@ def recipients_clean(recipients_instance, recipients):
         for _sms in _get_sms:
             # Verifico che il numero sia valido
             try:
-                number = phonenumbers.parse(_sms, CONFIG_SKEBBY["region"])
+                number = phonenumbers.parse(_sms, config_skebby["region"])
                 _sms = phonenumbers.format_number(number, phonenumbers.PhoneNumberFormat.E164)
                 # Contatto non ancora presente nella lista
                 if phonenumbers.is_valid_number(number) and _sms not in recipients["valids"]["address"]:

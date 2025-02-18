@@ -6,17 +6,19 @@ from django.apps import apps
 from django.conf import settings
 
 
-def send(recipients: Dict[str, List[int]], subject: str, body: str, message_sent):
+def send(recipients: Dict[str, List[int]], subject: str, body: str, message_sent, request=None):
     """
     Send Telegram message
 
     :param recipients: Dict {'<app_label>.<model>': [<id>, <id>]}
     :param body: Body of message
     :param message_sent: MessageSent instance
+    :param request:
     :return: MessageSent instance
     """
 
     from django_webix.contrib.sender.models import MessageRecipient, MessageSent
+    from django_webix.contrib.sender.utils import get_config_from_settings
 
     if "django_webix.contrib.sender" not in settings.INSTALLED_APPS:
         raise Exception("Django Webix Sender is not in INSTALLED_APPS")
@@ -37,13 +39,11 @@ def send(recipients: Dict[str, List[int]], subject: str, body: str, message_sent
     if not isinstance(message_sent, MessageSent):
         raise Exception("`message_sent` must be MessageSent instance")
 
-    CONFIG_TELEGRAM = next(
-        (item for item in settings.WEBIX_SENDER["send_methods"] if item["method"] == "telegram"), {}
-    ).get("config")
+    config_telegram = get_config_from_settings("telegram", request)
 
     CONF = getattr(settings, "WEBIX_SENDER", None)
 
-    bot = telegram.Bot(token=CONFIG_TELEGRAM.get("bot_token"))
+    bot = telegram.Bot(token=config_telegram.get("bot_token"))
 
     attachments = message_sent.attachments.all()
 
@@ -100,7 +100,7 @@ def send(recipients: Dict[str, List[int]], subject: str, body: str, message_sent
     return message_sent
 
 
-def recipients_clean(recipients_instance, recipients):
+def recipients_clean(recipients_instance, recipients, request=None):
     for recipient in recipients_instance:
         # Prelevo l'ID telegram e lo metto in una lista se non è già una lista
         _get_telegram = recipient.get_telegram
