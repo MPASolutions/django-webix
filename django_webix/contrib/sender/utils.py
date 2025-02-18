@@ -1,9 +1,9 @@
-import importlib
 from typing import Any, Dict, List, Optional, Tuple
 
 from django.apps import apps
 from django.conf import settings
 from django.db.models import Q, Value
+from django.utils.module_loading import import_string
 from django.utils.text import capfirst, format_lazy
 from django.utils.translation import gettext_lazy as _
 from django_webix.contrib.sender.models import DjangoWebixSender, MessageRecipient, MessageSent
@@ -54,17 +54,14 @@ def get_messages_read_required(request, queryset=None):
     return queryset.distinct().order_by("-creation_date")
 
 
-def my_import(name: str) -> callable:
-    """
-    Load a function from a string
+def get_config_from_settings(method, request=None):
+    config = next((item for item in settings.WEBIX_SENDER["send_methods"] if item["method"] == method), {}).get(
+        "config"
+    )
 
-    :param name: function path name (e.g. django_webix.contrib.sender.send_methods.email.send_utils)
-    :return: callable
-    """
-
-    module, function = name.rsplit(".", 1)
-    component = importlib.import_module(module)
-    return getattr(component, function)
+    if isinstance(config, str):
+        config = import_string(config)(request)
+    return config
 
 
 def send_mixin(
@@ -74,6 +71,7 @@ def send_mixin(
     body: str,
     recipients: Dict[str, List[int]],
     presend: Optional[Any],
+    request=None,
     **kwargs
 ) -> Tuple[Dict[str, Any], int]:
     """
@@ -86,6 +84,7 @@ def send_mixin(
     :param body: Body of message (email, skebby, telegram or storage)
     :param recipients: Dict {'<app_label>.<model>': [<id>, <id>]}
     :param presend: None: verify before the send; Otherwise: send the message
+    :param request:
     :param kwargs: `user` and `files` (default: user=None, files={})
     :return: Tuple[Dict, Code]
     """
@@ -139,8 +138,8 @@ def send_mixin(
         "duplicates": {"recipients": [], "address": []},
         "invalids": {"recipients": [], "address": []},
     }
-    recipients_clean = my_import(send_method_conf["recipients_clean"])
-    recipients_clean(_recipients_instance, _recipients)
+    recipients_clean = import_string(send_method_conf["recipients_clean"])
+    recipients_clean(_recipients_instance, _recipients, request)
 
     # Convert dict in list of tuples
     _recipients["valids"] = list(zip(_recipients["valids"]["recipients"], _recipients["valids"]["address"]))
@@ -151,7 +150,7 @@ def send_mixin(
 
     # 4 Verifica prima dell'invio (opzionale)
     if presend is None:
-        presend_check = my_import(send_method_conf["presend_check"])
+        presend_check = import_string(send_method_conf["presend_check"])
         result = presend_check(subject, body)
         if result is not None:
             return result
@@ -162,13 +161,13 @@ def send_mixin(
         }, 200
 
     # 5. Creo istanza `MessageAttachment` senza collegarlo alla m2m -> da collegare al passo 5
-    attachments = my_import(CONF["attachments"]["save_function"])(
+    attachments = import_string(CONF["attachments"]["save_function"])(
         files, send_method=send_method, typology=typology, subject=subject, body=body, recipients=_recipients
     )
 
     # 6. aggiungo il link del file in fondo al corpo
     if len(attachments) > 0:
-        attachments_format = my_import(send_method_conf["attachments_format"])
+        attachments_format = import_string(send_method_conf["attachments_format"])
         result = attachments_format(attachments, body)
         if result is not None:
             body = result
@@ -194,8 +193,8 @@ def send_mixin(
     message_sent.attachments.add(*attachments)
 
     # 8. Send messages
-    send_function = my_import(function)
-    result = send_function(_recipients, subject, body, message_sent)
+    send_function = import_string(function)
+    result = send_function(_recipients, subject, body, message_sent, request)
     status = format_lazy("{method} sent", method=capfirst(method.strip()))
 
     # Add optional extra params

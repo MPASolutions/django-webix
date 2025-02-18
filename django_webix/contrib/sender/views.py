@@ -16,6 +16,7 @@ from django.urls import reverse
 from django.utils import timezone, translation
 from django.utils.decorators import method_decorator
 from django.utils.html import escapejs
+from django.utils.module_loading import import_string
 from django.utils.text import format_lazy
 from django.utils.translation import gettext_lazy as _
 from django.views.decorators.csrf import csrf_exempt
@@ -28,7 +29,7 @@ from django_webix.contrib.sender.models import (
     MessageUserRead,
 )
 from django_webix.contrib.sender.send_methods.telegram.persistences import DatabaseTelegramPersistence
-from django_webix.contrib.sender.utils import my_import, send_mixin
+from django_webix.contrib.sender.utils import send_mixin
 from django_webix.views import WebixListView, WebixTemplateView
 from telegram import Update
 from telegram.ext import Dispatcher
@@ -52,12 +53,12 @@ class GetMessageUnreadView(WebixTemplateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        get_messages_read_required = my_import(CONF["read_required"])
+        get_messages_read_required = import_string(CONF["read_required"])
         context["message_unread"] = get_messages_read_required(self.request).first()
         return context
 
     def post(self, request, *args, **kwargs):
-        get_messages_read_required = my_import(CONF["read_required"])
+        get_messages_read_required = import_string(CONF["read_required"])
         messages = get_messages_read_required(self.request)
         message = messages.filter(id=request.POST.get("message_read_id", -1)).first()
         if message:
@@ -250,6 +251,7 @@ class SenderSendView(View):
                 body,
                 recipients,
                 presend,
+                request=request,
                 user=request.user,
                 files=request.FILES,
                 extra=extra,

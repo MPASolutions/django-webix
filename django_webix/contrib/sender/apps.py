@@ -3,6 +3,7 @@ from django.apps import AppConfig, apps
 from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.core.exceptions import ImproperlyConfigured
+from django.utils.module_loading import import_string
 from django.utils.translation import gettext_lazy as _
 
 
@@ -29,19 +30,22 @@ class SenderConfig(AppConfig):
         self.set_user_cost()
 
     def set_user_cost(self):
-        from django_webix.contrib.sender.utils import my_import
-
         user_cost_config = getattr(self.CONF, "USER_COST", None)
         User = get_user_model()
         if user_cost_config is None:
             user_cost_config = "django_webix.contrib.sender.send_methods.get_default_user_cost"
-        _get_cost = my_import(user_cost_config)
+        _get_cost = import_string(user_cost_config)
         User.get_cost = _get_cost
         return _get_cost
 
-    def send_methods_check(self):
-        from django_webix.contrib.sender.utils import my_import
+    def load_config_send(self, config):
+        if isinstance(config, str):
+            config = import_string(config)(None)
+        elif not isinstance(config, dict):
+            raise ImproperlyConfigured(_("Config must be dict instance or importable sting"))
+        return config
 
+    def send_methods_check(self):
         for send_method in self.CONF["send_methods"]:
             # Check common keys
             if "method" not in send_method:
@@ -118,10 +122,10 @@ class SenderConfig(AppConfig):
                     raise ImproperlyConfigured(_("`attachments_format` is not configured in send method"))
 
             # Try to import functions
-            my_import(send_method["function"])
-            my_import(send_method["recipients_clean"])
-            my_import(send_method["presend_check"])
-            my_import(send_method["attachments_format"])
+            import_string(send_method["function"])
+            import_string(send_method["recipients_clean"])
+            import_string(send_method["presend_check"])
+            import_string(send_method["attachments_format"])
 
             # Count method
             num = len([i for i in self.CONF["send_methods"] if i["method"] == send_method["method"]])
@@ -133,38 +137,30 @@ class SenderConfig(AppConfig):
             # Init Email
             if send_method["method"] == "email":
                 # Check Email config
-                if "config" not in send_method or "from_email" not in send_method["config"]:
+                if "config" not in send_method or "from_email" not in self.load_config_send(send_method["config"]):
                     raise ImproperlyConfigured(_("Email `config` is not configured in your settings.py file"))
 
             # Init Skebby
             elif send_method["method"] == "skebby":
                 # Check Skebby config
-                if (
-                    "config" not in send_method
-                    or "region" not in send_method["config"]
-                    or "method" not in send_method["config"]
-                    or "username" not in send_method["config"]
-                    or "password" not in send_method["config"]
-                    or "sender_string" not in send_method["config"]
-                ):
+                if "config" not in send_method:
                     raise ImproperlyConfigured(_("Skebby `config` is not configured in your settings.py file"))
+                config = self.load_config_send(send_method["config"])
 
             # Init Telegram
             elif send_method["method"] == "telegram":
                 # Check Telegram config
-                if "config" not in send_method or "bot_token" not in send_method["config"]:
+                if "config" not in send_method or "bot_token" not in self.load_config_send(send_method["config"]):
                     raise ImproperlyConfigured(_("Telegram `config` is not configured in your settings.py file"))
+
+                config = self.load_config_send(send_method["config"])
                 # Update webhooks
-                if (
-                    "webhooks" in send_method["config"]
-                    and isinstance(send_method["config"]["webhooks"], list)
-                    and len(send_method["config"]["webhooks"]) > 0
-                ):
+                if "webhooks" in config and isinstance(config["webhooks"], list) and len(config["webhooks"]) > 0:
                     webhooks = send_method["config"]["webhooks"]
                     if not isinstance(webhooks, list):
                         webhooks = [webhooks]
                     try:
-                        bot = telegram.Bot(token=send_method["config"]["bot_token"])
+                        bot = telegram.Bot(token=config["bot_token"])
                         # Remove old webhooks
                         bot.deleteWebhook()
                         # Add new webhooks
@@ -173,14 +169,10 @@ class SenderConfig(AppConfig):
                     except Exception:
                         pass
                 # Update commands
-                if (
-                    "commands" in send_method["config"]
-                    and isinstance(send_method["config"]["commands"], list)
-                    and len(send_method["config"]["commands"]) > 0
-                ):
+                if "commands" in config and isinstance(config["commands"], list) and len(config["commands"]) > 0:
                     try:
-                        bot = telegram.Bot(token=send_method["config"]["bot_token"])
-                        bot.set_my_commands(send_method["config"]["commands"])
+                        bot = telegram.Bot(token=config["bot_token"])
+                        bot.set_my_commands(config["commands"])
                     except Exception:
                         pass
 
@@ -189,8 +181,6 @@ class SenderConfig(AppConfig):
                 pass  # Nothing to check
 
     def initial_send_methods_check(self):
-        from django_webix.contrib.sender.utils import my_import
-
         # Check initial_send_methods
         for initial_send_method in self.CONF["initial_send_methods"]:
             # Check common keys
@@ -211,7 +201,7 @@ class SenderConfig(AppConfig):
                     raise ImproperlyConfigured(_("`function` is not configured in send method"))
 
             # Try to import functions
-            my_import(initial_send_method["function"])
+            import_string(initial_send_method["function"])
 
     def recipients_check(self):
         if "recipients" not in self.CONF:

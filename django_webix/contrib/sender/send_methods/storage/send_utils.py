@@ -4,7 +4,7 @@ import six
 from django.conf import settings
 
 
-def send(recipients: Dict[str, List[int]], subject: str, body: str, message_sent):
+def send(recipients: Dict[str, List[int]], subject: str, body: str, message_sent, request=None):
     """
     Send email
 
@@ -12,6 +12,7 @@ def send(recipients: Dict[str, List[int]], subject: str, body: str, message_sent
     :param subject: Subject of message
     :param body: Body of message
     :param message_sent: MessageSent instance
+    :param request:
     :return: MessageSent instance
     """
 
@@ -71,7 +72,7 @@ def send(recipients: Dict[str, List[int]], subject: str, body: str, message_sent
     return message_sent
 
 
-def recipients_clean(recipients_instance, recipients):
+def recipients_clean(recipients_instance, recipients, request=None):
     for recipient in recipients_instance:
         # Prelevo l'ID user e lo metto in una lista se non è già una lista
         if recipient.pk not in recipients["valids"]["address"]:
