@@ -101,24 +101,24 @@ _____________
 
 .. code-block:: python
 
-    def get_fieldsets(self, fs=None):
+    def get_fieldsets(self, **kwargs):
         self.readonly_fields = [] # automatically popupated, but is possibile to add some fields
         self.autocomplete_fields = [] # automatically popupated with ModelMultipleChoiceField and ModelChoiceField, but is possibile to add some fields
         self.autocomplete_fields_exclude = [] # automatically popupated with ModelMultipleChoiceField and ModelChoiceField, but is possibile to add some fields
-        if fs is None: fs = self.get_elements
+        fs = self.get_elements
         # create an output structure
         # otherwise can have flat structure with a field for each rows like django standard
-        return super().get_fieldsets(fs=fs)
+        return super().get_fieldsets(**kwargs)
 
 If you want to change not only field by field but as form will be rendered you can work on get_fieldsets.
 Example of override it:
 
 .. code-block:: python
 
-    def get_fieldsets(self, fs=None):
+    def get_fieldsets(self, **kwargs):
         self.autocomplete_fields_exclude = ['field_1']
         self.autocomplete_fields = ['field_2']
-        if fs is None: fs = self.get_elements
+        fs = self.get_elements
         # like override function get_elements here is possibile to force webix-field-dict
         return [
             {'cols': [fs['field_1', {}]]},

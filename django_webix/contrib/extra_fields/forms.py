@@ -22,9 +22,8 @@ class ModelFieldCreateForm(WebixModelForm):
             id__in=[i.pk for i in get_ct_models_with_extra_fields()]
         )
 
-    def get_fieldsets(self, fs=None):
-        if fs is None:
-            fs = self.get_elements
+    def get_fieldsets(self, **kwargs):
+        fs = self.get_elements
         return [
             {"cols": [fs["content_type"], fs["label"]]},
             {"cols": [fs["field_name"], fs["field_type"]]},
@@ -34,9 +33,8 @@ class ModelFieldCreateForm(WebixModelForm):
 
 
 class ModelFieldUpdateForm(ModelFieldCreateForm):
-    def get_fieldsets(self, fs=None):
-        if fs is None:
-            fs = self.get_elements
+    def get_fieldsets(self, **kwargs):
+        fs = self.get_elements
 
         fs["content_type"].update({"disabled": True})
         fs["field_name"].update({"disabled": True})
