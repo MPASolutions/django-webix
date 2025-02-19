@@ -158,9 +158,8 @@ class UserAdminUpdateForm(WebixModelForm):
         )
         return fs
 
-    def get_fieldsets(self, fs=None):
-        if fs is None:
-            fs = self.get_elements
+    def get_fieldsets(self, **kwargs):
+        fs = self.get_elements
 
         return [
             {

@@ -11,9 +11,8 @@ class CommandExecutionFormCreate(WebixModelForm):
         localized_fields = "__all__"
         fields = ["description", "command_name", "parameters"]
 
-    def get_fieldsets(self, fs=None):
-        if fs is None:
-            fs = self.get_elements
+    def get_fieldsets(self, **kwargs):
+        fs = self.get_elements
 
         return [
             {"cols": [fs["description"]]},
@@ -31,9 +30,8 @@ class CommandExecutionFormUpdate(WebixModelForm):
         localized_fields = "__all__"
         fields = ["description", "command_name", "parameters", "last_execution_date", "last_execution_state", "output"]
 
-    def get_fieldsets(self, fs=None):
-        if fs is None:
-            fs = self.get_elements
+    def get_fieldsets(self, **kwargs):
+        fs = self.get_elements
 
         for field_name in ["last_execution_date", "last_execution_state"]:
             fs[field_name].update({"readonly": "readonly", "disabled": True})

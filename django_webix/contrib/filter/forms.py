@@ -50,9 +50,8 @@ class WebixFilterForm(WebixModelForm):
         else:
             self.json_elaborated = None
 
-    def get_fieldsets(self, fs=None):
-        if fs is None:
-            fs = self.get_elements
+    def get_fieldsets(self, **kwargs):
+        fs = self.get_elements
 
         fs["filter"].update({"hidden": True})
         fs["description"].update({"height": 100, "maxHeight": 100})
