@@ -310,7 +310,7 @@ class AdminWebixSite:
                 )
                 children = self.get_tree(soons, available_items, language=language)
 
-                if children != []:
+                if children:
                     if self.webix_menu_type == "sidebar":
                         menu_item["data"] = children  # for sidebar
                     elif self.webix_menu_type == "menu":
