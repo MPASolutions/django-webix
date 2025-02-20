@@ -37,7 +37,9 @@ class SlugifyCharField(forms.CharField):
 
 class SlugifyChoiceField(forms.ChoiceField):
     def to_python(self, value):
-        "Returns a Unicode object."
+        """
+        Returns a Unicode object.
+        """
         if value in self.empty_values:
             return ""
         return slugify(force_str(value))

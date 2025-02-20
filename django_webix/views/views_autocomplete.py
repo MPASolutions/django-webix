@@ -26,10 +26,14 @@ def ajax_response(data):
 
 
 class RelatedLookup(View):
-    "Related Lookup"
+    """
+    Related Lookup
+    """
 
     def check_user_permission(self):
-        """CUSTOM"""
+        """
+        CUSTOM
+        """
 
         if not (self.request.user.is_active and self.request.user.is_authenticated):
             raise PermissionDenied
@@ -80,13 +84,17 @@ class RelatedLookup(View):
 
 
 class AutocompleteWebixLookup(RelatedLookup):
-    "AutocompleteLookup"
+    """
+    AutocompleteLookup
+    """
 
     def request_is_valid(self):
         return "filter[value]" in self.GET and "app_label" in self.GET and "model_name" in self.GET
 
     def get_searched_queryset(self, qs):
-        """CUSTOM"""
+        """
+        CUSTOM
+        """
 
         model = self.model
         term = self.GET["filter[value]"]  # ho cambiato da "term" a "filter[value]"

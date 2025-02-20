@@ -375,6 +375,7 @@ class BaseWebixMixin:
                             else:
                                 break
                     if callable(initial):
+                        # noinspection PyCallingNonCallable
                         initial = initial()
                     if isinstance(initial, six.string_types):
                         el.update({"value": "{}".format(initial)})
@@ -401,6 +402,7 @@ class BaseWebixMixin:
                             else:
                                 break
                     if callable(initial):
+                        # noinspection PyCallingNonCallable
                         initial = initial()
                     if not is_naive(initial):
                         initial = make_naive(initial)

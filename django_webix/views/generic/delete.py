@@ -121,6 +121,7 @@ class WebixDeleteView(WebixBaseMixin, WebixPermissionsMixin, WebixUrlMixin, Dele
         self.object = self.get_object()
         self.copied_object = copy.deepcopy(self.object)
 
+        # noinspection PyCallingNonCallable
         anonymous = request.user.is_anonymous() if callable(request.user.is_anonymous) else request.user.is_anonymous
         if len(self.get_failure_delete_related_objects(request=request, obj=self.object)) > 0:
             return self.response_invalid(failure_url=self.get_failure_url())

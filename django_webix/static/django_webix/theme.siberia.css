@@ -123,7 +123,7 @@ div.webix_ss_header input[type='checkbox'] {
 
 .flex_tmp .item {
     min-width: 100px;
-    padding-top: 0px;
+    padding-top: 0;
     height: auto;
 }
 

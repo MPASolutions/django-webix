@@ -14,6 +14,8 @@ import os
 import sys
 
 import django_webix
+
+# noinspection PyUnresolvedReferences
 import sphinx_rtd_theme
 
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "tests.settings")
