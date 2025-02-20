@@ -588,8 +588,8 @@ if (
         {% endblock %}
 
         setTimeout(function() {
-           {{ view_prefix }}restore_state_grid();
            {{ view_prefix }}_first_load = false;
+           {{ view_prefix }}restore_state_grid();
            {{ view_prefix }}apply_filters(); // must always get first page
         },100) // build grid browser timing
         {% endif %}
