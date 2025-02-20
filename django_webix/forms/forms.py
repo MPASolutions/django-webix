@@ -1037,13 +1037,16 @@ class BaseWebixMixin:
                         el["suggest"]["width"] = self.get_suggest_width()
 
                     if initial is not None:
-                        el.update(
-                            {
-                                "value": ",".join(
-                                    [str(i.pk) if isinstance(i, models.Model) else str(i) for i in initial]
-                                )
-                            }
-                        )
+                        if isinstance(initial, list):
+                            el.update(
+                                {
+                                    "value": ",".join(
+                                        [str(i.pk) if isinstance(i, models.Model) else str(i) for i in initial]
+                                    )
+                                }
+                            )
+                        else:
+                            el.update({"value": initial})
 
                 elif initial is not None:
                     el.update({"value": initial})
