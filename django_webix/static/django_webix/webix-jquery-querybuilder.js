@@ -523,11 +523,16 @@ webix.ui.jQueryQuerybuilder = webix.protoUI({
                             container.webix_datepicker({
                                 id: 'value_' + ruleInput.attr("name"),
                                 width: 300,
-                                format: webix.Date.dateToStr("%Y-%m-%d"),
+                                format: "%Y-%m-%d",
+                                stringResult: true,
                                 on: {
                                     onChange: function (newv, oldv) {
                                         var format_giorno_js = webix.Date.dateToStr("%Y-%m-%d");
-                                        ruleInput.val(format_giorno_js(newv));
+                                        if(newv instanceof Date){
+                                            ruleInput.val(format_giorno_js(newv));
+                                        } else {
+                                           ruleInput.val(newv);
+                                        }
                                         ruleInput.trigger("change");
                                     }
                                 }
@@ -538,11 +543,16 @@ webix.ui.jQueryQuerybuilder = webix.protoUI({
                                 id: 'value_' +  ruleInput.attr("name"),
                                 width: 300,
                                 type: "time",
-                                format: webix.Date.dateToStr("%H:%i:%s"),
+                                format: "%H:%i:%s",
+                                stringResult: true,
                                 on: {
                                     onChange: function (newv, oldv) {
                                         var format_ora_js = webix.Date.dateToStr("%H:%i:%s")
-                                        ruleInput.val(format_ora_js(newv));
+                                        if(newv instanceof Date){
+                                            ruleInput.val(format_ora_js(newv));
+                                        } else {
+                                           ruleInput.val(newv);
+                                        }
                                         ruleInput.trigger("change");
                                     }
                                 }
@@ -1007,11 +1017,16 @@ webix.ui.jQueryQuerybuilder = webix.protoUI({
                             container_input.webix_datepicker({
                                 id: 'value_' + ruleInput.attr("name"),
                                 width: 300,
-                                format: webix.Date.dateToStr("%Y-%m-%d"),
+                                format: "%Y-%m-%d",
+                                stringResult: true,
                                 on: {
                                     onChange: function (newv, oldv) {
                                         var format_giorno_js = webix.Date.dateToStr("%Y-%m-%d");
-                                        ruleInput.val(format_giorno_js(newv));
+                                        if(newv instanceof Date){
+                                            ruleInput.val(format_giorno_js(newv));
+                                        } else {
+                                           ruleInput.val(newv);
+                                        }
                                         ruleInput.trigger("change");
                                     }
                                 }
@@ -1024,11 +1039,16 @@ webix.ui.jQueryQuerybuilder = webix.protoUI({
                                 id: 'value_' + ruleInput.attr("name"),
                                 width: 300,
                                 type: "time",
-                                format: webix.Date.dateToStr("%H:%i:%s"),
+                                format: "%H:%i:%s",
+                                stringResult: true,
                                 on: {
                                     onChange: function (newv, oldv) {
                                         var format_ora_js = webix.Date.dateToStr("%H:%i:%s")
-                                        ruleInput.val(format_ora_js(newv));
+                                        if(newv instanceof Date){
+                                            ruleInput.val(format_ora_js(newv));
+                                        } else {
+                                           ruleInput.val(newv);
+                                        }
                                         ruleInput.trigger("change");
                                     }
                                 }
