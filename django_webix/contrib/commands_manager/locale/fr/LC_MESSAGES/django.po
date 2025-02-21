@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-12-16 10:49+0100\n"
+"POT-Creation-Date: 2025-02-21 17:48+0100\n"
 "PO-Revision-Date: 2022-03-21 12:42+0050\n"
 "Last-Translator: Traduzioni CBC <>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -23,11 +23,11 @@ msgstr ""
 msgid "Django Webix Commands Manager"
 msgstr ""
 
-#: contrib/commands_manager/forms.py:48 contrib/commands_manager/models.py:11
+#: contrib/commands_manager/forms.py:46 contrib/commands_manager/models.py:11
 msgid "Parameters"
 msgstr "Paramètres"
 
-#: contrib/commands_manager/forms.py:58 contrib/commands_manager/models.py:24
+#: contrib/commands_manager/forms.py:56 contrib/commands_manager/models.py:24
 msgid "Output"
 msgstr ""
 

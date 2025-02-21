@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-12-16 10:49+0100\n"
+"POT-Creation-Date: 2025-02-21 17:48+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -22,7 +22,7 @@ msgstr ""
 msgid "Administration"
 msgstr ""
 
-#: contrib/admin/django_admin_utils.py:57 contrib/admin/forms.py:176
+#: contrib/admin/django_admin_utils.py:57 contrib/admin/forms.py:175
 msgid "Groups"
 msgstr ""
 
@@ -93,11 +93,11 @@ msgstr ""
 msgid "Selected"
 msgstr ""
 
-#: contrib/admin/forms.py:56 contrib/admin/forms.py:255
+#: contrib/admin/forms.py:56 contrib/admin/forms.py:254
 msgid "The two password fields didn’t match."
 msgstr ""
 
-#: contrib/admin/forms.py:59 contrib/admin/forms.py:259
+#: contrib/admin/forms.py:59 contrib/admin/forms.py:258
 #: contrib/admin/templates/django_webix/admin/login.html:46
 msgid "Password"
 msgstr ""
@@ -106,27 +106,27 @@ msgstr ""
 msgid "Password confirmation"
 msgstr ""
 
-#: contrib/admin/forms.py:68 contrib/admin/forms.py:268
+#: contrib/admin/forms.py:68 contrib/admin/forms.py:267
 msgid "Enter the same password as before, for verification."
 msgstr ""
 
-#: contrib/admin/forms.py:173
+#: contrib/admin/forms.py:172
 msgid "Private data"
 msgstr ""
 
-#: contrib/admin/forms.py:174
+#: contrib/admin/forms.py:173
 msgid "Personal informations"
 msgstr ""
 
-#: contrib/admin/forms.py:175
+#: contrib/admin/forms.py:174
 msgid "Permissions"
 msgstr ""
 
-#: contrib/admin/forms.py:197
+#: contrib/admin/forms.py:196
 msgid "Change password"
 msgstr ""
 
-#: contrib/admin/forms.py:265
+#: contrib/admin/forms.py:264
 msgid "Password (again)"
 msgstr ""
 
