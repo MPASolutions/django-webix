@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-12-16 10:49+0100\n"
+"POT-Creation-Date: 2025-02-21 17:48+0100\n"
 "PO-Revision-Date: 2024-03-08 10:28+0100\n"
 "Last-Translator: Stefano Menegon <dallago@mpasol.it>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -23,7 +23,7 @@ msgstr ""
 msgid "Administration"
 msgstr "Verwaltung"
 
-#: contrib/admin/django_admin_utils.py:57 contrib/admin/forms.py:176
+#: contrib/admin/django_admin_utils.py:57 contrib/admin/forms.py:175
 msgid "Groups"
 msgstr "Gruppen"
 
@@ -98,11 +98,11 @@ msgstr "Verfügbare Berechtigungen"
 msgid "Selected"
 msgstr "Ausgewählt"
 
-#: contrib/admin/forms.py:56 contrib/admin/forms.py:255
+#: contrib/admin/forms.py:56 contrib/admin/forms.py:254
 msgid "The two password fields didn’t match."
 msgstr "Die beiden Passwörter stimmten nicht überein."
 
-#: contrib/admin/forms.py:59 contrib/admin/forms.py:259
+#: contrib/admin/forms.py:59 contrib/admin/forms.py:258
 #: contrib/admin/templates/django_webix/admin/login.html:46
 msgid "Password"
 msgstr "Passwort"
@@ -111,27 +111,27 @@ msgstr "Passwort"
 msgid "Password confirmation"
 msgstr "Passwort Bestätigung"
 
-#: contrib/admin/forms.py:68 contrib/admin/forms.py:268
+#: contrib/admin/forms.py:68 contrib/admin/forms.py:267
 msgid "Enter the same password as before, for verification."
 msgstr "Geben Sie zur Überprüfung das gleiche Passwort wie zuvor ein."
 
-#: contrib/admin/forms.py:173
+#: contrib/admin/forms.py:172
 msgid "Private data"
 msgstr "Private Daten"
 
-#: contrib/admin/forms.py:174
+#: contrib/admin/forms.py:173
 msgid "Personal informations"
 msgstr "Persönliche Informationen"
 
-#: contrib/admin/forms.py:175
+#: contrib/admin/forms.py:174
 msgid "Permissions"
 msgstr "Berechtigungen"
 
-#: contrib/admin/forms.py:197
+#: contrib/admin/forms.py:196
 msgid "Change password"
 msgstr "Passwort  ändern"
 
-#: contrib/admin/forms.py:265
+#: contrib/admin/forms.py:264
 msgid "Password (again)"
 msgstr "Passwort (wieder)"
 
