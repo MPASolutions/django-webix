@@ -247,6 +247,16 @@ function custom_checkbox_yesnonone(obj, common, value) {
     }
 }
 
+function template_carriagereturn(obj, common, value) {
+    return '<div style="border:1px solid #000;height:15px;background-color: '+value+'"></div>';
+}
+
+function template_replace_newline(obj, common, value) {
+    value = value.replaceAll("\r\n", "<br/>"); // Windows
+    value = value.replaceAll("\r", "<br/>"); // Old MAC
+    return value.replaceAll("\n", "<br/>"); // Linux / UNIX
+}
+
 function template_colour_rgb(obj, common, value) {
     return '<div style="border:1px solid #000;height:15px;background-color: '+value+'"></div>';
 }

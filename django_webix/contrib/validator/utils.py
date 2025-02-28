@@ -505,7 +505,7 @@ class ImportValidator:
                     self.check_mimetype is False or (mimetype in MIME["csv"] or mimetype in MIME["txt"])
                 ):
                     try:
-                        # check nrighe se usa skiprows, pandas si spacca se uso skiprows=1 ma c'è una sola riga
+                        # check n righe se usa skiprows, pandas si spacca se uso skiprows=1 ma c'è una sola riga
                         self.df_rows = pd.read_csv(self.filepath_or_buffer, dtype="object", **self.kw_pandas_read)
                     except pd.errors.EmptyDataError:
                         self.file_err.append(ERR_MSG["NODATA"].format(self.sheet_name + 1))
