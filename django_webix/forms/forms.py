@@ -501,6 +501,7 @@ class BaseWebixMixin:
                                     "id_label": "preview_" + self[name].auto_id,
                                     "id": "block_preview_" + self[name].auto_id,
                                     "borderless": True,
+                                    "view": "template",
                                     "template": _template_file,
                                     "height": 100,
                                     "width": 170,

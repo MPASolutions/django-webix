@@ -7,6 +7,7 @@ from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.contrib.auth.models import Group
+from django.contrib.contenttypes.models import ContentType
 from django.contrib.postgres.aggregates import StringAgg
 from django.db.models import Case, CharField, DecimalField, F, IntegerField, OuterRef, Q, Subquery, Sum, Value, When
 from django.db.models.functions import Cast, StrIndex, Substr
@@ -297,16 +298,45 @@ class SenderMessagesListView(WebixListView):
     title = _("Messages")
     order_by = ["-creation_date"]
 
+    def _get_objects_datatable_values(self, qs):
+        data = super()._get_objects_datatable_values(qs)
+        content_type_cache = {}
+
+        for value in data:
+            # Check if the ContentType is already cached
+            if value["content_type_id"] not in content_type_cache:
+                # If not cached, retrieve it from the database and cache it
+                content_type = get_object_or_404(ContentType, id=value["content_type_id"])
+                content_type_cache[value["content_type_id"]] = content_type
+            else:
+                # If cached, use the cached ContentType
+                content_type = content_type_cache[value["content_type_id"]]
+
+            model_class = content_type.model_class()
+            instance = get_object_or_404(model_class, id=value["object_id"])
+
+            value.update({"recipient_str": str(instance)})
+        return data
+
     def get_fields(self):
         _fields = [
+            {
+                "field_name": "content_type_id",
+                "datalist_column": """{id: "content_type_id", hidden: true}""",
+            },
+            {
+                "field_name": "object_id",
+                "datalist_column": """{id: "object_id", hidden: true}""",
+            },
             {
                 "field_name": "send_method_type",
                 "datalist_column": format_lazy(
                     """{{
                         id: "send_method_type",
-                        serverFilterType: "exact",
-                        header: ["{}", {{content: "serverSelectFilter", options: send_method_type_options}}],
-                        adjust: "all"
+                        serverFilterType: "exact_in",
+                        header: ["{}", {{content: "serverMultiSelectFilter", options: send_method_type_options}}],
+                        adjust: "all",
+                        minWidth: 150,
                     }}""",
                     escapejs(_("Send method type")),
                 ),
@@ -344,6 +374,19 @@ class SenderMessagesListView(WebixListView):
                 ),
             },
             {
+                "field_name": "recipient_str",
+                "queryset_exclude": True,
+                "datalist_column": format_lazy(
+                    """{{
+                        id: "recipient_str",
+                        header: ["{}"],
+                        adjust: "all",
+                        maxWidth: 150,
+                    }}""",
+                    escapejs(_("Interested")),
+                ),
+            },
+            {
                 "field_name": "message_sent__subject",
                 "datalist_column": format_lazy(
                     """{{
@@ -363,7 +406,8 @@ class SenderMessagesListView(WebixListView):
                         serverFilterType: "icontains",
                         header: ["{}", {{content: "serverFilter"}}],
                         adjust: "all",
-                        fillspace: true
+                        fillspace: true,
+                        template: template_replace_newline
                     }}""",
                     escapejs(_("Body")),
                 ),
@@ -465,7 +509,6 @@ class SenderMessagesListView(WebixListView):
 
         # Annotate attachments
         app_label, model = CONF["attachments"]["model"].lower().split(".")
-        model_class = apps.get_model(app_label=app_label, model_name=model)
         qs = qs.annotate(
             attachments=StringAgg(
                 # 'message_sent__attachments__{}'.format(model_class.get_file_fieldpath()),
