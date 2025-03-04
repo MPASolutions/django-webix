@@ -100,7 +100,7 @@ def get_actions_flexport(request, model):
 
 class WebixListView(WebixBaseMixin, WebixPermissionsMixin, WebixUrlMixin, ListView):
     # request vars
-    http_method_names = ["get", "post"]  # enable POST for filter porpouse
+    http_method_names = ["get", "post"]  # enable POST for filter porpoise
 
     # queryset vars
     pk_field = None
@@ -183,7 +183,8 @@ class WebixListView(WebixBaseMixin, WebixPermissionsMixin, WebixUrlMixin, ListVi
                     _related = "__".join(_related)
                     if _related != "":
                         _select_related.append(_related)
-            qs = qs.select_related(*_select_related)
+            if _select_related:
+                qs = qs.select_related(*_select_related)
         return qs
 
     def _model_translations(self, qs):
@@ -315,7 +316,8 @@ class WebixListView(WebixBaseMixin, WebixPermissionsMixin, WebixUrlMixin, ListVi
             if self.is_enable_column_webgis(self.request):
                 geo_field_names = get_model_geo_field_names(self.model)
                 annotations = self.get_annotations_geoavailable(geo_field_names)
-                qs = qs.annotate(**annotations)
+                if annotations:
+                    qs = qs.annotate(**annotations)
 
             # optimize select related queryset (only if fields are defined)
             qs = self._optimize_select_related(qs)  # TODO
@@ -675,7 +677,10 @@ class WebixListView(WebixBaseMixin, WebixPermissionsMixin, WebixUrlMixin, ListVi
             # apply ordering
             qs = self.apply_ordering(qs)
             # total count
-            total_count = qs.only(self.get_pk_field()).count()
+            if "UNION" in str(qs.query):
+                total_count = qs.count()
+            else:  # optimized count
+                total_count = qs.only(self.get_pk_field()).count()
             # apply pagination
             qs_paginate = self.paginate_queryset(qs, None)
             # build output

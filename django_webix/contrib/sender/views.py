@@ -304,13 +304,13 @@ class SenderMessagesListView(WebixListView):
 
         for value in data:
             # Check if the ContentType is already cached
-            if value["content_type_id"] not in content_type_cache:
+            if value["content_type__id"] not in content_type_cache:
                 # If not cached, retrieve it from the database and cache it
-                content_type = get_object_or_404(ContentType, id=value["content_type_id"])
-                content_type_cache[value["content_type_id"]] = content_type
+                content_type = get_object_or_404(ContentType, id=value["content_type__id"])
+                content_type_cache[value["content_type__id"]] = content_type
             else:
                 # If cached, use the cached ContentType
-                content_type = content_type_cache[value["content_type_id"]]
+                content_type = content_type_cache[value["content_type__id"]]
 
             model_class = content_type.model_class()
             instance = get_object_or_404(model_class, id=value["object_id"])
@@ -321,8 +321,8 @@ class SenderMessagesListView(WebixListView):
     def get_fields(self):
         _fields = [
             {
-                "field_name": "content_type_id",
-                "datalist_column": """{id: "content_type_id", hidden: true}""",
+                "field_name": "content_type__id",
+                "datalist_column": """{id: "content_type__id", hidden: true}""",
             },
             {
                 "field_name": "object_id",
