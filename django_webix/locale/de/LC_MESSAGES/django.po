@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-02-21 17:48+0100\n"
+"POT-Creation-Date: 2025-03-05 08:41+0100\n"
 "PO-Revision-Date: 2024-10-01 18:00+0200\n"
 "Last-Translator: Stefano Menegon <dallago@mpasol.it>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -109,56 +109,56 @@ msgstr "Neues Bild hochladen"
 msgid "Change image"
 msgstr "Bild ändern"
 
-#: forms/forms.py:551 forms/forms.py:695
+#: forms/forms.py:552 forms/forms.py:696
 msgid "Deleted"
 msgstr "Gelöscht"
 
-#: forms/forms.py:585
+#: forms/forms.py:586
 msgid "Upload file"
 msgstr "Datei hochladen"
 
-#: forms/forms.py:585
+#: forms/forms.py:586
 msgid "Change file"
 msgstr "Datei ändern"
 
-#: forms/forms.py:608
+#: forms/forms.py:609
 msgid "Upload folder"
 msgstr "Ordner hochladen"
 
-#: forms/forms.py:608
+#: forms/forms.py:609
 msgid "Change folder"
 msgstr "Ordner ändern"
 
-#: forms/forms.py:610
+#: forms/forms.py:611
 msgid "Upload files"
 msgstr "Dateien hochladen"
 
-#: forms/forms.py:610
+#: forms/forms.py:611
 msgid "Change files"
 msgstr "Dateien ändern"
 
-#: forms/forms.py:723
+#: forms/forms.py:724
 msgid "MultipleChoiceField is available only with PRO webix license"
 msgstr "Mehrfachauswahl-Feld nur mit PRO webix Lizenz verfügbar"
 
-#: forms/forms.py:763 forms/forms.py:796 forms/forms.py:867 forms/forms.py:930
-#: forms/forms.py:1022
+#: forms/forms.py:764 forms/forms.py:797 forms/forms.py:868 forms/forms.py:931
+#: forms/forms.py:1023
 msgid "Write and select"
 msgstr "Schreiben und auswählen"
 
-#: forms/forms.py:906 forms/forms.py:954
+#: forms/forms.py:907 forms/forms.py:955
 msgid "Click and select"
 msgstr "Klicken und auswählen"
 
-#: forms/forms.py:1073
+#: forms/forms.py:1074
 msgid "Initial value {} for geo field {} is not supported"
 msgstr "Anfangswert {} für Geo-Feld {} nicht unterstützt"
 
-#: forms/forms.py:1112
+#: forms/forms.py:1113
 msgid "Edit"
 msgstr "Bearbeiten"
 
-#: forms/forms.py:1272
+#: forms/forms.py:1273
 msgid "Type of field {} not supported"
 msgstr "Feldtyp {} nicht unterstutzt "
 
@@ -208,7 +208,7 @@ msgstr "Erweiterter Filter"
 #: templates/django_webix/generic/list.js:243
 #: templates/django_webix/include/toolbar_navigation.js:49
 #: templates/django_webix/include/toolbar_navigation.js:106
-#: views/generic/list.py:542
+#: views/generic/list.py:544
 msgid "Go to map"
 msgstr "Zur Karte gehen"
 
@@ -235,8 +235,8 @@ msgid "You do not have permission to edit this item"
 msgstr "Sie haben keine Berechtigung, dieses Element zu bearbeiten"
 
 #: templates/django_webix/generic/list.js:481
-#: templates/django_webix/include/utils.js:388
-#: templates/django_webix/include/utils.js:448
+#: templates/django_webix/include/utils.js:398
+#: templates/django_webix/include/utils.js:458
 msgid "Server error"
 msgstr "Server-Fehler"
 
@@ -248,7 +248,7 @@ msgstr "Doppelklick, um das Element zu bearbeiten"
 #: templates/django_webix/include/actions_list.js:74
 #: templates/django_webix/include/form_errors_popup.js:16
 #: templates/django_webix/include/form_warnings.js:23
-#: templates/django_webix/include/utils.js:304
+#: templates/django_webix/include/utils.js:314
 msgid "Close"
 msgstr "Schließen"
 
@@ -399,7 +399,7 @@ msgstr "Von "
 
 #: templates/django_webix/include/toolbar_list.js:43
 #: templates/django_webix/include/toolbar_list.js:52
-#: templates/django_webix/include/utils.js:613
+#: templates/django_webix/include/utils.js:623
 msgid "All"
 msgstr "Alle"
 
@@ -431,52 +431,52 @@ msgid "Reload"
 msgstr ""
 
 #: templates/django_webix/include/utils.js:235
-#: templates/django_webix/include/utils.js:242 views/generic/list.py:346
+#: templates/django_webix/include/utils.js:242 views/generic/list.py:348
 msgid "Yes"
 msgstr "Ja"
 
 #: templates/django_webix/include/utils.js:237
-#: templates/django_webix/include/utils.js:244 views/generic/list.py:347
+#: templates/django_webix/include/utils.js:244 views/generic/list.py:349
 msgid "No"
 msgstr "Nein"
 
-#: templates/django_webix/include/utils.js:256
+#: templates/django_webix/include/utils.js:266
 msgid "Default"
 msgstr "Default"
 
-#: templates/django_webix/include/utils.js:263
+#: templates/django_webix/include/utils.js:273
 msgid "Show on map"
 msgstr "Auf Karte anzeigen "
 
-#: templates/django_webix/include/utils.js:269
+#: templates/django_webix/include/utils.js:279
 msgid "Duplicate element"
 msgstr "Element duplizieren"
 
-#: templates/django_webix/include/utils.js:273
+#: templates/django_webix/include/utils.js:283
 msgid "Remove element"
 msgstr "Element löschen"
 
-#: templates/django_webix/include/utils.js:277
+#: templates/django_webix/include/utils.js:287
 msgid "Detail"
 msgstr "Detail"
 
-#: templates/django_webix/include/utils.js:301
+#: templates/django_webix/include/utils.js:311
 msgid "Image"
 msgstr "Bild"
 
-#: templates/django_webix/include/utils.js:446
+#: templates/django_webix/include/utils.js:456
 msgid "Permission denied"
 msgstr "Permission denied"
 
-#: templates/django_webix/include/utils.js:647
+#: templates/django_webix/include/utils.js:657
 msgid "Click and change"
 msgstr "Klicken und ändern"
 
-#: templates/django_webix/include/utils.js:649
+#: templates/django_webix/include/utils.js:659
 msgid "Locked data"
 msgstr "Gesperrte Daten"
 
-#: templates/django_webix/include/utils.js:691
+#: templates/django_webix/include/utils.js:701
 msgid "Editable column"
 msgstr "Bearbeitbare Spalte"
 
@@ -547,7 +547,7 @@ msgstr ""
 
 #: views/generic/create_update.py:404 views/generic/create_update.py:488
 #: views/generic/delete.py:42 views/generic/detail.py:18
-#: views/generic/list.py:725
+#: views/generic/list.py:730
 msgid "View permission is not allowed"
 msgstr "Ansichtsberechtigung nicht erlaubt"
 
@@ -612,19 +612,19 @@ msgstr ""
 "Keine URL, auf die umgeleitet werden kann. Entweder eine URL angeben oder "
 "eine get_absolute_url-Methode im Modell definieren."
 
-#: views/generic/list.py:422
+#: views/generic/list.py:424
 msgid "Paginate count is not integer"
 msgstr "Seitenzahl ist nicht ganzzahlig"
 
-#: views/generic/list.py:431
+#: views/generic/list.py:433
 msgid "Paginate start is not integer"
 msgstr "Seitenanfang ist nicht ganzzahlig"
 
-#: views/generic/list.py:543
+#: views/generic/list.py:545
 msgid "Filter in map"
 msgstr "In der Karte filtern"
 
-#: views/generic/list.py:685
+#: views/generic/list.py:690
 msgid ""
 "Json response is available only if get_queryset() return a queryset and not "
 "a list"
@@ -632,19 +632,19 @@ msgstr ""
 "Json-Antwort ist nur verfügbar, wenn get_queryset() ein Queryset und nicht "
 "eine Liste zurückgibt"
 
-#: views/generic/list.py:705
+#: views/generic/list.py:710
 msgid "This action is not registered"
 msgstr "Diese Aktion ist nicht registriert"
 
-#: views/generic/list.py:711
+#: views/generic/list.py:716
 msgid "Permission denied: {}"
 msgstr "Berechtigung verweigert: {}"
 
-#: views/generic/list.py:713
+#: views/generic/list.py:718
 msgid "This permission is not registered on this class"
 msgstr "Diese Berechtigung ist nicht auf dieser Klasse registriert"
 
-#: views/generic/list.py:793
+#: views/generic/list.py:798
 msgid "Generic TemplateListView needs to define data for datatable"
 msgstr "Generic TemplateListView muss Daten für Datentabelle definieren"
 
