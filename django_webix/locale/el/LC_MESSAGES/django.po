@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-02-21 17:48+0100\n"
+"POT-Creation-Date: 2025-03-05 08:41+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -106,56 +106,56 @@ msgstr ""
 msgid "Change image"
 msgstr ""
 
-#: forms/forms.py:551 forms/forms.py:695
+#: forms/forms.py:552 forms/forms.py:696
 msgid "Deleted"
 msgstr ""
 
-#: forms/forms.py:585
+#: forms/forms.py:586
 msgid "Upload file"
 msgstr ""
 
-#: forms/forms.py:585
+#: forms/forms.py:586
 msgid "Change file"
 msgstr ""
 
-#: forms/forms.py:608
+#: forms/forms.py:609
 msgid "Upload folder"
 msgstr ""
 
-#: forms/forms.py:608
+#: forms/forms.py:609
 msgid "Change folder"
 msgstr ""
 
-#: forms/forms.py:610
+#: forms/forms.py:611
 msgid "Upload files"
 msgstr ""
 
-#: forms/forms.py:610
+#: forms/forms.py:611
 msgid "Change files"
 msgstr ""
 
-#: forms/forms.py:723
+#: forms/forms.py:724
 msgid "MultipleChoiceField is available only with PRO webix license"
 msgstr ""
 
-#: forms/forms.py:763 forms/forms.py:796 forms/forms.py:867 forms/forms.py:930
-#: forms/forms.py:1022
+#: forms/forms.py:764 forms/forms.py:797 forms/forms.py:868 forms/forms.py:931
+#: forms/forms.py:1023
 msgid "Write and select"
 msgstr ""
 
-#: forms/forms.py:906 forms/forms.py:954
+#: forms/forms.py:907 forms/forms.py:955
 msgid "Click and select"
 msgstr ""
 
-#: forms/forms.py:1073
+#: forms/forms.py:1074
 msgid "Initial value {} for geo field {} is not supported"
 msgstr ""
 
-#: forms/forms.py:1112
+#: forms/forms.py:1113
 msgid "Edit"
 msgstr ""
 
-#: forms/forms.py:1272
+#: forms/forms.py:1273
 msgid "Type of field {} not supported"
 msgstr ""
 
@@ -205,7 +205,7 @@ msgstr ""
 #: templates/django_webix/generic/list.js:243
 #: templates/django_webix/include/toolbar_navigation.js:49
 #: templates/django_webix/include/toolbar_navigation.js:106
-#: views/generic/list.py:542
+#: views/generic/list.py:544
 msgid "Go to map"
 msgstr ""
 
@@ -232,8 +232,8 @@ msgid "You do not have permission to edit this item"
 msgstr ""
 
 #: templates/django_webix/generic/list.js:481
-#: templates/django_webix/include/utils.js:388
-#: templates/django_webix/include/utils.js:448
+#: templates/django_webix/include/utils.js:398
+#: templates/django_webix/include/utils.js:458
 msgid "Server error"
 msgstr ""
 
@@ -245,7 +245,7 @@ msgstr ""
 #: templates/django_webix/include/actions_list.js:74
 #: templates/django_webix/include/form_errors_popup.js:16
 #: templates/django_webix/include/form_warnings.js:23
-#: templates/django_webix/include/utils.js:304
+#: templates/django_webix/include/utils.js:314
 msgid "Close"
 msgstr ""
 
@@ -396,7 +396,7 @@ msgstr ""
 
 #: templates/django_webix/include/toolbar_list.js:43
 #: templates/django_webix/include/toolbar_list.js:52
-#: templates/django_webix/include/utils.js:613
+#: templates/django_webix/include/utils.js:623
 msgid "All"
 msgstr ""
 
@@ -428,52 +428,52 @@ msgid "Reload"
 msgstr ""
 
 #: templates/django_webix/include/utils.js:235
-#: templates/django_webix/include/utils.js:242 views/generic/list.py:346
+#: templates/django_webix/include/utils.js:242 views/generic/list.py:348
 msgid "Yes"
 msgstr ""
 
 #: templates/django_webix/include/utils.js:237
-#: templates/django_webix/include/utils.js:244 views/generic/list.py:347
+#: templates/django_webix/include/utils.js:244 views/generic/list.py:349
 msgid "No"
 msgstr ""
 
-#: templates/django_webix/include/utils.js:256
+#: templates/django_webix/include/utils.js:266
 msgid "Default"
 msgstr ""
 
-#: templates/django_webix/include/utils.js:263
+#: templates/django_webix/include/utils.js:273
 msgid "Show on map"
 msgstr ""
 
-#: templates/django_webix/include/utils.js:269
+#: templates/django_webix/include/utils.js:279
 msgid "Duplicate element"
 msgstr ""
 
-#: templates/django_webix/include/utils.js:273
+#: templates/django_webix/include/utils.js:283
 msgid "Remove element"
 msgstr ""
 
-#: templates/django_webix/include/utils.js:277
+#: templates/django_webix/include/utils.js:287
 msgid "Detail"
 msgstr ""
 
-#: templates/django_webix/include/utils.js:301
+#: templates/django_webix/include/utils.js:311
 msgid "Image"
 msgstr ""
 
-#: templates/django_webix/include/utils.js:446
+#: templates/django_webix/include/utils.js:456
 msgid "Permission denied"
 msgstr ""
 
-#: templates/django_webix/include/utils.js:647
+#: templates/django_webix/include/utils.js:657
 msgid "Click and change"
 msgstr ""
 
-#: templates/django_webix/include/utils.js:649
+#: templates/django_webix/include/utils.js:659
 msgid "Locked data"
 msgstr ""
 
-#: templates/django_webix/include/utils.js:691
+#: templates/django_webix/include/utils.js:701
 msgid "Editable column"
 msgstr ""
 
@@ -542,7 +542,7 @@ msgstr ""
 
 #: views/generic/create_update.py:404 views/generic/create_update.py:488
 #: views/generic/delete.py:42 views/generic/detail.py:18
-#: views/generic/list.py:725
+#: views/generic/list.py:730
 msgid "View permission is not allowed"
 msgstr ""
 
@@ -603,36 +603,36 @@ msgid ""
 "get_absolute_url method on the Model."
 msgstr ""
 
-#: views/generic/list.py:422
+#: views/generic/list.py:424
 msgid "Paginate count is not integer"
 msgstr ""
 
-#: views/generic/list.py:431
+#: views/generic/list.py:433
 msgid "Paginate start is not integer"
 msgstr ""
 
-#: views/generic/list.py:543
+#: views/generic/list.py:545
 msgid "Filter in map"
 msgstr ""
 
-#: views/generic/list.py:685
+#: views/generic/list.py:690
 msgid ""
 "Json response is available only if get_queryset() return a queryset and not "
 "a list"
 msgstr ""
 
-#: views/generic/list.py:705
+#: views/generic/list.py:710
 msgid "This action is not registered"
 msgstr ""
 
-#: views/generic/list.py:711
+#: views/generic/list.py:716
 msgid "Permission denied: {}"
 msgstr ""
 
-#: views/generic/list.py:713
+#: views/generic/list.py:718
 msgid "This permission is not registered on this class"
 msgstr ""
 
-#: views/generic/list.py:793
+#: views/generic/list.py:798
 msgid "Generic TemplateListView needs to define data for datatable"
 msgstr ""
