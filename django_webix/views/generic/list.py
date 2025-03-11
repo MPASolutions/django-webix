@@ -3,7 +3,7 @@ from copy import deepcopy
 
 from django.apps import apps
 from django.contrib.auth.decorators import login_required
-from django.core.exceptions import FieldDoesNotExist, ImproperlyConfigured, PermissionDenied
+from django.core.exceptions import EmptyResultSet, FieldDoesNotExist, ImproperlyConfigured, PermissionDenied
 from django.db.models import BooleanField, Case, F, ForeignKey, ManyToManyField, Value, When
 from django.db.models.functions import Coalesce
 from django.db.models.query import QuerySet
@@ -677,10 +677,15 @@ class WebixListView(WebixBaseMixin, WebixPermissionsMixin, WebixUrlMixin, ListVi
             # apply ordering
             qs = self.apply_ordering(qs)
             # total count
-            if "UNION" in str(qs.query):
-                total_count = qs.count()
-            else:  # optimized count
-                total_count = qs.only(self.get_pk_field()).count()
+            try:
+                qs_query = str(qs.query)
+            except EmptyResultSet:
+                total_count = 0
+            else:
+                if "UNION" in qs_query:
+                    total_count = qs.count()
+                else:  # optimized count
+                    total_count = qs.only(self.get_pk_field()).count()
             # apply pagination
             qs_paginate = self.paginate_queryset(qs, None)
             # build output
