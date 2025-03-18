@@ -105,3 +105,37 @@ class ModelChoiceZFillField(forms.ModelChoiceField):
         if not value:
             return
         return super().to_python(str(value).zfill(self.zfill))
+
+
+class MultipleChoiceSplitField(forms.MultipleChoiceField):
+
+    def __init__(self, separator=",", *args, **kwargs):
+        self.separator = separator
+        super().__init__(*args, **kwargs)
+
+    def to_python(self, value):
+        if isinstance(value, str):
+            value = value.split(self.separator)
+
+        return super().to_python(value)
+
+
+class ModelMultipleChoiceSplitField(forms.ModelMultipleChoiceField):
+
+    def __init__(self, separator=",", *args, **kwargs):
+        self.separator = separator
+        super().__init__(*args, **kwargs)
+
+    def to_python(self, value):
+        if isinstance(value, str):
+            value = value.split(self.separator)
+
+        return super().to_python(value)
+
+    def prepare_value(self, value):
+        if isinstance(value, str):
+            if value == "":
+                value = None
+            else:
+                value = value.split(self.separator)
+        return super().prepare_value(value)
