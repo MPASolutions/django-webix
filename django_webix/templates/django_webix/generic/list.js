@@ -526,7 +526,25 @@ if (
                     } else if (id.column == 'cmd_rm') {
                         {% block cmd_rm_click %}
                             {% if has_delete_permission and is_enable_column_delete %}
-                                load_js('{{ url_delete|safe }}'.replace('0', el.{{column_id}}), undefined, undefined, undefined, undefined, undefined, undefined, abortAllPending=true);
+                                let url_delete = '{{ url_delete|safe }}'.replace('0', el.{{column_id}});
+                                function done_check_delete_permission(msg){
+                                    if (msg['has_delete_permission']==true) {
+                                        load_js(url_delete, undefined, undefined, undefined, undefined, undefined, undefined, abortAllPending=true);
+                                    } else {
+                                        webix.confirm({
+                                            title: msg['info_no_delete_permission'].join(', '),
+                                            ok: "{{_("Prosegui")|escapejs}}",
+                                            cancel: "{{_("Annulla")|escapejs}}",
+                                        }).then(function(result){
+    //                                        $$('{{ webix_container_id }}').hideOverlay();
+                                            load_js(url_delete, undefined, undefined, undefined, undefined, undefined, undefined, abortAllPending=true);
+                                        }).fail(function(result){
+                                            $$('{{ webix_container_id }}').hideOverlay();
+
+                                        })
+                                    }
+                                    }
+                                load_js(url_delete+'?json=true', undefined, undefined, undefined, undefined, undefined, 'json', abortAllPending=true, done_check_delete_permission);
                             {% endif %}
                         {% endblock %}
                     } else if (id.column!='checkbox_action') {

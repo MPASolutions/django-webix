@@ -4,7 +4,7 @@ import json
 from django.apps import apps
 from django.conf import settings
 from django.core.exceptions import ImproperlyConfigured, PermissionDenied
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, JsonResponse
 from django.utils.translation import gettext as _
 from django.views.generic import DeleteView
 from django_webix.views.generic.base import WebixBaseMixin, WebixPermissionsMixin, WebixUrlMixin
@@ -35,9 +35,20 @@ class WebixDeleteView(WebixBaseMixin, WebixPermissionsMixin, WebixUrlMixin, Dele
             return self.object
         return super(WebixDeleteView, self).get_object(queryset=queryset)
 
+    def get_json(self):
+        context = self.get_context_data(object=self.object)
+        return JsonResponse(
+            {
+                "has_delete_permission": context["has_delete_permission"],
+                "info_no_delete_permission": context["info_no_delete_permission"],
+            }
+        )
+
     def dispatch(self, *args, **kwargs):
         self.object = self.get_object()
         if self.request.method == "GET":
+            if self.request.GET.get("json", None) is not None:
+                return self.get_json()
             if not self.has_view_permission(request=self.request, obj=self.object):
                 raise PermissionDenied(_("View permission is not allowed"))
         else:
