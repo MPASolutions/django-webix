@@ -626,7 +626,6 @@ class WebixListView(WebixBaseMixin, WebixPermissionsMixin, WebixUrlMixin, ListVi
         # TODO: is login is required depends if list has login required
         @method_decorator(login_required, name="dispatch")
         class ListUpdateView(WebixUpdateView):
-
             has_view_permission = _list_view.has_view_permission
             has_add_permission = _list_view.has_add_permission
             has_change_permission = _list_view.has_change_permission

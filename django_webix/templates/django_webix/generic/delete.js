@@ -14,6 +14,15 @@
         {% endif %}
     {% endblock %}
 
+    {% if not has_delete_permission %}
+    $$("{{ webix_container_id }}").addView({
+        id: "header_failure_related_objects",
+        view: "template",
+        template: "{{ info_no_delete_permission|join:", "|escapejs }}",
+        type: "header"
+    });
+    {% endif %}
+
     {% if failure_delete_blocking_objects %}
         {% block failure_blocking_objects %}
             {% include "django_webix/include/list_failure_blocking_objects.js"  with failure_blocking_objects=failure_delete_blocking_objects %}
