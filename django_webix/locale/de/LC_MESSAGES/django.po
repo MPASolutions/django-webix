@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-03-05 08:41+0100\n"
+"POT-Creation-Date: 2025-03-21 13:08+0100\n"
 "PO-Revision-Date: 2024-10-01 18:00+0200\n"
 "Last-Translator: Stefano Menegon <dallago@mpasol.it>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -166,25 +166,25 @@ msgstr "Feldtyp {} nicht unterstutzt "
 msgid "ManagementForm data is missing or has been tampered with"
 msgstr "ManagementForm-Daten fehlen oder wurden geändert"
 
-#: templates/django_webix/generic/delete.js:32
+#: templates/django_webix/generic/delete.js:41
 #: templates/django_webix/include/action_deleterelatedobjects.js:8
 msgid "The following objects will be deleted"
 msgstr "Folgende Objekte werden gelöscht"
 
-#: templates/django_webix/generic/delete.js:56
+#: templates/django_webix/generic/delete.js:65
 #: templates/django_webix/include/action_deleterelatedobjects.js:23
 msgid "Details"
 msgstr "Details"
 
-#: templates/django_webix/generic/delete.js:86
+#: templates/django_webix/generic/delete.js:95
 msgid "Confirm cancellation"
 msgstr "Löschung bestätigen"
 
-#: templates/django_webix/generic/delete.js:92
+#: templates/django_webix/generic/delete.js:101
 msgid "Delete confirmation"
 msgstr "Bestätigung löschen"
 
-#: templates/django_webix/generic/delete.js:93
+#: templates/django_webix/generic/delete.js:102
 msgid "Warning! All linked objects will also be deleted."
 msgstr "Achtung! Alle verknüpften Objekte werden ebenfalls gelöscht."
 
@@ -208,7 +208,7 @@ msgstr "Erweiterter Filter"
 #: templates/django_webix/generic/list.js:243
 #: templates/django_webix/include/toolbar_navigation.js:49
 #: templates/django_webix/include/toolbar_navigation.js:106
-#: views/generic/list.py:544
+#: views/generic/list.py:556
 msgid "Go to map"
 msgstr "Zur Karte gehen"
 
@@ -240,7 +240,15 @@ msgstr "Sie haben keine Berechtigung, dieses Element zu bearbeiten"
 msgid "Server error"
 msgstr "Server-Fehler"
 
-#: templates/django_webix/generic/list.js:541
+#: templates/django_webix/generic/list.js:536
+msgid "Prosegui"
+msgstr ""
+
+#: templates/django_webix/generic/list.js:537
+msgid "Annulla"
+msgstr ""
+
+#: templates/django_webix/generic/list.js:559
 msgid "Double click to edit the element"
 msgstr "Doppelklick, um das Element zu bearbeiten"
 
@@ -546,8 +554,8 @@ msgstr ""
 "oder \"tabs\" (standardmäßig)"
 
 #: views/generic/create_update.py:404 views/generic/create_update.py:488
-#: views/generic/delete.py:42 views/generic/detail.py:18
-#: views/generic/list.py:730
+#: views/generic/delete.py:53 views/generic/detail.py:18
+#: views/generic/list.py:746
 msgid "View permission is not allowed"
 msgstr "Ansichtsberechtigung nicht erlaubt"
 
@@ -592,11 +600,11 @@ msgstr "Aktion erfolgreich: {} Datum:{}"
 msgid "Action success: {}"
 msgstr "Aktion erfolgreich: {}"
 
-#: views/generic/delete.py:45
+#: views/generic/delete.py:56
 msgid "Delete permission is not allowed"
 msgstr "Berechtigung zum Löschen nicht erlaubt"
 
-#: views/generic/delete.py:82
+#: views/generic/delete.py:93
 msgid ""
 "No URL to redirect to.  Either provide a url or define a get_absolute_url "
 "method on the Model."
@@ -604,7 +612,7 @@ msgstr ""
 "Keine URL, auf die umgeleitet werden kann. Entweder eine URL angeben oder "
 "eine get_absolute_url-Methode im Modell definieren."
 
-#: views/generic/delete.py:94
+#: views/generic/delete.py:105
 msgid ""
 "No URL to failure redirect to.  Either provide a url or define a "
 "get_absolute_url method on the Model."
@@ -612,19 +620,19 @@ msgstr ""
 "Keine URL, auf die umgeleitet werden kann. Entweder eine URL angeben oder "
 "eine get_absolute_url-Methode im Modell definieren."
 
-#: views/generic/list.py:424
+#: views/generic/list.py:436
 msgid "Paginate count is not integer"
 msgstr "Seitenzahl ist nicht ganzzahlig"
 
-#: views/generic/list.py:433
+#: views/generic/list.py:445
 msgid "Paginate start is not integer"
 msgstr "Seitenanfang ist nicht ganzzahlig"
 
-#: views/generic/list.py:545
+#: views/generic/list.py:557
 msgid "Filter in map"
 msgstr "In der Karte filtern"
 
-#: views/generic/list.py:690
+#: views/generic/list.py:706
 msgid ""
 "Json response is available only if get_queryset() return a queryset and not "
 "a list"
@@ -632,19 +640,19 @@ msgstr ""
 "Json-Antwort ist nur verfügbar, wenn get_queryset() ein Queryset und nicht "
 "eine Liste zurückgibt"
 
-#: views/generic/list.py:710
+#: views/generic/list.py:726
 msgid "This action is not registered"
 msgstr "Diese Aktion ist nicht registriert"
 
-#: views/generic/list.py:716
+#: views/generic/list.py:732
 msgid "Permission denied: {}"
 msgstr "Berechtigung verweigert: {}"
 
-#: views/generic/list.py:718
+#: views/generic/list.py:734
 msgid "This permission is not registered on this class"
 msgstr "Diese Berechtigung ist nicht auf dieser Klasse registriert"
 
-#: views/generic/list.py:798
+#: views/generic/list.py:814
 msgid "Generic TemplateListView needs to define data for datatable"
 msgstr "Generic TemplateListView muss Daten für Datentabelle definieren"
 

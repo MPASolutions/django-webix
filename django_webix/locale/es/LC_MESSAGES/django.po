@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-03-05 08:41+0100\n"
+"POT-Creation-Date: 2025-03-21 13:08+0100\n"
 "PO-Revision-Date: 2023-09-07 15:07+0200\n"
 "Last-Translator: Stefano Menegon <dallago@mpasol.it>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -182,25 +182,25 @@ msgstr "El tipo de campo {} no compatible"
 msgid "ManagementForm data is missing or has been tampered with"
 msgstr "Faltan datos de ManagementForm o han sido alterados"
 
-#: templates/django_webix/generic/delete.js:32
+#: templates/django_webix/generic/delete.js:41
 #: templates/django_webix/include/action_deleterelatedobjects.js:8
 msgid "The following objects will be deleted"
 msgstr "Los siguientes objetos serán eliminados"
 
-#: templates/django_webix/generic/delete.js:56
+#: templates/django_webix/generic/delete.js:65
 #: templates/django_webix/include/action_deleterelatedobjects.js:23
 msgid "Details"
 msgstr "Detalles"
 
-#: templates/django_webix/generic/delete.js:86
+#: templates/django_webix/generic/delete.js:95
 msgid "Confirm cancellation"
 msgstr "Confirmar cancelación"
 
-#: templates/django_webix/generic/delete.js:92
+#: templates/django_webix/generic/delete.js:101
 msgid "Delete confirmation"
 msgstr "Eliminar confirmación"
 
-#: templates/django_webix/generic/delete.js:93
+#: templates/django_webix/generic/delete.js:102
 msgid "Warning! All linked objects will also be deleted."
 msgstr "¡Atención! Todos los objetos vinculados también serán eliminados."
 
@@ -224,7 +224,7 @@ msgstr "Filtro avanzado"
 #: templates/django_webix/generic/list.js:243
 #: templates/django_webix/include/toolbar_navigation.js:49
 #: templates/django_webix/include/toolbar_navigation.js:106
-#: views/generic/list.py:544
+#: views/generic/list.py:556
 msgid "Go to map"
 msgstr "Mostrar en el mapa"
 
@@ -256,7 +256,15 @@ msgstr ""
 msgid "Server error"
 msgstr "Error del servidor"
 
-#: templates/django_webix/generic/list.js:541
+#: templates/django_webix/generic/list.js:536
+msgid "Prosegui"
+msgstr ""
+
+#: templates/django_webix/generic/list.js:537
+msgid "Annulla"
+msgstr ""
+
+#: templates/django_webix/generic/list.js:559
 msgid "Double click to edit the element"
 msgstr "Doble clic para editar el elemento"
 
@@ -564,8 +572,8 @@ msgstr ""
 "'estándar' o 'pestañas' (estándar por defecto)."
 
 #: views/generic/create_update.py:404 views/generic/create_update.py:488
-#: views/generic/delete.py:42 views/generic/detail.py:18
-#: views/generic/list.py:730
+#: views/generic/delete.py:53 views/generic/detail.py:18
+#: views/generic/list.py:746
 msgid "View permission is not allowed"
 msgstr "Ver permiso no está permitido"
 
@@ -610,11 +618,11 @@ msgstr "Acción ejecutada correctamente: {} data:{}"
 msgid "Action success: {}"
 msgstr "Acción ejecutada correctamente: {}"
 
-#: views/generic/delete.py:45
+#: views/generic/delete.py:56
 msgid "Delete permission is not allowed"
 msgstr "Eliminar permiso no está permitido"
 
-#: views/generic/delete.py:82
+#: views/generic/delete.py:93
 msgid ""
 "No URL to redirect to.  Either provide a url or define a get_absolute_url "
 "method on the Model."
@@ -622,7 +630,7 @@ msgstr ""
 "No hay URL a la que redirigir. Proporcione una url o defina un método "
 "get_absolute_url en el Modelo."
 
-#: views/generic/delete.py:94
+#: views/generic/delete.py:105
 msgid ""
 "No URL to failure redirect to.  Either provide a url or define a "
 "get_absolute_url method on the Model."
@@ -630,19 +638,19 @@ msgstr ""
 "No hay URL a la que redirigir. Proporcione una url o defina un método \"\n"
 "\"get_absolute_url en el Modelo."
 
-#: views/generic/list.py:424
+#: views/generic/list.py:436
 msgid "Paginate count is not integer"
 msgstr "El recuento del paginado no es entero"
 
-#: views/generic/list.py:433
+#: views/generic/list.py:445
 msgid "Paginate start is not integer"
 msgstr "El inicio del paginado no es entero"
 
-#: views/generic/list.py:545
+#: views/generic/list.py:557
 msgid "Filter in map"
 msgstr "Filtrar en el mapa"
 
-#: views/generic/list.py:690
+#: views/generic/list.py:706
 msgid ""
 "Json response is available only if get_queryset() return a queryset and not "
 "a list"
@@ -650,19 +658,19 @@ msgstr ""
 "La respuesta de Json solo está disponible si get_queryset () devuelve un "
 "conjunto de consultas y no una lista"
 
-#: views/generic/list.py:710
+#: views/generic/list.py:726
 msgid "This action is not registered"
 msgstr "Esta acción no está registrada"
 
-#: views/generic/list.py:716
+#: views/generic/list.py:732
 msgid "Permission denied: {}"
 msgstr "Permiso denegado:{}"
 
-#: views/generic/list.py:718
+#: views/generic/list.py:734
 msgid "This permission is not registered on this class"
 msgstr "Este permiso no está registrado en esta clase"
 
-#: views/generic/list.py:798
+#: views/generic/list.py:814
 msgid "Generic TemplateListView needs to define data for datatable"
 msgstr ""
 "TemplateListView genérico necesita definir datos para la tabla de datos"
