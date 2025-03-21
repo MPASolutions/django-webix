@@ -3,6 +3,7 @@ import copy
 from django.apps import apps
 from django.core.exceptions import FieldDoesNotExist
 from django.db import models
+from django.db.models import Case, When
 from django.urls import path
 from django.utils.decorators import method_decorator
 from django.utils.text import capfirst
@@ -345,7 +346,9 @@ class ModelWebixAdmin(ModelWebixAdminPermissionsMixin):
                     except FieldDoesNotExist:
                         pass
                     else:
-                        if hasattr(_first_field, "choices") and _first_field.choices is not None:
+                        if (
+                            hasattr(_first_field, "choices") and _first_field.choices is not None
+                        ) or self.extra_header.setdefault(field_name, {}).get("choice", False):
                             editor = 'editor:"select"'
                             extra_header = "collection: {}_options ".format(field_name)
                             filter_type = "iexact"
@@ -456,12 +459,23 @@ class ModelWebixAdmin(ModelWebixAdminPermissionsMixin):
                 content_type_pk = ContentType.objects.get_for_model(self.model).pk
                 model_fields_names = (
                     ModelField.objects.filter(content_type_id=content_type_pk)
-                    .values_list("field_name", flat=True)
+                    .annotate(
+                        has_choice=Case(
+                            When(modelfieldchoice__isnull=False, then=1),
+                            default=0,
+                            output_field=models.BooleanField(),
+                        )
+                    )
+                    .values_list("field_name", "has_choice")
                     .distinct()
                     .order_by("field_name")
                 )
+                for field in model_fields_names:
+                    if field[1]:
+                        self.extra_header.setdefault(field[0], {})["choice"] = True
+
                 _model_list_display += self.create_list_display(
-                    model_fields_names,
+                    model_fields_names.values_list("field_name", flat=True),
                     view=view,
                     request=request,
                     defaults={"width": 'adjust:"all"', "extra_header": "hidden:true"},

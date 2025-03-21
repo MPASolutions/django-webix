@@ -351,6 +351,18 @@ class WebixListView(WebixBaseMixin, WebixPermissionsMixin, WebixUrlMixin, ListVi
                     elif _modelfield is not None and _modelfield.choices is not None:
                         _fields_choices[field_name] = [{"id": i[0], "value": i[1]} for i in _modelfield.get_choices()]
                     elif (
+                        apps.is_installed("django_webix.contrib.extra_fields")
+                        and "extrafields" in str(field.get("field_type", "")).lower()
+                    ):
+                        from django.contrib.contenttypes.models import ContentType
+                        from django_webix.contrib.extra_fields.models import ModelField
+
+                        ct = ContentType.objects.get_for_model(self.model)
+                        mf = ModelField.objects.filter(field_name=field_name, content_type=ct).first()
+                        if mf is not None and mf.modelfieldchoice_set.exists():
+                            options = mf.modelfieldchoice_set.values_list("key", "value")
+                            _fields_choices[field_name] = [{"id": i[0], "value": i[1]} for i in options]
+                    elif (
                         "serverSelectFilter" in field.get("datalist_column")
                         or "serverRichSelectFilter" in field.get("datalist_column")
                         or "serverMultiSelectFilter" in field.get("datalist_column")
