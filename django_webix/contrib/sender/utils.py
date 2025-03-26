@@ -2,6 +2,7 @@ from typing import Any, Dict, List, Optional, Tuple
 
 from django.apps import apps
 from django.conf import settings
+from django.contrib.auth.models import Group
 from django.db.models import Q, Value
 from django.utils.module_loading import import_string
 from django.utils.text import capfirst, format_lazy
@@ -9,6 +10,24 @@ from django.utils.translation import gettext_lazy as _
 from django_webix.contrib.sender.models import DjangoWebixSender, MessageRecipient, MessageSent
 
 CONF = getattr(settings, "WEBIX_SENDER", None)
+
+
+def user_can_send(user):
+    if user.is_anonymous:
+        return False
+
+    if hasattr(user, "webix_sender_can_send"):
+        if callable(user.webix_sender_can_send):
+            return user.webix_sender_can_send()
+        else:
+            return user.webix_sender_can_send
+
+    if (
+        "groups_can_send" in CONF
+        and not user.groups.intersection(Group.objects.filter(name__in=CONF["groups_can_send"])).exists()
+    ):
+        return False
+    return True
 
 
 def get_messages_read_required(request, queryset=None):

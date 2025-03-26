@@ -1,6 +1,6 @@
 from django import template
 from django.conf import settings
-from django.contrib.auth.models import Group
+from django_webix.contrib.sender.utils import user_can_send as check_user_can_send
 
 register = template.Library()
 
@@ -12,14 +12,7 @@ def user_can_send(context):
     """Returns boolean to indicate if user has send permission"""
 
     request = context["request"]
-    if request.user.is_anonymous:
-        return False
-    if (
-        "groups_can_send" in CONF
-        and not request.user.groups.intersection(Group.objects.filter(name__in=CONF["groups_can_send"])).exists()
-    ):
-        return False
-    return True
+    return check_user_can_send(user=request.user)
 
 
 @register.simple_tag(takes_context=True)
