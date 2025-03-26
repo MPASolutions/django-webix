@@ -6,7 +6,6 @@ from django.apps import apps
 from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.contrib.auth.decorators import login_required, user_passes_test
-from django.contrib.auth.models import Group
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.postgres.aggregates import StringAgg
 from django.db.models import Case, CharField, DecimalField, F, IntegerField, OuterRef, Q, Subquery, Sum, Value, When
@@ -30,7 +29,7 @@ from django_webix.contrib.sender.models import (
     MessageUserRead,
 )
 from django_webix.contrib.sender.send_methods.telegram.persistences import DatabaseTelegramPersistence
-from django_webix.contrib.sender.utils import send_mixin
+from django_webix.contrib.sender.utils import send_mixin, user_can_send
 from django_webix.views import WebixListView, WebixTemplateView
 from telegram import Update
 from telegram.ext import Dispatcher
@@ -77,10 +76,7 @@ class SenderListView(WebixTemplateView):
     http_method_names = ["get", "head", "options"]
 
     def dispatch(self, request, *args, **kwargs):
-        if (
-            "groups_can_send" in CONF
-            and not request.user.groups.intersection(Group.objects.filter(name__in=CONF["groups_can_send"])).exists()
-        ):
+        if not user_can_send(request.user):
             return HttpResponseForbidden()
         return super().dispatch(request, *args, **kwargs)
 
@@ -128,10 +124,7 @@ class SenderGetListView(View):
     http_method_names = ["get", "head", "options"]
 
     def dispatch(self, request, *args, **kwargs):
-        if (
-            "groups_can_send" in CONF
-            and not request.user.groups.intersection(Group.objects.filter(name__in=CONF["groups_can_send"])).exists()
-        ):
+        if not user_can_send(request.user):
             return HttpResponseForbidden()
         return super().dispatch(request, *args, **kwargs)
 
@@ -215,10 +208,7 @@ class SenderSendView(View):
     http_method_names = ["post", "head", "options"]
 
     def dispatch(self, request, *args, **kwargs):
-        if (
-            "groups_can_send" in CONF
-            and not request.user.groups.intersection(Group.objects.filter(name__in=CONF["groups_can_send"])).exists()
-        ):
+        if not user_can_send(request.user):
             return HttpResponseForbidden()
         return super().dispatch(request, *args, **kwargs)
 
@@ -271,10 +261,7 @@ class SenderWindowView(WebixTemplateView):
     template_name = "django_webix/sender/sender.js"
 
     def dispatch(self, request, *args, **kwargs):
-        if (
-            "groups_can_send" in CONF
-            and not request.user.groups.intersection(Group.objects.filter(name__in=CONF["groups_can_send"])).exists()
-        ):
+        if not user_can_send(request.user):
             return HttpResponseForbidden()
         return super().dispatch(request, *args, **kwargs)
 
@@ -669,12 +656,7 @@ class SenderMessagesChatView(WebixTemplateView):
                     )
 
                 inverted = False
-                if (
-                    "groups_can_send" in CONF
-                    and self.request.user.groups.intersection(
-                        Group.objects.filter(name__in=CONF["groups_can_send"])
-                    ).exists()
-                ):
+                if user_can_send(self.request.user):
                     inverted = True
 
                 context["typology_model"] = CONF["typology_model"]
