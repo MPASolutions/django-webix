@@ -544,7 +544,7 @@ if (
                                         })
                                     }
                                     }
-                                load_js(url_delete+'?json=true', undefined, undefined, undefined, undefined, undefined, 'json', abortAllPending=true, done_check_delete_permission);
+                                load_js(url_delete+'{% if '?' in url_list %}&{% else %}?{% endif %}json=true', undefined, undefined, undefined, undefined, undefined, 'json', abortAllPending=true, done_check_delete_permission);
                             {% endif %}
                         {% endblock %}
                     } else if (id.column!='checkbox_action') {
