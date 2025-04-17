@@ -540,6 +540,8 @@ class ModelWebixAdmin(ModelWebixAdminPermissionsMixin):
                         self.label_align = _admin.get_label_align()
                     if _admin.get_suggest_width() is not None:
                         self.suggest_width = _admin.get_suggest_width()
+                    if (qxs_layers := getattr(_admin, "qxs_layers", None)) is not None:
+                        self.qxs_layers = qxs_layers
 
             return WebixAdminCreateUpdateForm
 
@@ -739,6 +741,8 @@ class ModelWebixAdmin(ModelWebixAdminPermissionsMixin):
 
                 remove_disabled_buttons = _admin.remove_disabled_buttons
                 get_layers = _admin.get_layers
+                if hasattr(_admin, "qxs_layers"):
+                    qxs_layers = _admin.qxs_layers
 
                 if _admin.add_form_template is not None:
                     template_name = _admin.add_form_template
@@ -939,6 +943,8 @@ class ModelWebixAdmin(ModelWebixAdminPermissionsMixin):
 
                 remove_disabled_buttons = _admin.remove_disabled_buttons
                 get_layers = _admin.get_layers
+                if hasattr(_admin, "qxs_layers"):
+                    qxs_layers = _admin.qxs_layers
 
                 if _admin.change_form_template is not None:
                     template_name = _admin.change_form_template
@@ -1191,6 +1197,8 @@ class ModelWebixAdmin(ModelWebixAdminPermissionsMixin):
 
                 remove_disabled_buttons = _admin.remove_disabled_buttons
                 get_layers = _admin.get_layers
+                if hasattr(_admin, "qxs_layers"):
+                    qxs_layers = _admin.qxs_layers
 
                 if _admin.change_list_template is not None:
                     template_name = _admin.change_list_template

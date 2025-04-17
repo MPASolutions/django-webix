@@ -294,6 +294,8 @@ class WebixCreateView(
     def get_form_kwargs(self):
         kwargs = super(WebixCreateView, self).get_form_kwargs()
         kwargs.update({"request": self.request})
+        if (qxs_layers := getattr(self, "qxs_layers", None)) is not None:
+            kwargs.update({"qxs_layers": qxs_layers})
         return kwargs
 
     def get_model_copy_fields(self):
@@ -474,6 +476,8 @@ class WebixUpdateView(
     def get_form_kwargs(self):
         kwargs = super(WebixUpdateView, self).get_form_kwargs()
         kwargs.update({"request": self.request})
+        if (qxs_layers := getattr(self, "qxs_layers", None)) is not None:
+            kwargs.update({"qxs_layers": qxs_layers})
         return kwargs
 
     def get_object(self, queryset=None):
