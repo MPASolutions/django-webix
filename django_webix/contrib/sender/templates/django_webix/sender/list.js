@@ -165,7 +165,8 @@ $$("{{webix_container_id}}").addView({
                                         {% if field_t == "BooleanField" %}
                                             template: custom_bool,
                                         {% endif %}
-                                        adjust: "all"
+                                        adjust: true,
+                                        sort: "string",
                                     },
                                     {% endfor %}
                                 ],
