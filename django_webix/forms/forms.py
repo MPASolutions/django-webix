@@ -1472,6 +1472,9 @@ class BaseWebixForm(forms.BaseForm, BaseWebixMixin):
         # Update field names with prefix
         data = self.get_fields_data_with_prefix(data)
 
+        if getattr(self, "qxs_layers", None) is None and "qxs_layers" in kwparams:
+            self.qxs_layers = kwparams.get("qxs_layers")
+
         super(BaseWebixForm, self).__init__(
             data,
             files,
@@ -1557,6 +1560,9 @@ class BaseWebixModelForm(forms.BaseModelForm, BaseWebixMixin):
 
         # Update field names with prefix
         data = self.get_fields_data_with_prefix(data)
+
+        if getattr(self, "qxs_layers", None) is None and "qxs_layers" in kwargs:
+            self.qxs_layers = kwargs.get("qxs_layers")
 
         if django.VERSION > (2, 0):
             super(BaseWebixModelForm, self).__init__(
