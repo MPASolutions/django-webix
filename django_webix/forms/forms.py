@@ -995,7 +995,7 @@ class BaseWebixMixin:
                         {
                             "view": "datepicker",
                             "multiselect": "touch",
-                            "format": "%d/%m/%Y",
+                            # "format": "%d/%m/%Y",
                             "stringResult": True,
                         }
                     )
