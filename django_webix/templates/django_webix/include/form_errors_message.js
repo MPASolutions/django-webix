@@ -17,6 +17,7 @@ function show_errors(errors) {
         }
         webix.message({
             type: "error",
+            expire: 10000,
             text: "{{_("Oops! Something went wrong...")|escapejs}}" +
                   "<br><br>" +
                   "{{_("Error in the following fields:")|escapejs}}" +
