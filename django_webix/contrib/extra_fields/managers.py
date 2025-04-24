@@ -1,3 +1,4 @@
+import sys
 from itertools import chain
 
 from django.contrib.contenttypes.models import ContentType
@@ -71,15 +72,16 @@ class ExtraFieldsQuerySet(QuerySet):
 
 def add_extra_fields_to_queryset(queryset):
     # queryset = queryset.select_related('extra_fields')
-    for mf in ModelField.objects.filter(content_type=ContentType.objects.get_for_model(queryset.model)):
-        field_class = getattr(models, mf.field_type)
-        queryset = queryset.annotate(
-            **{
-                mf.field_name: Cast(
-                    Min("extra_fields__value", filter=Q(extra_fields__model_field_id=int(mf.pk))), field_class()
-                )
-            }
-        )
+    if "makemigrations" not in sys.argv and not any("migrate" in arg for arg in sys.argv):
+        for mf in ModelField.objects.filter(content_type=ContentType.objects.get_for_model(queryset.model)):
+            field_class = getattr(models, mf.field_type)
+            queryset = queryset.annotate(
+                **{
+                    mf.field_name: Cast(
+                        Min("extra_fields__value", filter=Q(extra_fields__model_field_id=int(mf.pk))), field_class()
+                    )
+                }
+            )
     return queryset
 
 
