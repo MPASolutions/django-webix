@@ -533,8 +533,8 @@ if (
                                     } else {
                                         webix.confirm({
                                             title: msg['info_no_delete_permission'].join(', '),
-                                            ok: "{{_("Prosegui")|escapejs}}",
-                                            cancel: "{{_("Annulla")|escapejs}}",
+                                            ok: "{{_("Continue")|escapejs}}",
+                                            cancel: "{{_("Undo")|escapejs}}",
                                         }).then(function(result){
     //                                        $$('{{ webix_container_id }}').hideOverlay();
                                             load_js(url_delete, undefined, undefined, undefined, undefined, undefined, undefined, abortAllPending=true);

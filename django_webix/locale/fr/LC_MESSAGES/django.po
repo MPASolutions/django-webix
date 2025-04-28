@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-03-21 13:08+0100\n"
+"POT-Creation-Date: 2025-04-24 11:52+0200\n"
 "PO-Revision-Date: 2023-09-07 15:14+0200\n"
 "Last-Translator: Stefano Menegon <dallago@mpasol.it>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -19,7 +19,7 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 "X-Translated-Using: django-rosetta 0.9.9\n"
 
-#: contrib/extra_fields/apps.py:11
+#: contrib/extra_fields/apps.py:13
 msgid "Django Webix Extra Fields"
 msgstr ""
 
@@ -255,12 +255,14 @@ msgid "Server error"
 msgstr "Erreur du serveur"
 
 #: templates/django_webix/generic/list.js:536
-msgid "Prosegui"
+msgid "Continue"
 msgstr ""
 
 #: templates/django_webix/generic/list.js:537
-msgid "Annulla"
-msgstr ""
+#: templates/django_webix/include/form_warnings.js:52
+#: views/generic/decorators.py:27 views/generic/list.py:86
+msgid "Undo"
+msgstr "Annuler"
 
 #: templates/django_webix/generic/list.js:559
 msgid "Double click to edit the element"
@@ -277,7 +279,7 @@ msgstr "Fermer"
 #: templates/django_webix/include/actions_list.js:37
 #: templates/django_webix/include/actions_utils.js:66
 #: templates/django_webix/include/actions_utils.js:97
-#: templates/django_webix/include/form_errors_message.js:20
+#: templates/django_webix/include/form_errors_message.js:21
 #: templates/django_webix/include/form_errors_popup.js:13
 msgid "Oops! Something went wrong..."
 msgstr "Un erreur s'est produite."
@@ -316,7 +318,7 @@ msgstr "Nouvel élément"
 msgid "Add"
 msgstr "Ajouter"
 
-#: templates/django_webix/include/form_errors_message.js:22
+#: templates/django_webix/include/form_errors_message.js:23
 msgid "Error in the following fields:"
 msgstr "Erreur dans les champs:"
 
@@ -363,11 +365,6 @@ msgstr "Texte plus longue que"
 #: templates/django_webix/include/form_warnings.js:20
 msgid "Oops! Some warnings here..."
 msgstr "Un avertissement s'est produite."
-
-#: templates/django_webix/include/form_warnings.js:52
-#: views/generic/decorators.py:27 views/generic/list.py:86
-msgid "Undo"
-msgstr "Annuler"
 
 #: templates/django_webix/include/form_warnings.js:63
 msgid "Continue anyway"
@@ -569,26 +566,26 @@ msgstr ""
 "Le style du modèle n'est pas configuré correctement. Les seules options sont "
 "'standard' ou 'tabs' (standard par défaut)."
 
-#: views/generic/create_update.py:404 views/generic/create_update.py:488
+#: views/generic/create_update.py:406 views/generic/create_update.py:492
 #: views/generic/delete.py:53 views/generic/detail.py:18
 #: views/generic/list.py:746
 msgid "View permission is not allowed"
 msgstr "La visualisation de la licence n'est pas autorisée"
 
-#: views/generic/create_update.py:407
+#: views/generic/create_update.py:409
 msgid "Add permission is not allowed"
 msgstr "Ajouter une licence n'est pas autorisé"
 
-#: views/generic/create_update.py:491
+#: views/generic/create_update.py:495
 msgid "Change permission is not allowed"
 msgstr "La modification de licence n'est pas autorisée"
 
-#: views/generic/create_update.py:550
+#: views/generic/create_update.py:554
 #, python-format
 msgid "Changed %s."
 msgstr "%s modifié."
 
-#: views/generic/create_update.py:550
+#: views/generic/create_update.py:554
 msgid "and"
 msgstr "et"
 

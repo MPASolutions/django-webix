@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-02-05 10:42+0100\n"
-"PO-Revision-Date: 2023-09-25 15:41+0200\n"
+"POT-Creation-Date: 2025-04-28 16:09+0200\n"
+"PO-Revision-Date: 2025-04-24 14:32+0200\n"
 "Last-Translator: Stefano Menegon <dallago@mpasol.it>\n"
 "Language-Team: \n"
 "Language: it\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Poedit 2.1.1\n"
-"X-Translated-Using: django-rosetta 0.9.9\n"
+"X-Translated-Using: django-rosetta 0.10.1\n"
 
 #: contrib/filter/apps.py:11
 msgid "Django Webix Filter"
@@ -76,8 +76,6 @@ msgid "Shared edit group"
 msgstr "Gruppo di modifica condiviso"
 
 #: contrib/filter/models.py:38
-#, fuzzy
-#| msgid "Apply temporary filter"
 msgid "Temporary filter"
 msgstr "Applica filtro temporaneo"
 
