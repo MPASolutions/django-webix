@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-03-05 08:41+0100\n"
+"POT-Creation-Date: 2025-04-24 07:02+0200\n"
 "PO-Revision-Date: 2025-03-05 08:48+0100\n"
 "Last-Translator: Stefano Menegon <dallago@mpasol.it>\n"
 "Language-Team: \n"
@@ -128,8 +128,7 @@ msgid "You have to define a `model` as string in your recipients list"
 msgstr "Devi definire un modello come stringa nel tuo recipiente"
 
 #: contrib/sender/apps.py:217
-msgid ""
-"You have to define a `datatable_fields` as list in your recipients list"
+msgid "You have to define a `datatable_fields` as list in your recipients list"
 msgstr ""
 "Devi definire un \"datartable_fields' come lista nella lista dei recipienti"
 
@@ -142,7 +141,7 @@ msgstr "Il modello dei destinatari `{}` non è valido"
 #: contrib/sender/models.py:300 contrib/sender/models.py:384
 #: contrib/sender/models.py:430
 #: contrib/sender/templates/django_webix/sender/sender.js:100
-#: contrib/sender/views.py:373
+#: contrib/sender/views.py:360
 msgid "Typology"
 msgstr "Tipologia"
 
@@ -305,7 +304,7 @@ msgid "Attachment"
 msgstr "Allegato"
 
 #: contrib/sender/models.py:366 contrib/sender/models.py:445
-#: contrib/sender/views.py:426
+#: contrib/sender/views.py:413
 msgid "Attachments"
 msgstr "Allegati"
 
@@ -340,11 +339,11 @@ msgstr "Metodo di invio"
 
 #: contrib/sender/models.py:433
 #: contrib/sender/templates/django_webix/sender/sender.js:118
-#: contrib/sender/views.py:398
+#: contrib/sender/views.py:385
 msgid "Subject"
 msgstr "Oggetto"
 
-#: contrib/sender/models.py:434 contrib/sender/views.py:412
+#: contrib/sender/models.py:434 contrib/sender/views.py:399
 msgid "Body"
 msgstr "Corpo"
 
@@ -362,7 +361,7 @@ msgstr "Costo"
 
 #: contrib/sender/models.py:451
 #: contrib/sender/templates/django_webix/sender/invoices.js:86
-#: contrib/sender/views.py:900
+#: contrib/sender/views.py:882
 msgid "Invoiced"
 msgstr "Fatturato"
 
@@ -491,7 +490,7 @@ msgid "Type your message"
 msgstr "Scrivi il tuo messaggio"
 
 #: contrib/sender/templates/django_webix/sender/chat_messages.js:92
-#: contrib/sender/templates/django_webix/sender/list.js:216
+#: contrib/sender/templates/django_webix/sender/list.js:217
 #: contrib/sender/templates/django_webix/sender/sender.js:164
 #: contrib/sender/templates/django_webix/sender/sender.js:336
 msgid "Send"
@@ -605,20 +604,20 @@ msgstr "Filtra la lista applicando dei filtri"
 msgid "All"
 msgstr "Tutti"
 
-#: contrib/sender/templates/django_webix/sender/list.js:212
+#: contrib/sender/templates/django_webix/sender/list.js:213
 msgid "Action"
 msgstr "Azione"
 
-#: contrib/sender/templates/django_webix/sender/list.js:223
+#: contrib/sender/templates/django_webix/sender/list.js:224
 msgid "Go"
 msgstr "Vai"
 
-#: contrib/sender/templates/django_webix/sender/list.js:251
-#: contrib/sender/templates/django_webix/sender/list.js:284
+#: contrib/sender/templates/django_webix/sender/list.js:252
+#: contrib/sender/templates/django_webix/sender/list.js:285
 msgid "selected of"
 msgstr "selezionati di"
 
-#: contrib/sender/templates/django_webix/sender/list.js:326
+#: contrib/sender/templates/django_webix/sender/list.js:327
 msgid "Unable to load sender class"
 msgstr "Impossibile caricare la classe sender"
 
@@ -678,144 +677,144 @@ msgstr "Risultati"
 msgid "There are no recipients for this communication"
 msgstr "Non ci sono destinatari per questa comunicazione"
 
-#: contrib/sender/utils.py:110 contrib/sender/utils.py:115
-#: contrib/sender/utils.py:120
+#: contrib/sender/utils.py:129 contrib/sender/utils.py:134
+#: contrib/sender/utils.py:139
 msgid "Related is not subclass of `DjangoWebixSender`"
 msgstr "Oggetto collegato non è una sottoclasse di `DjangoWebixSender`"
 
-#: contrib/sender/utils.py:133 contrib/sender/views.py:877
+#: contrib/sender/utils.py:152 contrib/sender/views.py:859
 msgid "Invalid send method"
 msgstr "Metodo di invio non valido"
 
-#: contrib/sender/views.py:169
+#: contrib/sender/views.py:162
 msgid "Content type doesn't match"
 msgstr "Nessun content type identificato"
 
-#: contrib/sender/views.py:174
+#: contrib/sender/views.py:167
 msgid "Not valid and/or filter"
 msgstr "Filtro e/o non valido"
 
-#: contrib/sender/views.py:298
+#: contrib/sender/views.py:285
 msgid "Messages"
 msgstr "Messaggi"
 
-#: contrib/sender/views.py:341
+#: contrib/sender/views.py:328
 msgid "Send method type"
 msgstr "Metodo di invio"
 
-#: contrib/sender/views.py:360
+#: contrib/sender/views.py:347
 msgid "Sent date"
 msgstr "Data invio"
 
-#: contrib/sender/views.py:386
+#: contrib/sender/views.py:373
 msgid "Interested"
 msgstr "Interessato"
 
-#: contrib/sender/views.py:720
+#: contrib/sender/views.py:702
 msgid "Jan"
 msgstr "Gen"
 
-#: contrib/sender/views.py:721
+#: contrib/sender/views.py:703
 msgid "Feb"
 msgstr "Feb"
 
-#: contrib/sender/views.py:722
+#: contrib/sender/views.py:704
 msgid "Mar"
 msgstr "Mar"
 
-#: contrib/sender/views.py:723
+#: contrib/sender/views.py:705
 msgid "Apr"
 msgstr "Apr"
 
-#: contrib/sender/views.py:724
+#: contrib/sender/views.py:706
 msgid "May"
 msgstr "Mag"
 
-#: contrib/sender/views.py:725
+#: contrib/sender/views.py:707
 msgid "Jun"
 msgstr "giu"
 
-#: contrib/sender/views.py:726
+#: contrib/sender/views.py:708
 msgid "Jul"
 msgstr "lug"
 
-#: contrib/sender/views.py:727
+#: contrib/sender/views.py:709
 msgid "Aug"
 msgstr "ago"
 
-#: contrib/sender/views.py:728
+#: contrib/sender/views.py:710
 msgid "Sep"
 msgstr "set"
 
-#: contrib/sender/views.py:729
+#: contrib/sender/views.py:711
 msgid "Oct"
 msgstr "ott"
 
-#: contrib/sender/views.py:730
+#: contrib/sender/views.py:712
 msgid "Nov"
 msgstr "nov"
 
-#: contrib/sender/views.py:731
+#: contrib/sender/views.py:713
 msgid "Dec"
 msgstr "dic"
 
-#: contrib/sender/views.py:733
+#: contrib/sender/views.py:715
 msgid "Jan - Feb"
 msgstr "gen - feb"
 
-#: contrib/sender/views.py:733
+#: contrib/sender/views.py:715
 msgid "Mar - Apr"
 msgstr "mar - apr"
 
-#: contrib/sender/views.py:733
+#: contrib/sender/views.py:715
 msgid "May - Jun"
 msgstr "mag - giu"
 
-#: contrib/sender/views.py:733
+#: contrib/sender/views.py:715
 msgid "Jul - Aug"
 msgstr "lug - ago"
 
-#: contrib/sender/views.py:733
+#: contrib/sender/views.py:715
 msgid "Sep - Oct"
 msgstr "set - ott"
 
-#: contrib/sender/views.py:733
+#: contrib/sender/views.py:715
 msgid "Nov - Dec"
 msgstr "nov - dic"
 
-#: contrib/sender/views.py:734
+#: contrib/sender/views.py:716
 msgid "First quarter"
 msgstr "Primo quarto"
 
-#: contrib/sender/views.py:734
+#: contrib/sender/views.py:716
 msgid "Second quarter"
 msgstr "Secondo quarto"
 
-#: contrib/sender/views.py:734
+#: contrib/sender/views.py:716
 msgid "Third quarter"
 msgstr "Terzo quarto"
 
-#: contrib/sender/views.py:734
+#: contrib/sender/views.py:716
 msgid "Fourth quarter"
 msgstr "Quarto quarto"
 
-#: contrib/sender/views.py:735
+#: contrib/sender/views.py:717
 msgid "First semester"
 msgstr "Primo semestre"
 
-#: contrib/sender/views.py:735
+#: contrib/sender/views.py:717
 msgid "Second semester"
 msgstr "Secondo semestre"
 
-#: contrib/sender/views.py:736
+#: contrib/sender/views.py:718
 msgid "Year"
 msgstr "Anno"
 
-#: contrib/sender/views.py:777 contrib/sender/views.py:878
+#: contrib/sender/views.py:759 contrib/sender/views.py:860
 msgid "Sender not specified"
 msgstr "Destinatario non specificato"
 
-#: contrib/sender/views.py:875
+#: contrib/sender/views.py:857
 msgid "Invalid period"
 msgstr "Periodo non valido"
 
@@ -838,8 +837,8 @@ msgstr "Periodo non valido"
 #~ "Warning! if there are messages with an unknown status, the data is not "
 #~ "updated"
 #~ msgstr ""
-#~ "Attenzione! Se ci sono messaggi con uno stato sconosciuto, i dati non sono "
-#~ "aggiornati"
+#~ "Attenzione! Se ci sono messaggi con uno stato sconosciuto, i dati non "
+#~ "sono aggiornati"
 
 #~ msgid "The messages have been sent"
 #~ msgstr "I messaggi sono stati inviati"

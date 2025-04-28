@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-03-21 13:08+0100\n"
-"PO-Revision-Date: 2024-03-19 11:45+0100\n"
+"POT-Creation-Date: 2025-04-28 16:09+0200\n"
+"PO-Revision-Date: 2025-04-24 14:31+0200\n"
 "Last-Translator: Stefano Menegon <dallago@mpasol.it>\n"
 "Language-Team: \n"
 "Language: it\n"
@@ -17,9 +17,9 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Poedit 2.1.1\n"
-"X-Translated-Using: django-rosetta 0.10.0\n"
+"X-Translated-Using: django-rosetta 0.10.1\n"
 
-#: contrib/extra_fields/apps.py:11
+#: contrib/extra_fields/apps.py:13
 msgid "Django Webix Extra Fields"
 msgstr ""
 
@@ -45,6 +45,8 @@ msgid ""
 "Field name must not contain spaces and special characters, and must begin "
 "with a letter"
 msgstr ""
+"Il nome del campo non deve contenere spazi e caratteri speciali e deve "
+"iniziare con una lettera"
 
 #: contrib/extra_fields/models.py:47
 msgid "Field type"
@@ -239,12 +241,14 @@ msgid "Server error"
 msgstr "Errore sul server"
 
 #: templates/django_webix/generic/list.js:536
-msgid "Prosegui"
-msgstr ""
+msgid "Continue"
+msgstr "Continua comunque"
 
 #: templates/django_webix/generic/list.js:537
-msgid "Annulla"
-msgstr ""
+#: templates/django_webix/include/form_warnings.js:52
+#: views/generic/decorators.py:27 views/generic/list.py:86
+msgid "Undo"
+msgstr "Annulla"
 
 #: templates/django_webix/generic/list.js:559
 msgid "Double click to edit the element"
@@ -261,7 +265,7 @@ msgstr "Chiudi"
 #: templates/django_webix/include/actions_list.js:37
 #: templates/django_webix/include/actions_utils.js:66
 #: templates/django_webix/include/actions_utils.js:97
-#: templates/django_webix/include/form_errors_message.js:20
+#: templates/django_webix/include/form_errors_message.js:21
 #: templates/django_webix/include/form_errors_popup.js:13
 msgid "Oops! Something went wrong..."
 msgstr "Oops! qualcosa è andato storto..."
@@ -300,7 +304,7 @@ msgstr "Nuovo elemento"
 msgid "Add"
 msgstr "Aggiungi"
 
-#: templates/django_webix/include/form_errors_message.js:22
+#: templates/django_webix/include/form_errors_message.js:23
 msgid "Error in the following fields:"
 msgstr "Errore nei seguenti campi:"
 
@@ -347,11 +351,6 @@ msgstr "Stringa più lunga di"
 #: templates/django_webix/include/form_warnings.js:20
 msgid "Oops! Some warnings here..."
 msgstr "Oops! ci sono degli avvertimenti da verificare..."
-
-#: templates/django_webix/include/form_warnings.js:52
-#: views/generic/decorators.py:27 views/generic/list.py:86
-msgid "Undo"
-msgstr "Annulla"
 
 #: templates/django_webix/include/form_warnings.js:63
 msgid "Continue anyway"
@@ -434,7 +433,7 @@ msgstr "Torna alla lista"
 
 #: templates/django_webix/include/toolbar_navigation.js:119
 msgid "Reload"
-msgstr ""
+msgstr "Ricarica"
 
 #: templates/django_webix/include/utils.js:235
 #: templates/django_webix/include/utils.js:242 views/generic/list.py:348
@@ -471,10 +470,8 @@ msgid "Image"
 msgstr "Immagine"
 
 #: templates/django_webix/include/utils.js:456
-#, fuzzy
-#| msgid "Permission denied: {}"
 msgid "Permission denied"
-msgstr "Permesso negato: {}"
+msgstr "Permesso negato"
 
 #: templates/django_webix/include/utils.js:657
 msgid "Click and change"
@@ -554,26 +551,26 @@ msgstr ""
 "Lo stile del modello è configurato in modo errato, le sole opzioni "
 "disponibili sono 'standard' o 'tabs' (standard di default)."
 
-#: views/generic/create_update.py:404 views/generic/create_update.py:488
+#: views/generic/create_update.py:406 views/generic/create_update.py:492
 #: views/generic/delete.py:53 views/generic/detail.py:18
 #: views/generic/list.py:746
 msgid "View permission is not allowed"
 msgstr "Non disponi del permesso di visione"
 
-#: views/generic/create_update.py:407
+#: views/generic/create_update.py:409
 msgid "Add permission is not allowed"
 msgstr "Non disponi del permesso di aggiunta"
 
-#: views/generic/create_update.py:491
+#: views/generic/create_update.py:495
 msgid "Change permission is not allowed"
 msgstr "Non disponi del permesso di modifica"
 
-#: views/generic/create_update.py:550
+#: views/generic/create_update.py:554
 #, python-format
 msgid "Changed %s."
 msgstr "Modificato %s."
 
-#: views/generic/create_update.py:550
+#: views/generic/create_update.py:554
 msgid "and"
 msgstr "e"
 

@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-03-21 13:08+0100\n"
-"PO-Revision-Date: 2024-03-19 11:42+0100\n"
+"POT-Creation-Date: 2025-04-28 16:09+0200\n"
+"PO-Revision-Date: 2025-04-24 14:30+0200\n"
 "Last-Translator: Stefano Menegon <dallago@mpasol.it>\n"
 "Language-Team: \n"
 "Language: it\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Poedit 2.1.1\n"
-"X-Translated-Using: django-rosetta 0.10.0\n"
+"X-Translated-Using: django-rosetta 0.10.1\n"
 
 #: contrib/admin/apps.py:26
 msgid "Administration"
@@ -77,14 +77,10 @@ msgid "Object"
 msgstr ""
 
 #: contrib/admin/dwadmin.py:364
-#, fuzzy
-#| msgid "Active"
 msgid "Action"
-msgstr "Attivo"
+msgstr "Azione"
 
 #: contrib/admin/dwadmin.py:377
-#, fuzzy
-#| msgid "Personal informations"
 msgid "Informations"
 msgstr "Informazioni personali"
 
