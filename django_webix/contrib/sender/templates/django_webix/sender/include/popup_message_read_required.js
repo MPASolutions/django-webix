@@ -2,7 +2,9 @@
 {% if message_unread %}
 var message_attachments = [
     {% for a in message_unread.message_sent.attachments.all %}
-    {'id':'{{ a.pk }}','file':'{{ a.file }}','filename': '{{a.file.name}}', 'read':false},
+        {% if a.file.name and a.file.name != '' %}
+            {'id':'{{ a.pk }}','file':'{{ a.file }}','filename': '{{a.file.name}}', 'read':false},
+        {% endif %}
     {% endfor %}
 ];
 
@@ -42,10 +44,15 @@ webix.ui({
                     }]
                 },
             },
-            {% if message_unread.message_sent.attachments.exists %}
-            { view:"template", template:"{{_("Click and open each file before confirming the reading of this communication")}}", type:"header" },
+            {
+                view:"template",
+                template:"{{_("Click and open each file before confirming the reading of this communication")}}",
+                type:"header",
+                hidden: message_attachments.length == 0,
+                },
             {
                 id: "message_attachments",
+                hidden: message_attachments.length == 0,
                 view: "list",
                 autoheight: true,
                 scroll: "auto",
@@ -60,7 +67,6 @@ webix.ui({
                     }
                 }
             },
-            {% endif %}
             {
                 view: "toolbar", cols: [
                     {},

@@ -693,10 +693,12 @@ class WebixListView(WebixBaseMixin, WebixPermissionsMixin, WebixUrlMixin, ListVi
             except EmptyResultSet:
                 total_count = 0
             else:
-                if "UNION" in qs_query:
+                pk_field = self.get_pk_field()
+                model_fields = [field.name for field in self.model._meta.get_fields()]
+                if "UNION" in qs_query or pk_field not in model_fields:
                     total_count = qs.count()
                 else:  # optimized count
-                    total_count = qs.only(self.get_pk_field()).count()
+                    total_count = qs.only(pk_field).count()
             # apply pagination
             qs_paginate = self.paginate_queryset(qs, None)
             # build output
