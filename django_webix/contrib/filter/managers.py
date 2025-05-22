@@ -10,7 +10,7 @@ class WebixFilterQueryset(DALQuerySet):
 
 
 class WebixFilterManager(DALManager.from_queryset(WebixFilterQueryset)):
-    def get_filter(self):
+    def get_filter(self, relations_limit=None):
         """
         Public: all
         Private: all only if there is no owner
