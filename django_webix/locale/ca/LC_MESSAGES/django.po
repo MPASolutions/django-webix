@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-04-24 11:52+0200\n"
+"POT-Creation-Date: 2025-05-28 15:56+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -547,7 +547,7 @@ msgstr ""
 
 #: views/generic/create_update.py:406 views/generic/create_update.py:492
 #: views/generic/delete.py:53 views/generic/detail.py:18
-#: views/generic/list.py:746
+#: views/generic/list.py:748
 msgid "View permission is not allowed"
 msgstr ""
 
@@ -620,24 +620,24 @@ msgstr ""
 msgid "Filter in map"
 msgstr ""
 
-#: views/generic/list.py:706
+#: views/generic/list.py:708
 msgid ""
 "Json response is available only if get_queryset() return a queryset and not "
 "a list"
 msgstr ""
 
-#: views/generic/list.py:726
+#: views/generic/list.py:728
 msgid "This action is not registered"
 msgstr ""
 
-#: views/generic/list.py:732
+#: views/generic/list.py:734
 msgid "Permission denied: {}"
 msgstr ""
 
-#: views/generic/list.py:734
+#: views/generic/list.py:736
 msgid "This permission is not registered on this class"
 msgstr ""
 
-#: views/generic/list.py:814
+#: views/generic/list.py:816
 msgid "Generic TemplateListView needs to define data for datatable"
 msgstr ""

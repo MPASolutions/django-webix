@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-04-28 16:09+0200\n"
+"POT-Creation-Date: 2025-05-28 15:56+0200\n"
 "PO-Revision-Date: 2025-04-24 11:57+0200\n"
 "Last-Translator: Stefano Menegon <dallago@mpasol.it>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -552,7 +552,7 @@ msgstr ""
 
 #: views/generic/create_update.py:406 views/generic/create_update.py:492
 #: views/generic/delete.py:53 views/generic/detail.py:18
-#: views/generic/list.py:746
+#: views/generic/list.py:748
 msgid "View permission is not allowed"
 msgstr "Ansichtsberechtigung nicht erlaubt"
 
@@ -629,7 +629,7 @@ msgstr "Seitenanfang ist nicht ganzzahlig"
 msgid "Filter in map"
 msgstr "In der Karte filtern"
 
-#: views/generic/list.py:706
+#: views/generic/list.py:708
 msgid ""
 "Json response is available only if get_queryset() return a queryset and not "
 "a list"
@@ -637,19 +637,19 @@ msgstr ""
 "Json-Antwort ist nur verfügbar, wenn get_queryset() ein Queryset und nicht "
 "eine Liste zurückgibt"
 
-#: views/generic/list.py:726
+#: views/generic/list.py:728
 msgid "This action is not registered"
 msgstr "Diese Aktion ist nicht registriert"
 
-#: views/generic/list.py:732
+#: views/generic/list.py:734
 msgid "Permission denied: {}"
 msgstr "Berechtigung verweigert: {}"
 
-#: views/generic/list.py:734
+#: views/generic/list.py:736
 msgid "This permission is not registered on this class"
 msgstr "Diese Berechtigung ist nicht auf dieser Klasse registriert"
 
-#: views/generic/list.py:814
+#: views/generic/list.py:816
 msgid "Generic TemplateListView needs to define data for datatable"
 msgstr "Generic TemplateListView muss Daten für Datentabelle definieren"
 
