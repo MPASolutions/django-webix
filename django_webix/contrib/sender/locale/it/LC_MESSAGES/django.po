@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-04-24 07:02+0200\n"
+"POT-Creation-Date: 2025-05-28 15:56+0200\n"
 "PO-Revision-Date: 2025-03-05 08:48+0100\n"
 "Last-Translator: Stefano Menegon <dallago@mpasol.it>\n"
 "Language-Team: \n"
@@ -502,27 +502,27 @@ msgstr "Invia"
 msgid "Unable to send messages"
 msgstr "Impossibile inviare i messaggi"
 
-#: contrib/sender/templates/django_webix/sender/include/popup_message_read_required.js:19
+#: contrib/sender/templates/django_webix/sender/include/popup_message_read_required.js:21
 msgid "Hi, there are messages to read..."
 msgstr "Ciao, ci sono messaggi da leggere..."
 
-#: contrib/sender/templates/django_webix/sender/include/popup_message_read_required.js:22
+#: contrib/sender/templates/django_webix/sender/include/popup_message_read_required.js:24
 #: contrib/sender/templates/django_webix/sender/sender.js:340
 msgid "Close"
 msgstr "Chiudi"
 
-#: contrib/sender/templates/django_webix/sender/include/popup_message_read_required.js:46
+#: contrib/sender/templates/django_webix/sender/include/popup_message_read_required.js:49
 msgid ""
 "Click and open each file before confirming the reading of this communication"
 msgstr ""
 "Clicca e apri ciascun file prima di confermare la lettura della presente "
 "comunicazione"
 
-#: contrib/sender/templates/django_webix/sender/include/popup_message_read_required.js:70
+#: contrib/sender/templates/django_webix/sender/include/popup_message_read_required.js:76
 msgid "I confirm that<br/>I have read"
 msgstr "Confermo che<br/>ho letto"
 
-#: contrib/sender/templates/django_webix/sender/include/popup_message_read_required.js:84
+#: contrib/sender/templates/django_webix/sender/include/popup_message_read_required.js:90
 msgid "You have not seen all the attachments."
 msgstr "Non hai visto tutti gli allegati."
 
