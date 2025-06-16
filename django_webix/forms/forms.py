@@ -303,7 +303,10 @@ class BaseWebixMixin:
                 elif connection.vendor == "postgresql" and isinstance(field, JSONField):
                     initial = self.data.get(self.add_prefix(name), None)
                     if initial is not None and initial != "":
-                        initial = loads(initial)
+                        try:
+                            initial = loads(initial)
+                        except Exception:  # if not valid do nothing
+                            pass
                     else:
                         initial = field.initial
                 else:
