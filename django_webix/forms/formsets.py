@@ -121,7 +121,7 @@ class WebixInlineFormSet(InlineFormSetFactory):
     def __init__(self, parent_model, request, instance, view_kwargs=None, view=None, initial=None):
         super().__init__(parent_model, request, instance, view_kwargs, view)
 
-        # Set initial (for copy purpouse)
+        # Set initial (for copy purpose)
         if initial is not None:
             self.initial = initial
 
