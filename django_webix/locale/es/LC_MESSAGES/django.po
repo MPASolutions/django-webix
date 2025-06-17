@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-05-28 15:56+0200\n"
+"POT-Creation-Date: 2025-06-17 09:23+0200\n"
 "PO-Revision-Date: 2025-04-24 14:39+0200\n"
 "Last-Translator: Stefano Menegon <dallago@mpasol.it>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -105,76 +105,76 @@ msgstr ""
 msgid "Model fields values"
 msgstr ""
 
-#: forms/forms.py:445
+#: forms/forms.py:448
 msgid "Upload new image"
 msgstr "Subir nueva imagen"
 
-#: forms/forms.py:445
+#: forms/forms.py:448
 #, fuzzy
 #| msgid "Upload new image"
 msgid "Change image"
 msgstr "Subir nueva imagen"
 
-#: forms/forms.py:552 forms/forms.py:696
+#: forms/forms.py:555 forms/forms.py:699
 msgid "Deleted"
 msgstr "Eliminado"
 
-#: forms/forms.py:586
+#: forms/forms.py:589
 msgid "Upload file"
 msgstr "Subir archivo"
 
-#: forms/forms.py:586
+#: forms/forms.py:589
 #, fuzzy
 #| msgid "Changed %s."
 msgid "Change file"
 msgstr "Cambiar %s."
 
-#: forms/forms.py:609
+#: forms/forms.py:612
 msgid "Upload folder"
 msgstr "Subir carpeta"
 
-#: forms/forms.py:609
+#: forms/forms.py:612
 #, fuzzy
 #| msgid "Upload folder"
 msgid "Change folder"
 msgstr "Subir carpeta"
 
-#: forms/forms.py:611
+#: forms/forms.py:614
 msgid "Upload files"
 msgstr "Subir archivos"
 
-#: forms/forms.py:611
+#: forms/forms.py:614
 #, fuzzy
 #| msgid "Changed %s."
 msgid "Change files"
 msgstr "Cambiar %s."
 
-#: forms/forms.py:724
+#: forms/forms.py:727
 msgid "MultipleChoiceField is available only with PRO webix license"
 msgstr ""
 "La elección de múltiples campos solo está permitida con la licencia webix "
 "PRO "
 
-#: forms/forms.py:764 forms/forms.py:797 forms/forms.py:868 forms/forms.py:931
-#: forms/forms.py:1023
+#: forms/forms.py:767 forms/forms.py:800 forms/forms.py:871 forms/forms.py:934
+#: forms/forms.py:1026
 msgid "Write and select"
 msgstr ""
 
-#: forms/forms.py:907 forms/forms.py:955
+#: forms/forms.py:910 forms/forms.py:958
 #, fuzzy
 #| msgid "Click to select"
 msgid "Click and select"
 msgstr "Clic para seleccionar"
 
-#: forms/forms.py:1074
+#: forms/forms.py:1077
 msgid "Initial value {} for geo field {} is not supported"
 msgstr "El valor inicial {} para el campo geográfico {} no es compatible"
 
-#: forms/forms.py:1113
+#: forms/forms.py:1116
 msgid "Edit"
 msgstr "Editar"
 
-#: forms/forms.py:1273
+#: forms/forms.py:1276
 msgid "Type of field {} not supported"
 msgstr "El tipo de campo {} no compatible"
 

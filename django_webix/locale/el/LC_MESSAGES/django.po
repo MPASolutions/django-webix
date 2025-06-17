@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-05-28 15:56+0200\n"
+"POT-Creation-Date: 2025-06-17 09:24+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -98,64 +98,64 @@ msgstr ""
 msgid "Model fields values"
 msgstr ""
 
-#: forms/forms.py:445
+#: forms/forms.py:448
 msgid "Upload new image"
 msgstr ""
 
-#: forms/forms.py:445
+#: forms/forms.py:448
 msgid "Change image"
 msgstr ""
 
-#: forms/forms.py:552 forms/forms.py:696
+#: forms/forms.py:555 forms/forms.py:699
 msgid "Deleted"
 msgstr ""
 
-#: forms/forms.py:586
+#: forms/forms.py:589
 msgid "Upload file"
 msgstr ""
 
-#: forms/forms.py:586
+#: forms/forms.py:589
 msgid "Change file"
 msgstr ""
 
-#: forms/forms.py:609
+#: forms/forms.py:612
 msgid "Upload folder"
 msgstr ""
 
-#: forms/forms.py:609
+#: forms/forms.py:612
 msgid "Change folder"
 msgstr ""
 
-#: forms/forms.py:611
+#: forms/forms.py:614
 msgid "Upload files"
 msgstr ""
 
-#: forms/forms.py:611
+#: forms/forms.py:614
 msgid "Change files"
 msgstr ""
 
-#: forms/forms.py:724
+#: forms/forms.py:727
 msgid "MultipleChoiceField is available only with PRO webix license"
 msgstr ""
 
-#: forms/forms.py:764 forms/forms.py:797 forms/forms.py:868 forms/forms.py:931
-#: forms/forms.py:1023
+#: forms/forms.py:767 forms/forms.py:800 forms/forms.py:871 forms/forms.py:934
+#: forms/forms.py:1026
 msgid "Write and select"
 msgstr ""
 
-#: forms/forms.py:907 forms/forms.py:955
+#: forms/forms.py:910 forms/forms.py:958
 msgid "Click and select"
 msgstr ""
 
-#: forms/forms.py:1074
+#: forms/forms.py:1077
 msgid "Initial value {} for geo field {} is not supported"
 msgstr ""
 
-#: forms/forms.py:1113
+#: forms/forms.py:1116
 msgid "Edit"
 msgstr ""
 
-#: forms/forms.py:1273
+#: forms/forms.py:1276
 msgid "Type of field {} not supported"
 msgstr ""
 
