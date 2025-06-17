@@ -90,7 +90,7 @@ def _get_config_new(model_class):
                     {
                         # 'input': 'select',
                         "operators": ["exact", "isnull"],
-                        "values": [{x[0]: x[1]} for x in field.base_field.choices],
+                        "values": [{"value": x[0], "label": x[1]} for x in field.base_field.choices],
                     }
                 )
 
@@ -102,7 +102,7 @@ def _get_config_new(model_class):
                     {
                         "input": "select",
                         "operators": ["exact", "isnull"],
-                        "values": [{x[0]: x[1]} for x in field.choices],
+                        "values": [{"value": x[0], "label": x[1]} for x in field.choices],
                     }
                 )
 
