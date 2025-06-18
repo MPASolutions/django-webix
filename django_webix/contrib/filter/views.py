@@ -269,7 +269,7 @@ class WebixFilterList(WebixFilterMixin, ListView):
     model = WebixFilter
     is_enable_column_geo = False
     enable_row_click = True
-    enable_column_copy = False
+    enable_column_copy = True  # in past was enable_column_copy = False
     type_row_click = "single"
 
     template_name = "django_webix/filter/list.js"

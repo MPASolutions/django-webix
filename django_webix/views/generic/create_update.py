@@ -350,16 +350,17 @@ class WebixCreateView(
 
     def get_initial(self):
         initial = {}
-        # main option: send SEND_INITIAL_DATA on (header or GET or POST) and POST initial data
-        if self.send_initial_data is not None:
-            initial.update(self.send_initial_data)
-        # secondary option: send pk_copy for copy instance field values
-        elif self.request.GET.get("pk_copy", None) is not None:
+        # main option: send pk_copy for copy instance field values
+        if self.request.GET.get("pk_copy", None) is not None:
             object_to_copy = get_object_or_404(self.get_queryset(), pk=self.request.GET["pk_copy"])
             fields_to_copy = self.get_model_copy_fields()
             if self.model._meta.pk.name in fields_to_copy:
                 fields_to_copy.remove(self.model._meta.pk.name)
             initial.update(model_to_dict(object_to_copy, fields=fields_to_copy))
+        # secondary option: send SEND_INITIAL_DATA on (header or GET or POST) and POST initial data
+        elif self.send_initial_data is not None:
+            initial.update(self.send_initial_data)
+
         return initial
 
     def get_initial_inlines(self):
