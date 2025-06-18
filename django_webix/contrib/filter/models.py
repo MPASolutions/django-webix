@@ -42,7 +42,7 @@ class WebixFilter(DALModel):
     class Meta:
         verbose_name = _("Webix Filter")
         verbose_name_plural = _("Webix Filters")
-        unique_together = (("model", "title"),)
+        # unique_together = (("model", "title"),)
 
     def __str__(self):
         return "{}".format(self.title)
