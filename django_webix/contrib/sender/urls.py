@@ -3,6 +3,7 @@ from django.urls import path, re_path
 from django_webix.contrib.sender.views import (
     CheckAttachmentView,
     GetMessageUnreadView,
+    GroupedMessagesListView,
     SenderGetListView,
     SenderInvoiceManagementView,
     SenderListView,
@@ -23,6 +24,7 @@ urlpatterns = [
     path("sender-window", SenderWindowView.as_view(), name="dwsender.sender_window"),
     path("invoices", SenderInvoiceManagementView.as_view(), name="dwsender.invoices"),
     path("messages_list", SenderMessagesListView.as_view(), name="dwsender.messages_list"),
+    path("groupedmessages_list", GroupedMessagesListView.as_view(), name="dwsender.groupedmessages_list"),
     path("attachment_check", CheckAttachmentView.as_view(), name="dwsender.attachment_check"),
     re_path(
         "^messages_chat/(?P<section>users|messages)$", SenderMessagesChatView.as_view(), name="dwsender.messages_chat"

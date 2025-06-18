@@ -8,8 +8,21 @@ from django.contrib.auth import get_user_model
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.postgres.aggregates import StringAgg
-from django.db.models import Case, CharField, DecimalField, F, IntegerField, OuterRef, Q, Subquery, Sum, Value, When
-from django.db.models.functions import Cast, StrIndex, Substr
+from django.db.models import (
+    Case,
+    CharField,
+    Count,
+    DecimalField,
+    F,
+    IntegerField,
+    OuterRef,
+    Q,
+    Subquery,
+    Sum,
+    Value,
+    When,
+)
+from django.db.models.functions import Cast, Left, StrIndex, Substr
 from django.http import Http404, HttpResponseForbidden, JsonResponse
 from django.shortcuts import get_object_or_404
 from django.urls import reverse
@@ -21,6 +34,7 @@ from django.utils.text import format_lazy
 from django.utils.translation import gettext_lazy as _
 from django.views.decorators.csrf import csrf_exempt
 from django.views.generic import View
+from django_webix.contrib.sender.actions import multiple_delete_messagesent_action
 from django_webix.contrib.sender.models import (
     MessageRecipient,
     MessageSent,
@@ -276,6 +290,143 @@ class SenderWindowView(WebixTemplateView):
         context["initial_send_methods"] = CONF.get("initial_send_methods", [])
 
         return context
+
+
+@method_decorator(login_required, name="dispatch")
+class GroupedMessagesListView(WebixListView):
+    template_name = "django_webix/sender/list_groupedmessages.js"
+    model = MessageSent
+    title = _("Grouped messages")
+    order_by = ["-creation_date"]
+
+    actions = [multiple_delete_messagesent_action]
+
+    url_pattern_list = "dwsender.groupedmessages_list"
+    add_permission = False
+    change_permission = False
+    delete_permission = True
+    enable_column_delete = False
+    enable_column_copy = False
+    enable_row_click = False
+    enable_json_loading = True
+    remove_disabled_buttons = True
+
+    def get_initial_queryset(self):
+        qs = super().get_initial_queryset()
+        qs = qs.annotate(send_method_txt=Left("send_method", StrIndex("send_method", Value(".")) - 1))
+        # Annotate attachments
+        qs = qs.annotate(
+            recipients_count=Count("messagerecipient__id", distinct=True, output_field=IntegerField()),
+            attachments_txt=StringAgg(
+                Cast("attachments__pk", CharField()),
+                delimiter="|",
+                distinct=True,
+                output_field=CharField(),
+            ),
+        )
+        return qs
+
+    def get_fields(self):
+        _fields = [
+            {
+                "field_name": "send_method_txt",
+                "datalist_column": format_lazy(
+                    """{{
+                        id: "send_method_txt",
+                        serverFilterType: "exact_in",
+                        header: ["{}", {{content: "serverMultiSelectFilter", options: send_method_txt_options}}],
+                        adjust: "all",
+                        minWidth: 150,
+                    }}""",
+                    escapejs(_("Send method")),
+                ),
+            },
+            {
+                "field_name": "creation_date",
+                "datalist_column": format_lazy(
+                    """{{
+                        id: "creation_date",
+                        serverFilterType: "range",
+                        header: ["{}", {{content: "serverDateRangeFilter"}}],
+                        adjust: "all",
+                        sort: "server",
+                        format: webix.i18n.fullDateFormatStr,
+                        template: function(obj) {{
+                        if (obj.creation_date === null) {{return ""
+                        }} else {{
+                        return this.format(new Date(obj.creation_date)) }}
+                        }},
+                    }}""",
+                    escapejs(_("Sent date")),
+                ),
+            },
+            {
+                "field_name": "typology__typology",
+                "datalist_column": format_lazy(
+                    """{{
+                        id: "typology__typology",
+                        serverFilterType: "icontains",
+                        header: ["{}", {{content: "serverSelectFilter",
+                        options: typology__typology_options}}],
+                        adjust: "all"
+                    }}""",
+                    escapejs(_("Typology")),
+                ),
+            },
+            {
+                "field_name": "subject",
+                "datalist_column": format_lazy(
+                    """{{
+                        id: "subject",
+                        serverFilterType: "icontains",
+                        header: ["{}", {{content: "serverFilter"}}],
+                        adjust: "all"
+                    }}""",
+                    escapejs(_("Subject")),
+                ),
+            },
+            {
+                "field_name": "body",
+                "datalist_column": format_lazy(
+                    """{{
+                        id: "body",
+                        serverFilterType: "icontains",
+                        header: ["{}", {{content: "serverFilter"}}],
+                        adjust: "all",
+                        fillspace: true,
+                        template: template_replace_newline
+                    }}""",
+                    escapejs(_("Body")),
+                ),
+            },
+            {
+                "field_name": "recipients_count",
+                "datalist_column": format_lazy(
+                    """{{
+                        id: "recipients_count",
+                        serverFilterType: "numbercompare",
+                        header: ["{}", {{content: "serverFilter"}}],
+                        adjust: "all",
+                    }}""",
+                    escapejs(_("Recipients")),
+                ),
+            },
+            {
+                "field_name": "attachments_txt",
+                "datalist_column": format_lazy(
+                    """{{
+                        id: "attachments_txt",
+                        header: ["{}"],
+                        width: 70,
+                        minWidth: 70,
+                        sort: 'server',
+                        template: attachmentsTemplate
+                    }}""",
+                    escapejs(_("Attachments")),
+                ),
+            },
+        ]
+        return super().get_fields(fields=_fields)
 
 
 @method_decorator(login_required, name="dispatch")
