@@ -137,6 +137,7 @@ class ModelWebixAdmin(ModelWebixAdminPermissionsMixin):
     type_row_click = "single"
     enable_actions = True
     remove_disabled_buttons = False
+    enable_column_webgis = True
 
     # permission custom
     only_superuser = False
@@ -674,6 +675,11 @@ class ModelWebixAdmin(ModelWebixAdminPermissionsMixin):
                     def post_forms_valid(self, form, inlines, **kwargs):
                         return _admin.post_forms_valid(view=self, form=form, inlines=inlines, **kwargs)
 
+                if hasattr(_admin, "inlines_save"):
+
+                    def inlines_save(self, inlines):
+                        return _admin.inlines_save(view=self, inlines=inlines)
+
                 if hasattr(_admin, "get_initial"):
 
                     def get_initial(self):
@@ -875,6 +881,11 @@ class ModelWebixAdmin(ModelWebixAdminPermissionsMixin):
 
                     def post_forms_valid(self, form, inlines, **kwargs):
                         return _admin.post_forms_valid(view=self, form=form, inlines=inlines, **kwargs)
+
+                if hasattr(_admin, "inlines_save"):
+
+                    def inlines_save(self, inlines):
+                        return _admin.inlines_save(view=self, inlines=inlines)
 
                 if hasattr(_admin, "get_initial"):
 
@@ -1158,6 +1169,8 @@ class ModelWebixAdmin(ModelWebixAdminPermissionsMixin):
                 is_enable_row_click = _admin.is_enable_row_click
                 type_row_click = _admin.type_row_click
                 enable_actions = _admin.enable_actions
+
+                enable_column_webgis = _admin.enable_column_webgis
 
                 add_permission = _admin.add_permission
                 change_permission = _admin.change_permission
