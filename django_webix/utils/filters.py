@@ -17,11 +17,9 @@ except ImportError:
     from backports import zoneinfo
 
 try:
-    import psycopg2  # noqa: F401
+    from django.contrib.postgres.fields import ArrayField
 except ModuleNotFoundError:
     ArrayField = None
-else:
-    from django.contrib.postgres.fields import ArrayField
 
 try:
     from django.contrib.gis.geos import GEOSGeometry
@@ -85,20 +83,31 @@ def from_dict_to_qset(data, model):
                         else:
                             pass  # there are no others field
 
-                # it's an array so put in into array
-                if ArrayField and isinstance(_curr_field, ArrayField) and not isinstance(data_qset["val"], list):
-                    data_qset["val"] = [data_qset.get("val")]
+                # cast value to the correct type
+                if (
+                    isinstance(_curr_field, models.BooleanField)
+                    or isinstance(_curr_field, models.NullBooleanField)
+                    or data_qset.get("path").endswith("__isnull")
+                ):
+                    # force boolean value
+                    data_qset["val"] = data_qset.get("val").lower() != "false"
+                elif (
+                    (ArrayField and isinstance(_curr_field, ArrayField))
+                    or data_qset.get("path").endswith("__exact_in")
+                    or data_qset.get("path").endswith("__overlap")
+                ) and not isinstance(data_qset.get("val"), list):
+                    # cast to list (if it has only one value, it will be a list with one element)
+                    data_qset["val"] = list(filter(None, data_qset.get("val", "").split(",")))
 
                 # 2 type of value for operator range, from WebixList is a dict and from AdvanceFilter is a list
                 if data_qset.get("path").endswith("__range") and isinstance(data_qset.get("val"), dict):
                     # {"start":null,"end":null}
-                    val = data_qset.get("val")
-                    base_path = data_qset.get("path").replace("__range", "")
+                    data_qset["path"] = data_qset["path"].replace("__range", "")
                     qset_to_applicate = Q()
-                    if val is not None and val.get("start") is not None:
-                        qset_to_applicate = Q(**{base_path + "__gte": parse(val.get("start"))})
-                    if val is not None and val.get("end") is not None:
-                        data_end = parse(val.get("end"))
+                    if (_start := data_qset["val"].get("start")) is not None:
+                        qset_to_applicate = Q(**{data_qset["path"] + "__gte": parse(_start)})
+                    if (_end := data_qset["val"].get("end")) is not None:
+                        data_end = parse(_end)
                         if _curr_field is None or (
                             isinstance(_curr_field, DateTimeField)
                             and datetime.datetime.combine(
@@ -109,24 +118,12 @@ def from_dict_to_qset(data, model):
                             == data_end
                         ):
                             data_end += relativedelta(days=1)
-                        qset_to_applicate &= Q(**{base_path + "__lte": data_end})
+                        qset_to_applicate &= Q(**{data_qset["path"] + "__lte": data_end})
                 elif data_qset.get("path").endswith("__exact_in"):
                     data_qset["path"] = data_qset["path"].replace("__exact_in", "__in")
-                    data_qset["val"] = data_qset["val"].split(",")
                     qset_to_applicate = Q(**{data_qset.get("path"): data_qset.get("val")})
                 else:
-                    valore_query = data_qset.get("val")
-                    if (
-                        isinstance(_curr_field, models.BooleanField)
-                        or isinstance(_curr_field, models.NullBooleanField)
-                        or data_qset.get("path").endswith("__isnull")
-                    ):
-                        # force cast
-                        if valore_query.lower() == "false":
-                            valore_query = False
-                        else:
-                            valore_query = True
-                    qset_to_applicate = Q(**{data_qset.get("path"): valore_query})
+                    qset_to_applicate = Q(**{data_qset.get("path"): data_qset.get("val")})
 
             if j == 0:
                 qset = qset_to_applicate
