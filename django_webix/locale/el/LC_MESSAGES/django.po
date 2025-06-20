@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-06-17 09:24+0200\n"
+"POT-Creation-Date: 2025-06-20 15:46+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -545,26 +545,26 @@ msgid ""
 "'tabs' (standard by default)."
 msgstr ""
 
-#: views/generic/create_update.py:406 views/generic/create_update.py:492
+#: views/generic/create_update.py:407 views/generic/create_update.py:493
 #: views/generic/delete.py:53 views/generic/detail.py:18
 #: views/generic/list.py:748
 msgid "View permission is not allowed"
 msgstr ""
 
-#: views/generic/create_update.py:409
+#: views/generic/create_update.py:410
 msgid "Add permission is not allowed"
 msgstr ""
 
-#: views/generic/create_update.py:495
+#: views/generic/create_update.py:496
 msgid "Change permission is not allowed"
 msgstr ""
 
-#: views/generic/create_update.py:554
+#: views/generic/create_update.py:555
 #, python-format
 msgid "Changed %s."
 msgstr ""
 
-#: views/generic/create_update.py:554
+#: views/generic/create_update.py:555
 msgid "and"
 msgstr ""
 

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-04-28 16:09+0200\n"
+"POT-Creation-Date: 2025-06-20 15:46+0200\n"
 "PO-Revision-Date: 2025-04-24 14:30+0200\n"
 "Last-Translator: Stefano Menegon <dallago@mpasol.it>\n"
 "Language-Team: \n"
@@ -188,11 +188,11 @@ msgstr "Menu"
 msgid "Webix Admin Menu Languages"
 msgstr "Menu"
 
-#: contrib/admin/options.py:305
+#: contrib/admin/options.py:306
 msgid "Yes"
 msgstr "Sì"
 
-#: contrib/admin/options.py:305
+#: contrib/admin/options.py:306
 msgid "No"
 msgstr "No"
 
