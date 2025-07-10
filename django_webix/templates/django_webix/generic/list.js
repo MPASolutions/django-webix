@@ -435,8 +435,9 @@ if (
                               return new Promise((resolve) => setTimeout(resolve, time));
                             } {#  enable ui customization only after second #}
                             sleep(100).then(() => {
-                                {{ view_prefix }}enable_datatable_custom_ui();
-
+                                if (typeof {{ view_prefix }}enable_datatable_custom_ui === "function") {
+                                    {{ view_prefix }}enable_datatable_custom_ui();
+                                    }
                             });
                         }
                     }
