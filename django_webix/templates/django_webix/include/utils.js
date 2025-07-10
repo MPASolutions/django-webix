@@ -566,7 +566,7 @@ function set_autocomplete_value(selector, QS, value, finally_function) {
     d.refresh();
 }
 
-function set_autocomplete(selector, QS, finally_function) {
+function set_autocomplete(selector, QS, finally_function, no_reload) {
     var a = $$(selector);
     var d = a.getList();
     if(a.config.view === 'multicombo' || a.config.view === 'multiselect'){
@@ -582,9 +582,12 @@ function set_autocomplete(selector, QS, finally_function) {
         }
         c.refresh();
     }
-    d.load(QS + '&filter[value]=').finally(finally_function);
-    d.refresh();
+    if (no_reload!=true){
+        d.load(QS + '&filter[value]=').finally(finally_function);
+        d.refresh();
+    }
 }
+
 
 function set_autocomplete_empty(selector, QS, finally_function) {
     var a = $$(selector);
