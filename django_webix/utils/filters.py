@@ -90,7 +90,7 @@ def from_dict_to_qset(data, model):
                     or data_qset.get("path").endswith("__isnull")
                 ):
                     # force boolean value
-                    data_qset["val"] = str(data_qset.get("val").lower()) != "false"
+                    data_qset["val"] = str(data_qset.get("val")).lower() != "false"
                 elif (
                     (ArrayField and isinstance(_curr_field, ArrayField))
                     or data_qset.get("path").endswith("__exact_in")
