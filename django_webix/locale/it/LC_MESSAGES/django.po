@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-06-20 15:46+0200\n"
+"POT-Creation-Date: 2025-07-16 16:45+0200\n"
 "PO-Revision-Date: 2025-04-24 14:31+0200\n"
 "Last-Translator: Stefano Menegon <dallago@mpasol.it>\n"
 "Language-Team: \n"
@@ -230,27 +230,27 @@ msgstr "Applica i filtri"
 msgid "Filter"
 msgstr "Filtra"
 
-#: templates/django_webix/generic/list.js:479
+#: templates/django_webix/generic/list.js:480
 msgid "You do not have permission to edit this item"
 msgstr "Non hai i permessi per modificare questo elemento"
 
-#: templates/django_webix/generic/list.js:481
+#: templates/django_webix/generic/list.js:482
 #: templates/django_webix/include/utils.js:398
 #: templates/django_webix/include/utils.js:458
 msgid "Server error"
 msgstr "Errore sul server"
 
-#: templates/django_webix/generic/list.js:536
+#: templates/django_webix/generic/list.js:537
 msgid "Continue"
 msgstr "Continua comunque"
 
-#: templates/django_webix/generic/list.js:537
+#: templates/django_webix/generic/list.js:538
 #: templates/django_webix/include/form_warnings.js:52
 #: views/generic/decorators.py:27 views/generic/list.py:86
 msgid "Undo"
 msgstr "Annulla"
 
-#: templates/django_webix/generic/list.js:559
+#: templates/django_webix/generic/list.js:560
 msgid "Double click to edit the element"
 msgstr "Doppio click per editare l'elemento"
 
@@ -404,7 +404,7 @@ msgstr "di"
 
 #: templates/django_webix/include/toolbar_list.js:43
 #: templates/django_webix/include/toolbar_list.js:52
-#: templates/django_webix/include/utils.js:623
+#: templates/django_webix/include/utils.js:626
 msgid "All"
 msgstr "Tutti"
 
@@ -473,15 +473,15 @@ msgstr "Immagine"
 msgid "Permission denied"
 msgstr "Permesso negato"
 
-#: templates/django_webix/include/utils.js:657
+#: templates/django_webix/include/utils.js:660
 msgid "Click and change"
 msgstr "Clicca e cambia"
 
-#: templates/django_webix/include/utils.js:659
+#: templates/django_webix/include/utils.js:662
 msgid "Locked data"
 msgstr "Dati bloccati"
 
-#: templates/django_webix/include/utils.js:701
+#: templates/django_webix/include/utils.js:704
 msgid "Editable column"
 msgstr "Colonna modificabile"
 
