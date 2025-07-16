@@ -406,6 +406,7 @@ class WebixUrlMixin(WebixUrlUtilsMixin):
 
 
 class WebixBaseMixin:
+    content_type = "application/javascript"
 
     def get_container_id(self, request):
         return settings.WEBIX_CONTAINER_ID
