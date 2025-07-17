@@ -451,6 +451,8 @@ class WebixBaseMixin:
 
 class WebixTemplateView(WebixBaseMixin, TemplateView):
 
+    content_type = "text/html"
+
     def get_context_data(self, **kwargs):
         context = super(WebixTemplateView, self).get_context_data(**kwargs)
         context.update(self.get_context_data_webix_base(request=self.request))
