@@ -19,7 +19,7 @@ $$("{{ webix_container_id }}").addView({
                         {% if not has_delete_permission %}
                             {% if remove_disabled_buttons %} hidden: true, {% endif %}
                             disabled: true,
-                            tooltip: "{{ info_no_delete_permission|join:", "|escapejs }}",
+                            tooltip: "{% for i in info_no_delete_permission %}{{ i|escapejs }}{% if not forloop.last %}, {% endif %}{% endfor %}",
                         {% endif %}
                         width: {% if request.user_agent.is_mobile %}40{% else %}120{% endif %},
                         click: function () {
@@ -45,11 +45,11 @@ $$("{{ webix_container_id }}").addView({
                         {% if not object.pk and not has_add_permission %}
                             {% if remove_disabled_buttons %} hidden: true, {% endif %}
                             disabled: true,
-                            tooltip: "{{ info_no_add_permission|join:", "|escapejs}}",
+                            tooltip: "{% for i in info_no_add_permission %}{{ i|escapejs }}{% if not forloop.last %}, {% endif %}{% endfor %}",
                         {% elif object.pk and not has_change_permission %}
                             {% if remove_disabled_buttons %} hidden: true, {% endif %}
                             disabled: true,
-                            tooltip: "{{ info_no_change_permission|join:", "|escapejs}}",
+                            tooltip: "{% for i in info_no_change_permission %}{{ i|escapejs }}{% if not forloop.last %}, {% endif %}{% endfor %}",
                         {% endif %}
                         click: function () {
                               webix.storage.local.put("last_button_click", '{{ form.webix_id }}_save_continue');
@@ -70,12 +70,12 @@ $$("{{ webix_container_id }}").addView({
                         {% if not object.pk and not has_add_permission %}
                             {% if remove_disabled_buttons %} hidden: true, {% endif %}
                             disabled: true,
-                            tooltip: "{{ info_no_add_permission|join:", "|escapejs}}",
+                            tooltip: "{% for i in info_no_add_permission %}{{ i|escapejs }}{% if not forloop.last %}, {% endif %}{% endfor %}",
                         {% elif object.pk %}
                             {% if not has_change_permission or not has_add_permission %}
                                 {% if remove_disabled_buttons %} hidden: true, {% endif %}
                                 disabled: true,
-                                tooltip: "{{ info_no_change_permission|join:", "|escapejs}}",
+                                tooltip: "{% for i in info_no_change_permission %}{{ i|escapejs }}{% if not forloop.last %}, {% endif %}{% endfor %}",
                             {% endif %}
                         {% endif %}
                         click: function () {
@@ -97,11 +97,11 @@ $$("{{ webix_container_id }}").addView({
                         {% if not object.pk and not has_add_permission %}
                             {% if remove_disabled_buttons %} hidden: true, {% endif %}
                             disabled: true,
-                            tooltip: "{{ info_no_add_permission|join:", "|escapejs }}",
+                            tooltip: "{% for i in info_no_add_permission %}{{ i|escapejs }}{% if not forloop.last %}, {% endif %}{% endfor %}",
                         {% elif object.pk and not has_change_permission %}
                             {% if remove_disabled_buttons %} hidden: true, {% endif %}
                             disabled: true,
-                            tooltip: "{{ info_no_change_permission|join:", "|escapejs }}",
+                            tooltip: "{% for i in info_no_change_permission %}{{ i|escapejs }}{% if not forloop.last %}, {% endif %}{% endfor %}",
                         {% endif %}
                         click: function () {
                             webix.storage.local.put("last_button_click", '{{ form.webix_id }}_save');
