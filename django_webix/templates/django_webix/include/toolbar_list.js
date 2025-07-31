@@ -133,7 +133,7 @@ $$("{{ webix_container_id }}").addView({
             label: '{% if request.user_agent.is_mobile %}<div title="{{_("Add new")|escapejs}}"><i style="cursor:pointer" class="webix_icon far fa-plus"></i></div>{% else %}{{_("Add new")|escapejs}}{% endif %}',
             {% if not has_add_permission %}
             disabled: true,
-            tooltip: '{{ info_no_add_permission|join:", " }}',
+            tooltip: "{% for i in info_no_add_permission %}{{ i|escapejs }}{% if not forloop.last %}, {% endif %}{% endfor %}",
             {% endif %}
             width: {% if request.user_agent.is_mobile %}40{% else %}150{% endif %},
             click: function () {
