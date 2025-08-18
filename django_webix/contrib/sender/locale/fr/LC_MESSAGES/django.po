@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-06-20 15:46+0200\n"
+"POT-Creation-Date: 2025-08-18 15:35+0200\n"
 "PO-Revision-Date: 2022-03-21 15:33+0050\n"
 "Last-Translator: Traduzioni CBC <>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -855,3 +855,8 @@ msgstr "Expéditeur non spécifié"
 #: contrib/sender/views.py:1008
 msgid "Invalid period"
 msgstr "Période invalide"
+
+#, fuzzy, python-brace-format
+#~| msgid "Duplicate recipients"
+#~ msgid "Telegram duplicate {recipient}"
+#~ msgstr "Dupliquer destinataires"
