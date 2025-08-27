@@ -150,7 +150,7 @@ class SenderGetListView(View):
         dinamici, allora il QuerySet viene filtrato, altrimenti ritorna tutti i valori presenti nel database.
 
         :param request: Django request
-        :return: Json contentente le istanze richieste e filtrate in caso di `filters` in `INSTALLED_APPS`
+        :return: Json contenente le istanze richieste e filtrate in caso di `filters` in `INSTALLED_APPS`
         """
 
         contentype = request.GET.get("contentype", None)
@@ -564,6 +564,27 @@ class SenderMessagesListView(WebixListView):
                     escapejs(_("Attachments")),
                 ),
             },
+            {
+                "field_name": "status",
+                "datalist_column": """{
+                        id: "status",
+                        hidden: true,
+                        header: "",
+                    }""",
+            },
+            {
+                "field_name": "status_message",
+                "datalist_column": format_lazy(
+                    """{{
+                        id: "status_message",
+                        serverFilterType: "icontains",
+                        header: ["{}", {{content: "serverSelectFilter",
+                        options: status_message_options}}],
+                        adjust: "all"
+                    }}""",
+                    escapejs(_("Status")),
+                ),
+            },
         ]
         return super().get_fields(fields=_fields)
 
@@ -603,7 +624,7 @@ class SenderMessagesListView(WebixListView):
         qs = super().get_initial_queryset()
 
         # Only sent messages
-        qs = qs.filter(message_sent__status="sent")
+        # qs = qs.filter(message_sent__status="sent")
 
         # Limit filter by user
         qset = Q()
@@ -656,6 +677,14 @@ class SenderMessagesListView(WebixListView):
                 distinct=True,
                 output_field=CharField(),
             ),
+        )
+
+        qs = qs.annotate(
+            status_message=Case(
+                *[When(status=k, then=Value(str(v))) for k, v in self.model._meta.get_field("status").choices],
+                default=Value(""),
+                output_field=CharField()
+            )
         )
 
         # Filter by send_method

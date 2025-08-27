@@ -25,7 +25,11 @@ from django.utils.text import capfirst
 from django.utils.timezone import is_naive, make_naive
 from django.utils.translation import gettext_lazy as _
 from django_webix.utils.layers import get_layers
-from sorl.thumbnail import get_thumbnail
+
+try:
+    from sorl.thumbnail import get_thumbnail
+except ImportError:
+    get_thumbnail = None
 
 try:
     from django.utils.encoding import force_text as force_str
@@ -208,7 +212,7 @@ class BaseWebixMixin:
         return [option for option in choices if option["id"] not in ["", None]]
 
     def _get_url_suggest(self, app_label, model_name, to_field_name=None, limit_choices_to=None):
-        """Returns the url to autocomplete model choiche field"""
+        """Returns the url to autocomplete model choice field"""
 
         url = "{url}?app_label={app_label}&model_name={model_name}"
         if to_field_name:
@@ -314,8 +318,14 @@ class BaseWebixMixin:
             else:
                 initial = self.initial.get(name, field.initial)
 
+            # if Field is pk into inline form
+            model = self.get_model()
+            if model and model._meta.pk.name == name:
+                el.update({"view": "text"})
+                if initial is not None:
+                    el.update({"value": initial})
             # EmailField
-            if isinstance(field, forms.EmailField):
+            elif isinstance(field, forms.EmailField):
                 el.update({"view": "text"})
                 if initial is not None:
                     el.update({"value": initial})
@@ -468,13 +478,16 @@ class BaseWebixMixin:
                 )
                 delete_hidden = True
                 if initial:
-                    img_small = get_thumbnail(initial, "150x100", quality=85)
-                    img_big = get_thumbnail(initial, "500x400", quality=85)
-                    key = randint(1, 100000)
-                    _template_file = "<img src=\"{}\"  onclick=\"image_modal('{}',{},{},'{}')\">".format(
-                        img_small.url, img_big.url, 500, 400, str(key)
-                    )
-                    delete_hidden = False
+                    if get_thumbnail is not None:
+                        img_small = get_thumbnail(initial, "150x100", quality=85)
+                        img_big = get_thumbnail(initial, "500x400", quality=85)
+                        key = randint(1, 100000)
+                        _template_file = "<img src=\"{}\"  onclick=\"image_modal('{}',{},{},'{}')\">".format(
+                            img_small.url, img_big.url, 500, 400, str(key)
+                        )
+                        delete_hidden = False
+                    else:
+                        _template_file = f'<img src="{initial.url}" style="height: 150px; width: 100px;" >'
                 else:
                     _template_file = ""
 
@@ -839,7 +852,7 @@ class BaseWebixMixin:
                             )
                         }
                     )
-                    # add initial value with text for other purpose
+                    # add initial value with text for another purpose
                     record = field.queryset.get(**{field.to_field_name or "pk": el["value"]})
                     el["initial"] = {
                         "id": "{}".format(getattr(record, field.to_field_name or "pk")),
@@ -892,12 +905,14 @@ class BaseWebixMixin:
                             }
                         ]
                 else:
-                    choices = self._add_null_choice(
-                        [
+                    if hasattr(field, "choices") and field.choices and len(field.choices) > 0:
+                        choices = [{"id": str(_choice[0]), "value": str(_choice[1])} for _choice in field.choices]
+                    else:
+                        choices = [
                             {"id": "{}".format(getattr(i, field.to_field_name or "pk")), "value": "{}".format(i)}
                             for i in field.queryset
                         ]
-                    )
+                    choices = self._add_null_choice(choices)
                     if not field.required:
                         choices.insert(0, {"id": "", "value": "------", "$empty": True})
                     count = len(choices)
@@ -923,7 +938,7 @@ class BaseWebixMixin:
 
                         # Default if is required and there are only one option
                         if field.required and initial is None and count == 1:
-                            #  TODO attenzione da rivedere perche puo dare problemi su inlines
+                            # TODO attenzione da rivedere perche puo dare problemi su inlines
                             el.update(
                                 {"value": "{}".format(getattr(field.queryset.first(), field.to_field_name or "pk"))}
                             )
@@ -1449,7 +1464,7 @@ class BaseWebixForm(forms.BaseForm, BaseWebixMixin):
         has_change_permission=None,
         has_delete_permission=None,
         parent_model=None,
-        **kwparams
+        **kwparams,
     ):
 
         # Set default parameter
@@ -1538,7 +1553,7 @@ class BaseWebixModelForm(forms.BaseModelForm, BaseWebixMixin):
         has_change_permission=None,
         has_delete_permission=None,
         parent_model=None,
-        **kwargs
+        **kwargs,
     ):
 
         # Set default

@@ -18,7 +18,11 @@ from django_webix.views.generic.signals import (
     django_webix_view_pre_save,
 )
 from extra_views import CreateWithInlinesView, UpdateWithInlinesView
-from sorl.thumbnail.fields import ImageField
+
+try:
+    from sorl.thumbnail.fields import ImageField
+except ImportError:
+    ImageField = None
 
 try:
     from django.utils.encoding import force_text as force_str
@@ -166,7 +170,7 @@ class WebixCreateUpdateMixin:
         obj = form.instance
         if obj is not None:
             for field in obj._meta.fields:
-                if not isinstance(field, FileField) and not isinstance(field, ImageField):
+                if not isinstance(field, FileField) and (ImageField is not None and not isinstance(field, ImageField)):
                     continue
 
                 if form.data.get(field.name + "_clean", None) == "1":
@@ -181,7 +185,9 @@ class WebixCreateUpdateMixin:
                 obj = inline.instance
                 if obj is not None:
                     for field in obj._meta.fields:
-                        if not isinstance(field, FileField) and not isinstance(field, ImageField):
+                        if not isinstance(field, FileField) and (
+                            ImageField is not None and not isinstance(field, ImageField)
+                        ):
                             continue
 
                         if inline.data.get(inline.add_prefix(field.name) + "_clean", None) == "1":
