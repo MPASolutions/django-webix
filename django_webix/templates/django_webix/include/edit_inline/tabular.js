@@ -24,7 +24,9 @@ $$('{{ inline.get_container_id|default_if_none:inline.get_container_id }}').addV
                         id: '{{ inline_form.prefix|safe }}-inline-body',
                         cols: [{{ inline_form.as_webix|safe }}]
                     }
+
                 },
+
                 {% endfor %}
                 {
                     //css: 'empty-form',
