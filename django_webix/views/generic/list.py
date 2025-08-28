@@ -2,6 +2,7 @@ from collections import OrderedDict
 from copy import deepcopy
 
 from django.apps import apps
+from django.conf import settings
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import EmptyResultSet, FieldDoesNotExist, ImproperlyConfigured, PermissionDenied
 from django.db.models import BooleanField, Case, F, ForeignKey, ManyToManyField, Value, When
@@ -355,13 +356,31 @@ class WebixListView(WebixBaseMixin, WebixPermissionsMixin, WebixUrlMixin, ListVi
                         and "extrafields" in str(field.get("field_type", "")).lower()
                     ):
                         from django.contrib.contenttypes.models import ContentType
-                        from django_webix.contrib.extra_fields.models import ModelField
 
-                        ct = ContentType.objects.get_for_model(self.model)
-                        mf = ModelField.objects.filter(field_name=field_name, content_type=ct).first()
-                        if mf is not None and mf.modelfieldchoice_set.exists():
-                            options = mf.modelfieldchoice_set.values_list("key", "value")
-                            _fields_choices[field_name] = [{"id": i[0], "value": i[1]} for i in options]
+                        content_type_id = ContentType.objects.get_for_model(self.model).pk
+
+                        if getattr(settings, "WEBIX_EXTRA_FIELDS_ENABLE_CACHE", False):
+                            from django.core.cache import cache
+
+                            extra_fields = cache.get("django_webix_extra_fields", {})
+                            if content_type_id in extra_fields:
+                                for mf in extra_fields[content_type_id]:
+                                    if mf["field_name"] == field_name:
+                                        if mf["has_choices"]:
+                                            _fields_choices[field_name] = [
+                                                {"id": i["key"], "value": i["value"]} for i in mf["choices"]
+                                            ]
+                                        break
+
+                        else:
+                            from django_webix.contrib.extra_fields.models import ModelField
+
+                            mf = ModelField.objects.filter(
+                                field_name=field_name, content_type_id=content_type_id
+                            ).first()
+                            if mf is not None and mf.modelfieldchoice_set.exists():
+                                options = mf.modelfieldchoice_set.values_list("key", "value")
+                                _fields_choices[field_name] = [{"id": i[0], "value": i[1]} for i in options]
                     elif (
                         "serverSelectFilter" in field.get("datalist_column")
                         or "serverRichSelectFilter" in field.get("datalist_column")
