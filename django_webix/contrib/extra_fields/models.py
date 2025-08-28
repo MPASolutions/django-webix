@@ -1,10 +1,12 @@
-import django_webix.contrib.extra_fields.signals  # noqa: F401
 from django.apps import apps
+from django.conf import settings
 from django.contrib.contenttypes.fields import GenericForeignKey
 from django.contrib.contenttypes.models import ContentType
 from django.core.exceptions import FieldDoesNotExist
 from django.core.validators import RegexValidator
 from django.db import models
+from django.db.models.signals import post_delete, post_save
+from django.dispatch import receiver
 from django.utils.translation import gettext_lazy as _
 from django_webix.contrib.extra_fields.fields import NotDbColumnField
 
@@ -127,3 +129,23 @@ class ModelFieldValue(Model):
 
     def __str__(self):
         return "{}: {}".format(self.content_object, self.model_field.label)
+
+
+if getattr(settings, "WEBIX_EXTRA_FIELDS_ENABLE_CACHE", False):
+    from django_webix.contrib.extra_fields.utils_cache import set_cache_extra_fields
+
+    @receiver(post_save, sender=ModelField)
+    def handle_ModelField_post_save(sender, instance, created, **kwargs):
+        set_cache_extra_fields(force=True)
+
+    @receiver(post_delete, sender=ModelField)
+    def handle_ModelField_post_delete(sender, instance, **kwargs):
+        set_cache_extra_fields(force=True)
+
+    @receiver(post_save, sender=ModelFieldChoice)
+    def handle_ModelFieldChoice_post_save(sender, instance, created, **kwargs):
+        set_cache_extra_fields(force=True)
+
+    @receiver(post_delete, sender=ModelFieldChoice)
+    def handle_ModelFieldChoice_post_delete(sender, instance, **kwargs):
+        set_cache_extra_fields(force=True)
