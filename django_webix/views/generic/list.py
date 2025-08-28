@@ -297,7 +297,8 @@ class WebixListView(WebixBaseMixin, WebixPermissionsMixin, WebixUrlMixin, ListVi
             )
         return queryset
 
-    def get_queryset(self, initial_queryset=None):
+    def get_queryset(self, initial_queryset=None, apply_translations=True, **kwargs):
+
         # bypass improperly configured for custom queryset without model
         if self.model:
             if initial_queryset is not None:
@@ -305,7 +306,8 @@ class WebixListView(WebixBaseMixin, WebixPermissionsMixin, WebixUrlMixin, ListVi
             else:
                 qs = self.get_initial_queryset()
 
-            qs = self._model_translations(qs)  # Check model translations
+            if apply_translations:
+                qs = self._model_translations(qs)  # Check model translations
 
             if apps.is_installed("django_filtersmerger"):
                 from django_filtersmerger import FilterMerger
@@ -422,13 +424,15 @@ class WebixListView(WebixBaseMixin, WebixPermissionsMixin, WebixUrlMixin, ListVi
 
     def get_footer(self):
         if self.is_enable_footer() and self.model is not None:
-            qs = self.get_queryset()
+            # INFO: Splitting into multiple queries makes it slower
             aggregation_dict = {}
+            qs = self.get_queryset(apply_translations=False)
+            pk_field_name = qs.model._meta.pk.name
             for field in self.get_fields():
                 if field.get("footer") is not None:
                     aggregation_dict.update({field.get("field_name") + "_footer": field.get("footer")})
-            qs = qs.aggregate(**aggregation_dict)
-            return qs
+            qs = qs.only(pk_field_name).aggregate(**aggregation_dict)
+            return dict(qs)
         else:
             return None
 
