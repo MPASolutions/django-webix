@@ -125,11 +125,12 @@ class WebixInlineFormSet(InlineFormSetFactory):
         if initial is not None:
             self.initial = initial
 
-        # Set form class
+    def get_form_class(self):
         if self.form_class is None:
             self.form_class = WebixModelForm
+        return super().get_form_class()
 
-        # Set formset class
+    def get_formset_class(self):
         if hasattr(self, "custom_formset_class"):
             self.formset_class = self.custom_formset_class
         else:
@@ -137,13 +138,7 @@ class WebixInlineFormSet(InlineFormSetFactory):
         self.formset_class = type(
             str("WebixInlineFormSet"), (self.formset_class,), {"template_name": self.template_name}
         )
-
-        if instance is not None and instance.pk is not None:
-            # Set queryset
-            if hasattr(self, "get_queryset") and callable(self.get_queryset):
-                self.formset_kwargs["queryset"] = self.get_queryset()
-            else:
-                self.formset_kwargs["queryset"] = self.inline_model.objects.all()
+        return super().get_formset_class()
 
     def get_formset_kwargs(self):
         _formset_kwargs = super().get_formset_kwargs()

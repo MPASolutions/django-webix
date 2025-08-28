@@ -1,7 +1,7 @@
 import sys
 from itertools import chain
 
-from django.contrib.contenttypes.models import ContentType
+from django.conf import settings
 from django.db import models
 from django.db.models import Min, Q
 from django.db.models.functions import Cast
@@ -42,14 +42,14 @@ class ExtraFieldsQuerySet(QuerySet):
         if names is None:
             names = set(
                 chain.from_iterable(
-                    (field.name, field.attname) if hasattr(field, "attname") else (field.name,)
+                    ((field.name, field.attname) if hasattr(field, "attname") else (field.name,))
                     for field in self.model._meta.get_fields()
                 )
             )
 
         for alias, annotation in annotations.items():
             if alias in names:
-                if self.model._meta.get_field(alias).concrete is True:
+                if self.model._meta.get_field(alias).concrete is True:  # custom
                     raise ValueError("The annotation '%s' conflicts with a field on " "the model." % alias)
             if isinstance(annotation, FilteredRelation):
                 clone.query.add_filtered_relation(annotation, alias)
@@ -71,17 +71,40 @@ class ExtraFieldsQuerySet(QuerySet):
 
 
 def add_extra_fields_to_queryset(queryset):
-    # queryset = queryset.select_related('extra_fields')
     if "makemigrations" not in sys.argv and not any("migrate" in arg for arg in sys.argv):
-        for mf in ModelField.objects.filter(content_type=ContentType.objects.get_for_model(queryset.model)):
-            field_class = getattr(models, mf.field_type)
-            queryset = queryset.annotate(
-                **{
-                    mf.field_name: Cast(
-                        Min("extra_fields__value", filter=Q(extra_fields__model_field_id=int(mf.pk))), field_class()
+        from django.contrib.contenttypes.models import ContentType
+
+        content_type = ContentType.objects.get_for_model(queryset.model)
+        # cache mode
+        if getattr(settings, "WEBIX_EXTRA_FIELDS_ENABLE_CACHE", False):
+            from django.core.cache import cache
+
+            if (
+                cache.get("django_webix_extra_fields", None) is not None
+                and cache.get("django_webix_extra_fields").get(content_type.pk, None) is not None
+            ):
+                for field_config in cache.get("django_webix_extra_fields").get(content_type.pk):
+                    field_class = getattr(models, field_config["field_type"])
+                    queryset = queryset.annotate(
+                        **{
+                            field_config["field_name"]: Cast(
+                                Min("extra_fields__value", filter=Q(extra_fields__model_field_id=field_config["pk"])),
+                                field_class(),
+                            )
+                        }
                     )
-                }
-            )
+
+        else:
+            for mf in ModelField.objects.filter(content_type_id=content_type.pk):
+                field_class = getattr(models, mf.field_type)
+                queryset = queryset.annotate(
+                    **{
+                        mf.field_name: Cast(
+                            Min("extra_fields__value", filter=Q(extra_fields__model_field_id=int(mf.pk))),
+                            field_class(),
+                        )
+                    }
+                )
     return queryset
 
 

@@ -1,6 +1,7 @@
 import copy
 
 from django.apps import apps
+from django.conf import settings
 from django.core.exceptions import FieldDoesNotExist
 from django.db import models
 from django.db.models import Case, When
@@ -454,33 +455,58 @@ class ModelWebixAdmin(ModelWebixAdminPermissionsMixin):
             from django_webix.contrib.extra_fields.models_mixin import ExtraFieldsModel
 
             if issubclass(self.model, ExtraFieldsModel):
-                from django.contrib.contenttypes.models import ContentType
-                from django_webix.contrib.extra_fields.models import ModelField
+                if getattr(settings, "WEBIX_EXTRA_FIELDS_ENABLE_CACHE", False):
 
-                content_type_pk = ContentType.objects.get_for_model(self.model).pk
-                model_fields_names = (
-                    ModelField.objects.filter(content_type_id=content_type_pk)
-                    .annotate(
-                        has_choice=Case(
-                            When(modelfieldchoice__isnull=False, then=1),
-                            default=0,
-                            output_field=models.BooleanField(),
+                    from django.contrib.contenttypes.models import ContentType
+                    from django.core.cache import cache
+                    from django_webix.contrib.extra_fields.models import ModelField
+
+                    content_type_pk = ContentType.objects.get_for_model(self.model).pk
+                    if (
+                        cache.get("django_webix_extra_fields", None) is not None
+                        and cache.get("django_webix_extra_fields").get(content_type_pk, None) is not None
+                    ):
+                        model_fields_names = []
+                        for field_config in cache.get("django_webix_extra_fields").get(content_type_pk):
+                            model_fields_names.append(field_config["field_name"])
+                            if field_config["has_choices"]:
+                                self.extra_header.setdefault(field_config["field_name"], {})["choice"] = True
+
+                        _model_list_display += self.create_list_display(
+                            model_fields_names,
+                            view=view,
+                            request=request,
+                            defaults={"width": 'adjust:"all"', "extra_header": "hidden:true"},
                         )
-                    )
-                    .values_list("field_name", "has_choice")
-                    .distinct()
-                    .order_by("field_name")
-                )
-                for field in model_fields_names:
-                    if field[1]:
-                        self.extra_header.setdefault(field[0], {})["choice"] = True
+                else:
 
-                _model_list_display += self.create_list_display(
-                    model_fields_names.values_list("field_name", flat=True),
-                    view=view,
-                    request=request,
-                    defaults={"width": 'adjust:"all"', "extra_header": "hidden:true"},
-                )
+                    from django.contrib.contenttypes.models import ContentType
+                    from django_webix.contrib.extra_fields.models import ModelField
+
+                    content_type_pk = ContentType.objects.get_for_model(self.model).pk
+                    model_fields_names = (
+                        ModelField.objects.filter(content_type_id=content_type_pk)
+                        .annotate(
+                            has_choice=Case(
+                                When(modelfieldchoice__isnull=False, then=1),
+                                default=0,
+                                output_field=models.BooleanField(),
+                            )
+                        )
+                        .values_list("field_name", "has_choice")
+                        .distinct()
+                        .order_by("field_name")
+                    )
+                    for field in model_fields_names:
+                        if field[1]:
+                            self.extra_header.setdefault(field[0], {})["choice"] = True
+
+                    _model_list_display += self.create_list_display(
+                        model_fields_names.values_list("field_name", flat=True),
+                        view=view,
+                        request=request,
+                        defaults={"width": 'adjust:"all"', "extra_header": "hidden:true"},
+                    )
         return _model_list_display
 
     def get_queryset(self, view=None, request=None):

@@ -1,3 +1,4 @@
+import django_webix.contrib.extra_fields.signals  # noqa: F401
 from django.apps import apps
 from django.contrib.contenttypes.fields import GenericForeignKey
 from django.contrib.contenttypes.models import ContentType
