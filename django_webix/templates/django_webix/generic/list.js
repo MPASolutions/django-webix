@@ -192,7 +192,6 @@ if (
         var {{ view_prefix }}_first_load = true;
         {% endif %}
 
-
         $$("{{ webix_container_id }}").addView({
             id: '{{ view_prefix }}datatable',
             view: "datatable",
@@ -333,25 +332,34 @@ if (
                                 }
                                 // counter
                                 {{ view_prefix }}update_counter();
+                                // load footer data
                                 {% if is_enable_footer %}
-                                    // footer only for first page
-                                    for (var field_name in _data.footer) {
-                                        var format = $$('{{ view_prefix }}datatable').getColumnConfig(field_name.replace('_footer', '')).footer[0].format;
-                                        var format_col = $$('{{ view_prefix }}datatable').getColumnConfig(field_name.replace('_footer', '')).format;
-                                        var text = _data.footer[field_name];
-                                        if (format !== undefined){
-                                            text = format(text)
-                                        } else if(format_col !== undefined){
-                                            text = format_col(text)
-                                        }
-                                        $$('{{ view_prefix }}datatable').getColumnConfig(field_name.replace('_footer', '')).footer[0].text = text;
-                                        // adjust css of footer
-                                        var css_col = $$('{{ view_prefix }}datatable').getColumnConfig(field_name.replace('_footer', '')).css;
-                                        if($$('{{ view_prefix }}datatable').getColumnConfig(field_name.replace('_footer', '')).footer[0].css === undefined){
-                                            $$('{{ view_prefix }}datatable').getColumnConfig(field_name.replace('_footer', '')).footer[0].css = css_col;
-                                        }
+                                    if (_start==0) { {# footer only for first page #}
+                                        // load data for footer
+                                        var _params_footer = JSON.parse(JSON.stringify(_params)); {# deep copy #}
+                                        _params_footer.only_footer = true;
+                                        webix.ajax().post("{{ url_list|safe }}{% if '?' in url_list %}&{% else %}?{% endif %}json", $.param(_params_footer))
+                                            .then(function (data) {
+                                                var _data = data.json();
+                                                for (var field_name in _data.footer) {
+                                                    var format = $$('{{ view_prefix }}datatable').getColumnConfig(field_name.replace('_footer', '')).footer[0].format;
+                                                    var format_col = $$('{{ view_prefix }}datatable').getColumnConfig(field_name.replace('_footer', '')).format;
+                                                    var text = _data.footer[field_name];
+                                                    if (format !== undefined){
+                                                        text = format(text)
+                                                    } else if(format_col !== undefined){
+                                                        text = format_col(text)
+                                                    }
+                                                    $$('{{ view_prefix }}datatable').getColumnConfig(field_name.replace('_footer', '')).footer[0].text = text;
+                                                    {# adjust css of footer #}
+                                                    var css_col = $$('{{ view_prefix }}datatable').getColumnConfig(field_name.replace('_footer', '')).css;
+                                                    if($$('{{ view_prefix }}datatable').getColumnConfig(field_name.replace('_footer', '')).footer[0].css === undefined){
+                                                        $$('{{ view_prefix }}datatable').getColumnConfig(field_name.replace('_footer', '')).footer[0].css = css_col;
+                                                    }
+                                                }
+                                        $$('{{ view_prefix }}datatable').refreshColumns();
+                                        })
                                     }
-                                    $$('{{ view_prefix }}datatable').refreshColumns();
                                 {% endif %}
                                 return data;
                             })

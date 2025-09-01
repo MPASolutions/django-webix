@@ -1242,6 +1242,11 @@ class ModelWebixAdmin(ModelWebixAdminPermissionsMixin):
                 if _admin.change_list_template is not None:
                     template_name = _admin.change_list_template
 
+                if hasattr(_admin, "get_footer"):
+
+                    def get_footer(self):
+                        return _admin.get_footer(view=self)
+
                 if hasattr(_admin, "get_container_id"):
 
                     def get_container_id(self, request):
