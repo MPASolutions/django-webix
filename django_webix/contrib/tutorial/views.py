@@ -83,7 +83,7 @@ class TutorialListView(ListView):
         ]
         return super().get_fields(fields=_fields)
 
-    def get_queryset(self, initial_queryset=None):
+    def get_queryset(self, initial_queryset=None, apply_translations=True, **kwargs):
         queryset = super(TutorialListView, self).get_queryset(initial_queryset=initial_queryset)
 
         # Icon

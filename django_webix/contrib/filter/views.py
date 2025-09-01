@@ -299,7 +299,7 @@ class WebixFilterList(WebixFilterMixin, ListView):
         )
         return qs
 
-    def get_queryset(self, initial_queryset=None):
+    def get_queryset(self, initial_queryset=None, apply_translations=True, **kwargs):
         qs = super().get_queryset(initial_queryset=initial_queryset)
 
         app_label = self.kwargs.get("app_label")
