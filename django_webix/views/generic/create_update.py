@@ -379,7 +379,10 @@ class WebixCreateView(
                     fields_to_copy.remove(self.model._meta.pk.name)
                 datas = []
                 fk_name = None
-                if hasattr(inline, "factory_kwargs") and inline.factory_kwargs.get("fk_name") is not None:
+                if (
+                    getattr(inline, "factory_kwargs", None) is not None
+                    and inline.factory_kwargs.get("fk_name") is not None
+                ):
                     fk_name = inline.factory_kwargs.get("fk_name")
                 try:
                     fk = _get_foreign_key(self.model, inline.model, fk_name=fk_name)

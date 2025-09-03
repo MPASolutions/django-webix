@@ -117,8 +117,20 @@ class BaseWebixInlineFormSet(BaseInlineFormSet):
 
 class WebixInlineFormSet(InlineFormSetFactory):
     template_name = None
+    formset_kwargs = None  # its mutable!!! so not set to {}
+    factory_kwargs = None  # its mutable!!! so not set to {}
+    form_kwargs = None  # its mutable!!! so not set to []
+    initial = None  # its mutable!!! so not set to []
 
     def __init__(self, parent_model, request, instance, view_kwargs=None, view=None, initial=None):
+        if self.formset_kwargs is None:
+            self.formset_kwargs = {}
+        if self.factory_kwargs is None:
+            self.factory_kwargs = {}
+        if self.form_kwargs is None:
+            self.form_kwargs = {}
+        if self.initial is None:
+            self.initial = []
         super().__init__(parent_model, request, instance, view_kwargs, view)
 
         # Set initial (for copy purpose)
@@ -141,6 +153,11 @@ class WebixInlineFormSet(InlineFormSetFactory):
         return super().get_formset_class()
 
     def get_formset_kwargs(self):
+        # allow override the default queryset ny self.get_queryset()
+        if self.object is not None and self.object.pk is not None:
+            if hasattr(self, "get_queryset") and callable(self.get_queryset):
+                self.formset_kwargs["queryset"] = self.get_queryset()
+
         _formset_kwargs = super().get_formset_kwargs()
         _formset_kwargs.update(
             {
