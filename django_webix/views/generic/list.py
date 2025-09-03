@@ -329,6 +329,10 @@ class WebixListView(WebixBaseMixin, WebixPermissionsMixin, WebixUrlMixin, ListVi
 
         return None
 
+    def get_method_choices_filters(self, field_name):
+        # usually DB distinct and order by are slower than distinct by python set
+        return "set"  # by python OR by db 'distinct'
+
     def get_choices_filters(self):
         _fields_choices = {}
         fields = self.get_fields()
@@ -390,26 +394,49 @@ class WebixListView(WebixBaseMixin, WebixPermissionsMixin, WebixUrlMixin, ListVi
                         or "serverMultiComboFilter" in field.get("datalist_column")
                     ):
                         if field.get("field_pk") is None:
-                            _fields_choices[field_name] += [
-                                str(i)
-                                for i in self.get_queryset()
-                                .filter(**{field_name + "__isnull": False})
-                                .values_list(field_name, flat=True)
-                                .distinct()
-                                .order_by()
-                            ]
+                            if self.get_method_choices_filters(field_name) == "set":
+                                _fields_choices[field_name] += set(
+                                    [
+                                        str(i)
+                                        for i in self.get_queryset()
+                                        .filter(**{field_name + "__isnull": False})
+                                        .values_list(field_name, flat=True)
+                                    ]
+                                )
+                            else:
+                                _fields_choices[field_name] += [
+                                    str(i)
+                                    for i in self.get_queryset()
+                                    .filter(**{field_name + "__isnull": False})
+                                    .values_list(field_name, flat=True)
+                                    .distinct()
+                                    .order_by()
+                                ]
                         else:
-                            _fields_choices[field_name] += [
-                                {
-                                    "id": key,
-                                    "value": value,
-                                }
-                                for key, value in self.get_queryset()
-                                .filter(**{field_name + "__isnull": False})
-                                .values_list(field.get("field_pk"), field_name)
-                                .distinct()
-                                .order_by()
-                            ]
+                            if self.get_method_choices_filters(field_name) == "set":
+                                _fields_choices[field_name] += set(
+                                    [
+                                        {
+                                            "id": key,
+                                            "value": value,
+                                        }
+                                        for key, value in self.get_queryset()
+                                        .filter(**{field_name + "__isnull": False})
+                                        .values_list(field.get("field_pk"), field_name)
+                                    ]
+                                )
+                            else:
+                                _fields_choices[field_name] += [
+                                    {
+                                        "id": key,
+                                        "value": value,
+                                    }
+                                    for key, value in self.get_queryset()
+                                    .filter(**{field_name + "__isnull": False})
+                                    .values_list(field.get("field_pk"), field_name)
+                                    .distinct()
+                                    .order_by()
+                                ]
 
         return _fields_choices
 
@@ -700,49 +727,56 @@ class WebixListView(WebixBaseMixin, WebixPermissionsMixin, WebixUrlMixin, ListVi
     def get(self, request, *args, **kwargs):
         return super(WebixListView, self).get(request, *args, **kwargs)
 
+    def get_total_count(self, queryset):
+        try:
+            qs_query = str(queryset.query)
+        except EmptyResultSet:
+            total_count = 0
+        else:
+            pk_field = self.get_pk_field()
+            model_fields = [field.name for field in self.model._meta.get_fields()]
+            if "UNION" in qs_query or pk_field not in model_fields:
+                total_count = queryset.count()
+            else:  # optimized count
+                total_count = queryset.only(pk_field).count()
+        return total_count
+
     def json_response(self, request, *args, **kwargs):
         # ONLY for get_queryset() -> qs and not get_queryset() -> list
-        _data = []
-        total_count = 0
-        if self.model:
-            qs = self.get_queryset(initial_queryset=self.get_initial_queryset())
-            # filters application (like IDS selections)
-            qs = self.filters_objects_datatable(qs)
-            # apply ordering
-            qs = self.apply_ordering(qs)
-            # total count
-            try:
-                qs_query = str(qs.query)
-            except EmptyResultSet:
-                total_count = 0
-            else:
-                pk_field = self.get_pk_field()
-                model_fields = [field.name for field in self.model._meta.get_fields()]
-                if "UNION" in qs_query or pk_field not in model_fields:
-                    total_count = qs.count()
-                else:  # optimized count
-                    total_count = qs.only(pk_field).count()
-            # apply pagination
-            qs_paginate = self.paginate_queryset(qs, None)
-            # build output
-            if qs_paginate is not None:
-                if type(qs_paginate) is list:
-                    raise Exception(
-                        _("Json response is available only if get_queryset() return a queryset and not a list")
-                    )
-                else:  # queryset
-                    _data = self._get_objects_datatable_values(qs_paginate)
+        if bool(request.GET.get("only_footer")) or bool(request.POST.get("only_footer")) is True:
+            data = {"footer": self.get_footer()}
+        else:
+            _data = []
+            total_count = 0
+            if self.model:
+                qs = self.get_queryset(initial_queryset=self.get_initial_queryset())
+                # filters application (like IDS selections)
+                qs = self.filters_objects_datatable(qs)
+                # apply ordering
+                qs = self.apply_ordering(qs)
+                # total count
+                total_count = self.get_total_count(qs)
+                # apply pagination
+                qs_paginate = self.paginate_queryset(qs, None)
+                # build output
+                if qs_paginate is not None:
+                    if type(qs_paginate) is list:
+                        raise Exception(
+                            _("Json response is available only if get_queryset() return a queryset and not a list")
+                        )
+                    else:  # queryset
+                        _data = self._get_objects_datatable_values(qs_paginate)
 
-        pos = self.get_paginate_start()
-        # output must be list and not values of queryset
-        data = {
-            "footer": self.get_footer() if pos == 0 else None,  # footer is computed only for first page
-            "is_enable_footer": self.is_enable_footer(),
-            "count": self.get_paginate_count(),
-            "total_count": total_count,
-            "pos": pos,
-            "data": list(_data),
-        }
+            pos = self.get_paginate_start()
+            # output must be list and not values of queryset
+            data = {
+                # "footer": self.get_footer() if pos == 0 else None,  # footer is computed only for first page
+                "is_enable_footer": self.is_enable_footer(),
+                "count": self.get_paginate_count(),
+                "total_count": total_count,
+                "pos": pos,
+                "data": list(_data),
+            }
         return JsonResponse(data, safe=False)
 
     def action_response(self, request, *args, **kwargs):
