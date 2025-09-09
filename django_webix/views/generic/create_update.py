@@ -31,6 +31,27 @@ except ImportError:
 
 
 class WebixCreateUpdateMixin:
+    """
+    A mixin for handling create and update operations in Django Webix views.
+
+    This mixin provides functionality for managing forms, inlines, warnings, and permissions
+    for create and update operations. It supports customizable buttons, error handling,
+    and logging.
+
+    Attributes:
+        logs_enable (bool): Whether to enable logging. Defaults to `True`.
+        model (Model, optional): The Django model associated with the view.
+        request (HttpRequest, optional): The HTTP request object.
+        errors_on_popup (bool): Whether to display errors in a popup. Defaults to `False`.
+        enable_button_save_continue (bool): Whether to enable the "Save and Continue" button. Defaults to `True`.
+        enable_button_save_addanother (bool): Whether to enable the "Save and Add Another" button. Defaults to `True`.
+        enable_button_save_gotolist (bool): Whether to enable the "Save and Go to List" button. Defaults to `True`.
+        enable_button_reload (bool): Whether to enable the "Reload" button. Defaults to `True`.
+        template_style (str, optional): The style of the template. Options: 'standard', 'tabs', 'monotabs'.
+        default_id_tabbar (str, optional): The default ID for the tab bar.
+        template_warnings_name (str): Template name for displaying warnings ['django_webix/include/form_warnings.js']
+    """
+
     logs_enable = True
 
     model = None
@@ -123,6 +144,16 @@ class WebixCreateUpdateMixin:
         return self.enable_button_reload
 
     def get_success_url(self, next_step=None):
+        """
+        Retrieves the success URL based on the next step.
+
+        Args:
+            next_step (str, optional): The next step after form submission.
+                Options: '_addanother', '_continue'.
+
+        Returns:
+            str: The success URL.
+        """
         if self.success_url is not None:
             url = self.success_url
 
@@ -278,6 +309,14 @@ class WebixCreateUpdateMixin:
 class WebixCreateView(
     WebixCreateUpdateMixin, WebixBaseMixin, WebixPermissionsMixin, WebixUrlMixin, CreateWithInlinesView
 ):
+    """
+    A view for creating a new object with Webix.
+
+    This view extends `WebixCreateUpdateMixin`, `WebixBaseMixin`, `WebixPermissionsMixin`,
+    `WebixUrlMixin`, and `CreateWithInlinesView` to provide functionality for creating new objects
+    with support for inlines, permissions, and URLs.
+    """
+
     template_name = "django_webix/generic/create.js"
     model_copy_fields = None
     inlines_copy_fields = None
@@ -481,6 +520,14 @@ class WebixCreateView(
 class WebixUpdateView(
     WebixCreateUpdateMixin, WebixBaseMixin, WebixPermissionsMixin, WebixUrlMixin, UpdateWithInlinesView
 ):
+    """
+    A view for updating an existing object with Webix.
+
+    This view extends `WebixCreateUpdateMixin`, `WebixBaseMixin`, `WebixPermissionsMixin`,
+    `WebixUrlMixin`, and `UpdateWithInlinesView` to provide functionality for updating existing objects
+    with support for inlines, permissions, and URLs.
+    """
+
     template_name = "django_webix/generic/update.js"
 
     def get_form_kwargs(self):

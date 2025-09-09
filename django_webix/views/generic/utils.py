@@ -85,6 +85,10 @@ def tree_formatter(item_list):
 
 
 class NestedObjectsWithLimit(NestedObjects):
+    """
+    Collect related objects
+    """
+
     exclude_models = None
     only_models = None
 

@@ -46,7 +46,7 @@ def send(recipients: Dict[str, List[int]], subject: str, body: str, message_sent
     mail_connection = get_connection(
         backend=config_email.get("backend"),
         fail_silently=config_email.get("fail_silently", False),
-        **config_email.get("backend_argumens", {})
+        **config_email.get("backend_arguments", {})
     )
 
     # Per ogni istanza di destinatario ciclo
@@ -86,7 +86,7 @@ def send(recipients: Dict[str, List[int]], subject: str, body: str, message_sent
             recipient=recipient,
             sent_number=0,
             status="invalid",
-            recipient_address=recipient_address,
+            recipient_address=recipient_address or "",
             extra={"status": "Email non presente ({}) e quindi non inviata".format(recipient)},
         )
         message_recipient.save()
@@ -98,7 +98,7 @@ def send(recipients: Dict[str, List[int]], subject: str, body: str, message_sent
             recipient=recipient,
             sent_number=0,
             status="duplicate",
-            recipient_address=recipient_address,
+            recipient_address=recipient_address or "",
             extra={"status": "Email duplicata {}".format(recipient)},
         )
         message_recipient.save()

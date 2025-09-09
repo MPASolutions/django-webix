@@ -1,0 +1,13 @@
+- Chiamata dedicata per choices
+  Sposta la logica delle choices in una funzione separata per renderla riutilizzabile e pulita e velocizzare le liste.
+
+- Ottimizzazione widget geo
+
+- Choices solo per campi necessari
+  Applicale esclusivamente ai campi che ne hanno bisogno, evitando query e calcoli non necessari.
+
+- Dizionario per override colonne ListView
+  Usa un dizionario per personalizzare colonne (es. larghezza, visibilità, formato) invece di definire singole chiavi.
+
+- Suddivisione creazione form (forms.get_elements)
+  Sposta la logica in un widget/modulo separato per isolare il rendering come fa nativamente Django.
