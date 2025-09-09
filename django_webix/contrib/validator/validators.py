@@ -50,7 +50,7 @@ class AutoMultiGeometryField(forms.GeometryField):
     def __init__(self, *, source_srid=None, **kwargs):
         """
 
-        :param source_srid: optional parameter defined in impotrer form field to define/overwrite the sorce data srid
+        :param source_srid: optional parameter defined in importer form field to define/overwrite the source data srid
         :param kwargs:
 
         Example:

@@ -13,6 +13,17 @@ from django_webix.views.generic.utils import NestedObjectsWithLimit, tree_format
 
 
 class DeleteRelatedObjectsView(WebixTemplateView):
+    """
+    A custom view for displaying related objects that will be deleted and any potential errors.
+
+    This view extends `WebixTemplateView` and is used to render a JavaScript template
+    (`action_deleterelatedobjects.js`). It prepares the context data required to show the user
+    the related objects that will be deleted and any errors that might occur during deletion.
+
+    Attributes:
+        template_name (str): The path to the JavaScript template used for rendering.
+    """
+
     template_name = "django_webix/include/action_deleterelatedobjects.js"
 
     def get_context_data(self, **kwargs):
@@ -47,6 +58,23 @@ class DeleteRelatedObjectsView(WebixTemplateView):
     template_view=DeleteRelatedObjectsView,
 )
 def multiple_delete_action(self, request, qs):
+    """
+    Deletes multiple objects and returns a JSON response with the result.
+
+    This action is configured to delete selected objects and requires the `delete` permission.
+    It returns a JSON response indicating the success of the operation and the number of deleted objects.
+
+    Args:
+        self: Reference to the instance of the class containing this action.
+        request: The HTTP request object.
+        qs: The queryset of objects to be deleted.
+
+    Returns:
+        JsonResponse: A JSON response containing:
+            - `status`: Boolean indicating whether the operation was successful.
+            - `message`: A confirmation message with the number of deleted objects.
+            - `redirect_url`: The URL to redirect to after deletion.
+    """
     _count_delete_instances = int(qs.only(qs.model._meta.pk.name).count())
     qs.delete()
     return JsonResponse(
@@ -69,6 +97,20 @@ def multiple_delete_action(self, request, qs):
     reload_list=False,
 )
 def multiple_download_attachments(self, request, qs):
+    """
+    Downloads all file and image attachments associated with the selected objects.
+
+    This action creates a ZIP file containing all attachments (files or images) from the selected objects.
+    It requires the `view` permission and opens the ZIP file in a new browser tab for download.
+
+    Args:
+        self: Reference to the instance of the class containing this action.
+        request: The HTTP request object.
+        qs: The queryset of objects whose attachments will be downloaded.
+
+    Returns:
+        HttpResponse: An HTTP response with the ZIP file attached, forcing the browser to download it.
+    """
     fields = []
     for fi in qs.model._meta.fields:
         if isinstance(fi, models.FileField) or isinstance(fi, models.ImageField):

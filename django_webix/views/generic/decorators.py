@@ -7,6 +7,12 @@ from django_webix.views import WebixFormView, WebixTemplateView
 
 
 class DynamicTemplateFormView(WebixFormView):
+    """
+    A dynamic form view for rendering Webix templates with additional context data for actions
+
+    This class extends `WebixFormView` to provide dynamic template rendering capabilities.
+    It includes the `queryset` and `parent_view` in the context data for further processing.
+    """
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -36,45 +42,48 @@ def action_config(
     icon=None,
 ):  # TODO: permission check before execution
     """
-    Decorator to configure action on list
+    A decorator to configure actions on a list view.
 
-    :param action_key: action code name
-    :param response_type: type of http response, options: 'json', 'script', 'blank'
-    :param allowed_permissions: list of permission required to execute the action
-    :param short_description: description to show on list toolbar
-    :param modal_header: title of the modal header
-    :param modal_title: description of the modal to display
-    :param modal_click: text of form button confirm
-    :param modal_ok: text of confirmation button
-    :param modal_cancel: text to discard changes
-    :param form: (optional) form to show before execute the action
-    :param reload_list: indicates whether to reload the list after executing the action
-    :param maximum_count: (optional) maximim number of selected elements
-    :param template_view: (optional) TemplateView to render before the action
-    :param dynamic: (optional) boolean for obtain a dynamic action load
-    :param form_view: (optional) FormView for dynamic render action window
-    :param form_view_template: (optional) FormView template for dynamic render action window
-    :param group: text for actions grouping
-    :param icon: fonts awesome icons
-    :return:
-        - response_type: json
-        JsonResponse with 'status', 'message', 'message_on_popup', 'message_type' keys
-            status: (bool) indicates if status is successfull
-            message: text to display
-            message_on_popup: (bool) show message as webix alert or message
-            message_type: type of webix alert or message
+    This decorator configures actions such as CRUD operations, form submissions, or custom actions
+    on a list of objects. It supports dynamic rendering, permission checks, and various response types.
 
-        e.g.: JsonResponse({'status': True, 'message': 'my message', 'message_on_popup': True, 'message_type': 'info'})
+    Args:
+        action_key (str): A unique identifier for the action.
+        response_type (str): The type of HTTP response. Options: 'json', 'script', or 'blank'.
+        allowed_permissions (list, optional): A list of permissions required to execute the action.
+        short_description (str, optional): A short description of the action for display purposes.
+        modal_header (str, optional): The title of the modal header. Defaults to "Fill in the form".
+        modal_title (str, optional): The description displayed in the modal. Defaults to a confirmation message.
+        modal_click (str, optional): The text for the form confirmation button. Defaults to "Go".
+        modal_ok (str, optional): The text for the confirmation button. Defaults to "Proceed".
+        modal_cancel (str, optional): The text for the cancel button. Defaults to "Undo".
+        form (Form, optional): The form to display before executing the action.
+        reload_list (bool, optional): Whether to reload the list after executing the action. Defaults to `True`.
+        maximum_count (int, optional): The maximum number of selected elements allowed for the action.
+        template_view (TemplateView, optional): A `TemplateView` to render before executing the action.
+        dynamic (bool, optional): Whether the action should be dynamically loaded. Defaults to `False`.
+        form_view (FormView, optional): A `FormView` for dynamically rendering the action window.
+            Defaults to `DynamicTemplateFormView`.
+        form_view_template (str, optional): The template for dynamically rendering the action window.
+        group (str, optional): A text label for grouping actions.
+        icon (str, optional): The Font Awesome icon class for the action.
 
-        - response_type: script
-        HttpResponse with javascript content
+    Returns:
+        function: A decorator function that wraps the action function and configures its behavior.
 
-        e.g.: HttpResponseRedirect(reverse('my-url'))
+    Raises:
+        Exception: If `response_type` is not one of 'json', 'script', or 'blank'.
+        Exception: If `template_view` is not a subclass of `WebixTemplateView`.
+        Exception: If `form_view` is not a subclass of `WebixFormView`.
 
-        - response_type: blank
-        HttpResponse with any type of content
-
-        e.g.: HttpResponse(content_type='application/octet-stream')
+    Notes:
+        - For `response_type="json"`, the response should be a `JsonResponse` with keys:
+            - `status`: A boolean indicating success.
+            - `message`: A message to display.
+            - `message_on_popup`: A boolean indicating whether to show the message as a popup.
+            - `message_type`: The type of message (e.g., 'info', 'error').
+        - For `response_type="script"`, the response should be an `HttpResponse` with JavaScript content.
+        - For `response_type="blank"`, the response can be any type of `HttpResponse`.
     """
 
     if allowed_permissions is None:
@@ -207,6 +216,7 @@ def action_config(
 
             return func(self, request, qs)
 
+        # Attach metadata to the wrapper function
         setattr(wrapper, "action_key", action_key)
         setattr(wrapper, "response_type", response_type)
         setattr(wrapper, "allowed_permissions", allowed_permissions)

@@ -32,7 +32,36 @@ except ImportError:
 
 
 def get_action_dict(request, action):
-    # needed for set var with None as value
+    """
+    Constructs a dictionary of action attributes for a given action.
+
+    This function extracts and organizes the attributes of an action, such as its form,
+    template view, and metadata, into a structured dictionary. It ensures that optional
+    attributes like `form`, `template_view`, and `form_view` are set to `None` if they
+    are not defined in the action.
+
+    Args:
+        request: The HTTP request object.
+        action: The action object containing attributes to be extracted.
+
+    Returns:
+        dict: A dictionary containing the action's attributes, including:
+            - `func`: The action function.
+            - `action_key`: The unique key identifying the action.
+            - `response_type`: The type of response expected from the action.
+            - `allowed_permissions`: Permissions required to execute the action.
+            - `short_description`: A brief description of the action.
+            - `modal_header`, `modal_title`, `modal_click`, `modal_ok`, `modal_cancel`: Modal dialog attributes.
+            - `form`: The form associated with the action, if any.
+            - `reload_list`: Whether to reload the list after executing the action.
+            - `template_view`: The template view for the action, if any.
+            - `dynamic`: Whether the action is dynamic.
+            - `form_view_template`: The template for the form view, if any.
+            - `form_view`: The form view for the action, if any.
+            - `group`: The group the action belongs to.
+            - `icon`: The icon associated with the action.
+    """
+    # needed to set var with None as value
     form = action.form(request=request) if hasattr(action, "form") and action.form is not None else None
     template_view = (
         action.template_view if hasattr(action, "template_view") and action.template_view is not None else None
@@ -62,6 +91,20 @@ def get_action_dict(request, action):
 
 
 def get_actions_flexport(request, model):
+    """
+    Retrieves and constructs Flexport-specific actions for a given model.
+
+    This function checks if the `flexport` app is installed and if a model is provided.
+    If so, it dynamically creates actions for each active `Export` instance associated
+    with the model. These actions are used to trigger data extraction processes.
+
+    Args:
+        request: The HTTP request object.
+        model: The Django model for which actions are being generated.
+
+    Returns:
+        list: A list of dynamically generated action functions for Flexport.
+    """
     _actions = []
     # add flexport actions
     if apps.is_installed("flexport") and model is not None:
@@ -100,6 +143,37 @@ def get_actions_flexport(request, model):
 
 
 class WebixListView(WebixBaseMixin, WebixPermissionsMixin, WebixUrlMixin, ListView):
+    """
+    A custom ListView for Webix integration, providing advanced features like dynamic actions,
+    pagination, filtering, and JSON responses.
+
+    This class extends Django's `ListView` and integrates with Webix to provide a rich,
+    interactive list interface. It supports features such as:
+    - Dynamic actions (e.g., Flexport actions).
+    - Pagination and sorting.
+    - JSON-based data loading and filtering.
+    - Editable fields and modal forms.
+    - Integration with WebGIS for geographic data visualization.
+    - Customizable columns, headers, and footers.
+    - Permission-based access control.
+
+    Main attributes:
+        http_method_names (list): Allowed HTTP methods (e.g., `get`, `post`).
+        pk_field (str): The primary key field name.
+        fields (list): List of fields to display in the table.
+        order_by (str): Default ordering for the queryset.
+        actions (list): List of actions available in the list view.
+        enable_json_loading (bool): Whether to enable JSON-based data loading.
+        template_name (str): The template used to render the list.
+        title (str): The title of the list view.
+        enable_column_webgis (bool): Whether to enable WebGIS column integration.
+        enable_column_copy (bool): Whether to enable the copy column.
+        enable_column_delete (bool): Whether to enable the delete column.
+        enable_row_click (bool): Whether to enable row click actions.
+        type_row_click (str): Type of row click action (`single` or `double`).
+        fields_editable (list): List of fields that are editable.
+    """
+
     # request vars
     http_method_names = ["get", "post"]  # enable POST for filter porpoise
 
@@ -118,6 +192,7 @@ class WebixListView(WebixBaseMixin, WebixPermissionsMixin, WebixUrlMixin, ListVi
 
     # paging
     enable_json_loading = False
+    enable_json_choices_loading = False  # TODO: developed for future javascript client implementations
     paginate_count_default = 100
     paginate_start_default = 0
     paginate_count_key = "count"
@@ -136,6 +211,15 @@ class WebixListView(WebixBaseMixin, WebixPermissionsMixin, WebixUrlMixin, ListVi
     fields_editable = []  # es. ['utilizzo__denominazione']
 
     def is_actions_flexport_enable(self, request):
+        """
+        Determines whether Flexport actions are enabled for the current request.
+
+        Args:
+            request: The HTTP request object.
+
+        Returns:
+            bool: `True` if Flexport actions are enabled, otherwise `False`.
+        """
         return True
 
     def is_errors_on_popup(self, request):
@@ -152,9 +236,31 @@ class WebixListView(WebixBaseMixin, WebixPermissionsMixin, WebixUrlMixin, ListVi
         return False
 
     def get_header_rows(self, request):
+        """
+        Returns the number of header rows to display in the list view.
+
+        Args:
+            request: The HTTP request object.
+
+        Returns:
+            int: The number of header rows.
+        """
         return self.header_rows
 
     def _optimize_select_related(self, qs):
+        """
+        Optimizes the queryset by adding `select_related` for foreign key relationships.
+
+        This method analyzes the fields defined in the list view and identifies foreign key
+        relationships to optimize database queries using `select_related`. This reduces the
+        number of queries required to fetch related data.
+
+        Args:
+            qs (QuerySet): The initial queryset to optimize.
+
+        Returns:
+            QuerySet: The optimized queryset with `select_related` applied.
+        """
         # extrapolate the information to populate `select_related`
         _select_related = []
         if self.get_fields() is not None:
@@ -189,6 +295,18 @@ class WebixListView(WebixBaseMixin, WebixPermissionsMixin, WebixUrlMixin, ListVi
         return qs
 
     def _model_translations(self, qs):
+        """
+        Applies model translations to the queryset if the `modeltranslation` app is installed.
+
+        This method checks if any fields in the list view are translated and annotates the
+        queryset to include the translated values based on the current language.
+
+        Args:
+            qs (QuerySet): The initial queryset to process.
+
+        Returns:
+            QuerySet: The queryset with translated fields annotated.
+        """
         if apps.is_installed("modeltranslation"):
             from modeltranslation.fields import TranslationFieldDescriptor
 
@@ -225,6 +343,22 @@ class WebixListView(WebixBaseMixin, WebixPermissionsMixin, WebixUrlMixin, ListVi
         return self.adjust_row_height
 
     def get_fields(self, fields=None):
+        """
+        Retrieves and processes the fields to be displayed in the list view.
+
+        This method supports both static and dynamic field definitions, including
+        template-based rendering for columns. It also ensures that server-side
+        filtering is enabled if JSON loading is active.
+
+        Args:
+            fields (list, optional): A custom list of fields to override the default fields.
+
+        Returns:
+            list: A list of processed field definitions.
+
+        Raises:
+            Exception: If no server filter is defined when JSON loading is enabled.
+        """
         if self.fields is not None:
             _in_fields = deepcopy(self.fields)
             # otherwise in the loop below the static fields attribute is redefined
@@ -266,6 +400,21 @@ class WebixListView(WebixBaseMixin, WebixPermissionsMixin, WebixUrlMixin, ListVi
             return _fields
 
     def get_annotations_geoavailable(self, geo_field_names):
+        """
+        Generates database annotations to check the availability of geographic fields.
+
+        This method creates a dictionary of annotations for the given geographic field names.
+        Each annotation adds a boolean field to the queryset indicating whether the geographic
+        field contains a non-null value. This is useful for filtering or displaying only objects
+        with valid geographic data.
+
+        Args:
+            geo_field_names (list): A list of geographic field names to check.
+
+        Returns:
+            dict: A dictionary of annotations where keys are field names suffixed with `_available`
+                  and values are `Case` expressions that evaluate to `True` if the field is not null.
+        """
         annotations = {}
         for geo_field_name in geo_field_names:
             annotations.update(
@@ -280,6 +429,19 @@ class WebixListView(WebixBaseMixin, WebixPermissionsMixin, WebixUrlMixin, ListVi
         return annotations
 
     def get_initial_queryset(self):
+        """
+        Retrieves the initial queryset for the list view.
+
+        This method determines the base queryset to use for the list view. It prioritizes
+        the `queryset` attribute if it is explicitly set. If not, it falls back to the default
+        manager of the model. If neither is available, it raises an `ImproperlyConfigured` exception.
+
+        Returns:
+            QuerySet: The initial queryset for the list view.
+
+        Raises:
+            ImproperlyConfigured: If neither `queryset` nor `model` is defined.
+        """
         if self.queryset is not None:
             queryset = self.queryset
             if isinstance(queryset, QuerySet):
@@ -298,7 +460,20 @@ class WebixListView(WebixBaseMixin, WebixPermissionsMixin, WebixUrlMixin, ListVi
         return queryset
 
     def get_queryset(self, initial_queryset=None, apply_translations=True, **kwargs):
+        """
+        Retrieves and processes the queryset for the list view.
 
+        This method applies translations, filters, and optimizations (e.g., `select_related`)
+        to the queryset. It also supports integration with `django_filtersmerger` and
+        WebGIS annotations.
+
+        Args:
+            initial_queryset (QuerySet, optional): A custom queryset to use as the base.
+            apply_translations (bool, optional): Whether to apply model translations.
+
+        Returns:
+            QuerySet: The processed queryset.
+        """
         # bypass improperly configured for custom queryset without model
         if self.model:
             if initial_queryset is not None:
@@ -331,9 +506,23 @@ class WebixListView(WebixBaseMixin, WebixPermissionsMixin, WebixUrlMixin, ListVi
 
     def get_method_choices_filters(self, field_name):
         # usually DB distinct and order by are slower than distinct by python set
-        return "set"  # by python OR by db 'distinct'
+        return "distinct"  # "set" by python OR "distinct" by db query
 
-    def get_choices_filters(self):
+    def get_choices_filters(self, empty=False):
+        """
+        Retrieves the filter choices for fields in the list view.
+
+        This method generates a dictionary of filter choices for each field, including
+        choices for boolean fields, model fields with predefined choices, and dynamic
+        choices fetched from the database. It supports both simple and complex field types,
+        including those from the `django_webix.contrib.extra_fields` app.
+
+        Args:
+            empty (bool, optional): If `True`, returns an empty choice as the first option.
+
+        Returns:
+            dict: A dictionary where keys are field names and values are lists of choices.
+        """
         _fields_choices = {}
         fields = self.get_fields()
         if fields is not None:
@@ -343,79 +532,95 @@ class WebixListView(WebixBaseMixin, WebixPermissionsMixin, WebixUrlMixin, ListVi
                     _fields_choices[field_name] = [
                         {"id": "null", "value": "---"},
                     ]  # default add null/'' option
-                    if self.model is not None:
-                        try:
-                            _modelfield = self.model._meta.get_field(field_name)
-                        except FieldDoesNotExist:
-                            _modelfield = None
-                    else:
-                        _modelfield = None
-                    if "boolean" in str(field.get("field_type", "")).lower():
-                        _fields_choices[field_name] += [
-                            {"id": "true", "value": _("Yes")},
-                            {"id": "false", "value": _("No")},
-                        ]
-                    elif _modelfield is not None and _modelfield.choices is not None:
-                        _fields_choices[field_name] = [{"id": i[0], "value": i[1]} for i in _modelfield.get_choices()]
-                    elif (
-                        apps.is_installed("django_webix.contrib.extra_fields")
-                        and "extrafields" in str(field.get("field_type", "")).lower()
-                    ):
-                        from django.contrib.contenttypes.models import ContentType
-
-                        content_type_id = ContentType.objects.get_for_model(self.model).pk
-
-                        if getattr(settings, "WEBIX_EXTRA_FIELDS_ENABLE_CACHE", False):
-                            from django.core.cache import cache
-
-                            extra_fields = cache.get("django_webix_extra_fields", {})
-                            if content_type_id in extra_fields:
-                                for mf in extra_fields[content_type_id]:
-                                    if mf["field_name"] == field_name:
-                                        if mf["has_choices"]:
-                                            _fields_choices[field_name] = [
-                                                {"id": i["key"], "value": i["value"]} for i in mf["choices"]
-                                            ]
-                                        break
-
+                    if not empty:
+                        if self.model is not None:
+                            try:
+                                _modelfield = self.model._meta.get_field(field_name)
+                            except FieldDoesNotExist:
+                                _modelfield = None
                         else:
-                            from django_webix.contrib.extra_fields.models import ModelField
+                            _modelfield = None
+                        if "boolean" in str(field.get("field_type", "")).lower():
+                            _fields_choices[field_name] += [
+                                {"id": "true", "value": _("Yes")},
+                                {"id": "false", "value": _("No")},
+                            ]
+                        elif _modelfield is not None and _modelfield.choices is not None:
+                            _fields_choices[field_name] = [
+                                {"id": i[0], "value": i[1]} for i in _modelfield.get_choices()
+                            ]
+                        elif (
+                            apps.is_installed("django_webix.contrib.extra_fields")
+                            and "extrafields" in str(field.get("field_type", "")).lower()
+                        ):
+                            from django.contrib.contenttypes.models import ContentType
 
-                            mf = ModelField.objects.filter(
-                                field_name=field_name, content_type_id=content_type_id
-                            ).first()
-                            if mf is not None and mf.modelfieldchoice_set.exists():
-                                options = mf.modelfieldchoice_set.values_list("key", "value")
-                                _fields_choices[field_name] = [{"id": i[0], "value": i[1]} for i in options]
-                    elif (
-                        "serverSelectFilter" in field.get("datalist_column")
-                        or "serverRichSelectFilter" in field.get("datalist_column")
-                        or "serverMultiSelectFilter" in field.get("datalist_column")
-                        or "serverMultiComboFilter" in field.get("datalist_column")
-                    ):
-                        if field.get("field_pk") is None:
-                            if self.get_method_choices_filters(field_name) == "set":
-                                _fields_choices[field_name] += set(
-                                    [
+                            content_type_id = ContentType.objects.get_for_model(self.model).pk
+
+                            if getattr(settings, "WEBIX_EXTRA_FIELDS_ENABLE_CACHE", False):
+                                from django.core.cache import cache
+
+                                extra_fields = cache.get("django_webix_extra_fields", {})
+                                if content_type_id in extra_fields:
+                                    for mf in extra_fields[content_type_id]:
+                                        if mf["field_name"] == field_name:
+                                            if mf["has_choices"]:
+                                                _fields_choices[field_name] = [
+                                                    {"id": i["key"], "value": i["value"]} for i in mf["choices"]
+                                                ]
+                                            break
+
+                            else:
+                                from django_webix.contrib.extra_fields.models import ModelField
+
+                                mf = ModelField.objects.filter(
+                                    field_name=field_name, content_type_id=content_type_id
+                                ).first()
+                                if mf is not None and mf.modelfieldchoice_set.exists():
+                                    options = mf.modelfieldchoice_set.values_list("key", "value")
+                                    _fields_choices[field_name] = [{"id": i[0], "value": i[1]} for i in options]
+                        elif (
+                            "serverSelectFilter" in field.get("datalist_column")
+                            or "serverRichSelectFilter" in field.get("datalist_column")
+                            or "serverMultiSelectFilter" in field.get("datalist_column")
+                            or "serverMultiComboFilter" in field.get("datalist_column")
+                        ) and (
+                            "_options" in field.get("datalist_column")
+                        ):  # enable only if choices are required
+                            if field.get("field_pk") is None:
+                                if self.get_method_choices_filters(field_name) == "set":
+                                    _fields_choices[field_name] += set(
+                                        [
+                                            str(i)
+                                            for i in self.get_queryset()
+                                            .filter(**{field_name + "__isnull": False})
+                                            .values_list(field_name, flat=True)
+                                        ]
+                                    )
+                                else:
+                                    _fields_choices[field_name] += [
                                         str(i)
                                         for i in self.get_queryset()
                                         .filter(**{field_name + "__isnull": False})
                                         .values_list(field_name, flat=True)
+                                        .distinct()
+                                        .order_by()
                                     ]
-                                )
                             else:
-                                _fields_choices[field_name] += [
-                                    str(i)
-                                    for i in self.get_queryset()
-                                    .filter(**{field_name + "__isnull": False})
-                                    .values_list(field_name, flat=True)
-                                    .distinct()
-                                    .order_by()
-                                ]
-                        else:
-                            if self.get_method_choices_filters(field_name) == "set":
-                                _fields_choices[field_name] += set(
-                                    [
+                                if self.get_method_choices_filters(field_name) == "set":
+                                    _fields_choices[field_name] += set(
+                                        [
+                                            {
+                                                "id": key,
+                                                "value": value,
+                                            }
+                                            for key, value in self.get_queryset()
+                                            .filter(**{field_name + "__isnull": False})
+                                            .values_list(field.get("field_pk"), field_name)
+                                        ]
+                                    )
+                                else:
+                                    _fields_choices[field_name] += [
                                         {
                                             "id": key,
                                             "value": value,
@@ -423,24 +628,23 @@ class WebixListView(WebixBaseMixin, WebixPermissionsMixin, WebixUrlMixin, ListVi
                                         for key, value in self.get_queryset()
                                         .filter(**{field_name + "__isnull": False})
                                         .values_list(field.get("field_pk"), field_name)
+                                        .distinct()
+                                        .order_by()
                                     ]
-                                )
-                            else:
-                                _fields_choices[field_name] += [
-                                    {
-                                        "id": key,
-                                        "value": value,
-                                    }
-                                    for key, value in self.get_queryset()
-                                    .filter(**{field_name + "__isnull": False})
-                                    .values_list(field.get("field_pk"), field_name)
-                                    .distinct()
-                                    .order_by()
-                                ]
 
         return _fields_choices
 
     def is_enable_footer(self):
+        """
+        Determines whether the footer should be displayed in the list view.
+
+        This method checks if any of the fields in the list view have a footer definition.
+        If at least one field has a footer, it returns `True`, indicating that the footer
+        should be rendered.
+
+        Returns:
+            bool: `True` if the footer is enabled, otherwise `False`.
+        """
         is_footer = False
         fields = self.get_fields()
         if fields is not None:
@@ -450,6 +654,15 @@ class WebixListView(WebixBaseMixin, WebixPermissionsMixin, WebixUrlMixin, ListVi
         return is_footer
 
     def get_footer(self):
+        """
+        Computes and returns the footer data for the list view.
+
+        If the list view has fields with footer definitions, this method calculates the
+        aggregated values (e.g., sum, average) for those fields and returns them as a dictionary.
+
+        Returns:
+            dict: A dictionary containing the footer values for each field, or `None` if no footer is defined.
+        """
         if self.is_enable_footer() and self.model is not None:
             # INFO: Splitting into multiple queries makes it slower
             aggregation_dict = {}
@@ -464,6 +677,15 @@ class WebixListView(WebixBaseMixin, WebixPermissionsMixin, WebixUrlMixin, ListVi
             return None
 
     def get_ordering(self):
+        """
+        Determines the ordering for the queryset based on user input or default settings.
+
+        This method checks the request for sorting parameters (e.g., `sort[]` in POST/GET)
+        and falls back to the default `order_by` attribute if no user input is provided.
+
+        Returns:
+            tuple: A tuple of field names to use for ordering the queryset.
+        """
         if self.request.POST.getlist("sort[]"):
             return self.request.POST.getlist("sort[]")
         else:
@@ -477,6 +699,19 @@ class WebixListView(WebixBaseMixin, WebixPermissionsMixin, WebixUrlMixin, ListVi
         return queryset.order_by(*order)
 
     def get_paginate_count(self):
+        """
+        Retrieves the number of items to display per page from the request.
+
+        This method checks the request parameters (`count` key) for pagination settings
+        and returns the value as an integer. If the value is not provided or invalid,
+        it falls back to the default pagination count.
+
+        Returns:
+            int: The number of items to display per page.
+
+        Raises:
+            Exception: If the pagination count is not an integer.
+        """
         paginate_count = self.request.GET.get(
             self.paginate_count_key, self.request.POST.get(self.paginate_count_key, self.paginate_count_default)
         )
@@ -486,6 +721,19 @@ class WebixListView(WebixBaseMixin, WebixPermissionsMixin, WebixUrlMixin, ListVi
             raise Exception(_("Paginate count is not integer"))
 
     def get_paginate_start(self):
+        """
+        Retrieves the starting index for pagination from the request.
+
+        This method checks the request parameters (`start` key) for the pagination start index
+        and returns the value as an integer. If the value is not provided or invalid,
+        it falls back to the default start index.
+
+        Returns:
+            int: The starting index for pagination.
+
+        Raises:
+            Exception: If the pagination start index is not an integer.
+        """
         paginate_start = self.request.GET.get(
             self.paginate_start_key, self.request.POST.get(self.paginate_start_key, self.paginate_start_default)
         )
@@ -494,12 +742,37 @@ class WebixListView(WebixBaseMixin, WebixPermissionsMixin, WebixUrlMixin, ListVi
         except ValueError:
             raise Exception(_("Paginate start is not integer"))
 
-    def paginate_queryset(self, queryset, page_size):  # page_size not used
+    def paginate_queryset(self, queryset, page_size):
+        """
+        Applies pagination to the queryset based on the current pagination settings.
+
+        Args:
+            queryset (QuerySet): The queryset to paginate.
+            page_size (int): The number of items per page (not used in this implementation).
+
+        Returns:
+            QuerySet: A slice of the queryset representing the current page.
+        """
+        # page_size not used
         paginate_count = self.get_paginate_count()
         paginate_start = self.get_paginate_start()
         return queryset[paginate_start : paginate_start + paginate_count]
 
     def _get_objects_datatable_values(self, qs):
+        """
+        Extracts the values for the datatable from the queryset.
+
+        This method processes the queryset to retrieve the values of the fields defined
+        in the list view, including the primary key and any geographic availability fields.
+        It also handles annotations for fields that require a custom primary key or geographic data.
+        This is very important to inject the values into webix datatable for field with set queryset_exclude.
+
+        Args:
+            qs (QuerySet): The queryset from which to extract values.
+
+        Returns:
+            QuerySet: A values queryset containing the data for the datatable.
+        """
         values = [self.get_pk_field()]
         fields = self.get_fields()
         if fields is not None:
@@ -519,6 +792,15 @@ class WebixListView(WebixBaseMixin, WebixPermissionsMixin, WebixUrlMixin, ListVi
         return data
 
     def get_objects_datatable(self):
+        """
+        Retrieves the data for the datatable in the list view.
+
+        This method applies filtering, ordering, and pagination to the queryset
+        and returns the data in a format suitable for Webix datatable rendering.
+
+        Returns:
+            list: A list of dictionaries representing the datatable rows.
+        """
         if self.model and not self.enable_json_loading:
             qs = self.get_queryset()
             # filters application (like IDS selections)
@@ -538,6 +820,18 @@ class WebixListView(WebixBaseMixin, WebixPermissionsMixin, WebixUrlMixin, ListVi
         return None
 
     def filters_objects_datatable(self, qs):
+        """
+        Filters the queryset or list based on the IDs provided in the request.
+
+        This method checks the request for a comma-separated list of IDs and filters the
+        queryset or list to include only those objects.
+
+        Args:
+            qs (QuerySet or list): The queryset or list to filter.
+
+        Returns:
+            QuerySet or list: The filtered queryset or list.
+        """
         ids = self.request.POST.get("ids", "").split(",")
         ids = list(set(ids) - {None, ""})
 
@@ -552,6 +846,14 @@ class WebixListView(WebixBaseMixin, WebixPermissionsMixin, WebixUrlMixin, ListVi
         return qs
 
     def get_pk_field(self):
+        """
+        Retrieves the name of the primary key field for the model.
+
+        If `pk_field` is explicitly set, it returns that value. Otherwise, it defaults to "id".
+
+        Returns:
+            str: The name of the primary key field.
+        """
         if self.pk_field is not None:
             return self.pk_field
         return "id"
@@ -569,11 +871,16 @@ class WebixListView(WebixBaseMixin, WebixPermissionsMixin, WebixUrlMixin, ListVi
 
     def get_actions(self):
         """
-        Return list of actions to be executed on listview
-        :return:
+        Retrieves all actions available in the list view, including Flexport actions.
+
+        This method combines the default actions with dynamically generated Flexport actions
+        and returns them as a dictionary, where keys are action keys and values are action
+        metadata.
+
+        Returns:
+            dict: A dictionary of actions, where each key is an action key and the value is
+                  a dictionary of action attributes.
         """
-        # _actions = self.actions
-        # tentativo di fix delle azioni sbagliate
         _actions = deepcopy(self.actions)
         _actions += self._get_actions_flexport(request=self.request)
 
@@ -583,6 +890,16 @@ class WebixListView(WebixBaseMixin, WebixPermissionsMixin, WebixUrlMixin, ListVi
         return _dict_actions
 
     def get_actions_menu_grouped(self):
+        """
+        Groups actions into a menu structure for the Webix interface.
+
+        This method organizes actions into groups and submenus, including default actions
+        and WebGIS-related actions. It returns a list of menu items suitable for rendering
+        in the Webix UI.
+
+        Returns:
+            list: A list of menu items, where each item is either an action or a group of actions.
+        """
         _menus = OrderedDict()
         _no_group = []
         # default actions
@@ -671,6 +988,15 @@ class WebixListView(WebixBaseMixin, WebixPermissionsMixin, WebixUrlMixin, ListVi
         return len(self.get_fields_editable()) > 0
 
     def get_update_form_class(self):
+        """
+        Dynamically generates a form class for updating editable fields in the list view.
+
+        This method creates a `WebixModelForm` subclass with fields corresponding to the
+        editable fields defined in the list view.
+
+        Returns:
+            class: A dynamically generated form class for updating objects.
+        """
         _list_view = self
 
         class UpdateForm(WebixModelForm):
@@ -682,6 +1008,21 @@ class WebixListView(WebixBaseMixin, WebixPermissionsMixin, WebixUrlMixin, ListVi
         return UpdateForm
 
     def get_update_view(self, request, *args, **kwargs):
+        """
+        Creates and returns a view for handling update requests.
+
+        This method dynamically generates a `ListUpdateView` class that handles POST requests
+        for updating objects in the list view. It ensures that only users with the appropriate
+        permissions can perform updates.
+
+        Args:
+            request: The HTTP request object.
+            *args: Variable-length argument list.
+            **kwargs: Arbitrary keyword arguments.
+
+        Returns:
+            HttpResponse: The response from the update view.
+        """
         kwargs.update({"pk": request.GET.get("pk", request.POST.get("pk"))})
         _list_view = self
 
@@ -712,12 +1053,30 @@ class WebixListView(WebixBaseMixin, WebixPermissionsMixin, WebixUrlMixin, ListVi
         return ListUpdateView.as_view()(request, *args, **kwargs)
 
     def get_fields_editable(self):
+        """
+        Retrieves the list of editable fields for the current user.
+
+        This method checks the user's permissions and returns the list of fields that can be
+        edited in the list view. If the user lacks change permissions, it returns an empty list.
+
+        Returns:
+            list: A list of editable field names.
+        """
         if self.has_change_permission(self.request, obj=None):
             return self.fields_editable
         else:
             return []
 
     def get_request_action(self):
+        """
+        Retrieves the action function associated with the current request.
+
+        This method checks the request parameters for an `action` key and returns the
+        corresponding action function from the list of available actions.
+
+        Returns:
+            function: The action function to execute.
+        """
         action_name = self.request.POST.get("action", self.request.GET.get("action", None))
         return self.get_actions().get(action_name)["func"]
 
@@ -728,6 +1087,19 @@ class WebixListView(WebixBaseMixin, WebixPermissionsMixin, WebixUrlMixin, ListVi
         return super(WebixListView, self).get(request, *args, **kwargs)
 
     def get_total_count(self, queryset):
+        """
+        Computes the total number of objects in the queryset.
+
+        This method optimizes the count operation by using `only()` to fetch only the primary
+        key field if possible. For complex queries (e.g., those involving `UNION`), it falls
+        back to the standard `count()` method.
+
+        Args:
+            queryset (QuerySet): The queryset to count.
+
+        Returns:
+            int: The total number of objects in the queryset.
+        """
         try:
             qs_query = str(queryset.query)
         except EmptyResultSet:
@@ -742,9 +1114,26 @@ class WebixListView(WebixBaseMixin, WebixPermissionsMixin, WebixUrlMixin, ListVi
         return total_count
 
     def json_response(self, request, *args, **kwargs):
+        """
+        Generates a JSON response for the list view.
+
+        This method handles requests for paginated data, footer data, or filter choices.
+        It returns the data in a structured JSON format, including pagination metadata.
+
+        Args:
+            request: The HTTP request object.
+
+        Returns:
+            JsonResponse: A JSON response containing the requested data.
+        """
         # ONLY for get_queryset() -> qs and not get_queryset() -> list
-        if bool(request.GET.get("only_footer")) or bool(request.POST.get("only_footer")) is True:
+
+        if bool(request.GET.get("only_footer")) or bool(request.POST.get("only_footer")):
             data = {"footer": self.get_footer()}
+        elif self.enable_json_choices_loading is True and (
+            bool(request.GET.get("only_choices_filters")) or bool(request.POST.get("only_choices_filters"))
+        ):
+            data = {"choices_filters": self.get_choices_filters(empty=False)}
         else:
             _data = []
             total_count = 0
@@ -780,6 +1169,21 @@ class WebixListView(WebixBaseMixin, WebixPermissionsMixin, WebixUrlMixin, ListVi
         return JsonResponse(data, safe=False)
 
     def action_response(self, request, *args, **kwargs):
+        """
+        Executes an action and returns the response.
+
+        This method retrieves the action function based on the request, checks permissions,
+        and executes the action on the filtered and ordered queryset.
+
+        Args:
+            request: The HTTP request object.
+
+        Returns:
+            HttpResponse: The response from the action function.
+
+        Raises:
+            Http404: If the action is not registered or permissions are denied.
+        """
         action_function = self.get_request_action()
         if action_function is None:
             raise Http404(_("This action is not registered"))
@@ -801,6 +1205,22 @@ class WebixListView(WebixBaseMixin, WebixPermissionsMixin, WebixUrlMixin, ListVi
             return action_function(self, request, qs)
 
     def dispatch(self, *args, **kwargs):
+        """
+        Dispatches the request to the appropriate handler.
+
+        This method routes the request to handle actions, JSON responses, updates,
+        or standard template rendering based on the request type.
+
+        Args:
+            *args: Variable-length argument list.
+            **kwargs: Arbitrary keyword arguments.
+
+        Returns:
+            HttpResponse: The response from the appropriate handler.
+
+        Raises:
+            PermissionDenied: If the user lacks view permissions.
+        """
         if not self.has_view_permission(request=self.request):
             raise PermissionDenied(_("View permission is not allowed"))
         if self.is_action_request:  # added for action response
@@ -813,6 +1233,18 @@ class WebixListView(WebixBaseMixin, WebixPermissionsMixin, WebixUrlMixin, ListVi
             return super(WebixListView, self).dispatch(*args, **kwargs)
 
     def get_context_data(self, **kwargs):
+        """
+        Prepares the context data for rendering the list view template.
+
+        This method extends the base context with additional data required for
+        Webix integration, such as fields, actions, permissions, and pagination settings.
+
+        Args:
+            **kwargs: Arbitrary keyword arguments.
+
+        Returns:
+            dict: The context data for the template.
+        """
         context = super(WebixListView, self).get_context_data(**kwargs)
         self.object = None  # bypass for mixin permissions functions
         context.update(self.get_context_data_webix_permissions(request=self.request, obj=self.object))
@@ -824,7 +1256,8 @@ class WebixListView(WebixBaseMixin, WebixPermissionsMixin, WebixUrlMixin, ListVi
                 "orders": self.get_ordering(),
                 "actions": self.get_actions(),
                 "actions_menu_grouped": self.get_actions_menu_grouped(),
-                "choices_filters": self.get_choices_filters(),
+                "enable_json_choices_loading": self.enable_json_choices_loading,
+                "choices_filters": self.get_choices_filters(empty=self.enable_json_choices_loading),
                 "footer": self.get_footer() if not self.enable_json_loading else None,  # footer only if not paging
                 "is_enable_footer": self.is_enable_footer(),
                 "get_pk_field": self.get_pk_field(),

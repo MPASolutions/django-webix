@@ -15,6 +15,13 @@ from django_webix.views.generic.base import WebixPermissionsBaseMixin
 
 
 class ModelWebixAdminPermissionsMixin(WebixPermissionsBaseMixin):
+    """
+    A mixin for handling permissions in Django Webix admin views.
+
+    This mixin extends `WebixPermissionsBaseMixin` to provide permission checks
+    for Django admin views. It delegates permission checks to the parent class
+    if a view is provided, otherwise it uses its own methods.
+    """
 
     def has_add_permission(self, view, request):
         if view is not None:
@@ -66,84 +73,91 @@ class ModelWebixAdminPermissionsMixin(WebixPermissionsBaseMixin):
 
 
 class ModelWebixAdmin(ModelWebixAdminPermissionsMixin):
+    """
+    The main class for configuring Django Webix admin views.
+
+    This class extends `ModelWebixAdminPermissionsMixin` and provides a comprehensive
+    configuration for Django Webix admin views, including settings for templates,
+    permissions, buttons, and URLs.
+    """
+
     # WEBIX VIEWS (for fully override)
-    create_view = None
-    update_view = None
-    delete_view = None
-    list_view = None
+    create_view = None  #: Custom view for creating objects.
+    update_view = None  #: Custom view for updating objects.
+    delete_view = None  #: Custom view for deleting objects.
+    list_view = None  #: Custom view for listing objects.
 
     # JS TEMPLATES
-    add_form_template = None
-    change_form_template = None
-    change_list_template = None
-    delete_template = None
+    add_form_template = None  #: Custom template for the add form.
+    change_form_template = None  #: Custom template for the change form.
+    change_list_template = None  #: Custom template for the list view.
+    delete_template = None  #: Custom template for the delete view.
 
     # CREATE AND UPDATE SETTINGS
-    enable_button_save_continue = True
-    enable_button_save_addanother = True
-    enable_button_save_gotolist = True
-
-    enable_button_save_continue_create = None
-    enable_button_save_addanother_create = None
-    enable_button_save_gotolist_create = None
-
-    enable_button_save_continue_update = None
-    enable_button_save_addanother_update = None
-    enable_button_save_gotolist_update = None
+    enable_button_save_continue = True  #: Enable the "Save and Continue" button.
+    enable_button_save_addanother = True  #: Enable the "Save and Add Another" button.
+    enable_button_save_gotolist = True  #: Enable the "Save and Go to List" button.
+    enable_button_save_continue_create = None  #: Override for the "Save and Continue" button in create view.
+    enable_button_save_addanother_create = None  #: Override for the "Save and Add Another" button in create view.
+    enable_button_save_gotolist_create = None  #: Override for the "Save and Go to List" button in create view.
+    enable_button_save_continue_update = None  #: Override for the "Save and Continue" button in update view.
+    enable_button_save_addanother_update = None  #: Override for the "Save and Add Another" button in update view.
+    enable_button_save_gotolist_update = None  #: Override for the "Save and Go to List" button in update view.
 
     # DJANGO WEBIX FORM: OPTION 1
-    autocomplete_fields = []
-    readonly_fields = []
-    fields = None
-    exclude = None
+    autocomplete_fields = []  #: List of fields to enable autocomplete.
+    readonly_fields = []  #: List of fields to mark as read-only.
+    fields = None  #: List of fields to include in the form.
+    exclude = None  #: List of fields to exclude from the form.
+
     # DJANGO WEBIX FORM: OPTION 2
-    form = None
-    form_create = None
-    form_update = None
-
-    form_mobile = None
-    form_create_mobile = None
-    form_update_mobile = None
-
-    template_form_style = None
-
-    label_width = None
-    suggest_width = None  # options : int | None for width as parent
-    label_align = "left"
-
-    inlines = []
-
-    errors_on_popup = False
+    form = None  #: Custom form for all views.
+    form_create = None  #: Custom form for the create view.
+    form_update = None  #: Custom form for the update view.
+    form_mobile = None  #: Custom form for mobile devices.
+    form_create_mobile = None  #: Custom form for the create view on mobile devices.
+    form_update_mobile = None  #: Custom form for the update view on mobile devices.
+    template_form_style = None  #: Style of the form template.
+    label_width = None  #: Width of the label.
+    suggest_width = None  #: Width of the suggest dropdown.
+    label_align = "left"  #: Alignment of the label.
+    inlines = []  #: List of inline formsets.
+    errors_on_popup = False  #: Display errors in a popup.
 
     # LIST SETTINGS
-    ordering = None
-    actions = []
-
-    list_display = []  # for choice with custom key [...('utilizzo__id', 'utilizzo__denominazione')...]
-    list_display_mobile = []
-    list_display_header = {}  # NEW OVERRIDE HEADER MODALITY
-    extra_header = {}  # TO BE REMOVED IN FUTURE
-    list_editable = []  # ex. ['utilizzo__denominazione']
-    list_editable_mode = "field"  # field ; row
-
-    enable_json_loading = True  # changed from the past
-    paginate_count_default = 100
-    pk_field = None
-    title = None
-    enable_column_copy = True
-    model_copy_fields = None
-    inlines_copy_fields = None
-    enable_column_delete = True
-    enable_row_click = True
-    type_row_click = "single"
-    enable_actions = True
-    remove_disabled_buttons = False
-    enable_column_webgis = True
+    ordering = None  #: Default ordering for the list view.
+    actions = []  #: List of actions available in the list view.
+    list_display = []  #: List of fields to display in the list view.
+    list_display_mobile = []  #: List of fields to display in the list view on mobile devices.
+    list_display_header = {}  #: Custom headers for the list view.
+    extra_header = {}  #: Extra header configurations.
+    list_editable = []  #: List of fields that are editable in the list view.
+    list_editable_mode = "field"  #: Mode for editing fields in the list view.
+    enable_json_loading = True  #: Enable JSON loading for the list view.
+    paginate_count_default = 100  #: Default number of items per page.
+    pk_field = None  #: Primary key field for the model.
+    title = None  #: Title for the list view.
+    enable_column_copy = True  #: Enable the copy column feature.
+    model_copy_fields = None  #: Fields to copy when creating a new object.
+    inlines_copy_fields = None  #: Fields to copy for inlines when creating a new object.
+    enable_column_delete = True  #: Enable the delete column feature.
+    enable_row_click = True  #: Enable row click actions.
+    type_row_click = "single"  #: Type of row click action.
+    enable_actions = True  #: Enable actions in the list view.
+    remove_disabled_buttons = False  #: Remove disabled buttons from the UI.
+    enable_column_webgis = True  #: Enable WebGIS column features.
 
     # permission custom
-    only_superuser = False
+    only_superuser = False  #: Restrict access to superusers only.
 
     def __init__(self, model, admin_site):
+        """
+        Initializes the `ModelWebixAdmin` class.
+
+        Args:
+            model (Model): The Django model associated with the admin.
+            admin_site (AdminSite): The admin site instance.
+        """
         self.model = model
         self.opts = model._meta
         self.admin_site = admin_site
@@ -156,6 +170,17 @@ class ModelWebixAdmin(ModelWebixAdminPermissionsMixin):
         return _str
 
     def get_inlines(self, view, object, request):
+        """
+        Retrieves the inline formsets for the view.
+
+        Args:
+            view (View): The view instance.
+            object (Model): The model instance.
+            request (HttpRequest): The HTTP request object.
+
+        Returns:
+            list: A list of inline formsets.
+        """
         _inlines = copy.deepcopy(self.inlines)
         if apps.is_installed("django_webix.contrib.extra_fields"):
             from django_webix.contrib.extra_fields.models_mixin import ExtraFieldsModel
@@ -232,9 +257,13 @@ class ModelWebixAdmin(ModelWebixAdminPermissionsMixin):
 
     def get_model_perms(self, request):
         """
-        Return a dict of all perms for this model. This dict has the keys
-        ``add``, ``change``, ``delete``, and ``view`` mapping to the True/False
-        for each of those actions.
+        Retrieves a dictionary of all permissions for this model.
+
+        Args:
+            request (HttpRequest): The HTTP request object.
+
+        Returns:
+            dict: A dictionary with keys `add`, `change`, `delete`, and `view` mapping to the respective permissions.
         """
         return {
             "add": self.has_add_permission(view=None, request=request),
@@ -251,6 +280,15 @@ class ModelWebixAdmin(ModelWebixAdminPermissionsMixin):
         return super().has_module_permission(request)
 
     def get_field_traverse(self, path):
+        """
+        Traverses the model fields based on the provided path.
+
+        Args:
+            path (str): The path to traverse.
+
+        Returns:
+            Field: The field at the end of the path.
+        """
         _next = self.model
         for j, key in enumerate(path.split("__")):
             if j == 0:
@@ -266,6 +304,18 @@ class ModelWebixAdmin(ModelWebixAdminPermissionsMixin):
         return _next
 
     def create_list_display(self, list_display, view=None, request=None, defaults=None):
+        """
+        Creates a list of fields to display in the list view.
+
+        Args:
+            list_display (list): The list of fields to display.
+            view (View, optional): The ListView instance.
+            request (HttpRequest, optional): The HTTP request object.
+            defaults (dict, optional): Default configurations for the fields.
+
+        Returns:
+            list: A list of dictionaries containing the configurations for each field.
+        """
         if defaults is None:
             defaults = {}
         _fields = []
@@ -510,9 +560,25 @@ class ModelWebixAdmin(ModelWebixAdminPermissionsMixin):
         return _model_list_display
 
     def get_queryset(self, view=None, request=None):
+        """
+        Retrieves the queryset for the list view.
+
+        Args:
+            view (View, optional): The view instance.
+            request (HttpRequest, optional): The HTTP request object.
+
+        Returns:
+            QuerySet: The queryset for the list view.
+        """
         return self.model._default_manager.all()
 
     def get_form_fields(self):
+        """
+        Retrieves the fields to include in the form.
+
+        Returns:
+            list: A list of fields to include in the form.
+        """
         _fields = []
         for _field in self.model._meta.fields + self.model._meta.many_to_many:
             if (
@@ -584,6 +650,12 @@ class ModelWebixAdmin(ModelWebixAdminPermissionsMixin):
         return layers
 
     def get_add_view(self):
+        """
+        Retrieves the view for creating objects.
+
+        Returns:
+            View: The view for creating objects.
+        """
         _admin = self
         if self.create_view is not None:
             return self.create_view
@@ -791,6 +863,12 @@ class ModelWebixAdmin(ModelWebixAdminPermissionsMixin):
             return WebixAdminCreateView
 
     def get_change_view(self):
+        """
+        Retrieves the view for updating objects.
+
+        Returns:
+            View: The view for updating objects.
+        """
         _admin = self
         if self.update_view is not None:
             return self.update_view
@@ -998,6 +1076,12 @@ class ModelWebixAdmin(ModelWebixAdminPermissionsMixin):
             return WebixAdminUpdateView
 
     def get_delete_view(self):
+        """
+        Retrieves the view for deleting objects.
+
+        Returns:
+            View: The view for deleting objects.
+        """
         _admin = self
         if self.delete_view is not None:
             return self.delete_view
@@ -1129,6 +1213,12 @@ class ModelWebixAdmin(ModelWebixAdminPermissionsMixin):
         return super(view.__class__, view).is_actions_flexport_enable(request=request)
 
     def get_list_view(self):
+        """
+        Retrieves the view for listing objects.
+
+        Returns:
+            View: The view for listing objects.
+        """
         _admin = self
         if self.list_view is not None:
             return self.list_view
@@ -1315,6 +1405,12 @@ class ModelWebixAdmin(ModelWebixAdminPermissionsMixin):
     enable_url_update = True
 
     def get_urls(self):
+        """
+        Retrieves the URL patterns for the admin views.
+
+        Returns:
+            list: A list of URL patterns.
+        """
         _prefix = self.get_prefix()
         if _prefix not in [None, ""]:
             _prefix += "/"
@@ -1342,4 +1438,10 @@ class ModelWebixAdmin(ModelWebixAdminPermissionsMixin):
 
     @property
     def urls(self):
+        """
+        Retrieves the URL patterns for the admin views.
+
+        Returns:
+            list: A list of URL patterns.
+        """
         return self.get_urls()

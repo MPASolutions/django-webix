@@ -1,3 +1,8 @@
+"""
+Fork of django-grappelli's Autocomplete view
+https://github.com/sehmaschine/django-grappelli/blob/master/grappelli/views/related.py
+"""
+
 import json
 
 from django.apps import apps

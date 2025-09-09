@@ -8,6 +8,25 @@ from django_webix.utils.layers import get_layers
 
 
 class WebixPermissionsBaseMixin:
+    """
+    A base mixin for handling permissions in Django Webix views.
+
+    This mixin provides methods to check and manage permissions for CRUD operations (add, change, delete, view)
+    on Django models. It also supports checking for related objects that might block these operations.
+
+    Attributes:
+        model (Model, optional): The Django model associated with the view.
+        request (HttpRequest, optional): The HTTP request object.
+        check_permissions (bool): Whether to enforce permission checks. Defaults to `True`.
+        add_permission (bool, optional): Override for add permission.
+        change_permission (bool, optional): Override for change permission.
+        delete_permission (bool, optional): Override for delete permission.
+        view_permission (bool, optional): Override for view permission.
+        view_or_change_permission (bool, optional): Override for view or change permission.
+        module_permission (bool, optional): Override for module-level permission.
+        remove_disabled_buttons (bool): Whether to remove disabled buttons from the UI. Defaults to `False`.
+    """
+
     model = None
     request = None
     check_permissions = True
@@ -192,6 +211,12 @@ class WebixPermissionsBaseMixin:
 
 
 class WebixPermissionsMixin(WebixPermissionsBaseMixin):
+    """
+    A mixin for handling permissions in Django Webix views.
+
+    This mixin extends `WebixPermissionsBaseMixin` and provides methods to check permissions
+    for CRUD operations and retrieve context data for Webix templates.
+    """
 
     def has_view_or_change_permission(self, request, obj=None):
         return self._has_view_or_change_permission(request, obj)
@@ -221,6 +246,17 @@ class WebixPermissionsMixin(WebixPermissionsBaseMixin):
         return self._get_info_no_view_permission(has_permission, request, obj)
 
     def get_context_data_webix_permissions(self, request, obj=None, **kwargs):
+        """
+        Retrieves context data for Webix permissions.
+
+        Args:
+            request (HttpRequest): The HTTP request object.
+            obj (Model, optional): The model instance to check permissions for.
+            **kwargs: Additional keyword arguments.
+
+        Returns:
+            dict: A dictionary containing permission-related context data.
+        """
         _has_view_permission = self.has_view_permission(request=self.request, obj=obj)
         _has_add_permission = self.has_add_permission(request=self.request)
         _has_change_permission = self.has_change_permission(request=self.request, obj=obj)
@@ -259,6 +295,11 @@ class WebixPermissionsMixin(WebixPermissionsBaseMixin):
 
 
 class WebixUrlUtilsMixin:
+    """
+    A mixin for handling URL utilities in Django Webix views.
+
+    This mixin provides methods to check if a URL is a popup and wrap URLs for popup usage.
+    """
 
     def is_popup(self):
         return self.request.GET.get("_popup", self.request.POST.get("_popup", False)) is not False
@@ -292,6 +333,12 @@ class WebixUrlUtilsMixin:
 
 
 class WebixUrlMixin(WebixUrlUtilsMixin):
+    """
+    A mixin for handling URLs in Django Webix views.
+
+    This mixin extends `WebixUrlUtilsMixin` and provides methods to generate URLs for CRUD operations.
+    """
+
     model = None
 
     url_pattern_list = None
@@ -389,6 +436,17 @@ class WebixUrlMixin(WebixUrlUtilsMixin):
         return "{}_{}_".format(self.model._meta.app_label, self.model._meta.model_name)
 
     def get_context_data_webix_url(self, request, obj=None, **kwargs):
+        """
+        Retrieves context data for Webix URLs.
+
+        Args:
+            request (HttpRequest): The HTTP request object.
+            obj (Model, optional): The model instance.
+            **kwargs: Additional keyword arguments.
+
+        Returns:
+            dict: A dictionary containing URL-related context data.
+        """
         return {
             # Urls
             "url_list": self.get_url_list(),
@@ -406,6 +464,13 @@ class WebixUrlMixin(WebixUrlUtilsMixin):
 
 
 class WebixBaseMixin:
+    """
+    A base mixin for Django Webix views.
+
+    This mixin provides common functionality for Webix views, such as retrieving container IDs
+    and layers for the Webix UI.
+    """
+
     content_type = "application/javascript"
 
     def get_container_id(self, request):
@@ -428,6 +493,7 @@ class WebixBaseMixin:
         return layers
 
     def get_context_data_webix_base(self, request, **kwargs):
+
         context = {
             "webix_container_id": self.get_container_id(request=self.request),
             "webix_overlay_container_id": self.get_overlay_container_id(request=self.request),
@@ -450,6 +516,12 @@ class WebixBaseMixin:
 
 
 class WebixTemplateView(WebixBaseMixin, TemplateView):
+    """
+    A template view for rendering Webix templates.
+
+    This view extends `WebixBaseMixin` and `TemplateView` to provide a base for rendering
+    Webix templates with additional context data.
+    """
 
     content_type = "text/html"
 
@@ -463,7 +535,12 @@ class WebixTemplateView(WebixBaseMixin, TemplateView):
 
 
 class WebixFormView(WebixTemplateView, WebixUrlUtilsMixin, BaseFormView):
-    """A base view for displaying a form with webix."""
+    """
+    A base view for displaying a form with Webix.
+
+    This view extends `WebixTemplateView`, `WebixUrlUtilsMixin`, and `BaseFormView` to provide
+    functionality for rendering forms in Webix.
+    """
 
     template_name = "django_webix/generic/form.js"
 
