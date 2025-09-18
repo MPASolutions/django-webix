@@ -34,11 +34,20 @@ class AdminWebixSite:
     # Text to put at the end of each page's <title>.
     site_title = _("Django webix site admin")
 
+    def get_site_title(self, request):
+        return self.site_title
+
     # Text to put in each page's <h1>.
     site_header = _("Django webix administration")
 
+    def get_site_header(self, request):
+        return self.site_header
+
     # Text to put at the top of the admin index page.
     index_title = _("Site administration")
+
+    def get_index_title(self, request):
+        return self.index_title
 
     site_url = "/"
 
@@ -477,8 +486,8 @@ class AdminWebixSite:
         script_name = request.META["SCRIPT_NAME"]
         site_url = script_name if self.site_url == "/" and script_name else self.site_url
         return {
-            "site_title": self.site_title,
-            "site_header": self.site_header,
+            "site_title": self.get_site_title(request),
+            "site_header": self.get_site_header(request),
             "site_url": site_url,
             "is_webgis_enable": self.is_webgis_enable(),
             "is_hijack_enable": self.is_hijack_enable(),
@@ -653,7 +662,7 @@ class AdminWebixSite:
                 # has_permission must be overridden.
                 # 'has_permission': False,
                 "template_name": self.logout_template or "django_webix/admin/logged_out.html",
-                "site_title": self.site_title,
+                "site_title": self.get_site_title(request),
                 **(extra_context or {}),
             },
         }
@@ -706,7 +715,7 @@ class AdminWebixSite:
             "title": gettext("Log in"),
             "app_path": request.get_full_path(),
             "username": request.user.get_username(),
-            "site_title": self.site_title,
+            "site_title": self.get_site_title(request),
         }
 
         if REDIRECT_FIELD_NAME not in request.GET and REDIRECT_FIELD_NAME not in request.POST:
@@ -745,7 +754,7 @@ class AdminWebixSite:
             **self.each_context(request),
             **self.extra_index_context(request),
             "history_url": history_url,
-            "title": self.index_title,
+            "title": self.get_index_title(request),
             "app_list": self.get_app_list(request),
             "active_tab": active_tab,
             **(extra_context or {}),
