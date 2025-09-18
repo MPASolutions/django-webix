@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-06-20 15:46+0200\n"
+"POT-Creation-Date: 2025-09-18 15:03+0200\n"
 "PO-Revision-Date: 2024-03-08 10:28+0100\n"
 "Last-Translator: Stefano Menegon <dallago@mpasol.it>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -19,7 +19,7 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Translated-Using: django-rosetta 0.10.0\n"
 
-#: contrib/admin/apps.py:26
+#: contrib/admin/apps.py:12
 msgid "Administration"
 msgstr "Verwaltung"
 
@@ -196,11 +196,11 @@ msgstr "Webix Admin Menu"
 msgid "Webix Admin Menu Languages"
 msgstr "Webix Admin Menu"
 
-#: contrib/admin/options.py:306
+#: contrib/admin/options.py:357
 msgid "Yes"
 msgstr "Ja"
 
-#: contrib/admin/options.py:306
+#: contrib/admin/options.py:357
 msgid "No"
 msgstr "Nein"
 
@@ -208,15 +208,15 @@ msgstr "Nein"
 msgid "Django webix site admin"
 msgstr "Django webix Webseite Verwaltung"
 
-#: contrib/admin/sites.py:38
+#: contrib/admin/sites.py:41
 msgid "Django webix administration"
 msgstr "Django webix Verwaltung"
 
-#: contrib/admin/sites.py:41
+#: contrib/admin/sites.py:47
 msgid "Site administration"
 msgstr "Verwaltung der Webseite"
 
-#: contrib/admin/sites.py:689
+#: contrib/admin/sites.py:698
 #, python-format
 msgid ""
 "Please enter the correct %(username)s and password for a staff account. Note "
@@ -225,7 +225,7 @@ msgstr ""
 "Bitte geben Sie den korrekten %(username)s und Passwort für einen Staff-"
 "Nutzer ein. Bei beiden Feldern bitte auf Groß- und Kleinschreibung achten."
 
-#: contrib/admin/sites.py:706
+#: contrib/admin/sites.py:715
 msgid "Log in"
 msgstr "Einloggen"
 
