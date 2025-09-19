@@ -122,6 +122,9 @@ class WebixInlineFormSet(InlineFormSetFactory):
     form_kwargs = None  # its mutable!!! so not set to []
     initial = None  # its mutable!!! so not set to []
 
+    form_class_name = None
+    style = None
+
     def __init__(self, parent_model, request, instance, view_kwargs=None, view=None, initial=None):
         if self.formset_kwargs is None:
             self.formset_kwargs = {}
@@ -140,7 +143,9 @@ class WebixInlineFormSet(InlineFormSetFactory):
     def get_form_class(self):
         if self.form_class is None:
             self.form_class = WebixModelForm
-        return super().get_form_class()
+        form_class = super().get_form_class()
+        form_class = type(self.form_class_name, (form_class,), {"style": self.style})
+        return form_class
 
     def get_formset_class(self):
         if hasattr(self, "custom_formset_class"):
@@ -209,16 +214,10 @@ class WebixInlineFormSet(InlineFormSetFactory):
 class WebixStackedInlineFormSet(WebixInlineFormSet):
     template_name = "django_webix/include/edit_inline/stacked.js"
     style = "stacked"
-
-    def __init__(self, parent_model, request, instance, view_kwargs=None, view=None, initial=None):
-        super().__init__(parent_model, request, instance, view_kwargs, view, initial)
-        self.form_class = type(str("WebixStackedModelForm"), (self.form_class,), {"style": self.style})
+    form_class_name = "WebixStackedModelForm"
 
 
 class WebixTabularInlineFormSet(WebixInlineFormSet):
     template_name = "django_webix/include/edit_inline/tabular.js"
     style = "tabular"
-
-    def __init__(self, parent_model, request, instance, view_kwargs=None, view=None, initial=None):
-        super().__init__(parent_model, request, instance, view_kwargs, view, initial)
-        self.form_class = type(str("WebixTabularModelForm"), (self.form_class,), {"style": self.style})
+    form_class_name = "WebixTabularModelForm"
