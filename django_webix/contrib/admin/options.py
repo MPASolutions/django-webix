@@ -1271,8 +1271,8 @@ class ModelWebixAdmin(ModelWebixAdminPermissionsMixin):
 
                 if hasattr(_admin, "get_choices_filters"):
 
-                    def get_choices_filters(self):
-                        return _admin.get_choices_filters(view=self)
+                    def get_choices_filters(self, empty=False):
+                        return _admin.get_choices_filters(view=self, empty=False)
 
                 errors_on_popup = _admin.errors_on_popup
 
