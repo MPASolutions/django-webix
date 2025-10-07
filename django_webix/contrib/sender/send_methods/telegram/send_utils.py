@@ -1,6 +1,12 @@
+#
+# NON VA!!!
+# 2/10/2025 - DEPRECATO: va aggiornato tutto il SW di telegram a causa della nuova versione della libreria
+#
 from typing import Dict, List
 
 import six
+
+# noinspection PyUnresolvedReferences
 import telegram
 from django.apps import apps
 from django.conf import settings

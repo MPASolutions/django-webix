@@ -1,3 +1,8 @@
+#
+# NON VA!!!
+# 2/10/2025 - DEPRECATO: va aggiornato tutto il SW di telegram a causa della nuova versione della libreria
+#
+
 from django_webix.contrib.sender.send_methods.telegram.send_utils import (
     attachments_format,
     presend_check,

@@ -1,8 +1,16 @@
+#
+# NON VA!!!
+# 2/10/2025 - DEPRECATO: va aggiornato tutto il SW di telegram a causa della nuova versione della libreria
+#
 import phonenumbers
 from django.apps import apps
 from django.conf import settings
 from django.utils.translation import gettext as _
+
+# noinspection PyUnresolvedReferences
 from telegram import KeyboardButton, ReplyKeyboardMarkup, ReplyKeyboardRemove, Update
+
+# noinspection PyUnresolvedReferences
 from telegram.ext import (
     CallbackContext,
     CommandHandler,

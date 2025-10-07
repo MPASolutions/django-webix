@@ -1,9 +1,17 @@
+#
+# NON VA!!!
+# 2/10/2025 - DEPRECATO: va aggiornato tutto il SW di telegram a causa della nuova versione della libreria
+#
 from collections import defaultdict
 from copy import deepcopy
 from typing import Any, DefaultDict, Dict, Optional, Tuple
 
 from django_webix.contrib.sender.models import TelegramPersistence
+
+# noinspection PyUnresolvedReferences
 from telegram.ext import BasePersistence
+
+# noinspection PyUnresolvedReferences
 from telegram.utils.types import ConversationDict
 
 
