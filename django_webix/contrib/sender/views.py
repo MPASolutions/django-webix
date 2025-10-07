@@ -43,7 +43,7 @@ from django_webix.contrib.sender.models import (
     MessageUserRead,
 )
 from django_webix.contrib.sender.send_methods.telegram.persistences import DatabaseTelegramPersistence
-from django_webix.contrib.sender.utils import send_mixin, user_can_send
+from django_webix.contrib.sender.utils import get_messages_limit_user, send_mixin, user_can_send
 from django_webix.views import WebixListView, WebixTemplateView
 from telegram import Update
 from telegram.ext import Dispatcher
@@ -627,26 +627,7 @@ class SenderMessagesListView(WebixListView):
         # qs = qs.filter(message_sent__status="sent")
 
         # Limit filter by user
-        qset = Q()
-
-        for recipient_config in CONF["recipients"]:
-            app_label, model = recipient_config["model"].lower().split(".")
-            model_class = apps.get_model(app_label=app_label, model_name=model)
-            recipient_queryset = model_class.objects.all()
-            recipient_queryset = recipient_queryset.select_related(*model_class.get_select_related())
-            recipient_queryset = recipient_queryset.prefetch_related(*model_class.get_prefetch_related())
-            recipient_queryset = recipient_queryset.filter(
-                model_class.get_filters_viewers(self.request.user, request=self.request)
-            )
-            qset |= Q(**{"{}_message_recipients__in".format(model): recipient_queryset})
-        qs = qs.filter(qset)
-
-        # Limit queryset to only list enabled in settings
-        methods_show = [
-            "{}.{}".format(i["method"], i["function"])
-            for i in filter(lambda x: x["show_in_list"] is True, CONF["send_methods"])
-        ]
-        qs = qs.filter(message_sent__send_method__in=methods_show)
+        qs = get_messages_limit_user(qs, self.request, only_list_enable=True)
 
         # Annotate send method types
         qs = qs.annotate(
