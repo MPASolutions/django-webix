@@ -90,11 +90,11 @@ class ImportValidator:
         Read the file (with existance/extension/type validation) and store in pandas dataframe
         (eventually build ModelForm from Model)
         :param filepath_or_buffer: filename/filepath string or file-like buffer
-        :param template: Form or Model used as tabplate to validate file
+        :param template: Form or Model used as template to validate file
         :param field_names: list of field_names used to create ModelForm from Model (default __all__)
-        :param fixpos: Boolean, True to raise better header validation, only if file colums
+        :param fixpos: Boolean, True to raise better header validation, only if file columns
         are exactly the same and in the same order of the Form fields
-        :param initial_as_default, default True: use field inital value as default (only if required=Fasle)
+        :param initial_as_default, default True: use field initial value as default (only if required=False)
         :param label_as_colname, default True: use field label as column name
         :param kw_pandas_read: pandas read_excel or read_csv arguments
             header : int, list of ints, default 0
@@ -107,7 +107,7 @@ class ImportValidator:
                 Lists of strings/integers are used to request multiple sheets.
                 Specify None to get all sheets.
             sep : str, default ‘,’
-                Delimiter to use in caharcater (eg comma) separated files.
+                Delimiter to use in character (eg comma) separated files.
         """
 
         self.fixpos = fixpos
@@ -337,7 +337,7 @@ class ImportValidator:
 
         # # fill NaN (and dates NaT) with '' (otherwise initialize form with nan string)
         self.df_rows.replace([np.nan, pd.NaT], ["", ""], inplace=True)
-        # could not rplace with None because pandas try to chage dtype to float
+        # could not replace with None because pandas try to change dtype to float
         # self.df_rows.replace([np.nan, pd.NaT], [None, None], inplace=True)
 
         # # filter dataframe by kwargs (session)
@@ -360,12 +360,12 @@ class ImportValidator:
     def _validate_row(self, row_dict, save=False):
         """
         Instantiate the form with the row data and validate it
-        :param row_dict: dict with the fields:value to initialize the form instance
+        :param row_dict: dict with the fields:value to initialise the form instance
         :param save: Boolean, if True save the validated form
         :return: return nothing, only append to errors dict the specific row (form instance) errors
         """
 
-        # inject constants_fields (set by set_constants_fields) in the dict that initializes the form values
+        # inject constants_fields (set by set_constants_fields) in the dict that initialises the form values
         row_dict.update(self.constants_fields)
         # initialize the form, instantiating the class with the values
         form = self.form_class(row_dict)
@@ -406,7 +406,7 @@ class ImportValidator:
     def postprocess_record(self, instance, save):
         """
 
-        :param instance: is wathever returned by form save method
+        :param instance: is whatever returned by form save method
         :param save: Boolean is the importer save option
         """
         pass
@@ -450,46 +450,56 @@ class ImportValidator:
                                     }
                                 )
 
+    def check_mime_ext(self, check_mimetype=True):
+        if check_mimetype:
+            mime = magic.Magic(mime=True, uncompress=True)  # uncompress, otherwise xlsx is zip
+        mimetype = None
+        ext = None
+        filename = None
+
+        if not self.file_err:
+            if not self.filepath_or_buffer:
+                self.file_err.append(ERR_MSG["NOFILE"])
+
+        if not self.file_err:
+            if isinstance(self.filepath_or_buffer, InMemoryUploadedFile):
+                # https://docs.djangoproject.com/en/2.1/_modules/django/core/files/uploadedfile/
+                if check_mimetype:
+                    mimetype = self.filepath_or_buffer.content_type
+                ext = os.path.splitext(self.filepath_or_buffer.name)[-1].lower().lstrip(".")
+                filename = self.filepath_or_buffer.name
+            elif (
+                not hasattr(self.filepath_or_buffer, "read")
+                and os.path.exists(self.filepath_or_buffer)
+                and os.path.isfile(self.filepath_or_buffer)
+            ):
+                if check_mimetype:
+                    mimetype = mime.from_file(self.filepath_or_buffer)
+                ext = os.path.splitext(self.filepath_or_buffer)[-1].lower().lstrip(".")
+                filename = self.filepath_or_buffer
+            elif hasattr(self.filepath_or_buffer, "read"):
+                if check_mimetype:
+                    mimetype = mime.from_buffer(self.filepath_or_buffer.read())
+                filename = "buffer"
+            else:
+                self.file_err.append(ERR_MSG["WRONG_FILE"].format(self.filepath_or_buffer))
+
+        self.meta = {
+            "filename": filename,
+            "sheet": self.sheet_name + 1 if type(self.sheet_name) is int else self.sheet_name,
+        }
+
+        if not self.file_err:
+            if ext and ext not in list(MIME):
+                self.file_err.append(ERR_MSG["WRONG_EXT"].format(ext, ", ".join(list(MIME))))
+
+        return mimetype, ext, filename
+
     def get_dataframe(self):
 
         if not hasattr(self, "df_rows") or self.df_rows is None:
-            mime = magic.Magic(mime=True, uncompress=True)  # uncompress, otherwise xlsx is zip
-            mimetype = None
-            ext = None
-            filename = None
 
-            if not self.file_err:
-                if not self.filepath_or_buffer:
-                    self.file_err.append(ERR_MSG["NOFILE"])
-
-            if not self.file_err:
-                if isinstance(self.filepath_or_buffer, InMemoryUploadedFile):
-                    # https://docs.djangoproject.com/en/2.1/_modules/django/core/files/uploadedfile/
-                    mimetype = self.filepath_or_buffer.content_type
-                    ext = os.path.splitext(self.filepath_or_buffer.name)[-1].lower().lstrip(".")
-                    filename = self.filepath_or_buffer.name
-                elif (
-                    not hasattr(self.filepath_or_buffer, "read")
-                    and os.path.exists(self.filepath_or_buffer)
-                    and os.path.isfile(self.filepath_or_buffer)
-                ):
-                    mimetype = mime.from_file(self.filepath_or_buffer)
-                    ext = os.path.splitext(self.filepath_or_buffer)[-1].lower().lstrip(".")
-                    filename = self.filepath_or_buffer
-                elif hasattr(self.filepath_or_buffer, "read"):
-                    mimetype = mime.from_buffer(self.filepath_or_buffer.read())
-                    filename = "buffer"
-                else:
-                    self.file_err.append(ERR_MSG["WRONG_FILE"].format(self.filepath_or_buffer))
-
-            self.meta = {
-                "filename": filename,
-                "sheet": self.sheet_name + 1 if type(self.sheet_name) is int else self.sheet_name,
-            }
-
-            if not self.file_err:
-                if ext and ext not in list(MIME):
-                    self.file_err.append(ERR_MSG["WRONG_EXT"].format(ext, ", ".join(list(MIME))))
+            mimetype, ext, filename = self.check_mime_ext()
 
             if not self.file_err:
                 # read with dtype='object' to allow mixed dtype columns, prevent pandas to autocast
@@ -505,7 +515,7 @@ class ImportValidator:
                     self.check_mimetype is False or (mimetype in MIME["csv"] or mimetype in MIME["txt"])
                 ):
                     try:
-                        # check n righe se usa skiprows, pandas si spacca se uso skiprows=1 ma c'è una sola riga
+                        # check n rows if using skiprows, pandas fails if I use skiprows=1 but there is only one row
                         self.df_rows = pd.read_csv(self.filepath_or_buffer, dtype="object", **self.kw_pandas_read)
                     except pd.errors.EmptyDataError:
                         self.file_err.append(ERR_MSG["NODATA"].format(self.sheet_name + 1))
@@ -516,7 +526,7 @@ class ImportValidator:
                             )
                         )
                 elif ext in ["zip"] and (self.check_mimetype is False or (mimetype in MIME["zip"])):
-                    # decomprimere tutto in temp dir e poi leggere con geopadas
+                    # decompress everything into temp dir and then read with geopandas
                     with tempfile.TemporaryDirectory() as tmpdir:
                         # raise Exception(filepath_or_buffer, type(filepath_or_buffer), filepath_or_buffer.read())
                         zp = zipfile.ZipFile(self.filepath_or_buffer)
@@ -587,7 +597,7 @@ class ImportValidator:
         """
         Run the file validation, file level validation (_base_validation) and then each row validation (_validate_rows)
         :param save: None|'ROW'|'FULL'
-            None: default, don't save nothiong
+            None: default, don't save nothing
             ROW: save each valid row after the form validation
             FULL: save all at the end, only in all the rows are validated without errors
         :return: {valid:True/False, errors:[item_error_dict], nerrors: number_of_errors, meta: infile_metadata}

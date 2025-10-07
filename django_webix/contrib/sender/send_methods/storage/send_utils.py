@@ -21,7 +21,7 @@ def send(recipients: Dict[str, List[int]], subject: str, body: str, message_sent
     if "django_webix.contrib.sender" not in settings.INSTALLED_APPS:
         raise Exception("Django Webix Sender is not in INSTALLED_APPS")
 
-    # Controllo correttezza parametri
+    # Check the correctness of parameters
     if (
         not isinstance(recipients, dict)
         or "valids" not in recipients
@@ -39,7 +39,7 @@ def send(recipients: Dict[str, List[int]], subject: str, body: str, message_sent
     if not isinstance(message_sent, MessageSent):
         raise Exception("`message_sent` must be MessageSent instance")
 
-    # Per ogni istanza di destinatario ciclo
+    # For each recipient instance, loop through
     for recipient, recipient_address in recipients["valids"]:
         MessageRecipient.objects.create(
             message_sent=message_sent,
@@ -49,7 +49,7 @@ def send(recipients: Dict[str, List[int]], subject: str, body: str, message_sent
             recipient_address=recipient_address,
         )
 
-    # Salvo i destinatari non validi
+    # Save invalid recipients
     for recipient, recipient_address in recipients["invalids"]:
         MessageRecipient.objects.create(
             message_sent=message_sent,
@@ -59,7 +59,7 @@ def send(recipients: Dict[str, List[int]], subject: str, body: str, message_sent
             recipient_address=recipient_address,
         )
 
-    # Salvo i destinatari duplicati
+    # Save duplicate recipients
     for recipient, recipient_address in recipients["duplicates"]:
         MessageRecipient.objects.create(
             message_sent=message_sent,
@@ -74,15 +74,15 @@ def send(recipients: Dict[str, List[int]], subject: str, body: str, message_sent
 
 def recipients_clean(recipients_instance, recipients, request=None):
     for recipient in recipients_instance:
-        # Prelevo l'ID user e lo metto in una lista se non è già una lista
+        # Retrieve the user ID and put it in a list if it's not already a list
         if recipient.pk not in recipients["valids"]["address"]:
             recipients["valids"]["address"].append(recipient.pk)
             recipients["valids"]["recipients"].append(recipient)
-        # Contatto già presente nella lista (duplicato)
+        # Contact already present in the list (duplicate)
         elif recipient.pk in recipients["valids"]["address"]:
             recipients["duplicates"]["address"].append(recipient.pk)
             recipients["duplicates"]["recipients"].append(recipient)
-        # Indirizzo non presente
+        # Address not present
         else:
             recipients["invalids"]["address"].append(recipient.pk)
             recipients["invalids"]["recipients"].append(recipient)

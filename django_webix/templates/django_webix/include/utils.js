@@ -440,7 +440,8 @@ function load_js(lnk, hide, area, method, data, headers, dataType, abortAllPendi
                         if ($$('main_content_right') != undefined) {
                             extra_url += '&tab=' + $$('main_content_right').getValue();
                         }
-                        history.replaceState(null, null, extra_url);
+                        console.log('history.pushState', extra_url);
+                        history.pushState(null, null, extra_url);
                     }
                     {% endif %}
                 }

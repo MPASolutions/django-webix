@@ -144,13 +144,11 @@ class SenderGetListView(View):
 
     def get(self, request, *args, **kwargs):
         """
-        Funzione che ritorna un JSON con i record del ContentType passato come parametro.
-
-        Se nella richiesta viene passata una lista di ID e nel file `settings.py` è abilitato l'utilizzo dei filtri
-        dinamici, allora il QuerySet viene filtrato, altrimenti ritorna tutti i valori presenti nel database.
-
+        Function that returns a JSON with the records of the ContentType passed as a parameter.
+        If a list of IDs is passed in the request and dynamic filters are enabled in the `settings.py` file,
+        then the QuerySet is filtered; otherwise, it returns all values present in the database.
         :param request: Django request
-        :return: Json contenente le istanze richieste e filtrate in caso di `filters` in `INSTALLED_APPS`
+        :return: JSON containing the requested instances, filtered if `filters` is in `INSTALLED_APPS`
         """
 
         contentype = request.GET.get("contentype", None)
@@ -228,10 +226,9 @@ class SenderSendView(View):
 
     def post(self, request, *args, **kwargs):
         """
-        Funzione per inviare la corrispondenza.
-
+        Function to send.
         :param request: Django request
-        :return: Json con lo stato dell'invio della corrispondenza
+        :return: JSON with the sending status
         """
 
         send_methods = request.POST.get("send_methods", None)
@@ -907,16 +904,16 @@ class SenderInvoiceManagementView(WebixTemplateView):
 
         context["send_methods"] = [{"key": key, "value": value} for key, value in _send_methods.items()]
 
-        # Prelievo i filtri
+        # Retrieve the filters
         year = self.request.GET.get("year", timezone.now().year)
         send_method = self.request.GET.get("send_method", None)
         group = CONF.get("invoices_period", "monthly")
 
-        # Controllo che i filtri siano validi
+        # Check that the filters are valid
         if group not in self.groups:
             return Http404
 
-        # Prendo tutti i tipi di sender dei vari messaggi per i filtri impostati
+        # Get all sender types of various messages for the set filters
         senders = MessageSent.objects.filter(creation_date__year=year, status="sent")
         if send_method:
             senders = senders.filter(send_method=send_method)
@@ -924,13 +921,13 @@ class SenderInvoiceManagementView(WebixTemplateView):
 
         context["senders"] = []
 
-        # Genero la lista dei mesi per periodo
+        # Generate the list of months for the period
         _periods = [
             [i * (12 // len(self.groups[group])) + j for j in range(1, (12 // len(self.groups[group])) + 1)]
             for i in range(0, len(self.groups[group]))
         ]
 
-        # Per ogni sender creo un dizionario con i vari periodi e costi
+        # For each sender, create a dictionary with various periods and costs
         for idx, (sender, send_method) in enumerate(senders):
             qs = MessageSent.objects.filter(
                 creation_date__year=year, sender=sender, send_method=send_method, status="sent"
@@ -949,7 +946,7 @@ class SenderInvoiceManagementView(WebixTemplateView):
                 "y": idx // 2,
             }
 
-            # Per ogni periodo estrapolo i dati
+            # For each period, extract the data
             for index, period in enumerate(_periods):
                 _filter = Q()
                 for _month in period:
@@ -1040,14 +1037,14 @@ class SenderInvoiceManagementView(WebixTemplateView):
         if sender == _("Sender not specified"):
             sender = None
 
-        # Genero la lista dei mesi per periodo
+        # Generate the list of months for the period
         _periods = [
             [i * (12 // len(self.groups[group])) + j for j in range(1, (12 // len(self.groups[group])) + 1)]
             for i in range(0, len(self.groups[group]))
         ]
         _months = _periods[self.groups[group].index(period)]
 
-        # Prelevo i messaggi da fatturare
+        # Retrieve the messages to be invoiced
         qs = MessageSent.objects.filter(
             creation_date__year=year, sender=sender, send_method=send_method, status="sent"
         )

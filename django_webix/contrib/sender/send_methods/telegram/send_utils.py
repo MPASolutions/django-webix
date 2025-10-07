@@ -4,6 +4,7 @@ import six
 import telegram
 from django.apps import apps
 from django.conf import settings
+from django.utils.translation import gettext_lazy as _
 
 
 def send(recipients: Dict[str, List[int]], subject: str, body: str, message_sent, request=None):
@@ -23,7 +24,7 @@ def send(recipients: Dict[str, List[int]], subject: str, body: str, message_sent
     if "django_webix.contrib.sender" not in settings.INSTALLED_APPS:
         raise Exception("Django Webix Sender is not in INSTALLED_APPS")
 
-    # Controllo correttezza parametri
+    # Check the correctness of parameters
     if (
         not isinstance(recipients, dict)
         or "valids" not in recipients
@@ -47,7 +48,7 @@ def send(recipients: Dict[str, List[int]], subject: str, body: str, message_sent
 
     attachments = message_sent.attachments.all()
 
-    # Per ogni istanza di destinatario ciclo
+    # For each recipient instance, loop through
     for recipient, recipient_address in recipients["valids"]:
         try:
             bot.send_message(chat_id=recipient_address, text=body)
@@ -58,7 +59,7 @@ def send(recipients: Dict[str, List[int]], subject: str, body: str, message_sent
                 else:
                     bot.send_document(recipient_address, open(file.path, "rb"))
 
-            _extra = {"status": "Telegram {} ({}) inviato con successo".format(recipient_address, recipient)}
+            _extra = {"status": _(f"Telegram {recipient_address} ({recipient}) sent successfully")}
             _status = "success"
         except Exception as e:
             _extra = {"status": "{}".format(e)}
@@ -73,7 +74,7 @@ def send(recipients: Dict[str, List[int]], subject: str, body: str, message_sent
             extra=_extra,
         )
 
-    # Salvo i destinatari senza numero e quindi ai quali non è stato inviato il messaggio
+    # Save recipients without a number and therefore to whom the message was not sent
     for recipient, recipient_address in recipients["invalids"]:
         message_recipient = MessageRecipient(
             message_sent=message_sent,
@@ -81,11 +82,11 @@ def send(recipients: Dict[str, List[int]], subject: str, body: str, message_sent
             sent_number=0,
             status="invalid",
             recipient_address=recipient_address,
-            extra={"status": "Telegram non registrato ({}) e quindi non inviato".format(recipient)},
+            extra={"status": _(f"Telegram not registered ({recipient}) and therefore not sent")},
         )
         message_recipient.save()
 
-    # Salvo i destinatari duplicati e quindi ai quali non è stato inviato il messaggio
+    # Save duplicate recipients and therefore to whom the message was not sent
     for recipient, recipient_address in recipients["duplicates"]:
         message_recipient = MessageRecipient(
             message_sent=message_sent,
@@ -93,7 +94,7 @@ def send(recipients: Dict[str, List[int]], subject: str, body: str, message_sent
             sent_number=0,
             status="duplicate",
             recipient_address=recipient_address,
-            extra={"status": "Telegram duplicato {}".format(recipient)},
+            extra={"status": _(f"Telegram duplicate {recipient}")},
         )
         message_recipient.save()
 
@@ -102,22 +103,22 @@ def send(recipients: Dict[str, List[int]], subject: str, body: str, message_sent
 
 def recipients_clean(recipients_instance, recipients, request=None):
     for recipient in recipients_instance:
-        # Prelevo l'ID telegram e lo metto in una lista se non è già una lista
+        # Retrieve the Telegram ID and put it in a list if it's not already a list
         _get_telegram = recipient.get_telegram
         if not isinstance(_get_telegram, list):
             _get_telegram = [_get_telegram]
 
-        # Per ogni email verifico il suo stato e lo aggiungo alla chiave corretta
+        # For each email, verify its status and add it to the correct key
         for _telegram in _get_telegram:
-            # Contatto non ancora presente nella lista
+            # Contact not yet present in the list
             if _telegram and _telegram not in recipients["valids"]["address"]:
                 recipients["valids"]["address"].append(_telegram)
                 recipients["valids"]["recipients"].append(recipient)
-            # Contatto già presente nella lista (duplicato)
+            # Contact already present in the list (duplicate)
             elif _telegram:
                 recipients["duplicates"]["address"].append(_telegram)
                 recipients["duplicates"]["recipients"].append(recipient)
-            # Indirizzo non presente
+            # Address not present
             else:
                 recipients["invalids"]["address"].append(_telegram)
                 recipients["invalids"]["recipients"].append(recipient)
@@ -128,4 +129,4 @@ def presend_check(subject, body):
 
 
 def attachments_format(attachments, body):
-    pass  # invio fatto in send
+    pass  # Sending done in send
