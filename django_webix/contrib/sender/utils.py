@@ -30,6 +30,28 @@ def user_can_send(user):
     return True
 
 
+def get_messages_limit_user(queryset, request, only_list_enable=False):
+    qset = Q()
+    for recipient_config in CONF["recipients"]:
+        app_label, model = recipient_config["model"].lower().split(".")
+        model_class = apps.get_model(app_label=app_label, model_name=model)
+        recipient_queryset = model_class.objects.all()
+        recipient_queryset = recipient_queryset.select_related(*model_class.get_select_related())
+        recipient_queryset = recipient_queryset.prefetch_related(*model_class.get_prefetch_related())
+        recipient_queryset = recipient_queryset.filter(model_class.get_filters_viewers(request.user, request=request))
+        qset |= Q(**{"{}_message_recipients__in".format(model): recipient_queryset})
+    queryset = queryset.filter(qset)
+
+    if only_list_enable:
+        methods_show = [
+            "{}.{}".format(i["method"], i["function"])
+            for i in filter(lambda x: x["show_in_list"] is True, CONF["send_methods"])
+        ]
+        queryset = queryset.filter(message_sent__send_method__in=methods_show)
+
+    return queryset
+
+
 def get_messages_read_required(request, queryset=None):
     """
     Get queryset of messages not read where reading is required
@@ -46,16 +68,7 @@ def get_messages_read_required(request, queryset=None):
     queryset = queryset.filter(message_sent__status="sent")
 
     # Limit filter by user
-    qset = Q()
-    for recipient_config in CONF["recipients"]:
-        app_label, model = recipient_config["model"].lower().split(".")
-        model_class = apps.get_model(app_label=app_label, model_name=model)
-        recipient_queryset = model_class.objects.all()
-        recipient_queryset = recipient_queryset.select_related(*model_class.get_select_related())
-        recipient_queryset = recipient_queryset.prefetch_related(*model_class.get_prefetch_related())
-        recipient_queryset = recipient_queryset.filter(model_class.get_filters_viewers(request.user, request=request))
-        qset |= Q(**{"{}_message_recipients__in".format(model): recipient_queryset})
-    queryset = queryset.filter(qset)
+    queryset = get_messages_limit_user(queryset, request)
 
     # filter for read required
     send_methods_read_required = []
