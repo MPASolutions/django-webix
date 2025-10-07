@@ -601,7 +601,7 @@ class AdminWebixSite:
         request.current_app = self.name
         return PasswordResetDoneView.as_view(**defaults)(request)
 
-    # NON so perche non funziona se lo metto nella function
+    # I DON'T know why it doesn't work if I put it in the function
     # def password_reset_confirm(self, request, extra_context=None):
     #
     #     from django.contrib.auth.views import PasswordResetConfirmView

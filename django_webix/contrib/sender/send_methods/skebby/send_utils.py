@@ -160,7 +160,7 @@ GSM_7_BIT = [
 
 
 def check_config_skebby(config_skebby):
-    assert isinstance(config_skebby, dict), "La configurazione di skebby deve essere un dizionario"
+    assert isinstance(config_skebby, dict), "The skebby configuration must be a dictionary"
     assert "region" in config_skebby, "Missing key region in the configuration"
     assert "method" in config_skebby, "Missing key method in the configuration"
     assert "username" in config_skebby, "Missing key username in the configuration"
@@ -186,7 +186,7 @@ def send(recipients: Dict[str, List[int]], subject: str, body: str, message_sent
     if "django_webix.contrib.sender" not in settings.INSTALLED_APPS:
         raise Exception("Django Webix Sender is not in INSTALLED_APPS")
 
-    # Controllo correttezza parametri
+    # Check the correctness of parameters
     if (
         not isinstance(recipients, dict)
         or "valids" not in recipients
@@ -202,7 +202,7 @@ def send(recipients: Dict[str, List[int]], subject: str, body: str, message_sent
     if not isinstance(message_sent, MessageSent):
         raise Exception("`message_sent` must be MessageSent instance")
 
-    result = {"status": "failed"}  # Default failed, cambia poi se inviato con successo
+    result = {"status": "failed"}  # Default failed, change later if sent successfully
     sent_per_recipient = 0
 
     try:
@@ -236,11 +236,11 @@ def send(recipients: Dict[str, List[int]], subject: str, body: str, message_sent
     except SkebbyException as e:
         result["error"] = "{}".format(e)
 
-    # Setto il numero dell'ordine per recuperare successivamente lo stato dei vari messaggi
+    # Set the order number to later retrieve the status of various messages
     if result["status"] == "success" and "total_sent" in result:
         sent_per_recipient = int(result["total_sent"]) / len(recipients["valids"])
 
-    # Per ogni utente con numero creo un record
+    # For each user with a number, create a record
     for recipient, recipient_address in recipients["valids"]:
         message_recipient = MessageRecipient(
             message_sent=message_sent,
@@ -251,7 +251,7 @@ def send(recipients: Dict[str, List[int]], subject: str, body: str, message_sent
         )
         message_recipient.save()
 
-    # Salvo i destinatari senza numero e quindi ai quali non è stato inviato il messaggio
+    # Save recipients without a number and therefore to whom the message was not sent
     for recipient, recipient_address in recipients["invalids"]:
         message_recipient = MessageRecipient(
             message_sent=message_sent,
@@ -265,7 +265,7 @@ def send(recipients: Dict[str, List[int]], subject: str, body: str, message_sent
         )
         message_recipient.save()
 
-    # Salvo i destinatari duplicati e quindi ai quali non è stato inviato il messaggio
+    # Save duplicate recipients and therefore to whom the message was not sent
     for recipient, recipient_address in recipients["duplicates"]:
         message_recipient = MessageRecipient(
             message_sent=message_sent,
@@ -290,26 +290,26 @@ def recipients_clean(recipients_instance, recipients, request=None):
     check_config_skebby(config_skebby)
 
     for recipient in recipients_instance:
-        # Prelevo il numero di telefono e lo metto in una lista se non è già una lista
+        # Retrieve the phone number and put it in a list if it's not already a list
         _get_sms = recipient.get_sms
         if not isinstance(_get_sms, list):
             _get_sms = [_get_sms]
 
-        # Per ogni numero verifico il suo stato e lo aggiungo alla chiave corretta
+        # For each number, verify its status and add it to the correct key
         for _sms in _get_sms:
-            # Verifico che il numero sia valido
+            # Verify that the number is valid
             try:
                 number = phonenumbers.parse(_sms, config_skebby["region"])
                 _sms = phonenumbers.format_number(number, phonenumbers.PhoneNumberFormat.E164)
-                # Contatto non ancora presente nella lista
+                # Contact not yet present in the list
                 if phonenumbers.is_valid_number(number) and _sms not in recipients["valids"]["address"]:
                     recipients["valids"]["address"].append(_sms)
                     recipients["valids"]["recipients"].append(recipient)
-                # Contatto già presente nella lista (duplicato)
+                # Contact already present in the list (duplicate)
                 elif phonenumbers.is_valid_number(number):
                     recipients["duplicates"]["address"].append(_sms)
                     recipients["duplicates"]["recipients"].append(recipient)
-                # Indirizzo non presente o non valido
+                # Address not present or invalid
                 else:
                     raise Exception("Invalid number")
             except Exception:
@@ -318,7 +318,7 @@ def recipients_clean(recipients_instance, recipients, request=None):
 
 
 def presend_check(subject, body):
-    # Verifico che il corpo dell'sms sia valido
+    # Verify that the body of the SMS is valid
     invalid_characters = ""
     for c in body:
         if c not in GSM_7_BIT:

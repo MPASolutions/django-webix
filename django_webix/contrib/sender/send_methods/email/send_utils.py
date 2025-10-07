@@ -23,7 +23,7 @@ def send(recipients: Dict[str, List[int]], subject: str, body: str, message_sent
     if "django_webix.contrib.sender" not in settings.INSTALLED_APPS:
         raise Exception("Django Webix Sender is not in INSTALLED_APPS")
 
-    # Controllo correttezza parametri
+    # Check the correctness of parameters
     if (
         not isinstance(recipients, dict)
         or "valids" not in recipients
@@ -49,7 +49,7 @@ def send(recipients: Dict[str, List[int]], subject: str, body: str, message_sent
         **config_email.get("backend_arguments", {})
     )
 
-    # Per ogni istanza di destinatario ciclo
+    # For each recipient instance, loop through
     for recipient, recipient_address in recipients["valids"]:
 
         email = EmailMessage(
@@ -79,7 +79,7 @@ def send(recipients: Dict[str, List[int]], subject: str, body: str, message_sent
             extra=_extra,
         )
 
-    # Salvo i destinatari senza numero e quindi ai quali non è stato inviato il messaggio
+    # Save recipients without a number and therefore to whom the message was not sent
     for recipient, recipient_address in recipients["invalids"]:
         message_recipient = MessageRecipient(
             message_sent=message_sent,
@@ -91,7 +91,7 @@ def send(recipients: Dict[str, List[int]], subject: str, body: str, message_sent
         )
         message_recipient.save()
 
-    # Salvo i destinatari duplicati e quindi ai quali non è stato inviato il messaggio
+    # Save duplicate recipients and therefore to whom the message was not sent
     for recipient, recipient_address in recipients["duplicates"]:
         message_recipient = MessageRecipient(
             message_sent=message_sent,
@@ -108,22 +108,22 @@ def send(recipients: Dict[str, List[int]], subject: str, body: str, message_sent
 
 def recipients_clean(recipients_instance, recipients, request=None):
     for recipient in recipients_instance:
-        # Prelevo l'indirizzo email e lo metto in una lista se non è già una lista
+        # Retrieve the email address and put it in a list if it's not already a list
         _get_email = recipient.get_email
         if not isinstance(_get_email, list):
             _get_email = [_get_email]
 
-        # Per ogni email verifico il suo stato e lo aggiungo alla chiave corretta
+        # For each email, verify its status and add it to the correct key
         for _email in _get_email:
-            # Contatto non ancora presente nella lista
+            # Contact not yet present in the list
             if _email and _email not in recipients["valids"]["address"]:
                 recipients["valids"]["address"].append(_email)
                 recipients["valids"]["recipients"].append(recipient)
-            # Contatto già presente nella lista (duplicato)
+            # Contact already present in the list (duplicate)
             elif _email:
                 recipients["duplicates"]["address"].append(_email)
                 recipients["duplicates"]["recipients"].append(recipient)
-            # Indirizzo non presente
+            # Address not present
             else:
                 recipients["invalids"]["address"].append(_email)
                 recipients["invalids"]["recipients"].append(recipient)

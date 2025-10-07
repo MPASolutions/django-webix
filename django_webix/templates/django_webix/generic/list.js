@@ -9,15 +9,17 @@ webix.ui([], $$("{{ webix_container_id }}"));
 
 {% block history_url %}
     {% webix_history_enable as history_enable %}
+    /*
     function set_history_url(){
     {% if history_enable %}
         extra_url = '?state={{ request.get_full_path }}';
         if ($$('main_content_right') != undefined) {
         extra_url += '&tab=' + $$('main_content_right').getValue();
         }
-        history.replaceState(null, null, extra_url);
+       // history.pushState(null, null, extra_url);
     {% endif %}
     }
+    */
 {% endblock %}
 
 {% if model %}
@@ -417,7 +419,7 @@ if (
                 },
                 {% endif %}
                 onBeforeLoad: function () {
-                    set_history_url();
+                   // set_history_url();
                     {%  if is_json_loading %}
                     if ({{ view_prefix }}_first_load==true) return false;
                     {%  endif %}
