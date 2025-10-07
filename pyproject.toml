@@ -1,3 +1,43 @@
+[build-system]
+requires = ["setuptools>=61.0.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "base"
+version = "25.7.0"
+description = ""
+authors = [
+    {name = "MPA Solutions soc coop, Enogis srl", email = "info@mpasol.it"},
+]
+license = {text = "GNU GPLv3 License"}
+readme = "README.md"
+requires-python = ">=3.12"
+classifiers = [
+    "Environment :: Web Environment",
+    "Framework :: Django",
+    "Framework :: Django :: 5.2",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: GNU General Public License v3 (GPLv3)",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Internet :: WWW/HTTP",
+    "Topic :: Internet :: WWW/HTTP :: Dynamic Content",
+]
+dependencies = [
+    {file = "requirements.txt"},
+]
+
+[project.urls]
+Homepage = "https://github.com/MPASolutions/django-webix"
+
+[tool.setuptools]
+include-package-data = true
+packages = ["mpaadmin", "mpadjango", "mpamonitor", "mpaoauth", "mpautils", "users"]
+
+[tool.setuptools.dynamic]
+readme = {file = ["README.md"], content-type = "text/markdown"}
+
 [tool.isort]
 profile = "black"
 combine_as_imports = true

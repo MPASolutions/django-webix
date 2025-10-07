@@ -1,7 +1,6 @@
 import json
 from decimal import Decimal
 
-import telegram
 from django.apps import apps
 from django.conf import settings
 from django.contrib.auth import get_user_model
@@ -42,11 +41,8 @@ from django_webix.contrib.sender.models import (
     MessageTypology,
     MessageUserRead,
 )
-from django_webix.contrib.sender.send_methods.telegram.persistences import DatabaseTelegramPersistence
 from django_webix.contrib.sender.utils import get_messages_limit_user, send_mixin, user_can_send
 from django_webix.views import WebixListView, WebixTemplateView
-from telegram import Update
-from telegram.ext import Dispatcher
 
 if apps.is_installed("django_webix.contrib.filter"):
     from django_webix.contrib.filter.models import WebixFilter
@@ -661,7 +657,7 @@ class SenderMessagesListView(WebixListView):
             status_message=Case(
                 *[When(status=k, then=Value(str(v))) for k, v in self.model._meta.get_field("status").choices],
                 default=Value(""),
-                output_field=CharField()
+                output_field=CharField(),
             )
         )
 
@@ -1042,7 +1038,19 @@ class SenderInvoiceManagementView(WebixTemplateView):
 
 @method_decorator(csrf_exempt, name="dispatch")
 class SenderTelegramWebhookView(View):
+
     def post(self, request, *args, **kwargs):
+
+        # noinspection PyUnresolvedReferences
+        import telegram
+        from django_webix.contrib.sender.send_methods.telegram.persistences import DatabaseTelegramPersistence
+
+        # noinspection PyUnresolvedReferences
+        from telegram import Update
+
+        # noinspection PyUnresolvedReferences
+        from telegram.ext import Dispatcher
+
         TELEGRAM = next((item for item in settings.WEBIX_SENDER["send_methods"] if item["method"] == "telegram"), {})
         CONFIG_TELEGRAM = TELEGRAM.get("config")
 
