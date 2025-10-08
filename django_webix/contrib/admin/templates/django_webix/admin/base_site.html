@@ -12,9 +12,6 @@
     {% block header_leaflet %}
         {% if is_webgis_enable %}
             {% friendly_load utils_leaflet %}
-            <script type="text/javascript">
-                var ForceScriptNameUrl = "{{settings.FORCE_SCRIPT_NAME_URL}}";
-            </script>
             {% header_webgis %}
         {% endif %}
     {% endblock %}

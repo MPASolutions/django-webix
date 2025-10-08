@@ -3,8 +3,6 @@ from django.contrib.postgres import fields
 from django.utils.translation import gettext_lazy as _
 
 matches = {
-    # devono avere questa struttura cioe tutti i dizzonari devono avere operators / input / values
-    # ########### Bool
     models.BooleanField: {
         "operators": ["exact", "isnull"],
         "input": "select",
@@ -15,7 +13,6 @@ matches = {
         "input": "select",
         "values": {"True": "Yes", "False": "No"},
     },
-    # ####################### number field
     models.AutoField: {"operators": ["exact", "isnull", "gt", "gte", "lt", "lte", "in"], "webix_type": "integer"},
     models.IntegerField: {"operators": ["exact", "isnull", "gt", "gte", "lt", "lte", "in"], "webix_type": "integer"},
     models.SmallIntegerField: {
@@ -37,7 +34,6 @@ matches = {
     models.BigAutoField: {"operators": ["exact", "isnull", "gt", "gte", "lt", "lte", "in"], "webix_type": "integer"},
     models.FloatField: {"operators": ["exact", "isnull", "gt", "gte", "lt", "lte", "in"], "webix_type": "double"},
     models.DecimalField: {"operators": ["exact", "isnull", "gt", "gte", "lt", "lte", "in"], "webix_type": "double"},
-    # ################ Time field
     models.DateField: {
         "operators": [
             "exact",
@@ -84,7 +80,6 @@ matches = {
     models.DurationField: {
         "operators": ["exact", "isnull"],
     },
-    # ############## char field+
     models.CharField: {
         "operators": [
             "exact",
@@ -187,15 +182,10 @@ matches = {
             "iregex",
         ],
     },
-    # ################### special field
-    models.CommaSeparatedIntegerField: {"operators": ["isnull"]},  # deprecato
+    models.CommaSeparatedIntegerField: {"operators": ["isnull"]},
     models.BinaryField: {"operators": ["isnull"]},
     fields.RangeField: {"operators": ["isnull"]},
     fields.IntegerRangeField: {"operators": ["isnull"]},
-    # deprecated version 2.2 django
-    # fields.FloatRangeField: {
-    #     "operators": ["isnull"]
-    # },
     fields.DecimalRangeField: {"operators": ["isnull"]},
     fields.DateTimeRangeField: {"operators": ["isnull"]},
     fields.DateRangeField: {"operators": ["isnull"]},
@@ -205,7 +195,6 @@ matches = {
         "operators": ["exact", "contains", "contained_by", "isnull", "overlap"],
         # ['exact', 'iexact', 'gt', 'gte', 'lt', 'lte', 'in', 'contains', 'icontains', 'isnull', 'contained_by', 'len']
     },
-    # GEO FIELDS
     models.PolygonField: {
         "operators": ["within", "isnull"],
     },
@@ -227,11 +216,8 @@ matches = {
     models.GeometryCollectionField: {
         "operators": ["within", "isnull"],
     },
+    models.JSONField: {"operators": ["isnull", "exact", "has_key", "has_keys", "has_any_keys"]},
 }
-
-
-matches[models.JSONField] = {"operators": ["isnull", "exact", "has_key", "has_keys", "has_any_keys"]}
-
 
 counter_operator = {
     # 'isnull': 'isnotnull'
