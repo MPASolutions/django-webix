@@ -2,6 +2,21 @@
 
 {% get_request_filter_params %}
 
+let isListenerPopstateAdded = false;
+
+if (!isListenerPopstateAdded) {
+    window.addEventListener('popstate', function(event) {
+        console.log("Evento popstate scatenato!");
+        let _url = window.location.href;
+        let urlObj = new URL(_url);
+        let searchParams = new URLSearchParams(urlObj.search);
+        let state = searchParams.get('state');
+        let tab = searchParams.get('tab');
+        load_js(state);
+    });
+    isListenerPopstateAdded = true;
+}
+
 String.prototype.toTitle = function () {
     return this.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
 };
