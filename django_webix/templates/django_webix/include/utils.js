@@ -455,7 +455,6 @@ function load_js(lnk, hide, area, method, data, headers, dataType, abortAllPendi
                         if ($$('main_content_right') != undefined) {
                             extra_url += '&tab=' + $$('main_content_right').getValue();
                         }
-                        console.log('history.pushState', extra_url);
                         history.pushState(null, null, extra_url);
                     }
                     {% endif %}

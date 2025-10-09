@@ -8,7 +8,7 @@ Development Lead
 
 * Alessandro Regolini <alessandro@regolini.it>
 * Alessio Bazzanella <bazzanella@mpasol.it>
-* Leonardo Perathoner <bazzanella@mpasol.it>
+* Leonardo Perathoner <perathoner@mpasol.it>
 * Kristjan Gjika <gjika@mpasol.it>
 * Luca Coviello <coviello@enogis.it>
 
