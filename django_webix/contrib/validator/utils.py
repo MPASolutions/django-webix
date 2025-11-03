@@ -84,7 +84,7 @@ class ImportValidator:
         label_as_colname=True,
         pass_warning=False,
         check_mimetype=True,
-        **kw_pandas_read
+        **kw_pandas_read,
     ):
         """
         Read the file (with existance/extension/type validation) and store in pandas dataframe
@@ -351,6 +351,13 @@ class ImportValidator:
         # do_filter = pd.Series(filter_cols).isin(self.df_rows.columns)
         for fcol, fval in self.filter_cols.items():
             # self.df_rows = self.df_rows[self.df_rows[fcol] == fval]
+            if isinstance(fval, dict):
+                if "regex" in fval:
+                    self.df_rows = self.df_rows[self.df_rows[fcol].str.match(fval["regex"])]
+                    continue
+                elif "plain" in fval:
+                    fval = fval["plain"]
+
             if not isinstance(fval, list):
                 fval = [fval]
             self.df_rows = self.df_rows[self.df_rows[fcol].isin(fval)]
