@@ -741,10 +741,13 @@ class AdminWebixSite:
         """
 
         history_url = request.GET.get("state", None)
-        try:
-            resolve(history_url)
-        except Exception:
-            history_url = None
+        if history_url is not None:
+            if "?" in history_url:
+                history_url, _get_params = history_url.split("?")
+            try:
+                resolve(history_url)
+            except Exception:
+                history_url = None
 
         active_tab = request.GET.get("tab", None)
         if active_tab not in ["webgis_leaflet", self.webix_container_id]:
