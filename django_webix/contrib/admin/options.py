@@ -489,18 +489,8 @@ class ModelWebixAdmin(ModelWebixAdminPermissionsMixin):
     def get_list_editable(self, view=None, request=None):
         return self.list_editable
 
-    def get_list_display(self, view=None, request=None):
-        if request is not None and request.user_agent.is_mobile and len(self.list_display_mobile) > 0:
-            _list_display = self.list_display_mobile
-        else:
-            _list_display = self.list_display
-
-        if _list_display == [] or type(_list_display[0]) is str:
-            _model_list_display = self.create_list_display(_list_display, view=view, request=request)
-        else:
-            _model_list_display = list(_list_display)
-
-        # extra_fields columns
+    def get_list_display_extra_fields(self, view=None, request=None):
+        _model_list_display = []
         if apps.is_installed("django_webix.contrib.extra_fields"):
             from django_webix.contrib.extra_fields.models_mixin import ExtraFieldsModel
 
@@ -557,6 +547,22 @@ class ModelWebixAdmin(ModelWebixAdminPermissionsMixin):
                         request=request,
                         defaults={"width": 'adjust:"all"', "extra_header": "hidden:true"},
                     )
+        return _model_list_display
+
+    def get_list_display(self, view=None, request=None):
+        if request is not None and request.user_agent.is_mobile and len(self.list_display_mobile) > 0:
+            _list_display = self.list_display_mobile
+        else:
+            _list_display = self.list_display
+
+        if _list_display == [] or type(_list_display[0]) is str:
+            _model_list_display = self.create_list_display(_list_display, view=view, request=request)
+        else:
+            _model_list_display = list(_list_display)
+
+        # extra_fields columns
+        _model_list_display.extend(self.get_list_display_extra_fields(view=view, request=request))
+
         return _model_list_display
 
     def get_queryset(self, view=None, request=None):
