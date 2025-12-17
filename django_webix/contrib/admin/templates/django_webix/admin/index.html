@@ -2,8 +2,8 @@
 
 {% block content %}
 
-    {% if history_url %}
-        load_js('{{history_url}}');
+    {% if state %}
+        load_js('{{state}}');
     {% else %}
         {% with pattern_dashboard=urls_namespace|add:':dashboard' %}
         load_js('{% url pattern_dashboard %}');

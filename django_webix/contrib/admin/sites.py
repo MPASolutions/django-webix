@@ -740,14 +740,14 @@ class AdminWebixSite:
         apps that have been registered in this site.
         """
 
-        history_url = request.GET.get("state", None)
-        if history_url is not None:
-            if "?" in history_url:
-                history_url, _get_params = history_url.split("?")
+        state = request.GET.get("state", None)
+        if state is not None:
+            if "?" in state:
+                state, _get_params = state.split("?")
             try:
-                resolve(history_url)
+                resolve(state)
             except Exception:
-                history_url = None
+                state = None
 
         active_tab = request.GET.get("tab", None)
         if active_tab not in ["webgis_leaflet", self.webix_container_id]:
@@ -756,7 +756,7 @@ class AdminWebixSite:
         context = {
             **self.each_context(request),
             **self.extra_index_context(request),
-            "history_url": history_url,
+            "state": state,
             "title": self.get_index_title(request),
             "app_list": self.get_app_list(request),
             "active_tab": active_tab,
