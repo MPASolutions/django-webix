@@ -5,6 +5,7 @@ from django.conf import settings
 from django.core.exceptions import FieldDoesNotExist
 from django.db import models
 from django.db.models import Case, When
+from django.http import Http404, HttpResponseRedirect
 from django.urls import path
 from django.utils.decorators import method_decorator
 from django.utils.text import capfirst
@@ -675,7 +676,26 @@ class ModelWebixAdmin(ModelWebixAdminPermissionsMixin):
 
                     def dispatch(self, *args, **kwargs):
                         kwargs.update({"view": self})
-                        return _admin.dispatch(*args, **kwargs)
+                        if hasattr(settings, "WEBIX_HISTORY_ENABLE"):
+                            # manage 404 to go to list view if history is enabled
+                            try:
+                                return _admin.dispatch(*args, **kwargs)
+                            except Http404:
+                                return HttpResponseRedirect(self.get_url_list())
+                        else:
+                            return _admin.dispatch(*args, **kwargs)
+
+                else:
+
+                    def dispatch(self, request, *args, **kwargs):
+                        if hasattr(settings, "WEBIX_HISTORY_ENABLE"):
+                            # manage 404 to go to list view if history is enabled
+                            try:
+                                return super().dispatch(request, *args, **kwargs)
+                            except Http404:
+                                return HttpResponseRedirect(self.get_url_list())
+                        else:
+                            return super().dispatch(request, *args, **kwargs)
 
                 admin_prefix = _admin.get_prefix()
 
@@ -888,7 +908,26 @@ class ModelWebixAdmin(ModelWebixAdminPermissionsMixin):
 
                     def dispatch(self, *args, **kwargs):
                         kwargs.update({"view": self})
-                        return _admin.dispatch(*args, **kwargs)
+                        if hasattr(settings, "WEBIX_HISTORY_ENABLE"):
+                            # manage 404 to go to list view if history is enabled
+                            try:
+                                return _admin.dispatch(*args, **kwargs)
+                            except Http404:
+                                return HttpResponseRedirect(self.get_url_list())
+                        else:
+                            return _admin.dispatch(*args, **kwargs)
+
+                else:
+
+                    def dispatch(self, request, *args, **kwargs):
+                        if hasattr(settings, "WEBIX_HISTORY_ENABLE"):
+                            # manage 404 to go to list view if history is enabled
+                            try:
+                                return super().dispatch(request, *args, **kwargs)
+                            except Http404:
+                                return HttpResponseRedirect(self.get_url_list())
+                        else:
+                            return super().dispatch(request, *args, **kwargs)
 
                 admin_prefix = _admin.get_prefix()
 
@@ -1101,7 +1140,26 @@ class ModelWebixAdmin(ModelWebixAdminPermissionsMixin):
 
                     def dispatch(self, *args, **kwargs):
                         kwargs.update({"view": self})
-                        return _admin.dispatch(*args, **kwargs)
+                        if hasattr(settings, "WEBIX_HISTORY_ENABLE"):
+                            # manage 404 to go to list view if history is enabled
+                            try:
+                                return _admin.dispatch(*args, **kwargs)
+                            except Http404:
+                                return HttpResponseRedirect(self.get_url_list())
+                        else:
+                            return _admin.dispatch(*args, **kwargs)
+
+                else:
+
+                    def dispatch(self, request, *args, **kwargs):
+                        if hasattr(settings, "WEBIX_HISTORY_ENABLE"):
+                            # manage 404 to go to list view if history is enabled
+                            try:
+                                return super().dispatch(request, *args, **kwargs)
+                            except Http404:
+                                return HttpResponseRedirect(self.get_url_list())
+                        else:
+                            return super().dispatch(request, *args, **kwargs)
 
                 admin_prefix = _admin.get_prefix()
 
