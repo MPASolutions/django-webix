@@ -18,6 +18,5 @@ build-sphinx:
     paths:
     - public
   publish: public
-
-  # only:
-  #   - main
+  only:
+    - main
