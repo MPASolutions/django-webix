@@ -1,0 +1,23 @@
+stages:
+  - deploy-docs
+
+build-sphinx:
+  image: ubuntu:24.04
+  stage: deploy-docs
+  script:
+    - apt update
+    - export DEBIAN_FRONTEND=noninteractive
+    - apt install -y --no-install-recommends git python3 python3-venv python3-pip exiftool
+    - python3 -m venv venv
+    - . venv/bin/activate
+    - pip install -U sphinx django sphinx-jsonschema
+    - pip install .
+    - sphinx-build -b html ./docs public
+  pages: true
+  artifacts:
+    paths:
+    - public
+  publish: public
+
+  # only:
+  #   - main
