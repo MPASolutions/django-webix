@@ -530,6 +530,7 @@ class BaseWebixMixin:
                                         el,
                                         {
                                             "cols": [
+                                                {},  # template for add porpuse into inline tabular
                                                 {
                                                     "id": self[name].auto_id + "_download",
                                                     "view": "button",
@@ -602,10 +603,23 @@ class BaseWebixMixin:
                         "label": _("Upload file") if not initial else _("Change file"),
                         "on": {
                             "onAfterFileAdd": (
-                                "(function (data) {{ "
-                                "if ($$('block_name_" + self[name].auto_id + "')!=undefined){"
-                                "$$('block_name_" + self[name].auto_id + "').setHTML(data.file.name);"
-                                "}}} )"
+                                """
+                            (function(data) {{
+                                var id = "{0}";
+                                $$(id + "_download").define("tooltip", data.file.name);
+                                $$(id + "_download").refresh();
+                                $$(id + "_download").detachEvent("onItemClick");
+                                if (!$$(id + "_download").isVisible()) {{
+                                    $$(id + "_download").show();
+                                    $$(id + "_clean").show();
+                                }}
+                                if ($$("block_name_" + id) != undefined) {{
+                                    $$("block_name_" + id).setHTML(data.file.name);
+                                }}
+                            }});
+                            """.format(
+                                    self[name].auto_id
+                                )
                             )
                         },
                     }
