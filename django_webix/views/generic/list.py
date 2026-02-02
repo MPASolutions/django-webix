@@ -283,7 +283,7 @@ class WebixListView(WebixBaseMixin, WebixPermissionsMixin, WebixUrlMixin, ListVi
                             and hasattr(_field, "related_model")
                             and _field.related_model is not None
                         ):
-                            _related.append(name)
+                            _related.append(_field.name)
                             _model = _field.related_model  # field is a relation
                         else:
                             break  # field is not a relation, any name that follows is probably a lookup or transform
